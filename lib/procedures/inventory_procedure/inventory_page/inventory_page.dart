@@ -4,7 +4,7 @@ import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/enterprise_model.dart';
+import '../models/enterprise_inventory_model.dart';
 import 'inventory_items.dart';
 import 'inventory_provider.dart';
 
@@ -21,8 +21,8 @@ class _InventoryPageState extends State<InventoryPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    EnterpriseModel enterprise =
-        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
+    EnterpriseInventoryModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseInventoryModel;
 
     if (!_isLoaded) {
       Provider.of<InventoryProvider>(context, listen: false).getInventory(
@@ -36,8 +36,8 @@ class _InventoryPageState extends State<InventoryPage> {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
-    EnterpriseModel enterprise =
-        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
+    EnterpriseInventoryModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseInventoryModel;
 
     return Scaffold(
       appBar: AppBar(

@@ -79,6 +79,7 @@ flutter:
     - lib/assets/Images/inventory.jpg
     - lib/assets/Images/stock.jpg
     - lib/assets/Images/pedidoDeVendas.jpg
+    - lib/assets/Images/receipt.jpg
     - lib/assets/Images/LogoCeltaTransparente.png
     
   #   - images/a_dot_ham.jpeg

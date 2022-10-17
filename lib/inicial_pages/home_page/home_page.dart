@@ -57,21 +57,15 @@ class _HomePageState extends State<HomePage> {
             ImageComponent.instance.image(
               imagePath: 'lib/assets/Images/inventory.jpg',
               routine: 'Inventário',
-              route: APPROUTES.ENTERPRISES,
+              route: APPROUTES.INVENTORY_ENTERPRISES,
               context: context,
             ),
-            // ImageComponent.instance.image(
-            //   imagePath: 'lib/assets/Images/pedidoDeVendas.jpg',
-            //   routine: 'Pedido de vendas',
-            //   route: APPROUTES.SALES,
-            //   context: context,
-            // ),
-            // ImageComponent.instance.image(
-            //   imagePath: 'lib/assets/Images/stock.jpg',
-            //   routine: 'Estoque',
-            //   route: APPROUTES.STOCK,
-            //   context: context,
-            // ),
+            ImageComponent.instance.image(
+              imagePath: 'lib/assets/Images/receipt.jpg',
+              routine: 'Recebimento de mercadorias',
+              route: APPROUTES.RECEIPT_ENTERPRISES,
+              context: context,
+            ),
             const SizedBox(height: 5),
           ],
         ),

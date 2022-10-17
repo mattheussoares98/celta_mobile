@@ -1,14 +1,15 @@
-import 'package:celta_inventario/procedures/receipt_prodecure/models/enterprise_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-class EnterpriseProvider with ChangeNotifier {
-  List<EnterpriseModel> _enterprises = [];
+import '../models/enterprise_inventory_model.dart';
 
-  List<EnterpriseModel> get enterprises {
+class EnterpriseInventoryProvider with ChangeNotifier {
+  List<EnterpriseInventoryModel> _enterprises = [];
+
+  List<EnterpriseInventoryModel> get enterprises {
     return [..._enterprises];
   }
 
@@ -52,7 +53,7 @@ class EnterpriseProvider with ChangeNotifier {
 
       resultAsMap.forEach((id, data) {
         _enterprises.add(
-          EnterpriseModel(
+          EnterpriseInventoryModel(
             codigoInternoEmpresa: data['CodigoInterno_Empresa'],
             codigoEmpresa: data['Codigo_Empresa'],
             nomeEmpresa: data['Nome_Empresa'],

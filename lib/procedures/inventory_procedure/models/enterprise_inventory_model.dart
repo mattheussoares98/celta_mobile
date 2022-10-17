@@ -1,10 +1,10 @@
-class EnterpriseModel {
+class EnterpriseInventoryModel {
   final int codigoInternoEmpresa;
   final String codigoEmpresa;
   final String nomeEmpresa;
   bool isMarked;
 
-  EnterpriseModel({
+  EnterpriseInventoryModel({
     required this.codigoInternoEmpresa,
     required this.codigoEmpresa,
     required this.nomeEmpresa,

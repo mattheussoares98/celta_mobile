@@ -4,19 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../product_page/product_provider.dart';
-import 'enterprise_provider.dart';
+import 'enterprise_inventory_provider.dart';
 
-class EnterpriseItems extends StatefulWidget {
-  const EnterpriseItems({Key? key}) : super(key: key);
+class EnterpriseInventoryItems extends StatefulWidget {
+  const EnterpriseInventoryItems({Key? key}) : super(key: key);
 
   @override
-  State<EnterpriseItems> createState() => _EnterpriseItemsState();
+  State<EnterpriseInventoryItems> createState() =>
+      _EnterpriseInventoryItemsState();
 }
 
-class _EnterpriseItemsState extends State<EnterpriseItems> {
+class _EnterpriseInventoryItemsState extends State<EnterpriseInventoryItems> {
   @override
   Widget build(BuildContext context) {
-    EnterpriseProvider enterpriseProvider = Provider.of(context, listen: true);
+    EnterpriseInventoryProvider enterpriseInventoryProvider =
+        Provider.of(context, listen: true);
     ProductProvider productProvider = Provider.of(context);
 
     return Column(
@@ -30,13 +32,13 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: enterpriseProvider.enterpriseCount,
+            itemCount: enterpriseInventoryProvider.enterpriseCount,
             itemBuilder: (ctx, index) {
               return PersonalizedCard.personalizedCard(
                 context: context,
                 child: ListTile(
                   title: Text(
-                    enterpriseProvider.enterprises[index].nomeEmpresa,
+                    enterpriseInventoryProvider.enterprises[index].nomeEmpresa,
                     style: const TextStyle(
                       fontFamily: 'OpenSans',
                       fontWeight: FontWeight.bold,
@@ -44,7 +46,7 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
                     ),
                   ),
                   leading: Text(
-                    enterpriseProvider.enterprises[index].codigoEmpresa
+                    enterpriseInventoryProvider.enterprises[index].codigoEmpresa
                         .toString(),
                     style: const TextStyle(
                       color: Colors.black,
@@ -52,12 +54,13 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
                     ),
                   ),
                   onTap: () {
-                    productProvider.codigoInternoEmpresa = enterpriseProvider
-                        .enterprises[index].codigoInternoEmpresa;
+                    productProvider.codigoInternoEmpresa =
+                        enterpriseInventoryProvider
+                            .enterprises[index].codigoInternoEmpresa;
 
                     Navigator.of(context).pushNamed(
                       APPROUTES.INVENTORY,
-                      arguments: enterpriseProvider.enterprises[index],
+                      arguments: enterpriseInventoryProvider.enterprises[index],
                     );
                   },
                 ),
