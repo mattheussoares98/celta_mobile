@@ -54,7 +54,6 @@ class _InventoryPageState extends State<InventoryPage> {
           if (inventoryProvider.errorMessage != '')
             Expanded(
               child: TryAgainWidget.tryAgain(
-                provider: inventoryProvider,
                 errorMessage: inventoryProvider.errorMessage,
                 request: () async => setState(() {
                   inventoryProvider.getInventory(

@@ -29,16 +29,15 @@ class EnterpriseInventoryProvider with ChangeNotifier {
     return _isLoadingEnterprises;
   }
 
-  clearEnterprises() {
-    _enterprises.clear();
-  }
-
   Future getEnterprises({
     String? userIdentity,
   }) async {
-    clearEnterprises();
+    _enterprises.clear();
     _errorMessage = '';
     _isLoadingEnterprises = true;
+    // notifyListeners();
+    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
+    //porque está sendo chamado dentro de um setState
 
     try {
       var headers = {'Content-Type': 'application/json'};

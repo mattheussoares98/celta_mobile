@@ -1,0 +1,160 @@
+import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_insert_quantity.dart';
+import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class ConferenceItems extends StatefulWidget {
+  const ConferenceItems({Key? key}) : super(key: key);
+
+  @override
+  State<ConferenceItems> createState() => _ConferenceItemsState();
+}
+
+class _ConferenceItemsState extends State<ConferenceItems> {
+  int selectedIndex = -1;
+
+  TextStyle _fontStyle = const TextStyle(
+    fontSize: 20,
+    color: Colors.black,
+    fontFamily: 'OpenSans',
+  );
+  TextStyle _fontBoldStyle = const TextStyle(
+    fontFamily: 'OpenSans',
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+
+  Column values({
+    required String title,
+    required String value,
+    required int index,
+    required ConferenceProvider conferenceProvider,
+  }) {
+    // print(conferenceProvider.products[index].toString());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          children: [
+            Text(
+              "${title}: ",
+              style: _fontStyle,
+            ),
+            const SizedBox(width: 5),
+            Expanded(
+              child: Text(
+                value,
+                style: _fontBoldStyle,
+                maxLines: 2,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ConferenceProvider conferenceProvider = Provider.of(context, listen: true);
+
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: conferenceProvider.productsCount,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                    //isso faz com que apareça os botões de "conferir" e "liberar" somente no item selecionado
+                  });
+                },
+                child: PersonalizedCard.personalizedCard(
+                  context: context,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        values(
+                          title: "Nome",
+                          value:
+                              conferenceProvider.products[index].Nome_Produto,
+                          index: index,
+                          conferenceProvider: conferenceProvider,
+                        ),
+                        values(
+                          title: "PLU",
+                          value: conferenceProvider
+                              .products[index].CodigoPlu_ProEmb,
+                          index: index,
+                          conferenceProvider: conferenceProvider,
+                        ),
+                        values(
+                          title: "Embalagem",
+                          value: conferenceProvider
+                              .products[index].PackingQuantity,
+                          index: index,
+                          conferenceProvider: conferenceProvider,
+                        ),
+                        values(
+                          title: "EANs",
+                          value:
+                              conferenceProvider.products[index].AllEans != ""
+                                  ? conferenceProvider.products[index].AllEans
+                                  : "Nenhum",
+                          index: index,
+                          conferenceProvider: conferenceProvider,
+                        ),
+                        Row(
+                          children: [
+                            const Text("Quantidade contada: "),
+                            Text(
+                              conferenceProvider
+                                  .products[index].Quantidade_ProcRecebDocProEmb
+                                  .toString(),
+                            ),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    fixedSize: const Size(15, 15),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Icon(Icons.add),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.remove),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        values(
+                          title: "Quantidade contada",
+                          value: conferenceProvider
+                              .products[index].Quantidade_ProcRecebDocProEmb
+                              .toString(),
+                          index: index,
+                          conferenceProvider: conferenceProvider,
+                        ),
+                        const SizedBox(height: 10),
+                        if (selectedIndex == index)
+                          const ProductsConferenceInsert(),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}

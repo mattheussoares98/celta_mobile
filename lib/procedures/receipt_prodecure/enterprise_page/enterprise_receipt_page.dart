@@ -50,10 +50,10 @@ class EnterpriseReceiptPageState extends State<EnterpriseReceiptPage> {
           if (enterpriseReceiptProvider.errorMessage != '')
             Expanded(
               child: TryAgainWidget.tryAgain(
-                provider: enterpriseReceiptProvider,
                 errorMessage: enterpriseReceiptProvider.errorMessage,
-                request: () async =>
-                    await getEnterprises(enterpriseReceiptProvider),
+                request: () async => setState(
+                  () => enterpriseReceiptProvider.getEnterprises(),
+                ),
               ),
             ),
           if (enterpriseReceiptProvider.errorMessage == "" &&

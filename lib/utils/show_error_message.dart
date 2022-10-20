@@ -13,6 +13,7 @@ class ShowErrorMessage {
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.red,
+        duration: const Duration(seconds: 5),
       ),
     );
   }

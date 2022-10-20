@@ -3,7 +3,7 @@ class ReceiptModel {
   final int CodigoInterno_Empresa;
   final String Numero_ProcRecebDoc;
   final String EmitterName;
-  String Status;
+  dynamic Status; //ele vem como inteiro mas preciso tratar como string
 
   ReceiptModel({
     required this.CodigoInterno_ProcRecebDoc,

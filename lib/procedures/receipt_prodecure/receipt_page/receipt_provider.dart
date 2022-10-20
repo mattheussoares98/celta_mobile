@@ -17,10 +17,16 @@ class ReceiptProvider with ChangeNotifier {
     return _receipts.length;
   }
 
-  bool _isLoading = false;
+  bool _isLoadingReceipt = false;
 
-  bool get isLoading {
-    return _isLoading;
+  bool get isLoadingReceipt {
+    return _isLoadingReceipt;
+  }
+
+  bool _isLoadingLiberateCheck = false;
+
+  bool get isLoadingLiberateCheck {
+    return _isLoadingLiberateCheck;
   }
 
   static String _errorMessage = '';
@@ -29,15 +35,26 @@ class ReceiptProvider with ChangeNotifier {
     return _errorMessage;
   }
 
+  static String _liberateError = '';
+
+  String get liberateError {
+    return _liberateError;
+  }
+
   Future<void> getReceipt({
     required String? enterpriseCode,
     required String? userIdentity,
   }) async {
-    _isLoading = true;
     _receipts.clear();
+    _isLoadingReceipt = true;
     _errorMessage = '';
+    _liberateError = "";
+    // notifyListeners();
+    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
+    //porque está sendo chamado dentro de um setState
 
     try {
+      // notifyListeners();
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
           'POST',
@@ -49,20 +66,19 @@ class ReceiptProvider with ChangeNotifier {
       http.StreamedResponse response = await request.send();
       String responseAsString = await response.stream.bytesToString();
 
-      //esse if serve para quando não houver um inventário congelado para a empresa, não continunar o processo senão dará erro na aplicação
-      // if (responseAsString
-      //     .contains('Nenhum processo de inventário foi encontrado')) {
-      //   _errorMessage =
-      //       'Não há processos de inventário para essa empresa. Somente processos de inventário congelados ficarão disponíveis para consulta e seleção.';
-      //   _isLoading = false;
-      //   notifyListeners();
-      //   return;
-      // }
+      print(responseAsString);
+      if (_haveReceiptError(responseAsString)) {
+        //precisa tratar o erro aqui porque não cai no catch se no
+        //responseAsString tiver alguma mensagem de erro, por isso ele continua
+        //a execução do código abaixo e aí sim da erro, fazendo com que
+        //apresente a mensagem de erro errada
+        notifyListeners();
+        return;
+      }
 
       List responseAsList = json.decode(responseAsString.toString());
       Map responseAsMap = responseAsList.asMap();
 
-      print(responseAsMap);
       responseAsMap.forEach((id, data) {
         _receipts.add(
           ReceiptModel(
@@ -75,17 +91,40 @@ class ReceiptProvider with ChangeNotifier {
         );
       });
     } catch (e) {
-      print("erro para consultar os recebimentos: " + e.toString());
-      _errorMessage =
-          'O servidor não foi encontrado! Verifique a sua internet!';
+      //a mensagem de erro precisa ser tratada antes de chegar aqui, pois não
+      //pode continuar a execução do código caso no "responseAsString" tenha
+      //alguma mensagem de erro
     } finally {
-      _treatErrorMessage();
-      _isLoading = false;
+      _treatStatusMessage();
+      _isLoadingReceipt = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  _treatErrorMessage() {
+  bool _haveReceiptError(
+    String responseAsString,
+  ) {
+    if (responseAsString.contains(
+        "Ocorreu um erro não esperado durante o acesso ao banco de dados do Celta Business Solutions")) {
+      _errorMessage =
+          "Ocorreu um erro não esperado durante o acesso ao banco de dados do Celta Business Solutions. Este tipo de problema normalmente está ligado à questões de configuração ou à equivocos de desenvolvimento. Fale com seu administrador de sistema ou com nosso suporte técnico para maiores detalhes.";
+      return true;
+    } else if (responseAsString
+        .contains("O Celta Business Solutions enviou uma solicitação")) {
+      _errorMessage =
+          "O Celta Business Solutions enviou uma solicitação ao banco de dados que não respondeu no tempo esperado (timeout). Caso este problema persista, entre em contato com o nosso suporte técnico para que possamos resolvê-lo o mais rápido possível.";
+      return true;
+    } else if (responseAsString.contains(
+        "Nenhum documento para recebimento de mercadorias foi encontrado")) {
+      _errorMessage =
+          "Nenhum documento para recebimento de mercadorias foi encontrado no Celta Business Solutions. Caso você sinta que isto está incorreto, entre em contato com o administrador do seu sistema.";
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  _treatStatusMessage() {
     _receipts.forEach((element) {
       if (element.Status == "8") {
         element.Status = "Aguardando a liberação para entrada";
@@ -93,25 +132,54 @@ class ReceiptProvider with ChangeNotifier {
         element.Status = "Aguardando a manutenção dos produtos";
       } else if (element.Status == "4") {
         element.Status = "Em processo de autorização";
+      } else if (element.Status == "3") {
+        element.Status = "Liberado para entrada (aguardando entrada)";
       }
     });
+    notifyListeners();
   }
 
   liberate(int grDocCode) async {
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/GoodsReceiving/LiberateGRDoc?grDocCode=${grDocCode}'));
-    request.body = json.encode(UserIdentity.identity);
-    request.headers.addAll(headers);
+    _isLoadingLiberateCheck = true;
+    _liberateError = "";
+    notifyListeners();
 
-    http.StreamedResponse response = await request.send();
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+          'POST',
+          Uri.parse(
+              '${BaseUrl.url}/GoodsReceiving/LiberateGRDoc?grDocCode=${grDocCode}'));
+      request.body = json.encode(UserIdentity.identity);
+      request.headers.addAll(headers);
 
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-    } else {
-      print("Erro para fazer a requisição: ${response.reasonPhrase}");
-    }
+      http.StreamedResponse response = await request.send();
+      final responseInString = await response.stream.bytesToString();
+
+      print("responseInString receiptProvider ${responseInString}");
+      if (responseInString == "4") {
+        _liberateError =
+            "Existem divergencias, verifique e informe o real status";
+      } else if (responseInString
+          .contains("O canal de solicitação atingiu o tempo limite")) {
+        _liberateError = "Ocorreu timeout para efetuar a solicitação";
+      } else if (responseInString.contains("Você não está autorizado")) {
+        _liberateError =
+            "Você não está autorizado a utilizar este serviço ou o serviço não está disponível. Fale com seu administrador de sistemas para resolver o problema.";
+      } else if (responseInString.contains("Bad Request")) {
+        _liberateError =
+            "Este documento está em algum processo de autorização e por este motivo não pode ser liberado.";
+      } else if (responseInString.contains("Este documento já está liberado")) {
+        _liberateError =
+            "Este documento já está liberado, o que significa que não é possível liberá-lo para entrada.";
+      } else if (responseInString
+          .contains("Este documento está em algum processo de autorização")) {
+        _liberateError =
+            "Este documento está em algum processo de autorização e por este motivo não pode ser liberado.";
+      }
+    } catch (e) {}
+
+    _isLoadingLiberateCheck = false;
+    notifyListeners();
   }
 }

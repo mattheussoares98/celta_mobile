@@ -55,7 +55,6 @@ class _CountingPageState extends State<CountingPage> {
           if (countingProvider.errorMessage != '')
             Expanded(
               child: TryAgainWidget.tryAgain(
-                provider: countingProvider,
                 errorMessage: countingProvider.errorMessage,
                 request: () async => setState(() {
                   countingProvider.getCountings(

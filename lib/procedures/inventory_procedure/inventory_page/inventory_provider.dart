@@ -35,6 +35,9 @@ class InventoryProvider with ChangeNotifier {
     _isLoadingInventorys = true;
     _inventorys.clear();
     _errorMessage = '';
+    // notifyListeners();
+    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
+    //porque está sendo chamado dentro de um setState
 
     try {
       var headers = {'Content-Type': 'application/json'};

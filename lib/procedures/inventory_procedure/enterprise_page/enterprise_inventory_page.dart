@@ -52,7 +52,6 @@ class EnterpriseInventoryPageState extends State<EnterpriseInventoryPage> {
           if (enterpriseInventoryProvider.errorMessage != '')
             Expanded(
               child: TryAgainWidget.tryAgain(
-                provider: enterpriseInventoryProvider,
                 errorMessage: enterpriseInventoryProvider.errorMessage,
                 request: () async =>
                     await getEnterprises(enterpriseInventoryProvider),

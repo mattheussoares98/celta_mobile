@@ -11,4 +11,5 @@ class APPROUTES {
   static const SPLASHSCREEN = '/SPLASHSCREEN';
   static const HOME_PAGE = '/HOME_PAGE';
   static const RECEIPT = '/RECEIPT';
+  static const CONFERENCE = '/CONFERENCE';
 }

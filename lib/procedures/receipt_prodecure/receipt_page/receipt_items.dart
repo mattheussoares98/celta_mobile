@@ -1,7 +1,6 @@
 import 'package:celta_inventario/components/personalized_card.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/liberate_check_buttons.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +16,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
 
   @override
   Widget build(BuildContext context) {
-    ReceiptProvider receiptProvider = Provider.of(context);
+    ReceiptProvider receiptProvider = Provider.of(context, listen: true);
 
     TextStyle _fontStyle = const TextStyle(
       fontSize: 20,
@@ -46,17 +45,14 @@ class _ReceiptItemsState extends State<ReceiptItems> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
+                  if (receiptProvider.isLoadingLiberateCheck) {
+                    //não permite mudar o recebimento enquanto está carregando uma liberação
+                    return;
+                  }
                   setState(() {
                     selectedIndex = index;
                     //isso faz com que apareça os botões de "conferir" e "liberar" somente no item selecionado
                   });
-                  // productProvider.codigoInternoInventario = receiptProvider
-                  //     .receipts[index].codigoInternoInventario;
-
-                  // Navigator.of(context).pushNamed(
-                  //   APPROUTES.COUNTINGS, //alterar
-                  //   arguments: receiptProvider.receipts[index],
-                  // );
                 },
                 //sem esse Card, não funciona o gesture detector no campo inteiro
                 child: PersonalizedCard.personalizedCard(
@@ -121,6 +117,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                             grDocCode: receiptProvider
                                 .receipts[index].CodigoInterno_ProcRecebDoc,
                             receiptProvider: receiptProvider,
+                            context: context,
                           ),
                       ],
                     ),

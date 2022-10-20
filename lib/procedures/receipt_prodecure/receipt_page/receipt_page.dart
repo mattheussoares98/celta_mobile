@@ -1,5 +1,6 @@
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_items.dart';
 import 'package:celta_inventario/utils/consulting_widget.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/try_again.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,10 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
     EnterpriseReceiptModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseReceiptModel;
+    ReceiptProvider receiptProvider = Provider.of(context, listen: true);
 
     if (!_isLoaded) {
-      Provider.of<ReceiptProvider>(context, listen: false).getReceipt(
+      receiptProvider.getReceipt(
         enterpriseCode: enterprise.codigoInternoEmpresa.toString(),
         userIdentity: UserIdentity.identity,
       );
@@ -47,25 +49,34 @@ class _ReceiptPageState extends State<ReceiptPage> {
       ),
       body: Column(
         children: [
-          if (receiptProvider.isLoading)
+          if (receiptProvider.isLoadingReceipt)
             Expanded(
-                child: ConsultingWidget.consultingWidget(
-                    title: 'Consultando recebimentos')),
-          if (receiptProvider.errorMessage != '')
+              child: ConsultingWidget.consultingWidget(
+                  title: 'Consultando recebimentos'),
+            ),
+          if (receiptProvider.errorMessage != '' &&
+              receiptProvider.receiptCount == 0 &&
+              !receiptProvider.isLoadingReceipt)
             Expanded(
               child: TryAgainWidget.tryAgain(
-                provider: receiptProvider,
                 errorMessage: receiptProvider.errorMessage,
                 request: () async => setState(() {
                   receiptProvider.getReceipt(
                     enterpriseCode: enterprise.codigoInternoEmpresa.toString(),
                     userIdentity: UserIdentity.identity,
                   );
+                  if (receiptProvider.liberateError != "") {
+                    ShowErrorMessage().showErrorMessage(
+                        error: receiptProvider.liberateError, context: context);
+                  }
                 }),
               ),
             ),
-          if (receiptProvider.errorMessage == "" && !receiptProvider.isLoading)
-            const Expanded(child: const ReceiptItems()),
+          if (!receiptProvider.isLoadingReceipt &&
+              receiptProvider.errorMessage == '')
+            const Expanded(
+              child: const ReceiptItems(),
+            ),
         ],
       ),
     );

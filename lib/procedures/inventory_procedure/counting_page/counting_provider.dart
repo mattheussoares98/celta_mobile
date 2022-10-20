@@ -35,6 +35,9 @@ class CountingProvider with ChangeNotifier {
     _countings.clear();
     _errorMessage = '';
     _isLoadingCountings = true;
+    // notifyListeners();
+    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
+    //porque está sendo chamado dentro de um setState
 
     try {
       var headers = {'Content-Type': 'application/json'};

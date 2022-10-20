@@ -1,24 +1,77 @@
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_provider.dart';
+import 'package:celta_inventario/utils/app_routes.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 
 class LiberateCheckButtons {
   static liberateCheckButtons({
     required int grDocCode,
     required ReceiptProvider receiptProvider,
+    required BuildContext context,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-          onPressed: () async {
-            print(grDocCode);
-            await receiptProvider.liberate(grDocCode);
-          },
-          child: const Text("Liberar"),
+          onPressed: receiptProvider.isLoadingLiberateCheck
+              ? null
+              : () async {
+                  // print(grDocCode);
+                  await receiptProvider.liberate(grDocCode);
+
+                  if (receiptProvider.liberateError != "") {
+                    ShowErrorMessage().showErrorMessage(
+                      error: receiptProvider.liberateError,
+                      context: context,
+                    );
+                  }
+                },
+          child: receiptProvider.isLoadingLiberateCheck
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'AGUARDE...',
+                    ),
+                    const SizedBox(width: 7),
+                    Container(
+                      height: 20,
+                      width: 20,
+                      child: const CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                )
+              : const Text("Liberar"),
         ),
         ElevatedButton(
-          onPressed: () {},
-          child: const Text("Conferir"),
+          onPressed: receiptProvider.isLoadingLiberateCheck
+              ? null
+              : () {
+                  Navigator.of(context).pushNamed(
+                    APPROUTES.CONFERENCE,
+                    arguments: grDocCode,
+                  );
+                },
+          child: receiptProvider.isLoadingLiberateCheck
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'AGUARDE...',
+                    ),
+                    const SizedBox(width: 7),
+                    Container(
+                      height: 20,
+                      width: 20,
+                      child: const CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                )
+              : const Text("Conferir"),
         )
       ],
     );

@@ -28,16 +28,15 @@ class EnterpriseReceiptProvider with ChangeNotifier {
     return _isLoadingEnterprises;
   }
 
-  clearEnterprises() {
-    _enterprises.clear();
-  }
-
-  Future getEnterprises({
+  Future<void> getEnterprises({
     String? userIdentity,
   }) async {
-    clearEnterprises();
+    _enterprises.clear();
     _errorMessage = '';
     _isLoadingEnterprises = true;
+    // notifyListeners();
+    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
+    //porque está sendo chamado dentro de um setState
 
     try {
       var headers = {'Content-Type': 'application/json'};
@@ -47,6 +46,12 @@ class EnterpriseReceiptProvider with ChangeNotifier {
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();
+
+      if (_hasError(resultAsString)) {
+        return;
+      }
+
+      print("resultAsString: ${resultAsString}");
       List resultAsList = json.decode(resultAsString);
       Map resultAsMap = resultAsList.asMap();
 
@@ -76,5 +81,20 @@ class EnterpriseReceiptProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  bool _hasError(String resultAsString) {
+    if (resultAsString.contains("erro não esperado")) {
+      _errorMessage =
+          "Ocorreu um erro não esperado durante o acesso ao banco de dados do Celta Business Solutions. Este tipo de problema normalmente está ligado à questões de configuração ou à equivocos de desenvolvimento. Fale com seu administrador de sistema ou com nosso suporte técnico para maiores detalhes.";
+      return true;
+    } else if (resultAsString.contains(
+        "A identidade para o 'Celta BS Cross Services' não é válida")) {
+      _errorMessage =
+          "A identidade para o 'Celta BS Cross Services' não é válida. Fale com o administrador do seu sistema para resolver o problema.";
+      return true;
+    } else {
+      return false;
+    }
   }
 }

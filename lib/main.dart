@@ -8,6 +8,8 @@ import 'package:celta_inventario/procedures/inventory_procedure/product_page/pro
 import 'package:celta_inventario/procedures/inventory_procedure/product_page/product_provider.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/provider/quantity_provider.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/enterprise_page/enterprise_receipt_page.dart';
+import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_page.dart';
+import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_provider.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_page.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
@@ -34,6 +36,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => QuantityProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
+        ChangeNotifierProvider(create: (_) => ConferenceProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -104,6 +107,7 @@ void main() {
           APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
           APPROUTES.RECEIPT_ENTERPRISES: (ctx) => const EnterpriseReceiptPage(),
           APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
+          APPROUTES.CONFERENCE: (ctx) => const ConferencePage(),
         },
       ),
     ),
