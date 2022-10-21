@@ -52,7 +52,7 @@ class ConferenceProvider with ChangeNotifier {
       http.StreamedResponse response = await request.send();
 
       String resultAsString = await response.stream.bytesToString();
-
+      print(resultAsString);
       if (_hasError(resultAsString)) {
         _isLoading = false;
         notifyListeners();

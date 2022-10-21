@@ -110,31 +110,6 @@ class _ConferenceItemsState extends State<ConferenceItems> {
                           index: index,
                           conferenceProvider: conferenceProvider,
                         ),
-                        Row(
-                          children: [
-                            const Text("Quantidade contada: "),
-                            Text(
-                              conferenceProvider
-                                  .products[index].Quantidade_ProcRecebDocProEmb
-                                  .toString(),
-                            ),
-                            Row(
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    fixedSize: const Size(15, 15),
-                                  ),
-                                  onPressed: () {},
-                                  child: const Icon(Icons.add),
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.remove),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
                         values(
                           title: "Quantidade contada",
                           value: conferenceProvider
