@@ -29,7 +29,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
     if (!_isLoaded) {
       receiptProvider.getReceipt(
         enterpriseCode: enterprise.codigoInternoEmpresa.toString(),
-        userIdentity: UserIdentity.identity,
       );
       _isLoaded = true;
     }
@@ -63,7 +62,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
                 request: () async => setState(() {
                   receiptProvider.getReceipt(
                     enterpriseCode: enterprise.codigoInternoEmpresa.toString(),
-                    userIdentity: UserIdentity.identity,
                   );
                   if (receiptProvider.liberateError != "") {
                     ShowErrorMessage().showErrorMessage(
@@ -74,8 +72,11 @@ class _ReceiptPageState extends State<ReceiptPage> {
             ),
           if (!receiptProvider.isLoadingReceipt &&
               receiptProvider.errorMessage == '')
-            const Expanded(
-              child: const ReceiptItems(),
+            Expanded(
+              child: ReceiptItems(
+                enterprise: enterprise,
+                receiptProvider: receiptProvider,
+              ),
             ),
         ],
       ),

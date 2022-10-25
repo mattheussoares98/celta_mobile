@@ -1,11 +1,18 @@
 import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/procedures/receipt_prodecure/models/enterprise_receipt_model.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/liberate_check_buttons.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ReceiptItems extends StatefulWidget {
-  const ReceiptItems({Key? key}) : super(key: key);
+  final EnterpriseReceiptModel enterprise;
+  final ReceiptProvider receiptProvider;
+  const ReceiptItems({
+    required this.enterprise,
+    required this.receiptProvider,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ReceiptItems> createState() => _ReceiptItemsState();
@@ -16,8 +23,6 @@ class _ReceiptItemsState extends State<ReceiptItems> {
 
   @override
   Widget build(BuildContext context) {
-    ReceiptProvider receiptProvider = Provider.of(context, listen: true);
-
     TextStyle _fontStyle = const TextStyle(
       fontSize: 20,
       color: Colors.black,
@@ -41,11 +46,11 @@ class _ReceiptItemsState extends State<ReceiptItems> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: receiptProvider.receiptCount,
+            itemCount: widget.receiptProvider.receiptCount,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  if (receiptProvider.isLoadingLiberateCheck) {
+                  if (widget.receiptProvider.isLoadingLiberateCheck) {
                     //não permite mudar o recebimento enquanto está carregando uma liberação
                     return;
                   }
@@ -72,8 +77,8 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                             const SizedBox(height: 25),
                             Expanded(
                               child: Text(
-                                receiptProvider
-                                    .receipts[index].Numero_ProcRecebDoc,
+                                widget.receiptProvider.receipts[index]
+                                    .Numero_ProcRecebDoc,
                                 style: _fontBoldStyle,
                                 maxLines: 2,
                               ),
@@ -89,7 +94,8 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                                 style: _fontStyle,
                               ),
                               Text(
-                                receiptProvider.receipts[index].EmitterName,
+                                widget.receiptProvider.receipts[index]
+                                    .EmitterName,
                                 style: _fontBoldStyle,
                               )
                             ],
@@ -104,7 +110,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                                 style: _fontStyle,
                               ),
                               Text(
-                                receiptProvider.receipts[index].Status
+                                widget.receiptProvider.receipts[index].Status
                                     .toString(),
                                 style: _fontBoldStyle,
                               )
@@ -114,10 +120,11 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                         const SizedBox(height: 15),
                         if (selectedIndex == index)
                           LiberateCheckButtons.liberateCheckButtons(
-                            grDocCode: receiptProvider
-                                .receipts[index].CodigoInterno_ProcRecebDoc,
-                            receiptProvider: receiptProvider,
+                            grDocCode: widget.receiptProvider.receipts[index]
+                                .CodigoInterno_ProcRecebDoc,
+                            receiptProvider: widget.receiptProvider,
                             context: context,
+                            enterprise: widget.enterprise,
                           ),
                       ],
                     ),

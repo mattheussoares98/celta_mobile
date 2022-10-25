@@ -1,3 +1,4 @@
+import 'package:celta_inventario/procedures/receipt_prodecure/models/enterprise_receipt_model.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
@@ -8,6 +9,7 @@ class LiberateCheckButtons {
     required int grDocCode,
     required ReceiptProvider receiptProvider,
     required BuildContext context,
+    required EnterpriseReceiptModel enterprise,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -23,6 +25,11 @@ class LiberateCheckButtons {
                     ShowErrorMessage().showErrorMessage(
                       error: receiptProvider.liberateError,
                       context: context,
+                    );
+                  } else {
+                    receiptProvider.getReceipt(
+                      enterpriseCode:
+                          enterprise.codigoInternoEmpresa.toString(),
                     );
                   }
                 },

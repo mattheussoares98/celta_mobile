@@ -1,6 +1,8 @@
 import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_consult_product.dart';
+import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_consult_product_without_ean.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_items.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_provider.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,21 +17,6 @@ class ConferencePage extends StatefulWidget {
 }
 
 class _ConferencePageState extends State<ConferencePage> {
-  bool _isLoaded = false;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    int docCode = ModalRoute.of(context)!.settings.arguments as int;
-
-    if (!_isLoaded) {
-      Provider.of<ConferenceProvider>(context, listen: true)
-          .getProducts(docCode: docCode);
-
-      _isLoaded = true;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     ConferenceProvider conferenceProvider = Provider.of(context, listen: true);
@@ -43,34 +30,26 @@ class _ConferencePageState extends State<ConferencePage> {
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ConferenceConsultProduct(conferenceProvider),
-          if (conferenceProvider.isLoading)
+          ConferenceConsultProduct(
+            conferenceProvider: conferenceProvider,
+            docCode: docCode,
+          ),
+          if (conferenceProvider.consultingProducts)
             Expanded(
               child: ConsultingWidget.consultingWidget(
-                  title: 'Consultando produtos do recebimento'),
+                  title: 'Consultando produtos'),
             ),
-          if (conferenceProvider.errorMessage != '' &&
-              !conferenceProvider.isLoading)
-            // && conferenceProvider.receiptCount == 0)
-            SingleChildScrollView(
-              child: TryAgainWidget.tryAgain(
-                errorMessage: conferenceProvider.errorMessage,
-                request: () async {
-                  setState(() {
-                    conferenceProvider.getProducts(docCode: docCode);
-                  });
-                },
-              ),
+          if (!conferenceProvider.consultingProducts)
+            ConferenceItems(
+              docCode: docCode,
+              conferenceProvider: conferenceProvider,
             ),
-          if (conferenceProvider.errorMessage != '' &&
-              !conferenceProvider.isLoading)
-            const Card(), //coloquei isso só pra aparecer a mensagem de erro no centro... no mainAxisAlignment da coluna está colocando espaço entre os itens
-          if (!conferenceProvider.isLoading &&
-              conferenceProvider.errorMessage == "")
-            const Expanded(
-              child: const ConferenceItems(),
+          if (MediaQuery.of(context).viewInsets.bottom == 0)
+            ConferenceConsultProductWithoutEan(
+              docCode: docCode,
+              conferenceProvider: conferenceProvider,
             ),
         ],
       ),

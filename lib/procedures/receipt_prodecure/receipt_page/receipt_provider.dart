@@ -43,7 +43,6 @@ class ReceiptProvider with ChangeNotifier {
 
   Future<void> getReceipt({
     required String? enterpriseCode,
-    required String? userIdentity,
   }) async {
     _receipts.clear();
     _isLoadingReceipt = true;
