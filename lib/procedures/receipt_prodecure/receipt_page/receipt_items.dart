@@ -119,12 +119,11 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                         ),
                         const SizedBox(height: 15),
                         if (selectedIndex == index)
-                          LiberateCheckButtons.liberateCheckButtons(
+                          LiberateCheckButtons(
                             grDocCode: widget.receiptProvider.receipts[index]
                                 .CodigoInterno_ProcRecebDoc,
                             receiptProvider: widget.receiptProvider,
-                            context: context,
-                            enterprise: widget.enterprise,
+                            index: index,
                           ),
                       ],
                     ),

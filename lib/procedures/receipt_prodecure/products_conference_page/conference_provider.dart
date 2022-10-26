@@ -121,6 +121,7 @@ class ConferenceProvider with ChangeNotifier {
   void _updateAtualQuantity({
     required int index,
     required double newQuantity,
+    required bool isAnnulQuantity,
   }) {
     ConferenceProductModel productWithNewQuantity = ConferenceProductModel(
       Nome_Produto: _products[index].Nome_Produto,
@@ -130,7 +131,8 @@ class ConferenceProvider with ChangeNotifier {
       CodigoPlu_ProEmb: _products[index].CodigoPlu_ProEmb,
       Codigo_ProEmb: _products[index].Codigo_ProEmb,
       PackingQuantity: _products[index].PackingQuantity,
-      Quantidade_ProcRecebDocProEmb: newQuantity, //alterando a quantidade
+      Quantidade_ProcRecebDocProEmb:
+          isAnnulQuantity ? null : newQuantity, //alterando a quantidade
       ReferenciaXml_ProcRecebDocProEmb:
           _products[index].ReferenciaXml_ProcRecebDocProEmb,
       AllEans: _products[index].AllEans,
@@ -168,7 +170,6 @@ class ConferenceProvider with ChangeNotifier {
         docCode: docCode,
         productgCode: productgCode,
         productPackingCode: productPackingCode,
-        quantityText: quantityText,
         index: index,
       );
       return;
@@ -220,6 +221,7 @@ class ConferenceProvider with ChangeNotifier {
         _updateAtualQuantity(
           index: index,
           newQuantity: quantity!,
+          isAnnulQuantity: false,
         );
       }
     } catch (e) {
@@ -235,13 +237,12 @@ class ConferenceProvider with ChangeNotifier {
     required int docCode,
     required int productgCode,
     required int productPackingCode,
-    required String
-        quantityText, //o parâmetro é recebido via String porque vem de um controller de um textFormField
     required int index,
   }) async {
-    if (_products[index].Quantidade_ProcRecebDocProEmb == 0) {
+    if (_products[index].Quantidade_ProcRecebDocProEmb == 0 ||
+        _products[index].Quantidade_ProcRecebDocProEmb == null) {
       //se a quantidade for igual à atual, não precisa fazer a requisição
-      _errorMessageUpdateQuantity = "A quantidade já está zerada";
+      _errorMessageUpdateQuantity = "A quantidade já está nula";
       notifyListeners();
       return;
     }
@@ -279,6 +280,7 @@ class ConferenceProvider with ChangeNotifier {
         _updateAtualQuantity(
           index: index,
           newQuantity: 0,
+          isAnnulQuantity: true,
         );
       }
     } catch (e) {

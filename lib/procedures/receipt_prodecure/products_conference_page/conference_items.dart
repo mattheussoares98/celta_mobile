@@ -134,10 +134,10 @@ class _ConferenceItemsState extends State<ConferenceItems> {
                                     value: conferenceProvider.products[index]
                                                 .Quantidade_ProcRecebDocProEmb ==
                                             null
-                                        //se for maior que zero pode colocar no
-                                        //máximo 3 casas decimais. Senão,
-                                        //precisa aparecer o valor que vier na
-                                        //consulta da API
+                                        //se o valor for nulo, basta convertê-lo
+                                        //para String. Se não for nulo, basta
+                                        //alterar os pontos por vírgula e
+                                        //mostrar no máximo 3 casas decimais
                                         ? conferenceProvider.products[index]
                                             .Quantidade_ProcRecebDocProEmb
                                             .toString()

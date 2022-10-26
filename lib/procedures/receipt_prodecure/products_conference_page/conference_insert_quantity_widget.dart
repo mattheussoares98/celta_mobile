@@ -148,7 +148,6 @@ class _ConferenceInsertQuantityWidget
                               .conferenceProductModel.CodigoInterno_Produto,
                           productPackingCode: widget
                               .conferenceProductModel.CodigoInterno_ProEmb,
-                          quantityText: _consultedProductController.text,
                           index: widget.index,
                         );
 

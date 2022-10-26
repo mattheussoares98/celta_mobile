@@ -142,7 +142,23 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  liberate(int grDocCode) async {
+  void _updateAtualStatus({
+    required int index,
+  }) {
+    ReceiptModel receiptWithNewStatus = ReceiptModel(
+      CodigoInterno_ProcRecebDoc: _receipts[index].CodigoInterno_ProcRecebDoc,
+      CodigoInterno_Empresa: _receipts[index].CodigoInterno_Empresa,
+      Numero_ProcRecebDoc: _receipts[index].Numero_ProcRecebDoc,
+      EmitterName: _receipts[index].EmitterName,
+      Status:
+          "Em processo de autorização", //sempre que da certo a liberação, fica com esse status
+    );
+
+    _receipts[index] = receiptWithNewStatus;
+    notifyListeners();
+  }
+
+  liberate({required int grDocCode, required int index, required}) async {
     _isLoadingLiberateCheck = true;
     _liberateError = "";
     notifyListeners();
@@ -160,27 +176,24 @@ class ReceiptProvider with ChangeNotifier {
       final responseInString = await response.stream.bytesToString();
 
       print("responseInString receiptProvider ${responseInString}");
-      if (responseInString == "4") {
+      if (responseInString.contains("Message")) {
+        //significa que deu algum erro
+        _liberateError = json.decode(responseInString)["Message"];
+        _isLoadingLiberateCheck = false;
+        notifyListeners();
+        return;
+      } else if (responseInString.contains("!DOCTYPE HTML")) {
         _liberateError =
-            "Existem divergencias, verifique e informe o real status";
-      } else if (responseInString
-          .contains("O canal de solicitação atingiu o tempo limite")) {
-        _liberateError = "Ocorreu timeout para efetuar a solicitação";
-      } else if (responseInString.contains("Você não está autorizado")) {
-        _liberateError =
-            "Você não está autorizado a utilizar este serviço ou o serviço não está disponível. Fale com seu administrador de sistemas para resolver o problema.";
-      } else if (responseInString.contains("Bad Request")) {
-        _liberateError =
-            "Este documento está em algum processo de autorização e por este motivo não pode ser liberado.";
-      } else if (responseInString.contains("Este documento já está liberado")) {
-        _liberateError =
-            "Este documento já está liberado, o que significa que não é possível liberá-lo para entrada.";
-      } else if (responseInString
-          .contains("Este documento está em algum processo de autorização")) {
-        _liberateError =
-            "Este documento está em algum processo de autorização e por este motivo não pode ser liberado.";
+            "Ocorreu um erro não esperado para consultar os produtos";
+        _isLoadingLiberateCheck = false;
+        notifyListeners();
+        return;
+      } else {
+        _updateAtualStatus(index: index);
       }
-    } catch (e) {}
+    } catch (e) {
+      _liberateError = "Ocorreu um erro não esperado para efetuar a liberação";
+    }
 
     _isLoadingLiberateCheck = false;
     notifyListeners();

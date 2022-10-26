@@ -4,36 +4,45 @@ import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 
-class LiberateCheckButtons {
-  static liberateCheckButtons({
-    required int grDocCode,
-    required ReceiptProvider receiptProvider,
-    required BuildContext context,
-    required EnterpriseReceiptModel enterprise,
-  }) {
+class LiberateCheckButtons extends StatefulWidget {
+  final int grDocCode;
+  final ReceiptProvider receiptProvider;
+  final int index;
+  const LiberateCheckButtons({
+    required this.grDocCode,
+    required this.receiptProvider,
+    required this.index,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<LiberateCheckButtons> createState() => _LiberateCheckButtonsState();
+}
+
+class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-          onPressed: receiptProvider.isLoadingLiberateCheck
+          onPressed: widget.receiptProvider.isLoadingLiberateCheck
               ? null
               : () async {
                   // print(grDocCode);
-                  await receiptProvider.liberate(grDocCode);
+                  await widget.receiptProvider.liberate(
+                    grDocCode: widget.grDocCode,
+                    index: widget.index,
+                  );
 
-                  if (receiptProvider.liberateError != "") {
+                  if (widget.receiptProvider.liberateError != "") {
                     ShowErrorMessage().showErrorMessage(
-                      error: receiptProvider.liberateError,
+                      error: widget.receiptProvider.liberateError,
                       context: context,
-                    );
-                  } else {
-                    receiptProvider.getReceipt(
-                      enterpriseCode:
-                          enterprise.codigoInternoEmpresa.toString(),
                     );
                   }
                 },
-          child: receiptProvider.isLoadingLiberateCheck
+          child: widget.receiptProvider.isLoadingLiberateCheck
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -53,15 +62,15 @@ class LiberateCheckButtons {
               : const Text("Liberar"),
         ),
         ElevatedButton(
-          onPressed: receiptProvider.isLoadingLiberateCheck
+          onPressed: widget.receiptProvider.isLoadingLiberateCheck
               ? null
               : () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.CONFERENCE,
-                    arguments: grDocCode,
+                    arguments: widget.grDocCode,
                   );
                 },
-          child: receiptProvider.isLoadingLiberateCheck
+          child: widget.receiptProvider.isLoadingLiberateCheck
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
