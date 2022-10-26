@@ -96,12 +96,6 @@ class ConferenceProvider with ChangeNotifier {
         _consultingProducts = false;
         notifyListeners();
         return;
-      } else if (resultAsString.contains("!DOCTYPE HTML")) {
-        _errorMessageGetProducts =
-            "Ocorreu um erro não esperado para consultar os produtos";
-        _consultingProducts = false;
-        notifyListeners();
-        return;
       } else {
         resultAsStringToConferenceModel(
           resultAsString: resultAsString,
@@ -110,8 +104,7 @@ class ConferenceProvider with ChangeNotifier {
       }
     } catch (e) {
       _errorMessageGetProducts =
-          "Erro para consultar os produtos do recebimento";
-      print('Erro para consultar os produtos do recebimento: ${e.toString()}');
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
     }
 
     _consultingProducts = false;
@@ -211,12 +204,6 @@ class ConferenceProvider with ChangeNotifier {
         _isUpdatingQuantity = false;
         notifyListeners();
         return;
-      } else if (resultAsString.contains("!DOCTYPE HTML")) {
-        _errorMessageUpdateQuantity =
-            "Ocorreu um erro não esperado para consultar os produtos";
-        _isUpdatingQuantity = false;
-        notifyListeners();
-        return;
       } else {
         _updateAtualQuantity(
           index: index,
@@ -225,8 +212,8 @@ class ConferenceProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      _errorMessageUpdateQuantity = "Erro para alterar a quantidade";
-      print('Erro para alterar a quantidade do produto: ${e.toString()}');
+      _errorMessageUpdateQuantity =
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
     }
 
     _isUpdatingQuantity = false;
@@ -270,12 +257,6 @@ class ConferenceProvider with ChangeNotifier {
         _isUpdatingQuantity = false;
         notifyListeners();
         return;
-      } else if (resultAsString.contains("!DOCTYPE HTML")) {
-        _errorMessageUpdateQuantity =
-            "Ocorreu um erro não esperado para consultar os produtos";
-        _isUpdatingQuantity = false;
-        notifyListeners();
-        return;
       } else {
         _updateAtualQuantity(
           index: index,
@@ -284,8 +265,8 @@ class ConferenceProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      _errorMessageUpdateQuantity = "Erro para alterar a quantidade";
-      print('Erro para alterar a quantidade do produto: ${e.toString()}');
+      _errorMessageUpdateQuantity =
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
     }
 
     _isUpdatingQuantity = false;
@@ -329,12 +310,6 @@ class ConferenceProvider with ChangeNotifier {
         _consultingProducts = false;
         notifyListeners();
         return;
-      } else if (resultAsString.contains("!DOCTYPE HTML")) {
-        _errorMessageGetProducts =
-            "Ocorreu um erro não esperado para consultar os produtos";
-        _consultingProducts = false;
-        notifyListeners();
-        return;
       }
 
       resultAsStringToConferenceModel(
@@ -342,7 +317,8 @@ class ConferenceProvider with ChangeNotifier {
         listToAdd: _products,
       );
     } catch (e) {
-      _errorMessageGetProducts = "Erro para consultar o produto";
+      _errorMessageGetProducts =
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
     }
     _consultingProducts = false;
     notifyListeners();
@@ -386,12 +362,6 @@ class ConferenceProvider with ChangeNotifier {
         _consultingProducts = false;
         notifyListeners();
         return;
-      } else if (resultAsString.contains("!DOCTYPE HTML")) {
-        _errorMessageGetProducts =
-            "Ocorreu um erro não esperado para consultar os produtos";
-        _consultingProducts = false;
-        notifyListeners();
-        return;
       }
 
       resultAsStringToConferenceModel(
@@ -399,7 +369,8 @@ class ConferenceProvider with ChangeNotifier {
         listToAdd: _products,
       );
     } catch (e) {
-      _errorMessageGetProducts = "Erro para consultar o produto";
+      _errorMessageGetProducts =
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
     }
     _consultingProducts = false;
     notifyListeners();
@@ -436,12 +407,6 @@ class ConferenceProvider with ChangeNotifier {
         _consultingProducts = false;
         notifyListeners();
         return;
-      } else if (resultAsString.contains("!DOCTYPE HTML")) {
-        _errorMessageGetProducts =
-            "Ocorreu um erro não esperado para consultar os produtos";
-        _consultingProducts = false;
-        notifyListeners();
-        return;
       }
 
       resultAsStringToConferenceModel(
@@ -449,7 +414,8 @@ class ConferenceProvider with ChangeNotifier {
         listToAdd: _products,
       );
     } catch (e) {
-      _errorMessageGetProducts = "Erro para consultar o produto";
+      _errorMessageGetProducts =
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
     }
     _consultingProducts = false;
     notifyListeners();

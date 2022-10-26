@@ -45,9 +45,7 @@ class CountingProvider with ChangeNotifier {
           'POST',
           Uri.parse(
               '${BaseUrl.url}/Inventory/GetCountings?inventoryProcessCode=$inventoryProcessCode'));
-      request.body = json.encode(
-        userIdentity,
-      );
+      request.body = json.encode(userIdentity);
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();

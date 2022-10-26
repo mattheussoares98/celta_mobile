@@ -15,18 +15,16 @@ class EnterpriseReceiptPage extends StatefulWidget {
 }
 
 class EnterpriseReceiptPageState extends State<EnterpriseReceiptPage> {
-  getEnterprises(EnterpriseReceiptProvider enterpriseReceiptProvider) async {
-    await enterpriseReceiptProvider.getEnterprises(
-      userIdentity: UserIdentity.identity,
-    );
-  }
-
+  bool isLoaded = false;
   @override
-  void initState() {
-    super.initState();
-    EnterpriseReceiptProvider enterpriseReceiptProvider =
-        Provider.of(context, listen: false);
-    getEnterprises(enterpriseReceiptProvider);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!isLoaded) {
+      Provider.of<EnterpriseReceiptProvider>(context, listen: false)
+          .getEnterprises();
+      isLoaded = true;
+    }
   }
 
   @override
@@ -51,9 +49,8 @@ class EnterpriseReceiptPageState extends State<EnterpriseReceiptPage> {
             Expanded(
               child: TryAgainWidget.tryAgain(
                 errorMessage: enterpriseReceiptProvider.errorMessage,
-                request: () async => setState(
-                  () => enterpriseReceiptProvider.getEnterprises(),
-                ),
+                request: () async =>
+                    await enterpriseReceiptProvider.getEnterprises(),
               ),
             ),
           if (enterpriseReceiptProvider.errorMessage == "" &&

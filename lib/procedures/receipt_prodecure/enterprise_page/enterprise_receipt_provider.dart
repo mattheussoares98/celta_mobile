@@ -1,5 +1,6 @@
 import 'package:celta_inventario/procedures/receipt_prodecure/models/enterprise_receipt_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -28,9 +29,7 @@ class EnterpriseReceiptProvider with ChangeNotifier {
     return _isLoadingEnterprises;
   }
 
-  Future<void> getEnterprises({
-    String? userIdentity,
-  }) async {
+  Future<void> getEnterprises() async {
     _enterprises.clear();
     _errorMessage = '';
     _isLoadingEnterprises = true;
@@ -42,7 +41,7 @@ class EnterpriseReceiptProvider with ChangeNotifier {
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
           'POST', Uri.parse('${BaseUrl.url}/Enterprise/GetEnterprises'));
-      request.body = json.encode(userIdentity);
+      request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();

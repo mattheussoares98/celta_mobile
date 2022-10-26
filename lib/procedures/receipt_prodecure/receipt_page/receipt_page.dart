@@ -17,21 +17,18 @@ class ReceiptPage extends StatefulWidget {
 }
 
 class _ReceiptPageState extends State<ReceiptPage> {
-  bool _isLoaded = false;
+  bool isLoaded = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    EnterpriseReceiptModel enterprise =
+    final enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseReceiptModel;
-    ReceiptProvider receiptProvider = Provider.of(context, listen: true);
-
-    if (!_isLoaded) {
-      receiptProvider.getReceipt(
+    if (!isLoaded) {
+      Provider.of<ReceiptProvider>(context, listen: true).getReceipt(
         enterpriseCode: enterprise.codigoInternoEmpresa.toString(),
       );
-      _isLoaded = true;
     }
+    isLoaded = true;
   }
 
   @override
@@ -58,17 +55,14 @@ class _ReceiptPageState extends State<ReceiptPage> {
               !receiptProvider.isLoadingReceipt)
             Expanded(
               child: TryAgainWidget.tryAgain(
-                errorMessage: receiptProvider.errorMessage,
-                request: () async => setState(() {
-                  receiptProvider.getReceipt(
-                    enterpriseCode: enterprise.codigoInternoEmpresa.toString(),
-                  );
-                  if (receiptProvider.liberateError != "") {
-                    ShowErrorMessage().showErrorMessage(
-                        error: receiptProvider.liberateError, context: context);
-                  }
-                }),
-              ),
+                  errorMessage: receiptProvider.errorMessage,
+                  request: () async {
+                    setState(() {});
+                    await receiptProvider.getReceipt(
+                      enterpriseCode:
+                          enterprise.codigoInternoEmpresa.toString(),
+                    );
+                  }),
             ),
           if (!receiptProvider.isLoadingReceipt &&
               receiptProvider.errorMessage == '')

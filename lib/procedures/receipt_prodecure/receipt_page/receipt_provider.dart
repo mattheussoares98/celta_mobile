@@ -47,8 +47,6 @@ class ReceiptProvider with ChangeNotifier {
     _receipts.clear();
     _isLoadingReceipt = true;
     _errorMessage = '';
-    _liberateError = "";
-    // notifyListeners();
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
 
@@ -65,12 +63,17 @@ class ReceiptProvider with ChangeNotifier {
       http.StreamedResponse response = await request.send();
       String responseAsString = await response.stream.bytesToString();
 
-      print(responseAsString);
-      if (_haveReceiptError(responseAsString)) {
-        //precisa tratar o erro aqui porque não cai no catch se no
-        //responseAsString tiver alguma mensagem de erro, por isso ele continua
-        //a execução do código abaixo e aí sim da erro, fazendo com que
-        //apresente a mensagem de erro errada
+      // print(responseAsString);
+      if (responseAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessage = json.decode(responseAsString)["Message"];
+        _isLoadingReceipt = false;
+        notifyListeners();
+        return;
+      } else if (responseAsString.contains("!DOCTYPE HTML")) {
+        _errorMessage =
+            "Ocorreu um erro não esperado para consultar os produtos";
+        _isLoadingReceipt = false;
         notifyListeners();
         return;
       }
@@ -90,36 +93,12 @@ class ReceiptProvider with ChangeNotifier {
         );
       });
     } catch (e) {
-      //a mensagem de erro precisa ser tratada antes de chegar aqui, pois não
-      //pode continuar a execução do código caso no "responseAsString" tenha
-      //alguma mensagem de erro
+      _errorMessage =
+          "Ocorreu um erro não esperado na consulta dos recebimentos";
     } finally {
       _treatStatusMessage();
       _isLoadingReceipt = false;
       notifyListeners();
-    }
-  }
-
-  bool _haveReceiptError(
-    String responseAsString,
-  ) {
-    if (responseAsString.contains(
-        "Ocorreu um erro não esperado durante o acesso ao banco de dados do Celta Business Solutions")) {
-      _errorMessage =
-          "Ocorreu um erro não esperado durante o acesso ao banco de dados do Celta Business Solutions. Este tipo de problema normalmente está ligado à questões de configuração ou à equivocos de desenvolvimento. Fale com seu administrador de sistema ou com nosso suporte técnico para maiores detalhes.";
-      return true;
-    } else if (responseAsString
-        .contains("O Celta Business Solutions enviou uma solicitação")) {
-      _errorMessage =
-          "O Celta Business Solutions enviou uma solicitação ao banco de dados que não respondeu no tempo esperado (timeout). Caso este problema persista, entre em contato com o nosso suporte técnico para que possamos resolvê-lo o mais rápido possível.";
-      return true;
-    } else if (responseAsString.contains(
-        "Nenhum documento para recebimento de mercadorias foi encontrado")) {
-      _errorMessage =
-          "Nenhum documento para recebimento de mercadorias foi encontrado no Celta Business Solutions. Caso você sinta que isto está incorreto, entre em contato com o administrador do seu sistema.";
-      return true;
-    } else {
-      return false;
     }
   }
 
