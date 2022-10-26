@@ -150,27 +150,32 @@ class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
                         widget.conferenceProvider.isUpdatingQuantity
                     ? null
                     : () async {
-                        _consultProductController.text =
-                            await widget.conferenceProvider.scanAndConsultEan(
-                          consultProductController:
-                              _consultProductController.text,
-                          docCode: widget.docCode,
-                          eanInString: _consultProductController.text,
-                        );
+                        _consultProductController.clear();
 
-                        if (widget.conferenceProvider.errorMessageGetProducts !=
-                            "") {
-                          ShowErrorMessage().showErrorMessage(
-                            error: widget
-                                .conferenceProvider.errorMessageGetProducts,
-                            context: context,
+                        _consultProductController.text =
+                            await widget.conferenceProvider.scanBarcode();
+
+                        if (_consultProductController.text != "") {
+                          await widget.conferenceProvider.getProductByEan(
+                            docCode: widget.docCode,
+                            eanInString: _consultProductController.text,
                           );
-                        }
-                        if (widget.conferenceProvider.productsCount > 0) {
-                          //se for maior que 0 significa que deu certo a consulta e
-                          //por isso pode apagar o que foi escrito no campo de
-                          //consulta
-                          _consultProductController.clear();
+
+                          if (widget
+                                  .conferenceProvider.errorMessageGetProducts !=
+                              "") {
+                            ShowErrorMessage().showErrorMessage(
+                              error: widget
+                                  .conferenceProvider.errorMessageGetProducts,
+                              context: context,
+                            );
+                          }
+                          if (widget.conferenceProvider.productsCount > 0) {
+                            //se for maior que 0 significa que deu certo a consulta e
+                            //por isso pode apagar o que foi escrito no campo de
+                            //consulta
+                            _consultProductController.clear();
+                          }
                         }
                       },
                 icon: const Icon(Icons.photo_camera),

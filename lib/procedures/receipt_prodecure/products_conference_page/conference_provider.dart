@@ -342,7 +342,7 @@ class ConferenceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getProductByEan({
+  Future<void> getProductByEan({
     required int docCode,
     required String eanInString, //em string pq vem de um texfFormField
   }) async {
@@ -459,7 +459,7 @@ class ConferenceProvider with ChangeNotifier {
       await _getProductByPlu(docCode: docCode, pluInString: controllerText);
       if (_products.isNotEmpty) return;
 
-      await _getProductByEan(docCode: docCode, eanInString: controllerText);
+      await getProductByEan(docCode: docCode, eanInString: controllerText);
       if (_products.isNotEmpty) return;
     } else {
       //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
@@ -467,11 +467,7 @@ class ConferenceProvider with ChangeNotifier {
     }
   }
 
-  Future<String> scanAndConsultEan({
-    required String consultProductController,
-    required int docCode,
-    required String eanInString,
-  }) async {
+  Future<String> scanBarcode() async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -484,11 +480,9 @@ class ConferenceProvider with ChangeNotifier {
     // if (!mounted) return;
 
     if (barcodeScanRes != '-1') {
-      consultProductController = barcodeScanRes;
+      return barcodeScanRes;
+    } else {
+      return "";
     }
-
-    await _getProductByEan(docCode: docCode, eanInString: eanInString);
-
-    return consultProductController;
   }
 }
