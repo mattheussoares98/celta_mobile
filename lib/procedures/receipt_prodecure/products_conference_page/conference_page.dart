@@ -18,6 +18,21 @@ class ConferencePage extends StatefulWidget {
 
 class _ConferencePageState extends State<ConferencePage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  bool isLoaded = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!isLoaded) {
+      Provider.of<ConferenceProvider>(context, listen: false).clearProducts();
+    }
+    isLoaded = true;
+  }
+
+  @override
   Widget build(BuildContext context) {
     ConferenceProvider conferenceProvider = Provider.of(context, listen: true);
     int docCode = ModalRoute.of(context)!.settings.arguments as int;

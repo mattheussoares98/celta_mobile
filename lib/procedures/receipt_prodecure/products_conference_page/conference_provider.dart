@@ -37,6 +37,10 @@ class ConferenceProvider with ChangeNotifier {
     return _errorMessageUpdateQuantity;
   }
 
+  clearProducts() {
+    _products = [];
+  }
+
   resultAsStringToConferenceModel({
     required resultAsString,
     required listToAdd,
