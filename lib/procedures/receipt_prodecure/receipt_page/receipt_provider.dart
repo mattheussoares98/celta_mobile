@@ -133,6 +133,10 @@ class ReceiptProvider with ChangeNotifier {
         element.Status = "Em processo de autorização";
       } else if (element.Status == "3") {
         element.Status = "Liberado para entrada (aguardando entrada)";
+      } else if (element.Status == "1") {
+        element.Status = "Utilizado para uma entrada (finalizado)";
+      } else {
+        element.Status = "Status desconhecido. Avise o suporte";
       }
     });
     notifyListeners();
