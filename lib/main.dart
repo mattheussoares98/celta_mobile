@@ -1,3 +1,5 @@
+import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/enterprise_consult_price_page.dart';
+import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/enterprise_consult_price_provider.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/counting_page/counting_page.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/counting_page/counting_provider.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/enterprise_page/enterprise_inventory_page.dart';
@@ -7,7 +9,6 @@ import 'package:celta_inventario/procedures/inventory_procedure/inventory_page/i
 import 'package:celta_inventario/procedures/inventory_procedure/product_page/product_page.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/product_page/product_provider.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/provider/quantity_provider.dart';
-import 'package:celta_inventario/procedures/receipt_prodecure/enterprise_page/enterprise_receipt_page.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_page.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_provider.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_page.dart';
@@ -22,7 +23,8 @@ import 'inicial_pages/login_or_home_page/login_or_home_page.dart';
 import 'inicial_pages/login_page/login_page.dart';
 import 'inicial_pages/login_page/login_provider.dart';
 import 'inicial_pages/splash_screen/splash_screen.dart';
-import 'procedures/receipt_prodecure/enterprise_page/enterprise_receipt_provider.dart';
+import 'procedures/receipt_prodecure/enterprise_receipt_page/enterprise_receipt_page.dart';
+import 'procedures/receipt_prodecure/enterprise_receipt_page/enterprise_receipt_provider.dart';
 
 void main() {
   runApp(
@@ -37,6 +39,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => QuantityProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
         ChangeNotifierProvider(create: (_) => ConferenceProvider()),
+        ChangeNotifierProvider(create: (_) => EnterpriseConsultPriceProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -108,6 +111,7 @@ void main() {
           APPROUTES.RECEIPT_ENTERPRISES: (ctx) => const EnterpriseReceiptPage(),
           APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
           APPROUTES.CONFERENCE: (ctx) => const ConferencePage(),
+          APPROUTES.CONSULT_PRICE: (ctx) => const EnterpriseConsultPricePage(),
         },
       ),
     ),

@@ -1,11 +1,11 @@
-class EnterpriseReceiptModel {
+class EnterpriseConsultPriceModel {
   final int codigoInternoEmpresa;
+  final String cnpj;
   final String codigoEmpresa;
   final String nomeEmpresa;
-  final String cnpj;
   bool isMarked;
 
-  EnterpriseReceiptModel({
+  EnterpriseConsultPriceModel({
     required this.codigoInternoEmpresa,
     required this.codigoEmpresa,
     required this.nomeEmpresa,

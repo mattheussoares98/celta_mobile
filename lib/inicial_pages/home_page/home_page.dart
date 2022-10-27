@@ -55,6 +55,12 @@ class _HomePageState extends State<HomePage> {
           children: [
             const SizedBox(height: 5),
             ImageComponent.instance.image(
+              imagePath: 'lib/assets/Images/consultPrice.jpg',
+              routine: 'Consulta de preços',
+              route: APPROUTES.CONSULT_PRICE,
+              context: context,
+            ),
+            ImageComponent.instance.image(
               imagePath: 'lib/assets/Images/inventory.jpg',
               routine: 'Inventário',
               route: APPROUTES.INVENTORY_ENTERPRISES,

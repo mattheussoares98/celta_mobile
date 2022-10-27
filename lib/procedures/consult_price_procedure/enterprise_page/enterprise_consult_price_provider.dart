@@ -1,3 +1,4 @@
+import 'package:celta_inventario/procedures/consult_price_procedure/models/enterprise_consult_price_model.dart';
 import 'package:celta_inventario/procedures/receipt_prodecure/models/enterprise_receipt_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
@@ -6,10 +7,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-class EnterpriseReceiptProvider with ChangeNotifier {
-  List<EnterpriseReceiptModel> _enterprises = [];
+class EnterpriseConsultPriceProvider with ChangeNotifier {
+  List<EnterpriseConsultPriceModel> _enterprises = [];
 
-  List<EnterpriseReceiptModel> get enterprises {
+  List<EnterpriseConsultPriceModel> get enterprises {
     return [..._enterprises];
   }
 
@@ -23,16 +24,16 @@ class EnterpriseReceiptProvider with ChangeNotifier {
     return _errorMessage;
   }
 
-  static bool _isLoadingEnterprises = false;
+  static bool _isLoading = false;
 
-  bool get isLoadingEnterprises {
-    return _isLoadingEnterprises;
+  bool get isLoading {
+    return _isLoading;
   }
 
   Future<void> getEnterprises() async {
     _enterprises.clear();
     _errorMessage = '';
-    _isLoadingEnterprises = true;
+    _isLoading = true;
     // notifyListeners();
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
@@ -46,7 +47,11 @@ class EnterpriseReceiptProvider with ChangeNotifier {
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();
 
-      if (_hasError(resultAsString)) {
+      if (resultAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessage = json.decode(resultAsString)["Message"];
+        _isLoading = false;
+        notifyListeners();
         return;
       }
 
@@ -56,44 +61,23 @@ class EnterpriseReceiptProvider with ChangeNotifier {
 
       resultAsMap.forEach((id, data) {
         _enterprises.add(
-          EnterpriseReceiptModel(
+          EnterpriseConsultPriceModel(
             codigoInternoEmpresa: data['CodigoInterno_Empresa'],
             codigoEmpresa: data['Codigo_Empresa'],
             nomeEmpresa: data['Nome_Empresa'],
+            cnpj: data['Cnpj_Empresa'],
             isMarked: false,
           ),
         );
       });
     } catch (e) {
-      print('erro na empresa: $e');
-      if (e.toString().contains('No route')) {
-        _errorMessage =
-            'O servidor não foi encontrado. Verifique a sua internet!';
-      } else if (e.toString().contains('Connection timed')) {
-        _errorMessage = 'Time out. Tente novamente';
-      } else {
-        _errorMessage =
-            'O servidor não foi encontrado. Verifique a sua internet!';
-      }
+      print(e);
+      _errorMessage =
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte técnico";
     } finally {
-      _isLoadingEnterprises = false;
+      _isLoading = false;
     }
 
     notifyListeners();
-  }
-
-  bool _hasError(String resultAsString) {
-    if (resultAsString.contains("erro não esperado")) {
-      _errorMessage =
-          "Ocorreu um erro não esperado durante o acesso ao banco de dados do Celta Business Solutions. Este tipo de problema normalmente está ligado à questões de configuração ou à equivocos de desenvolvimento. Fale com seu administrador de sistema ou com nosso suporte técnico para maiores detalhes.";
-      return true;
-    } else if (resultAsString.contains(
-        "A identidade para o 'Celta BS Cross Services' não é válida")) {
-      _errorMessage =
-          "A identidade para o 'Celta BS Cross Services' não é válida. Fale com o administrador do seu sistema para resolver o problema.";
-      return true;
-    } else {
-      return false;
-    }
   }
 }

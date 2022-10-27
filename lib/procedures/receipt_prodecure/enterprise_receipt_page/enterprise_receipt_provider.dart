@@ -1,15 +1,15 @@
+import 'package:celta_inventario/procedures/receipt_prodecure/models/enterprise_receipt_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/enterprise_inventory_model.dart';
+class EnterpriseReceiptProvider with ChangeNotifier {
+  List<EnterpriseReceiptModel> _enterprises = [];
 
-class EnterpriseInventoryProvider with ChangeNotifier {
-  List<EnterpriseInventoryModel> _enterprises = [];
-
-  List<EnterpriseInventoryModel> get enterprises {
+  List<EnterpriseReceiptModel> get enterprises {
     return [..._enterprises];
   }
 
@@ -29,9 +29,7 @@ class EnterpriseInventoryProvider with ChangeNotifier {
     return _isLoadingEnterprises;
   }
 
-  Future getEnterprises({
-    String? userIdentity,
-  }) async {
+  Future<void> getEnterprises() async {
     _enterprises.clear();
     _errorMessage = '';
     _isLoadingEnterprises = true;
@@ -43,16 +41,26 @@ class EnterpriseInventoryProvider with ChangeNotifier {
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
           'POST', Uri.parse('${BaseUrl.url}/Enterprise/GetEnterprises'));
-      request.body = json.encode(userIdentity);
+      request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();
+
+      if (resultAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessage = json.decode(resultAsString)["Message"];
+        _isLoadingEnterprises = false;
+        notifyListeners();
+        return;
+      }
+
+      print("resultAsString: ${resultAsString}");
       List resultAsList = json.decode(resultAsString);
       Map resultAsMap = resultAsList.asMap();
 
       resultAsMap.forEach((id, data) {
         _enterprises.add(
-          EnterpriseInventoryModel(
+          EnterpriseReceiptModel(
             codigoInternoEmpresa: data['CodigoInterno_Empresa'],
             codigoEmpresa: data['Codigo_Empresa'],
             nomeEmpresa: data['Nome_Empresa'],
@@ -62,16 +70,8 @@ class EnterpriseInventoryProvider with ChangeNotifier {
         );
       });
     } catch (e) {
-      print('erro na empresa: $e');
-      if (e.toString().contains('No route')) {
-        _errorMessage =
-            'O servidor não foi encontrado. Verifique a sua internet!';
-      } else if (e.toString().contains('Connection timed')) {
-        _errorMessage = 'Time out. Tente novamente';
-      } else {
-        _errorMessage =
-            'O servidor não foi encontrado. Verifique a sua internet!';
-      }
+      _errorMessage =
+          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte técnico";
     } finally {
       _isLoadingEnterprises = false;
     }
