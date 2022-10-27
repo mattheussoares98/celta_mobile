@@ -2,6 +2,8 @@ class APPROUTES {
   static const LOGIN_OR_HOME_PAGE = '/';
   static const INVENTORY_ENTERPRISES = '/INVENTORY_ENTERPRISES';
   static const RECEIPT_ENTERPRISES = '/RECEIPT_ENTERPRISES';
+  static const CONSULT_PRICE_ENTERPRISES = '/CONSULT_PRICE_ENTERPRISES';
+  static const CONSULT_PRICE = '/CONSULT_PRICE';
   static const INVENTORY = '/INVENTORY';
   static const SALES = '/SALES';
   static const STOCK = '/STOCK';
@@ -12,5 +14,4 @@ class APPROUTES {
   static const HOME_PAGE = '/HOME_PAGE';
   static const RECEIPT = '/RECEIPT';
   static const CONFERENCE = '/CONFERENCE';
-  static const CONSULT_PRICE = '/CONSULT_PRICE';
 }

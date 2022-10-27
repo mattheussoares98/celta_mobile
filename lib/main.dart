@@ -1,5 +1,7 @@
+import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_page.dart';
+import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_provider.dart';
 import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/enterprise_consult_price_page.dart';
-import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/enterprise_consult_price_provider.dart';
+import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/consult_price_provider.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/counting_page/counting_page.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/counting_page/counting_provider.dart';
 import 'package:celta_inventario/procedures/inventory_procedure/enterprise_page/enterprise_inventory_page.dart';
@@ -40,6 +42,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
         ChangeNotifierProvider(create: (_) => ConferenceProvider()),
         ChangeNotifierProvider(create: (_) => EnterpriseConsultPriceProvider()),
+        ChangeNotifierProvider(create: (_) => ConsultPriceProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -111,7 +114,9 @@ void main() {
           APPROUTES.RECEIPT_ENTERPRISES: (ctx) => const EnterpriseReceiptPage(),
           APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
           APPROUTES.CONFERENCE: (ctx) => const ConferencePage(),
-          APPROUTES.CONSULT_PRICE: (ctx) => const EnterpriseConsultPricePage(),
+          APPROUTES.CONSULT_PRICE: (ctx) => const ConsultPricePage(),
+          APPROUTES.CONSULT_PRICE_ENTERPRISES: (ctx) =>
+              const EnterpriseConsultPricePage(),
         },
       ),
     ),

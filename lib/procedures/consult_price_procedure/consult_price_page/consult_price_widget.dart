@@ -1,23 +1,22 @@
-import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_provider.dart';
-import 'package:celta_inventario/utils/consulting_widget.dart';
-import 'package:celta_inventario/utils/show_error_message.dart';
+import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_provider.dart';
 import 'package:flutter/material.dart';
 
-class ConferenceConsultProduct extends StatefulWidget {
-  final ConferenceProvider conferenceProvider;
+import '../../../utils/show_error_message.dart';
+
+class ConsultPriceWidget extends StatefulWidget {
+  final ConsultPriceProvider consultPriceProvider;
   final int docCode;
-  const ConferenceConsultProduct({
-    required this.conferenceProvider,
+  const ConsultPriceWidget({
+    required this.consultPriceProvider,
     required this.docCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConferenceConsultProduct> createState() =>
-      _ConferenceConsultProductState();
+  State<ConsultPriceWidget> createState() => _ConsultPriceWidgetState();
 }
 
-class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
+class _ConsultPriceWidgetState extends State<ConsultPriceWidget> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   static final TextEditingController _consultProductController =
@@ -43,8 +42,8 @@ class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
             child: Form(
               key: _formKey,
               child: TextFormField(
-                enabled: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
+                enabled: widget.consultPriceProvider.isLoading ||
+                        widget.consultPriceProvider.isSendingToPrint
                     ? false
                     : true,
                 autofocus: true,
@@ -66,8 +65,7 @@ class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
                 decoration: InputDecoration(
                   labelText: 'Consultar PLU, EAN ou nome',
                   floatingLabelStyle: TextStyle(
-                    color: widget.conferenceProvider.consultingProducts ||
-                            widget.conferenceProvider.isUpdatingQuantity
+                    color: widget.consultPriceProvider.isLoading
                         ? Colors.grey
                         : Theme.of(context).primaryColor,
                   ),
@@ -91,8 +89,7 @@ class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
                     ),
                   ),
                   labelStyle: TextStyle(
-                    color: widget.conferenceProvider.consultingProducts ||
-                            widget.conferenceProvider.isUpdatingQuantity
+                    color: widget.consultPriceProvider.isLoading
                         ? Colors.grey
                         : Theme.of(context).primaryColor,
                   ),
@@ -106,33 +103,32 @@ class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
           Row(
             children: [
               IconButton(
-                color: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
+                color: widget.consultPriceProvider.isLoading ||
+                        widget.consultPriceProvider.isSendingToPrint
                     ? Colors.grey
                     : Theme.of(context).primaryColor,
-                onPressed: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
+                onPressed: widget.consultPriceProvider.isLoading ||
+                        widget.consultPriceProvider.isSendingToPrint
                     ? null
                     : () async {
                         if (!isValid()) {
                           return;
                         }
                         FocusScope.of(context).unfocus();
-                        await widget.conferenceProvider
+
+                        await widget.consultPriceProvider
                             .getProductByPluEanOrName(
-                          docCode: widget.docCode,
+                          enterpriseCode: widget.docCode,
                           controllerText: _consultProductController.text,
                         );
 
-                        if (widget.conferenceProvider.errorMessageGetProducts !=
-                            "") {
+                        if (widget.consultPriceProvider.errorMessage != "") {
                           ShowErrorMessage().showErrorMessage(
-                            error: widget
-                                .conferenceProvider.errorMessageGetProducts,
+                            error: widget.consultPriceProvider.errorMessage,
                             context: context,
                           );
                         }
-                        if (widget.conferenceProvider.productsCount > 0) {
+                        if (widget.consultPriceProvider.productsCount > 0) {
                           //se for maior que 0 significa que deu certo a consulta e
                           //por isso pode apagar o que foi escrito no campo de
                           //consulta
@@ -142,36 +138,33 @@ class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
                 icon: const Icon(Icons.search),
               ),
               IconButton(
-                color: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
+                color: widget.consultPriceProvider.isLoading ||
+                        widget.consultPriceProvider.isSendingToPrint
                     ? Colors.grey
                     : Theme.of(context).primaryColor,
-                onPressed: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
+                onPressed: widget.consultPriceProvider.isLoading ||
+                        widget.consultPriceProvider.isSendingToPrint
                     ? null
                     : () async {
-                        FocusScope.of(context).unfocus();
                         _consultProductController.clear();
-
+                        FocusScope.of(context).unfocus();
                         _consultProductController.text =
-                            await widget.conferenceProvider.scanBarcode();
+                            await widget.consultPriceProvider.scanBarcode();
 
                         if (_consultProductController.text != "") {
-                          await widget.conferenceProvider.getProductByEan(
-                            docCode: widget.docCode,
-                            eanInString: _consultProductController.text,
+                          await widget.consultPriceProvider
+                              .getProductByPluEanOrName(
+                            enterpriseCode: widget.docCode,
+                            controllerText: _consultProductController.text,
                           );
 
-                          if (widget
-                                  .conferenceProvider.errorMessageGetProducts !=
-                              "") {
+                          if (widget.consultPriceProvider.errorMessage != "") {
                             ShowErrorMessage().showErrorMessage(
-                              error: widget
-                                  .conferenceProvider.errorMessageGetProducts,
+                              error: widget.consultPriceProvider.errorMessage,
                               context: context,
                             );
                           }
-                          if (widget.conferenceProvider.productsCount > 0) {
+                          if (widget.consultPriceProvider.productsCount > 0) {
                             //se for maior que 0 significa que deu certo a consulta e
                             //por isso pode apagar o que foi escrito no campo de
                             //consulta

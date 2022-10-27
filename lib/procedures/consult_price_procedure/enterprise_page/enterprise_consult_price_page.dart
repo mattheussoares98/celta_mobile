@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'enterprise_consult_price_items.dart';
-import 'enterprise_consult_price_provider.dart';
+import 'consult_price_provider.dart';
 
 class EnterpriseConsultPricePage extends StatefulWidget {
   const EnterpriseConsultPricePage({Key? key}) : super(key: key);
@@ -56,7 +56,7 @@ class EnterpriseConsultPricePageState
             ),
           if (enterpriseConsultPriceProvider.errorMessage == "" &&
               !enterpriseConsultPriceProvider.isLoading)
-            const Expanded(child: EnterpriseReceiptItems()),
+            const Expanded(child: EnterpriseConsultPriceItems()),
         ],
       ),
     );

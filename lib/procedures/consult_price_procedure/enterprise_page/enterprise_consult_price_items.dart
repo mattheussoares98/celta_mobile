@@ -1,21 +1,23 @@
 import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/consult_price_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../inventory_procedure/product_page/product_provider.dart';
-import 'enterprise_consult_price_provider.dart';
 
-class EnterpriseReceiptItems extends StatefulWidget {
-  const EnterpriseReceiptItems({Key? key}) : super(key: key);
+class EnterpriseConsultPriceItems extends StatefulWidget {
+  const EnterpriseConsultPriceItems({Key? key}) : super(key: key);
 
   @override
-  State<EnterpriseReceiptItems> createState() => _EnterpriseReceiptItemsState();
+  State<EnterpriseConsultPriceItems> createState() =>
+      _EnterpriseConsultPriceItemsState();
 }
 
-class _EnterpriseReceiptItemsState extends State<EnterpriseReceiptItems> {
+class _EnterpriseConsultPriceItemsState
+    extends State<EnterpriseConsultPriceItems> {
   @override
   Widget build(BuildContext context) {
-    EnterpriseConsultPriceProvider enterpriseReceiptProvider =
+    EnterpriseConsultPriceProvider enterpriseConsultPriceProvider =
         Provider.of(context, listen: true);
     ProductProvider productProvider = Provider.of(context);
 
@@ -30,13 +32,14 @@ class _EnterpriseReceiptItemsState extends State<EnterpriseReceiptItems> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: enterpriseReceiptProvider.enterpriseCount,
+            itemCount: enterpriseConsultPriceProvider.enterpriseCount,
             itemBuilder: (ctx, index) {
               return PersonalizedCard.personalizedCard(
                 context: context,
                 child: ListTile(
                   title: Text(
-                    enterpriseReceiptProvider.enterprises[index].nomeEmpresa,
+                    enterpriseConsultPriceProvider
+                        .enterprises[index].nomeEmpresa,
                     style: const TextStyle(
                       fontFamily: 'OpenSans',
                       fontWeight: FontWeight.bold,
@@ -44,7 +47,8 @@ class _EnterpriseReceiptItemsState extends State<EnterpriseReceiptItems> {
                     ),
                   ),
                   leading: Text(
-                    enterpriseReceiptProvider.enterprises[index].codigoEmpresa
+                    enterpriseConsultPriceProvider
+                        .enterprises[index].codigoEmpresa
                         .toString(),
                     style: const TextStyle(
                       color: Colors.black,
@@ -53,7 +57,7 @@ class _EnterpriseReceiptItemsState extends State<EnterpriseReceiptItems> {
                   ),
                   subtitle: Text(
                     "Cnpj: " +
-                        enterpriseReceiptProvider.enterprises[index].cnpj
+                        enterpriseConsultPriceProvider.enterprises[index].cnpj
                             .toString(),
                     style: const TextStyle(
                       color: Colors.black,
@@ -62,12 +66,13 @@ class _EnterpriseReceiptItemsState extends State<EnterpriseReceiptItems> {
                   ),
                   onTap: () {
                     productProvider.codigoInternoEmpresa =
-                        enterpriseReceiptProvider
+                        enterpriseConsultPriceProvider
                             .enterprises[index].codigoInternoEmpresa;
 
                     Navigator.of(context).pushNamed(
-                      APPROUTES.RECEIPT,
-                      arguments: enterpriseReceiptProvider.enterprises[index],
+                      APPROUTES.CONSULT_PRICE,
+                      arguments: enterpriseConsultPriceProvider
+                          .enterprises[index].codigoInternoEmpresa,
                     );
                   },
                 ),
