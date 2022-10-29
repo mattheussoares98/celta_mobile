@@ -104,16 +104,18 @@ class ReceiptProvider with ChangeNotifier {
 
   _treatStatusMessage() {
     _receipts.forEach((element) {
-      if (element.Status == "8") {
-        element.Status = "Aguardando a liberação para entrada";
-      } else if (element.Status == "6") {
-        element.Status = "Aguardando a manutenção dos produtos";
-      } else if (element.Status == "4") {
-        element.Status = "Em processo de autorização";
+      if (element.Status == "1") {
+        element.Status = "Utilizado por uma entrada(Finalizado)";
+      } else if (element.Status == "2") {
+        element.Status = "Cancelado (Finalizado)";
       } else if (element.Status == "3") {
-        element.Status = "Liberado para entrada (aguardando entrada)";
-      } else if (element.Status == "1") {
-        element.Status = "Utilizado para uma entrada (finalizado)";
+        element.Status = "Liberado para entrada (Aguardando entrada)";
+      } else if (element.Status == "4" || element.Status == "7") {
+        element.Status = "Em processo de autorização";
+      } else if (element.Status == "5" || element.Status == "6") {
+        element.Status = "Aguardando manutenção de produtos)";
+      } else if (element.Status == "8") {
+        element.Status = "Aguardando liberação para entrada";
       } else {
         element.Status = "Status desconhecido. Avise o suporte";
       }
