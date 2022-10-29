@@ -167,7 +167,7 @@ class _ConferenceInsertQuantityWidget
                   child: Text(
                     widget.conferenceProvider.isUpdatingQuantity
                         ? "AGUARDE"
-                        : "ZERAR",
+                        : "ANULAR",
                     style: const TextStyle(
                       fontSize: 50,
                     ),

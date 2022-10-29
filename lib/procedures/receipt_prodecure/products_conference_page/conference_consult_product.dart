@@ -30,161 +30,173 @@ class _ConferenceConsultProductState extends State<ConferenceConsultProduct> {
   @override
   Widget build(BuildContext context) {
     // TextEditingController textEditingController =
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 10,
-        left: 4,
-        right: 0,
-        bottom: 10,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Form(
-              key: _formKey,
-              child: TextFormField(
-                enabled: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
-                    ? false
-                    : true,
-                autofocus: true,
-                controller: _consultProductController,
-                // focusNode: _consultedProductFocusNode,
-                // inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                onChanged: (value) {
-                  if (value.isEmpty || value == '-') {
-                    value = '0';
-                  }
-                },
-                validator: (value) {
-                  if (value!.isEmpty || value == "") {
-                    return 'Digite O PLU, EAN ou nome';
-                  } else {
-                    return null;
-                  }
-                },
-                decoration: InputDecoration(
-                  labelText: 'Consultar PLU, EAN ou nome',
-                  floatingLabelStyle: TextStyle(
-                    color: widget.conferenceProvider.consultingProducts ||
-                            widget.conferenceProvider.isUpdatingQuantity
-                        ? Colors.grey
-                        : Theme.of(context).primaryColor,
-                  ),
-                  errorStyle: const TextStyle(
-                    fontSize: 17,
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      style: BorderStyle.solid,
-                      width: 2,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      style: BorderStyle.solid,
-                      width: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  labelStyle: TextStyle(
-                    color: widget.conferenceProvider.consultingProducts ||
-                            widget.conferenceProvider.isUpdatingQuantity
-                        ? Colors.grey
-                        : Theme.of(context).primaryColor,
-                  ),
-                ),
-                style: const TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            left: 4,
+            right: 0,
+            bottom: 10,
           ),
-          Row(
+          child: Row(
             children: [
-              IconButton(
-                color: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
-                    ? Colors.grey
-                    : Theme.of(context).primaryColor,
-                onPressed: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
-                    ? null
-                    : () async {
-                        if (!isValid()) {
-                          return;
-                        }
-                        FocusScope.of(context).unfocus();
-                        await widget.conferenceProvider
-                            .getProductByPluEanOrName(
-                          docCode: widget.docCode,
-                          controllerText: _consultProductController.text,
-                        );
-
-                        if (widget.conferenceProvider.errorMessageGetProducts !=
-                            "") {
-                          ShowErrorMessage().showErrorMessage(
-                            error: widget
-                                .conferenceProvider.errorMessageGetProducts,
-                            context: context,
-                          );
-                        }
-                        if (widget.conferenceProvider.productsCount > 0) {
-                          //se for maior que 0 significa que deu certo a consulta e
-                          //por isso pode apagar o que foi escrito no campo de
-                          //consulta
-                          _consultProductController.clear();
-                        }
-                      },
-                icon: const Icon(Icons.search),
+              Expanded(
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    enabled: widget.conferenceProvider.consultingProducts ||
+                            widget.conferenceProvider.isUpdatingQuantity
+                        ? false
+                        : true,
+                    autofocus: true,
+                    controller: _consultProductController,
+                    // focusNode: _consultedProductFocusNode,
+                    // inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                    onChanged: (value) {
+                      if (value.isEmpty || value == '-') {
+                        value = '0';
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty || value == "") {
+                        return 'Digite O PLU, EAN ou nome';
+                      } else {
+                        return null;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Consultar PLU, EAN ou nome',
+                      floatingLabelStyle: TextStyle(
+                        color: widget.conferenceProvider.consultingProducts ||
+                                widget.conferenceProvider.isUpdatingQuantity
+                            ? Colors.grey
+                            : Theme.of(context).primaryColor,
+                      ),
+                      errorStyle: const TextStyle(
+                        fontSize: 17,
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      labelStyle: TextStyle(
+                        color: widget.conferenceProvider.consultingProducts ||
+                                widget.conferenceProvider.isUpdatingQuantity
+                            ? Colors.grey
+                            : Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
               ),
-              IconButton(
-                color: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
-                    ? Colors.grey
-                    : Theme.of(context).primaryColor,
-                onPressed: widget.conferenceProvider.consultingProducts ||
-                        widget.conferenceProvider.isUpdatingQuantity
-                    ? null
-                    : () async {
-                        FocusScope.of(context).unfocus();
-                        _consultProductController.clear();
-
-                        _consultProductController.text =
-                            await widget.conferenceProvider.scanBarcode();
-
-                        if (_consultProductController.text != "") {
-                          await widget.conferenceProvider.getProductByEan(
-                            docCode: widget.docCode,
-                            eanInString: _consultProductController.text,
-                          );
-
-                          if (widget
-                                  .conferenceProvider.errorMessageGetProducts !=
-                              "") {
-                            ShowErrorMessage().showErrorMessage(
-                              error: widget
-                                  .conferenceProvider.errorMessageGetProducts,
-                              context: context,
+              Row(
+                children: [
+                  IconButton(
+                    color: widget.conferenceProvider.consultingProducts ||
+                            widget.conferenceProvider.isUpdatingQuantity
+                        ? Colors.grey
+                        : Theme.of(context).primaryColor,
+                    onPressed: widget.conferenceProvider.consultingProducts ||
+                            widget.conferenceProvider.isUpdatingQuantity
+                        ? null
+                        : () async {
+                            if (!isValid()) {
+                              return;
+                            }
+                            FocusScope.of(context).unfocus();
+                            await widget.conferenceProvider
+                                .getProductByPluEanOrName(
+                              docCode: widget.docCode,
+                              controllerText: _consultProductController.text,
                             );
-                          }
-                          if (widget.conferenceProvider.productsCount > 0) {
-                            //se for maior que 0 significa que deu certo a consulta e
-                            //por isso pode apagar o que foi escrito no campo de
-                            //consulta
+
+                            if (widget.conferenceProvider
+                                    .errorMessageGetProducts !=
+                                "") {
+                              ShowErrorMessage().showErrorMessage(
+                                error: widget
+                                    .conferenceProvider.errorMessageGetProducts,
+                                context: context,
+                              );
+                            }
+                            if (widget.conferenceProvider.productsCount > 0) {
+                              //se for maior que 0 significa que deu certo a consulta e
+                              //por isso pode apagar o que foi escrito no campo de
+                              //consulta
+                              _consultProductController.clear();
+                            }
+                          },
+                    icon: const Icon(Icons.search),
+                  ),
+                  IconButton(
+                    color: widget.conferenceProvider.consultingProducts ||
+                            widget.conferenceProvider.isUpdatingQuantity
+                        ? Colors.grey
+                        : Theme.of(context).primaryColor,
+                    onPressed: widget.conferenceProvider.consultingProducts ||
+                            widget.conferenceProvider.isUpdatingQuantity
+                        ? null
+                        : () async {
+                            FocusScope.of(context).unfocus();
                             _consultProductController.clear();
-                          }
-                        }
-                      },
-                icon: const Icon(Icons.photo_camera),
+
+                            _consultProductController.text =
+                                await widget.conferenceProvider.scanBarcode();
+
+                            if (_consultProductController.text != "") {
+                              await widget.conferenceProvider.getProductByEan(
+                                docCode: widget.docCode,
+                                eanInString: _consultProductController.text,
+                              );
+
+                              if (widget.conferenceProvider
+                                      .errorMessageGetProducts !=
+                                  "") {
+                                ShowErrorMessage().showErrorMessage(
+                                  error: widget.conferenceProvider
+                                      .errorMessageGetProducts,
+                                  context: context,
+                                );
+                              }
+                              if (widget.conferenceProvider.productsCount > 0) {
+                                //se for maior que 0 significa que deu certo a consulta e
+                                //por isso pode apagar o que foi escrito no campo de
+                                //consulta
+                                _consultProductController.clear();
+                              }
+                            }
+                          },
+                    icon: const Icon(Icons.photo_camera),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          child: Divider(
+            height: 6,
+            color: Colors.grey,
+          ),
+        )
+      ],
     );
   }
 }
