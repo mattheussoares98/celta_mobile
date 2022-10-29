@@ -9,6 +9,12 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../../../utils/base_url.dart';
 
+enum SearchTypes {
+  GetProductByName,
+  GetProductByEAN,
+  GetProductByPLU,
+}
+
 class ConsultPriceProvider with ChangeNotifier {
   List<ConsultPriceModel> _products = [];
 
@@ -115,89 +121,39 @@ class ConsultPriceProvider with ChangeNotifier {
     });
   }
 
-  Future<void> _getProductByPlu({
+  Future<void> _getProducts({
     required int enterpriseCode,
-    required String pluInString, //em string pq vem de um texfFormField
+    required String controllerText, //em string pq vem de um texfFormField
+    required SearchTypes searchTypes,
   }) async {
     _products.clear();
     _errorMessage = "";
     _isLoading = true;
+    String searchType =
+        searchTypes.toString().replaceAll(RegExp(r'SearchTypes.'), '');
     notifyListeners();
-    print("obtendo produtos por PLU");
-    int? plu = int.tryParse(pluInString);
-    if (plu == null) {
-      //quando clica no ícone de pesquisa, consulta primeiro por plu, depois por
-      //ean e finalmente pelo nome. Caso não consiga converter o que foi
-      //digitado em um inteiro, significa que não precisa continuar a execução
-      //do código pois deve efetuar a consulta via nome
-      return;
+    dynamic value = int.tryParse(controllerText);
+    //o valor pode ser em inteiro ou em texto
+    if (value == null) {
+      //retorna nulo quando não consegue converter para inteiro. Se não
+      //conseguir converter precisa consultar por nome, por isso pode usar o
+      //próprio texto do "controllerText"
+      value = controllerText;
     }
 
     var headers = {'Content-Type': 'application/json'};
+    // print(searchType);
     var request = http.Request(
         'POST',
         Uri.parse(
-            '${BaseUrl.url}/PriceConference/GetProductByPLU?enterpriseCode=$enterpriseCode&searchValue=$plu'));
+            '${BaseUrl.url}/PriceConference/$searchType?enterpriseCode=$enterpriseCode&searchValue=$value'));
     request.body = json.encode(UserIdentity.identity);
     request.headers.addAll(headers);
 
     try {
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do PLU: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessage = json.decode(resultAsString)["Message"];
-        _isLoading = false;
-        notifyListeners();
-        return;
-      }
-
-      resultAsStringToConferenceModel(
-        resultAsString: resultAsString,
-        listToAdd: _products,
-      );
-    } catch (e) {
-      _errorMessage =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
-    }
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> getProductByEan({
-    required String eanInString, //em string pq vem de um texfFormField
-    required int enterpriseCode,
-  }) async {
-    _products.clear();
-    _errorMessage = "";
-    _isLoading = true;
-    notifyListeners();
-    print("obtendo produtos por EAN");
-
-    int? ean = int.tryParse(eanInString);
-    if (ean == null) {
-      //quando clica no ícone de pesquisa, consulta primeiro por plu, depois por
-      //ean e finalmente pelo nome. Caso não consiga converter o que foi
-      //digitado em um inteiro, significa que não precisa continuar a execução
-      //do código pois deve efetuar a consulta via nome
-      return;
-    }
-
-    try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/PriceConference/GetProductByEAN?enterpriseCode=$enterpriseCode&searchValue=$ean'));
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do EAN: $resultAsString");
+      print("resultAsString consulta do $searchType: $resultAsString");
 
       if (resultAsString.contains("Message")) {
         //significa que deu algum erro
@@ -220,52 +176,6 @@ class ConsultPriceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getProductByName({
-    required String name,
-    required int enterpriseCode,
-  }) async {
-    _products.clear();
-    _errorMessage = "";
-    _isLoading = true;
-    notifyListeners();
-    print("obtendo produtos por nome");
-
-    //só está funcionando porque está chamando o setState na função
-
-    try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/PriceConference/GetProductByName?enterpriseCode=$enterpriseCode&searchValue=$name'));
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do nome: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessage = json.decode(resultAsString)["Message"];
-        _isLoading = false;
-        notifyListeners();
-        return;
-      }
-
-      resultAsStringToConferenceModel(
-        resultAsString: resultAsString,
-        listToAdd: _products,
-      );
-    } catch (e) {
-      _errorMessage =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
-    }
-    _isLoading = false;
-    notifyListeners();
-  }
-
   Future<void> getProductByPluEanOrName({
     required int enterpriseCode,
     required controllerText,
@@ -273,17 +183,26 @@ class ConsultPriceProvider with ChangeNotifier {
     int? isInt = int.tryParse(controllerText);
     if (isInt != null) {
       //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
-      await _getProductByPlu(
-          pluInString: controllerText, enterpriseCode: enterpriseCode);
+      await _getProducts(
+        enterpriseCode: enterpriseCode,
+        controllerText: controllerText,
+        searchTypes: SearchTypes.GetProductByPLU,
+      );
       if (_products.isNotEmpty) return;
 
-      await getProductByEan(
-          eanInString: controllerText, enterpriseCode: enterpriseCode);
+      await _getProducts(
+        enterpriseCode: enterpriseCode,
+        controllerText: controllerText,
+        searchTypes: SearchTypes.GetProductByEAN,
+      );
       if (_products.isNotEmpty) return;
     } else {
       //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
-      await _getProductByName(
-          name: controllerText, enterpriseCode: enterpriseCode);
+      await _getProducts(
+        enterpriseCode: enterpriseCode,
+        controllerText: controllerText,
+        searchTypes: SearchTypes.GetProductByName,
+      );
     }
 
     notifyListeners();
