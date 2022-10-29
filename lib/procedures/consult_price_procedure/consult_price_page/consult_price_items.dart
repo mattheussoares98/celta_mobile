@@ -33,33 +33,28 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
     color: Colors.black,
   );
 
-  Column values({
+  Widget values({
     required String title,
     required String value,
     required int index,
     required ConsultPriceProvider consultPriceProvider,
   }) {
     // print(consultPriceProvider.products[index].toString());
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Row(
+      mainAxisSize: MainAxisSize.max,
       children: [
-        Row(
-          children: [
-            Text(
-              "${title}: ",
-              style: _fontStyle,
-            ),
-            const SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                value,
-                style: _fontBoldStyle,
-                maxLines: 2,
-              ),
-            ),
-          ],
+        Text(
+          "${title}: ",
+          style: _fontStyle,
         ),
-        const SizedBox(height: 5),
+        const SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            value,
+            style: _fontBoldStyle,
+            maxLines: 2,
+          ),
+        ),
       ],
     );
   }
@@ -68,19 +63,24 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Colors.grey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: ListView.builder(
                 itemCount: widget.consultPriceProvider.productsCount,
                 itemBuilder: (context, index) {
+                  var product = widget.consultPriceProvider.products[index];
                   return GestureDetector(
                     onTap: () {
                       if (widget.consultPriceProvider.isLoading ||
                           widget.consultPriceProvider.isSendingToPrint) return;
                       setState(() {
-                        selectedIndex = index;
+                        if (selectedIndex == index) {
+                          selectedIndex = -1;
+                        } else {
+                          selectedIndex = index;
+                        }
                       });
                     },
                     child: PersonalizedCard.personalizedCard(
@@ -88,25 +88,23 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             values(
                               title: "Nome",
-                              value: widget.consultPriceProvider.products[index]
-                                  .ProductName,
+                              value: product.ProductName,
                               index: index,
                               consultPriceProvider: widget.consultPriceProvider,
                             ),
                             values(
                               title: "PLU",
-                              value: widget.consultPriceProvider.products[index]
-                                  .PriceLookUp,
+                              value: product.PriceLookUp,
                               index: index,
                               consultPriceProvider: widget.consultPriceProvider,
                             ),
                             values(
                               title: "Embalagem",
-                              value: widget.consultPriceProvider.products[index]
-                                  .PackingQuantity,
+                              value: product.PackingQuantity,
                               index: index,
                               consultPriceProvider: widget.consultPriceProvider,
                             ),
@@ -119,9 +117,7 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: Text(
-                                    widget.consultPriceProvider.products[index]
-                                            .SalePracticedRetail +
-                                        " R\$",
+                                    product.SalePracticedRetail + " R\$",
                                     style: const TextStyle(
                                       fontSize: 17,
                                       color: Colors.green,
@@ -135,62 +131,80 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                             ),
                             values(
                               title: "Permite venda",
-                              value: widget.consultPriceProvider.products[index]
-                                          .AllowSale ==
-                                      1
-                                  ? "Sim"
-                                  : "Não",
-                              index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
-                            ),
-                            values(
-                              title: "Custo de reposição",
-                              value: double.tryParse(widget.consultPriceProvider
-                                          .products[0].ReplacementCost
-                                          .toString()
-                                          .replaceAll(RegExp(r','), '.'))!
-                                      .toStringAsFixed(2)
-                                      .replaceAll(RegExp(r'\.'), ',') +
-                                  " R\$",
+                              value: product.AllowSale == 1 ? "Sim" : "Não",
                               index: index,
                               consultPriceProvider: widget.consultPriceProvider,
                             ),
                             values(
                               title: "Estoque atual",
-                              value: widget.consultPriceProvider.products[index]
-                                  .CurrentStock,
+                              value: product.CurrentStock,
+                              //  == null
+                              //     ? product.CurrentStock.toString()
+                              //     : double.tryParse(
+                              //             product.CurrentStock.toString()
+                              //                 .replaceAll(RegExp(r','), '.'))!
+                              //         .toStringAsFixed(3)
+                              //         .replaceAll(RegExp(r'\.'), ','),
                               index: index,
                               consultPriceProvider: widget.consultPriceProvider,
                             ),
                             values(
-                              title: "Saldo de venda",
-                              value: widget.consultPriceProvider.products[index]
-                                  .SaldoEstoqueVenda,
+                              title: "Custo de reposição: ",
+                              value: product.ReplacementCost == null
+                                  ? product.ReplacementCost.toString()
+                                  : double.tryParse(
+                                              product.ReplacementCost.toString()
+                                                  .replaceAll(
+                                                      RegExp(r','), '.'))!
+                                          .toStringAsFixed(2)
+                                          .replaceAll(RegExp(r'\.'), ',') +
+                                      " R\$",
                               index: index,
                               consultPriceProvider: widget.consultPriceProvider,
                             ),
-                            values(
-                              title: "Etiqueta pendente",
-                              value: widget.consultPriceProvider.products[index]
-                                  .EtiquetaPendenteDescricao,
-                              index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
+                            Container(
+                              // color: Colors.amber,
+                              height: 22,
+                              child: Row(
+                                // mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Etiqueta pendente: ",
+                                        style: _fontStyle,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        product.EtiquetaPendenteDescricao,
+                                        style: _fontBoldStyle,
+                                        maxLines: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  Icon(
+                                    selectedIndex != index
+                                        ? Icons.arrow_drop_down_sharp
+                                        : Icons.arrow_drop_up_sharp,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    size: 40,
+                                  ),
+                                ],
+                              ),
                             ),
                             if (selectedIndex == index)
-                              //só aparece a opção para marcar para impressão se
-                              //o produto estiver selecionado
                               ConsultPriceSendPrintButton(
                                 internalEnterpriseCode:
                                     widget.internalEnterpriseCode,
                                 index: index,
                                 consultPriceProvider:
                                     widget.consultPriceProvider,
-                                productPackingCode: widget.consultPriceProvider
-                                    .products[index].ProductPackingCode,
-                                etiquetaPendenteDescricao: widget
-                                    .consultPriceProvider
-                                    .products[index]
-                                    .EtiquetaPendenteDescricao,
+                                productPackingCode: product.ProductPackingCode,
+                                etiquetaPendenteDescricao:
+                                    product.EtiquetaPendenteDescricao,
                               ),
                           ],
                         ),

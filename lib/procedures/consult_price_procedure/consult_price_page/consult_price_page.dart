@@ -1,3 +1,4 @@
+import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_order_products_buttons.dart';
 import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_items.dart';
 import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_widget.dart';
 import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_provider.dart';
@@ -56,39 +57,10 @@ class _ConsultPricePageState extends State<ConsultPricePage> {
               consultPriceProvider: consultPriceProvider,
               internalEnterpriseCode: internalEnterpriseCode,
             ),
-          if (MediaQuery.of(context).viewInsets.bottom == 0)
-            Container(
-              width: double.infinity,
-              color: Colors.amber[600],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            consultPriceProvider.orderByDownPrice();
-                          },
-                          icon: Icon(
-                            Icons.arrow_upward,
-                          ),
-                        ),
-                        Text("Preço"),
-                        IconButton(
-                          onPressed: () {
-                            consultPriceProvider.orderByUpPrice();
-                          },
-                          icon: Icon(
-                            Icons.arrow_downward,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )
+          if (MediaQuery.of(context).viewInsets.bottom == 0 &&
+              consultPriceProvider.productsCount > 1)
+            //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
+            ConsultFilterProducts(consultPriceProvider: consultPriceProvider),
         ],
       ),
     );

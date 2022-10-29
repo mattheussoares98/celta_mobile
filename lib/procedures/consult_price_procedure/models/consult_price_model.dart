@@ -11,7 +11,6 @@ class ConsultPriceModel {
   final int AllowSale;
   final int AllowBuy;
   final double MinimumWholeQuantity;
-  final String SalePracticedRetail;
   final String SalePracticedWholeSale;
   final String OperationalCost;
   final String ReplacementCost;
@@ -22,10 +21,15 @@ class ConsultPriceModel {
   final String RealLiquidCost;
   final String FiscalCost;
   final String FiscalLiquidCost;
-  final String CurrentStock;
   final String SaldoEstoqueVenda;
-  bool EtiquetaPendente;
-  String EtiquetaPendenteDescricao;
+  String
+      SalePracticedRetail; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
+  String
+      CurrentStock; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
+  bool
+      EtiquetaPendente; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
+  String
+      EtiquetaPendenteDescricao; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
 
   ConsultPriceModel({
     required this.PriceLookUp,

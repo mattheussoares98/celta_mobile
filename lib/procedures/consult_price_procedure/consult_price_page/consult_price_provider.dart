@@ -51,6 +51,21 @@ class ConsultPriceProvider with ChangeNotifier {
     }
   }
 
+  String _convertToBrazilianNumber(String valueInString) {
+    print(valueInString);
+    int lastindex = valueInString.lastIndexOf("\.");
+
+    // print(lastindex.toString());
+
+    valueInString = valueInString.replaceRange(lastindex, lastindex + 1, ',');
+    if (lastindex > 4) {
+      valueInString = valueInString.replaceFirst(RegExp(r'\,'), '.');
+      return valueInString;
+    } else {
+      return valueInString;
+    }
+  }
+
   resultAsStringToConferenceModel({
     required resultAsString,
     required listToAdd,
@@ -90,6 +105,13 @@ class ConsultPriceProvider with ChangeNotifier {
           EtiquetaPendenteDescricao: data["EtiquetaPendenteDescricao"],
         ),
       );
+    });
+
+    _products.forEach((element) {
+      element.SalePracticedRetail =
+          _convertToBrazilianNumber(element.SalePracticedRetail.toString());
+      element.CurrentStock =
+          _convertToBrazilianNumber(element.CurrentStock.toString());
     });
   }
 
@@ -334,6 +356,17 @@ class ConsultPriceProvider with ChangeNotifier {
   orderByDownPrice() {
     _products
         .sort((a, b) => b.SalePracticedRetail.compareTo(a.SalePracticedRetail));
+    notifyListeners();
+  }
+
+  orderByUpName() {
+    _products.sort((a, b) => a.ProductName.compareTo(b.ProductName));
+
+    notifyListeners();
+  }
+
+  orderByDownName() {
+    _products.sort((a, b) => b.ProductName.compareTo(a.ProductName));
     notifyListeners();
   }
 }
