@@ -1,0 +1,333 @@
+import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../../providers/inventory_product_provider.dart';
+import '../Buttons/inventory_anull_quantity_button.dart';
+import '../Buttons/inventory_confirm_quantity_button.dart';
+import 'inventory_insert_one_quantity.dart';
+
+class ConsultedProductWidget extends StatefulWidget {
+  final int countingCode;
+  final int productPackingCode;
+  final bool isIndividual;
+  final bool? isLoadingEanOrPlu;
+  final bool isSubtract;
+  ConsultedProductWidget({
+    Key? key,
+    required this.countingCode,
+    required this.isSubtract,
+    required this.productPackingCode,
+    required this.isIndividual,
+    this.isLoadingEanOrPlu,
+  }) : super(key: key);
+
+  @override
+  State<ConsultedProductWidget> createState() => ConsultedProductWidgetState();
+}
+
+class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  static final TextEditingController _consultedProductController =
+      TextEditingController();
+
+  final _consultedProductFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _consultedProductFocusNode.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    InventoryProductProvider inventoryProductProvider =
+        Provider.of(context, listen: true);
+
+    double? lastQuantityAdded =
+        double.tryParse(inventoryProductProvider.lastQuantityAdded);
+
+    return PersonalizedCard.personalizedCard(
+      context: context,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          bottom: 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            FittedBox(
+              child: Row(
+                children: [
+                  const Text(
+                    'Produto: ',
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  //26
+                  Text(
+                    inventoryProductProvider.products[0].productName.length > 26
+                        //se o nome do produto tiver mais de 26 caracteres, vai ficar ruim a exibição somente em uma linha, aí ele quebra a linha no 26º caracter
+                        ? inventoryProductProvider.products[0].productName
+                                .replaceRange(
+                                    26,
+                                    inventoryProductProvider
+                                        .products[0].productName.length,
+                                    '\n') +
+                            inventoryProductProvider.products[0].productName
+                                .substring(26)
+                                .replaceFirst(
+                                  RegExp(r'\('),
+                                  '\n\(',
+                                )
+                        : inventoryProductProvider.products[0].productName,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'PLU: ',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  inventoryProductProvider.products[0].plu,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                //precisei colocar o flexible porque pelo fittedbox não estava funcionando como queria
+                const Flexible(
+                  flex: 20,
+                  child: Text(
+                    'Quantidade contada: ',
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Flexible(
+                  flex: 15,
+                  child: FittedBox(
+                    child: Text(
+                      inventoryProductProvider
+                                  .products[0].quantidadeInvContProEmb ==
+                              double
+                          ? double.tryParse(inventoryProductProvider
+                                  .products[0].quantidadeInvContProEmb
+                                  .toString())!
+                              .toStringAsFixed(3)
+                              .replaceAll(RegExp(r'\.'), ',')
+                          : inventoryProductProvider
+                                      .products[0].quantidadeInvContProEmb ==
+                                  -1
+                              //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
+                              ? 'Sem contagem'
+                              : double.tryParse(inventoryProductProvider
+                                      .products[0].quantidadeInvContProEmb
+                                      .toString())!
+                                  .toStringAsFixed(3)
+                                  .replaceAll(RegExp(r'\.'), ','),
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'OpenSans',
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            if (inventoryProductProvider.lastQuantityAdded != '')
+              const SizedBox(height: 3),
+            if (inventoryProductProvider.lastQuantityAdded != '')
+              FittedBox(
+                child: Text(
+                  widget.isSubtract && lastQuantityAdded != ''
+                      ? 'Última quantidade adicionada:  -${lastQuantityAdded!.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} '
+                      : 'Última quantidade adicionada:  ${lastQuantityAdded!.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} ',
+                  style: TextStyle(
+                    fontSize: 100,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'BebasNeue',
+                    fontStyle: FontStyle.italic,
+                    letterSpacing: 1,
+                    wordSpacing: 4,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            const SizedBox(height: 8),
+            if (!widget.isIndividual)
+              Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        flex: 3,
+                        child: Container(
+                          child: Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              autofocus: true,
+                              enabled:
+                                  inventoryProductProvider.isLoadingQuantity
+                                      ? false
+                                      : true,
+                              controller: _consultedProductController,
+                              focusNode: _consultedProductFocusNode,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(10)
+                              ],
+                              onChanged: (value) {
+                                if (value.isEmpty || value == '-') {
+                                  value = '0';
+                                }
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Digite uma quantidade';
+                                } else if (value == '0' ||
+                                    value == '0.' ||
+                                    value == '0,') {
+                                  return 'Digite uma quantidade';
+                                } else if (value.contains('..')) {
+                                  return 'Carácter inválido';
+                                } else if (value.contains(',,')) {
+                                  return 'Carácter inválido';
+                                } else if (value.contains('..')) {
+                                  return 'Carácter inválido';
+                                } else if (value.contains(',.')) {
+                                  return 'Carácter inválido';
+                                } else if (value.contains('.,')) {
+                                  return 'Carácter inválido';
+                                } else if (value.contains('-')) {
+                                  return 'Carácter inválido';
+                                } else if (value.contains(' ')) {
+                                  return 'Carácter inválido';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'Digite a quantidade aqui',
+                                errorStyle: const TextStyle(
+                                  fontSize: 17,
+                                ),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    style: BorderStyle.solid,
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                labelStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          child: InventoryAnullQuantityButton(
+                            countingCode: widget.countingCode,
+                            productPackingCode: inventoryProductProvider
+                                .products[0].codigoInternoProEmb,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: InventoryConfirmQuantityButton(
+                          isIndividual: widget.isIndividual,
+                          consultedProductController:
+                              _consultedProductController,
+                          countingCode: widget.countingCode,
+                          isSubtract: widget.isSubtract,
+                          formKey: _formKey,
+                          consultedProductFocusNode: _consultedProductFocusNode,
+                          inventoryProductProvider: inventoryProductProvider,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        flex: 5,
+                        child: InventoryConfirmQuantityButton(
+                          isIndividual: widget.isIndividual,
+                          consultedProductController:
+                              _consultedProductController,
+                          countingCode: widget.countingCode,
+                          isSubtract: widget.isSubtract,
+                          formKey: _formKey,
+                          consultedProductFocusNode: _consultedProductFocusNode,
+                          inventoryProductProvider: inventoryProductProvider,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            if (widget.isIndividual)
+              InsertOneQuantity(
+                isIndividual: widget.isIndividual,
+                codigoInternoInvCont: widget.countingCode,
+                consultedProductController: _consultedProductController,
+                isSubtract: widget.isSubtract,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}

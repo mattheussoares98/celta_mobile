@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShowErrorMessage {
-  showErrorMessage({
+  static showErrorMessage({
     required String error,
     required BuildContext context,
   }) {

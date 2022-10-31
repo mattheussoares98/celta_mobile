@@ -1,32 +1,27 @@
-import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_page.dart';
-import 'package:celta_inventario/procedures/consult_price_procedure/consult_price_page/consult_price_provider.dart';
-import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/enterprise_consult_price_page.dart';
-import 'package:celta_inventario/procedures/consult_price_procedure/enterprise_page/consult_price_provider.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/counting_page/counting_page.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/counting_page/counting_provider.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/enterprise_page/enterprise_inventory_page.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/enterprise_page/enterprise_inventory_provider.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/inventory_page/inventory_page.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/inventory_page/inventory_provider.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/product_page/product_page.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/product_page/product_provider.dart';
-import 'package:celta_inventario/procedures/inventory_procedure/provider/quantity_provider.dart';
-import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_page.dart';
-import 'package:celta_inventario/procedures/receipt_prodecure/products_conference_page/conference_provider.dart';
-import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_page.dart';
-import 'package:celta_inventario/procedures/receipt_prodecure/receipt_page/receipt_provider.dart';
+import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
+import 'package:celta_inventario/pages/consult_price_page.dart';
+import 'package:celta_inventario/providers/consult_price_provider.dart';
+import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
+import 'package:celta_inventario/providers/inventory_counting_provider.dart';
+import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
+import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
+import 'package:celta_inventario/providers/inventory_product_provider.dart';
+import 'package:celta_inventario/Pages/conference_page.dart';
+import 'package:celta_inventario/providers/conference_provider.dart';
+import 'package:celta_inventario/Pages/receipt_page.dart';
+import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
 import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'inicial_pages/home_page/home_page.dart';
-import 'inicial_pages/login_or_home_page/login_or_home_page.dart';
-import 'inicial_pages/login_page/login_page.dart';
-import 'inicial_pages/login_page/login_provider.dart';
-import 'inicial_pages/splash_screen/splash_screen.dart';
-import 'procedures/receipt_prodecure/enterprise_receipt_page/enterprise_receipt_page.dart';
-import 'procedures/receipt_prodecure/enterprise_receipt_page/enterprise_receipt_provider.dart';
+import 'pages/Inicial_pages/home_page.dart';
+import 'pages/Inicial_pages/login_or_home_page.dart';
+import 'pages/Inicial_pages/login_page.dart';
+import 'providers/enterprise_provider.dart';
+import 'providers/login_provider.dart';
+import 'pages/Inicial_pages/splash_page.dart';
 
 void main() {
   runApp(
@@ -34,14 +29,11 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => InventoryProvider()),
-        ChangeNotifierProvider(create: (_) => EnterpriseInventoryProvider()),
-        ChangeNotifierProvider(create: (_) => EnterpriseReceiptProvider()),
-        ChangeNotifierProvider(create: (_) => CountingProvider()),
-        ChangeNotifierProvider(create: (_) => ProductProvider()),
-        ChangeNotifierProvider(create: (_) => QuantityProvider()),
+        ChangeNotifierProvider(create: (_) => EnterpriseProvider()),
+        ChangeNotifierProvider(create: (_) => InventoryCountingProvider()),
+        ChangeNotifierProvider(create: (_) => InventoryProductProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
         ChangeNotifierProvider(create: (_) => ConferenceProvider()),
-        ChangeNotifierProvider(create: (_) => EnterpriseConsultPriceProvider()),
         ChangeNotifierProvider(create: (_) => ConsultPriceProvider()),
       ],
       child: MaterialApp(
@@ -104,19 +96,15 @@ void main() {
         routes: {
           APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
           APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
-          APPROUTES.INVENTORY_ENTERPRISES: (ctx) =>
-              const EnterpriseInventoryPage(),
           APPROUTES.INVENTORY: (ctx) => const InventoryPage(),
           APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
           APPROUTES.PRODUCTS: (ctx) => const ProductPage(),
-          APPROUTES.SPLASHSCREEN: (ctx) => SplashScreen(),
+          APPROUTES.SPLASHSCREEN: (ctx) => SplashPage(),
           APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
-          APPROUTES.RECEIPT_ENTERPRISES: (ctx) => const EnterpriseReceiptPage(),
           APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
           APPROUTES.CONFERENCE: (ctx) => const ConferencePage(),
           APPROUTES.CONSULT_PRICE: (ctx) => const ConsultPricePage(),
-          APPROUTES.CONSULT_PRICE_ENTERPRISES: (ctx) =>
-              const EnterpriseConsultPricePage(),
+          APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
         },
       ),
     ),

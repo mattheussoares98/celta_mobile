@@ -1,8 +1,6 @@
 class APPROUTES {
   static const LOGIN_OR_HOME_PAGE = '/';
-  static const INVENTORY_ENTERPRISES = '/INVENTORY_ENTERPRISES';
-  static const RECEIPT_ENTERPRISES = '/RECEIPT_ENTERPRISES';
-  static const CONSULT_PRICE_ENTERPRISES = '/CONSULT_PRICE_ENTERPRISES';
+  static const ENTERPRISE = '/ENTERPRISE';
   static const CONSULT_PRICE = '/CONSULT_PRICE';
   static const INVENTORY = '/INVENTORY';
   static const SALES = '/SALES';
