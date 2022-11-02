@@ -5,12 +5,10 @@ import 'package:provider/provider.dart';
 class InsertOneQuantity extends StatefulWidget {
   final bool isIndividual;
   final int codigoInternoInvCont;
-  final bool isSubtract;
   final TextEditingController consultedProductController;
   const InsertOneQuantity({
     Key? key,
     required this.isIndividual,
-    required this.isSubtract,
     required this.codigoInternoInvCont,
     required this.consultedProductController,
   }) : super(key: key);
@@ -54,7 +52,7 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
                       context: context,
                       codigoInternoInvCont: widget.codigoInternoInvCont,
                       quantity: widget.consultedProductController,
-                      isSubtract: widget.isSubtract,
+                      isSubtract: true,
                     );
                   },
           ),
@@ -80,13 +78,13 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
             ),
             onPressed: inventoryProductProvider.isLoadingQuantity
                 ? null
-                : () {
-                    inventoryProductProvider.addQuantity(
+                : () async {
+                    await inventoryProductProvider.addQuantity(
                       isIndividual: widget.isIndividual,
                       context: context,
                       codigoInternoInvCont: widget.codigoInternoInvCont,
                       quantity: widget.consultedProductController,
-                      isSubtract: widget.isSubtract,
+                      isSubtract: false,
                     );
                   },
           ),

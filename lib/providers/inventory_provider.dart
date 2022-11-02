@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Models/inventory_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -61,10 +62,6 @@ class InventoryProvider with ChangeNotifier {
         _errorMessage = json.decode(responseAsString)["Message"];
         _isLoadingInventorys = false;
 
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessage,
-          context: context,
-        );
         notifyListeners();
         return;
       }
@@ -74,15 +71,8 @@ class InventoryProvider with ChangeNotifier {
         listToAdd: _inventorys,
       );
     } catch (e) {
-      //sempre que cair aqui no erro, é porque não conseguiu acessar o servidor
-      //por isso vou deixar essa mensagem padrão
-
-      _errorMessage =
-          'O servidor não foi encontrado! Verifique a sua internet!';
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
-        context: context,
-      );
+      print("Erro para efetuar a requisição: $e");
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingInventorys = false;
     }

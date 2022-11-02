@@ -12,11 +12,13 @@ class ConsultProductWidget extends StatefulWidget {
   final FocusNode consultProductFocusNode;
   // final Function() consultAndAddProduct;
   final TextEditingController consultProductController;
+  final TextEditingController consultedProductController;
   const ConsultProductWidget({
     Key? key,
     required this.formKey,
     required this.isIndividual,
     required this.consultProductFocusNode,
+    required this.consultedProductController,
     // required this.consultAndAddProduct,
     required this.consultProductController,
   }) : super(key: key);
@@ -57,6 +59,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                       inventoryProductProvider: inventoryProductProvider,
                     );
                     widget.consultProductController.clear();
+                    widget.consultedProductController.clear();
                   },
                   focusNode: widget.consultProductFocusNode,
                   enabled: inventoryProductProvider.isLoading ||
@@ -199,6 +202,8 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                         inventoryProductProvider.isLoadingQuantity
                     ? null
                     : () async {
+                        widget.consultedProductController.clear();
+
                         if (widget.consultProductController.text.isEmpty) {
                           //se não digitar o ean ou plu, vai abrir a câmera
                           widget.consultProductController.text =

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 class SearchProductWithEanPluOrNameWidget extends StatefulWidget {
   final bool isLoading;
   final Function onPressSearch;
-  final int productsCount;
   final TextEditingController consultProductController;
+  final FocusNode focusNodeConsultProduct;
   const SearchProductWithEanPluOrNameWidget({
     required this.consultProductController,
     required this.isLoading,
     required this.onPressSearch,
-    required this.productsCount,
+    required this.focusNodeConsultProduct,
     Key? key,
   }) : super(key: key);
 
@@ -45,6 +45,7 @@ class _SearchProductWithEanPluOrNameWidgetState
                 child: Form(
                   key: _formKey,
                   child: TextFormField(
+                    focusNode: widget.focusNodeConsultProduct,
                     enabled: widget.isLoading ? false : true,
                     autofocus: true,
                     controller: widget.consultProductController,
@@ -63,6 +64,20 @@ class _SearchProductWithEanPluOrNameWidgetState
                       }
                     },
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          widget.consultProductController.clear();
+
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            FocusScope.of(context)
+                                .requestFocus(widget.focusNodeConsultProduct);
+                          });
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: widget.isLoading ? Colors.grey : Colors.red,
+                        ),
+                      ),
                       labelText: 'Consultar PLU, EAN ou nome',
                       floatingLabelStyle: TextStyle(
                         color: widget.isLoading
@@ -94,6 +109,9 @@ class _SearchProductWithEanPluOrNameWidgetState
                             : Theme.of(context).primaryColor,
                       ),
                     ),
+                    onFieldSubmitted: (value) async {
+                      await widget.onPressSearch();
+                    },
                     style: const TextStyle(
                       fontSize: 20,
                     ),
@@ -115,13 +133,6 @@ class _SearchProductWithEanPluOrNameWidgetState
                             FocusScope.of(context).unfocus();
 
                             await widget.onPressSearch();
-
-                            if (widget.productsCount > 0) {
-                              //se for maior que 0 significa que deu certo a consulta e
-                              //por isso pode apagar o que foi escrito no campo de
-                              //consulta
-                              widget.consultProductController.clear();
-                            }
                           },
                     icon: const Icon(Icons.search),
                   ),

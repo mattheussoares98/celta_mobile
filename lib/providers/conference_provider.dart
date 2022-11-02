@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:celta_inventario/Models/conference_product_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -86,8 +87,9 @@ class ConferenceProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      _errorMessageGetProducts =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
+      print("Erro para efetuar a requisição: $e");
+      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+
       ShowErrorMessage.showErrorMessage(
         error: _errorMessageGetProducts,
         context: context,
@@ -205,10 +207,11 @@ class ConferenceProvider with ChangeNotifier {
         );
       }
     } catch (e) {
+      print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(
-        error: _errorMessageGetProducts,
+        error: _errorMessageUpdateQuantity,
         context: context,
       );
     }
@@ -224,10 +227,16 @@ class ConferenceProvider with ChangeNotifier {
     required int index,
     required BuildContext context,
   }) async {
+    print("anulando");
     if (_products[index].Quantidade_ProcRecebDocProEmb == 0 ||
         _products[index].Quantidade_ProcRecebDocProEmb == null) {
       //se a quantidade for igual à atual, não precisa fazer a requisição
       _errorMessageUpdateQuantity = "A quantidade já está nula";
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageUpdateQuantity,
+        context: context,
+      );
+      notifyListeners();
       notifyListeners();
       return;
     }
@@ -254,7 +263,7 @@ class ConferenceProvider with ChangeNotifier {
         _errorMessageUpdateQuantity = json.decode(resultAsString)["Message"];
         _isUpdatingQuantity = false;
         ShowErrorMessage.showErrorMessage(
-          error: _errorMessageGetProducts,
+          error: _errorMessageUpdateQuantity,
           context: context,
         );
         notifyListeners();
@@ -267,10 +276,11 @@ class ConferenceProvider with ChangeNotifier {
         );
       }
     } catch (e) {
+      print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(
-        error: _errorMessageGetProducts,
+        error: _errorMessageUpdateQuantity,
         context: context,
       );
     }
@@ -278,6 +288,8 @@ class ConferenceProvider with ChangeNotifier {
     _isUpdatingQuantity = false;
     notifyListeners();
   }
+
+  final consultProductFocusNode = FocusNode();
 
   Future<void> _getProducts({
     required int docCode,
@@ -317,17 +329,13 @@ class ConferenceProvider with ChangeNotifier {
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do nome: $resultAsString");
+      print("resultAsString consulta do $searchTypes: $resultAsString");
 
       if (resultAsString.contains("Message")) {
         //significa que deu algum erro
         _errorMessageGetProducts = json.decode(resultAsString)["Message"];
         _consultingProducts = false;
 
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageGetProducts,
-          context: context,
-        );
         notifyListeners();
         return;
       }
@@ -337,8 +345,8 @@ class ConferenceProvider with ChangeNotifier {
         listToAdd: _products,
       );
     } catch (e) {
-      _errorMessageGetProducts =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
+      print("Erro para efetuar a requisição: $e");
+      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(
         error: _errorMessageGetProducts,
         context: context,
@@ -362,7 +370,7 @@ class ConferenceProvider with ChangeNotifier {
         searchTypes: SearchTypes.GetProductByEAN,
         context: context,
       );
-      if (_products.isNotEmpty) return;
+      if (productsCount > 0) return;
 
       await _getProducts(
         docCode: docCode,
@@ -370,7 +378,7 @@ class ConferenceProvider with ChangeNotifier {
         searchTypes: SearchTypes.GetProductByPLU,
         context: context,
       );
-      if (_products.isNotEmpty) return;
+      if (productsCount > 0) return;
     } else {
       //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
       await _getProducts(
@@ -379,6 +387,19 @@ class ConferenceProvider with ChangeNotifier {
         searchTypes: SearchTypes.GetProductByName,
         context: context,
       );
+    }
+
+    if (_errorMessageGetProducts != "") {
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageGetProducts,
+        context: context,
+      );
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        //se não colocar em um future pra mudar o foco, não funciona corretamente
+        FocusScope.of(context).requestFocus(consultProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
+      });
     }
   }
 }

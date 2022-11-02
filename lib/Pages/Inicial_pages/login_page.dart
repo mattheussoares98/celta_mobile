@@ -64,48 +64,52 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: AnimatedBuilder(
-                  animation: _animationController!,
-                  child: FadeTransition(
-                    opacity: _animationOpacity!,
-                    child: Container(
-                      transform: Matrix4.rotationZ(-8 * pi / 180)
-                        ..translate(-10.0),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 30,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      child: const FittedBox(
-                        child: Text(
-                          'Celta mobile',
-                          style: TextStyle(
-                            fontSize: 100,
-                            color: ColorsTheme.text,
-                            fontFamily: 'BebasNeue',
+          Center(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: AnimatedBuilder(
+                      animation: _animationController!,
+                      child: FadeTransition(
+                        opacity: _animationOpacity!,
+                        child: Container(
+                          transform: Matrix4.rotationZ(-8 * pi / 180)
+                            ..translate(-10.0),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 30,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          child: const FittedBox(
+                            child: Text(
+                              'Celta mobile',
+                              style: TextStyle(
+                                fontSize: 100,
+                                color: ColorsTheme.text,
+                                fontFamily: 'BebasNeue',
+                              ),
+                            ),
                           ),
                         ),
                       ),
+                      builder: (context, child) {
+                        return child!;
+                      },
                     ),
                   ),
-                  builder: (context, child) {
-                    return child!;
-                  },
-                ),
+                  AuthForm(
+                    formKey: _key,
+                  ),
+                ],
               ),
-              AuthForm(
-                formKey: _key,
-              ),
-            ],
+            ),
           ),
         ],
       ),

@@ -12,11 +12,11 @@ class ConsultedProductWidget extends StatefulWidget {
   final int productPackingCode;
   final bool isIndividual;
   final bool? isLoadingEanOrPlu;
-  final bool isSubtract;
+  final TextEditingController consultedProductController;
   ConsultedProductWidget({
     Key? key,
     required this.countingCode,
-    required this.isSubtract,
+    required this.consultedProductController,
     required this.productPackingCode,
     required this.isIndividual,
     this.isLoadingEanOrPlu,
@@ -28,9 +28,6 @@ class ConsultedProductWidget extends StatefulWidget {
 
 class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  static final TextEditingController _consultedProductController =
-      TextEditingController();
 
   final _consultedProductFocusNode = FocusNode();
 
@@ -166,8 +163,8 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
             if (inventoryProductProvider.lastQuantityAdded != '')
               FittedBox(
                 child: Text(
-                  widget.isSubtract && lastQuantityAdded != ''
-                      ? 'Última quantidade adicionada:  -${lastQuantityAdded!.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} '
+                  lastQuantityAdded != ''
+                      ? 'Última quantidade adicionada:  ${lastQuantityAdded!.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} '
                       : 'Última quantidade adicionada:  ${lastQuantityAdded!.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} ',
                   style: TextStyle(
                     fontSize: 100,
@@ -199,7 +196,7 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
                                   inventoryProductProvider.isLoadingQuantity
                                       ? false
                                       : true,
-                              controller: _consultedProductController,
+                              controller: widget.consultedProductController,
                               focusNode: _consultedProductFocusNode,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(10)
@@ -216,19 +213,26 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
                                     value == '0.' ||
                                     value == '0,') {
                                   return 'Digite uma quantidade';
-                                } else if (value.contains('..')) {
-                                  return 'Carácter inválido';
-                                } else if (value.contains(',,')) {
-                                  return 'Carácter inválido';
-                                } else if (value.contains('..')) {
-                                  return 'Carácter inválido';
-                                } else if (value.contains(',.')) {
-                                  return 'Carácter inválido';
-                                } else if (value.contains('.,')) {
+                                } else if (value.contains('.') &&
+                                    value.contains(',')) {
                                   return 'Carácter inválido';
                                 } else if (value.contains('-')) {
                                   return 'Carácter inválido';
                                 } else if (value.contains(' ')) {
+                                  return 'Carácter inválido';
+                                } else if (value.characters.toList().fold<int>(
+                                        0,
+                                        (t, e) =>
+                                            e == "." ? t + e.length : t + 0) >
+                                    1) {
+                                  //verifica se tem mais de um ponto
+                                  return 'Carácter inválido';
+                                } else if (value.characters.toList().fold<int>(
+                                        0,
+                                        (t, e) =>
+                                            e == "," ? t + e.length : t + 0) >
+                                    1) {
+                                  //verifica se tem mais de uma vírgula
                                   return 'Carácter inválido';
                                 }
                                 return null;
@@ -292,9 +296,9 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
                         child: InventoryConfirmQuantityButton(
                           isIndividual: widget.isIndividual,
                           consultedProductController:
-                              _consultedProductController,
+                              widget.consultedProductController,
                           countingCode: widget.countingCode,
-                          isSubtract: widget.isSubtract,
+                          isSubtract: true,
                           formKey: _formKey,
                           consultedProductFocusNode: _consultedProductFocusNode,
                           inventoryProductProvider: inventoryProductProvider,
@@ -306,9 +310,9 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
                         child: InventoryConfirmQuantityButton(
                           isIndividual: widget.isIndividual,
                           consultedProductController:
-                              _consultedProductController,
+                              widget.consultedProductController,
                           countingCode: widget.countingCode,
-                          isSubtract: widget.isSubtract,
+                          isSubtract: false,
                           formKey: _formKey,
                           consultedProductFocusNode: _consultedProductFocusNode,
                           inventoryProductProvider: inventoryProductProvider,
@@ -322,8 +326,7 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
               InsertOneQuantity(
                 isIndividual: widget.isIndividual,
                 codigoInternoInvCont: widget.countingCode,
-                consultedProductController: _consultedProductController,
-                isSubtract: widget.isSubtract,
+                consultedProductController: widget.consultedProductController,
               ),
           ],
         ),

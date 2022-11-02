@@ -4,20 +4,22 @@ import 'package:celta_inventario/providers/conference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ConferenceItems extends StatefulWidget {
+class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;
   final ConferenceProvider conferenceProvider;
-  const ConferenceItems({
+  const ReceiptConferenceProductsItems({
     required this.docCode,
     required this.conferenceProvider,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConferenceItems> createState() => _ConferenceItemsState();
+  State<ReceiptConferenceProductsItems> createState() =>
+      _ReceiptConferenceProductsItemsState();
 }
 
-class _ConferenceItemsState extends State<ConferenceItems> {
+class _ReceiptConferenceProductsItemsState
+    extends State<ReceiptConferenceProductsItems> {
   int selectedIndex = -1;
 
   TextStyle _fontStyle = const TextStyle(
@@ -62,6 +64,11 @@ class _ConferenceItemsState extends State<ConferenceItems> {
     );
   }
 
+  var _consultedProductFocusNode = FocusNode();
+
+  static final TextEditingController _consultedProductController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     ConferenceProvider conferenceProvider = Provider.of(context, listen: true);
@@ -74,20 +81,40 @@ class _ConferenceItemsState extends State<ConferenceItems> {
               itemCount: conferenceProvider.productsCount,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    if (conferenceProvider.isUpdatingQuantity ||
-                        conferenceProvider.consultingProducts) return;
-                    if (selectedIndex != index) {
-                      setState(() {
-                        selectedIndex = index;
-                        //isso faz com que apareça os botões de "conferir" e "liberar" somente no item selecionado
-                      });
-                    } else {
-                      setState(() {
-                        selectedIndex = -1;
-                      });
-                    }
-                  },
+                  onTap: conferenceProvider.isUpdatingQuantity ||
+                          conferenceProvider.consultingProducts
+                      ? null
+                      : () {
+                          if (selectedIndex != index) {
+                            _consultedProductController.clear();
+                            //necessário apagar o campo da quantidade quando
+                            //mudar de produto selecionado
+                            _consultedProductFocusNode = FocusNode();
+                            //se não fizer isso, a mudança de foco abaixo não da
+                            //certo. Dessa forma o teclado nem está fechando
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () {
+                              //se não colocar em um future pra mudar o foco,
+                              //não funciona corretamente
+                              FocusScope.of(context)
+                                  .requestFocus(_consultedProductFocusNode);
+                            });
+
+                            setState(() {
+                              selectedIndex = index;
+                              //isso faz com que apareça os botões de "conferir"
+                              //e "liberar" somente no item selecionado
+                            });
+                          } else {
+                            FocusScope.of(context).unfocus();
+                            //quando clica no mesmo produto, fecha o teclado. Se
+                            //não fizer isso, o foco volta para o de consulta de
+                            //produtos
+                            setState(() {
+                              selectedIndex = -1;
+                            });
+                          }
+                        },
                   child: PersonalizedCard.personalizedCard(
                     context: context,
                     child: Padding(
@@ -181,6 +208,10 @@ class _ConferenceItemsState extends State<ConferenceItems> {
                                 ),
                                 const SizedBox(height: 10),
                                 ConferenceInsertQuantityWidget(
+                                  consultedProductController:
+                                      _consultedProductController,
+                                  focusNodeConsultedProduct:
+                                      _consultedProductFocusNode,
                                   conferenceProvider: widget.conferenceProvider,
                                   conferenceProductModel:
                                       conferenceProvider.products[index],

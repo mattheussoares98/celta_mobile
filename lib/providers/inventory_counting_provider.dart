@@ -1,4 +1,5 @@
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:http/http.dart' as http;
@@ -71,13 +72,8 @@ class InventoryCountingProvider with ChangeNotifier {
         listToAdd: _countings,
       );
     } catch (e) {
-      print('erro ao consultar a contagem ==== $e');
-      _errorMessage =
-          'O servidor não foi encontrado. Verifique a sua internet!';
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
-        context: context,
-      );
+      print("Erro para efetuar a requisição: $e");
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingCountings = false;
     }

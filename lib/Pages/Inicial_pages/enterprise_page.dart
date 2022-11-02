@@ -50,11 +50,15 @@ class EnterprisePageState extends State<EnterprisePage> {
               child: ConsultingWidget.consultingWidget(
                   title: 'Consultando empresas'),
             ),
-          if (enterpriseProvider.errorMessage != '')
+          if (enterpriseProvider.errorMessage != '' &&
+              !enterpriseProvider.isLoadingEnterprises)
             Expanded(
               child: TryAgainWidget.tryAgain(
                 errorMessage: enterpriseProvider.errorMessage,
-                request: () async => await getEnterprises(enterpriseProvider),
+                request: () async {
+                  setState(() {});
+                  await getEnterprises(enterpriseProvider);
+                },
               ),
             ),
           if (enterpriseProvider.errorMessage == "" &&

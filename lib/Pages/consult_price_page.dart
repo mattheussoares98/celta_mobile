@@ -19,7 +19,7 @@ class _ConsultPricePageState extends State<ConsultPricePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!isLoaded) {
-      // Provider.of<consultPriceProvider>(context, listen: false)
+      // Provider.of<onsultPriceProvider>(context, listen: false)
       //     .clearProducts();
     }
     isLoaded = true;
@@ -27,6 +27,12 @@ class _ConsultPricePageState extends State<ConsultPricePage> {
 
   final TextEditingController _consultProductController =
       TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _consultProductController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +52,8 @@ class _ConsultPricePageState extends State<ConsultPricePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SearchProductWithEanPluOrNameWidget(
+            focusNodeConsultProduct:
+                consultPriceProvider.consultProductFocusNode,
             isLoading: consultPriceProvider.isLoading ||
                 consultPriceProvider.isSendingToPrint,
             onPressSearch: () async {
@@ -55,6 +63,10 @@ class _ConsultPricePageState extends State<ConsultPricePage> {
                 context: context,
               );
 
+              //não estava funcionando passar o productsCount como parâmetro
+              //para o "SearchProductWithEanPluOrNameWidget" para apagar o
+              //textEditingController após a consulta dos produtos se encontrar
+              //algum produto
               if (consultPriceProvider.productsCount > 0) {
                 //se for maior que 0 significa que deu certo a consulta e
                 //por isso pode apagar o que foi escrito no campo de
@@ -63,7 +75,6 @@ class _ConsultPricePageState extends State<ConsultPricePage> {
               }
             },
             consultProductController: _consultProductController,
-            productsCount: consultPriceProvider.productsCount,
           ),
           if (consultPriceProvider.isLoading)
             Expanded(

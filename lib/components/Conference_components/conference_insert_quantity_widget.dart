@@ -8,7 +8,11 @@ class ConferenceInsertQuantityWidget extends StatefulWidget {
   final ConferenceProductModel conferenceProductModel;
   final int docCode;
   final int index;
+  final FocusNode focusNodeConsultedProduct;
+  final TextEditingController consultedProductController;
   const ConferenceInsertQuantityWidget({
+    required this.focusNodeConsultedProduct,
+    required this.consultedProductController,
     required this.docCode,
     required this.conferenceProvider,
     required this.conferenceProductModel,
@@ -24,17 +28,6 @@ class ConferenceInsertQuantityWidget extends StatefulWidget {
 class _ConferenceInsertQuantityWidget
     extends State<ConferenceInsertQuantityWidget> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  static final TextEditingController _consultedProductController =
-      TextEditingController();
-
-  final _consultedProductFocusNode = FocusNode();
-
-  @override
-  void dispose() {
-    super.dispose();
-    _consultedProductFocusNode.dispose();
-  }
 
   bool isValid() {
     return _formKey.currentState!.validate();
@@ -55,11 +48,12 @@ class _ConferenceInsertQuantityWidget
                   key: _formKey,
                   child: TextFormField(
                     autofocus: true,
-                    enabled: widget.conferenceProvider.isUpdatingQuantity
+                    enabled: widget.conferenceProvider.isUpdatingQuantity ||
+                            widget.conferenceProvider.consultingProducts
                         ? false
                         : true,
-                    controller: _consultedProductController,
-                    focusNode: _consultedProductFocusNode,
+                    controller: widget.consultedProductController,
+                    focusNode: widget.focusNodeConsultedProduct,
                     inputFormatters: [LengthLimitingTextInputFormatter(10)],
                     onChanged: (value) {
                       if (value.isEmpty || value == '-') {
@@ -69,19 +63,25 @@ class _ConferenceInsertQuantityWidget
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Digite uma quantidade';
-                      } else if (value.contains('..')) {
-                        return 'Carácter inválido';
-                      } else if (value.contains(',,')) {
-                        return 'Carácter inválido';
-                      } else if (value.contains('..')) {
-                        return 'Carácter inválido';
-                      } else if (value.contains(',.')) {
-                        return 'Carácter inválido';
-                      } else if (value.contains('.,')) {
+                      } else if (value == '0' ||
+                          value == '0.' ||
+                          value == '0,') {
+                        return 'Digite uma quantidade';
+                      } else if (value.contains('.') && value.contains(',')) {
                         return 'Carácter inválido';
                       } else if (value.contains('-')) {
                         return 'Carácter inválido';
                       } else if (value.contains(' ')) {
+                        return 'Carácter inválido';
+                      } else if (value.characters.toList().fold<int>(
+                              0, (t, e) => e == "." ? t + e.length : t + 0) >
+                          1) {
+                        //verifica se tem mais de um ponto
+                        return 'Carácter inválido';
+                      } else if (value.characters.toList().fold<int>(
+                              0, (t, e) => e == "," ? t + e.length : t + 0) >
+                          1) {
+                        //verifica se tem mais de uma vírgula
                         return 'Carácter inválido';
                       }
                       return null;
@@ -137,7 +137,8 @@ class _ConferenceInsertQuantityWidget
                   minimumSize: const Size(double.infinity, 50),
                   maximumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: widget.conferenceProvider.isUpdatingQuantity
+                onPressed: widget.conferenceProvider.isUpdatingQuantity ||
+                        widget.conferenceProvider.consultingProducts
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
@@ -154,12 +155,13 @@ class _ConferenceInsertQuantityWidget
                         if (widget.conferenceProvider
                                 .errorMessageUpdateQuantity ==
                             "") {
-                          _consultedProductController.clear();
+                          widget.consultedProductController.clear();
                         }
                       },
                 child: FittedBox(
                   child: Text(
-                    widget.conferenceProvider.isUpdatingQuantity
+                    widget.conferenceProvider.isUpdatingQuantity ||
+                            widget.conferenceProvider.consultingProducts
                         ? "AGUARDE"
                         : "ANULAR",
                     style: const TextStyle(
@@ -178,7 +180,8 @@ class _ConferenceInsertQuantityWidget
                   minimumSize: const Size(double.infinity, 50),
                   maximumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: widget.conferenceProvider.isUpdatingQuantity
+                onPressed: widget.conferenceProvider.isUpdatingQuantity ||
+                        widget.conferenceProvider.consultingProducts
                     ? null
                     : () async {
                         if (!isValid()) return;
@@ -189,7 +192,7 @@ class _ConferenceInsertQuantityWidget
                               .conferenceProductModel.CodigoInterno_Produto,
                           productPackingCode: widget
                               .conferenceProductModel.CodigoInterno_ProEmb,
-                          quantityText: _consultedProductController.text,
+                          quantityText: widget.consultedProductController.text,
                           index: widget.index,
                           context: context,
                         );
@@ -197,12 +200,13 @@ class _ConferenceInsertQuantityWidget
                         if (widget.conferenceProvider
                                 .errorMessageUpdateQuantity ==
                             "") {
-                          _consultedProductController.clear();
+                          widget.consultedProductController.clear();
                         }
                       },
                 child: FittedBox(
                   child: Text(
-                    widget.conferenceProvider.isUpdatingQuantity
+                    widget.conferenceProvider.isUpdatingQuantity ||
+                            widget.conferenceProvider.consultingProducts
                         ? "AGUARDE"
                         : "Alterar",
                     style: const TextStyle(

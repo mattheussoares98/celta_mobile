@@ -16,16 +16,22 @@ class _ProductPageState extends State<ProductPage> {
   final _consultProductFocusNode = FocusNode();
 
   bool _isIndividual = false;
-  bool _isSubtract = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  static final TextEditingController _consultProductController =
+  final TextEditingController _consultProductController =
+      TextEditingController();
+
+  final TextEditingController _consultedProductController =
       TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
+    _consultProductController.dispose();
+    _consultedProductController.dispose();
+    _consultProductFocusNode.dispose();
+    _formKey.currentState?.dispose();
   }
 
   @override
@@ -54,6 +60,7 @@ class _ProductPageState extends State<ProductPage> {
                   isIndividual: _isIndividual,
                   consultProductFocusNode: _consultProductFocusNode,
                   consultProductController: _consultProductController,
+                  consultedProductController: _consultedProductController,
                 ),
                 const SizedBox(height: 8),
                 FittedBox(
@@ -95,7 +102,7 @@ class _ProductPageState extends State<ProductPage> {
                     isIndividual: _isIndividual,
                     countingCode: countings.codigoInternoInvCont,
                     productPackingCode: countings.numeroContagemInvCont,
-                    isSubtract: _isSubtract,
+                    consultedProductController: _consultedProductController,
                   ),
               ],
             ),

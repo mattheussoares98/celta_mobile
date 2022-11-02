@@ -8,7 +8,7 @@ class APPROUTES {
   static const LOGIN_PAGE = '/LOGINPAGE';
   static const COUNTINGS = '/COUNTINGS';
   static const PRODUCTS = '/PRODUCTS';
-  static const SPLASHSCREEN = '/SPLASHSCREEN';
+  static const SPLASHPAGE = '/SPLASHPAGE';
   static const HOME_PAGE = '/HOME_PAGE';
   static const RECEIPT = '/RECEIPT';
   static const CONFERENCE = '/CONFERENCE';

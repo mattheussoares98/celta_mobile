@@ -1,4 +1,5 @@
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -68,13 +69,8 @@ class EnterpriseProvider with ChangeNotifier {
         listToAdd: _enterprises,
       );
     } catch (e) {
-      print('erro na empresa: $e');
-      _errorMessage =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
-        context: context,
-      );
+      print("Erro para efetuar a requisição: $e");
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingEnterprises = false;
     }

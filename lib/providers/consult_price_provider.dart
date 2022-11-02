@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:celta_inventario/Models/consult_price_model.dart';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,12 +38,13 @@ class ConsultPriceProvider with ChangeNotifier {
   }
 
   String _convertToBrazilianNumber(String valueInString) {
-    int lastindex = valueInString.lastIndexOf("\.");
+    int lastIndex = valueInString.lastIndexOf("\.");
 
-    // print(lastindex.toString());
-
-    valueInString = valueInString.replaceRange(lastindex, lastindex + 1, ',');
-    if (lastindex > 4) {
+    //se não houver pontuação, vai resultar em -1
+    if (lastIndex != -1) {
+      valueInString = valueInString.replaceRange(lastIndex, lastIndex + 1, ',');
+    }
+    if (lastIndex > 4) {
       valueInString = valueInString.replaceFirst(RegExp(r'\,'), '.');
       return valueInString;
     } else {
@@ -55,6 +57,7 @@ class ConsultPriceProvider with ChangeNotifier {
     required String controllerText, //em string pq vem de um texfFormField
     required SearchTypes searchTypes,
     required BuildContext context,
+    // required FocusNode consultProductFocusNode,
   }) async {
     _products.clear();
     _errorMessage = "";
@@ -89,10 +92,7 @@ class ConsultPriceProvider with ChangeNotifier {
         //significa que deu algum erro
         _errorMessage = json.decode(resultAsString)["Message"];
         _isLoading = false;
-        ShowErrorMessage.showErrorMessage(
-          error: _errorSendToPrint,
-          context: context,
-        );
+
         notifyListeners();
         return;
       }
@@ -103,28 +103,26 @@ class ConsultPriceProvider with ChangeNotifier {
       );
 
       _products.forEach((element) {
-        element.SalePracticedRetail =
-            _convertToBrazilianNumber(element.SalePracticedRetail.toString());
         element.CurrentStock =
             _convertToBrazilianNumber(element.CurrentStock.toString());
+        element.SalePracticedRetail =
+            _convertToBrazilianNumber(element.SalePracticedRetail.toString());
       });
     } catch (e) {
-      print(e);
-      _errorMessage =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
-      ShowErrorMessage.showErrorMessage(
-        error: _errorSendToPrint,
-        context: context,
-      );
+      print("Erro para efetuar a requisição $searchType: $e");
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoading = false;
     notifyListeners();
   }
 
+  final consultProductFocusNode = FocusNode();
+
   Future<void> getProductByPluEanOrName({
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
+    // required FocusNode consultProductFocusNode,
   }) async {
     int? isInt = int.tryParse(controllerText);
     if (isInt != null) {
@@ -134,6 +132,7 @@ class ConsultPriceProvider with ChangeNotifier {
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByPLU,
         context: context,
+        // // consultProductFocusNode: consultProductFocusNode,
       );
       if (_products.isNotEmpty) return;
 
@@ -142,14 +141,29 @@ class ConsultPriceProvider with ChangeNotifier {
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByEAN,
         context: context,
+        // // consultProductFocusNode: consultProductFocusNode,
       );
       if (_products.isNotEmpty) return;
     } else {
       //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
       await _getProducts(
+        // consultProductFocusNode: consultProductFocusNode,
         enterpriseCode: enterpriseCode,
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByName,
+        context: context,
+      );
+    }
+    if (_errorMessage != "") {
+      //quando da erro para consultar os produtos, muda o foco novamente para o
+      //campo de pesquisa dos produtos
+      Future.delayed(const Duration(milliseconds: 100), () {
+        //se não colocar em um future pra mudar o foco, não funciona corretamente
+        FocusScope.of(context).requestFocus(consultProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
+      });
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessage,
         context: context,
       );
     }
@@ -212,9 +226,8 @@ class ConsultPriceProvider with ChangeNotifier {
       //caso dê certo a alteração, vai alterar o valor localmente para o usuário
       //saber que deu certo a requisição
     } catch (e) {
-      print("Erro para alterar o status da impressão");
-      _errorSendToPrint =
-          "Ocorreu um erro não esperado durante a operação. Verifique a sua internet e caso ela esteja funcionando, entre em contato com o suporte";
+      print("Erro para efetuar a requisição: $e");
+      _errorSendToPrint = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(
         error: _errorSendToPrint,
         context: context,

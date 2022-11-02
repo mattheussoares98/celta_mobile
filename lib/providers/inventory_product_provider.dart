@@ -1,4 +1,5 @@
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../Models/inventory_product_model.dart';
+
+enum SearchTypes {
+  GetProductByEAN,
+  GetProductByPLU,
+}
 
 class InventoryProductProvider with ChangeNotifier {
   List<InventoryProductModel> _products = [];
@@ -29,42 +35,50 @@ class InventoryProductProvider with ChangeNotifier {
     return _errorMessage;
   }
 
-  Future<void> _getProductByEan({
-    required String ean,
+  Future<void> _getProducts({
+    required String controllerText,
     required int enterpriseCode,
     required int inventoryProcessCode,
     required int inventoryCountingCode,
     required BuildContext context,
+    required SearchTypes searchTypes,
   }) async {
     _products.clear();
     _errorMessage = '';
     _isLoading = true;
     notifyListeners();
 
-    try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
+    http.Request request;
+
+    if (searchTypes == SearchTypes.GetProductByEAN) {
+      request = http.Request(
         'POST',
         Uri.parse(
-            '${BaseUrl.url}//Inventory/GetProductByEan?ean=$ean&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
+            '${BaseUrl.url}//Inventory/GetProductByEan?ean=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
       );
+    } else {
+      request = http.Request(
+        'POST',
+        Uri.parse(
+            '${BaseUrl.url}/Inventory/GetProductByPlu?plu=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
+      );
+    }
+
+    try {
+      var headers = {'Content-Type': 'application/json'};
+
       request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
       String responseInString = await response.stream.bytesToString();
 
-      print('resposta para consulta do EAN = $responseInString');
+      print('resposta para consulta do $searchTypes = $responseInString');
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
         _errorMessage = json.decode(responseInString)["Message"];
         _isLoading = false;
-
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessage,
-          context: context,
-        );
         notifyListeners();
         return;
       }
@@ -74,75 +88,15 @@ class InventoryProductProvider with ChangeNotifier {
         listToAdd: _products,
       );
     } catch (e) {
-      _errorMessage = 'Servidor não encontrado. Verifique a sua internet';
+      print("Erro para efetuar a requisição: $e");
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       _isLoading = false;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
-        context: context,
-      );
       notifyListeners();
     }
 
     if (products.isNotEmpty) {
       _isLoading = false;
     }
-    notifyListeners();
-  }
-
-  _getProductByPlu({
-    required String? plu,
-    required int? enterpriseCode,
-    required int? inventoryProcessCode,
-    required int? inventoryCountingCode,
-    required BuildContext context,
-  }) async {
-    _products.clear();
-    _errorMessage = '';
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      http.Response response = await http.post(
-        Uri.parse(
-          '${BaseUrl.url}/Inventory/GetProductByPlu?plu=$plu&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode',
-        ),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(UserIdentity.identity),
-      );
-
-      var responseInString = response.body;
-
-      print('resposta da solicitação para consultar o PLU = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessage = json.decode(responseInString)["Message"];
-        _isLoading = false;
-
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessage,
-          context: context,
-        );
-        notifyListeners();
-        return;
-      }
-
-      InventoryProductModel.responseInStringToInventoryProductModel(
-        responseInString: responseInString,
-        listToAdd: _products,
-      );
-    } catch (e) {
-      print('erro pra obter o produto pelo plu: $e');
-      _errorMessage =
-          'Ocorreu um erro não esperado durante a operação. Verifique a sua internet';
-      _isLoading = false;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
-        context: context,
-      );
-      notifyListeners();
-    }
-    _isLoading = false;
     notifyListeners();
   }
 
@@ -156,21 +110,23 @@ class InventoryProductProvider with ChangeNotifier {
     required bool isIndividual,
     required InventoryProductProvider inventoryProductProvider,
   }) async {
-    await _getProductByEan(
-      ean: controllerText,
+    await _getProducts(
+      controllerText: controllerText,
       enterpriseCode: enterpriseCode,
       inventoryProcessCode: inventoryProcessCode,
       inventoryCountingCode: codigoInternoInvCont,
       context: context,
+      searchTypes: SearchTypes.GetProductByPLU,
     );
 
     if (_products.length == 0) {
-      await _getProductByPlu(
-        plu: controllerText,
+      await _getProducts(
+        controllerText: controllerText,
         enterpriseCode: enterpriseCode,
         inventoryProcessCode: inventoryProcessCode,
         inventoryCountingCode: codigoInternoInvCont,
         context: context,
+        searchTypes: SearchTypes.GetProductByEAN,
       );
     }
 
@@ -178,7 +134,13 @@ class InventoryProductProvider with ChangeNotifier {
       Future.delayed(const Duration(milliseconds: 100), () {
         //se não colocar em um future pra mudar o foco, não funciona corretamente
         FocusScope.of(context).requestFocus(consultProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
       });
+
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessage,
+        context: context,
+      );
     }
 
     if (_errorMessage == '' && isIndividual) {
@@ -230,7 +192,7 @@ class InventoryProductProvider with ChangeNotifier {
     return _lastQuantityAdded;
   }
 
-  Future<void> entryQuantity({
+  Future<void> _entryQuantity({
     required int countingCode,
     required int productPackingCode,
     required String quantity,
@@ -274,14 +236,20 @@ class InventoryProductProvider with ChangeNotifier {
         notifyListeners();
         return;
       }
+
+      if (isSubtract) {
+        _lastQuantityAdded = "-$quantity";
+      } else {
+        _lastQuantityAdded = quantity;
+      }
     } catch (e) {
-      _errorMessageQuantity =
-          'Erro para confirmar. Verifique a sua internet e tente novamente';
+      print("Erro para efetuar a requisição: $e");
+      _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
+        error: _errorMessageQuantity,
         context: context,
       );
-    } finally {}
+    }
     _isLoadingQuantity = false;
     _canChangeTheFocus = true;
     notifyListeners();
@@ -332,13 +300,12 @@ class InventoryProductProvider with ChangeNotifier {
 
       _products[0].quantidadeInvContProEmb = -1;
     } catch (e) {
-      _errorMessageQuantity =
-          'Erro para confirmar. Verifique a sua internet e tente novamente';
+      print("Erro para efetuar a requisição: $e");
+      _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
+        error: _errorMessageQuantity,
         context: context,
       );
-      print('Erro no anullQuantity: $e');
       _lastQuantityAdded = '';
     }
 
@@ -387,7 +354,7 @@ class InventoryProductProvider with ChangeNotifier {
     void Function()? alterFocusToConsultedProduct,
   }) async {
     try {
-      await entryQuantity(
+      await _entryQuantity(
         countingCode: codigoInternoInvCont,
         productPackingCode: _products[0].codigoInternoProEmb,
         quantity: isIndividual ? '1' : quantity.text,
@@ -404,7 +371,12 @@ class InventoryProductProvider with ChangeNotifier {
           quantity: quantity,
           isIndividual: isIndividual);
     } catch (e) {
-      e;
+      print("Erro para efetuar a requisição: $e");
+      _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageQuantity,
+        context: context,
+      );
     }
     if (_errorMessageQuantity != '') {
       alterFocusToConsultedProduct!();
@@ -416,9 +388,4 @@ class InventoryProductProvider with ChangeNotifier {
       alterFocusToConsultedProduct!();
     }
   }
-
-  // clearProducts() {
-  //   _products.clear();
-  //   notifyListeners();
-  // }
 }

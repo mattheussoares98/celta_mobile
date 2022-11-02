@@ -1,4 +1,5 @@
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -76,12 +77,6 @@ class ReceiptProvider with ChangeNotifier {
         );
         notifyListeners();
         return;
-      } else if (responseAsString.contains("!DOCTYPE HTML")) {
-        _errorMessage =
-            "Ocorreu um erro não esperado para consultar os produtos";
-        _isLoadingReceipt = false;
-        notifyListeners();
-        return;
       }
 
       ReceiptModel.responseAsStringToReceiptModel(
@@ -89,8 +84,12 @@ class ReceiptProvider with ChangeNotifier {
         listToAdd: _receipts,
       );
     } catch (e) {
-      _errorMessage =
-          "Ocorreu um erro não esperado na consulta dos recebimentos";
+      print("Erro para efetuar a requisição: $e");
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessage,
+        context: context,
+      );
     } finally {
       _treatStatusMessage();
       _isLoadingReceipt = false;
@@ -178,10 +177,10 @@ class ReceiptProvider with ChangeNotifier {
         _updateAtualStatus(index: index);
       }
     } catch (e) {
-      _liberateError =
-          "Ocorreu um erro não esperado para efetuar a liberação. Verifique a sua internet e tente novamente";
+      print("Erro para efetuar a requisição: $e");
+      _liberateError = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
+        error: _liberateError,
         context: context,
       );
     }
