@@ -1,15 +1,15 @@
 import 'package:celta_inventario/components/personalized_card.dart';
 import 'package:celta_inventario/Components/Conference_components/conference_insert_quantity_widget.dart';
-import 'package:celta_inventario/providers/conference_provider.dart';
+import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;
-  final ConferenceProvider conferenceProvider;
+  final ReceiptConferenceProvider receiptConferenceProvider;
   const ReceiptConferenceProductsItems({
     required this.docCode,
-    required this.conferenceProvider,
+    required this.receiptConferenceProvider,
     Key? key,
   }) : super(key: key);
 
@@ -38,7 +38,7 @@ class _ReceiptConferenceProductsItemsState
     required String title,
     required String value,
     required int index,
-    required ConferenceProvider conferenceProvider,
+    required ReceiptConferenceProvider receiptConferenceProvider,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -64,40 +64,62 @@ class _ReceiptConferenceProductsItemsState
     );
   }
 
-  var _consultedProductFocusNode = FocusNode();
-
   static final TextEditingController _consultedProductController =
       TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    ConferenceProvider conferenceProvider = Provider.of(context, listen: true);
+    ReceiptConferenceProvider receiptConferenceProvider =
+        Provider.of(context, listen: true);
 
     return Expanded(
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: conferenceProvider.productsCount,
+              itemCount: receiptConferenceProvider.productsCount,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: conferenceProvider.isUpdatingQuantity ||
-                          conferenceProvider.consultingProducts
+                  onTap: receiptConferenceProvider.isUpdatingQuantity ||
+                          receiptConferenceProvider.consultingProducts
                       ? null
                       : () {
+                          if (!receiptConferenceProvider
+                                  .consultedProductFocusNode.hasFocus &&
+                              selectedIndex == index) {
+                            //só cai aqui quando está exibindo a opção de
+                            //alterar/anular a quantidade de algum produto e ele
+                            //não está com o foco. Ao clicar nele novamnete, ao
+                            //invés de minimizá-lo, só altera o foco novamente
+                            //pra ele
+
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () {
+                              //se não colocar em um future pra mudar o foco,
+                              //não funciona corretamente
+                              FocusScope.of(context).requestFocus(
+                                receiptConferenceProvider
+                                    .consultedProductFocusNode,
+                              );
+                            });
+                            return;
+                          }
                           if (selectedIndex != index) {
                             _consultedProductController.clear();
                             //necessário apagar o campo da quantidade quando
                             //mudar de produto selecionado
-                            _consultedProductFocusNode = FocusNode();
+                            receiptConferenceProvider
+                                .consultedProductFocusNode = FocusNode();
                             //se não fizer isso, a mudança de foco abaixo não da
                             //certo. Dessa forma o teclado nem está fechando
                             Future.delayed(const Duration(milliseconds: 100),
                                 () {
                               //se não colocar em um future pra mudar o foco,
                               //não funciona corretamente
-                              FocusScope.of(context)
-                                  .requestFocus(_consultedProductFocusNode);
+                              FocusScope.of(context).requestFocus(
+                                receiptConferenceProvider
+                                    .consultedProductFocusNode,
+                              );
                             });
 
                             setState(() {
@@ -123,24 +145,27 @@ class _ReceiptConferenceProductsItemsState
                         children: [
                           values(
                             title: "Nome",
-                            value:
-                                conferenceProvider.products[index].Nome_Produto,
+                            value: receiptConferenceProvider
+                                .products[index].Nome_Produto,
                             index: index,
-                            conferenceProvider: conferenceProvider,
+                            receiptConferenceProvider:
+                                receiptConferenceProvider,
                           ),
                           values(
                             title: "PLU",
-                            value: conferenceProvider
+                            value: receiptConferenceProvider
                                 .products[index].CodigoPlu_ProEmb,
                             index: index,
-                            conferenceProvider: conferenceProvider,
+                            receiptConferenceProvider:
+                                receiptConferenceProvider,
                           ),
                           values(
                             title: "Embalagem",
-                            value: conferenceProvider
+                            value: receiptConferenceProvider
                                 .products[index].PackingQuantity,
                             index: index,
-                            conferenceProvider: conferenceProvider,
+                            receiptConferenceProvider:
+                                receiptConferenceProvider,
                           ),
                           Container(
                             // color: Colors.amber,
@@ -157,10 +182,10 @@ class _ReceiptConferenceProductsItemsState
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
-                                      conferenceProvider
+                                      receiptConferenceProvider
                                                   .products[index].AllEans !=
                                               ""
-                                          ? conferenceProvider
+                                          ? receiptConferenceProvider
                                               .products[index].AllEans
                                           : "Nenhum",
                                       style: _fontBoldStyle,
@@ -187,34 +212,34 @@ class _ReceiptConferenceProductsItemsState
                               children: [
                                 values(
                                   title: "Quantidade contada",
-                                  value: conferenceProvider.products[index]
+                                  value: receiptConferenceProvider
+                                              .products[index]
                                               .Quantidade_ProcRecebDocProEmb ==
                                           null
                                       //se o valor for nulo, basta convertê-lo
                                       //para String. Se não for nulo, basta
                                       //alterar os pontos por vírgula e
                                       //mostrar no máximo 3 casas decimais
-                                      ? conferenceProvider.products[index]
-                                          .Quantidade_ProcRecebDocProEmb
-                                          .toString()
-                                      : double.tryParse(conferenceProvider
-                                              .products[index]
-                                              .Quantidade_ProcRecebDocProEmb
-                                              .toString())!
+                                      ? "nula"
+                                      : double.tryParse(
+                                              receiptConferenceProvider
+                                                  .products[index]
+                                                  .Quantidade_ProcRecebDocProEmb
+                                                  .toString())!
                                           .toStringAsFixed(3)
                                           .replaceAll(RegExp(r'\.'), ','),
                                   index: index,
-                                  conferenceProvider: conferenceProvider,
+                                  receiptConferenceProvider:
+                                      receiptConferenceProvider,
                                 ),
                                 const SizedBox(height: 10),
                                 ConferenceInsertQuantityWidget(
                                   consultedProductController:
                                       _consultedProductController,
-                                  focusNodeConsultedProduct:
-                                      _consultedProductFocusNode,
-                                  conferenceProvider: widget.conferenceProvider,
+                                  receiptConferenceProvider:
+                                      widget.receiptConferenceProvider,
                                   conferenceProductModel:
-                                      conferenceProvider.products[index],
+                                      receiptConferenceProvider.products[index],
                                   docCode: widget.docCode,
                                   index: index,
                                 ),

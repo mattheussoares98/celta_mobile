@@ -25,7 +25,6 @@ class _InventoryPageState extends State<InventoryPage> {
       Provider.of<InventoryProvider>(context, listen: false).getInventory(
         enterpriseCode: enterpriseCode,
         userIdentity: UserIdentity.identity,
-        context: context,
       );
       _isLoaded = true;
     }
@@ -56,7 +55,6 @@ class _InventoryPageState extends State<InventoryPage> {
                   inventoryProvider.getInventory(
                     enterpriseCode: enterpriseCode,
                     userIdentity: UserIdentity.identity,
-                    context: context,
                   );
                 }),
               ),

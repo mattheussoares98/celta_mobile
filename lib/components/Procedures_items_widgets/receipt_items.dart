@@ -1,14 +1,11 @@
-import 'package:celta_inventario/Models/enterprise_model.dart';
 import 'package:celta_inventario/components/personalized_card.dart';
 import 'package:celta_inventario/Components/Buttons/receipt_liberate_check_buttons.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptItems extends StatefulWidget {
-  final EnterpriseModel enterprise;
   final ReceiptProvider receiptProvider;
   const ReceiptItems({
-    required this.enterprise,
     required this.receiptProvider,
     Key? key,
   }) : super(key: key);
@@ -121,6 +118,10 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                           LiberateCheckButtons(
                             grDocCode: widget.receiptProvider.receipts[index]
                                 .CodigoInterno_ProcRecebDoc,
+                            emitterName: widget
+                                .receiptProvider.receipts[index].EmitterName,
+                            numeroProcRecebDoc: widget.receiptProvider
+                                .receipts[index].Numero_ProcRecebDoc,
                             receiptProvider: widget.receiptProvider,
                             index: index,
                           ),

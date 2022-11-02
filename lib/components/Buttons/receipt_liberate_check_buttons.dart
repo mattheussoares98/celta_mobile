@@ -6,8 +6,12 @@ class LiberateCheckButtons extends StatefulWidget {
   final int grDocCode;
   final ReceiptProvider receiptProvider;
   final int index;
+  final String emitterName;
+  final String numeroProcRecebDoc;
   const LiberateCheckButtons({
     required this.grDocCode,
+    required this.emitterName,
+    required this.numeroProcRecebDoc,
     required this.receiptProvider,
     required this.index,
     Key? key,
@@ -58,7 +62,11 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
               : () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.CONFERENCE,
-                    arguments: widget.grDocCode,
+                    arguments: {
+                      "grDocCode": widget.grDocCode,
+                      "numeroProcRecebDoc": widget.numeroProcRecebDoc,
+                      "emitterName": widget.emitterName,
+                    },
                   );
                 },
           child: widget.receiptProvider.isLoadingLiberateCheck

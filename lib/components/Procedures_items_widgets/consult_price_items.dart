@@ -70,6 +70,7 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                   var product = widget.consultPriceProvider.products[index];
                   return GestureDetector(
                     onTap: () {
+                      FocusScope.of(context).unfocus();
                       if (widget.consultPriceProvider.isLoading ||
                           widget.consultPriceProvider.isSendingToPrint) return;
                       setState(() {
@@ -146,7 +147,7 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                               consultPriceProvider: widget.consultPriceProvider,
                             ),
                             values(
-                              title: "Custo de reposição: ",
+                              title: "Custo de reposição",
                               value: product.ReplacementCost == null
                                   ? product.ReplacementCost.toString()
                                   : double.tryParse(

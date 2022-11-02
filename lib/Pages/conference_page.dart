@@ -1,7 +1,7 @@
 import 'package:celta_inventario/Components/Buttons/receipt_conference_consult_product_without_ean_button.dart';
 import 'package:celta_inventario/Components/search_product_with_ean_plu_or_name_widget.dart';
 import 'package:celta_inventario/Components/Procedures_items_widgets/receipt_conference_products_items.dart';
-import 'package:celta_inventario/providers/conference_provider.dart';
+import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/consulting_widget.dart';
@@ -24,7 +24,8 @@ class _ConferencePageState extends State<ConferencePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!isLoaded) {
-      Provider.of<ConferenceProvider>(context, listen: false).clearProducts();
+      Provider.of<ReceiptConferenceProvider>(context, listen: false)
+          .clearProducts();
     }
     isLoaded = true;
   }
@@ -34,22 +35,24 @@ class _ConferencePageState extends State<ConferencePage> {
   @override
   void dispose() {
     super.dispose();
-    // Provider.of<ConferenceProvider>(context, listen: false)
-    //     .consultProductFocusNode
-    //     .dispose();
-
     _consultProductController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    ConferenceProvider conferenceProvider = Provider.of(context, listen: true);
-    int docCode = ModalRoute.of(context)!.settings.arguments as int;
+    ReceiptConferenceProvider receiptConferenceProvider =
+        Provider.of(context, listen: true);
+    Map map = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'PRODUTOS DA CONFERÊNCIA',
+        title: FittedBox(
+          child: Text(
+            '[${map["numeroProcRecebDoc"]}] ${map["emitterName"]}',
+            style: const TextStyle(
+              fontSize: 50,
+            ),
+          ),
         ),
       ),
       body: Column(
@@ -57,12 +60,13 @@ class _ConferencePageState extends State<ConferencePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SearchProductWithEanPluOrNameWidget(
-            focusNodeConsultProduct: conferenceProvider.consultProductFocusNode,
-            isLoading: conferenceProvider.consultingProducts ||
-                conferenceProvider.isUpdatingQuantity,
+            focusNodeConsultProduct:
+                receiptConferenceProvider.consultProductFocusNode,
+            isLoading: receiptConferenceProvider.consultingProducts ||
+                receiptConferenceProvider.isUpdatingQuantity,
             onPressSearch: () async {
-              await conferenceProvider.getProductByPluEanOrName(
-                docCode: docCode,
+              await receiptConferenceProvider.getProductByPluEanOrName(
+                docCode: map["grDocCode"],
                 controllerText: _consultProductController.text,
                 context: context,
               );
@@ -71,7 +75,7 @@ class _ConferencePageState extends State<ConferencePage> {
               //para o "SearchProductWithEanPluOrNameWidget" para apagar o
               //textEditingController após a consulta dos produtos se encontrar
               //algum produto
-              if (conferenceProvider.productsCount > 0) {
+              if (receiptConferenceProvider.productsCount > 0) {
                 //se for maior que 0 significa que deu certo a consulta e
                 //por isso pode apagar o que foi escrito no campo de
                 //consulta
@@ -80,20 +84,20 @@ class _ConferencePageState extends State<ConferencePage> {
             },
             consultProductController: _consultProductController,
           ),
-          if (conferenceProvider.consultingProducts)
+          if (receiptConferenceProvider.consultingProducts)
             Expanded(
               child: ConsultingWidget.consultingWidget(
                   title: 'Consultando produtos'),
             ),
-          if (!conferenceProvider.consultingProducts)
+          if (!receiptConferenceProvider.consultingProducts)
             ReceiptConferenceProductsItems(
-              docCode: docCode,
-              conferenceProvider: conferenceProvider,
+              docCode: map["grDocCode"],
+              receiptConferenceProvider: receiptConferenceProvider,
             ),
           if (MediaQuery.of(context).viewInsets.bottom == 0)
             ConferenceConsultProductWithoutEanButton(
-              docCode: docCode,
-              conferenceProvider: conferenceProvider,
+              docCode: map["grDocCode"],
+              receiptConferenceProvider: receiptConferenceProvider,
             ),
         ],
       ),

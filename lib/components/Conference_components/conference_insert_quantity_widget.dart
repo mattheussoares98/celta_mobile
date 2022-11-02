@@ -1,20 +1,18 @@
 import 'package:celta_inventario/Models/conference_product_model.dart';
-import 'package:celta_inventario/providers/conference_provider.dart';
+import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ConferenceInsertQuantityWidget extends StatefulWidget {
-  final ConferenceProvider conferenceProvider;
+  final ReceiptConferenceProvider receiptConferenceProvider;
   final ConferenceProductModel conferenceProductModel;
   final int docCode;
   final int index;
-  final FocusNode focusNodeConsultedProduct;
   final TextEditingController consultedProductController;
   const ConferenceInsertQuantityWidget({
-    required this.focusNodeConsultedProduct,
     required this.consultedProductController,
     required this.docCode,
-    required this.conferenceProvider,
+    required this.receiptConferenceProvider,
     required this.conferenceProductModel,
     required this.index,
     Key? key,
@@ -48,12 +46,14 @@ class _ConferenceInsertQuantityWidget
                   key: _formKey,
                   child: TextFormField(
                     autofocus: true,
-                    enabled: widget.conferenceProvider.isUpdatingQuantity ||
-                            widget.conferenceProvider.consultingProducts
+                    enabled: widget
+                                .receiptConferenceProvider.isUpdatingQuantity ||
+                            widget.receiptConferenceProvider.consultingProducts
                         ? false
                         : true,
                     controller: widget.consultedProductController,
-                    focusNode: widget.focusNodeConsultedProduct,
+                    focusNode: widget
+                        .receiptConferenceProvider.consultedProductFocusNode,
                     inputFormatters: [LengthLimitingTextInputFormatter(10)],
                     onChanged: (value) {
                       if (value.isEmpty || value == '-') {
@@ -89,8 +89,10 @@ class _ConferenceInsertQuantityWidget
                     decoration: InputDecoration(
                       labelText: 'Digite a quantidade aqui',
                       floatingLabelStyle: TextStyle(
-                        color: widget.conferenceProvider.consultingProducts ||
-                                widget.conferenceProvider.isUpdatingQuantity
+                        color: widget.receiptConferenceProvider
+                                    .consultingProducts ||
+                                widget.receiptConferenceProvider
+                                    .isUpdatingQuantity
                             ? Colors.grey
                             : Theme.of(context).primaryColor,
                       ),
@@ -114,8 +116,10 @@ class _ConferenceInsertQuantityWidget
                         ),
                       ),
                       labelStyle: TextStyle(
-                        color: widget.conferenceProvider.consultingProducts ||
-                                widget.conferenceProvider.isUpdatingQuantity
+                        color: widget.receiptConferenceProvider
+                                    .consultingProducts ||
+                                widget.receiptConferenceProvider
+                                    .isUpdatingQuantity
                             ? Colors.grey
                             : Theme.of(context).primaryColor,
                       ),
@@ -137,12 +141,13 @@ class _ConferenceInsertQuantityWidget
                   minimumSize: const Size(double.infinity, 50),
                   maximumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: widget.conferenceProvider.isUpdatingQuantity ||
-                        widget.conferenceProvider.consultingProducts
+                onPressed: widget
+                            .receiptConferenceProvider.isUpdatingQuantity ||
+                        widget.receiptConferenceProvider.consultingProducts
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
-                        await widget.conferenceProvider.anullQuantity(
+                        await widget.receiptConferenceProvider.anullQuantity(
                           docCode: widget.docCode,
                           productgCode: widget
                               .conferenceProductModel.CodigoInterno_Produto,
@@ -152,7 +157,7 @@ class _ConferenceInsertQuantityWidget
                           context: context,
                         );
 
-                        if (widget.conferenceProvider
+                        if (widget.receiptConferenceProvider
                                 .errorMessageUpdateQuantity ==
                             "") {
                           widget.consultedProductController.clear();
@@ -160,8 +165,8 @@ class _ConferenceInsertQuantityWidget
                       },
                 child: FittedBox(
                   child: Text(
-                    widget.conferenceProvider.isUpdatingQuantity ||
-                            widget.conferenceProvider.consultingProducts
+                    widget.receiptConferenceProvider.isUpdatingQuantity ||
+                            widget.receiptConferenceProvider.consultingProducts
                         ? "AGUARDE"
                         : "ANULAR",
                     style: const TextStyle(
@@ -180,13 +185,14 @@ class _ConferenceInsertQuantityWidget
                   minimumSize: const Size(double.infinity, 50),
                   maximumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: widget.conferenceProvider.isUpdatingQuantity ||
-                        widget.conferenceProvider.consultingProducts
+                onPressed: widget
+                            .receiptConferenceProvider.isUpdatingQuantity ||
+                        widget.receiptConferenceProvider.consultingProducts
                     ? null
                     : () async {
                         if (!isValid()) return;
                         FocusScope.of(context).unfocus();
-                        await widget.conferenceProvider.updateQuantity(
+                        await widget.receiptConferenceProvider.updateQuantity(
                           docCode: widget.docCode,
                           productgCode: widget
                               .conferenceProductModel.CodigoInterno_Produto,
@@ -197,7 +203,7 @@ class _ConferenceInsertQuantityWidget
                           context: context,
                         );
 
-                        if (widget.conferenceProvider
+                        if (widget.receiptConferenceProvider
                                 .errorMessageUpdateQuantity ==
                             "") {
                           widget.consultedProductController.clear();
@@ -205,8 +211,8 @@ class _ConferenceInsertQuantityWidget
                       },
                 child: FittedBox(
                   child: Text(
-                    widget.conferenceProvider.isUpdatingQuantity ||
-                            widget.conferenceProvider.consultingProducts
+                    widget.receiptConferenceProvider.isUpdatingQuantity ||
+                            widget.receiptConferenceProvider.consultingProducts
                         ? "AGUARDE"
                         : "Alterar",
                     style: const TextStyle(

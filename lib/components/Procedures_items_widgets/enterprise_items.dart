@@ -2,7 +2,6 @@ import 'package:celta_inventario/components/personalized_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/inventory_product_provider.dart';
 import '../../providers/enterprise_provider.dart';
 
 class EnterpriseItems extends StatefulWidget {
@@ -20,7 +19,6 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
   @override
   Widget build(BuildContext context) {
     EnterpriseProvider enterpriseProvider = Provider.of(context, listen: true);
-    InventoryProductProvider inventoryProductProvider = Provider.of(context);
 
     return Column(
       children: [
@@ -63,10 +61,6 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
                     ),
                   ),
                   onTap: () {
-                    inventoryProductProvider.codigoInternoEmpresa =
-                        enterpriseProvider
-                            .enterprises[index].codigoInternoEmpresa;
-
                     Navigator.of(context).pushNamed(
                       widget.nextPageRoute,
                       arguments: enterpriseProvider

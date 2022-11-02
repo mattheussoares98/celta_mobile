@@ -13,7 +13,7 @@ enum SearchTypes {
   GetProductByPLU,
 }
 
-class ConferenceProvider with ChangeNotifier {
+class ReceiptConferenceProvider with ChangeNotifier {
   List<ConferenceProductModel> _products = [];
 
   get products {
@@ -41,6 +41,9 @@ class ConferenceProvider with ChangeNotifier {
   get errorMessageUpdateQuantity {
     return _errorMessageUpdateQuantity;
   }
+
+  var consultProductFocusNode = FocusNode();
+  var consultedProductFocusNode = FocusNode();
 
   clearProducts() {
     _products = [];
@@ -145,6 +148,16 @@ class ConferenceProvider with ChangeNotifier {
     if (_products[index].Quantidade_ProcRecebDocProEmb == quantity) {
       //se a quantidade for igual à atual, não precisa fazer a requisição
       _errorMessageUpdateQuantity = "A quantidade é igual à atual";
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        //se não colocar em um future pra mudar o foco, não funciona corretamente
+        FocusScope.of(context).requestFocus(consultedProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
+      });
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageUpdateQuantity,
+        context: context,
+      );
       notifyListeners();
       return;
     } else if (quantity == 0) {
@@ -288,8 +301,6 @@ class ConferenceProvider with ChangeNotifier {
     _isUpdatingQuantity = false;
     notifyListeners();
   }
-
-  final consultProductFocusNode = FocusNode();
 
   Future<void> _getProducts({
     required int docCode,

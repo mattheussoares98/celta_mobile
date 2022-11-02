@@ -34,7 +34,6 @@ class InventoryProvider with ChangeNotifier {
   Future<void> getInventory({
     required int enterpriseCode,
     required String? userIdentity,
-    required BuildContext context,
   }) async {
     _isLoadingInventorys = true;
     _inventorys.clear();

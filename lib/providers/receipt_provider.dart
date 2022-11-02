@@ -44,7 +44,7 @@ class ReceiptProvider with ChangeNotifier {
   }
 
   Future<void> getReceipt({
-    required String? enterpriseCode,
+    required int enterpriseCode,
     required BuildContext context,
   }) async {
     _receipts.clear();

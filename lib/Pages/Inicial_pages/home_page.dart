@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               imagePath: 'lib/assets/Images/receipt.jpg',
               routine: 'Recebimento de mercadorias',
               route: APPROUTES.ENTERPRISE,
-              nextRoute: APPROUTES.CONFERENCE,
+              nextRoute: APPROUTES.RECEIPT,
               context: context,
             ),
             const SizedBox(height: 5),

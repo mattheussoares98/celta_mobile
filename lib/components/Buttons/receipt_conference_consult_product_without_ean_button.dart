@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../providers/conference_provider.dart';
+import '../../providers/receipt_conference_provider.dart';
 
 class ConferenceConsultProductWithoutEanButton extends StatefulWidget {
-  final ConferenceProvider conferenceProvider;
+  final ReceiptConferenceProvider receiptConferenceProvider;
   final int docCode;
   const ConferenceConsultProductWithoutEanButton({
     required this.docCode,
-    required this.conferenceProvider,
+    required this.receiptConferenceProvider,
     Key? key,
   }) : super(key: key);
 
@@ -26,18 +26,18 @@ class _ConferenceConsultProductWithoutEanButtonState
         style: TextButton.styleFrom(
           primary: Colors.white,
         ),
-        onPressed: widget.conferenceProvider.consultingProducts ||
-                widget.conferenceProvider.isUpdatingQuantity
+        onPressed: widget.receiptConferenceProvider.consultingProducts ||
+                widget.receiptConferenceProvider.isUpdatingQuantity
             ? null
             : () async {
-                await widget.conferenceProvider.getAllProductsWithoutEan(
+                await widget.receiptConferenceProvider.getAllProductsWithoutEan(
                   docCode: widget.docCode,
                   context: context,
                 );
               },
         child: Text(
-          widget.conferenceProvider.consultingProducts ||
-                  widget.conferenceProvider.isUpdatingQuantity
+          widget.receiptConferenceProvider.consultingProducts ||
+                  widget.receiptConferenceProvider.isUpdatingQuantity
               ? "Aguarde o término da consulta/alteração"
               : "Consultar todos produtos sem EAN",
         ),

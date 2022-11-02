@@ -8,7 +8,7 @@ import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
 import 'package:celta_inventario/providers/inventory_product_provider.dart';
 import 'package:celta_inventario/Pages/conference_page.dart';
-import 'package:celta_inventario/providers/conference_provider.dart';
+import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
@@ -37,7 +37,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => InventoryCountingProvider()),
           ChangeNotifierProvider(create: (_) => InventoryProductProvider()),
           ChangeNotifierProvider(create: (_) => ReceiptProvider()),
-          ChangeNotifierProvider(create: (_) => ConferenceProvider()),
+          ChangeNotifierProvider(create: (_) => ReceiptConferenceProvider()),
           ChangeNotifierProvider(create: (_) => ConsultPriceProvider()),
         ],
         child: MaterialApp(
