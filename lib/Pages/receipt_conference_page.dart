@@ -92,7 +92,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 docCode: arguments["grDocCode"],
                 receiptConferenceProvider: receiptConferenceProvider,
               ),
-            if (MediaQuery.of(context).viewInsets.bottom == 0)
+            if (MediaQuery.of(context).viewInsets.bottom == 0 ||
+                receiptConferenceProvider.productsCount == 0)
               ConferenceConsultProductWithoutEanButton(
                 docCode: arguments["grDocCode"],
                 receiptConferenceProvider: receiptConferenceProvider,
