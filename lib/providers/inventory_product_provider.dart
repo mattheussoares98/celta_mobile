@@ -34,6 +34,7 @@ class InventoryProductProvider with ChangeNotifier {
 
   clearProducts() {
     _products.clear();
+    notifyListeners();
   }
 
   Future<void> _getProducts({

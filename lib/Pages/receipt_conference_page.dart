@@ -30,7 +30,9 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
 
     return WillPopScope(
       onWillPop: () async {
-        receiptConferenceProvider.clearProducts();
+        Future.delayed(const Duration(milliseconds: 300), () {
+          receiptConferenceProvider.clearProducts();
+        });
         return true;
       },
       child: Scaffold(

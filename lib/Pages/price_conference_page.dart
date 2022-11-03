@@ -14,17 +14,6 @@ class PriceConferencePage extends StatefulWidget {
 }
 
 class _PriceConferencePageState extends State<PriceConferencePage> {
-  bool isLoaded = false;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!isLoaded) {
-      // Provider.of<onsultPriceProvider>(context, listen: false)
-      //     .clearProducts();
-    }
-    isLoaded = true;
-  }
-
   final TextEditingController _consultProductController =
       TextEditingController();
 

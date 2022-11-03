@@ -47,6 +47,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
 
   clearProducts() {
     _products = [];
+    notifyListeners();
   }
 
   Future<void> getAllProductsWithoutEan({
