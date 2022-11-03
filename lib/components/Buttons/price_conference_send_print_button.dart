@@ -1,28 +1,28 @@
-import 'package:celta_inventario/providers/consult_price_provider.dart';
+import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:flutter/material.dart';
 
-class ConsultPriceSendPrintButton extends StatefulWidget {
+class PriceConferenceSendPrintButton extends StatefulWidget {
   final String etiquetaPendenteDescricao;
-  final ConsultPriceProvider consultPriceProvider;
+  final PriceConferenceProvider priceConferenceProvider;
   final int internalEnterpriseCode;
   final int productPackingCode;
   final int index;
-  const ConsultPriceSendPrintButton({
+  const PriceConferenceSendPrintButton({
     required this.internalEnterpriseCode,
     required this.index,
-    required this.consultPriceProvider,
+    required this.priceConferenceProvider,
     required this.productPackingCode,
     required this.etiquetaPendenteDescricao,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConsultPriceSendPrintButton> createState() =>
-      _ConsultPriceSendPrintButtonState();
+  State<PriceConferenceSendPrintButton> createState() =>
+      _PriceConferenceSendPrintButtonState();
 }
 
-class _ConsultPriceSendPrintButtonState
-    extends State<ConsultPriceSendPrintButton> {
+class _PriceConferenceSendPrintButtonState
+    extends State<PriceConferenceSendPrintButton> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -34,18 +34,18 @@ class _ConsultPriceSendPrintButtonState
                 ? Theme.of(context).colorScheme.primary
                 : Colors.red,
           ),
-          onPressed: widget.consultPriceProvider.isSendingToPrint
+          onPressed: widget.priceConferenceProvider.isSendingToPrint
               ? null
               : () async {
-                  await widget.consultPriceProvider.sendToPrint(
+                  await widget.priceConferenceProvider.sendToPrint(
                     enterpriseCode: widget.internalEnterpriseCode,
                     productPackingCode: widget.productPackingCode,
                     index: widget.index,
                     context: context,
                   );
                 },
-          child: widget.consultPriceProvider.isSendingToPrint ||
-                  widget.consultPriceProvider.isLoading
+          child: widget.priceConferenceProvider.isSendingToPrint ||
+                  widget.priceConferenceProvider.isLoading
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

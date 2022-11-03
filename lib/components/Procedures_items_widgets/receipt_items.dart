@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 class ReceiptItems extends StatefulWidget {
   final ReceiptProvider receiptProvider;
+  final int enterpriseCode;
   const ReceiptItems({
     required this.receiptProvider,
+    required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
@@ -124,6 +126,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                                 .receipts[index].Numero_ProcRecebDoc,
                             receiptProvider: widget.receiptProvider,
                             index: index,
+                            enterpriseCode: widget.enterpriseCode,
                           ),
                       ],
                     ),

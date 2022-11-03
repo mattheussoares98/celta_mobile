@@ -35,6 +35,9 @@ class EnterpriseProvider with ChangeNotifier {
   Future getEnterprises({
     required BuildContext context,
   }) async {
+    if (_isLoadingEnterprises) {
+      return;
+    }
     _enterprises.clear();
     _errorMessage = '';
     _isLoadingEnterprises = true;

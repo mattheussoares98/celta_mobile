@@ -30,8 +30,7 @@ class ConsultProductWidget extends StatefulWidget {
 class _ConsultProductWidgetState extends State<ConsultProductWidget> {
   @override
   Widget build(BuildContext context) {
-    final countings =
-        ModalRoute.of(context)!.settings.arguments as InventoryCountingsModel;
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     InventoryProductProvider inventoryProductProvider =
         Provider.of(context, listen: true);
@@ -48,11 +47,11 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                     await inventoryProductProvider
                         .getProductsAndAddIfIsIndividual(
                       controllerText: widget.consultProductController.text,
-                      enterpriseCode:
-                          inventoryProductProvider.codigoInternoEmpresa!,
-                      inventoryProcessCode:
-                          inventoryProductProvider.codigoInternoInventario!,
-                      codigoInternoInvCont: countings.codigoInternoInvCont,
+                      enterpriseCode: arguments["codigoInternoEmpresa"],
+                      inventoryProcessCode: arguments["InventoryCountingsModel"]
+                          .codigoInternoInventario,
+                      codigoInternoInvCont: arguments["InventoryCountingsModel"]
+                          .codigoInternoInvCont,
                       context: context,
                       consultProductFocusNode: widget.consultProductFocusNode,
                       isIndividual: widget.isIndividual,
@@ -216,12 +215,13 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                               .getProductsAndAddIfIsIndividual(
                             controllerText:
                                 widget.consultProductController.text,
-                            enterpriseCode:
-                                inventoryProductProvider.codigoInternoEmpresa!,
-                            inventoryProcessCode: inventoryProductProvider
-                                .codigoInternoInventario!,
+                            enterpriseCode: arguments["codigoInternoEmpresa"],
+                            inventoryProcessCode:
+                                arguments["InventoryCountingsModel"]
+                                    .codigoInternoInventario,
                             codigoInternoInvCont:
-                                countings.codigoInternoInvCont,
+                                arguments["InventoryCountingsModel"]
+                                    .codigoInternoInvCont,
                             context: context,
                             consultProductFocusNode:
                                 widget.consultProductFocusNode,

@@ -64,6 +64,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
               receiptProvider.errorMessage == '')
             Expanded(
               child: ReceiptItems(
+                enterpriseCode: enterpriseCode,
                 receiptProvider: receiptProvider,
               ),
             ),

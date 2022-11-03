@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:celta_inventario/Models/conference_product_model.dart';
+import 'package:celta_inventario/Models/receipt_conference_product_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
@@ -14,7 +14,7 @@ enum SearchTypes {
 }
 
 class ReceiptConferenceProvider with ChangeNotifier {
-  List<ConferenceProductModel> _products = [];
+  List<ReceiptConferenceProductModel> _products = [];
 
   get products {
     return _products;
@@ -84,7 +84,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
         notifyListeners();
         return;
       } else {
-        ConferenceProductModel.resultAsStringToConferenceModel(
+        ReceiptConferenceProductModel.resultAsStringToReceiptConferenceModel(
           resultAsString: resultAsString,
           listToAdd: _products,
         );
@@ -108,7 +108,8 @@ class ReceiptConferenceProvider with ChangeNotifier {
     required double newQuantity,
     required bool isAnnulQuantity,
   }) {
-    ConferenceProductModel productWithNewQuantity = ConferenceProductModel(
+    ReceiptConferenceProductModel productWithNewQuantity =
+        ReceiptConferenceProductModel(
       Nome_Produto: _products[index].Nome_Produto,
       FormatedProduct: _products[index].FormatedProduct,
       CodigoInterno_Produto: _products[index].CodigoInterno_Produto,
@@ -351,7 +352,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
         return;
       }
 
-      ConferenceProductModel.resultAsStringToConferenceModel(
+      ReceiptConferenceProductModel.resultAsStringToReceiptConferenceModel(
         resultAsString: resultAsString,
         listToAdd: _products,
       );

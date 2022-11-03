@@ -1,18 +1,20 @@
-import 'package:celta_inventario/providers/consult_price_provider.dart';
+import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:flutter/material.dart';
 
-class ConsultFilterProducts extends StatefulWidget {
-  final ConsultPriceProvider consultPriceProvider;
-  const ConsultFilterProducts({
-    required this.consultPriceProvider,
+class PriceConferenceOrderProductsButtons extends StatefulWidget {
+  final PriceConferenceProvider priceConferenceProvider;
+  const PriceConferenceOrderProductsButtons({
+    required this.priceConferenceProvider,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConsultFilterProducts> createState() => _ConsultFilterProductsState();
+  State<PriceConferenceOrderProductsButtons> createState() =>
+      _PriceConferenceOrderProductsButtonsState();
 }
 
-class _ConsultFilterProductsState extends State<ConsultFilterProducts> {
+class _PriceConferenceOrderProductsButtonsState
+    extends State<PriceConferenceOrderProductsButtons> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,11 +29,11 @@ class _ConsultFilterProductsState extends State<ConsultFilterProducts> {
               children: [
                 IconButton(
                   color: Colors.white,
-                  onPressed: widget.consultPriceProvider.isLoading ||
-                          widget.consultPriceProvider.isSendingToPrint
+                  onPressed: widget.priceConferenceProvider.isLoading ||
+                          widget.priceConferenceProvider.isSendingToPrint
                       ? null
                       : () {
-                          widget.consultPriceProvider.orderByDownPrice();
+                          widget.priceConferenceProvider.orderByDownPrice();
                         },
                   icon: const Icon(
                     Icons.arrow_upward,
@@ -40,11 +42,11 @@ class _ConsultFilterProductsState extends State<ConsultFilterProducts> {
                 const Text("Preço"),
                 IconButton(
                   color: Colors.white,
-                  onPressed: widget.consultPriceProvider.isLoading ||
-                          widget.consultPriceProvider.isSendingToPrint
+                  onPressed: widget.priceConferenceProvider.isLoading ||
+                          widget.priceConferenceProvider.isSendingToPrint
                       ? null
                       : () {
-                          widget.consultPriceProvider.orderByUpPrice();
+                          widget.priceConferenceProvider.orderByUpPrice();
                         },
                   icon: const Icon(
                     Icons.arrow_downward,
@@ -56,11 +58,11 @@ class _ConsultFilterProductsState extends State<ConsultFilterProducts> {
               children: [
                 IconButton(
                   color: Colors.white,
-                  onPressed: widget.consultPriceProvider.isLoading ||
-                          widget.consultPriceProvider.isSendingToPrint
+                  onPressed: widget.priceConferenceProvider.isLoading ||
+                          widget.priceConferenceProvider.isSendingToPrint
                       ? null
                       : () {
-                          widget.consultPriceProvider.orderByDownName();
+                          widget.priceConferenceProvider.orderByDownName();
                         },
                   icon: const Icon(
                     Icons.arrow_upward,
@@ -72,11 +74,11 @@ class _ConsultFilterProductsState extends State<ConsultFilterProducts> {
                 ),
                 IconButton(
                   color: Colors.white,
-                  onPressed: widget.consultPriceProvider.isLoading ||
-                          widget.consultPriceProvider.isSendingToPrint
+                  onPressed: widget.priceConferenceProvider.isLoading ||
+                          widget.priceConferenceProvider.isSendingToPrint
                       ? null
                       : () {
-                          widget.consultPriceProvider.orderByUpName();
+                          widget.priceConferenceProvider.orderByUpName();
                         },
                   icon: const Icon(
                     Icons.arrow_downward,

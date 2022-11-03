@@ -19,14 +19,13 @@ class _CountingPageState extends State<CountingPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final inventorys =
-        ModalRoute.of(context)!.settings.arguments as InventoryModel;
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     InventoryCountingProvider inventoryCountingProvider =
         Provider.of(context, listen: true);
 
     if (!isLoaded) {
       inventoryCountingProvider.getCountings(
-        inventoryProcessCode: inventorys.codigoInternoInventario,
+        inventoryProcessCode: arguments["codigoInternoInventario"],
         context: context,
       );
     }
@@ -37,8 +36,7 @@ class _CountingPageState extends State<CountingPage> {
   Widget build(BuildContext context) {
     InventoryCountingProvider inventoryCountingProvider =
         Provider.of(context, listen: true);
-    final inventorys =
-        ModalRoute.of(context)!.settings.arguments as InventoryModel;
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +56,7 @@ class _CountingPageState extends State<CountingPage> {
                 errorMessage: inventoryCountingProvider.errorMessage,
                 request: () async => setState(() {
                   inventoryCountingProvider.getCountings(
-                    inventoryProcessCode: inventorys.codigoInternoInventario,
+                    inventoryProcessCode: arguments["codigoInternoInventario"],
                     context: context,
                   );
                 }),
@@ -66,7 +64,11 @@ class _CountingPageState extends State<CountingPage> {
             ),
           if (inventoryCountingProvider.errorMessage == "" &&
               !inventoryCountingProvider.isLoadingCountings)
-            const Expanded(child: const InventoryCountingItems()),
+            Expanded(
+              child: InventoryCountingItems(
+                codigoInternoEmpresa: arguments["codigoInternoEmpresa"],
+              ),
+            ),
         ],
       ),
     );

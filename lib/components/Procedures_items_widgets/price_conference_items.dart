@@ -1,22 +1,23 @@
-import 'package:celta_inventario/components/Buttons/consult_price_send_print_button.dart';
+import 'package:celta_inventario/Components/Buttons/price_conference_send_print_button.dart';
 import 'package:celta_inventario/components/personalized_card.dart';
-import 'package:celta_inventario/providers/consult_price_provider.dart';
 import 'package:flutter/material.dart';
 
-class ConsultPriceItems extends StatefulWidget {
-  final ConsultPriceProvider consultPriceProvider;
+import '../../providers/price_conference_provider.dart';
+
+class PriceConferenceItems extends StatefulWidget {
+  final PriceConferenceProvider priceConferenceProvider;
   final int internalEnterpriseCode;
-  const ConsultPriceItems({
+  const PriceConferenceItems({
     required this.internalEnterpriseCode,
-    required this.consultPriceProvider,
+    required this.priceConferenceProvider,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConsultPriceItems> createState() => _ConsultPriceItemsState();
+  State<PriceConferenceItems> createState() => _PriceConferenceItemsState();
 }
 
-class _ConsultPriceItemsState extends State<ConsultPriceItems> {
+class _PriceConferenceItemsState extends State<PriceConferenceItems> {
   int selectedIndex = -1;
 
   TextStyle _fontStyle = const TextStyle(
@@ -35,7 +36,7 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
     required String title,
     required String value,
     required int index,
-    required ConsultPriceProvider consultPriceProvider,
+    required PriceConferenceProvider priceConferenceProvider,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -65,14 +66,15 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: widget.consultPriceProvider.productsCount,
+                itemCount: widget.priceConferenceProvider.productsCount,
                 itemBuilder: (context, index) {
-                  var product = widget.consultPriceProvider.products[index];
+                  var product = widget.priceConferenceProvider.products[index];
                   return GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      if (widget.consultPriceProvider.isLoading ||
-                          widget.consultPriceProvider.isSendingToPrint) return;
+                      if (widget.priceConferenceProvider.isLoading ||
+                          widget.priceConferenceProvider.isSendingToPrint)
+                        return;
                       setState(() {
                         if (selectedIndex == index) {
                           selectedIndex = -1;
@@ -92,19 +94,22 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                               title: "Nome",
                               value: product.ProductName,
                               index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
+                              priceConferenceProvider:
+                                  widget.priceConferenceProvider,
                             ),
                             values(
                               title: "PLU",
                               value: product.PriceLookUp,
                               index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
+                              priceConferenceProvider:
+                                  widget.priceConferenceProvider,
                             ),
                             values(
                               title: "Embalagem",
                               value: product.PackingQuantity,
                               index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
+                              priceConferenceProvider:
+                                  widget.priceConferenceProvider,
                             ),
                             Row(
                               children: [
@@ -131,7 +136,8 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                               title: "Permite venda",
                               value: product.AllowSale == 1 ? "Sim" : "Não",
                               index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
+                              priceConferenceProvider:
+                                  widget.priceConferenceProvider,
                             ),
                             values(
                               title: "Estoque atual",
@@ -144,7 +150,8 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                               //         .toStringAsFixed(3)
                               //         .replaceAll(RegExp(r'\.'), ','),
                               index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
+                              priceConferenceProvider:
+                                  widget.priceConferenceProvider,
                             ),
                             values(
                               title: "Custo de reposição",
@@ -158,7 +165,8 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                                           .replaceAll(RegExp(r'\.'), ',') +
                                       " R\$",
                               index: index,
-                              consultPriceProvider: widget.consultPriceProvider,
+                              priceConferenceProvider:
+                                  widget.priceConferenceProvider,
                             ),
                             Container(
                               // color: Colors.amber,
@@ -194,12 +202,12 @@ class _ConsultPriceItemsState extends State<ConsultPriceItems> {
                               ),
                             ),
                             if (selectedIndex == index)
-                              ConsultPriceSendPrintButton(
+                              PriceConferenceSendPrintButton(
                                 internalEnterpriseCode:
                                     widget.internalEnterpriseCode,
                                 index: index,
-                                consultPriceProvider:
-                                    widget.consultPriceProvider,
+                                priceConferenceProvider:
+                                    widget.priceConferenceProvider,
                                 productPackingCode: product.ProductPackingCode,
                                 etiquetaPendenteDescricao:
                                     product.EtiquetaPendenteDescricao,

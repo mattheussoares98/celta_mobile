@@ -1,30 +1,30 @@
-import 'package:celta_inventario/Models/conference_product_model.dart';
+import 'package:celta_inventario/Models/receipt_conference_product_model.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ConferenceInsertQuantityWidget extends StatefulWidget {
+class ReceiptConferenceInsertQuantityWidget extends StatefulWidget {
   final ReceiptConferenceProvider receiptConferenceProvider;
-  final ConferenceProductModel conferenceProductModel;
+  final ReceiptConferenceProductModel receiptConferenceProductModel;
   final int docCode;
   final int index;
   final TextEditingController consultedProductController;
-  const ConferenceInsertQuantityWidget({
+  const ReceiptConferenceInsertQuantityWidget({
     required this.consultedProductController,
     required this.docCode,
     required this.receiptConferenceProvider,
-    required this.conferenceProductModel,
+    required this.receiptConferenceProductModel,
     required this.index,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConferenceInsertQuantityWidget> createState() =>
-      _ConferenceInsertQuantityWidget();
+  State<ReceiptConferenceInsertQuantityWidget> createState() =>
+      _ReceiptConferenceInsertQuantityWidget();
 }
 
-class _ConferenceInsertQuantityWidget
-    extends State<ConferenceInsertQuantityWidget> {
+class _ReceiptConferenceInsertQuantityWidget
+    extends State<ReceiptConferenceInsertQuantityWidget> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isValid() {
@@ -149,10 +149,11 @@ class _ConferenceInsertQuantityWidget
                         FocusScope.of(context).unfocus();
                         await widget.receiptConferenceProvider.anullQuantity(
                           docCode: widget.docCode,
-                          productgCode: widget
-                              .conferenceProductModel.CodigoInterno_Produto,
+                          productgCode: widget.receiptConferenceProductModel
+                              .CodigoInterno_Produto,
                           productPackingCode: widget
-                              .conferenceProductModel.CodigoInterno_ProEmb,
+                              .receiptConferenceProductModel
+                              .CodigoInterno_ProEmb,
                           index: widget.index,
                           context: context,
                         );
@@ -194,10 +195,11 @@ class _ConferenceInsertQuantityWidget
                         FocusScope.of(context).unfocus();
                         await widget.receiptConferenceProvider.updateQuantity(
                           docCode: widget.docCode,
-                          productgCode: widget
-                              .conferenceProductModel.CodigoInterno_Produto,
+                          productgCode: widget.receiptConferenceProductModel
+                              .CodigoInterno_Produto,
                           productPackingCode: widget
-                              .conferenceProductModel.CodigoInterno_ProEmb,
+                              .receiptConferenceProductModel
+                              .CodigoInterno_ProEmb,
                           quantityText: widget.consultedProductController.text,
                           index: widget.index,
                           context: context,

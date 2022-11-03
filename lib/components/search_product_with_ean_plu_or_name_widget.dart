@@ -79,6 +79,11 @@ class _SearchProductWithEanPluOrNameWidgetState
                         ),
                       ),
                       labelText: 'Consultar PLU, EAN ou nome',
+                      labelStyle: TextStyle(
+                        color: widget.isLoading
+                            ? Colors.grey
+                            : Theme.of(context).primaryColor,
+                      ),
                       floatingLabelStyle: TextStyle(
                         color: widget.isLoading
                             ? Colors.grey
@@ -102,11 +107,6 @@ class _SearchProductWithEanPluOrNameWidgetState
                           width: 2,
                           color: Theme.of(context).colorScheme.primary,
                         ),
-                      ),
-                      labelStyle: TextStyle(
-                        color: widget.isLoading
-                            ? Colors.grey
-                            : Theme.of(context).primaryColor,
                       ),
                     ),
                     onFieldSubmitted: (value) async {

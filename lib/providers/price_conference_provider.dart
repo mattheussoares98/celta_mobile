@@ -12,9 +12,10 @@ enum SearchTypes {
   GetProductByName,
   GetProductByEAN,
   GetProductByPLU,
+  GetProductByLegacyCode,
 }
 
-class ConsultPriceProvider with ChangeNotifier {
+class PriceConferenceProvider with ChangeNotifier {
   List<ConsultPriceProductsModel> _products = [];
 
   get products {
@@ -35,6 +36,11 @@ class ConsultPriceProvider with ChangeNotifier {
 
   get errorMessage {
     return _errorMessage;
+  }
+
+  clearProducts() {
+    _products.clear();
+    notifyListeners();
   }
 
   String _convertToBrazilianNumber(String valueInString) {
@@ -132,7 +138,6 @@ class ConsultPriceProvider with ChangeNotifier {
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByPLU,
         context: context,
-        // // consultProductFocusNode: consultProductFocusNode,
       );
       if (_products.isNotEmpty) return;
 
@@ -141,7 +146,14 @@ class ConsultPriceProvider with ChangeNotifier {
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByEAN,
         context: context,
-        // // consultProductFocusNode: consultProductFocusNode,
+      );
+      if (_products.isNotEmpty) return;
+
+      await _getProducts(
+        enterpriseCode: enterpriseCode,
+        controllerText: controllerText,
+        searchTypes: SearchTypes.GetProductByLegacyCode,
+        context: context,
       );
       if (_products.isNotEmpty) return;
     } else {

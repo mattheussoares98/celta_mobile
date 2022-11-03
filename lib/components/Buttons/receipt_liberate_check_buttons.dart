@@ -8,8 +8,10 @@ class LiberateCheckButtons extends StatefulWidget {
   final int index;
   final String emitterName;
   final String numeroProcRecebDoc;
+  final int enterpriseCode;
   const LiberateCheckButtons({
     required this.grDocCode,
+    required this.enterpriseCode,
     required this.emitterName,
     required this.numeroProcRecebDoc,
     required this.receiptProvider,
@@ -61,11 +63,12 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
               ? null
               : () {
                   Navigator.of(context).pushNamed(
-                    APPROUTES.CONFERENCE,
+                    APPROUTES.RECEIPT_CONFERENCE,
                     arguments: {
                       "grDocCode": widget.grDocCode,
                       "numeroProcRecebDoc": widget.numeroProcRecebDoc,
                       "emitterName": widget.emitterName,
+                      "enterpriseCode": widget.enterpriseCode,
                     },
                   );
                 },

@@ -4,7 +4,6 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/inventory_product_provider.dart';
 import '../../providers/inventory_provider.dart';
 
 class InventoryItems extends StatelessWidget {
@@ -13,7 +12,8 @@ class InventoryItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context);
-    InventoryProductProvider inventoryProductProvider = Provider.of(context);
+    final codigoInternoEmpresa =
+        ModalRoute.of(context)!.settings.arguments as int;
 
     TextStyle _fontStyle = const TextStyle(
       fontSize: 20,
@@ -42,13 +42,14 @@ class InventoryItems extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  inventoryProductProvider.codigoInternoInventario =
-                      inventoryProvider
-                          .inventorys[index].codigoInternoInventario;
-
                   Navigator.of(context).pushNamed(
                     APPROUTES.COUNTINGS,
-                    arguments: inventoryProvider.inventorys[index],
+                    arguments: {
+                      "codigoInternoInventario": inventoryProvider
+                          .inventorys[index].codigoInternoInventario,
+                      "codigoInternoEmpresa":
+                          codigoInternoEmpresa, //passando o código da empresa também porque vai precisar na tela de consulta de produtos
+                    },
                   );
                 },
                 //sem esse Card, não funciona o gesture detector no campo inteiro

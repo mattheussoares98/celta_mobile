@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ConferenceProductModel {
+class ReceiptConferenceProductModel {
   final String Nome_Produto;
   final String FormatedProduct;
   final int CodigoInterno_Produto;
@@ -12,7 +12,7 @@ class ConferenceProductModel {
   final dynamic ReferenciaXml_ProcRecebDocProEmb;
   final String AllEans;
 
-  ConferenceProductModel({
+  ReceiptConferenceProductModel({
     required this.Nome_Produto,
     required this.FormatedProduct,
     required this.CodigoInterno_Produto,
@@ -25,7 +25,7 @@ class ConferenceProductModel {
     required this.AllEans,
   });
 
-  static resultAsStringToConferenceModel({
+  static resultAsStringToReceiptConferenceModel({
     required resultAsString,
     required listToAdd,
   }) {
@@ -34,7 +34,7 @@ class ConferenceProductModel {
 
     resultAsMap.forEach((id, data) {
       listToAdd.add(
-        ConferenceProductModel(
+        ReceiptConferenceProductModel(
           Nome_Produto: data["Nome_Produto"],
           FormatedProduct: data["FormatedProduct"],
           CodigoInterno_Produto: data["CodigoInterno_Produto"],

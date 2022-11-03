@@ -26,13 +26,14 @@ class InventoryProductProvider with ChangeNotifier {
     return _isLoading;
   }
 
-  int? codigoInternoEmpresa;
-  int? codigoInternoInventario;
-
   String _errorMessage = '';
 
   get errorMessage {
     return _errorMessage;
+  }
+
+  clearProducts() {
+    _products.clear();
   }
 
   Future<void> _getProducts({

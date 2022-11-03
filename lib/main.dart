@@ -1,13 +1,12 @@
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
-import 'package:celta_inventario/pages/consult_price_page.dart';
-import 'package:celta_inventario/providers/consult_price_provider.dart';
+import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
+import 'package:celta_inventario/Pages/receipt_conference_page.dart';
 import 'package:celta_inventario/providers/inventory_counting_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
 import 'package:celta_inventario/providers/inventory_product_provider.dart';
-import 'package:celta_inventario/Pages/conference_page.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
@@ -23,6 +22,7 @@ import 'pages/Inicial_pages/login_page.dart';
 import 'providers/enterprise_provider.dart';
 import 'providers/login_provider.dart';
 import 'pages/Inicial_pages/splash_page.dart';
+import 'providers/price_conference_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => InventoryProductProvider()),
           ChangeNotifierProvider(create: (_) => ReceiptProvider()),
           ChangeNotifierProvider(create: (_) => ReceiptConferenceProvider()),
-          ChangeNotifierProvider(create: (_) => ConsultPriceProvider()),
+          ChangeNotifierProvider(create: (_) => PriceConferenceProvider()),
         ],
         child: MaterialApp(
           theme: ThemeData(
@@ -102,12 +102,14 @@ void main() {
             APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
             APPROUTES.INVENTORY: (ctx) => const InventoryPage(),
             APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
-            APPROUTES.PRODUCTS: (ctx) => const ProductPage(),
+            APPROUTES.INVENTORY_PRODUCTS: (ctx) =>
+                const InventoryProductsPage(),
             APPROUTES.SPLASHPAGE: (ctx) => SplashPage(),
             APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
             APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
-            APPROUTES.CONFERENCE: (ctx) => const ConferencePage(),
-            APPROUTES.CONSULT_PRICE: (ctx) => const ConsultPricePage(),
+            APPROUTES.RECEIPT_CONFERENCE: (ctx) =>
+                const ReceiptConferencePage(),
+            APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
             APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
           },
         ),

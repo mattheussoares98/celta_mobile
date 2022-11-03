@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               imagePath: 'lib/assets/Images/consultPrice.jpg',
               routine: 'Consulta de preços',
               route: APPROUTES.ENTERPRISE,
-              nextRoute: APPROUTES.CONSULT_PRICE,
+              nextRoute: APPROUTES.PRICE_CONFERENCE,
               context: context,
             ),
             ImageComponent.image(

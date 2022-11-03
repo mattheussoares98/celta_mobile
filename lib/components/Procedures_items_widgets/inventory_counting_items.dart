@@ -6,7 +6,11 @@ import 'package:provider/provider.dart';
 import '../../providers/inventory_counting_provider.dart';
 
 class InventoryCountingItems extends StatelessWidget {
-  const InventoryCountingItems({Key? key}) : super(key: key);
+  final int codigoInternoEmpresa;
+  const InventoryCountingItems({
+    required this.codigoInternoEmpresa,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +33,12 @@ class InventoryCountingItems extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(
-                    APPROUTES.PRODUCTS,
-                    arguments: inventoryCountingProvider.countings[index],
+                    APPROUTES.INVENTORY_PRODUCTS,
+                    arguments: {
+                      "InventoryCountingsModel":
+                          inventoryCountingProvider.countings[index],
+                      "codigoInternoEmpresa": codigoInternoEmpresa,
+                    },
                   );
                 },
                 //sem esse Card, não funciona o gesture detector no campo inteiro
