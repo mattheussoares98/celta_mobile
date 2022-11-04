@@ -28,92 +28,99 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LoginProvider()),
-          ChangeNotifierProvider(create: (_) => InventoryProvider()),
-          ChangeNotifierProvider(create: (_) => EnterpriseProvider()),
-          ChangeNotifierProvider(create: (_) => InventoryCountingProvider()),
-          ChangeNotifierProvider(create: (_) => InventoryProductProvider()),
-          ChangeNotifierProvider(create: (_) => ReceiptProvider()),
-          ChangeNotifierProvider(create: (_) => ReceiptConferenceProvider()),
-          ChangeNotifierProvider(create: (_) => PriceConferenceProvider()),
-        ],
-        child: MaterialApp(
-          theme: ThemeData(
-            primaryColor: ColorsTheme.principalColor,
-            secondaryHeaderColor: ColorsTheme.text,
-            backgroundColor: Colors.lightGreen[100],
-            appBarTheme: ThemeData().appBarTheme.copyWith(
-                  actionsIconTheme: const IconThemeData(
-                    color: Colors.black,
-                  ),
-                  toolbarHeight: ResponsiveItems.appBarToolbarHeight,
-                  backgroundColor: ColorsTheme.principalColor,
-                  centerTitle: true,
-                  titleTextStyle: const TextStyle(
-                    letterSpacing: 0.7,
-                    color: ColorsTheme.appBarText,
-                    fontFamily: 'BebasNeue',
-                    fontSize: 30,
-                  ),
+    runApp(MyApp());
+  });
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => InventoryProvider()),
+        ChangeNotifierProvider(create: (_) => EnterpriseProvider()),
+        ChangeNotifierProvider(create: (_) => InventoryCountingProvider()),
+        ChangeNotifierProvider(create: (_) => InventoryProductProvider()),
+        ChangeNotifierProvider(create: (_) => ReceiptProvider()),
+        ChangeNotifierProvider(create: (_) => ReceiptConferenceProvider()),
+        ChangeNotifierProvider(create: (_) => PriceConferenceProvider()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: ColorsTheme.principalColor,
+          secondaryHeaderColor: ColorsTheme.text,
+          backgroundColor: Colors.lightGreen[100],
+          appBarTheme: ThemeData().appBarTheme.copyWith(
+                actionsIconTheme: const IconThemeData(
+                  color: Colors.black,
                 ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'OpenSans',
-                  color: ColorsTheme.elevatedButtonTextColor,
-                ),
-                primary: ColorsTheme.principalColor,
-                onPrimary: ColorsTheme.text,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                toolbarHeight: ResponsiveItems.appBarToolbarHeight,
+                backgroundColor: ColorsTheme.principalColor,
+                centerTitle: true,
+                titleTextStyle: const TextStyle(
+                  letterSpacing: 0.7,
+                  color: ColorsTheme.appBarText,
+                  fontFamily: 'BebasNeue',
+                  fontSize: 30,
                 ),
               ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'OpenSans',
+                color: ColorsTheme.elevatedButtonTextColor,
+              ),
+              primary: ColorsTheme.principalColor,
+              onPrimary: ColorsTheme.text,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
             ),
-          ).copyWith(
-            textTheme: ThemeData.light().textTheme.copyWith(
-                  headline6: const TextStyle(
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.bold,
-                    color: ColorsTheme.headline6,
-                    fontSize: ResponsiveItems.headline6,
-                    fontFamily: 'BebasNeue',
-                  ),
-                  bodyText1: const TextStyle(
-                    fontFamily: 'OpenSans',
-                    color: ColorsTheme.headline6,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-            colorScheme: ThemeData().colorScheme.copyWith(
-                  primary: ColorsTheme.principalColor,
-                  secondary: ColorsTheme.text,
-                  onSecondary: ColorsTheme.principalColor,
-                ),
           ),
-          debugShowCheckedModeBanner: false,
-          initialRoute: APPROUTES.SPLASHPAGE,
-          routes: {
-            APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
-            APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
-            APPROUTES.INVENTORY: (ctx) => const InventoryPage(),
-            APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
-            APPROUTES.INVENTORY_PRODUCTS: (ctx) =>
-                const InventoryProductsPage(),
-            APPROUTES.SPLASHPAGE: (ctx) => SplashPage(),
-            APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
-            APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
-            APPROUTES.RECEIPT_CONFERENCE: (ctx) =>
-                const ReceiptConferencePage(),
-            APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
-            APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
-          },
+        ).copyWith(
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline6: const TextStyle(
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                  color: ColorsTheme.headline6,
+                  fontSize: ResponsiveItems.headline6,
+                  fontFamily: 'BebasNeue',
+                ),
+                bodyText1: const TextStyle(
+                  fontFamily: 'OpenSans',
+                  color: ColorsTheme.headline6,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+          colorScheme: ThemeData().colorScheme.copyWith(
+                primary: ColorsTheme.principalColor,
+                secondary: ColorsTheme.text,
+                onSecondary: ColorsTheme.principalColor,
+              ),
         ),
+        debugShowCheckedModeBanner: false,
+        initialRoute: APPROUTES.SPLASHPAGE,
+        routes: {
+          APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
+          APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
+          APPROUTES.INVENTORY: (ctx) => const InventoryPage(),
+          APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
+          APPROUTES.INVENTORY_PRODUCTS: (ctx) => const InventoryProductsPage(),
+          APPROUTES.SPLASHPAGE: (ctx) => SplashPage(),
+          APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
+          APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
+          APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
+          APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
+          APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
+        },
       ),
     );
-  });
+  }
 }

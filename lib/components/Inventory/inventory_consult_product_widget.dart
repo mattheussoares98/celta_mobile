@@ -2,8 +2,6 @@ import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import '../../Models/countings_model.dart';
 import '../../providers/inventory_product_provider.dart';
 
 class ConsultProductWidget extends StatefulWidget {
