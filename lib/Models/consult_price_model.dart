@@ -24,7 +24,7 @@ class ConsultPriceProductsModel {
   final String FiscalCost;
   final String FiscalLiquidCost;
   final String SaldoEstoqueVenda;
-  String
+  dynamic //quando filtra os produtos por preço, precisa converter para double para conseguir ordenar corretamente. Como estava por string, não estava organizando corretamente
       SalePracticedRetail; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
   String
       CurrentStock; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta

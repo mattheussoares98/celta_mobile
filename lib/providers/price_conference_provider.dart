@@ -251,14 +251,40 @@ class PriceConferenceProvider with ChangeNotifier {
   }
 
   orderByUpPrice() {
+    //precisei fazer esse foreach para converter a string para um double e conseguir ordenar corretamente os preços. Depois da ordenação, aí converto novamente para uma String
+    _products.forEach((element) {
+      element.SalePracticedRetail =
+          element.SalePracticedRetail.replaceAll(RegExp(r','), '.');
+
+      element.SalePracticedRetail =
+          double.tryParse(element.SalePracticedRetail);
+    });
+
     _products
         .sort((a, b) => a.SalePracticedRetail.compareTo(b.SalePracticedRetail));
+
+    _products.forEach((element) {
+      element.SalePracticedRetail =
+          element.SalePracticedRetail.toString().replaceAll(RegExp(r'\.'), ',');
+    });
     notifyListeners();
   }
 
   orderByDownPrice() {
+    _products.forEach((element) {
+      element.SalePracticedRetail =
+          element.SalePracticedRetail.replaceAll(RegExp(r','), '.');
+
+      element.SalePracticedRetail =
+          double.tryParse(element.SalePracticedRetail);
+    });
     _products
         .sort((a, b) => b.SalePracticedRetail.compareTo(a.SalePracticedRetail));
+
+    _products.forEach((element) {
+      element.SalePracticedRetail =
+          element.SalePracticedRetail.toString().replaceAll(RegExp(r'\.'), ',');
+    });
     notifyListeners();
   }
 
