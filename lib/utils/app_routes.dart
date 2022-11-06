@@ -12,4 +12,5 @@ class APPROUTES {
   static const HOME_PAGE = '/HOME_PAGE';
   static const RECEIPT = '/RECEIPT';
   static const RECEIPT_CONFERENCE = '/RECEIPT_CONFERENCE';
+  static const ADJUST_STOCK = '/ADJUST_STOCK';
 }

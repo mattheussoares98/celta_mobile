@@ -1,7 +1,9 @@
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
+import 'package:celta_inventario/Pages/adjust_stock_page.dart';
 import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
 import 'package:celta_inventario/Pages/receipt_conference_page.dart';
+import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/providers/inventory_counting_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
@@ -49,6 +51,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptConferenceProvider()),
         ChangeNotifierProvider(create: (_) => PriceConferenceProvider()),
+        ChangeNotifierProvider(create: (_) => AdjustStockProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -119,6 +122,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
           APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
           APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
+          APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
         },
       ),
     );

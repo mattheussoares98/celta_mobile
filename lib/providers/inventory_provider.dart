@@ -1,12 +1,9 @@
-import 'package:celta_inventario/Models/inventory_model.dart';
+import 'package:celta_inventario/Models/inventory/inventory_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import '../Models/inventory_model.dart';
 
 class InventoryProvider with ChangeNotifier {
   final List<InventoryModel> _inventorys = [];

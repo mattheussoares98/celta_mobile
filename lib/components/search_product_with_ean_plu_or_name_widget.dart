@@ -58,7 +58,7 @@ class _SearchProductWithEanPluOrNameWidgetState
                     },
                     validator: (value) {
                       if (value!.isEmpty || value == "") {
-                        return 'Digite O PLU, EAN ou nome';
+                        return 'PLU, EAN ou nome';
                       } else {
                         return null;
                       }
@@ -78,7 +78,7 @@ class _SearchProductWithEanPluOrNameWidgetState
                           color: widget.isLoading ? Colors.grey : Colors.red,
                         ),
                       ),
-                      labelText: 'Consultar PLU, EAN ou nome',
+                      labelText: 'PLU, EAN ou nome',
                       labelStyle: TextStyle(
                         color: widget.isLoading
                             ? Colors.grey

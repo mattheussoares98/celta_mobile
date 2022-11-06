@@ -2,7 +2,6 @@ import 'package:celta_inventario/utils/consulting_widget.dart';
 import 'package:celta_inventario/utils/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Models/inventory_model.dart';
 import '../../Components/Procedures_items_widgets/inventory_counting_items.dart';
 import '../../providers/inventory_counting_provider.dart';
 
