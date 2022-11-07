@@ -1,5 +1,5 @@
 import 'package:celta_inventario/Components/Procedures_items_widgets/adjust_stock_products_items.dart';
-import 'package:celta_inventario/Components/adjust_stock_justifications_stocks_dropdown.dart';
+import 'package:celta_inventario/Components/Adjust_stock_components/adjust_stock_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +16,28 @@ class AdjustStockPage extends StatefulWidget {
 class _AdjustStockPageState extends State<AdjustStockPage> {
   final TextEditingController _consultProductController =
       TextEditingController();
+  final TextEditingController _consultedProductController =
+      TextEditingController();
+
+  var _insertQuantityFormKey = GlobalKey<FormState>();
+  var _dropDownFormKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
     _consultProductController.dispose();
+  }
+
+  bool _isLoaded = false;
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if (!_isLoaded) {
+      await Provider.of<AdjustStockProvider>(context)
+          .getStockTypeAndJustifications(context);
+      _isLoaded = true;
+    }
   }
 
   @override
@@ -32,7 +49,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        adjustStockProvider.clearProductsJustificationsAndStockTypes();
+        adjustStockProvider
+            .clearProductsJustificationsStockTypesAndJsonAdjustStock();
         return true;
       },
       child: Scaffold(
@@ -42,7 +60,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
           ),
           leading: IconButton(
             onPressed: () {
-              adjustStockProvider.clearProductsJustificationsAndStockTypes();
+              adjustStockProvider
+                  .clearProductsJustificationsStockTypesAndJsonAdjustStock();
               Navigator.of(context).pop();
             },
             icon: const Icon(
@@ -52,13 +71,14 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
         ),
         body: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SearchProductWithEanPluOrNameWidget(
               focusNodeConsultProduct:
                   adjustStockProvider.consultProductFocusNode,
-              isLoading: adjustStockProvider.isLoadingProducts,
+              isLoading: adjustStockProvider.isLoadingProducts ||
+                  adjustStockProvider.isLoadingAdjustStock,
               onPressSearch: () async {
                 await adjustStockProvider.getProductByPluEanOrName(
                   enterpriseCode: codigoInternoEmpresa,
@@ -79,6 +99,10 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
               },
               consultProductController: _consultProductController,
             ),
+            AdjustStockJustificationsStockDropwdownWidget(
+              adjustStockProvider: adjustStockProvider,
+              dropDownFormKey: _dropDownFormKey,
+            ),
             if (adjustStockProvider.isLoadingProducts)
               Expanded(
                 child: ConsultingWidget.consultingWidget(
@@ -89,10 +113,10 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
               AdjustStockProductsItems(
                 internalEnterpriseCode: codigoInternoEmpresa,
                 adjustStockProvider: adjustStockProvider,
+                consultedProductController: _consultedProductController,
+                dropDownFormKey: _dropDownFormKey,
+                insertQuantityFormKey: _insertQuantityFormKey,
               ),
-            AdjustStockJustificationsStockDropwdownWidget(
-              adjustStockProvider: adjustStockProvider,
-            ),
           ],
         ),
       ),

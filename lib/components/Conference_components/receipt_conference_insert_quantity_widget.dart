@@ -45,7 +45,7 @@ class _ReceiptConferenceInsertQuantityWidget
                 child: Form(
                   key: _formKey,
                   child: TextFormField(
-                    autofocus: true,
+                    // autofocus: true,
                     enabled: widget
                                 .receiptConferenceProvider.isUpdatingQuantity ||
                             widget.receiptConferenceProvider.consultingProducts

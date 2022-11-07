@@ -59,18 +59,53 @@ class AdjustStockProvider with ChangeNotifier {
     return _errorMessageTypeStockAndJustifications;
   }
 
+  String _errorMessageAdjustStock = '';
+
+  String _lastUpdatedQuantity = "";
+  String _indexOfLastProductChangedStockQuantity = "";
+
+  String get lastUpdatedQuantity => _lastUpdatedQuantity;
+  String get indexOfLastProductChangedStockQuantity =>
+      _indexOfLastProductChangedStockQuantity;
+
+  String get errorMessageAdjustStock {
+    return _errorMessageAdjustStock;
+  }
+
+  static bool _isLoadingAdjustStock = false;
+
+  bool get isLoadingAdjustStock {
+    return _isLoadingAdjustStock;
+  }
+
   static bool _isLoadingTypeStockAndJustifications = false;
 
   bool get isLoadingTypeStockAndJustifications {
     return _isLoadingTypeStockAndJustifications;
   }
 
-  final consultProductFocusNode = FocusNode();
+  var consultProductFocusNode = FocusNode();
+  var consultedProductFocusNode = FocusNode();
 
-  clearProductsJustificationsAndStockTypes() {
+  Map<String, String> jsonAdjustStock = {
+    "EnterpriseCode": "", //esse parâmetro vem da tela de empresas
+    "ProductCode": "", //quando clica no produto, altera o código
+    "ProductPackingCode": "", //quando clica no produto, altera o código
+    "JustificationCode":
+        "", //sempre que seleciona a opção do dropdown altera o valor aqui
+    "StockTypeCode":
+        "", //sempre que seleciona a opção do dropdown altera o valor aqui
+    "Quantity":
+        "" //quando clica em "alterar", valida se a quantidade é válida e se os dropdowns do estoque e justificativa estão selecionados. Caso esteja tudo certo, altera a quantidade do json de acordo com o que o usuário digitou
+  };
+
+  clearProductsJustificationsStockTypesAndJsonAdjustStock() {
     _justifications.clear();
     _stockTypes.clear();
     _products.clear();
+    jsonAdjustStock.clear();
+    _lastUpdatedQuantity = "";
+    _indexOfLastProductChangedStockQuantity = "";
     notifyListeners();
   }
 
@@ -125,21 +160,10 @@ class AdjustStockProvider with ChangeNotifier {
         return;
       }
 
-      // ConsultPriceProductsModel.resultAsStringToConsultPriceModel(
-      //   resultAsString: resultAsString,
-      //   listToAdd: _products,
-      // );
       AdjustStockProductModel.resultAsStringToAdjustStockProductModel(
         resultAsString: resultAsString,
         listToAdd: _products,
       );
-
-      // _products.forEach((element) {
-      //   element.CurrentStock =
-      //       _convertToBrazilianNumber(element.CurrentStock.toString());
-      //   element.SalePracticedRetail =
-      //       _convertToBrazilianNumber(element.SalePracticedRetail.toString());
-      // });
     } catch (e) {
       print("Erro para efetuar a requisição $searchType: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -154,6 +178,9 @@ class AdjustStockProvider with ChangeNotifier {
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
   }) async {
+    _lastUpdatedQuantity = "";
+    _indexOfLastProductChangedStockQuantity = "";
+
     int? isInt = int.tryParse(controllerText);
     if (isInt != null) {
       //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
@@ -231,8 +258,10 @@ class AdjustStockProvider with ChangeNotifier {
       );
     } catch (e) {
       print("Erro para efetuar a requisição stockTypes: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageTypeStockAndJustifications =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
+    notifyListeners();
   }
 
   _getJustificationsType() async {
@@ -268,8 +297,10 @@ class AdjustStockProvider with ChangeNotifier {
       );
     } catch (e) {
       print("Erro para efetuar a requisição justifications: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageTypeStockAndJustifications =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
+    notifyListeners();
   }
 
   getStockTypeAndJustifications(BuildContext context) async {
@@ -282,6 +313,8 @@ class AdjustStockProvider with ChangeNotifier {
         error: _errorMessageTypeStockAndJustifications,
         context: context,
       );
+      _isLoadingTypeStockAndJustifications = false;
+      notifyListeners();
       return;
     }
     await _getJustificationsType();
@@ -294,6 +327,53 @@ class AdjustStockProvider with ChangeNotifier {
     }
 
     _isLoadingTypeStockAndJustifications = false;
+    notifyListeners();
+  }
+
+  confirmAdjustStock({
+    required BuildContext context,
+    required String indexOfProduct,
+  }) async {
+    _isLoadingAdjustStock = true;
+    _errorMessageAdjustStock = "";
+    notifyListeners();
+
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request(
+      'POST',
+      Uri.parse(
+        '${BaseUrl.url}/AdjustStock/ConfirmAdjustStock?jsonAdjustStock=$jsonAdjustStock',
+      ),
+    );
+    request.body = json.encode(UserIdentity.identity);
+    request.headers.addAll(headers);
+    try {
+      http.StreamedResponse response = await request.send();
+      String resultAsString = await response.stream.bytesToString();
+
+      print("resultAsString consulta do justifications: $resultAsString");
+
+      if (resultAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageAdjustStock = json.decode(resultAsString)["Message"];
+
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageAdjustStock,
+          context: context,
+        );
+        _isLoadingAdjustStock = false;
+        notifyListeners();
+        return;
+      }
+
+      _lastUpdatedQuantity = jsonAdjustStock["Quantity"]!;
+      _indexOfLastProductChangedStockQuantity = indexOfProduct;
+    } catch (e) {
+      print("Erro para efetuar a requisição justifications: $e");
+      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    }
+
+    _isLoadingAdjustStock = false;
     notifyListeners();
   }
 }

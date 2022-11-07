@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;
   final ReceiptConferenceProvider receiptConferenceProvider;
+  final TextEditingController consultedProductController;
   const ReceiptConferenceProductsItems({
+    required this.consultedProductController,
     required this.docCode,
     required this.receiptConferenceProvider,
     Key? key,
@@ -63,9 +65,6 @@ class _ReceiptConferenceProductsItemsState
     );
   }
 
-  static final TextEditingController _consultedProductController =
-      TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -107,13 +106,11 @@ class _ReceiptConferenceProductsItemsState
                                   return;
                                 }
                                 if (selectedIndex != index) {
-                                  _consultedProductController.clear();
+                                  FocusScope.of(context).unfocus();
+
+                                  widget.consultedProductController.clear();
                                   //necessário apagar o campo da quantidade quando
                                   //mudar de produto selecionado
-                                  widget.receiptConferenceProvider
-                                      .consultedProductFocusNode = FocusNode();
-                                  //se não fizer isso, a mudança de foco abaixo não da
-                                  //certo. Dessa forma o teclado nem está fechando
                                   Future.delayed(
                                       const Duration(milliseconds: 100), () {
                                     //se não colocar em um future pra mudar o foco,
@@ -242,7 +239,7 @@ class _ReceiptConferenceProductsItemsState
                                       const SizedBox(height: 10),
                                       ReceiptConferenceInsertQuantityWidget(
                                         consultedProductController:
-                                            _consultedProductController,
+                                            widget.consultedProductController,
                                         receiptConferenceProvider:
                                             widget.receiptConferenceProvider,
                                         receiptConferenceProductModel: widget

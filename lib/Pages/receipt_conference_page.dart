@@ -22,6 +22,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
     _consultProductController.dispose();
   }
 
+  TextEditingController _consultedProductController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     ReceiptConferenceProvider receiptConferenceProvider =
@@ -91,6 +93,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               ReceiptConferenceProductsItems(
                 docCode: arguments["grDocCode"],
                 receiptConferenceProvider: receiptConferenceProvider,
+                consultedProductController: _consultedProductController,
               ),
             if (MediaQuery.of(context).viewInsets.bottom == 0 ||
                 receiptConferenceProvider.productsCount == 0)
