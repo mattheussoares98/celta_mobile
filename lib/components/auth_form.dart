@@ -48,18 +48,12 @@ class _AuthFormState extends State<AuthForm>
     await loginProvider.login(
       user: _userController.text,
       password: _passwordController.text,
-      baseUrl: _urlController.text,
+      context: context,
     );
 
-    if (loginProvider.errorMessage != '') {
-      ShowErrorMessage.showErrorMessage(
-        error: loginProvider.errorMessage,
-        context: context,
-      );
-    } else {
+    if (loginProvider.errorMessage == '') {
       _passwordController.clear();
     }
-
     BaseUrl.url = _urlController.text;
   }
 

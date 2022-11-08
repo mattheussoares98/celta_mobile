@@ -5,6 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
+import '../utils/base_url.dart';
+import '../utils/default_error_message_to_find_server.dart';
+import '../utils/show_error_message.dart';
+
 class LoginProvider with ChangeNotifier {
   String _errorMessage = '';
 
@@ -30,9 +34,9 @@ class LoginProvider with ChangeNotifier {
   }
 
   login({
-    required String? user,
-    required String? password,
-    required String baseUrl,
+    required String user,
+    required String password,
+    required BuildContext context,
   }) async {
     _errorMessage = '';
     _isLoading = true;
@@ -42,7 +46,7 @@ class LoginProvider with ChangeNotifier {
       var request = http.Request(
           'POST',
           Uri.parse(
-              '$baseUrl/Security/UserCanLoginPlain?user=$user&password=$password'));
+              '${BaseUrl.url}/Security/UserCanLoginPlain?user=$user&password=$password'));
 
       http.StreamedResponse response = await request.send();
 
@@ -52,6 +56,11 @@ class LoginProvider with ChangeNotifier {
       if (resultAsString.contains("Message")) {
         //significa que deu algum erro
         _errorMessage = json.decode(resultAsString)["Message"];
+
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessage,
+          context: context,
+        );
         _isLoading = false;
         notifyListeners();
         return;
@@ -72,6 +81,11 @@ class LoginProvider with ChangeNotifier {
     } catch (e) {
       // _updateErrorMessage(e.toString());
       print('deu erro no login: $e');
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessage,
+        context: context,
+      );
       // notifyListeners();
     }
 

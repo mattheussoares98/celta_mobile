@@ -445,7 +445,12 @@ class AdjustStockProvider with ChangeNotifier {
       );
     } catch (e) {
       print("Erro para efetuar a requisição justifications: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageAdjustStock,
+        context: context,
+      );
     }
 
     _isLoadingAdjustStock = false;
