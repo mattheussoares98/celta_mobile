@@ -28,19 +28,6 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
     _consultProductController.dispose();
   }
 
-  bool _isLoaded = false;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!_isLoaded) {
-      AdjustStockProvider adjustStockProvider =
-          Provider.of(context, listen: false);
-      adjustStockProvider.getStockTypeAndJustifications(context);
-      _isLoaded = true;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider =

@@ -18,32 +18,6 @@ class LoginProvider with ChangeNotifier {
     return _isLoading;
   }
 
-  _updateErrorMessage(String error) {
-    if (error.contains('O usuário não foi encontrado')) {
-      _errorMessage = 'Usuário não encontrado!';
-    } else if (error.contains('senha está incorreta')) {
-      _errorMessage = 'O usuário ou a senha está inválido!';
-    } else if (error.contains('Connection timed out')) {
-      _errorMessage = 'Time out! Tente novamente!';
-    } else if (error.contains('Connection')) {
-      _errorMessage = 'O servidor não foi encontrado. Verifique a sua internet';
-    } else if (error.contains('Software caused connection abort')) {
-      _errorMessage = 'Conexão abortada. Tente novamente';
-    } else if (error.contains('No host specifie')) {
-      _errorMessage = 'URL inválida!';
-    } else if (error.contains('Failed host lookup')) {
-      _errorMessage = 'URL inválida!';
-    } else if (error.contains('FormatException')) {
-      _errorMessage = 'URL inválida!';
-    } else if (error.contains('Invalid port')) {
-      _errorMessage = 'Url inválida!';
-    } else if (error.contains('No route')) {
-      _errorMessage = 'Servidor não encontrado!';
-    } else {
-      _errorMessage = 'Servidor indisponível';
-    }
-  }
-
   static MultiStreamController<bool>? _loginController;
   //esse stream está sendo usado no AuthOrHomePage
   //quando da certo o login, ele adiciona o _isAuth no controller
@@ -65,37 +39,40 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await http.post(
-        Uri.parse(
-          '$baseUrl/Security/UserCanLoginPlain?user=$user&password=$password',
-        ),
-      );
+      var request = http.Request(
+          'POST',
+          Uri.parse(
+              '$baseUrl/Security/UserCanLoginPlain?user=$user&password=$password'));
 
-      var responseOfUser = json.decode(response.body);
+      http.StreamedResponse response = await request.send();
 
-      //transformando o XML em String pra pegar a identidade do usuário
+      String resultAsString = await response.stream.bytesToString();
+      print("resultAsString consulta do login: $resultAsString");
+
+      if (resultAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessage = json.decode(resultAsString)["Message"];
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+      List resultAsList = json.decode(resultAsString);
+      Map resultAsMap = resultAsList.asMap();
+
       final myTransformer = Xml2Json();
+      myTransformer.parse(resultAsMap[0]['CrossIdentity_Usuario']);
+      String toParker = myTransformer.toParker();
+      Map toParker2 = json.decode(toParker);
+      UserIdentity.identity = toParker2['string'];
+      //transformando o XML em String pra pegar a identidade do usuário
 
-      //se não colocar essa condição, a validação do login fica errada porque tenta converter algo nulo
-      if (responseOfUser[0] != null) {
-        myTransformer.parse(responseOfUser[0]['CrossIdentity_Usuario']);
-        String toParker = myTransformer.toParker();
-        Map toParker2 = json.decode(toParker);
-        UserIdentity.identity = toParker2['string'];
-      }
+      _loginController?.add(
+          true); //como deu certo o login, adiciona o valor "true" pra na tela AuthOrHome identificar que está como true e ir para a homePage
 
-      if (response.statusCode == 200) {
-        _loginController?.add(
-            true); //como deu certo o login, adiciona o valor "true" pra na tela AuthOrHome identificar que está como true e ir para a homePage
-      } else {
-        print('Erro no login === ' + response.body);
-
-        _updateErrorMessage(response.body);
-      }
     } catch (e) {
-      _updateErrorMessage(e.toString());
+      // _updateErrorMessage(e.toString());
       print('deu erro no login: $e');
-      notifyListeners();
+      // notifyListeners();
     }
 
     _isLoading = false;

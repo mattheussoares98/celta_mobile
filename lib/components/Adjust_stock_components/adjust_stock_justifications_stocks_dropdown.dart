@@ -43,7 +43,12 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                     width: MediaQuery.of(context).size.width / 2 - 8,
                     child: DropdownButtonFormField<dynamic>(
                       key: _keyJustifications,
-                      disabledHint: const Center(child: Text("Consultando")),
+                      disabledHint: Center(
+                        child: Text(widget.adjustStockProvider
+                                .isLoadingTypeStockAndJustifications
+                            ? "Consultando"
+                            : "Justificativas"),
+                      ),
                       isExpanded: true,
                       hint: Center(
                         child: Text(
@@ -90,7 +95,12 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                     width: MediaQuery.of(context).size.width / 2 - 8,
                     child: DropdownButtonFormField<dynamic>(
                       key: _keyStockType,
-                      disabledHint: const Center(child: Text("Consultando")),
+                      disabledHint: Center(
+                        child: Text(widget.adjustStockProvider
+                                .isLoadingTypeStockAndJustifications
+                            ? "Consultando"
+                            : "Tipos de estoque"),
+                      ),
                       isExpanded: true,
                       hint: Center(
                         child: Text(
