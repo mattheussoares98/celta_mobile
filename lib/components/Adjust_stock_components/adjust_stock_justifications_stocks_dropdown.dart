@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class AdjustStockJustificationsStockDropwdownWidget extends StatefulWidget {
   final AdjustStockProvider adjustStockProvider;
   final GlobalKey<FormState> dropDownFormKey;
+
   const AdjustStockJustificationsStockDropwdownWidget({
     required this.adjustStockProvider,
     required this.dropDownFormKey,
@@ -17,8 +18,15 @@ class AdjustStockJustificationsStockDropwdownWidget extends StatefulWidget {
 
 class _AdjustStockJustificationsStockDropwdownWidgetState
     extends State<AdjustStockJustificationsStockDropwdownWidget> {
+  final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
+  final GlobalKey<FormFieldState> _keyStockType = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
+    if (widget.adjustStockProvider.isLoadingTypeStockAndJustifications) {
+      _keyJustifications.currentState?.reset();
+      _keyStockType.currentState?.reset();
+    }
     return Form(
       key: widget.dropDownFormKey,
       child: Padding(
@@ -34,6 +42,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                   Container(
                     width: MediaQuery.of(context).size.width / 2 - 8,
                     child: DropdownButtonFormField<dynamic>(
+                      key: _keyJustifications,
                       disabledHint: const Center(child: Text("Consultando")),
                       isExpanded: true,
                       hint: Center(
@@ -65,7 +74,9 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                                 widget.adjustStockProvider
                                         .jsonAdjustStock["JustificationCode"] =
                                     value.Code.toString();
-                                print(value.Code);
+
+                                widget.adjustStockProvider.typeOperator = value
+                                    .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
                                 //value.Code é o código que deve usar na requisição pra confirmar a atualização do estoque
                               },
                               value: value.Description,
@@ -78,6 +89,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                   Container(
                     width: MediaQuery.of(context).size.width / 2 - 8,
                     child: DropdownButtonFormField<dynamic>(
+                      key: _keyStockType,
                       disabledHint: const Center(child: Text("Consultando")),
                       isExpanded: true,
                       hint: Center(
@@ -109,7 +121,9 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                                 widget.adjustStockProvider
                                         .jsonAdjustStock["StockTypeCode"] =
                                     value.Code.toString();
-                                print(value.Code);
+                                // print(value.Code);
+                                widget.adjustStockProvider.stockTypeName =
+                                    value.Name;
                                 //value.Code é o código que deve usar na requisição pra confirmar a atualização do estoque
                               },
                               value: value.Name,

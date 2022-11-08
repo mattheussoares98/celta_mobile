@@ -152,14 +152,41 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                             title: "Embalagem",
                             value: product.PackingQuantity,
                           ),
-                          // values(
-                          //   title: "Estoque atual",
-                          //   value: product.CurrentStock,
-                          // ),
-                          // values(
-                          //   title: "Saldo estoque de venda",
-                          //   value: product.SaldoEstoqueVenda,
-                          // ),
+                          values(
+                            title: "Estoque atual",
+                            value: product.CurrentStock,
+                          ),
+                          Container(
+                            // color: Colors.amber,
+                            height: 22,
+                            child: Row(
+                              // mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Saldo estoque de venda: ",
+                                      style: _fontStyle,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      product.SaldoEstoqueVenda,
+                                      style: _fontBoldStyle,
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                                Icon(
+                                  selectedIndex != index
+                                      ? Icons.arrow_drop_down_sharp
+                                      : Icons.arrow_drop_up_sharp,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 40,
+                                ),
+                              ],
+                            ),
+                          ),
                           if (selectedIndex == index)
                             AdjustStockInsertQuantity(
                               adjustStockProvider: widget.adjustStockProvider,

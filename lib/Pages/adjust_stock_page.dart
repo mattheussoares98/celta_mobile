@@ -30,12 +30,13 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
 
   bool _isLoaded = false;
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     super.didChangeDependencies();
 
     if (!_isLoaded) {
-      await Provider.of<AdjustStockProvider>(context)
-          .getStockTypeAndJustifications(context);
+      AdjustStockProvider adjustStockProvider =
+          Provider.of(context, listen: false);
+      adjustStockProvider.getStockTypeAndJustifications(context);
       _isLoaded = true;
     }
   }

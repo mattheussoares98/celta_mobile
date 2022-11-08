@@ -141,16 +141,21 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                                 widget.insertQuantityFormKey.currentState!
                                     .validate()) {
                               print("formulários corretos. Pode salvar");
+
                               widget.adjustStockProvider
                                       .jsonAdjustStock["Quantity"] =
                                   widget.consultedProductController.text;
+
                               widget.adjustStockProvider
                                       .jsonAdjustStock["EnterpriseCode"] =
                                   widget.internalEnterpriseCode.toString();
+
                               await widget.adjustStockProvider
                                   .confirmAdjustStock(
                                 context: context,
-                                indexOfProduct: widget.index.toString(),
+                                indexOfProduct: widget.index,
+                                consultedProductControllerText:
+                                    widget.consultedProductController.text,
                               );
 
                               if (widget.adjustStockProvider
@@ -176,12 +181,12 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
             ),
           ),
           if (widget.adjustStockProvider.lastUpdatedQuantity != "" &&
-              widget.adjustStockProvider
-                      .indexOfLastProductChangedStockQuantity !=
-                  "" &&
+              // widget.adjustStockProvider
+              //         .indexOfLastProductChangedStockQuantity !=
+              //     -1 &&
               widget.adjustStockProvider
                       .indexOfLastProductChangedStockQuantity ==
-                  widget.index.toString())
+                  widget.index)
             FittedBox(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

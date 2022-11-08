@@ -62,10 +62,16 @@ class AdjustStockProvider with ChangeNotifier {
   String _errorMessageAdjustStock = '';
 
   String _lastUpdatedQuantity = "";
-  String _indexOfLastProductChangedStockQuantity = "";
+  int _indexOfLastProductChangedStockQuantity =
+      -1; //index do último produto alterado. Serve para só exibir a mensagem da última quantidade alterada no produto correto
+
+  String stockTypeName =
+      ""; //quando clica no tipo de estoque altera o valor da variável. É utilizado pra se for o estoque atual, já atualizar no produto consultado
+  String typeOperator =
+      ""; //quando clica na opção de justificativa, obtém o tipo de operador "-" ou "+". Isso é usado pra atualizar o estoque do produto consultado após confirmar a alteração
 
   String get lastUpdatedQuantity => _lastUpdatedQuantity;
-  String get indexOfLastProductChangedStockQuantity =>
+  int get indexOfLastProductChangedStockQuantity =>
       _indexOfLastProductChangedStockQuantity;
 
   String get errorMessageAdjustStock {
@@ -99,19 +105,71 @@ class AdjustStockProvider with ChangeNotifier {
         "" //quando clica em "alterar", valida se a quantidade é válida e se os dropdowns do estoque e justificativa estão selecionados. Caso esteja tudo certo, altera a quantidade do json de acordo com o que o usuário digitou
   };
 
+  _updateCurrentStock({
+    required int index,
+    required String consultedProductControllerText,
+  }) {
+    double currentStockInDouble = double.tryParse(
+        _products[index].CurrentStock.replaceAll(RegExp(r','), '.'))!;
+
+    dynamic newCurrentStock;
+
+    if (typeOperator.contains("+")) {
+      newCurrentStock = currentStockInDouble +
+          double.tryParse(consultedProductControllerText)!;
+    } else {
+      newCurrentStock = currentStockInDouble -
+          double.tryParse(consultedProductControllerText)!;
+    }
+    if (stockTypeName.toLowerCase() == "estoque atual") {
+      newCurrentStock =
+          newCurrentStock.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',');
+
+      AdjustStockProductModel newProduct = AdjustStockProductModel(
+        CurrentStock: newCurrentStock.toString(),
+        ProductCode: _products[index].ProductCode,
+        ProductPackingCode: _products[index].ProductPackingCode,
+        PriceLookUp: _products[index].PriceLookUp,
+        ProductName: _products[index].ProductName,
+        CodigoPlu_ProEmb: _products[index].CodigoPlu_ProEmb,
+        Nome_Produto: _products[index].Nome_Produto,
+        Packing: _products[index].Packing,
+        PackingQuantity: _products[index].PackingQuantity,
+        Name: _products[index].Name,
+        ReducedName: _products[index].ReducedName,
+        PersonalizedCode: _products[index].PersonalizedCode,
+        AllowTransfer: _products[index].AllowTransfer,
+        AllowSale: _products[index].AllowSale,
+        AllowBuy: _products[index].AllowBuy,
+        MinimumWholeQuantity: _products[index].MinimumWholeQuantity,
+        SalePracticedRetail: _products[index].SalePracticedRetail,
+        SalePracticedWholeSale: _products[index].SalePracticedWholeSale,
+        OperationalCost: _products[index].OperationalCost,
+        ReplacementCost: _products[index].ReplacementCost,
+        ReplacementCostMidle: _products[index].ReplacementCostMidle,
+        LiquidCost: _products[index].LiquidCost,
+        LiquidCostMidle: _products[index].LiquidCostMidle,
+        RealCost: _products[index].RealCost,
+        RealLiquidCost: _products[index].RealLiquidCost,
+        FiscalCost: _products[index].FiscalCost,
+        FiscalLiquidCost: _products[index].FiscalLiquidCost,
+        CurrentStockString: _products[index].CurrentStockString,
+        SaldoEstoqueVenda: _products[index].SaldoEstoqueVenda,
+        EtiquetaPendente: _products[index].EtiquetaPendente,
+        EtiquetaPendenteDescricao: _products[index].EtiquetaPendenteDescricao,
+      );
+      _products[index] = newProduct;
+    }
+  }
+
   clearProductsJustificationsStockTypesAndJsonAdjustStock() {
     _justifications.clear();
     _stockTypes.clear();
     _products.clear();
     jsonAdjustStock.clear();
     _lastUpdatedQuantity = "";
-    _indexOfLastProductChangedStockQuantity = "";
-    notifyListeners();
-  }
-
-  updateProduct(AdjustStockProductModel currentProduct) {
-    _products.clear();
-    _products.add(currentProduct);
+    _indexOfLastProductChangedStockQuantity = -1;
+    stockTypeName = "";
     notifyListeners();
   }
 
@@ -122,7 +180,6 @@ class AdjustStockProvider with ChangeNotifier {
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
   }) async {
-    _products.clear();
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
     String searchType =
@@ -178,10 +235,21 @@ class AdjustStockProvider with ChangeNotifier {
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
   }) async {
+    stockTypeName = "";
     _lastUpdatedQuantity = "";
-    _indexOfLastProductChangedStockQuantity = "";
+    _indexOfLastProductChangedStockQuantity = -1;
+    _products.clear();
+    notifyListeners();
 
     int? isInt = int.tryParse(controllerText);
+
+    if (!_isLoadingTypeStockAndJustifications) {
+      //logo que entra na tela de consulta de produtos, já começa a consultar os
+      //tipos de estoque e justificativas. Se ainda estiver consultando e
+      //colocar pra consultar os produtos, vai tentar consultar novamente os
+      //tipos de estoque e justificativas
+      getStockTypeAndJustifications(context);
+    }
     if (isInt != null) {
       //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
       await _getProducts(
@@ -306,6 +374,7 @@ class AdjustStockProvider with ChangeNotifier {
   getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
+    stockTypeName = "";
 
     await _getStockType();
     if (_errorMessageTypeStockAndJustifications != "") {
@@ -332,7 +401,8 @@ class AdjustStockProvider with ChangeNotifier {
 
   confirmAdjustStock({
     required BuildContext context,
-    required String indexOfProduct,
+    required int indexOfProduct,
+    required String consultedProductControllerText,
   }) async {
     _isLoadingAdjustStock = true;
     _errorMessageAdjustStock = "";
@@ -368,6 +438,11 @@ class AdjustStockProvider with ChangeNotifier {
 
       _lastUpdatedQuantity = jsonAdjustStock["Quantity"]!;
       _indexOfLastProductChangedStockQuantity = indexOfProduct;
+
+      _updateCurrentStock(
+        index: indexOfProduct,
+        consultedProductControllerText: consultedProductControllerText,
+      );
     } catch (e) {
       print("Erro para efetuar a requisição justifications: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
