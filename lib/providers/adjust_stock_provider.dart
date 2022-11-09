@@ -111,22 +111,36 @@ class AdjustStockProvider with ChangeNotifier {
   }) {
     double currentStockInDouble = double.tryParse(
         _products[index].CurrentStock.replaceAll(RegExp(r','), '.'))!;
+    double saldoEstoqueVendaInDouble = double.tryParse(
+        _products[index].SaldoEstoqueVenda.replaceAll(RegExp(r','), '.'))!;
 
     dynamic newCurrentStock;
+    dynamic newSaldoEstoqueVenda;
 
     if (typeOperator.contains("+")) {
       newCurrentStock = currentStockInDouble +
           double.tryParse(consultedProductControllerText)!;
+
+      newSaldoEstoqueVenda = saldoEstoqueVendaInDouble +
+          double.tryParse(consultedProductControllerText)!;
     } else {
       newCurrentStock = currentStockInDouble -
           double.tryParse(consultedProductControllerText)!;
+      newSaldoEstoqueVenda = currentStockInDouble -
+          double.tryParse(consultedProductControllerText)!;
     }
+
+    print(stockTypeName.toLowerCase());
     if (stockTypeName.toLowerCase() == "estoque atual") {
       newCurrentStock =
           newCurrentStock.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',');
+      newSaldoEstoqueVenda = newSaldoEstoqueVenda
+          .toStringAsFixed(3)
+          .replaceAll(RegExp(r'\.'), ',');
 
       AdjustStockProductModel newProduct = AdjustStockProductModel(
         CurrentStock: newCurrentStock.toString(),
+        SaldoEstoqueVenda: newSaldoEstoqueVenda.toString(),
         ProductCode: _products[index].ProductCode,
         ProductPackingCode: _products[index].ProductPackingCode,
         PriceLookUp: _products[index].PriceLookUp,
@@ -154,7 +168,6 @@ class AdjustStockProvider with ChangeNotifier {
         FiscalCost: _products[index].FiscalCost,
         FiscalLiquidCost: _products[index].FiscalLiquidCost,
         CurrentStockString: _products[index].CurrentStockString,
-        SaldoEstoqueVenda: _products[index].SaldoEstoqueVenda,
         EtiquetaPendente: _products[index].EtiquetaPendente,
         EtiquetaPendenteDescricao: _products[index].EtiquetaPendenteDescricao,
       );
@@ -169,7 +182,6 @@ class AdjustStockProvider with ChangeNotifier {
     jsonAdjustStock.clear();
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
-    stockTypeName = "";
     notifyListeners();
   }
 
@@ -235,7 +247,6 @@ class AdjustStockProvider with ChangeNotifier {
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
   }) async {
-    stockTypeName = "";
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
     _products.clear();
@@ -248,7 +259,7 @@ class AdjustStockProvider with ChangeNotifier {
       //tipos de estoque e justificativas. Se ainda estiver consultando e
       //colocar pra consultar os produtos, vai tentar consultar novamente os
       //tipos de estoque e justificativas
-      getStockTypeAndJustifications(context);
+      _getStockTypeAndJustifications(context);
     }
     if (isInt != null) {
       //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
@@ -296,6 +307,7 @@ class AdjustStockProvider with ChangeNotifier {
 
   _getStockType() async {
     _stockTypes.clear();
+    notifyListeners();
     try {
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
@@ -334,6 +346,7 @@ class AdjustStockProvider with ChangeNotifier {
 
   _getJustificationsType() async {
     _justifications.clear();
+    notifyListeners();
     try {
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
@@ -371,21 +384,13 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  getStockTypeAndJustifications(BuildContext context) async {
+  _getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
-    stockTypeName = "";
+    notifyListeners();
 
     await _getStockType();
-    if (_errorMessageTypeStockAndJustifications != "") {
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageTypeStockAndJustifications,
-        context: context,
-      );
-      _isLoadingTypeStockAndJustifications = false;
-      notifyListeners();
-      return;
-    }
+
     await _getJustificationsType();
 
     if (_errorMessageTypeStockAndJustifications != "") {
@@ -436,13 +441,16 @@ class AdjustStockProvider with ChangeNotifier {
         return;
       }
 
-      _lastUpdatedQuantity = jsonAdjustStock["Quantity"]!;
-      _indexOfLastProductChangedStockQuantity = indexOfProduct;
-
       _updateCurrentStock(
         index: indexOfProduct,
         consultedProductControllerText: consultedProductControllerText,
       );
+
+      typeOperator = typeOperator
+          .replaceAll(RegExp(r'\('), '')
+          .replaceAll(RegExp(r'\)'), '');
+      _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
+      _indexOfLastProductChangedStockQuantity = indexOfProduct;
     } catch (e) {
       print("Erro para efetuar a requisição justifications: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

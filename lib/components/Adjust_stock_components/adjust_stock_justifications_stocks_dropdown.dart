@@ -21,6 +21,35 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
   final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
   final GlobalKey<FormFieldState> _keyStockType = GlobalKey();
 
+  String _justificationStockTypeName = "";
+  bool _justificationHasStockType = false;
+  //se a justificativa possuir um código de estoque atrelado, significa que
+  //somente esse estoque pode ser alterado quando selecionar essa justificativa.
+  //Por isso, quando selecionar a justificativa, está validando se ela possui um
+  //estoque atrelado e caso tenha, desativa o dropdown de tipo de estoque,
+  //altera o nome do dropdown do tipo de estoque e atualiza o código do estoque
+  //que precisa ser enviado na requisição do json
+
+  Widget ConfirmingProgressWidget = Center(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Confirmando...",
+          style: TextStyle(
+            fontSize: 17,
+          ),
+        ),
+        const SizedBox(width: 15),
+        Container(
+          width: 20,
+          height: 20,
+          child: const CircularProgressIndicator(),
+        ),
+      ],
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     if (widget.adjustStockProvider.isLoadingTypeStockAndJustifications) {
@@ -30,142 +59,205 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
     return Form(
       key: widget.dropDownFormKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          children: [
-            // if (widget.adjustStockProvider
-            //         .errorMessageTypeStockAndJustifications ==
-            //     "")
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 2 - 8,
-                  child: DropdownButtonFormField<dynamic>(
-                    key: _keyJustifications,
-                    disabledHint: Center(
-                      child: Text(widget.adjustStockProvider
-                              .isLoadingTypeStockAndJustifications
-                          ? "Consultando"
-                          : "Justificativas"),
-                    ),
-                    isExpanded: true,
-                    hint: Center(
-                      child: Text(
-                        'Justificativas',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
+        padding: const EdgeInsets.only(left: 5, right: 5, bottom: 3),
+        child: FittedBox(
+          child: Row(
+            children: [
+              Container(
+                height: 100,
+                alignment: widget.adjustStockProvider.isLoadingAdjustStock
+                    ? Alignment.center
+                    : Alignment.bottomCenter,
+                width: MediaQuery.of(context).size.width / 2 - 8,
+                child: widget.adjustStockProvider.isLoadingAdjustStock
+                    ? ConfirmingProgressWidget
+                    : DropdownButtonFormField<dynamic>(
+                        isDense: false,
+                        key: _keyJustifications,
+                        disabledHint: Row(
+                          children: [
+                            if (!widget.adjustStockProvider
+                                .isLoadingTypeStockAndJustifications)
+                              const Expanded(
+                                child: Center(
+                                  child: Text(
+                                    "Justificativas",
+                                    overflow: TextOverflow.visible,
+                                    softWrap: true,
+                                    maxLines: 4,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Selecione uma justificativa!';
-                      }
-                      return null;
-                    },
-                    onChanged: widget.adjustStockProvider
-                                .isLoadingTypeStockAndJustifications ||
-                            widget.adjustStockProvider.isLoadingAdjustStock
-                        ? null
-                        : (value) {
-                            print(value);
-                          },
-                    items: widget.adjustStockProvider.justifications
-                        .map(
-                          (value) => DropdownMenuItem(
-                            onTap: () {
-                              widget.adjustStockProvider
-                                      .jsonAdjustStock["JustificationCode"] =
-                                  value.Code.toString();
+                        isExpanded: true,
+                        hint: Center(
+                          child: Text(
+                            'Justificativas',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Selecione uma justificativa!';
+                          }
+                          return null;
+                        },
+                        onChanged: widget.adjustStockProvider
+                                    .isLoadingTypeStockAndJustifications ||
+                                widget.adjustStockProvider.isLoadingAdjustStock
+                            ? null
+                            : (value) {
+                                // print(value);
+                              },
+                        items: widget.adjustStockProvider.justifications
+                            .map(
+                              (value) => DropdownMenuItem(
+                                onTap: () {
+                                  widget.adjustStockProvider.jsonAdjustStock[
+                                          "JustificationCode"] =
+                                      value.Code.toString();
 
-                              widget.adjustStockProvider.typeOperator = value
-                                  .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
-                              //value.Code é o código que deve usar na requisição pra confirmar a atualização do estoque
-                            },
-                            value: value.Description,
-                            child: Text(value.Description),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 2 - 8,
-                  child: DropdownButtonFormField<dynamic>(
-                    key: _keyStockType,
-                    disabledHint: Center(
-                      child: Text(widget.adjustStockProvider
-                              .isLoadingTypeStockAndJustifications
-                          ? "Consultando"
-                          : "Tipos de estoque"),
-                    ),
-                    isExpanded: true,
-                    hint: Center(
-                      child: Text(
-                        'Tipos de estoque',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        textAlign: TextAlign.center,
+                                  if (value.StockType["Code"] != null) {
+                                    //se no tipo de justificativa houver um código
+                                    //atrelado, somente esse estoque pode ser
+                                    //alterado. Por isso a aplicação desativa o
+                                    //outro tropdown e atribui o código ao json que
+                                    //precisa ser enviado na requisição do tipo de
+                                    //estoque
+
+                                    setState(() {
+                                      _justificationHasStockType = true;
+                                    });
+
+                                    widget.adjustStockProvider
+                                            .jsonAdjustStock["StockTypeCode"] =
+                                        value.StockType["Code"];
+                                  } else {
+                                    setState(() {
+                                      _justificationHasStockType = false;
+                                    });
+                                  }
+                                  widget.adjustStockProvider.typeOperator = value
+                                      .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
+
+                                  if (value.StockType["Name"] ==
+                                      _justificationStockTypeName) {
+                                    //se a variável já estiver com o mesmo nome do
+                                    //tipo de estoque não precisa alterar
+                                    return;
+                                  } else if (value.StockType["Name"] != null) {
+                                    setState(() {
+                                      _justificationStockTypeName =
+                                          value.StockType["Name"];
+
+                                      widget.adjustStockProvider.stockTypeName =
+                                          value.StockType["Name"];
+                                      //quando for o estoque atual, se der certo a alteração, vai alterar a quantidade do estoque atual do produto
+                                    });
+                                  }
+                                },
+                                value: value.Description,
+                                child: Container(
+                                  height: 60,
+                                  child: Center(
+                                    child: Text(
+                                      value.Description,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
-                    ),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Selecione um tipo de estoque!';
-                      }
-                      return null;
-                    },
-                    onChanged: widget.adjustStockProvider
-                                .isLoadingTypeStockAndJustifications ||
-                            widget.adjustStockProvider.isLoadingAdjustStock
-                        ? null
-                        : (value) {
-                            print(value);
-                          },
-                    items: widget.adjustStockProvider.stockTypes
-                        .map(
-                          (value) => DropdownMenuItem(
-                            onTap: () {
-                              widget.adjustStockProvider
-                                      .jsonAdjustStock["StockTypeCode"] =
-                                  value.Code.toString();
-                              // print(value.Code);
-                              widget.adjustStockProvider.stockTypeName =
-                                  value.Name;
-                              //value.Code é o código que deve usar na requisição pra confirmar a atualização do estoque
-                            },
-                            value: value.Name,
-                            child: Text(value.Name),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                height: 100,
+                alignment: widget.adjustStockProvider.isLoadingAdjustStock
+                    ? Alignment.center
+                    : Alignment.bottomCenter,
+                width: MediaQuery.of(context).size.width / 2 - 8,
+                child: widget.adjustStockProvider.isLoadingAdjustStock
+                    ? ConfirmingProgressWidget
+                    : DropdownButtonFormField<dynamic>(
+                        isDense: false,
+                        key: _keyStockType,
+                        disabledHint: Row(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  widget.adjustStockProvider
+                                          .isLoadingTypeStockAndJustifications
+                                      ? "Consultando"
+                                      : _justificationHasStockType
+                                          ? _justificationStockTypeName
+                                          : "Tipos de estoque",
+                                  overflow: TextOverflow.visible,
+                                  softWrap: true,
+                                  maxLines: 4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        isExpanded: true,
+                        hint: Center(
+                          child: Text(
+                            'Tipos de estoque',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                        )
-                        .toList(),
-                  ),
-                ),
-              ],
-            ),
-            // if (widget.adjustStockProvider
-            //         .errorMessageTypeStockAndJustifications !=
-            //     "")
-            //   TextButton(
-            //     onPressed: widget
-            //             .adjustStockProvider.isLoadingTypeStockAndJustifications
-            //         ? null
-            //         : () async {
-            //             await widget.adjustStockProvider
-            //                 .getStockTypeAndJustifications(context);
-            //           },
-            //     child: Text(
-            //       widget.adjustStockProvider.isLoadingTypeStockAndJustifications
-            //           ? "Consultando justificativas e tipos de estoque"
-            //           : "Consultar justificativas e tipos de estoque novamente",
-            //       style: const TextStyle(
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   )
-          ],
+                        ),
+                        validator: (value) {
+                          if (_justificationHasStockType) {
+                            return null;
+                          } else if (value == null) {
+                            return 'Selecione um tipo de estoque!';
+                          }
+                          return null;
+                        },
+                        onChanged: widget.adjustStockProvider
+                                    .isLoadingTypeStockAndJustifications ||
+                                widget
+                                    .adjustStockProvider.isLoadingAdjustStock ||
+                                _justificationHasStockType
+                            ? null
+                            : (value) {},
+                        items: widget.adjustStockProvider.stockTypes
+                            .map(
+                              (value) => DropdownMenuItem(
+                                onTap: () {
+                                  widget.adjustStockProvider
+                                          .jsonAdjustStock["StockTypeCode"] =
+                                      value.Code.toString();
+                                  widget.adjustStockProvider.stockTypeName =
+                                      value.Name;
+                                },
+                                value: value.Name,
+                                child: Container(
+                                  height: 60,
+                                  child: Center(
+                                    child: Text(
+                                      _justificationHasStockType
+                                          ? _justificationStockTypeName
+                                          : value.Name,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
