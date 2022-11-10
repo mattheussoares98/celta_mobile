@@ -110,6 +110,14 @@ class _SearchProductWithEanPluOrNameWidgetState
                       ),
                     ),
                     onFieldSubmitted: (value) async {
+                      if (!isValid()) {
+                        Future.delayed(const Duration(), () {
+                          FocusScope.of(context)
+                              .requestFocus(widget.focusNodeConsultProduct);
+                        });
+                        return;
+                      }
+
                       await widget.onPressSearch();
                     },
                     style: const TextStyle(
