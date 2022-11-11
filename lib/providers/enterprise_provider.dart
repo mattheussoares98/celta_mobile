@@ -59,10 +59,6 @@ class EnterpriseProvider with ChangeNotifier {
         _errorMessage = json.decode(resultAsString)["Message"];
         _isLoadingEnterprises = false;
 
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessage,
-          context: context,
-        );
         notifyListeners();
         return;
       }

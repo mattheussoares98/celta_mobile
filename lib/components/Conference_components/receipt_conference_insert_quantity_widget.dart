@@ -27,10 +27,8 @@ class ReceiptConferenceInsertQuantityWidget extends StatefulWidget {
 
 class _ReceiptConferenceInsertQuantityWidget
     extends State<ReceiptConferenceInsertQuantityWidget> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   bool isValid() {
-    return _formKey.currentState!.validate();
+    return widget.insertQuantityFormKey.currentState!.validate();
   }
 
   @override

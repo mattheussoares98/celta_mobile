@@ -1,5 +1,6 @@
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
+import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,20 +31,12 @@ class _AuthFormState extends State<AuthForm>
   final _passwordFocusNode = FocusNode();
   final _urlFocusNode = FocusNode();
 
-  _saveUserAndUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('url', _urlController.text);
-    await prefs.setString('user', _userController.text);
-  }
-
   _submit({required LoginProvider loginProvider}) async {
     bool isValid = widget.formKey.currentState!.validate();
 
     if (!isValid) {
       return;
     }
-
-    await _saveUserAndUrl();
 
     await loginProvider.login(
       user: _userController.text,
@@ -54,21 +47,13 @@ class _AuthFormState extends State<AuthForm>
     if (loginProvider.errorMessage == '') {
       _passwordController.clear();
     }
+
+    await loginProvider.saveUrlAndUser(
+      urlController: _urlController,
+      userController: _userController,
+    );
+
     BaseUrl.url = _urlController.text;
-  }
-
-  _restoreUserAndUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    //logo que instala o app, logicamente ainda não tem nada salvo nas URLs se
-    //não fizer essa verificação, vai dar erro no debug console
-    if (prefs.getString('url') == null || prefs.getString('user') == null) {
-      return;
-    }
-
-    BaseUrl.url = prefs.getString('url')!;
-    _urlController.text = prefs.getString('url')!;
-    _userController.text = prefs.getString('user')!;
   }
 
   @override
@@ -91,7 +76,21 @@ class _AuthFormState extends State<AuthForm>
         ), //esse intervalo é o proporcional do tempo de animação, levando em conta que o tempo de animação é 1. Se a animação for de um segundo, vai executar a animação a partir de 0,6 do tempo de animação até 1 de animação
       ),
     );
-    _restoreUserAndUrl();
+  }
+
+  bool isLoaded = false;
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    LoginProvider loginProvider = Provider.of(context, listen: true);
+    if (!isLoaded) {
+      await loginProvider.verifyIsLogged();
+
+      await loginProvider.restoreUserAndUrl(
+        urlController: _urlController,
+        userController: _userController,
+      );
+    }
   }
 
   @override //essa função serve para liberar qualquer tipo de memória que esteja sendo utilizado por esses FocusNode e Listner
