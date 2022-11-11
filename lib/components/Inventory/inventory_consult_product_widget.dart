@@ -42,6 +42,13 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                 key: widget.formKey,
                 child: TextFormField(
                   onFieldSubmitted: (value) async {
+                    if (!widget.formKey.currentState!.validate()) {
+                      Future.delayed(const Duration(microseconds: 100), () {
+                        FocusScope.of(context)
+                            .requestFocus(widget.consultProductFocusNode);
+                      });
+                      return;
+                    }
                     await inventoryProductProvider
                         .getProductsAndAddIfIsIndividual(
                       controllerText: widget.consultProductController.text,
@@ -76,6 +83,8 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                         value.contains('.') ||
                         value.contains('-')) {
                       return 'Escreva somente números ou somente letras';
+                    } else if (value.isEmpty || value == null) {
+                      return "Digite o EAN ou o PLU!";
                     }
                     return null;
                   },
@@ -208,7 +217,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                         }
 
                         //se ler algum código, vai consultar o produto
-                        if (widget.consultProductController.text.isNotEmpty) {
+                        if (widget.formKey.currentState!.validate()) {
                           await inventoryProductProvider
                               .getProductsAndAddIfIsIndividual(
                             controllerText:
