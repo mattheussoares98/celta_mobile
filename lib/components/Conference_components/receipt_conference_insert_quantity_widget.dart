@@ -9,8 +9,10 @@ class ReceiptConferenceInsertQuantityWidget extends StatefulWidget {
   final int docCode;
   final int index;
   final TextEditingController consultedProductController;
+  final GlobalKey<FormState> insertQuantityFormKey;
   const ReceiptConferenceInsertQuantityWidget({
     required this.consultedProductController,
+    required this.insertQuantityFormKey,
     required this.docCode,
     required this.receiptConferenceProvider,
     required this.receiptConferenceProductModel,
@@ -36,14 +38,14 @@ class _ReceiptConferenceInsertQuantityWidget
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Flexible(
-              flex: 10,
-              child: Container(
-                child: Form(
-                  key: _formKey,
+        Form(
+          key: widget.insertQuantityFormKey,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(
+                flex: 10,
+                child: Container(
                   child: TextFormField(
                     // autofocus: true,
                     enabled: widget
@@ -131,100 +133,103 @@ class _ReceiptConferenceInsertQuantityWidget
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 5),
-            Flexible(
-              flex: 4,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  minimumSize: const Size(double.infinity, 50),
-                  maximumSize: const Size(double.infinity, 50),
-                ),
-                onPressed: widget
-                            .receiptConferenceProvider.isUpdatingQuantity ||
-                        widget.receiptConferenceProvider.consultingProducts
-                    ? null
-                    : () async {
-                        FocusScope.of(context).unfocus();
-                        await widget.receiptConferenceProvider.anullQuantity(
-                          docCode: widget.docCode,
-                          productgCode: widget.receiptConferenceProductModel
-                              .CodigoInterno_Produto,
-                          productPackingCode: widget
-                              .receiptConferenceProductModel
-                              .CodigoInterno_ProEmb,
-                          index: widget.index,
-                          context: context,
-                        );
+              const SizedBox(width: 5),
+              Flexible(
+                flex: 4,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    minimumSize: const Size(double.infinity, 50),
+                    maximumSize: const Size(double.infinity, 50),
+                  ),
+                  onPressed: widget
+                              .receiptConferenceProvider.isUpdatingQuantity ||
+                          widget.receiptConferenceProvider.consultingProducts
+                      ? null
+                      : () async {
+                          FocusScope.of(context).unfocus();
+                          await widget.receiptConferenceProvider.anullQuantity(
+                            docCode: widget.docCode,
+                            productgCode: widget.receiptConferenceProductModel
+                                .CodigoInterno_Produto,
+                            productPackingCode: widget
+                                .receiptConferenceProductModel
+                                .CodigoInterno_ProEmb,
+                            index: widget.index,
+                            context: context,
+                          );
 
-                        if (widget.receiptConferenceProvider
-                                .errorMessageUpdateQuantity ==
-                            "") {
-                          widget.consultedProductController.clear();
-                        }
-                      },
-                child: FittedBox(
-                  child: Text(
-                    widget.receiptConferenceProvider.isUpdatingQuantity ||
-                            widget.receiptConferenceProvider.consultingProducts
-                        ? "AGUARDE"
-                        : "ANULAR",
-                    style: const TextStyle(
-                      fontSize: 50,
+                          if (widget.receiptConferenceProvider
+                                  .errorMessageUpdateQuantity ==
+                              "") {
+                            widget.consultedProductController.clear();
+                          }
+                        },
+                  child: FittedBox(
+                    child: Text(
+                      widget.receiptConferenceProvider.isUpdatingQuantity ||
+                              widget
+                                  .receiptConferenceProvider.consultingProducts
+                          ? "AGUARDE"
+                          : "ANULAR",
+                      style: const TextStyle(
+                        fontSize: 50,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 5),
-            Flexible(
-              flex: 7,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  // primary: Colors.red,
-                  minimumSize: const Size(double.infinity, 50),
-                  maximumSize: const Size(double.infinity, 50),
-                ),
-                onPressed: widget
-                            .receiptConferenceProvider.isUpdatingQuantity ||
-                        widget.receiptConferenceProvider.consultingProducts
-                    ? null
-                    : () async {
-                        if (!isValid()) return;
-                        FocusScope.of(context).unfocus();
-                        await widget.receiptConferenceProvider.updateQuantity(
-                          docCode: widget.docCode,
-                          productgCode: widget.receiptConferenceProductModel
-                              .CodigoInterno_Produto,
-                          productPackingCode: widget
-                              .receiptConferenceProductModel
-                              .CodigoInterno_ProEmb,
-                          quantityText: widget.consultedProductController.text,
-                          index: widget.index,
-                          context: context,
-                        );
+              const SizedBox(width: 5),
+              Flexible(
+                flex: 7,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    // primary: Colors.red,
+                    minimumSize: const Size(double.infinity, 50),
+                    maximumSize: const Size(double.infinity, 50),
+                  ),
+                  onPressed: widget
+                              .receiptConferenceProvider.isUpdatingQuantity ||
+                          widget.receiptConferenceProvider.consultingProducts
+                      ? null
+                      : () async {
+                          if (!isValid()) return;
+                          FocusScope.of(context).unfocus();
+                          await widget.receiptConferenceProvider.updateQuantity(
+                            docCode: widget.docCode,
+                            productgCode: widget.receiptConferenceProductModel
+                                .CodigoInterno_Produto,
+                            productPackingCode: widget
+                                .receiptConferenceProductModel
+                                .CodigoInterno_ProEmb,
+                            quantityText:
+                                widget.consultedProductController.text,
+                            index: widget.index,
+                            context: context,
+                          );
 
-                        if (widget.receiptConferenceProvider
-                                .errorMessageUpdateQuantity ==
-                            "") {
-                          widget.consultedProductController.clear();
-                        }
-                      },
-                child: FittedBox(
-                  child: Text(
-                    widget.receiptConferenceProvider.isUpdatingQuantity ||
-                            widget.receiptConferenceProvider.consultingProducts
-                        ? "AGUARDE"
-                        : "Alterar",
-                    style: const TextStyle(
-                      fontSize: 50,
+                          if (widget.receiptConferenceProvider
+                                  .errorMessageUpdateQuantity ==
+                              "") {
+                            widget.consultedProductController.clear();
+                          }
+                        },
+                  child: FittedBox(
+                    child: Text(
+                      widget.receiptConferenceProvider.isUpdatingQuantity ||
+                              widget
+                                  .receiptConferenceProvider.consultingProducts
+                          ? "AGUARDE"
+                          : "Alterar",
+                      style: const TextStyle(
+                        fontSize: 50,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

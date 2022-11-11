@@ -66,6 +66,7 @@ class _AuthFormState extends State<AuthForm>
       return;
     }
 
+    BaseUrl.url = prefs.getString('url')!;
     _urlController.text = prefs.getString('url')!;
     _userController.text = prefs.getString('user')!;
   }

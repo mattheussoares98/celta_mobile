@@ -65,6 +65,8 @@ class _ReceiptConferenceProductsItemsState
     );
   }
 
+  final GlobalKey<FormState> insertQuantityFormKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -106,8 +108,6 @@ class _ReceiptConferenceProductsItemsState
                                   return;
                                 }
                                 if (selectedIndex != index) {
-                                  FocusScope.of(context).unfocus();
-
                                   widget.consultedProductController.clear();
                                   //necessário apagar o campo da quantidade quando
                                   //mudar de produto selecionado
@@ -238,6 +238,8 @@ class _ReceiptConferenceProductsItemsState
                                       ),
                                       const SizedBox(height: 10),
                                       ReceiptConferenceInsertQuantityWidget(
+                                        insertQuantityFormKey:
+                                            insertQuantityFormKey,
                                         consultedProductController:
                                             widget.consultedProductController,
                                         receiptConferenceProvider:
