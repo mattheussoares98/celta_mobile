@@ -29,7 +29,7 @@ class _SearchProductWithEanPluOrNameWidgetState
 
   @override
   Widget build(BuildContext context) {
-    // TextEditingController textEditingController =
+    FocusNode focusNode = widget.focusNodeConsultProduct;
     return Column(
       children: [
         Padding(
@@ -45,7 +45,7 @@ class _SearchProductWithEanPluOrNameWidgetState
                 child: Form(
                   key: _formKey,
                   child: TextFormField(
-                    focusNode: widget.focusNodeConsultProduct,
+                    focusNode: focusNode,
                     enabled: widget.isLoading ? false : true,
                     autofocus: true,
                     controller: widget.consultProductController,
@@ -68,9 +68,10 @@ class _SearchProductWithEanPluOrNameWidgetState
                         onPressed: () {
                           widget.consultProductController.clear();
 
-                          Future.delayed(const Duration(milliseconds: 100), () {
-                            FocusScope.of(context)
-                                .requestFocus(widget.focusNodeConsultProduct);
+                          FocusScope.of(context).unfocus();
+
+                          Future.delayed(const Duration(), () {
+                            FocusScope.of(context).requestFocus(focusNode);
                           });
                         },
                         icon: Icon(

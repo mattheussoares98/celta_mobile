@@ -25,6 +25,8 @@ class InventoryProductProvider with ChangeNotifier {
     return _isLoading;
   }
 
+  int get productsCount => _products.length;
+
   String _errorMessage = '';
 
   get errorMessage {
@@ -138,10 +140,10 @@ class InventoryProductProvider with ChangeNotifier {
         //altera o foco para o campo de pesquisa novamente
       });
 
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
-        context: context,
-      );
+      // ShowErrorMessage.showErrorMessage(
+      //   error: _errorMessage,
+      //   context: context,
+      // );
     }
 
     if (_errorMessage == '' && isIndividual) {

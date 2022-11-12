@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Buttons/receipt_conference_consult_p
 import 'package:celta_inventario/Components/search_product_with_ean_plu_or_name_widget.dart';
 import 'package:celta_inventario/Components/Procedures_items_widgets/receipt_conference_products_items.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
+import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/consulting_widget.dart';
@@ -84,6 +85,10 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               },
               consultProductController: _consultProductController,
             ),
+            if (receiptConferenceProvider.errorMessageGetProducts != "")
+              ErrorMessage(
+                errorMessage: receiptConferenceProvider.errorMessageGetProducts,
+              ),
             if (receiptConferenceProvider.consultingProducts)
               Expanded(
                 child: ConsultingWidget.consultingWidget(

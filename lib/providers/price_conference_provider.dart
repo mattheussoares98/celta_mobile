@@ -43,6 +43,10 @@ class PriceConferenceProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  changeFocusToConsultProduct({required BuildContext context}) {
+    FocusScope.of(context).requestFocus(consultProductFocusNode);
+  }
+
   String _convertToBrazilianNumber(String valueInString) {
     int lastIndex = valueInString.lastIndexOf("\.");
 
@@ -174,10 +178,10 @@ class PriceConferenceProvider with ChangeNotifier {
         FocusScope.of(context).requestFocus(consultProductFocusNode);
         //altera o foco para o campo de pesquisa novamente
       });
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
-        context: context,
-      );
+      // ShowErrorMessage.showErrorMessage(
+      //   error: _errorMessage,
+      //   context: context,
+      // );
     }
 
     notifyListeners();

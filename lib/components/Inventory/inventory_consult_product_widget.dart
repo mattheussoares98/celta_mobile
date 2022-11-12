@@ -121,6 +121,9 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                   : () {
                       widget.consultProductController.clear();
 
+                      FocusScope.of(context)
+                          .unfocus(); //caso o teclado esteja fechado, precisa retirar o foco e alterar novamente o foco para o campo senão o teclado não abre
+
                       inventoryProductProvider.alterFocusToConsultProduct(
                         context: context,
                         consultProductFocusNode: widget.consultProductFocusNode,

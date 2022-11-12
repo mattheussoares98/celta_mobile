@@ -403,10 +403,10 @@ class ReceiptConferenceProvider with ChangeNotifier {
     }
 
     if (_errorMessageGetProducts != "") {
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageGetProducts,
-        context: context,
-      );
+      // ShowErrorMessage.showErrorMessage(
+      //   error: _errorMessageGetProducts,
+      //   context: context,
+      // );
 
       Future.delayed(const Duration(milliseconds: 100), () {
         //se não colocar em um future pra mudar o foco, não funciona corretamente

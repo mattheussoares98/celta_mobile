@@ -296,10 +296,10 @@ class AdjustStockProvider with ChangeNotifier {
         FocusScope.of(context).requestFocus(consultProductFocusNode);
         //altera o foco para o campo de pesquisa novamente
       });
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageGetProducts,
-        context: context,
-      );
+      // ShowErrorMessage.showErrorMessage(
+      //   error: _errorMessageGetProducts,
+      //   context: context,
+      // );
     }
 
     notifyListeners();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'error_message.dart';
 
 class TryAgainWidget {
   static Widget tryAgain({
@@ -9,7 +8,19 @@ class TryAgainWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ErrorMessage(text: errorMessage),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+            child: Text(
+              errorMessage,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
         TextButton(
           onPressed: () {
             request();

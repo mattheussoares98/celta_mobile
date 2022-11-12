@@ -1,3 +1,5 @@
+import 'package:celta_inventario/utils/consulting_widget.dart';
+import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/inventory_product_provider.dart';
@@ -59,13 +61,13 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             ),
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8, top: 15),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
                 children: [
                   ConsultProductWidget(
                     formKey: _formKey,
@@ -74,15 +76,17 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                     consultProductController: _consultProductController,
                     consultedProductController: _consultedProductController,
                   ),
-                  const SizedBox(height: 8),
                   FittedBox(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Inserir produto individualmente',
-                          style: TextStyle(
-                            fontSize: 30,
+                        const FittedBox(
+                          child: Text(
+                            'Inserir produto individualmente',
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 30,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 20),
@@ -108,19 +112,29 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  if (inventoryProductProvider.products.isNotEmpty)
-                    ConsultedProductWidget(
-                      isIndividual: _isIndividual,
-                      countingCode: arguments["InventoryCountingsModel"]
-                          .codigoInternoInvCont,
-                      productPackingCode: arguments["InventoryCountingsModel"]
-                          .numeroContagemInvCont,
-                      consultedProductController: _consultedProductController,
-                    ),
                 ],
               ),
-            ),
+              if (inventoryProductProvider.productsCount == 0 &&
+                  inventoryProductProvider.errorMessage != "")
+                ErrorMessage(
+                  errorMessage: inventoryProductProvider.errorMessage,
+                ),
+              if (inventoryProductProvider.products.isNotEmpty)
+                ConsultedProductWidget(
+                  isIndividual: _isIndividual,
+                  countingCode:
+                      arguments["InventoryCountingsModel"].codigoInternoInvCont,
+                  productPackingCode: arguments["InventoryCountingsModel"]
+                      .numeroContagemInvCont,
+                  consultedProductController: _consultedProductController,
+                ),
+              // if (inventoryProductProvider.isLoading)
+              //   Expanded(
+              //     child: ConsultingWidget.consultingWidget(
+              //         title: "Consultando o produto"),
+              //   ),
+              Expanded(child: Container())
+            ],
           ),
         ),
       ),

@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 
 class ErrorMessage extends StatelessWidget {
-  final String text;
+  final String errorMessage;
   const ErrorMessage({
     Key? key,
-    required this.text,
+    required this.errorMessage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+    return Expanded(
+      flex: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                errorMessage,
+                style: const TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
