@@ -104,7 +104,9 @@ class AdjustStockProductModel {
           FiscalCost: data["FiscalCost"],
           FiscalLiquidCost: data["FiscalLiquidCost"],
           CurrentStock: data["CurrentStock"],
-          CurrentStockString: data["CurrentStockString"],
+          CurrentStockString: data["CurrentStockString"] == null
+              ? "null"
+              : data["CurrentStockString"],
           SaldoEstoqueVenda: data["SaldoEstoqueVenda"],
           EtiquetaPendente: data["EtiquetaPendente"],
           EtiquetaPendenteDescricao: data["EtiquetaPendenteDescricao"],

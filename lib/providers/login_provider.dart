@@ -34,13 +34,14 @@ class LoginProvider with ChangeNotifier {
     return _isAuthStream;
   }
 
-  saveUrlAndUser({
-    required TextEditingController urlController,
-    required TextEditingController userController,
+  _saveUrlAndUser({
+    required String url,
+    required String user,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('url', urlController.text);
-    await prefs.setString('user', userController.text);
+    await prefs.setString('url', url);
+    await prefs.setString('user', user);
+    BaseUrl.url = url;
   }
 
   Future<String> getUserName() async {
@@ -75,8 +76,11 @@ class LoginProvider with ChangeNotifier {
   login({
     required String user,
     required String password,
+    required String url,
     required BuildContext context,
   }) async {
+    _saveUrlAndUser(url: url, user: user);
+
     _errorMessage = '';
     _isLoading = true;
     notifyListeners();
@@ -130,7 +134,6 @@ class LoginProvider with ChangeNotifier {
       );
       // notifyListeners();
     }
-
     _isLoading = false;
     notifyListeners();
   }

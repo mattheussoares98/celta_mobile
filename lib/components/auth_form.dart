@@ -42,16 +42,12 @@ class _AuthFormState extends State<AuthForm>
       user: _userController.text,
       password: _passwordController.text,
       context: context,
+      url: _urlController.text,
     );
 
     if (loginProvider.errorMessage == '') {
       _passwordController.clear();
     }
-
-    await loginProvider.saveUrlAndUser(
-      urlController: _urlController,
-      userController: _userController,
-    );
 
     BaseUrl.url = _urlController.text;
   }
