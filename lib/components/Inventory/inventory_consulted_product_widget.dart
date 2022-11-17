@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../providers/inventory_product_provider.dart';
 import '../Buttons/inventory_anull_quantity_button.dart';
-import '../Buttons/inventory_confirm_quantity_button.dart';
+import '../Buttons/addOrSubtractButton.dart';
 import 'inventory_insert_one_quantity.dart';
 
 class ConsultedProductWidget extends StatefulWidget {
