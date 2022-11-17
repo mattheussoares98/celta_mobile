@@ -38,10 +38,10 @@ class LoginProvider with ChangeNotifier {
     required String url,
     required String user,
   }) async {
+    BaseUrl.url = url;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('url', url);
     await prefs.setString('user', user);
-    BaseUrl.url = url;
   }
 
   Future<String> getUserName() async {
@@ -79,7 +79,10 @@ class LoginProvider with ChangeNotifier {
     required String url,
     required BuildContext context,
   }) async {
-    _saveUrlAndUser(url: url, user: user);
+    await _saveUrlAndUser(url: url, user: user);
+    print(url);
+    print(user);
+    print(BaseUrl.url);
 
     _errorMessage = '';
     _isLoading = true;

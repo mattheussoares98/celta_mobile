@@ -48,8 +48,6 @@ class _AuthFormState extends State<AuthForm>
     if (loginProvider.errorMessage == '') {
       _passwordController.clear();
     }
-
-    BaseUrl.url = _urlController.text;
   }
 
   @override
