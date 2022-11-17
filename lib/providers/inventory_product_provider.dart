@@ -389,7 +389,7 @@ class InventoryProductProvider with ChangeNotifier {
 
       _updateLastQuantity(
         isSubtract: isSubtract,
-        quantity: quantity!,
+        quantity: quantity,
         isIndividual: isIndividual,
       );
 

@@ -71,10 +71,7 @@ class ReceiptProvider with ChangeNotifier {
         //significa que deu algum erro
         _errorMessage = json.decode(responseAsString)["Message"];
         _isLoadingReceipt = false;
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessage,
-          context: context,
-        );
+
         notifyListeners();
         return;
       }
