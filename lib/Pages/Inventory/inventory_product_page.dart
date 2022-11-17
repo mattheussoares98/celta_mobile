@@ -14,8 +14,6 @@ class InventoryProductsPage extends StatefulWidget {
 }
 
 class _InventoryProductsPageState extends State<InventoryProductsPage> {
-  final _consultProductFocusNode = FocusNode();
-
   bool _isIndividual = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -31,7 +29,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     super.dispose();
     _consultProductController.dispose();
     _consultedProductController.dispose();
-    _consultProductFocusNode.dispose();
     _formKey.currentState?.dispose();
   }
 
@@ -61,80 +58,83 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ConsultProductWidget(
-                    formKey: _formKey,
-                    isIndividual: _isIndividual,
-                    consultProductFocusNode: _consultProductFocusNode,
-                    consultProductController: _consultProductController,
-                    consultedProductController: _consultedProductController,
-                  ),
-                  FittedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const FittedBox(
-                          child: Text(
-                            'Inserir produto individualmente',
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 30,
+                  Column(
+                    children: [
+                      ConsultProductWidget(
+                        formKey: _formKey,
+                        isIndividual: _isIndividual,
+                        consultProductController: _consultProductController,
+                        consultedProductController: _consultedProductController,
+                      ),
+                      FittedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const FittedBox(
+                              child: Text(
+                                'Inserir produto individualmente',
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 20),
+                            Switch(
+                              value: _isIndividual,
+                              onChanged: inventoryProductProvider.isLoading ||
+                                      inventoryProductProvider.isLoadingQuantity
+                                  ? null
+                                  : (value) {
+                                      setState(() {
+                                        _isIndividual = value;
+                                      });
+                                      if (_isIndividual) {
+                                        inventoryProductProvider
+                                            .alterFocusToConsultProduct(
+                                          context: context,
+                                        );
+                                      }
+                                    },
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 20),
-                        Switch(
-                          value: _isIndividual,
-                          onChanged: inventoryProductProvider.isLoading ||
-                                  inventoryProductProvider.isLoadingQuantity
-                              ? null
-                              : (value) {
-                                  setState(() {
-                                    _isIndividual = value;
-                                  });
-                                  if (_isIndividual) {
-                                    inventoryProductProvider
-                                        .alterFocusToConsultProduct(
-                                      context: context,
-                                      consultProductFocusNode:
-                                          _consultProductFocusNode,
-                                    );
-                                  }
-                                },
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  if (inventoryProductProvider.productsCount == 0 &&
+                      inventoryProductProvider.errorMessage != "")
+                    Container(
+                      height: 300,
+                      child: Column(
+                        children: [
+                          ErrorMessage(
+                            errorMessage: inventoryProductProvider.errorMessage,
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (inventoryProductProvider.products.isNotEmpty)
+                    ConsultedProductWidget(
+                      isIndividual: _isIndividual,
+                      countingCode: arguments["InventoryCountingsModel"]
+                          .codigoInternoInvCont,
+                      productPackingCode: arguments["InventoryCountingsModel"]
+                          .numeroContagemInvCont,
+                      consultedProductController: _consultedProductController,
+                    ),
+                  Container()
                 ],
               ),
-              if (inventoryProductProvider.productsCount == 0 &&
-                  inventoryProductProvider.errorMessage != "")
-                ErrorMessage(
-                  errorMessage: inventoryProductProvider.errorMessage,
-                ),
-              if (inventoryProductProvider.products.isNotEmpty)
-                ConsultedProductWidget(
-                  isIndividual: _isIndividual,
-                  countingCode:
-                      arguments["InventoryCountingsModel"].codigoInternoInvCont,
-                  productPackingCode: arguments["InventoryCountingsModel"]
-                      .numeroContagemInvCont,
-                  consultedProductController: _consultedProductController,
-                ),
-              // if (inventoryProductProvider.isLoading)
-              //   Expanded(
-              //     child: ConsultingWidget.consultingWidget(
-              //         title: "Consultando o produto"),
-              //   ),
-              Expanded(child: Container())
-            ],
+            ),
           ),
         ),
       ),

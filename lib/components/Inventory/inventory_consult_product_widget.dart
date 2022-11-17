@@ -7,7 +7,6 @@ import '../../providers/inventory_product_provider.dart';
 class ConsultProductWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final bool isIndividual;
-  final FocusNode consultProductFocusNode;
   // final Function() consultAndAddProduct;
   final TextEditingController consultProductController;
   final TextEditingController consultedProductController;
@@ -15,7 +14,6 @@ class ConsultProductWidget extends StatefulWidget {
     Key? key,
     required this.formKey,
     required this.isIndividual,
-    required this.consultProductFocusNode,
     required this.consultedProductController,
     // required this.consultAndAddProduct,
     required this.consultProductController,
@@ -41,11 +39,12 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
               child: Form(
                 key: widget.formKey,
                 child: TextFormField(
+                  focusNode: inventoryProductProvider.consultProductFocusNode,
                   onFieldSubmitted: (value) async {
                     if (!widget.formKey.currentState!.validate()) {
                       Future.delayed(const Duration(microseconds: 100), () {
-                        FocusScope.of(context)
-                            .requestFocus(widget.consultProductFocusNode);
+                        FocusScope.of(context).requestFocus(
+                            inventoryProductProvider.consultProductFocusNode);
                       });
                       return;
                     }
@@ -58,14 +57,13 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                       codigoInternoInvCont: arguments["InventoryCountingsModel"]
                           .codigoInternoInvCont,
                       context: context,
-                      consultProductFocusNode: widget.consultProductFocusNode,
                       isIndividual: widget.isIndividual,
-                      inventoryProductProvider: inventoryProductProvider,
+                      consultedProductController:
+                          widget.consultProductController,
                     );
                     widget.consultProductController.clear();
                     widget.consultedProductController.clear();
                   },
-                  focusNode: widget.consultProductFocusNode,
                   enabled: inventoryProductProvider.isLoading ||
                           inventoryProductProvider.isLoadingQuantity
                       ? false
@@ -121,13 +119,12 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                   : () {
                       widget.consultProductController.clear();
 
-                      FocusScope.of(context)
-                          .unfocus(); //caso o teclado esteja fechado, precisa retirar o foco e alterar novamente o foco para o campo senão o teclado não abre
-
-                      inventoryProductProvider.alterFocusToConsultProduct(
-                        context: context,
-                        consultProductFocusNode: widget.consultProductFocusNode,
-                      );
+                      if (!inventoryProductProvider
+                          .consultProductFocusNode.hasFocus) {
+                        inventoryProductProvider.alterFocusToConsultProduct(
+                          context: context,
+                        );
+                      }
                     },
               icon: Icon(
                 Icons.delete,
@@ -233,10 +230,9 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                                 arguments["InventoryCountingsModel"]
                                     .codigoInternoInvCont,
                             context: context,
-                            consultProductFocusNode:
-                                widget.consultProductFocusNode,
                             isIndividual: widget.isIndividual,
-                            inventoryProductProvider: inventoryProductProvider,
+                            consultedProductController:
+                                widget.consultProductController,
                           );
                         }
 
@@ -246,8 +242,6 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
 
                           inventoryProductProvider.alterFocusToConsultProduct(
                             context: context,
-                            consultProductFocusNode:
-                                widget.consultProductFocusNode,
                           );
                         }
                       },

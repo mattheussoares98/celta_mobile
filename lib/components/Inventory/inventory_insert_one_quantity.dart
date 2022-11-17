@@ -51,7 +51,8 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
                       isIndividual: widget.isIndividual,
                       context: context,
                       codigoInternoInvCont: widget.codigoInternoInvCont,
-                      quantity: widget.consultedProductController,
+                      consultedProductController:
+                          widget.consultedProductController,
                       isSubtract: true,
                     );
                   },
@@ -83,8 +84,9 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
                       isIndividual: widget.isIndividual,
                       context: context,
                       codigoInternoInvCont: widget.codigoInternoInvCont,
-                      quantity: widget.consultedProductController,
                       isSubtract: false,
+                      consultedProductController:
+                          widget.consultedProductController,
                     );
                   },
           ),

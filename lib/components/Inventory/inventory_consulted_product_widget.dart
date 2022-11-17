@@ -1,4 +1,5 @@
 import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -37,13 +38,47 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
     _consultedProductFocusNode.dispose();
   }
 
+  addQuantity({
+    required bool isSubtract,
+    required InventoryProductProvider inventoryProductProvider,
+  }) async {
+    double quantity = double.tryParse(
+        widget.consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
+
+    if (quantity >= 10000) {
+      //se a quantidade digitada for maior que 10.000, vai abrir um alertDialog pra confirmar a quantidade
+      ShowAlertDialog().showAlertDialog(
+        context: context,
+        title: 'Deseja confirmar a quantidade?',
+        subtitle: isSubtract
+            ? 'Quantidade digitada: -${quantity.toStringAsFixed(3)}'
+            : 'Quantidade digitada: ${quantity.toStringAsFixed(3)}',
+        function: () async {
+          await inventoryProductProvider.addQuantity(
+            consultedProductController: widget.consultedProductController,
+            isIndividual: widget.isIndividual,
+            context: context,
+            codigoInternoInvCont: widget.countingCode,
+            isSubtract: isSubtract,
+          );
+        },
+      );
+    } else {
+      //se a quantidade digitada for menor do que 10.000, vai adicionar direto a quantidade, sem o alertDialog pra confirmar
+      await inventoryProductProvider.addQuantity(
+        consultedProductController: widget.consultedProductController,
+        isIndividual: widget.isIndividual,
+        context: context,
+        codigoInternoInvCont: widget.countingCode,
+        isSubtract: isSubtract,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     InventoryProductProvider inventoryProductProvider =
         Provider.of(context, listen: true);
-
-    double? lastQuantityAdded =
-        double.tryParse(inventoryProductProvider.lastQuantityAdded);
 
     return PersonalizedCard.personalizedCard(
       context: context,
@@ -163,9 +198,9 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
             if (inventoryProductProvider.lastQuantityAdded != '')
               FittedBox(
                 child: Text(
-                  lastQuantityAdded != ''
-                      ? 'Última quantidade adicionada:  ${lastQuantityAdded!.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} '
-                      : 'Última quantidade adicionada:  ${lastQuantityAdded!.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} ',
+                  inventoryProductProvider.lastQuantityAdded != 0
+                      ? 'Última quantidade adicionada:  ${inventoryProductProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} '
+                      : 'Última quantidade adicionada:  ${inventoryProductProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} ',
                   style: TextStyle(
                     fontSize: 100,
                     color: Theme.of(context).colorScheme.primary,
@@ -197,7 +232,8 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
                                       ? false
                                       : true,
                               controller: widget.consultedProductController,
-                              focusNode: _consultedProductFocusNode,
+                              focusNode: inventoryProductProvider
+                                  .consultedProductFocusNode,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(10)
                               ],
@@ -293,29 +329,37 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
                     children: [
                       Flexible(
                         flex: 2,
-                        child: InventoryConfirmQuantityButton(
+                        child: AddOrSubtractButton(
+                          isLoading: inventoryProductProvider.isLoadingQuantity,
                           isIndividual: widget.isIndividual,
-                          consultedProductController:
-                              widget.consultedProductController,
-                          countingCode: widget.countingCode,
                           isSubtract: true,
                           formKey: _formKey,
                           consultedProductFocusNode: _consultedProductFocusNode,
-                          inventoryProductProvider: inventoryProductProvider,
+                          function: () async {
+                            await addQuantity(
+                              isSubtract: true,
+                              inventoryProductProvider:
+                                  inventoryProductProvider,
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(width: 8),
                       Flexible(
                         flex: 5,
-                        child: InventoryConfirmQuantityButton(
+                        child: AddOrSubtractButton(
+                          isLoading: inventoryProductProvider.isLoadingQuantity,
                           isIndividual: widget.isIndividual,
-                          consultedProductController:
-                              widget.consultedProductController,
-                          countingCode: widget.countingCode,
                           isSubtract: false,
                           formKey: _formKey,
                           consultedProductFocusNode: _consultedProductFocusNode,
-                          inventoryProductProvider: inventoryProductProvider,
+                          function: () async {
+                            await addQuantity(
+                              isSubtract: false,
+                              inventoryProductProvider:
+                                  inventoryProductProvider,
+                            );
+                          },
                         ),
                       ),
                     ],

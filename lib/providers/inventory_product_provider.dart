@@ -109,9 +109,8 @@ class InventoryProductProvider with ChangeNotifier {
     required int inventoryProcessCode,
     required int codigoInternoInvCont,
     required BuildContext context,
-    required FocusNode consultProductFocusNode,
     required bool isIndividual,
-    required InventoryProductProvider inventoryProductProvider,
+    required TextEditingController consultedProductController,
   }) async {
     await _getProducts(
       controllerText: controllerText,
@@ -148,19 +147,28 @@ class InventoryProductProvider with ChangeNotifier {
 
     if (_errorMessage == '' && isIndividual) {
       //se estiver habilitado pra inserir individualmente, assim que efetuar a consulta do produto já vai tentar adicionar uma unidade
+
       await addQuantity(
-        isIndividual: true,
+        isIndividual: isIndividual,
         context: context,
-        quantity: '1',
-        isSubtract: false,
         codigoInternoInvCont: codigoInternoInvCont,
+        isSubtract: false,
+        consultedProductController: consultedProductController,
       );
     }
   }
 
+  alterFocusToConsultedProduct({
+    required BuildContext context,
+  }) {
+    Future.delayed(const Duration(milliseconds: 400), () {
+      //se não colocar em um future, da erro pra alterar o foco porque tenta trocar enquanto o campo está desabilitado
+      FocusScope.of(context).requestFocus(consultedProductFocusNode);
+    });
+  }
+
   alterFocusToConsultProduct({
     required BuildContext context,
-    required FocusNode consultProductFocusNode,
   }) {
     Future.delayed(const Duration(milliseconds: 300), () {
       //se não colocar em um future pra mudar o foco, não funciona corretamente
@@ -191,8 +199,12 @@ class InventoryProductProvider with ChangeNotifier {
 
   String _lastQuantityAdded = '';
 
-  String get lastQuantityAdded {
-    return _lastQuantityAdded;
+  double get lastQuantityAdded {
+    if (_lastQuantityAdded == "") {
+      return 0;
+    } else {
+      return double.tryParse(_lastQuantityAdded)!;
+    }
   }
 
   Future<void> _entryQuantity({
@@ -319,13 +331,13 @@ class InventoryProductProvider with ChangeNotifier {
 
   _updateLastQuantity({
     required bool isSubtract,
-    required dynamic quantity,
+    required double quantity,
     required bool isIndividual,
   }) {
     if (!isIndividual && _products[0].quantidadeInvContProEmb == -1) {
       //quando fica nulo, deixei pra ficar com o valor de -1 para corrigir um bug
-      _products[0].quantidadeInvContProEmb = double.tryParse(
-          quantity.text.toString().replaceAll(RegExp(r','), '.'))!;
+      _products[0].quantidadeInvContProEmb =
+          double.tryParse(quantity.toString().replaceAll(RegExp(r','), '.'))!;
     } else if (isIndividual && _products[0].quantidadeInvContProEmb == -1) {
       //quando fica nulo, deixei pra ficar com o valor de -1 para corrigir um bug
       _products[0].quantidadeInvContProEmb = 1;
@@ -335,32 +347,37 @@ class InventoryProductProvider with ChangeNotifier {
       _products[0].quantidadeInvContProEmb++;
     } else if (!isIndividual &&
         isSubtract &&
-        (_products[0].quantidadeInvContProEmb -
-                double.tryParse(quantity.text)!) >=
-            0) {
-      _products[0].quantidadeInvContProEmb -= double.tryParse(quantity.text)!;
+        (_products[0].quantidadeInvContProEmb - quantity) >= 0) {
+      _products[0].quantidadeInvContProEmb -= quantity;
     } else {
       //se não for individual nem subtração, vai cair aqui
       //precisei sobrescrever a vírgula por ponto senão ocorria erro para somar/subtrair fracionado
-      _products[0].quantidadeInvContProEmb += double.tryParse(
-          quantity.text.toString().replaceAll(RegExp(r','), '.'))!;
+      _products[0].quantidadeInvContProEmb +=
+          double.tryParse(quantity.toString().replaceAll(RegExp(r','), '.'))!;
     }
   }
+
+  FocusNode consultedProductFocusNode = FocusNode();
+  FocusNode consultProductFocusNode = FocusNode();
 
   addQuantity({
     required bool isIndividual,
     required BuildContext context,
     required int codigoInternoInvCont,
-    required dynamic
-        quantity, //coloquei como dynamic porque pode ser um controller ou somente o valor direto, como no caso de quando está inserindo os produtos individualmente que precisa inserir direto a quantidade "1"
     required bool isSubtract,
-    void Function()? alterFocusToConsultedProduct,
+    required TextEditingController consultedProductController,
   }) async {
+    double quantity = 0;
+    if (consultedProductController.text.isNotEmpty) {
+      quantity = double.tryParse(
+          consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
+    }
+
     try {
       await _entryQuantity(
         countingCode: codigoInternoInvCont,
         productPackingCode: _products[0].codigoInternoProEmb,
-        quantity: isIndividual ? '1' : quantity.text,
+        quantity: isIndividual ? '1' : quantity.toString(),
         isSubtract: isSubtract,
         context: context,
       );
@@ -369,10 +386,24 @@ class InventoryProductProvider with ChangeNotifier {
         //Se der erro não pode alterar a última quantidade adicionada
         return;
       }
+
       _updateLastQuantity(
-          isSubtract: isSubtract,
-          quantity: quantity,
-          isIndividual: isIndividual);
+        isSubtract: isSubtract,
+        quantity: quantity!,
+        isIndividual: isIndividual,
+      );
+
+      if (isIndividual) {
+        alterFocusToConsultProduct(
+          context: context,
+        );
+      } else {
+        alterFocusToConsultedProduct(
+          context: context,
+        );
+      }
+
+      consultedProductController.clear();
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -380,15 +411,6 @@ class InventoryProductProvider with ChangeNotifier {
         error: _errorMessageQuantity,
         context: context,
       );
-    }
-    if (_errorMessageQuantity != '') {
-      alterFocusToConsultedProduct!();
-      return;
-    }
-
-    if (!isIndividual) {
-      quantity.clear();
-      alterFocusToConsultedProduct!();
     }
   }
 }
