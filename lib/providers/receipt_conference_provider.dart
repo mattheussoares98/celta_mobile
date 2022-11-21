@@ -106,9 +106,17 @@ class ReceiptConferenceProvider with ChangeNotifier {
 
   void _updateAtualQuantity({
     required int index,
-    required double newQuantity,
+    required double quantity,
     required bool isAnnulQuantity,
+    required bool isSubtract,
+    required BuildContext context,
   }) {
+    if (isSubtract) {
+      quantity = _products[index].Quantidade_ProcRecebDocProEmb - quantity;
+    } else if (_products[index].Quantidade_ProcRecebDocProEmb != null) {
+      quantity = _products[index].Quantidade_ProcRecebDocProEmb + quantity;
+    }
+
     ReceiptConferenceProductModel productWithNewQuantity =
         ReceiptConferenceProductModel(
       Nome_Produto: _products[index].Nome_Produto,
@@ -119,7 +127,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
       Codigo_ProEmb: _products[index].Codigo_ProEmb,
       PackingQuantity: _products[index].PackingQuantity,
       Quantidade_ProcRecebDocProEmb:
-          isAnnulQuantity ? null : newQuantity, //alterando a quantidade
+          isAnnulQuantity ? null : quantity, //alterando a quantidade
       ReferenciaXml_ProcRecebDocProEmb:
           _products[index].ReferenciaXml_ProcRecebDocProEmb,
       AllEans: _products[index].AllEans,
@@ -143,59 +151,59 @@ class ReceiptConferenceProvider with ChangeNotifier {
         quantityText, //o parâmetro é recebido via String porque vem de um controller de um textFormField
     required int index,
     required BuildContext context,
+    required bool isSubtract,
   }) async {
     quantityText = quantityText.replaceAll(RegExp(r','), '.');
     var quantity = double.tryParse(quantityText);
 
-    if (_products[index].Quantidade_ProcRecebDocProEmb == quantity) {
-      //se a quantidade for igual à atual, não precisa fazer a requisição
-      _errorMessageUpdateQuantity = "A quantidade é igual à atual";
-
-      Future.delayed(const Duration(milliseconds: 100), () {
-        //se não colocar em um future pra mudar o foco, não funciona corretamente
-        FocusScope.of(context).requestFocus(consultedProductFocusNode);
-        //altera o foco para o campo de pesquisa novamente
-      });
+    if (isSubtract && _products[index].Quantidade_ProcRecebDocProEmb == null) {
+      _isUpdatingQuantity = false;
+      _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
       ShowErrorMessage.showErrorMessage(
         error: _errorMessageUpdateQuantity,
         context: context,
       );
       notifyListeners();
       return;
-    } else if (quantity == 0) {
-      //se a quantidade for igual a 0, precisa zerar a contagem
-      await anullQuantity(
-        docCode: docCode,
-        productgCode: productgCode,
-        productPackingCode: productPackingCode,
-        index: index,
+    } else if (isSubtract &&
+        quantity! > _products[index].Quantidade_ProcRecebDocProEmb) {
+      _isUpdatingQuantity = false;
+      _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageUpdateQuantity,
         context: context,
       );
+      notifyListeners();
       return;
     }
+
     _errorMessageUpdateQuantity = "";
     _isUpdatingQuantity = true;
 
     notifyListeners();
 
-    double? quantityToAdd;
-
-    if (_products[index].Quantidade_ProcRecebDocProEmb == null) {
-      quantityToAdd = quantity;
-    } else {
-      quantityToAdd =
-          quantity! - _products[index].Quantidade_ProcRecebDocProEmb;
-    }
-    print(quantityToAdd);
-
     try {
+      http.Request request;
       var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
+      if (isSubtract) {
+        request = http.Request(
           'POST',
           Uri.parse(
-              "${BaseUrl.url}/GoodsReceiving/EntryQuantity?grDocCode=${docCode}" +
-                  "&productgCode=${productgCode}&productPackingCode=${productPackingCode}" +
-                  "&quantity=${quantityToAdd}"));
+            "${BaseUrl.url}/GoodsReceiving/EntryQuantity?grDocCode=${docCode}" +
+                "&productgCode=${productgCode}&productPackingCode=${productPackingCode}" +
+                "&quantity=-${quantity}",
+          ),
+        );
+      } else {
+        request = http.Request(
+          'POST',
+          Uri.parse(
+            "${BaseUrl.url}/GoodsReceiving/EntryQuantity?grDocCode=${docCode}" +
+                "&productgCode=${productgCode}&productPackingCode=${productPackingCode}" +
+                "&quantity=${quantity}",
+          ),
+        );
+      }
       request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
 
@@ -209,18 +217,24 @@ class ReceiptConferenceProvider with ChangeNotifier {
         _errorMessageUpdateQuantity = json.decode(resultAsString)["Message"];
         _isUpdatingQuantity = false;
         ShowErrorMessage.showErrorMessage(
-          error: _errorMessageGetProducts,
+          error: _errorMessageUpdateQuantity,
           context: context,
         );
         notifyListeners();
         return;
       } else {
         _updateAtualQuantity(
+          context: context,
           index: index,
-          newQuantity: quantity!,
+          quantity: quantity!,
           isAnnulQuantity: false,
+          isSubtract: isSubtract,
         );
       }
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        FocusScope.of(context).requestFocus(consultedProductFocusNode);
+      });
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
@@ -251,7 +265,6 @@ class ReceiptConferenceProvider with ChangeNotifier {
         error: _errorMessageUpdateQuantity,
         context: context,
       );
-      notifyListeners();
       notifyListeners();
       return;
     }
@@ -286,8 +299,10 @@ class ReceiptConferenceProvider with ChangeNotifier {
       } else {
         _updateAtualQuantity(
           index: index,
-          newQuantity: 0,
+          quantity: 0,
           isAnnulQuantity: true,
+          isSubtract: false,
+          context: context,
         );
       }
     } catch (e) {

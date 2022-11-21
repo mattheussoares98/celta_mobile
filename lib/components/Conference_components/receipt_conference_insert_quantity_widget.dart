@@ -1,7 +1,11 @@
 import 'package:celta_inventario/Models/receipt_conference_product_model.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../Buttons/addOrSubtractButton.dart';
 
 class ReceiptConferenceInsertQuantityWidget extends StatefulWidget {
   final ReceiptConferenceProvider receiptConferenceProvider;
@@ -133,7 +137,7 @@ class _ReceiptConferenceInsertQuantityWidget
               ),
               const SizedBox(width: 5),
               Flexible(
-                flex: 4,
+                flex: 3,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.red,
@@ -146,22 +150,43 @@ class _ReceiptConferenceInsertQuantityWidget
                       ? null
                       : () async {
                           FocusScope.of(context).unfocus();
-                          await widget.receiptConferenceProvider.anullQuantity(
-                            docCode: widget.docCode,
-                            productgCode: widget.receiptConferenceProductModel
-                                .CodigoInterno_Produto,
-                            productPackingCode: widget
-                                .receiptConferenceProductModel
-                                .CodigoInterno_ProEmb,
-                            index: widget.index,
-                            context: context,
-                          );
 
-                          if (widget.receiptConferenceProvider
-                                  .errorMessageUpdateQuantity ==
-                              "") {
-                            widget.consultedProductController.clear();
+                          if (widget
+                                  .receiptConferenceProvider
+                                  .products[widget.index]
+                                  .Quantidade_ProcRecebDocProEmb ==
+                              null) {
+                            ShowErrorMessage.showErrorMessage(
+                              error: "A quantidade já está nula!",
+                              context: context,
+                            );
+                            return;
                           }
+
+                          ShowAlertDialog().showAlertDialog(
+                            context: context,
+                            title: "Deseja realmente anular a quantidade?",
+                            function: () async {
+                              await widget.receiptConferenceProvider
+                                  .anullQuantity(
+                                docCode: widget.docCode,
+                                productgCode: widget
+                                    .receiptConferenceProductModel
+                                    .CodigoInterno_Produto,
+                                productPackingCode: widget
+                                    .receiptConferenceProductModel
+                                    .CodigoInterno_ProEmb,
+                                index: widget.index,
+                                context: context,
+                              );
+
+                              if (widget.receiptConferenceProvider
+                                      .errorMessageUpdateQuantity ==
+                                  "") {
+                                widget.consultedProductController.clear();
+                              }
+                            },
+                          );
                         },
                   child: FittedBox(
                     child: Text(
@@ -177,53 +202,74 @@ class _ReceiptConferenceInsertQuantityWidget
                   ),
                 ),
               ),
-              const SizedBox(width: 5),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Row(
+            children: [
               Flexible(
-                flex: 7,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    // primary: Colors.red,
-                    minimumSize: const Size(double.infinity, 50),
-                    maximumSize: const Size(double.infinity, 50),
-                  ),
-                  onPressed: widget
-                              .receiptConferenceProvider.isUpdatingQuantity ||
-                          widget.receiptConferenceProvider.consultingProducts
-                      ? null
-                      : () async {
-                          if (!isValid()) return;
-                          FocusScope.of(context).unfocus();
-                          await widget.receiptConferenceProvider.updateQuantity(
-                            docCode: widget.docCode,
-                            productgCode: widget.receiptConferenceProductModel
-                                .CodigoInterno_Produto,
-                            productPackingCode: widget
-                                .receiptConferenceProductModel
-                                .CodigoInterno_ProEmb,
-                            quantityText:
-                                widget.consultedProductController.text,
-                            index: widget.index,
-                            context: context,
-                          );
+                flex: 4,
+                child: AddOrSubtractButton(
+                  isLoading:
+                      widget.receiptConferenceProvider.isUpdatingQuantity,
+                  function: () async {
+                    await widget.receiptConferenceProvider.updateQuantity(
+                      quantityText: widget.consultedProductController.text,
+                      docCode: widget.docCode,
+                      productgCode: widget
+                          .receiptConferenceProductModel.CodigoInterno_Produto,
+                      productPackingCode: widget
+                          .receiptConferenceProductModel.CodigoInterno_ProEmb,
+                      index: widget.index,
+                      context: context,
+                      isSubtract: true,
+                    );
 
-                          if (widget.receiptConferenceProvider
-                                  .errorMessageUpdateQuantity ==
-                              "") {
-                            widget.consultedProductController.clear();
-                          }
-                        },
-                  child: FittedBox(
-                    child: Text(
-                      widget.receiptConferenceProvider.isUpdatingQuantity ||
-                              widget
-                                  .receiptConferenceProvider.consultingProducts
-                          ? "AGUARDE"
-                          : "Alterar",
-                      style: const TextStyle(
-                        fontSize: 50,
-                      ),
-                    ),
-                  ),
+                    if (widget.receiptConferenceProvider
+                            .errorMessageUpdateQuantity ==
+                        "") {
+                      widget.consultedProductController.clear();
+                    }
+                  },
+                  isSubtract: true,
+                  formKey: widget.insertQuantityFormKey,
+                  isIndividual: false,
+                  consultedProductFocusNode: widget
+                      .receiptConferenceProvider.consultedProductFocusNode,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Flexible(
+                flex: 10,
+                child: AddOrSubtractButton(
+                  isLoading:
+                      widget.receiptConferenceProvider.isUpdatingQuantity,
+                  function: () async {
+                    await widget.receiptConferenceProvider.updateQuantity(
+                      quantityText: widget.consultedProductController.text,
+                      docCode: widget.docCode,
+                      productgCode: widget
+                          .receiptConferenceProductModel.CodigoInterno_Produto,
+                      productPackingCode: widget
+                          .receiptConferenceProductModel.CodigoInterno_ProEmb,
+                      index: widget.index,
+                      context: context,
+                      isSubtract: false,
+                    );
+
+                    if (widget.receiptConferenceProvider
+                            .errorMessageUpdateQuantity ==
+                        "") {
+                      widget.consultedProductController.clear();
+                    }
+                  },
+                  isSubtract: false,
+                  formKey: widget.insertQuantityFormKey,
+                  isIndividual: false,
+                  consultedProductFocusNode: widget
+                      .receiptConferenceProvider.consultedProductFocusNode,
                 ),
               ),
             ],

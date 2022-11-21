@@ -68,9 +68,8 @@ class _SearchProductWithEanPluOrNameWidgetState
                         onPressed: () {
                           widget.consultProductController.clear();
 
-                          FocusScope.of(context).unfocus();
-
                           Future.delayed(const Duration(), () {
+                            FocusScope.of(context).unfocus();
                             FocusScope.of(context).requestFocus(focusNode);
                           });
                         },

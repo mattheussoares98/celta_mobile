@@ -8,7 +8,7 @@ class ReceiptConferenceProductModel {
   final String CodigoPlu_ProEmb;
   final String Codigo_ProEmb;
   final String PackingQuantity;
-  final dynamic Quantidade_ProcRecebDocProEmb;
+  final dynamic Quantidade_ProcRecebDocProEmb; //pode vir como nulo ou double
   final dynamic ReferenciaXml_ProcRecebDocProEmb;
   final String AllEans;
 
