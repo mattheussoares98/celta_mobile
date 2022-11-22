@@ -99,6 +99,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 docCode: arguments["grDocCode"],
                 receiptConferenceProvider: receiptConferenceProvider,
                 consultedProductController: _consultedProductController,
+                consultProductController: _consultProductController,
               ),
             if (MediaQuery.of(context).viewInsets.bottom == 0 ||
                 receiptConferenceProvider.productsCount == 0)

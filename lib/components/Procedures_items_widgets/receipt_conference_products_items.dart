@@ -1,14 +1,18 @@
+import 'package:celta_inventario/Components/add_subtract_or_anull_widget.dart';
 import 'package:celta_inventario/components/personalized_card.dart';
-import 'package:celta_inventario/Components/Conference_components/receipt_conference_insert_quantity_widget.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;
   final ReceiptConferenceProvider receiptConferenceProvider;
   final TextEditingController consultedProductController;
+  final TextEditingController consultProductController;
   const ReceiptConferenceProductsItems({
     required this.consultedProductController,
+    required this.consultProductController,
     required this.docCode,
     required this.receiptConferenceProvider,
     Key? key,
@@ -65,7 +69,62 @@ class _ReceiptConferenceProductsItemsState
     );
   }
 
-  final GlobalKey<FormState> insertQuantityFormKey = GlobalKey();
+  final GlobalKey<FormState> consultedProductFormKey = GlobalKey();
+
+  updateQuantity({
+    required bool isSubtract,
+    required int index,
+  }) async {
+    await widget.receiptConferenceProvider.updateQuantity(
+      quantityText: widget.consultedProductController.text,
+      docCode: widget.docCode,
+      productgCode: widget
+          .receiptConferenceProvider.products[index].CodigoInterno_Produto,
+      productPackingCode:
+          widget.receiptConferenceProvider.products[index].CodigoInterno_ProEmb,
+      index: index,
+      context: context,
+      isSubtract: isSubtract,
+    );
+
+    if (widget.receiptConferenceProvider.errorMessageUpdateQuantity == "") {
+      widget.consultedProductController.clear();
+    }
+  }
+
+  anullQuantity(int index) async {
+    FocusScope.of(context).unfocus();
+
+    if (widget.receiptConferenceProvider.products[index]
+            .Quantidade_ProcRecebDocProEmb ==
+        null) {
+      ShowErrorMessage.showErrorMessage(
+        error: "A quantidade já está nula!",
+        context: context,
+      );
+      return;
+    }
+
+    ShowAlertDialog().showAlertDialog(
+      context: context,
+      title: "Deseja realmente anular a quantidade?",
+      function: () async {
+        await widget.receiptConferenceProvider.anullQuantity(
+          docCode: widget.docCode,
+          productgCode: widget
+              .receiptConferenceProvider.products[index].CodigoInterno_Produto,
+          productPackingCode: widget
+              .receiptConferenceProvider.products[index].CodigoInterno_ProEmb,
+          index: index,
+          context: context,
+        );
+
+        if (widget.receiptConferenceProvider.errorMessageUpdateQuantity == "") {
+          widget.consultedProductController.clear();
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,18 +296,37 @@ class _ReceiptConferenceProductsItemsState
                                             widget.receiptConferenceProvider,
                                       ),
                                       const SizedBox(height: 10),
-                                      ReceiptConferenceInsertQuantityWidget(
-                                        insertQuantityFormKey:
-                                            insertQuantityFormKey,
+                                      AddSubtractOrAnullWidget(
                                         consultedProductController:
                                             widget.consultedProductController,
-                                        receiptConferenceProvider:
-                                            widget.receiptConferenceProvider,
-                                        receiptConferenceProductModel: widget
+                                        consultedProductFormKey:
+                                            consultedProductFormKey,
+                                        consultedProductFocusNode: widget
                                             .receiptConferenceProvider
-                                            .products[index],
-                                        docCode: widget.docCode,
-                                        index: index,
+                                            .consultedProductFocusNode,
+                                        isUpdatingQuantity: widget
+                                            .receiptConferenceProvider
+                                            .isUpdatingQuantity,
+                                        isLoading: widget
+                                                .receiptConferenceProvider
+                                                .isUpdatingQuantity ||
+                                            widget.receiptConferenceProvider
+                                                .consultingProducts,
+                                        addQuantityFunction: () async {
+                                          await updateQuantity(
+                                            isSubtract: false,
+                                            index: index,
+                                          );
+                                        },
+                                        subtractQuantityFunction: () async {
+                                          await updateQuantity(
+                                            isSubtract: true,
+                                            index: index,
+                                          );
+                                        },
+                                        anullFunction: () async {
+                                          await anullQuantity(index);
+                                        },
                                       ),
                                     ],
                                   ),

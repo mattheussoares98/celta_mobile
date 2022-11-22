@@ -90,6 +90,12 @@ class InventoryProductProvider with ChangeNotifier {
         responseInString: responseInString,
         listToAdd: _products,
       );
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        //se não colocar em um future pra mudar o foco, não funciona corretamente
+        FocusScope.of(context).requestFocus(consultedProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
+      });
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -138,11 +144,6 @@ class InventoryProductProvider with ChangeNotifier {
         FocusScope.of(context).requestFocus(consultProductFocusNode);
         //altera o foco para o campo de pesquisa novamente
       });
-
-      // ShowErrorMessage.showErrorMessage(
-      //   error: _errorMessage,
-      //   context: context,
-      // );
     }
 
     if (_errorMessage == '' && isIndividual) {
@@ -214,6 +215,16 @@ class InventoryProductProvider with ChangeNotifier {
     required bool isSubtract,
     required BuildContext context,
   }) async {
+    quantity = quantity.replaceAll(RegExp(r','), '.');
+    if (isSubtract &&
+        double.tryParse(quantity)! > _products[0].quantidadeInvContProEmb) {
+      _errorMessageQuantity = "A quantidade não pode ficar negativa!";
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageQuantity,
+        context: context,
+      );
+      return;
+    }
     _isLoadingQuantity = true;
     _errorMessageQuantity = '';
     _canChangeTheFocus = false;
@@ -221,7 +232,6 @@ class InventoryProductProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      quantity = quantity.replaceAll(RegExp(r','), '.');
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
         'POST',
@@ -273,9 +283,7 @@ class InventoryProductProvider with ChangeNotifier {
   Future<void> anullQuantity({
     required int countingCode,
     required int productPackingCode,
-    required String userIdentity,
     required BuildContext context,
-    required InventoryProductProvider inventoryProductProvider,
   }) async {
     _errorMessageQuantity = '';
     _isLoadingQuantity = true;
@@ -290,7 +298,7 @@ class InventoryProductProvider with ChangeNotifier {
           '${BaseUrl.url}/Inventory/AnnulQuantity?countingCode=$countingCode&productPackingCode=$productPackingCode',
         ),
       );
-      request.body = json.encode(userIdentity);
+      request.body = json.encode(UserIdentity.identity);
 
       request.headers.addAll(headers);
 
@@ -298,7 +306,7 @@ class InventoryProductProvider with ChangeNotifier {
 
       String resultAsString = await response.stream.bytesToString();
 
-      print('response do entryQuantity: $resultAsString');
+      print('response do anullQuantity: $resultAsString');
 
       if (resultAsString.contains("Message")) {
         //significa que deu algum erro
@@ -314,6 +322,10 @@ class InventoryProductProvider with ChangeNotifier {
       }
 
       _products[0].quantidadeInvContProEmb = -1;
+
+      alterFocusToConsultProduct(
+        context: context,
+      );
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

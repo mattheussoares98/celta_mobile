@@ -5,7 +5,6 @@ class AddOrSubtractButton extends StatefulWidget {
   final bool isSubtract;
   final GlobalKey<FormState> formKey;
   final bool isIndividual;
-  final FocusNode consultedProductFocusNode;
   final bool isLoading;
 
   AddOrSubtractButton({
@@ -14,7 +13,6 @@ class AddOrSubtractButton extends StatefulWidget {
     required this.isSubtract,
     required this.formKey,
     required this.isIndividual,
-    required this.consultedProductFocusNode,
     Key? key,
   }) : super(key: key);
 
