@@ -33,9 +33,9 @@ class ImageComponent {
               padding: const EdgeInsets.all(8.0),
               child: Image.asset(
                 imagePath,
-                height: 150,
+                height: 200,
                 width: double.infinity,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.contain,
               ),
             ),
             Positioned(

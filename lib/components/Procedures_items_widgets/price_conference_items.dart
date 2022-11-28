@@ -153,21 +153,21 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                               priceConferenceProvider:
                                   widget.priceConferenceProvider,
                             ),
-                            values(
-                              title: "Custo de reposição",
-                              value: product.ReplacementCost == null
-                                  ? product.ReplacementCost.toString()
-                                  : double.tryParse(
-                                              product.ReplacementCost.toString()
-                                                  .replaceAll(
-                                                      RegExp(r','), '.'))!
-                                          .toStringAsFixed(2)
-                                          .replaceAll(RegExp(r'\.'), ',') +
-                                      " R\$",
-                              index: index,
-                              priceConferenceProvider:
-                                  widget.priceConferenceProvider,
-                            ),
+                            // values(
+                            //   title: "Custo de reposição",
+                            //   value: product.ReplacementCost == null
+                            //       ? product.ReplacementCost.toString()
+                            //       : double.tryParse(
+                            //                   product.ReplacementCost.toString()
+                            //                       .replaceAll(
+                            //                           RegExp(r','), '.'))!
+                            //               .toStringAsFixed(2)
+                            //               .replaceAll(RegExp(r'\.'), ',') +
+                            //           " R\$",
+                            //   index: index,
+                            //   priceConferenceProvider:
+                            //       widget.priceConferenceProvider,
+                            // ),
                             Container(
                               // color: Colors.amber,
                               height: 22,

@@ -93,6 +93,13 @@ class _HomePageState extends State<HomePage> {
               nextRoute: APPROUTES.ADJUST_STOCK,
               context: context,
             ),
+            ImageComponent.image(
+              imagePath: 'lib/assets/Images/saleRequest.jpg',
+              routine: 'Pedido de vendas',
+              route: APPROUTES.ENTERPRISE,
+              nextRoute: APPROUTES.SALE_REQUEST,
+              context: context,
+            ),
             const SizedBox(height: 5),
           ],
         ),
