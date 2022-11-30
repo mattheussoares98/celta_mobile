@@ -41,6 +41,18 @@ class SaleRequestProductsModel {
     required String responseAsString,
     required List listToAdd,
   }) {
+    responseAsString = responseAsString
+        .replaceAll(RegExp(r'\\'), '')
+        .replaceAll(RegExp(r'\n'), '')
+        .replaceAll(RegExp(r' '), '')
+        .replaceFirst(RegExp(r'"'), '');
+
+    int lastIndex = responseAsString.lastIndexOf('"');
+    responseAsString =
+        responseAsString.replaceRange(lastIndex, lastIndex + 1, "");
+    //precisei fazer esse tratamento acima porque o estava retornando "\", "\n"
+    //e sinal de " a mais, causando erro no decode
+
     List responseAsList = json.decode(responseAsString.toString());
     Map responseAsMap = responseAsList.asMap();
 

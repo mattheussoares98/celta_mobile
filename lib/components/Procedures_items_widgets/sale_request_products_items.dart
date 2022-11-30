@@ -4,15 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SaleRequestProductsItems extends StatefulWidget {
-  // final int internalEnterpriseCode;
-  // final TextEditingController consultedProductController;
-  // final GlobalKey<FormState> dropDownFormKey;
-  // final GlobalKey<FormState> insertQuantityFormKey;
+  final TextEditingController consultedProductController;
+
   const SaleRequestProductsItems({
-    // required this.internalEnterpriseCode,
-    // required this.consultedProductController,
-    // required this.dropDownFormKey,
-    // required this.insertQuantityFormKey,
+    required this.consultedProductController,
     Key? key,
   }) : super(key: key);
 
@@ -23,8 +18,6 @@ class SaleRequestProductsItems extends StatefulWidget {
 
 class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
   int selectedIndex = -1;
-  double _quantityToAdd = 1;
-  TextEditingController _consultedProductController = TextEditingController();
 
   TextStyle _fontStyle = const TextStyle(
     fontSize: 17,
@@ -61,13 +54,48 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     );
   }
 
-  GlobalKey<FormState> consultedProductFormKey = GlobalKey();
+  GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
+
+  double _totalItemValue = 0;
+  double quantityToAdd = null ?? 0;
+
+  updateTotalItemValue({
+    required double salePraticedPrice,
+    required double wholeMinimumQuantity,
+    required double wholePrice,
+  }) {
+    if (double.tryParse(widget.consultedProductController.text) != null) {
+      quantityToAdd = double.tryParse(widget.consultedProductController.text)!;
+    }
+
+    if (wholeMinimumQuantity == 0) {
+      setState(() {
+        _totalItemValue = quantityToAdd * salePraticedPrice;
+      });
+    } else if (quantityToAdd < wholeMinimumQuantity) {
+      setState(() {
+        _totalItemValue = quantityToAdd * salePraticedPrice;
+      });
+    } else {
+      setState(() {
+        _totalItemValue = quantityToAdd * wholePrice;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.consultedProductController.text == '') {
+      setState(() {
+        _totalItemValue = 0;
+        selectedIndex = -1;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    double? _controllerInDouble =
-        double.tryParse(_consultedProductController.text);
-
     SaleRequestProvider saleRequestProvider = Provider.of(
       context,
       listen: true,
@@ -84,57 +112,62 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
               itemCount: saleRequestProvider.productsCount,
               itemBuilder: (context, index) {
                 var product = saleRequestProvider.products[index];
-                return GestureDetector(
-                  onTap: saleRequestProvider.isLoadingProducts
-                      ? null
-                      : () {
-                          if (!saleRequestProvider
-                                  .consultedProductFocusNode.hasFocus &&
-                              selectedIndex == index) {
-                            //só cai aqui quando está exibindo a opção de
-                            //alterar/anular a quantidade de algum produto e ele
-                            //não está com o foco. Ao clicar nele novamnete, ao
-                            //invés de minimizá-lo, só altera o foco novamente
-                            //pra ele
+                return PersonalizedCard.personalizedCard(
+                  context: context,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: saleRequestProvider.isLoadingProducts
+                          ? null
+                          : () {
+                              if (!saleRequestProvider
+                                      .consultedProductFocusNode.hasFocus &&
+                                  selectedIndex == index) {
+                                Future.delayed(
+                                    const Duration(milliseconds: 100), () {
+                                  FocusScope.of(context).requestFocus(
+                                    saleRequestProvider
+                                        .consultedProductFocusNode,
+                                  );
+                                });
+                                return;
+                              }
+                              if (selectedIndex != index) {
+                                quantityToAdd = 0;
+                                widget.consultedProductController.clear();
+                                widget.consultedProductController.selection =
+                                    TextSelection.collapsed(
+                                  offset: widget
+                                      .consultedProductController.text.length,
+                                );
+                                //necessário apagar o campo da quantidade quando
+                                //mudar de produto selecionado
 
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () {
-                              FocusScope.of(context).requestFocus(
-                                saleRequestProvider.consultedProductFocusNode,
-                              );
-                            });
-                            return;
-                          }
-                          if (selectedIndex != index) {
-                            _consultedProductController.clear();
-                            //necessário apagar o campo da quantidade quando
-                            //mudar de produto selecionado
+                                Future.delayed(
+                                    const Duration(milliseconds: 100), () {
+                                  FocusScope.of(context).requestFocus(
+                                    saleRequestProvider
+                                        .consultedProductFocusNode,
+                                  );
+                                });
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              } else {
+                                FocusScope.of(context).unfocus();
+                                //quando clica no mesmo produto, fecha o teclado
+                                setState(() {
+                                  selectedIndex = -1;
+                                });
+                              }
 
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () {
-                              FocusScope.of(context).requestFocus(
-                                saleRequestProvider.consultedProductFocusNode,
+                              updateTotalItemValue(
+                                salePraticedPrice: product.RetailPracticedPrice,
+                                wholeMinimumQuantity:
+                                    product.MinimumWholeQuantity,
+                                wholePrice: product.WholePracticedPrice,
                               );
-                            });
-                            setState(() {
-                              selectedIndex = index;
-                              //isso faz com que apareça os botões de "conferir"
-                              //e "liberar" somente no item selecionado
-                            });
-                          } else {
-                            FocusScope.of(context).unfocus();
-                            //quando clica no mesmo produto, fecha o teclado. Se
-                            //não fizer isso, o foco volta para o de consulta de
-                            //produtos
-                            setState(() {
-                              selectedIndex = -1;
-                            });
-                          }
-                        },
-                  child: PersonalizedCard.personalizedCard(
-                    context: context,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                            },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -147,68 +180,92 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                             value: product.Name.toString() +
                                 " (${product.PackingQuantity})",
                           ),
-                          // values(
-                          //   title: "Embalagem",
-                          //   value: product.PackingQuantity.toString(),
-                          // ),
-                          values(
-                            title: "Preço praticado",
-                            value: product.RetailPracticedPrice.toString()
-                                    .replaceFirst(RegExp(r'\.'), ',') +
-                                "R\$",
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                "Preço de venda: ",
+                                style: _fontStyle,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  product.RetailPracticedPrice.toString()
+                                          .replaceFirst(RegExp(r'\.'), ',') +
+                                      "R\$",
+                                  style: selectedIndex == index
+                                      ? TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: quantityToAdd <
+                                                      saleRequestProvider
+                                                          .products[
+                                                              selectedIndex]
+                                                          .MinimumWholeQuantity ||
+                                                  saleRequestProvider
+                                                          .products[
+                                                              selectedIndex]
+                                                          .MinimumWholeQuantity ==
+                                                      0
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Colors.black,
+                                          fontFamily: 'OpenSans',
+                                          fontSize: 17,
+                                        )
+                                      : _fontBoldStyle,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
                           ),
-                          // values(
-                          //   title: "Preço de varejo",
-                          //   value:
-                          //       double.parse(product.RetailSalePrice.toString())
-                          //               .toStringAsFixed(2)
-                          //               .toString()
-                          //               .replaceFirst(RegExp(r'\.'), ',') +
-                          //           "R\$",
-                          // ),
-                          // values(
-                          //   title: "Preço de oferta",
-                          //   value: double.parse(
-                          //               product.RetailOfferPrice.toString())
-                          //           .toStringAsFixed(2)
-                          //           .toString()
-                          //           .replaceFirst(RegExp(r'\.'), ',') +
-                          //       "R\$",
-                          // ),
-                          values(
-                            title: "Preço de atacado",
-                            value: double.parse(
-                                        product.WholePracticedPrice.toString())
-                                    .toStringAsFixed(2)
-                                    .toString()
-                                    .replaceFirst(RegExp(r'\.'), ',') +
-                                "R\$",
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                "Preço de atacado: ",
+                                style: _fontStyle,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  double.parse(product.WholePracticedPrice
+                                              .toString())
+                                          .toStringAsFixed(2)
+                                          .toString()
+                                          .replaceFirst(RegExp(r'\.'), ',') +
+                                      "R\$",
+                                  style: selectedIndex == index &&
+                                          saleRequestProvider
+                                                  .products[selectedIndex]
+                                                  .MinimumWholeQuantity >
+                                              0
+                                      ? TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: quantityToAdd <
+                                                  saleRequestProvider
+                                                      .products[selectedIndex]
+                                                      .MinimumWholeQuantity
+                                              ? Colors.black
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                          fontFamily: 'OpenSans',
+                                          fontSize: 17,
+                                        )
+                                      : _fontBoldStyle,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
                           ),
-                          // values(
-                          //   title: "WholeSalePrice",
-                          //   value: product.WholeSalePrice.toString()
-                          //           .replaceFirst(RegExp(r'\.'), ',') +
-                          //       "R\$",
-                          // ),
-                          // values(
-                          //   title: "WholeOfferPrice",
-                          //   value: product.WholeOfferPrice.toString()
-                          //           .replaceFirst(RegExp(r'\.'), ',') +
-                          //       "R\$",
-                          // ),
                           values(
                             title: "Quantidade mínima para atacado",
                             value: product.MinimumWholeQuantity.toString(),
                           ),
-                          // values(
-                          //   title: "BalanceStockSale",
-                          //   value: product.BalanceStockSale.toString(),
-                          // ),
                           Container(
-                            // color: Colors.amber,
                             height: 22,
                             child: Row(
-                              // mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
@@ -247,44 +304,37 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 ),
                                 Row(
                                   children: [
-                                    IconButton(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      onPressed: _quantityToAdd == 1
-                                          ? null
-                                          : () {
-                                              setState(() {
-                                                _quantityToAdd--;
-
-                                                _consultedProductController
-                                                        .text =
-                                                    _quantityToAdd.toString();
-                                              });
-                                              _consultedProductController
-                                                      .selection =
-                                                  TextSelection.collapsed(
-                                                offset:
-                                                    _consultedProductController
-                                                        .text.length,
-                                              );
-                                            },
-                                      icon: const Icon(
-                                        Icons.remove,
-                                      ),
-                                    ),
                                     Form(
-                                      key: consultedProductFormKey,
+                                      key: _consultedProductFormKey,
                                       child: Expanded(
                                         child: TextFormField(
                                           focusNode: saleRequestProvider
                                               .consultedProductFocusNode,
                                           controller:
-                                              _consultedProductController,
+                                              widget.consultedProductController,
                                           keyboardType: TextInputType.number,
                                           onChanged: (text) {
-                                            _quantityToAdd = double.tryParse(
-                                              _consultedProductController.text,
-                                            )!;
+                                            if (widget
+                                                .consultedProductController
+                                                .text
+                                                .isEmpty) {
+                                              quantityToAdd = 0;
+                                            } else {
+                                              quantityToAdd = double.tryParse(
+                                                widget
+                                                    .consultedProductController
+                                                    .text,
+                                              )!;
+                                            }
+
+                                            updateTotalItemValue(
+                                              salePraticedPrice:
+                                                  product.RetailPracticedPrice,
+                                              wholeMinimumQuantity:
+                                                  product.MinimumWholeQuantity,
+                                              wholePrice:
+                                                  product.WholePracticedPrice,
+                                            );
                                           },
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(
@@ -298,24 +348,57 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                                     .primary,
                                               ),
                                             ),
+                                            suffixIcon: Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 20,
+                                              ),
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  widget
+                                                      .consultedProductController
+                                                      .clear();
+                                                  setState(() {
+                                                    quantityToAdd = 0;
+                                                    _totalItemValue = 0;
+                                                  });
+                                                },
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 5),
+                                    const SizedBox(width: 20),
                                     IconButton(
                                       color:
                                           Theme.of(context).colorScheme.primary,
                                       onPressed: () {
                                         setState(() {
-                                          _quantityToAdd++;
-                                          _consultedProductController.text =
-                                              _quantityToAdd.toString();
+                                          quantityToAdd++;
+                                          widget.consultedProductController
+                                                  .text =
+                                              quantityToAdd.toStringAsFixed(3);
                                         });
-                                        _consultedProductController.selection =
+
+                                        updateTotalItemValue(
+                                          salePraticedPrice:
+                                              product.RetailPracticedPrice,
+                                          wholeMinimumQuantity:
+                                              product.MinimumWholeQuantity,
+                                          wholePrice:
+                                              product.WholePracticedPrice,
+                                        );
+                                        widget.consultedProductController
+                                                .selection =
                                             TextSelection.collapsed(
-                                          offset: _consultedProductController
-                                              .text.length,
+                                          offset: widget
+                                              .consultedProductController
+                                              .text
+                                              .length,
                                         );
                                       },
                                       icon: const Icon(
@@ -324,26 +407,108 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 5),
                                 Row(
                                   // mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const SizedBox(width: 15),
                                     Expanded(
                                       child: Container(
-                                        height: 45,
+                                        height: 60,
                                         child: ElevatedButton(
-                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            primary: _totalItemValue == 0
+                                                ? Colors.grey[400]
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                          ),
+                                          onPressed: _totalItemValue == 0
+                                              ? () {} //se deixar como nulo, ao clicar no botão está minimizando os campos de inserção
+                                              : () {
+                                                  saleRequestProvider
+                                                      .addProductInCart(
+                                                    ProductPackingCode: product
+                                                        .ProductPackingCode,
+                                                    Quantity: quantityToAdd,
+                                                    Value: _totalItemValue,
+                                                  );
+                                                },
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text("valor"),
-                                              const Text("Adicionar"),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  const Text("Total"),
+                                                  Text(
+                                                      "${_totalItemValue.toStringAsFixed(2).toString().replaceAll(RegExp(r'\.'), ',')} R\$"),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const Text(
+                                                    "Adicionar",
+                                                    style:
+                                                        TextStyle(fontSize: 17),
+                                                  ),
+                                                  const Icon(
+                                                    Icons.shopping_cart,
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
                                         ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    IconButton(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      onPressed: () {
+                                        setState(() {
+                                          if (quantityToAdd <= 1) {
+                                            quantityToAdd = 0;
+                                            widget.consultedProductController
+                                                .clear();
+                                          } else {
+                                            quantityToAdd--;
+                                            widget.consultedProductController
+                                                    .text =
+                                                quantityToAdd
+                                                    .toStringAsFixed(3);
+                                          }
+
+                                          updateTotalItemValue(
+                                            salePraticedPrice:
+                                                product.RetailPracticedPrice,
+                                            wholeMinimumQuantity:
+                                                product.MinimumWholeQuantity,
+                                            wholePrice:
+                                                product.WholePracticedPrice,
+                                          );
+                                        });
+                                        widget.consultedProductController
+                                                .selection =
+                                            TextSelection.collapsed(
+                                          offset: widget
+                                              .consultedProductController
+                                              .text
+                                              .length,
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.remove,
+                                        color: quantityToAdd == 0
+                                            ? Colors.grey
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                       ),
                                     ),
                                   ],

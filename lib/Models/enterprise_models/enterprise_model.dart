@@ -5,14 +5,12 @@ class EnterpriseModel {
   final String codigoEmpresa;
   final String nomeEmpresa;
   final String cnpj;
-  bool isMarked;
 
   EnterpriseModel({
     required this.codigoInternoEmpresa,
     required this.codigoEmpresa,
     required this.nomeEmpresa,
     required this.cnpj,
-    this.isMarked = false,
   });
 
   static resultAsStringToEnterpriseModel({
@@ -29,7 +27,6 @@ class EnterpriseModel {
           codigoEmpresa: data['Codigo_Empresa'],
           nomeEmpresa: data['Nome_Empresa'],
           cnpj: data['Cnpj_Empresa'],
-          isMarked: false,
         ),
       );
     });

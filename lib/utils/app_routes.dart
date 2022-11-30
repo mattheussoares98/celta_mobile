@@ -14,4 +14,5 @@ class APPROUTES {
   static const RECEIPT_CONFERENCE = '/RECEIPT_CONFERENCE';
   static const ADJUST_STOCK = '/ADJUST_STOCK';
   static const SALE_REQUEST = '/SALE_REQUEST';
+  static const ENTERPRISE_JSON = '/ENTERPRISE_JSON';
 }

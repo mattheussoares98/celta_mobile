@@ -1,35 +1,27 @@
-import 'package:celta_inventario/utils/base_url.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
-import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../Models/enterprise_models/enterprise_json_model.dart';
+import '../utils/base_url.dart';
+import '../utils/default_error_message_to_find_server.dart';
+import '../utils/user_identity.dart';
 
-import '../Models/enterprise_models/enterprise_model.dart';
+//retorna parâmetros diferentes do que é retornado no EnterpriseProvider, por
+//isso criei outro provider. Essas informações diferentes são utilizadas para o
+//pedido de vendas
 
-class EnterpriseProvider with ChangeNotifier {
-  List<EnterpriseModel> _enterprises = [];
+class EnterpriseJsonProvider with ChangeNotifier {
+  List<EnterpriseJsonModel> _enterprises = [];
+  List<EnterpriseJsonModel> get enterprises => [..._enterprises];
 
-  List<EnterpriseModel> get enterprises {
-    return [..._enterprises];
-  }
-
-  int get enterpriseCount {
-    return _enterprises.length;
-  }
+  int get enterpriseCount => _enterprises.length;
 
   String _errorMessage = '';
-
-  String get errorMessage {
-    return _errorMessage;
-  }
+  String get errorMessage => _errorMessage;
 
   static bool _isLoadingEnterprises = false;
-
-  bool get isLoadingEnterprises {
-    return _isLoadingEnterprises;
-  }
+  bool get isLoadingEnterprises => _isLoadingEnterprises;
 
   Future getEnterprises({
     required BuildContext context,
@@ -47,9 +39,14 @@ class EnterpriseProvider with ChangeNotifier {
     try {
       var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
-          'POST', Uri.parse('${BaseUrl.url}/Enterprise/GetEnterprises'));
+        'POST',
+        Uri.parse(
+          '${BaseUrl.url}/Enterprise/GetEnterprisesJson',
+        ),
+      );
       request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
+
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();
 
@@ -62,7 +59,7 @@ class EnterpriseProvider with ChangeNotifier {
         return;
       }
 
-      EnterpriseModel.resultAsStringToEnterpriseModel(
+      EnterpriseJsonModel.resultAsStringToEnterpriseJsonModel(
         resultAsString: resultAsString,
         listToAdd: _enterprises,
       );

@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
             ImageComponent.image(
               imagePath: 'lib/assets/Images/saleRequest.jpg',
               routine: 'Pedido de vendas',
-              route: APPROUTES.ENTERPRISE,
+              route: APPROUTES.ENTERPRISE_JSON,
               nextRoute: APPROUTES.SALE_REQUEST,
               context: context,
             ),
