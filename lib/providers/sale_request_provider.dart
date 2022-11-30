@@ -34,12 +34,59 @@ class SaleRequestProvider with ChangeNotifier {
   get products => [..._products];
   get productsCount => _products.length;
 
+  List<Map<String, Object>> _cartProducts = [];
+
+  Map<String, dynamic> jsonSaleRequest = {
+    "crossId": UserIdentity.identity,
+    "EnterpriseCode": 0,
+    "RequestTypeCode": 0,
+    "SellerCode": 0,
+    "CustomerCode": 0,
+    "Products": [],
+  };
+
   FocusNode searchProductFocusNode = FocusNode();
   FocusNode consultedProductFocusNode = FocusNode();
 
   changeFocusToConsultedProduct(BuildContext context) {
     Future.delayed(const Duration(milliseconds: 100), () {
       FocusScope.of(context).requestFocus(consultedProductFocusNode);
+    });
+  }
+
+  clearProducts() {
+    _products.clear();
+    notifyListeners();
+  }
+
+  addProductInCart({
+    required int ProductPackingCode,
+    required double Quantity,
+    required double Value,
+  }) {
+    Map<String, Object> value = {
+      "ProductPackingCode": ProductPackingCode,
+      "Quantity": Quantity,
+      "Value": Value,
+      "IncrementPercentageOrValue": "0.0",
+      "IncrementValue": 0.0,
+      "DiscountPercentageOrValue": "0.0",
+      "DiscountValue": 0.0,
+      "ExpectedDeliveryDate": DateTime.now(),
+    };
+
+    // jsonSaleRequest["Products"];
+    // [].contains()
+    // jsonSaleRequest["Products"].add(value);
+    // print(jsonSaleRequest["Products"]["ProductPackingCode"]);
+    jsonSaleRequest["Products"].forEach((element) {
+      print(element["ProductPackingCode"]);
+    });
+
+    print(jsonSaleRequest["Products"].contains(ProductPackingCode));
+    // [].contains(element);
+    [].forEach((element) {
+      // element
     });
   }
 
@@ -55,16 +102,18 @@ class SaleRequestProvider with ChangeNotifier {
     //porque está sendo chamado dentro de um setState
 
     try {
-      var headers = {'Authorization': 'Bearer ${UserIdentity.identity}'};
+      var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
           'GET',
           Uri.parse(
               '${BaseUrl.url}/SaleRequest/RequestType?enterpriseCode=$enterpriseCode&searchValue=%'));
-      request.body = '''''';
+
+      request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
       String responseInString = await response.stream.bytesToString();
+
       print('resposta para consulta do RequestType = $responseInString');
 
       if (responseInString.contains("Message")) {
@@ -78,16 +127,6 @@ class SaleRequestProvider with ChangeNotifier {
         notifyListeners();
         return;
       }
-
-      String resposta =
-          "[\n  {\n    \"Code\": 1,\n    \"PersonalizedCode\": \"Venda\",\n    \"Name\": \"Venda\",\n    \"OperationType\": true,\n    \"TransferUnitValueType\": true,\n    \"UseWholePrice\": true\n  },\n  {\n    \"Code\": 4,\n    \"PersonalizedCode\": \"XVendas\",\n    \"Name\": \"XVendas\",\n    \"OperationType\": true,\n    \"TransferUnitValueType\": true,\n    \"UseWholePrice\": true\n  }\n]";
-
-      resposta = resposta
-          .replaceAll(RegExp(r'\\'), '')
-          .replaceAll(RegExp(r'\n'), '')
-          .replaceAll(RegExp(r' '), '');
-
-      responseInString = resposta;
 
       SaleRequestRequestTypeModel.responseAsStringToSaleRequestRequestTypeModel(
         responseAsString: responseInString,
@@ -152,19 +191,21 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      var headers = {'Authorization': 'Bearer ${UserIdentity.identity}'};
+      var headers = {'Content-Type': 'application/json'};
       var request = http.Request(
         'GET',
         Uri.parse(
           '${BaseUrl.url}/Customer/Customer?searchTypeInt=$searchTypeInt&searchValue=$searchValueControllerText',
         ),
       );
-      request.body = '''''';
+
+      request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
       String responseInString = await response.stream.bytesToString();
-      print('resposta para consulta do RequestType = $responseInString');
+
+      print('resposta para consulta do Costumers = $responseInString');
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
@@ -177,16 +218,6 @@ class SaleRequestProvider with ChangeNotifier {
         notifyListeners();
         return;
       }
-
-      String resposta =
-          "[{\"Code\":5,\"PersonalizedCode\":\"5\",\"Name\":\"1Pessoa Fisica SP\",\"ReducedName\":\"1Pessoa Fisica SP\",\"CpfCnpjNumber\":\"13198543894\",\"RegistrationNumber\":\"197741435\",\"SexType\":\"M\"},{\"Code\":15,\"PersonalizedCode\":\"15\",\"Name\":\"Cleusa Oliveira Braga Oliveira Confecções - ME\",\"ReducedName\":\"\",\"CpfCnpjNumber\":\"10249388000112\",\"RegistrationNumber\":\"ISENTO\",\"SexType\":\"M\"},{\"Code\":1,\"PersonalizedCode\":\"1\",\"Name\":\"Consumidor\",\"ReducedName\":\"\",\"CpfCnpjNumber\":\"1\",\"RegistrationNumber\":\"\",\"SexType\":\"M\"},{\"Code\":10,\"PersonalizedCode\":\"10\",\"Name\":\"Estrangeiro\",\"ReducedName\":\"Estrangeiro\",\"CpfCnpjNumber\":\"10\",\"RegistrationNumber\":\"11111111111\",\"SexType\":\"M\"},{\"Code\":16,\"PersonalizedCode\":\"16\",\"Name\":\"Lixo\",\"ReducedName\":\"Lixo\",\"CpfCnpjNumber\":\"44444444444\",\"RegistrationNumber\":\"197741435\",\"SexType\":\"M\"},{\"Code\":386,\"PersonalizedCode\":\"01020304\",\"Name\":\"Mattheus Soares\",\"ReducedName\":\"\",\"CpfCnpjNumber\":\"39367504837\",\"RegistrationNumber\":\"37722006\",\"SexType\":\"M\"},{\"Code\":17,\"PersonalizedCode\":\"5\",\"Name\":\"Nome\",\"ReducedName\":\"Nome\",\"CpfCnpjNumber\":\"55555555555\",\"RegistrationNumber\":\"\",\"SexType\":\"M\"},{\"Code\":12,\"PersonalizedCode\":\"12\",\"Name\":\"Pessoa fisica BA\",\"ReducedName\":\"\",\"CpfCnpjNumber\":\"22222222222\",\"RegistrationNumber\":\"2222\",\"SexType\":\"M\"},{\"Code\":4,\"PersonalizedCode\":\"4\",\"Name\":\"Pessoa Fisica CE\",\"ReducedName\":\"Pessoa Fisica CE\",\"CpfCnpjNumber\":\"19316702003\",\"RegistrationNumber\":\"11005390\",\"SexType\":\"M\"},{\"Code\":7,\"PersonalizedCode\":\"7\",\"Name\":\"Pessoa Fisica MA\",\"ReducedName\":\"Pessoa Fisica MA\",\"CpfCnpjNumber\":\"10699935814\",\"RegistrationNumber\":\"11005390\",\"SexType\":\"M\"},{\"Code\":9,\"PersonalizedCode\":\"9\",\"Name\":\"Pessoa Fisica MG\",\"ReducedName\":\"Pessoa Fisica MG\",\"CpfCnpjNumber\":\"12710259656\",\"RegistrationNumber\":\"31971633064\",\"SexType\":\"M\"},{\"Code\":8,\"PersonalizedCode\":\"8\",\"Name\":\"Pessoa Fisica RJ\",\"ReducedName\":\"Pessoa Fisica RJ\",\"CpfCnpjNumber\":\"45472332842\",\"RegistrationNumber\":\"11635300\",\"SexType\":\"M\"},{\"Code\":6,\"PersonalizedCode\":\"6\",\"Name\":\"Pessoa Jurídica BA\",\"ReducedName\":\"Pessoa Jurídica BA\",\"CpfCnpjNumber\":\"09060984000170\",\"RegistrationNumber\":\"075.086.240\",\"SexType\":\"M\"},{\"Code\":3,\"PersonalizedCode\":\"3\",\"Name\":\"Pessoa Juridica RJ\",\"ReducedName\":\"Pessoa Juridica RJ\",\"CpfCnpjNumber\":\"27356901000177\",\"RegistrationNumber\":\"11005390\",\"SexType\":\"M\"},{\"Code\":13,\"PersonalizedCode\":\"13\",\"Name\":\"Pessoa Juridica SC\",\"ReducedName\":\"Pessoa Juridica SC\",\"CpfCnpjNumber\":\"79525242001040\",\"RegistrationNumber\":\"258992220\",\"SexType\":\"M\"},{\"Code\":2,\"PersonalizedCode\":\"2\",\"Name\":\"Pessoa Juridica SP\",\"ReducedName\":\"Pessoa Juridica SP\",\"CpfCnpjNumber\":\"16839728000141\",\"RegistrationNumber\":\"387130395117\",\"SexType\":\"M\"},{\"Code\":11,\"PersonalizedCode\":\"11\",\"Name\":\"Pessoa Júridica ZFM\",\"ReducedName\":\"Pessoa Jurídica ZFM\",\"CpfCnpjNumber\":\"15803174000160\",\"RegistrationNumber\":\"041841557\",\"SexType\":\"M\"},{\"Code\":371,\"PersonalizedCode\":\"371\",\"Name\":\"REIDI SÃO PAULO\",\"ReducedName\":\"\",\"CpfCnpjNumber\":\"10347996000160\",\"RegistrationNumber\":\"148298358119\",\"SexType\":\"M\"}]";
-
-      resposta = resposta
-          .replaceAll(RegExp(r'\\'), '')
-          .replaceAll(RegExp(r'\n'), '')
-          .replaceAll(RegExp(r' '), '');
-
-      responseInString = resposta;
 
       SaleRequestCostumerModel.responseAsStringToSaleRequestCostumerModel(
         responseAsString: responseInString,
@@ -222,47 +253,35 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      // var headers = {
-      //   // 'Authorization': 'Bearer ${UserIdentity.identity}',
-      //   'Authorization': 'Bearer ',
-      // };
-      // var request = http.Request(
-      //   'GET',
-      //   Uri.parse(
-      //     '${BaseUrl.url}/SaleRequest/Product?enterpriseCode=$enterpriseCode&searchTypeInt=$searchTypeInt&searchValue=$searchValueControllerText',
-      //   ),
-      // );
-      // request.body = '''''';
-      // request.headers.addAll(headers);
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+        'GET',
+        Uri.parse(
+          '${BaseUrl.url}/SaleRequest/Product?enterpriseCode=$enterpriseCode&searchTypeInt=$searchTypeInt&searchValue=$searchValueControllerText',
+        ),
+      );
+      request.body = json.encode(UserIdentity.identity);
+      request.headers.addAll(headers);
 
-      // http.StreamedResponse response = await request.send();
-      // String responseInString = await response.stream.bytesToString();
-      // print('resposta para consulta do RequestType = $responseInString');
+      http.StreamedResponse response = await request.send();
+      String responseInString = await response.stream.bytesToString();
 
-      // if (responseInString.contains("Message")) {
-      //   //significa que deu algum erro
-      //   _errorMessageRequestType = json.decode(responseInString)["Message"];
-      //   _isLoadingRequestType = false;
-      //   ShowErrorMessage.showErrorMessage(
-      //     error: _errorMessageRequestType,
-      //     context: context,
-      //   );
-      //   notifyListeners();
-      //   return;
-      // }
+      print('resposta para consulta dos produtos = $responseInString');
 
-      String resposta =
-          "[{\"ProductCode\":4,\"ProductPackingCode\":3,\"PLU\":\"00002-4\",\"Name\":\"Isento\",\"PackingQuantity\":\"UN 1\",\"RetailPracticedPrice\":0.99,\"RetailSalePrice\":0.99,\"RetailOfferPrice\":0.00,\"WholePracticedPrice\":0.88,\"WholeSalePrice\":0.88,\"WholeOfferPrice\":0.00,\"ECommercePracticedPrice\":0.00,\"ECommerceSalePrice\":0.00,\"ECommerceOfferPrice\":0.00,\"MinimumWholeQuantity\":3.000,\"BalanceStockSale\":134.000},{\"ProductCode\":4,\"ProductPackingCode\":77,\"PLU\":\"00013-0\",\"Name\":\"Isento\",\"PackingQuantity\":\"CX 12\",\"RetailPracticedPrice\":11.88,\"RetailSalePrice\":11.88,\"RetailOfferPrice\":0.00,\"WholePracticedPrice\":10.56,\"WholeSalePrice\":10.56,\"WholeOfferPrice\":0.00,\"ECommercePracticedPrice\":0.00,\"ECommerceSalePrice\":0.00,\"ECommerceOfferPrice\":0.00,\"MinimumWholeQuantity\":3.000,\"BalanceStockSale\":20.000}]";
-
-      resposta = resposta
-          .replaceAll(RegExp(r'\\'), '')
-          .replaceAll(RegExp(r'\n'), '')
-          .replaceAll(RegExp(r' '), '');
-
-      // responseInString = resposta;
+      if (responseInString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageRequestType = json.decode(responseInString)["Message"];
+        _isLoadingRequestType = false;
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageRequestType,
+          context: context,
+        );
+        notifyListeners();
+        return;
+      }
 
       SaleRequestProductsModel.responseAsStringToSaleRequestProductsModel(
-        responseAsString: resposta,
+        responseAsString: responseInString,
         listToAdd: _products,
       );
     } catch (e) {
@@ -272,10 +291,10 @@ class SaleRequestProvider with ChangeNotifier {
         error: _errorMessageProducts,
         context: context,
       );
+    } finally {
+      _isLoadingProducts = false;
+      notifyListeners();
     }
-
-    _isLoadingProducts = false;
-    notifyListeners();
   }
 
   Future<void> getProducts({
