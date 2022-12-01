@@ -1,5 +1,7 @@
 import 'package:celta_inventario/components/personalized_card.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +18,8 @@ class SaleRequestProductsItems extends StatefulWidget {
       _SaleRequestProductsItemsState();
 }
 
-class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
+class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
+    with ConvertString {
   int selectedIndex = -1;
 
   TextStyle _fontStyle = const TextStyle(
@@ -57,7 +60,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
   GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
 
   double _totalItemValue = 0;
-  double quantityToAdd = null ?? 0;
+  double _quantityToAdd = null ?? 0;
 
   updateTotalItemValue({
     required double salePraticedPrice,
@@ -65,21 +68,29 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     required double wholePrice,
   }) {
     if (double.tryParse(widget.consultedProductController.text) != null) {
-      quantityToAdd = double.tryParse(widget.consultedProductController.text)!;
+      _quantityToAdd = double.tryParse(widget.consultedProductController.text)!;
     }
 
+    double praticedPrice = getPraticedPrice(
+      salePraticedPrice: salePraticedPrice,
+      wholeMinimumQuantity: wholeMinimumQuantity,
+      wholePrice: wholePrice,
+    );
+
+    _totalItemValue = _quantityToAdd * praticedPrice;
+  }
+
+  double getPraticedPrice({
+    required double salePraticedPrice,
+    required double wholeMinimumQuantity,
+    required double wholePrice,
+  }) {
     if (wholeMinimumQuantity == 0) {
-      setState(() {
-        _totalItemValue = quantityToAdd * salePraticedPrice;
-      });
-    } else if (quantityToAdd < wholeMinimumQuantity) {
-      setState(() {
-        _totalItemValue = quantityToAdd * salePraticedPrice;
-      });
+      return salePraticedPrice;
+    } else if (_quantityToAdd < wholeMinimumQuantity) {
+      return salePraticedPrice;
     } else {
-      setState(() {
-        _totalItemValue = quantityToAdd * wholePrice;
-      });
+      return wholePrice;
     }
   }
 
@@ -94,12 +105,54 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     }
   }
 
+  changeCursorToLastIndex() {
+    widget.consultedProductController.selection = TextSelection.collapsed(
+      offset: widget.consultedProductController.text.length,
+    );
+  }
+
+  addProductInCart({
+    required SaleRequestProvider saleRequestProvider,
+    required int ProductPackingCode,
+    required double RetailPracticedPrice,
+    required double MinimumWholeQuantity,
+    required double WholePracticedPrice,
+    required bool alreadyContainsProduct,
+  }) {
+    double praticedPrice = getPraticedPrice(
+      salePraticedPrice: RetailPracticedPrice,
+      wholeMinimumQuantity: MinimumWholeQuantity,
+      wholePrice: WholePracticedPrice,
+    );
+
+    saleRequestProvider.addProductInCart(
+      ProductPackingCode: ProductPackingCode,
+      Quantity: _quantityToAdd,
+      Value: praticedPrice,
+      context: context,
+      alreadyContaintProduct: alreadyContainsProduct,
+    );
+
+    widget.consultedProductController.text = "";
+    _quantityToAdd = 0;
+
+    updateTotalItemValue(
+      salePraticedPrice: RetailPracticedPrice,
+      wholeMinimumQuantity: MinimumWholeQuantity,
+      wholePrice: WholePracticedPrice,
+    );
+
+    changeCursorToLastIndex();
+  }
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
       context,
       listen: true,
     );
+
+    saleRequestProvider.totalCartPrice;
 
     return Expanded(
       child: Column(
@@ -133,13 +186,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 return;
                               }
                               if (selectedIndex != index) {
-                                quantityToAdd = 0;
+                                _quantityToAdd = 0;
                                 widget.consultedProductController.clear();
-                                widget.consultedProductController.selection =
-                                    TextSelection.collapsed(
-                                  offset: widget
-                                      .consultedProductController.text.length,
-                                );
+                                changeCursorToLastIndex();
                                 //necessário apagar o campo da quantidade quando
                                 //mudar de produto selecionado
 
@@ -190,13 +239,13 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  product.RetailPracticedPrice.toString()
-                                          .replaceFirst(RegExp(r'\.'), ',') +
-                                      "R\$",
+                                  ConvertString.convertToBRL(
+                                    product.RetailPracticedPrice,
+                                  ),
                                   style: selectedIndex == index
                                       ? TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: quantityToAdd <
+                                          color: _quantityToAdd <
                                                       saleRequestProvider
                                                           .products[
                                                               selectedIndex]
@@ -229,12 +278,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  double.parse(product.WholePracticedPrice
-                                              .toString())
-                                          .toStringAsFixed(2)
-                                          .toString()
-                                          .replaceFirst(RegExp(r'\.'), ',') +
-                                      "R\$",
+                                  ConvertString.convertToBRL(
+                                    product.WholePracticedPrice,
+                                  ),
                                   style: selectedIndex == index &&
                                           saleRequestProvider
                                                   .products[selectedIndex]
@@ -242,7 +288,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                               0
                                       ? TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: quantityToAdd <
+                                          color: _quantityToAdd <
                                                   saleRequestProvider
                                                       .products[selectedIndex]
                                                       .MinimumWholeQuantity
@@ -318,9 +364,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                                 .consultedProductController
                                                 .text
                                                 .isEmpty) {
-                                              quantityToAdd = 0;
+                                              _quantityToAdd = 0;
                                             } else {
-                                              quantityToAdd = double.tryParse(
+                                              _quantityToAdd = double.tryParse(
                                                 widget
                                                     .consultedProductController
                                                     .text,
@@ -358,7 +404,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                                       .consultedProductController
                                                       .clear();
                                                   setState(() {
-                                                    quantityToAdd = 0;
+                                                    _quantityToAdd = 0;
                                                     _totalItemValue = 0;
                                                   });
                                                 },
@@ -378,10 +424,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                           Theme.of(context).colorScheme.primary,
                                       onPressed: () {
                                         setState(() {
-                                          quantityToAdd++;
+                                          _quantityToAdd++;
                                           widget.consultedProductController
                                                   .text =
-                                              quantityToAdd.toStringAsFixed(3);
+                                              _quantityToAdd.toStringAsFixed(3);
                                         });
 
                                         updateTotalItemValue(
@@ -392,14 +438,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                           wholePrice:
                                               product.WholePracticedPrice,
                                         );
-                                        widget.consultedProductController
-                                                .selection =
-                                            TextSelection.collapsed(
-                                          offset: widget
-                                              .consultedProductController
-                                              .text
-                                              .length,
-                                        );
+                                        changeCursorToLastIndex();
                                       },
                                       icon: const Icon(
                                         Icons.add,
@@ -424,17 +463,56 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                                     .colorScheme
                                                     .primary,
                                           ),
-                                          onPressed: _totalItemValue == 0
-                                              ? () {} //se deixar como nulo, ao clicar no botão está minimizando os campos de inserção
-                                              : () {
-                                                  saleRequestProvider
-                                                      .addProductInCart(
+                                          onPressed: () {
+                                            if (_totalItemValue == 0) return;
+
+                                            bool alreadyContainsProduct =
+                                                saleRequestProvider
+                                                    .alreadyContainsProduct(
+                                              product.ProductPackingCode,
+                                            );
+
+                                            if (alreadyContainsProduct) {
+                                              ShowAlertDialog().showAlertDialog(
+                                                context: context,
+                                                subtitle:
+                                                    "Deseja atualizar a quantidade do produto?",
+                                                title:
+                                                    "O produto já está no carrinho!",
+                                                function: () {
+                                                  addProductInCart(
+                                                    saleRequestProvider:
+                                                        saleRequestProvider,
                                                     ProductPackingCode: product
                                                         .ProductPackingCode,
-                                                    Quantity: quantityToAdd,
-                                                    Value: _totalItemValue,
+                                                    RetailPracticedPrice: product
+                                                        .RetailPracticedPrice,
+                                                    MinimumWholeQuantity: product
+                                                        .MinimumWholeQuantity,
+                                                    WholePracticedPrice: product
+                                                        .WholePracticedPrice,
+                                                    alreadyContainsProduct:
+                                                        alreadyContainsProduct,
                                                   );
                                                 },
+                                              );
+                                            } else {
+                                              addProductInCart(
+                                                saleRequestProvider:
+                                                    saleRequestProvider,
+                                                ProductPackingCode:
+                                                    product.ProductPackingCode,
+                                                RetailPracticedPrice: product
+                                                    .RetailPracticedPrice,
+                                                MinimumWholeQuantity: product
+                                                    .MinimumWholeQuantity,
+                                                WholePracticedPrice:
+                                                    product.WholePracticedPrice,
+                                                alreadyContainsProduct:
+                                                    alreadyContainsProduct,
+                                              );
+                                            }
+                                          },
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -446,7 +524,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                                 children: [
                                                   const Text("Total"),
                                                   Text(
-                                                      "${_totalItemValue.toStringAsFixed(2).toString().replaceAll(RegExp(r'\.'), ',')} R\$"),
+                                                    ConvertString.convertToBRL(
+                                                      _totalItemValue,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                               Row(
@@ -472,15 +553,15 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                           Theme.of(context).colorScheme.primary,
                                       onPressed: () {
                                         setState(() {
-                                          if (quantityToAdd <= 1) {
-                                            quantityToAdd = 0;
+                                          if (_quantityToAdd <= 1) {
+                                            _quantityToAdd = 0;
                                             widget.consultedProductController
                                                 .clear();
                                           } else {
-                                            quantityToAdd--;
+                                            _quantityToAdd--;
                                             widget.consultedProductController
                                                     .text =
-                                                quantityToAdd
+                                                _quantityToAdd
                                                     .toStringAsFixed(3);
                                           }
 
@@ -493,18 +574,11 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                                 product.WholePracticedPrice,
                                           );
                                         });
-                                        widget.consultedProductController
-                                                .selection =
-                                            TextSelection.collapsed(
-                                          offset: widget
-                                              .consultedProductController
-                                              .text
-                                              .length,
-                                        );
+                                        changeCursorToLastIndex();
                                       },
                                       icon: Icon(
                                         Icons.remove,
-                                        color: quantityToAdd == 0
+                                        color: _quantityToAdd == 0
                                             ? Colors.grey
                                             : Theme.of(context)
                                                 .colorScheme

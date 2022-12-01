@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_request_type_model.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,25 @@ class SaleRequestProvider with ChangeNotifier {
   get products => [..._products];
   get productsCount => _products.length;
 
-  List<Map<String, Object>> _cartProducts = [];
+  List<Map<String, dynamic>> _cartProducts = [];
+  get cartProducts => [..._cartProducts];
+
+  double get totalCartPrice {
+    double total = 0;
+
+    _cartProducts.forEach((element) {
+      element.forEach((key, value) {
+        if (key == "Quantity") {
+          print("quantity");
+        }
+        if (key == "Value") {
+          total += value;
+        }
+      });
+    });
+
+    return total;
+  }
 
   Map<String, dynamic> jsonSaleRequest = {
     "crossId": UserIdentity.identity,
@@ -59,12 +78,27 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  addProductInCart({
+  alreadyContainsProduct(int ProductPackingCode) {
+    bool alreadyContainsProduct = false;
+    print(ProductPackingCode);
+
+    _cartProducts.forEach((element) {
+      if (element.containsValue(ProductPackingCode)) {
+        alreadyContainsProduct = true;
+      }
+    });
+
+    return alreadyContainsProduct;
+  }
+
+  dynamic addProductInCart({
     required int ProductPackingCode,
     required double Quantity,
     required double Value,
-  }) {
-    Map<String, Object> value = {
+    required BuildContext context,
+    required bool alreadyContaintProduct,
+  }) async {
+    var value = {
       "ProductPackingCode": ProductPackingCode,
       "Quantity": Quantity,
       "Value": Value,
@@ -75,19 +109,15 @@ class SaleRequestProvider with ChangeNotifier {
       "ExpectedDeliveryDate": DateTime.now(),
     };
 
-    // jsonSaleRequest["Products"];
-    // [].contains()
-    // jsonSaleRequest["Products"].add(value);
-    // print(jsonSaleRequest["Products"]["ProductPackingCode"]);
-    jsonSaleRequest["Products"].forEach((element) {
-      print(element["ProductPackingCode"]);
-    });
-
-    print(jsonSaleRequest["Products"].contains(ProductPackingCode));
-    // [].contains(element);
-    [].forEach((element) {
-      // element
-    });
+    if (alreadyContaintProduct) {
+      int index = _cartProducts.indexWhere(
+          (element) => element["ProductPackingCode"] == ProductPackingCode);
+      _cartProducts[index] = value;
+    } else {
+      _cartProducts.add(value);
+    }
+    jsonSaleRequest["Products"] = _cartProducts;
+    notifyListeners();
   }
 
   Future<void> getRequestType({
@@ -98,8 +128,6 @@ class SaleRequestProvider with ChangeNotifier {
     _errorMessageRequestType = "";
     _requests.clear();
     // notifyListeners();
-    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
-    //porque está sendo chamado dentro de um setState
 
     try {
       var headers = {'Content-Type': 'application/json'};

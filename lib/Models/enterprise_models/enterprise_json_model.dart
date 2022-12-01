@@ -27,7 +27,6 @@ class EnterpriseJsonModel {
     resultAsString = resultAsString
         .replaceAll(RegExp(r'\\'), '')
         .replaceAll(RegExp(r'\n'), '')
-        .replaceAll(RegExp(r' '), '')
         .replaceFirst(RegExp(r'"'), '');
 
     int lastIndex = resultAsString.lastIndexOf('"');

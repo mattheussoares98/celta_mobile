@@ -3,9 +3,9 @@ import 'package:celta_inventario/Components/search_product_with_ean_plu_or_name_
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/consulting_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/convert_string.dart';
 
 class SaleRequestPage extends StatefulWidget {
   const SaleRequestPage({Key? key}) : super(key: key);
@@ -18,12 +18,13 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
   TextEditingController _searchProductTextEditingController =
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
-  double _quantityToAdd = 0;
 
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
+
+    print(saleRequestProvider.jsonSaleRequest["Products"]);
 
     // int codigoInternoEmpresa =
     //     ModalRoute.of(context)!.settings.arguments as int;
@@ -34,10 +35,10 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         return true;
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text(
-            "Pedido de vendas",
+            "Inserção de produtos",
           ),
           leading: IconButton(
             onPressed: () {
@@ -70,7 +71,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                       padding: const EdgeInsets.all(2.0),
                       child: FittedBox(
                         child: Text(
-                          saleRequestProvider.products.length.toString(),
+                          saleRequestProvider.cartProducts.length.toString(),
                         ),
                       ),
                     ),
@@ -96,6 +97,10 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                   searchValueControllerText:
                       _searchProductTextEditingController.text,
                 );
+
+                if (saleRequestProvider.productsCount > 0) {
+                  _searchProductTextEditingController.clear();
+                }
               },
               focusNodeConsultProduct:
                   saleRequestProvider.searchProductFocusNode,
@@ -109,40 +114,48 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
               SaleRequestProductsItems(
                 consultedProductController: _consultedProductController,
               ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                maximumSize: const Size(double.infinity, 50),
-                shape: const RoundedRectangleBorder(),
-                primary: Colors.red,
-              ),
-              onPressed: () {},
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      const Text("Itens"),
-                      const Text("1000"),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const Text("Total"),
-                      const Text("10000 R\$"),
-                    ],
-                  ),
-                  const Text(
-                    "VISUALIZAR",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber,
+            if (MediaQuery.of(context).viewInsets.bottom ==
+                0) //só exibe o botão se o teclado estiver fechado
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                  maximumSize: const Size(double.infinity, 50),
+                  shape: const RoundedRectangleBorder(),
+                  primary: Colors.red,
+                ),
+                onPressed: () {},
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        const Text("Itens"),
+                        Text(
+                          saleRequestProvider.cartProducts.length.toString(),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    Column(
+                      children: [
+                        const Text("Total"),
+                        Text(
+                          ConvertString.convertToBRL(
+                            saleRequestProvider.totalCartPrice,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Text(
+                      "VISUALIZAR",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),

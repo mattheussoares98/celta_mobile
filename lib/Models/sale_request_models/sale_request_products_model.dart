@@ -44,7 +44,6 @@ class SaleRequestProductsModel {
     responseAsString = responseAsString
         .replaceAll(RegExp(r'\\'), '')
         .replaceAll(RegExp(r'\n'), '')
-        .replaceAll(RegExp(r' '), '')
         .replaceFirst(RegExp(r'"'), '');
 
     int lastIndex = responseAsString.lastIndexOf('"');
