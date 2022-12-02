@@ -2,6 +2,8 @@ import 'package:celta_inventario/Components/Procedures_items_widgets/sale_reques
 import 'package:celta_inventario/Components/search_product_with_ean_plu_or_name_widget.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/consulting_widget.dart';
+import 'package:celta_inventario/utils/error_message.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,8 +26,6 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
 
-    print(saleRequestProvider.jsonSaleRequest["Products"]);
-
     // int codigoInternoEmpresa =
     //     ModalRoute.of(context)!.settings.arguments as int;
 
@@ -37,8 +37,10 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text(
-            "Inserção de produtos",
+          title: const FittedBox(
+            child: Text(
+              "Inserção de produtos",
+            ),
           ),
           leading: IconButton(
             onPressed: () {
@@ -50,35 +52,53 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             ),
           ),
           actions: [
-            Stack(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.shopping_cart,
-                    color: Colors.white,
-                  ),
-                  tooltip: 'Open shopping cart',
-                  onPressed: () {
-                    // handle the press
-                  },
-                ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: FittedBox(
-                        child: Text(
-                          saleRequestProvider.cartProducts.length.toString(),
+            FittedBox(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.shopping_cart,
+                          color: Colors.white,
+                        ),
+                        tooltip: 'Open shopping cart',
+                        onPressed: () {
+                          // handle the press
+                        },
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: FittedBox(
+                              child: Text(
+                                saleRequestProvider.cartProducts.length
+                                    .toString(),
+                              ),
+                            ),
+                          ),
+                          maxRadius: 11,
                         ),
                       ),
-                    ),
-                    maxRadius: 11,
+                    ],
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: Text(
+                      ConvertString.convertToBRL(
+                        saleRequestProvider.totalCartPrice,
+                      ),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -105,6 +125,10 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
               focusNodeConsultProduct:
                   saleRequestProvider.searchProductFocusNode,
             ),
+            if (saleRequestProvider.errorMessageProducts != "")
+              ErrorMessage(
+                errorMessage: saleRequestProvider.errorMessageProducts,
+              ),
             if (saleRequestProvider.isLoadingProducts)
               Expanded(
                 child: ConsultingWidget.consultingWidget(

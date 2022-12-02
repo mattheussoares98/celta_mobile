@@ -101,6 +101,13 @@ class MyApp extends StatelessWidget {
                   fontSize: ResponsiveItems.headline6,
                   fontFamily: 'BebasNeue',
                 ),
+                headline2: const TextStyle(
+                  // letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                  color: ColorsTheme.headline2,
+                  fontSize: 20,
+                  fontFamily: 'OpenSans',
+                ),
                 bodyText1: const TextStyle(
                   fontFamily: 'OpenSans',
                   color: ColorsTheme.headline6,

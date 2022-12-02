@@ -42,14 +42,11 @@ class SaleRequestProvider with ChangeNotifier {
     double total = 0;
 
     _cartProducts.forEach((element) {
-      element.forEach((key, value) {
-        if (key == "Quantity") {
-          print("quantity");
-        }
-        if (key == "Value") {
-          total += value;
-        }
-      });
+      print(element);
+      print("element Quantity: ${element["Quantity"]}");
+      print("element Value: ${element["Value"]}");
+
+      total += element["Quantity"] * element["Value"];
     });
 
     return total;
@@ -80,10 +77,9 @@ class SaleRequestProvider with ChangeNotifier {
 
   alreadyContainsProduct(int ProductPackingCode) {
     bool alreadyContainsProduct = false;
-    print(ProductPackingCode);
 
     _cartProducts.forEach((element) {
-      if (element.containsValue(ProductPackingCode)) {
+      if (ProductPackingCode == element["ProductPackingCode"]) {
         alreadyContainsProduct = true;
       }
     });
@@ -298,12 +294,9 @@ class SaleRequestProvider with ChangeNotifier {
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
-        _errorMessageRequestType = json.decode(responseInString)["Message"];
+        _errorMessageProducts = json.decode(responseInString)["Message"];
         _isLoadingRequestType = false;
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageRequestType,
-          context: context,
-        );
+
         notifyListeners();
         return;
       }

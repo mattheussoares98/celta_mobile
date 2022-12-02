@@ -35,11 +35,11 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
   );
 
   Widget values({
+    Widget? otherWidget,
     required String title,
     required String value,
   }) {
     return Row(
-      mainAxisSize: MainAxisSize.max,
       children: [
         Text(
           "${title}: ",
@@ -53,6 +53,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
             maxLines: 2,
           ),
         ),
+        if (otherWidget != null) otherWidget,
       ],
     );
   }
@@ -77,7 +78,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
       wholePrice: wholePrice,
     );
 
-    _totalItemValue = _quantityToAdd * praticedPrice;
+    setState(() {
+      _totalItemValue = _quantityToAdd * praticedPrice;
+    });
   }
 
   double getPraticedPrice({
@@ -117,32 +120,61 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
     required double RetailPracticedPrice,
     required double MinimumWholeQuantity,
     required double WholePracticedPrice,
-    required bool alreadyContainsProduct,
   }) {
+    bool alreadyContainsProduct = saleRequestProvider.alreadyContainsProduct(
+      ProductPackingCode,
+    );
+
     double praticedPrice = getPraticedPrice(
       salePraticedPrice: RetailPracticedPrice,
       wholeMinimumQuantity: MinimumWholeQuantity,
       wholePrice: WholePracticedPrice,
     );
+    if (alreadyContainsProduct) {
+      ShowAlertDialog().showAlertDialog(
+        context: context,
+        subtitle: "Deseja atualizar a quantidade do produto?",
+        title: "O produto já está no carrinho!",
+        function: () {
+          saleRequestProvider.addProductInCart(
+            ProductPackingCode: ProductPackingCode,
+            Quantity: _quantityToAdd,
+            Value: praticedPrice,
+            context: context,
+            alreadyContaintProduct: alreadyContainsProduct,
+          );
+          widget.consultedProductController.text = "";
+          _quantityToAdd = 0;
 
-    saleRequestProvider.addProductInCart(
-      ProductPackingCode: ProductPackingCode,
-      Quantity: _quantityToAdd,
-      Value: praticedPrice,
-      context: context,
-      alreadyContaintProduct: alreadyContainsProduct,
-    );
+          updateTotalItemValue(
+            salePraticedPrice: RetailPracticedPrice,
+            wholeMinimumQuantity: MinimumWholeQuantity,
+            wholePrice: WholePracticedPrice,
+          );
 
-    widget.consultedProductController.text = "";
-    _quantityToAdd = 0;
+          changeCursorToLastIndex();
+        },
+      );
+    } else {
+      saleRequestProvider.addProductInCart(
+        ProductPackingCode: ProductPackingCode,
+        Quantity: _quantityToAdd,
+        Value: praticedPrice,
+        context: context,
+        alreadyContaintProduct: alreadyContainsProduct,
+      );
 
-    updateTotalItemValue(
-      salePraticedPrice: RetailPracticedPrice,
-      wholeMinimumQuantity: MinimumWholeQuantity,
-      wholePrice: WholePracticedPrice,
-    );
+      widget.consultedProductController.text = "";
+      _quantityToAdd = 0;
 
-    changeCursorToLastIndex();
+      updateTotalItemValue(
+        salePraticedPrice: RetailPracticedPrice,
+        wholeMinimumQuantity: MinimumWholeQuantity,
+        wholePrice: WholePracticedPrice,
+      );
+
+      changeCursorToLastIndex();
+    }
   }
 
   @override
@@ -151,8 +183,6 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
       context,
       listen: true,
     );
-
-    saleRequestProvider.totalCartPrice;
 
     return Expanded(
       child: Column(
@@ -223,6 +253,98 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                           values(
                             title: "PLU",
                             value: product.PLU.toString(),
+                            otherWidget: InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          scrollable: true,
+                                          content: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.5,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.8,
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: product
+                                                  .StockByEnterpriseAssociateds
+                                                  .length,
+                                              itemBuilder: (
+                                                BuildContext context,
+                                                int index,
+                                              ) {
+                                                return Column(
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "Endereço",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline2,
+                                                        ),
+                                                        Text(
+                                                          product.StorageAreaAddress ==
+                                                                  ""
+                                                              ? "não há"
+                                                              : product
+                                                                  .StorageAreaAddress,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Text(
+                                                      product.StockByEnterpriseAssociateds[
+                                                          index]["Enterprise"],
+                                                    ),
+                                                    Text(
+                                                      product
+                                                          .StockByEnterpriseAssociateds[
+                                                              index][
+                                                              "StockBalanceForSale"]
+                                                          .toString(),
+                                                    ),
+                                                    Text(
+                                                      product.StockByEnterpriseAssociateds[
+                                                                  index][
+                                                              "StorageAreaAddress"] =
+                                                          null ?? "Não há",
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                          ));
+                                    });
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Estoque",
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 3),
+                                  Icon(
+                                    Icons.info,
+                                    size: 30,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                           values(
                             title: "Produto",
@@ -466,52 +588,18 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                           onPressed: () {
                                             if (_totalItemValue == 0) return;
 
-                                            bool alreadyContainsProduct =
-                                                saleRequestProvider
-                                                    .alreadyContainsProduct(
-                                              product.ProductPackingCode,
+                                            addProductInCart(
+                                              saleRequestProvider:
+                                                  saleRequestProvider,
+                                              ProductPackingCode:
+                                                  product.ProductPackingCode,
+                                              RetailPracticedPrice:
+                                                  product.RetailPracticedPrice,
+                                              MinimumWholeQuantity:
+                                                  product.MinimumWholeQuantity,
+                                              WholePracticedPrice:
+                                                  product.WholePracticedPrice,
                                             );
-
-                                            if (alreadyContainsProduct) {
-                                              ShowAlertDialog().showAlertDialog(
-                                                context: context,
-                                                subtitle:
-                                                    "Deseja atualizar a quantidade do produto?",
-                                                title:
-                                                    "O produto já está no carrinho!",
-                                                function: () {
-                                                  addProductInCart(
-                                                    saleRequestProvider:
-                                                        saleRequestProvider,
-                                                    ProductPackingCode: product
-                                                        .ProductPackingCode,
-                                                    RetailPracticedPrice: product
-                                                        .RetailPracticedPrice,
-                                                    MinimumWholeQuantity: product
-                                                        .MinimumWholeQuantity,
-                                                    WholePracticedPrice: product
-                                                        .WholePracticedPrice,
-                                                    alreadyContainsProduct:
-                                                        alreadyContainsProduct,
-                                                  );
-                                                },
-                                              );
-                                            } else {
-                                              addProductInCart(
-                                                saleRequestProvider:
-                                                    saleRequestProvider,
-                                                ProductPackingCode:
-                                                    product.ProductPackingCode,
-                                                RetailPracticedPrice: product
-                                                    .RetailPracticedPrice,
-                                                MinimumWholeQuantity: product
-                                                    .MinimumWholeQuantity,
-                                                WholePracticedPrice:
-                                                    product.WholePracticedPrice,
-                                                alreadyContainsProduct:
-                                                    alreadyContainsProduct,
-                                              );
-                                            }
                                           },
                                           child: Row(
                                             mainAxisAlignment:

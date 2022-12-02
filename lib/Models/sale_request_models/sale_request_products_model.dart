@@ -17,6 +17,8 @@ class SaleRequestProductsModel {
   final double ECommerceOfferPrice;
   final double MinimumWholeQuantity;
   final double BalanceStockSale;
+  final String StorageAreaAddress;
+  final List<dynamic> StockByEnterpriseAssociateds;
 
   SaleRequestProductsModel({
     required this.ProductCode,
@@ -35,6 +37,8 @@ class SaleRequestProductsModel {
     required this.ECommerceOfferPrice,
     required this.MinimumWholeQuantity,
     required this.BalanceStockSale,
+    required this.StorageAreaAddress,
+    required this.StockByEnterpriseAssociateds,
   });
 
   static responseAsStringToSaleRequestProductsModel({
@@ -74,6 +78,8 @@ class SaleRequestProductsModel {
           ECommerceOfferPrice: data["ECommerceOfferPrice"],
           MinimumWholeQuantity: data["MinimumWholeQuantity"],
           BalanceStockSale: data["BalanceStockSale"],
+          StorageAreaAddress: data["StorageAreaAddress"],
+          StockByEnterpriseAssociateds: data["StockByEnterpriseAssociateds"],
         ),
       );
     });
