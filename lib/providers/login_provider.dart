@@ -51,7 +51,8 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> verifyIsLogged() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('userIdentity') != "") {
+    if (prefs.getString('userIdentity') != "" &&
+        prefs.getString('userIdentity') != null) {
       UserIdentity.identity = await prefs.getString('userIdentity')!;
       _loginController!.add(true);
     }
