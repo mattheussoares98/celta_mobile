@@ -3,6 +3,7 @@ import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class SaleRequestProductsItems extends StatefulWidget {
@@ -22,34 +23,36 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
     with ConvertString {
   int selectedIndex = -1;
 
-  TextStyle _fontStyle = const TextStyle(
-    fontSize: 17,
-    color: Colors.black,
-    fontFamily: 'OpenSans',
-  );
-  TextStyle _fontBoldStyle = const TextStyle(
-    fontFamily: 'OpenSans',
-    fontSize: 17,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
+  TextStyle _fontStyle({Color? color = Colors.black}) => TextStyle(
+        fontSize: 17,
+        color: color,
+        fontFamily: 'OpenSans',
+      );
+  TextStyle _fontBoldStyle({Color? color = Colors.black}) => TextStyle(
+        fontFamily: 'OpenSans',
+        fontSize: 17,
+        fontWeight: FontWeight.bold,
+        color: color,
+      );
 
   Widget values({
+    Color? titleColor,
+    Color? subtitleColor,
     Widget? otherWidget,
-    required String title,
+    String? title,
     required String value,
   }) {
     return Row(
       children: [
         Text(
-          "${title}: ",
-          style: _fontStyle,
+          title == null ? "" : "${title}: ",
+          style: _fontStyle(color: titleColor),
         ),
         const SizedBox(width: 5),
         Expanded(
           child: Text(
             value,
-            style: _fontBoldStyle,
+            style: _fontBoldStyle(color: subtitleColor),
             maxLines: 2,
           ),
         ),
@@ -62,9 +65,11 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
 
   double _totalItemValue = 0;
   double _quantityToAdd = null ?? 0;
+  double _totalItemQuantity = 0;
+  double _praticedPrice = 0;
 
   updateTotalItemValue({
-    required double salePraticedPrice,
+    required double salePracticedPrice,
     required double wholeMinimumQuantity,
     required double wholePrice,
   }) {
@@ -72,26 +77,26 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
       _quantityToAdd = double.tryParse(widget.consultedProductController.text)!;
     }
 
-    double praticedPrice = getPraticedPrice(
-      salePraticedPrice: salePraticedPrice,
+    _praticedPrice = getPraticedPrice(
+      salePracticedPrice: salePracticedPrice,
       wholeMinimumQuantity: wholeMinimumQuantity,
       wholePrice: wholePrice,
     );
 
     setState(() {
-      _totalItemValue = _quantityToAdd * praticedPrice;
+      _totalItemValue = _quantityToAdd * _praticedPrice;
     });
   }
 
   double getPraticedPrice({
-    required double salePraticedPrice,
+    required double salePracticedPrice,
     required double wholeMinimumQuantity,
     required double wholePrice,
   }) {
     if (wholeMinimumQuantity == 0) {
-      return salePraticedPrice;
-    } else if (_quantityToAdd < wholeMinimumQuantity) {
-      return salePraticedPrice;
+      return salePracticedPrice;
+    } else if ((_quantityToAdd + _totalItemQuantity) < wholeMinimumQuantity) {
+      return salePracticedPrice;
     } else {
       return wholePrice;
     }
@@ -121,60 +126,38 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
     required double MinimumWholeQuantity,
     required double WholePracticedPrice,
   }) {
-    bool alreadyContainsProduct = saleRequestProvider.alreadyContainsProduct(
-      ProductPackingCode,
-    );
-
     double praticedPrice = getPraticedPrice(
-      salePraticedPrice: RetailPracticedPrice,
+      salePracticedPrice: RetailPracticedPrice,
       wholeMinimumQuantity: MinimumWholeQuantity,
       wholePrice: WholePracticedPrice,
     );
-    if (alreadyContainsProduct) {
-      ShowAlertDialog().showAlertDialog(
-        context: context,
-        subtitle: "Deseja atualizar a quantidade do produto?",
-        title: "O produto já está no carrinho!",
-        function: () {
-          saleRequestProvider.addProductInCart(
-            ProductPackingCode: ProductPackingCode,
-            Quantity: _quantityToAdd,
-            Value: praticedPrice,
-            context: context,
-            alreadyContaintProduct: alreadyContainsProduct,
-          );
-          widget.consultedProductController.text = "";
-          _quantityToAdd = 0;
 
-          updateTotalItemValue(
-            salePraticedPrice: RetailPracticedPrice,
-            wholeMinimumQuantity: MinimumWholeQuantity,
-            wholePrice: WholePracticedPrice,
-          );
+    saleRequestProvider.addProductInCart(
+      ProductPackingCode: ProductPackingCode,
+      Quantity: _quantityToAdd,
+      Value: praticedPrice,
+      context: context,
+      alreadyContaintProduct: saleRequestProvider.alreadyContainsProduct(
+        ProductPackingCode,
+      ), //se já houver o produto no carrinho, vai somar a quantidade
+    );
 
-          changeCursorToLastIndex();
-        },
-      );
-    } else {
-      saleRequestProvider.addProductInCart(
-        ProductPackingCode: ProductPackingCode,
-        Quantity: _quantityToAdd,
-        Value: praticedPrice,
-        context: context,
-        alreadyContaintProduct: alreadyContainsProduct,
-      );
+    widget.consultedProductController.text = "0";
+    _quantityToAdd = 0;
 
-      widget.consultedProductController.text = "";
-      _quantityToAdd = 0;
+    updateTotalItemValue(
+      salePracticedPrice: RetailPracticedPrice,
+      wholeMinimumQuantity: MinimumWholeQuantity,
+      wholePrice: WholePracticedPrice,
+    );
 
-      updateTotalItemValue(
-        salePraticedPrice: RetailPracticedPrice,
-        wholeMinimumQuantity: MinimumWholeQuantity,
-        wholePrice: WholePracticedPrice,
-      );
+    changeCursorToLastIndex();
 
-      changeCursorToLastIndex();
-    }
+    _totalItemQuantity = saleRequestProvider.getAtualQuantity(
+      ProductPackingCode: ProductPackingCode,
+    );
+
+    setState(() {});
   }
 
   @override
@@ -203,6 +186,18 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                       onTap: saleRequestProvider.isLoadingProducts
                           ? null
                           : () {
+                              if (saleRequestProvider.alreadyContainsProduct(
+                                product.ProductPackingCode,
+                              )) {
+                                _totalItemQuantity =
+                                    saleRequestProvider.getAtualQuantity(
+                                  ProductPackingCode:
+                                      product.ProductPackingCode,
+                                );
+                              } else {
+                                _totalItemQuantity = 0;
+                              }
+
                               if (!saleRequestProvider
                                       .consultedProductFocusNode.hasFocus &&
                                   selectedIndex == index) {
@@ -217,7 +212,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                               }
                               if (selectedIndex != index) {
                                 _quantityToAdd = 0;
-                                widget.consultedProductController.clear();
+                                widget.consultedProductController.text = "0";
                                 changeCursorToLastIndex();
                                 //necessário apagar o campo da quantidade quando
                                 //mudar de produto selecionado
@@ -241,7 +236,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                               }
 
                               updateTotalItemValue(
-                                salePraticedPrice: product.RetailPracticedPrice,
+                                salePracticedPrice:
+                                    product.RetailPracticedPrice,
                                 wholeMinimumQuantity:
                                     product.MinimumWholeQuantity,
                                 wholePrice: product.WholePracticedPrice,
@@ -356,7 +352,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                             children: [
                               Text(
                                 "Preço de venda: ",
-                                style: _fontStyle,
+                                style: _fontStyle(),
                               ),
                               const SizedBox(width: 5),
                               Expanded(
@@ -367,7 +363,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                   style: selectedIndex == index
                                       ? TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: _quantityToAdd <
+                                          color: _quantityToAdd +
+                                                          _totalItemQuantity <
                                                       saleRequestProvider
                                                           .products[
                                                               selectedIndex]
@@ -384,7 +381,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                           fontFamily: 'OpenSans',
                                           fontSize: 17,
                                         )
-                                      : _fontBoldStyle,
+                                      : _fontBoldStyle(),
                                   maxLines: 2,
                                 ),
                               ),
@@ -395,7 +392,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                             children: [
                               Text(
                                 "Preço de atacado: ",
-                                style: _fontStyle,
+                                style: _fontStyle(),
                               ),
                               const SizedBox(width: 5),
                               Expanded(
@@ -410,7 +407,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                               0
                                       ? TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: _quantityToAdd <
+                                          color: _quantityToAdd +
+                                                      _totalItemQuantity <
                                                   saleRequestProvider
                                                       .products[selectedIndex]
                                                       .MinimumWholeQuantity
@@ -421,7 +419,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                           fontFamily: 'OpenSans',
                                           fontSize: 17,
                                         )
-                                      : _fontBoldStyle,
+                                      : _fontBoldStyle(),
                                   maxLines: 2,
                                 ),
                               ),
@@ -431,35 +429,29 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                             title: "Quantidade mínima para atacado",
                             value: product.MinimumWholeQuantity.toString(),
                           ),
-                          Container(
-                            height: 22,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Saldo estoque de venda: ",
-                                      style: _fontStyle,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      product.BalanceStockSale.toString(),
-                                      style: _fontBoldStyle,
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  selectedIndex != index
-                                      ? Icons.arrow_drop_down_sharp
-                                      : Icons.arrow_drop_up_sharp,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 40,
-                                ),
-                              ],
+                          values(
+                            title: "Saldo estoque de venda",
+                            value: product.BalanceStockSale.toString(),
+                            otherWidget: Icon(
+                              selectedIndex != index
+                                  ? Icons.arrow_drop_down_sharp
+                                  : Icons.arrow_drop_up_sharp,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 40,
                             ),
                           ),
+                          if (saleRequestProvider.alreadyContainsProduct(
+                            product.ProductPackingCode,
+                          ))
+                            values(
+                              titleColor: Theme.of(context).colorScheme.primary,
+                              subtitleColor:
+                                  Theme.of(context).colorScheme.primary,
+                              value: "Quantidade no carrinho: " +
+                                  _totalItemQuantity
+                                      .toString()
+                                      .replaceAll(RegExp(r'\.'), ','),
+                            ),
                           if (selectedIndex == index)
                             Column(
                               children: [
@@ -476,6 +468,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                       key: _consultedProductFormKey,
                                       child: Expanded(
                                         child: TextFormField(
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(10)
+                                          ],
                                           focusNode: saleRequestProvider
                                               .consultedProductFocusNode,
                                           controller:
@@ -491,12 +486,14 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                               _quantityToAdd = double.tryParse(
                                                 widget
                                                     .consultedProductController
-                                                    .text,
+                                                    .text
+                                                    .replaceAll(
+                                                        RegExp(r','), '\.'),
                                               )!;
                                             }
 
                                             updateTotalItemValue(
-                                              salePraticedPrice:
+                                              salePracticedPrice:
                                                   product.RetailPracticedPrice,
                                               wholeMinimumQuantity:
                                                   product.MinimumWholeQuantity,
@@ -549,11 +546,14 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                           _quantityToAdd++;
                                           widget.consultedProductController
                                                   .text =
-                                              _quantityToAdd.toStringAsFixed(3);
+                                              _quantityToAdd
+                                                  .toStringAsFixed(3)
+                                                  .replaceAll(
+                                                      RegExp(r'\.'), ',');
                                         });
 
                                         updateTotalItemValue(
-                                          salePraticedPrice:
+                                          salePracticedPrice:
                                               product.RetailPracticedPrice,
                                           wholeMinimumQuantity:
                                               product.MinimumWholeQuantity,
@@ -579,59 +579,119 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                         height: 60,
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            primary: _totalItemValue == 0
-                                                ? Colors.grey[400]
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
+                                            primary:
+                                                widget.consultedProductController
+                                                            .text.isEmpty &&
+                                                        _totalItemQuantity > 0
+                                                    ? Colors.red
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
                                           ),
-                                          onPressed: () {
-                                            if (_totalItemValue == 0) return;
+                                          onPressed:
+                                              widget.consultedProductController
+                                                          .text.isEmpty &&
+                                                      _totalItemQuantity > 0
+                                                  ? () {
+                                                      ShowAlertDialog()
+                                                          .showAlertDialog(
+                                                        context: context,
+                                                        title:
+                                                            "Confirmar exclusão",
+                                                        subtitle:
+                                                            "Deseja excluir o produto do carrinho?",
+                                                        function: () {
+                                                          saleRequestProvider
+                                                              .removeProductFromCart(
+                                                            product
+                                                                .ProductPackingCode,
+                                                          );
 
-                                            addProductInCart(
-                                              saleRequestProvider:
-                                                  saleRequestProvider,
-                                              ProductPackingCode:
-                                                  product.ProductPackingCode,
-                                              RetailPracticedPrice:
-                                                  product.RetailPracticedPrice,
-                                              MinimumWholeQuantity:
-                                                  product.MinimumWholeQuantity,
-                                              WholePracticedPrice:
-                                                  product.WholePracticedPrice,
-                                            );
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  const Text("Total"),
-                                                  Text(
-                                                    ConvertString.convertToBRL(
-                                                      _totalItemValue,
+                                                          updateTotalItemValue(
+                                                            salePracticedPrice:
+                                                                product
+                                                                    .RetailPracticedPrice,
+                                                            wholeMinimumQuantity:
+                                                                product
+                                                                    .MinimumWholeQuantity,
+                                                            wholePrice: product
+                                                                .WholePracticedPrice,
+                                                          );
+
+                                                          _totalItemQuantity =
+                                                              saleRequestProvider
+                                                                  .getAtualQuantity(
+                                                            ProductPackingCode:
+                                                                product
+                                                                    .ProductPackingCode,
+                                                          );
+                                                          setState(() {});
+                                                        },
+                                                      );
+                                                    }
+                                                  : () {
+                                                      if (_totalItemValue == 0)
+                                                        return;
+
+                                                      addProductInCart(
+                                                        saleRequestProvider:
+                                                            saleRequestProvider,
+                                                        ProductPackingCode: product
+                                                            .ProductPackingCode,
+                                                        RetailPracticedPrice:
+                                                            product
+                                                                .RetailPracticedPrice,
+                                                        MinimumWholeQuantity:
+                                                            product
+                                                                .MinimumWholeQuantity,
+                                                        WholePracticedPrice: product
+                                                            .WholePracticedPrice,
+                                                      );
+                                                    },
+                                          child: widget
+                                                      .consultedProductController
+                                                      .text
+                                                      .isEmpty &&
+                                                  _totalItemQuantity > 0
+                                              ? const Text(
+                                                  "Remover produto do carrinho")
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                        children: [
+                                                          const Text("Total"),
+                                                          Text(
+                                                            ConvertString
+                                                                .convertToBRL(
+                                                              _totalItemValue,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  const Text(
-                                                    "Adicionar",
-                                                    style:
-                                                        TextStyle(fontSize: 17),
-                                                  ),
-                                                  const Icon(
-                                                    Icons.shopping_cart,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          const Text(
+                                                            "Adicionar",
+                                                            style: TextStyle(
+                                                                fontSize: 17),
+                                                          ),
+                                                          const Icon(
+                                                            Icons.shopping_cart,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                         ),
                                       ),
                                     ),
@@ -650,11 +710,13 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                             widget.consultedProductController
                                                     .text =
                                                 _quantityToAdd
-                                                    .toStringAsFixed(3);
+                                                    .toStringAsFixed(3)
+                                                    .replaceAll(
+                                                        RegExp(r'\.'), ',');
                                           }
 
                                           updateTotalItemValue(
-                                            salePraticedPrice:
+                                            salePracticedPrice:
                                                 product.RetailPracticedPrice,
                                             wholeMinimumQuantity:
                                                 product.MinimumWholeQuantity,
@@ -666,7 +728,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                       },
                                       icon: Icon(
                                         Icons.remove,
-                                        color: _quantityToAdd == 0
+                                        color: widget.consultedProductController
+                                                .text.isEmpty
                                             ? Colors.grey
                                             : Theme.of(context)
                                                 .colorScheme

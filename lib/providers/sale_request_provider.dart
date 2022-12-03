@@ -42,7 +42,6 @@ class SaleRequestProvider with ChangeNotifier {
     double total = 0;
 
     _cartProducts.forEach((element) {
-      print(element);
       print("element Quantity: ${element["Quantity"]}");
       print("element Value: ${element["Value"]}");
 
@@ -75,6 +74,14 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  removeProductFromCart(int ProductPackingCode) {
+    int index = _cartProducts.indexWhere(
+        (element) => element["ProductPackingCode"] == ProductPackingCode);
+
+    _cartProducts.removeAt(index);
+    notifyListeners();
+  }
+
   alreadyContainsProduct(int ProductPackingCode) {
     bool alreadyContainsProduct = false;
 
@@ -85,6 +92,20 @@ class SaleRequestProvider with ChangeNotifier {
     });
 
     return alreadyContainsProduct;
+  }
+
+  getAtualQuantity({
+    required int ProductPackingCode,
+  }) {
+    double atualQuantity = 0;
+    _cartProducts.forEach((element) {
+      // print(element["ProductPackingCode"]);
+      if (element["ProductPackingCode"] == ProductPackingCode) {
+        atualQuantity = double.tryParse(element["Quantity"].toString())!;
+      }
+    });
+
+    return atualQuantity;
   }
 
   dynamic addProductInCart({
@@ -108,7 +129,8 @@ class SaleRequestProvider with ChangeNotifier {
     if (alreadyContaintProduct) {
       int index = _cartProducts.indexWhere(
           (element) => element["ProductPackingCode"] == ProductPackingCode);
-      _cartProducts[index] = value;
+      _cartProducts[index]["Quantity"] += Quantity;
+      _cartProducts[index]["Value"] = Value;
     } else {
       _cartProducts.add(value);
     }
