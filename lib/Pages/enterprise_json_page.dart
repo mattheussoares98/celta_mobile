@@ -2,7 +2,7 @@ import 'package:celta_inventario/utils/consulting_widget.dart';
 import 'package:celta_inventario/utils/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Components/Procedures_items_widgets/enterprise_json_items.dart';
+import '../Components/Global_widgets/enterprise_json_items.dart';
 import '../providers/enterprise_json_provider.dart';
 
 ///criei essa página diferente da EnterprisePage porque a consulta de empresas

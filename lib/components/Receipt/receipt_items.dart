@@ -1,5 +1,5 @@
-import 'package:celta_inventario/components/personalized_card.dart';
-import 'package:celta_inventario/Components/Buttons/receipt_liberate_check_buttons.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/Components/Receipt/receipt_liberate_check_buttons.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';

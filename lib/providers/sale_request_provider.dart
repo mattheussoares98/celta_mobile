@@ -38,6 +38,13 @@ class SaleRequestProvider with ChangeNotifier {
   List<Map<String, dynamic>> _cartProducts = [];
   get cartProducts => [..._cartProducts];
 
+  double getItemCount(SaleRequestProductsModel product) {
+    int index = _cartProducts.indexWhere((element) =>
+        element["ProductPackingCode"] == product.ProductPackingCode);
+
+    return _cartProducts[index]["Quantity"];
+  }
+
   double get totalCartPrice {
     double total = 0;
 
@@ -110,6 +117,8 @@ class SaleRequestProvider with ChangeNotifier {
 
   dynamic addProductInCart({
     required int ProductPackingCode,
+    required String PackingQuantity,
+    required String Name,
     required double Quantity,
     required double Value,
     required BuildContext context,
@@ -117,6 +126,8 @@ class SaleRequestProvider with ChangeNotifier {
   }) async {
     var value = {
       "ProductPackingCode": ProductPackingCode,
+      "Name": Name,
+      "PackingQuantity": PackingQuantity,
       "Quantity": Quantity,
       "Value": Value,
       "IncrementPercentageOrValue": "0.0",

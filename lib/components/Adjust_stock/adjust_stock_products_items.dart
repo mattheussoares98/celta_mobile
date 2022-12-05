@@ -1,7 +1,7 @@
-import 'package:celta_inventario/Components/Adjust_stock_components/adjust_stock_insert_quantity.dart';
-import 'package:celta_inventario/components/personalized_card.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'adjust_stock_insert_quantity.dart';
 
 class AdjustStockProductsItems extends StatefulWidget {
   final AdjustStockProvider adjustStockProvider;

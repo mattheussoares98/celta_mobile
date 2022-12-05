@@ -1,6 +1,6 @@
-import 'package:celta_inventario/Components/Buttons/receipt_conference_consult_product_without_ean_button.dart';
-import 'package:celta_inventario/Components/search_product_with_ean_plu_or_name_widget.dart';
-import 'package:celta_inventario/Components/Procedures_items_widgets/receipt_conference_products_items.dart';
+import 'package:celta_inventario/Components/Receipt/receipt_conference_consult_product_without_ean_button.dart';
+import 'package:celta_inventario/Components/Global_widgets/search_product_with_ean_plu_or_name_widget.dart';
+import 'package:celta_inventario/Components/Receipt/receipt_conference_products_items.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';

@@ -1,13 +1,13 @@
-import 'package:celta_inventario/Components/Procedures_items_widgets/sale_request_products_items.dart';
-import 'package:celta_inventario/Components/search_product_with_ean_plu_or_name_widget.dart';
+import 'package:celta_inventario/Components/Sale_request/sale_request_products_items.dart';
+import 'package:celta_inventario/Components/Global_widgets/search_product_with_ean_plu_or_name_widget.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/consulting_widget.dart';
 import 'package:celta_inventario/utils/error_message.dart';
-import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/convert_string.dart';
+import '../../utils/convert_string.dart';
 
 class SaleRequestPage extends StatefulWidget {
   const SaleRequestPage({Key? key}) : super(key: key);
@@ -21,13 +21,26 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
 
+  bool _isLoaded = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_isLoaded) {
+      Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+      if (arguments["SaleRequestTypeCode"] == 0) {
+        print("precisa configurar");
+      }
+
+      _isLoaded = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
-
-    // int codigoInternoEmpresa =
-    //     ModalRoute.of(context)!.settings.arguments as int;
 
     return WillPopScope(
       onWillPop: () async {
@@ -62,9 +75,11 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                           Icons.shopping_cart,
                           color: Colors.white,
                         ),
-                        tooltip: 'Open shopping cart',
                         onPressed: () {
-                          // handle the press
+                          Navigator.of(context).pushNamed(
+                            APPROUTES.SALE_REQUEST_CART_DETAILS,
+                          );
+                          saleRequestProvider.clearProducts();
                         },
                       ),
                       Positioned(
@@ -145,9 +160,14 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                   minimumSize: const Size(double.infinity, 50),
                   maximumSize: const Size(double.infinity, 50),
                   shape: const RoundedRectangleBorder(),
-                  primary: Colors.red,
+                  // primary: Colors.red,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    APPROUTES.SALE_REQUEST_CART_DETAILS,
+                  );
+                  saleRequestProvider.clearProducts();
+                },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -174,7 +194,20 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                       "VISUALIZAR",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.amber,
+                        color: Color.fromARGB(255, 255, 242, 0),
+                        fontSize: 17,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(1, 1),
+                            blurRadius: 3.0,
+                            color: Colors.black,
+                          ),
+                          // Shadow(
+                          //   offset: Offset(-2, -2),
+                          //   blurRadius: 3.0,
+                          //   color: Colors.white30,
+                          // ),
+                        ],
                       ),
                     ),
                   ],

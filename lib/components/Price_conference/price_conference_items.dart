@@ -1,5 +1,5 @@
-import 'package:celta_inventario/Components/Buttons/price_conference_send_print_button.dart';
-import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/Components/Price_conference/price_conference_send_print_button.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../providers/price_conference_provider.dart';

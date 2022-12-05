@@ -4,8 +4,8 @@ import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Components/Global_widgets/image_component.dart';
 import '../../providers/login_provider.dart';
-import '../../components/image_component.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../providers/login_provider.dart';
+import '../../providers/login_provider.dart';
 
 class AuthForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;

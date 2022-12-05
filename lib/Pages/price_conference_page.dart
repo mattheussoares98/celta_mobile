@@ -1,10 +1,10 @@
-import 'package:celta_inventario/Components/Buttons/price_conference_order_products_buttons.dart';
-import 'package:celta_inventario/Components/Procedures_items_widgets/price_conference_items.dart';
+import 'package:celta_inventario/Components/Price_conference/price_conference_order_products_buttons.dart';
+import 'package:celta_inventario/Components/Price_conference/price_conference_items.dart';
 import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Components/search_product_with_ean_plu_or_name_widget.dart';
+import '../Components/Global_widgets/search_product_with_ean_plu_or_name_widget.dart';
 import '../utils/consulting_widget.dart';
 
 class PriceConferencePage extends StatefulWidget {

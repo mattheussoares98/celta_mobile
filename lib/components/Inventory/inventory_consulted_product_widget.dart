@@ -1,14 +1,10 @@
-import 'package:celta_inventario/Components/add_subtract_or_anull_widget.dart';
-import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../providers/inventory_product_provider.dart';
-import '../Buttons/inventory_anull_quantity_button.dart';
-import '../Buttons/addOrSubtractButton.dart';
 import 'inventory_insert_one_quantity.dart';
 
 class ConsultedProductWidget extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'Buttons/addOrSubtractButton.dart';
+import 'addOrSubtractButton.dart';
 
 class AddSubtractOrAnullWidget extends StatefulWidget {
   final bool isLoading;

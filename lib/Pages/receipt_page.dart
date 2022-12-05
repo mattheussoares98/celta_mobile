@@ -1,5 +1,5 @@
 import 'package:celta_inventario/Models/enterprise_models/enterprise_model.dart';
-import 'package:celta_inventario/Components/Procedures_items_widgets/receipt_items.dart';
+import 'package:celta_inventario/Components/Receipt/receipt_items.dart';
 import 'package:celta_inventario/utils/consulting_widget.dart';
 import 'package:celta_inventario/utils/try_again.dart';
 import 'package:flutter/material.dart';

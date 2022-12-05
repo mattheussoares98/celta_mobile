@@ -4,7 +4,8 @@ import 'package:celta_inventario/Pages/enterprise_json_page.dart';
 import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
 import 'package:celta_inventario/Pages/receipt_conference_page.dart';
-import 'package:celta_inventario/Pages/sale_request_page.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/providers/enterprise_json_provider.dart';
 import 'package:celta_inventario/providers/inventory_counting_provider.dart';
@@ -105,7 +106,7 @@ class MyApp extends StatelessWidget {
                   // letterSpacing: 1,
                   fontWeight: FontWeight.bold,
                   color: ColorsTheme.headline2,
-                  fontSize: 20,
+                  fontSize: 17,
                   fontFamily: 'OpenSans',
                 ),
                 bodyText1: const TextStyle(
@@ -138,6 +139,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
           APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
           APPROUTES.ENTERPRISE_JSON: (ctx) => const EnterpriseJsonPage(),
+          APPROUTES.SALE_REQUEST_CART_DETAILS: (ctx) =>
+              const SaleRequestCartDetailsPage(),
         },
       ),
     );

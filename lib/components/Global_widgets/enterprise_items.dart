@@ -1,29 +1,24 @@
-import 'package:celta_inventario/components/personalized_card.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/enterprise_json_provider.dart';
+import '../../providers/enterprise_provider.dart';
 
-///quando seleciona o pedido de vendas utiliza esses itens porque na consulta de
-///empresas retorna informações diferentes das que são retornadas nas outras
-///consultas de empresas
-
-class EnterpriseJsonItems extends StatefulWidget {
+class EnterpriseItems extends StatefulWidget {
   final String nextPageRoute;
-  const EnterpriseJsonItems({
+  const EnterpriseItems({
     required this.nextPageRoute,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<EnterpriseJsonItems> createState() => _EnterpriseJsonItemsState();
+  State<EnterpriseItems> createState() => _EnterpriseItemsState();
 }
 
-class _EnterpriseJsonItemsState extends State<EnterpriseJsonItems> {
+class _EnterpriseItemsState extends State<EnterpriseItems> {
   @override
   Widget build(BuildContext context) {
-    EnterpriseJsonProvider enterpriseJsonProvider =
-        Provider.of(context, listen: true);
+    EnterpriseProvider enterpriseProvider = Provider.of(context, listen: true);
 
     return Column(
       children: [
@@ -36,13 +31,13 @@ class _EnterpriseJsonItemsState extends State<EnterpriseJsonItems> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: enterpriseJsonProvider.enterpriseCount,
+            itemCount: enterpriseProvider.enterpriseCount,
             itemBuilder: (ctx, index) {
               return PersonalizedCard.personalizedCard(
                 context: context,
                 child: ListTile(
                   title: Text(
-                    enterpriseJsonProvider.enterprises[index].Name,
+                    enterpriseProvider.enterprises[index].nomeEmpresa,
                     style: const TextStyle(
                       fontFamily: 'OpenSans',
                       fontWeight: FontWeight.bold,
@@ -50,7 +45,7 @@ class _EnterpriseJsonItemsState extends State<EnterpriseJsonItems> {
                     ),
                   ),
                   leading: Text(
-                    enterpriseJsonProvider.enterprises[index].PersonalizedCode
+                    enterpriseProvider.enterprises[index].codigoEmpresa
                         .toString(),
                     style: const TextStyle(
                       color: Colors.black,
@@ -59,8 +54,7 @@ class _EnterpriseJsonItemsState extends State<EnterpriseJsonItems> {
                   ),
                   subtitle: Text(
                     "Cnpj: " +
-                        enterpriseJsonProvider.enterprises[index].CnpjNumber
-                            .toString(),
+                        enterpriseProvider.enterprises[index].cnpj.toString(),
                     style: const TextStyle(
                       color: Colors.black,
                       fontFamily: 'OpenSans',
@@ -69,7 +63,8 @@ class _EnterpriseJsonItemsState extends State<EnterpriseJsonItems> {
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       widget.nextPageRoute,
-                      arguments: enterpriseJsonProvider.enterprises[index].Code,
+                      arguments: enterpriseProvider
+                          .enterprises[index].codigoInternoEmpresa,
                     );
                   },
                 ),

@@ -1,0 +1,514 @@
+import 'package:celta_inventario/Components/Sale_request/sale_request_insert_quantity_form.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../Models/sale_request_models/sale_request_products_model.dart';
+
+class SaleRequestProductsItems extends StatefulWidget {
+  final TextEditingController consultedProductController;
+
+  const SaleRequestProductsItems({
+    required this.consultedProductController,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<SaleRequestProductsItems> createState() =>
+      _SaleRequestProductsItemsState();
+}
+
+class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
+    with ConvertString {
+  int selectedIndex = -1;
+
+  TextStyle _fontStyle({Color? color = Colors.black}) => TextStyle(
+        fontSize: 17,
+        color: color,
+        fontFamily: 'OpenSans',
+      );
+  TextStyle _fontBoldStyle({Color? color = Colors.black}) => TextStyle(
+        fontFamily: 'OpenSans',
+        fontSize: 17,
+        fontWeight: FontWeight.bold,
+        color: color,
+      );
+
+  Widget values({
+    Color? titleColor,
+    Color? subtitleColor,
+    Widget? otherWidget,
+    String? title,
+    required String value,
+  }) {
+    return Row(
+      children: [
+        Text(
+          title == null ? "" : "${title}: ",
+          style: _fontStyle(color: titleColor),
+        ),
+        const SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            value,
+            style: _fontBoldStyle(color: subtitleColor),
+            maxLines: 2,
+          ),
+        ),
+        if (otherWidget != null) otherWidget,
+      ],
+    );
+  }
+
+  GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
+
+  double _totalItemValue = 0;
+  double _quantityToAdd = null ?? 0;
+  double _totalItemQuantity = 0;
+  double _praticedPrice = 0;
+
+  updateTotalItemValue({
+    required SaleRequestProductsModel product,
+    required SaleRequestProvider saleRequestProvider,
+  }) {
+    if (double.tryParse(widget.consultedProductController.text
+            .replaceAll(RegExp(r','), '.')) !=
+        null) {
+      _quantityToAdd = double.tryParse(widget.consultedProductController.text
+          .replaceAll(RegExp(r','), '.'))!;
+    } else {
+      setState(() {
+        _totalItemValue = 0;
+      });
+      return;
+    }
+
+    _praticedPrice = getPraticedPrice(
+      salePracticedPrice: product.RetailSalePrice,
+      wholeMinimumQuantity: product.MinimumWholeQuantity,
+      wholePrice: product.WholeSalePrice,
+    );
+
+    setState(() {
+      _totalItemValue = _quantityToAdd * _praticedPrice;
+    });
+
+    if (widget.consultedProductController.text.isEmpty) {
+      _quantityToAdd = 0;
+      _totalItemValue = 0;
+    } else {
+      _quantityToAdd = double.tryParse(
+        widget.consultedProductController.text.replaceAll(RegExp(r','), '\.'),
+      )!;
+    }
+
+    setState(() {
+      _totalItemQuantity = saleRequestProvider.getAtualQuantity(
+        ProductPackingCode: product.ProductPackingCode,
+      );
+    });
+
+    changeCursorToLastIndex();
+  }
+
+  double getPraticedPrice({
+    required double salePracticedPrice,
+    required double wholeMinimumQuantity,
+    required double wholePrice,
+  }) {
+    if (wholeMinimumQuantity == 0) {
+      return salePracticedPrice;
+    } else if ((_quantityToAdd + _totalItemQuantity) < wholeMinimumQuantity) {
+      return salePracticedPrice;
+    } else {
+      return wholePrice;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.consultedProductController.text == '') {
+      setState(() {
+        _totalItemValue = 0;
+        selectedIndex = -1;
+      });
+    }
+  }
+
+  changeCursorToLastIndex() {
+    widget.consultedProductController.selection = TextSelection.collapsed(
+      offset: widget.consultedProductController.text.length,
+    );
+  }
+
+  addProductInCart({
+    required SaleRequestProvider saleRequestProvider,
+    required SaleRequestProductsModel product,
+  }) {
+    double praticedPrice = getPraticedPrice(
+      salePracticedPrice: product.RetailPracticedPrice,
+      wholeMinimumQuantity: product.MinimumWholeQuantity,
+      wholePrice: product.WholePracticedPrice,
+    );
+
+    saleRequestProvider.addProductInCart(
+      Name: product.Name,
+      PackingQuantity: product.PackingQuantity,
+      ProductPackingCode: product.ProductPackingCode,
+      Quantity: _quantityToAdd,
+      Value: praticedPrice,
+      context: context,
+      alreadyContaintProduct: saleRequestProvider.alreadyContainsProduct(
+        product.ProductPackingCode,
+      ), //se já houver o produto no carrinho, vai somar a quantidade
+    );
+
+    widget.consultedProductController.text = "0";
+    _quantityToAdd = 0;
+
+    updateTotalItemValue(
+      product: product,
+      saleRequestProvider: saleRequestProvider,
+    );
+
+    changeCursorToLastIndex();
+
+    _totalItemQuantity = saleRequestProvider.getAtualQuantity(
+      ProductPackingCode: product.ProductPackingCode,
+    );
+
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SaleRequestProvider saleRequestProvider = Provider.of(
+      context,
+      listen: true,
+    );
+
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: saleRequestProvider.productsCount > 1
+            ? MainAxisAlignment.center
+            : MainAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: saleRequestProvider.productsCount,
+              itemBuilder: (context, index) {
+                var product = saleRequestProvider.products[index];
+                return PersonalizedCard.personalizedCard(
+                  context: context,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: saleRequestProvider.isLoadingProducts
+                          ? null
+                          : () {
+                              if (saleRequestProvider.alreadyContainsProduct(
+                                product.ProductPackingCode,
+                              )) {
+                                _totalItemQuantity =
+                                    saleRequestProvider.getAtualQuantity(
+                                  ProductPackingCode:
+                                      product.ProductPackingCode,
+                                );
+                              } else {
+                                _totalItemQuantity = 0;
+                              }
+
+                              if (!saleRequestProvider
+                                      .consultedProductFocusNode.hasFocus &&
+                                  selectedIndex == index) {
+                                Future.delayed(
+                                    const Duration(milliseconds: 100), () {
+                                  FocusScope.of(context).requestFocus(
+                                    saleRequestProvider
+                                        .consultedProductFocusNode,
+                                  );
+                                });
+                                return;
+                              }
+                              if (selectedIndex != index) {
+                                _quantityToAdd = 0;
+                                widget.consultedProductController.text = "0";
+                                changeCursorToLastIndex();
+                                //necessário apagar o campo da quantidade quando
+                                //mudar de produto selecionado
+
+                                Future.delayed(
+                                    const Duration(milliseconds: 100), () {
+                                  FocusScope.of(context).requestFocus(
+                                    saleRequestProvider
+                                        .consultedProductFocusNode,
+                                  );
+                                });
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              } else {
+                                FocusScope.of(context).unfocus();
+                                //quando clica no mesmo produto, fecha o teclado
+                                setState(() {
+                                  selectedIndex = -1;
+                                });
+                              }
+
+                              updateTotalItemValue(
+                                product: product,
+                                saleRequestProvider: saleRequestProvider,
+                              );
+                            },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          values(
+                            title: "PLU",
+                            value: product.PLU.toString(),
+                            otherWidget: InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          scrollable: true,
+                                          content: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.5,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: product
+                                                  .StockByEnterpriseAssociateds
+                                                  .length,
+                                              itemBuilder: (
+                                                BuildContext context,
+                                                int index,
+                                              ) {
+                                                return Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    if (index == 0)
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          FittedBox(
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                  "Endereço na empresa atual: ",
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headline2,
+                                                                ),
+                                                                Text(
+                                                                  product.StorageAreaAddress ==
+                                                                          ""
+                                                                      ? "não há"
+                                                                      : product
+                                                                          .StorageAreaAddress,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    const SizedBox(height: 10),
+                                                    const Divider(
+                                                      height: 3,
+                                                      color: Colors.grey,
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Empresa: ",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline2,
+                                                        ),
+                                                        Text(
+                                                          product.StockByEnterpriseAssociateds[
+                                                                  index]
+                                                              ["Enterprise"],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Estoque de venda: ",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline2,
+                                                        ),
+                                                        Text(
+                                                          product
+                                                              .StockByEnterpriseAssociateds[
+                                                                  index][
+                                                                  "StockBalanceForSale"]
+                                                              .toStringAsFixed(
+                                                                  3)
+                                                              .replaceAll(
+                                                                  RegExp(r'\.'),
+                                                                  ','),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Estoque de venda: ",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline2,
+                                                        ),
+                                                        Text(
+                                                          product.StockByEnterpriseAssociateds[
+                                                                      index][
+                                                                  "StorageAreaAddress"] =
+                                                              null ?? "Não há",
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                          ));
+                                    });
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Estoque",
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 3),
+                                  Icon(
+                                    Icons.info,
+                                    size: 30,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          values(
+                            title: "Produto",
+                            value: product.Name.toString() +
+                                " (${product.PackingQuantity})",
+                          ),
+                          values(
+                            title: "Preço de venda",
+                            value: ConvertString.convertToBRL(
+                              product.RetailPracticedPrice,
+                            ),
+                            subtitleColor: selectedIndex == index
+                                ? _quantityToAdd + _totalItemQuantity <
+                                            saleRequestProvider
+                                                .products[selectedIndex]
+                                                .MinimumWholeQuantity ||
+                                        saleRequestProvider
+                                                .products[selectedIndex]
+                                                .MinimumWholeQuantity ==
+                                            0
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Colors.black
+                                : Colors.black,
+                          ),
+                          values(
+                            title: "Preço de atacado",
+                            value: ConvertString.convertToBRL(
+                              product.WholePracticedPrice,
+                            ),
+                            subtitleColor: selectedIndex == index &&
+                                    saleRequestProvider.products[selectedIndex]
+                                            .MinimumWholeQuantity >
+                                        0
+                                ? _quantityToAdd + _totalItemQuantity <
+                                        saleRequestProvider
+                                            .products[selectedIndex]
+                                            .MinimumWholeQuantity
+                                    ? Colors.black
+                                    : Theme.of(context).colorScheme.primary
+                                : Colors.black,
+                          ),
+                          values(
+                            title: "Quantidade mínima para atacado",
+                            value: product.MinimumWholeQuantity.toString(),
+                          ),
+                          values(
+                            title: "Saldo estoque de venda",
+                            value: product.BalanceStockSale.toString(),
+                            otherWidget: Icon(
+                              selectedIndex != index
+                                  ? Icons.arrow_drop_down_sharp
+                                  : Icons.arrow_drop_up_sharp,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 40,
+                            ),
+                          ),
+                          if (saleRequestProvider.alreadyContainsProduct(
+                            product.ProductPackingCode,
+                          ))
+                            values(
+                              // titleColor: Theme.of(context).colorScheme.primary,
+                              subtitleColor: Colors.green[700],
+                              value: "Quantidade no carrinho: " +
+                                  saleRequestProvider
+                                      .getItemCount(product)
+                                      .toStringAsFixed(3)
+                                      .replaceAll(RegExp(r'\.'), ','),
+                            ),
+                          if (selectedIndex == index)
+                            SaleRequestInsertQuantityForm(
+                              consultedProductController:
+                                  widget.consultedProductController,
+                              consultedProductFormKey: _consultedProductFormKey,
+                              totalItemQuantity: _totalItemQuantity,
+                              product: product,
+                              totalItemValue: _totalItemValue,
+                              addProductInCart: () => addProductInCart(
+                                saleRequestProvider: saleRequestProvider,
+                                product: product,
+                              ),
+                              updateTotalItemValue: () => updateTotalItemValue(
+                                product: product,
+                                saleRequestProvider: saleRequestProvider,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
