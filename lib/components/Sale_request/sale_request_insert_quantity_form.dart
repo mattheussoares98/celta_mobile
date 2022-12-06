@@ -10,7 +10,7 @@ import '../../utils/show_alert_dialog.dart';
 class SaleRequestInsertQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
   final TextEditingController consultedProductController;
-  final double totalItemQuantity;
+  final double totalItensInCart;
   final double totalItemValue;
   final SaleRequestProductsModel product;
   final Function addProductInCart;
@@ -18,9 +18,9 @@ class SaleRequestInsertQuantityForm extends StatefulWidget {
   const SaleRequestInsertQuantityForm({
     required this.consultedProductController,
     required this.consultedProductFormKey,
-    required this.totalItemQuantity,
-    required this.product,
+    required this.totalItensInCart,
     required this.totalItemValue,
+    required this.product,
     required this.addProductInCart,
     required this.updateTotalItemValue,
     Key? key,
@@ -127,12 +127,12 @@ class _SaleRequestInsertQuantityFormState
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: widget.consultedProductController.text.isEmpty &&
-                            widget.totalItemQuantity > 0
+                            widget.totalItensInCart > 0
                         ? Colors.red
                         : Theme.of(context).colorScheme.primary,
                   ),
                   onPressed: widget.consultedProductController.text.isEmpty &&
-                          widget.totalItemQuantity > 0
+                          widget.totalItensInCart > 0
                       ? () {
                           ShowAlertDialog().showAlertDialog(
                             context: context,
@@ -155,7 +155,7 @@ class _SaleRequestInsertQuantityFormState
                           widget.addProductInCart();
                         },
                   child: widget.consultedProductController.text.isEmpty &&
-                          widget.totalItemQuantity > 0
+                          widget.totalItensInCart > 0
                       ? const Text("Remover produto do carrinho")
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

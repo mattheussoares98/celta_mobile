@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _SaleRequestCartDetailsPageState
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
+            color: Color.fromARGB(255, 100, 97, 97),
           ),
         ),
         const SizedBox(height: 5),
@@ -38,6 +40,7 @@ class _SaleRequestCartDetailsPageState
           subtitle,
           style: const TextStyle(
             fontSize: 18,
+            color: Colors.grey,
           ),
         ),
         const SizedBox(height: 5),
@@ -179,61 +182,204 @@ class _SaleRequestCartDetailsPageState
                     itemCount: saleRequestProvider.cartProducts.length,
                     itemBuilder: (context, index) {
                       var product = saleRequestProvider.cartProducts[index];
-                      return Card(
-                        elevation: 10,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 2,
-                          ),
-                        ),
-                        child: ListTile(
-                          style: ListTileStyle.drawer,
-                          title: Text(product["Name"] +
-                              " (${product["PackingQuantity"]})"),
-                          // leading: Text((index + 1).toString()),
-                          trailing: FittedBox(
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+
+                      if (1 != 1)
+                        return PersonalizedCard.personalizedCard(
+                          context: context,
+                          child: InkWell(
+                            onTap: () {},
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          product["Name"] +
+                                              " (${product["PackingQuantity"]})",
+                                          style: const TextStyle(
+                                            letterSpacing: 1,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                            fontFamily: 'BebasNeue',
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: Colors.black,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              titleAndSubtitle(
+                                                title: "Qtd",
+                                                subtitle: product["Quantity"]
+                                                    .toStringAsFixed(3)
+                                                    .replaceAll(
+                                                        RegExp(r'\.'), ','),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              titleAndSubtitle(
+                                                title: "Preço",
+                                                subtitle:
+                                                    ConvertString.convertToBRL(
+                                                  product["Value"].toString(),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              titleAndSubtitle(
+                                                title: "Total",
+                                                subtitle:
+                                                    ConvertString.convertToBRL(
+                                                  "${(product["Quantity"] * product["Value"])} ",
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                          subtitle: FittedBox(
+                        );
+                      return PersonalizedCard.personalizedCard(
+                        context: context,
+                        child: InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                titleAndSubtitle(
-                                  title: "Qtd",
-                                  subtitle: product["Quantity"]
-                                      .toStringAsFixed(3)
-                                      .replaceAll(RegExp(r'\.'), ','),
+                                Column(
+                                  children: [
+                                    Text((index + 1).toString()),
+                                  ],
                                 ),
-                                const SizedBox(width: 15),
-                                titleAndSubtitle(
-                                  title: "Preço",
-                                  subtitle: ConvertString.convertToBRL(
-                                    product["Value"].toString(),
-                                  ),
-                                ),
-                                const SizedBox(width: 15),
-                                titleAndSubtitle(
-                                  title: "Total",
-                                  subtitle: ConvertString.convertToBRL(
-                                    "${(product["Quantity"] * product["Value"])} ",
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              product["Name"] +
+                                                  " (${product["PackingQuantity"]})",
+                                              style: const TextStyle(
+                                                letterSpacing: 1,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 25,
+                                                fontFamily: 'BebasNeue',
+                                              ),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        // mainAxisAlignment:
+                                        //     MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    titleAndSubtitle(
+                                                      title: "Qtd",
+                                                      subtitle:
+                                                          product["Quantity"]
+                                                              .toStringAsFixed(
+                                                                  3)
+                                                              .replaceAll(
+                                                                  RegExp(r'\.'),
+                                                                  ','),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    titleAndSubtitle(
+                                                      title: "Preço",
+                                                      subtitle: ConvertString
+                                                          .convertToBRL(
+                                                        product["Value"]
+                                                            .toString(),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    titleAndSubtitle(
+                                                      title: "Total",
+                                                      subtitle: ConvertString
+                                                          .convertToBRL(
+                                                        "${(product["Quantity"] * product["Value"])} ",
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 30),
+                                            child: IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.edit,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

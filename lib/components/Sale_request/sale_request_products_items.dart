@@ -4,7 +4,6 @@ import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../Models/sale_request_models/sale_request_products_model.dart';
 
 class SaleRequestProductsItems extends StatefulWidget {
@@ -20,8 +19,7 @@ class SaleRequestProductsItems extends StatefulWidget {
       _SaleRequestProductsItemsState();
 }
 
-class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
-    with ConvertString {
+class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
   int selectedIndex = -1;
 
   TextStyle _fontStyle({Color? color = Colors.black}) => TextStyle(
@@ -64,123 +62,21 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
 
   GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
 
-  double _totalItemValue = 0;
-  double _quantityToAdd = null ?? 0;
-  double _totalItemQuantity = 0;
-  double _praticedPrice = 0;
-
-  updateTotalItemValue({
-    required SaleRequestProductsModel product,
-    required SaleRequestProvider saleRequestProvider,
-  }) {
-    if (double.tryParse(widget.consultedProductController.text
-            .replaceAll(RegExp(r','), '.')) !=
-        null) {
-      _quantityToAdd = double.tryParse(widget.consultedProductController.text
-          .replaceAll(RegExp(r','), '.'))!;
-    } else {
-      setState(() {
-        _totalItemValue = 0;
-      });
-      return;
-    }
-
-    _praticedPrice = getPraticedPrice(
-      salePracticedPrice: product.RetailSalePrice,
-      wholeMinimumQuantity: product.MinimumWholeQuantity,
-      wholePrice: product.WholeSalePrice,
-    );
-
-    setState(() {
-      _totalItemValue = _quantityToAdd * _praticedPrice;
-    });
-
-    if (widget.consultedProductController.text.isEmpty) {
-      _quantityToAdd = 0;
-      _totalItemValue = 0;
-    } else {
-      _quantityToAdd = double.tryParse(
-        widget.consultedProductController.text.replaceAll(RegExp(r','), '\.'),
-      )!;
-    }
-
-    setState(() {
-      _totalItemQuantity = saleRequestProvider.getAtualQuantity(
-        ProductPackingCode: product.ProductPackingCode,
-      );
-    });
-
-    changeCursorToLastIndex();
-  }
-
-  double getPraticedPrice({
-    required double salePracticedPrice,
-    required double wholeMinimumQuantity,
-    required double wholePrice,
-  }) {
-    if (wholeMinimumQuantity == 0) {
-      return salePracticedPrice;
-    } else if ((_quantityToAdd + _totalItemQuantity) < wholeMinimumQuantity) {
-      return salePracticedPrice;
-    } else {
-      return wholePrice;
-    }
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (widget.consultedProductController.text == '') {
-      setState(() {
-        _totalItemValue = 0;
-        selectedIndex = -1;
-      });
-    }
+    // if (widget.consultedProductController.text == '') {
+    //   setState(() {
+    //     _totalItemValue = 0;
+    //     selectedIndex = -1;
+    //   });
+    // }
   }
 
   changeCursorToLastIndex() {
     widget.consultedProductController.selection = TextSelection.collapsed(
       offset: widget.consultedProductController.text.length,
     );
-  }
-
-  addProductInCart({
-    required SaleRequestProvider saleRequestProvider,
-    required SaleRequestProductsModel product,
-  }) {
-    double praticedPrice = getPraticedPrice(
-      salePracticedPrice: product.RetailPracticedPrice,
-      wholeMinimumQuantity: product.MinimumWholeQuantity,
-      wholePrice: product.WholePracticedPrice,
-    );
-
-    saleRequestProvider.addProductInCart(
-      Name: product.Name,
-      PackingQuantity: product.PackingQuantity,
-      ProductPackingCode: product.ProductPackingCode,
-      Quantity: _quantityToAdd,
-      Value: praticedPrice,
-      context: context,
-      alreadyContaintProduct: saleRequestProvider.alreadyContainsProduct(
-        product.ProductPackingCode,
-      ), //se já houver o produto no carrinho, vai somar a quantidade
-    );
-
-    widget.consultedProductController.text = "0";
-    _quantityToAdd = 0;
-
-    updateTotalItemValue(
-      product: product,
-      saleRequestProvider: saleRequestProvider,
-    );
-
-    changeCursorToLastIndex();
-
-    _totalItemQuantity = saleRequestProvider.getAtualQuantity(
-      ProductPackingCode: product.ProductPackingCode,
-    );
-
-    setState(() {});
   }
 
   @override
@@ -201,6 +97,23 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
               itemCount: saleRequestProvider.productsCount,
               itemBuilder: (context, index) {
                 var product = saleRequestProvider.products[index];
+
+                double _quantityToAdd = saleRequestProvider
+                    .getQuantityToAdd(widget.consultedProductController);
+
+                double _totalItensInCart = saleRequestProvider
+                    .getTotalItensInCart(product.ProductPackingCode);
+
+                double _totalItemValue = saleRequestProvider.getTotalItemValue(
+                  product: product,
+                  consultedProductController: widget.consultedProductController,
+                );
+
+                // double _totalItemValue = saleRequestProvider.getTotalItemValue(
+                //   product: product,
+                //   consultedProductController: widget.consultedProductController,
+                // );
+
                 return PersonalizedCard.personalizedCard(
                   context: context,
                   child: Padding(
@@ -209,18 +122,6 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                       onTap: saleRequestProvider.isLoadingProducts
                           ? null
                           : () {
-                              if (saleRequestProvider.alreadyContainsProduct(
-                                product.ProductPackingCode,
-                              )) {
-                                _totalItemQuantity =
-                                    saleRequestProvider.getAtualQuantity(
-                                  ProductPackingCode:
-                                      product.ProductPackingCode,
-                                );
-                              } else {
-                                _totalItemQuantity = 0;
-                              }
-
                               if (!saleRequestProvider
                                       .consultedProductFocusNode.hasFocus &&
                                   selectedIndex == index) {
@@ -257,11 +158,6 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                   selectedIndex = -1;
                                 });
                               }
-
-                              updateTotalItemValue(
-                                product: product,
-                                saleRequestProvider: saleRequestProvider,
-                              );
                             },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -324,14 +220,16 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                                               ],
                                                             ),
                                                           ),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          const Divider(
+                                                            height: 3,
+                                                            color: Colors.grey,
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 10),
                                                         ],
                                                       ),
-                                                    const SizedBox(height: 10),
-                                                    const Divider(
-                                                      height: 3,
-                                                      color: Colors.grey,
-                                                    ),
-                                                    const SizedBox(height: 10),
                                                     Row(
                                                       children: [
                                                         Text(
@@ -426,7 +324,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                               product.RetailPracticedPrice,
                             ),
                             subtitleColor: selectedIndex == index
-                                ? _quantityToAdd + _totalItemQuantity <
+                                ? _quantityToAdd + _totalItensInCart <
                                             saleRequestProvider
                                                 .products[selectedIndex]
                                                 .MinimumWholeQuantity ||
@@ -447,7 +345,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                                     saleRequestProvider.products[selectedIndex]
                                             .MinimumWholeQuantity >
                                         0
-                                ? _quantityToAdd + _totalItemQuantity <
+                                ? _quantityToAdd + _totalItensInCart <
                                         saleRequestProvider
                                             .products[selectedIndex]
                                             .MinimumWholeQuantity
@@ -478,7 +376,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                               subtitleColor: Colors.green[700],
                               value: "Quantidade no carrinho: " +
                                   saleRequestProvider
-                                      .getItemCount(product)
+                                      .getTotalItensInCart(
+                                        product.ProductPackingCode,
+                                      )
                                       .toStringAsFixed(3)
                                       .replaceAll(RegExp(r'\.'), ','),
                             ),
@@ -487,17 +387,25 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems>
                               consultedProductController:
                                   widget.consultedProductController,
                               consultedProductFormKey: _consultedProductFormKey,
-                              totalItemQuantity: _totalItemQuantity,
-                              product: product,
                               totalItemValue: _totalItemValue,
-                              addProductInCart: () => addProductInCart(
-                                saleRequestProvider: saleRequestProvider,
+                              product: product,
+                              addProductInCart: () =>
+                                  saleRequestProvider.addProductInCart(
+                                consultedProductController:
+                                    widget.consultedProductController,
                                 product: product,
                               ),
-                              updateTotalItemValue: () => updateTotalItemValue(
-                                product: product,
-                                saleRequestProvider: saleRequestProvider,
-                              ),
+                              totalItensInCart: _totalItensInCart,
+                              updateTotalItemValue: () {
+                                setState(() {
+                                  _totalItemValue =
+                                      saleRequestProvider.getTotalItemValue(
+                                    product: product,
+                                    consultedProductController:
+                                        widget.consultedProductController,
+                                  );
+                                });
+                              },
                             ),
                         ],
                       ),

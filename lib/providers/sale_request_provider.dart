@@ -38,11 +38,107 @@ class SaleRequestProvider with ChangeNotifier {
   List<Map<String, dynamic>> _cartProducts = [];
   get cartProducts => [..._cartProducts];
 
-  double getItemCount(SaleRequestProductsModel product) {
-    int index = _cartProducts.indexWhere((element) =>
-        element["ProductPackingCode"] == product.ProductPackingCode);
+  double getQuantityToAdd(TextEditingController consultedProductController) {
+    if (double.tryParse(
+            consultedProductController.text.replaceAll(RegExp(r','), '.')) !=
+        null) {
+      return double.tryParse(
+          consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
+    } else {
+      return 0;
+    }
+  }
 
-    return _cartProducts[index]["Quantity"];
+  double getPraticedPrice({
+    required SaleRequestProductsModel product,
+    required TextEditingController consultedProductController,
+  }) {
+    double _quantityToAdd = getQuantityToAdd(consultedProductController);
+    double _totalItensInCart = getTotalItensInCart(product.ProductPackingCode);
+
+    if (product.MinimumWholeQuantity == 0) {
+      return product.RetailSalePrice;
+    } else if ((_quantityToAdd + _totalItensInCart) <
+        product.MinimumWholeQuantity) {
+      return product.RetailSalePrice;
+    } else {
+      return product.WholeSalePrice;
+    }
+  }
+
+  double getTotalItemValue({
+    required SaleRequestProductsModel product,
+    required TextEditingController consultedProductController,
+  }) {
+    double _quantityToAdd = getQuantityToAdd(consultedProductController);
+
+    double _praticedPrice = getPraticedPrice(
+      product: product,
+      consultedProductController: consultedProductController,
+    );
+
+    double _totalItemValue = _quantityToAdd * _praticedPrice;
+
+    if (consultedProductController.text.isEmpty) {
+      _quantityToAdd = 0;
+      _totalItemValue = 0;
+    } else {
+      _quantityToAdd = double.tryParse(
+        consultedProductController.text.replaceAll(RegExp(r','), '\.'),
+      )!;
+    }
+
+    _changeCursorToLastIndex(consultedProductController);
+
+    return _totalItemValue;
+  }
+
+  _changeCursorToLastIndex(TextEditingController consultedProductController) {
+    consultedProductController.selection = TextSelection.collapsed(
+      offset: consultedProductController.text.length,
+    );
+  }
+
+  dynamic addProductInCart({
+    required SaleRequestProductsModel product,
+    required TextEditingController consultedProductController,
+  }) async {
+    double praticedPrice = getPraticedPrice(
+      product: product,
+      consultedProductController: consultedProductController,
+    );
+    double quantity = getQuantityToAdd(consultedProductController);
+
+    var value = {
+      "ProductPackingCode": product.ProductPackingCode,
+      "Name": product.Name,
+      "PackingQuantity": product.PackingQuantity,
+      "Quantity": quantity,
+      "Value": praticedPrice,
+      "IncrementPercentageOrValue": "0.0",
+      "IncrementValue": 0.0,
+      "DiscountPercentageOrValue": "0.0",
+      "DiscountValue": 0.0,
+      "ExpectedDeliveryDate": DateTime.now(),
+    };
+
+    if (alreadyContainsProduct(
+      product.ProductPackingCode,
+    )) {
+      int index = _cartProducts.indexWhere((element) =>
+          element["ProductPackingCode"] == product.ProductPackingCode);
+      _cartProducts[index]["Quantity"] += quantity;
+      _cartProducts[index]["Value"] = praticedPrice;
+    } else {
+      _cartProducts.add(value);
+    }
+
+    consultedProductController.text = "0";
+
+    _changeCursorToLastIndex(consultedProductController);
+
+    jsonSaleRequest["Products"] = _cartProducts;
+    notifyListeners();
   }
 
   double get totalCartPrice {
@@ -101,9 +197,7 @@ class SaleRequestProvider with ChangeNotifier {
     return alreadyContainsProduct;
   }
 
-  getAtualQuantity({
-    required int ProductPackingCode,
-  }) {
+  double getTotalItensInCart(int ProductPackingCode) {
     double atualQuantity = 0;
     _cartProducts.forEach((element) {
       // print(element["ProductPackingCode"]);
@@ -113,40 +207,6 @@ class SaleRequestProvider with ChangeNotifier {
     });
 
     return atualQuantity;
-  }
-
-  dynamic addProductInCart({
-    required int ProductPackingCode,
-    required String PackingQuantity,
-    required String Name,
-    required double Quantity,
-    required double Value,
-    required BuildContext context,
-    required bool alreadyContaintProduct,
-  }) async {
-    var value = {
-      "ProductPackingCode": ProductPackingCode,
-      "Name": Name,
-      "PackingQuantity": PackingQuantity,
-      "Quantity": Quantity,
-      "Value": Value,
-      "IncrementPercentageOrValue": "0.0",
-      "IncrementValue": 0.0,
-      "DiscountPercentageOrValue": "0.0",
-      "DiscountValue": 0.0,
-      "ExpectedDeliveryDate": DateTime.now(),
-    };
-
-    if (alreadyContaintProduct) {
-      int index = _cartProducts.indexWhere(
-          (element) => element["ProductPackingCode"] == ProductPackingCode);
-      _cartProducts[index]["Quantity"] += Quantity;
-      _cartProducts[index]["Value"] = Value;
-    } else {
-      _cartProducts.add(value);
-    }
-    jsonSaleRequest["Products"] = _cartProducts;
-    notifyListeners();
   }
 
   Future<void> getRequestType({
