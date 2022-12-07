@@ -154,23 +154,25 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
             DropdownButtonFormField<dynamic>(
               // isDense: false,
               key: _keyStockType,
-              disabledHint: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox(
-                    child: Center(
-                      child: Text(
-                        widget.adjustStockProvider
-                                .isLoadingTypeStockAndJustifications
-                            ? "Consultando"
-                            : widget.adjustStockProvider
-                                    .justificationHasStockType
-                                ? _justificationStockTypeName
-                                : "Tipos de estoque",
+              disabledHint: FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
+                      child: Center(
+                        child: Text(
+                          widget.adjustStockProvider
+                                  .isLoadingTypeStockAndJustifications
+                              ? "Consultando"
+                              : widget.adjustStockProvider
+                                      .justificationHasStockType
+                                  ? _justificationStockTypeName
+                                  : "Tipos de estoque",
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               isExpanded: true,
               hint: Center(
