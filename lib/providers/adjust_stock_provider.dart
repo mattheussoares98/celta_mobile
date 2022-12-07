@@ -18,15 +18,12 @@ enum SearchTypes {
 
 class AdjustStockProvider with ChangeNotifier {
   List<AdjustStockProductModel> _products = [];
-
   List<AdjustStockProductModel> get products => _products;
 
   List<AdjustStockTypeModel> _stockTypes = [];
-
   List<AdjustStockTypeModel> get stockTypes => _stockTypes;
 
   List<AdjustStockJustificationModel> _justifications = [];
-
   List<AdjustStockJustificationModel> get justifications => _justifications;
 
   int get productsCount {
@@ -93,14 +90,21 @@ class AdjustStockProvider with ChangeNotifier {
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
-  Map<String, String> jsonAdjustStock = {
+  bool _justificationHasStockType = false;
+  bool get justificationHasStockType => _justificationHasStockType;
+  set justificationHasStockType(bool value) {
+    _justificationHasStockType = value;
+    notifyListeners();
+  }
+
+  Map<String, dynamic> jsonAdjustStock = {
     "EnterpriseCode": "", //esse parâmetro vem da tela de empresas
     "ProductCode": "", //quando clica no produto, altera o código
     "ProductPackingCode": "", //quando clica no produto, altera o código
     "JustificationCode":
         "", //sempre que seleciona a opção do dropdown altera o valor aqui
     "StockTypeCode":
-        "", //sempre que seleciona a opção do dropdown altera o valor aqui
+        0, //sempre que seleciona a opção do dropdown altera o valor aqui
     "Quantity":
         "" //quando clica em "alterar", valida se a quantidade é válida e se os dropdowns do estoque e justificativa estão selecionados. Caso esteja tudo certo, altera a quantidade do json de acordo com o que o usuário digitou
   };
@@ -182,6 +186,7 @@ class AdjustStockProvider with ChangeNotifier {
     jsonAdjustStock.clear();
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
+    _justificationHasStockType = false;
     notifyListeners();
   }
 
@@ -269,6 +274,7 @@ class AdjustStockProvider with ChangeNotifier {
         searchTypes: SearchTypes.GetProductByPLU,
         context: context,
       );
+      _justificationHasStockType = false;
       if (_products.isNotEmpty) return;
 
       await _getProducts(
@@ -277,6 +283,7 @@ class AdjustStockProvider with ChangeNotifier {
         searchTypes: SearchTypes.GetProductByEAN,
         context: context,
       );
+      _justificationHasStockType = false;
       if (_products.isNotEmpty) return;
     } else {
       //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
@@ -302,6 +309,7 @@ class AdjustStockProvider with ChangeNotifier {
       // );
     }
 
+    _justificationHasStockType = false;
     notifyListeners();
   }
 
@@ -426,7 +434,7 @@ class AdjustStockProvider with ChangeNotifier {
       http.StreamedResponse response = await request.send();
       String resultAsString = await response.stream.bytesToString();
 
-      print("resultAsString consulta do justifications: $resultAsString");
+      print("resultAsString consulta do ConfirmAdjustStock: $resultAsString");
 
       if (resultAsString.contains("Message")) {
         //significa que deu algum erro

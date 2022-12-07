@@ -22,7 +22,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
   final GlobalKey<FormFieldState> _keyStockType = GlobalKey();
 
   String _justificationStockTypeName = "";
-  bool _justificationHasStockType = false;
+
   //se a justificativa possuir um código de estoque atrelado, significa que
   //somente esse estoque pode ser alterado quando selecionar essa justificativa.
   //Por isso, quando selecionar a justificativa, está validando se ela possui um
@@ -55,6 +55,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                                 .isLoadingTypeStockAndJustifications
                             ? "Consultando"
                             : "Justificativas",
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -86,6 +87,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
               items: widget.adjustStockProvider.justifications
                   .map(
                     (value) => DropdownMenuItem(
+                      alignment: Alignment.center,
                       onTap: () {
                         widget.adjustStockProvider
                                 .jsonAdjustStock["JustificationCode"] =
@@ -99,17 +101,15 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           //precisa ser enviado na requisição do tipo de
                           //estoque
 
-                          setState(() {
-                            _justificationHasStockType = true;
-                          });
+                          widget.adjustStockProvider.justificationHasStockType =
+                              true;
 
                           widget.adjustStockProvider
                                   .jsonAdjustStock["StockTypeCode"] =
                               value.StockType["Code"];
                         } else {
-                          setState(() {
-                            _justificationHasStockType = false;
-                          });
+                          widget.adjustStockProvider.justificationHasStockType =
+                              false;
                         }
                         widget.adjustStockProvider.typeOperator = value
                             .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
@@ -150,7 +150,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                   )
                   .toList(),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             DropdownButtonFormField<dynamic>(
               // isDense: false,
               key: _keyStockType,
@@ -163,7 +163,8 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                         widget.adjustStockProvider
                                 .isLoadingTypeStockAndJustifications
                             ? "Consultando"
-                            : _justificationHasStockType
+                            : widget.adjustStockProvider
+                                    .justificationHasStockType
                                 ? _justificationStockTypeName
                                 : "Tipos de estoque",
                       ),
@@ -182,7 +183,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                 ),
               ),
               validator: (value) {
-                if (_justificationHasStockType) {
+                if (widget.adjustStockProvider.justificationHasStockType) {
                   return null;
                 } else if (value == null) {
                   return 'Selecione um tipo de estoque!';
@@ -192,12 +193,13 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
               onChanged: widget.adjustStockProvider
                           .isLoadingTypeStockAndJustifications ||
                       widget.adjustStockProvider.isLoadingAdjustStock ||
-                      _justificationHasStockType
+                      widget.adjustStockProvider.justificationHasStockType
                   ? null
                   : (value) {},
               items: widget.adjustStockProvider.stockTypes
                   .map(
                     (value) => DropdownMenuItem(
+                      alignment: Alignment.center,
                       onTap: () {
                         widget.adjustStockProvider
                                 .jsonAdjustStock["StockTypeCode"] =
@@ -211,7 +213,8 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           children: [
                             Center(
                               child: Text(
-                                _justificationHasStockType
+                                widget.adjustStockProvider
+                                        .justificationHasStockType
                                     ? _justificationStockTypeName
                                     : value.Name,
                                 style: const TextStyle(

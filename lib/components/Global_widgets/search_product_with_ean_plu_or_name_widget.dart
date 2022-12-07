@@ -78,7 +78,8 @@ class _SearchProductWithEanPluOrNameWidgetState
                           color: widget.isLoading ? Colors.grey : Colors.red,
                         ),
                       ),
-                      labelText: 'PLU, EAN ou nome',
+                      hintText: "PLU, EAN ou nome",
+                      labelText: 'Consultar produto',
                       labelStyle: TextStyle(
                         color: widget.isLoading
                             ? Colors.grey

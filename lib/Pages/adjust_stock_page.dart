@@ -1,5 +1,5 @@
 import 'package:celta_inventario/Components/Adjust_stock/adjust_stock_products_items.dart';
-import 'package:celta_inventario/Components/Adjust_stock/adjust_stock_justifications_stocks_dropdown.dart';
+import 'package:celta_inventario/components/Adjust_stock/adjust_stock_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,13 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
 
   var _insertQuantityFormKey = GlobalKey<FormState>();
   var _dropDownFormKey = GlobalKey<FormState>();
+  bool _justificationHasStockType = false;
+
+  changeJustificationHasStockType(bool value) {
+    setState(() {
+      _justificationHasStockType = value;
+    });
+  }
 
   @override
   void dispose() {
