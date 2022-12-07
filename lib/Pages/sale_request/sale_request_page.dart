@@ -1,5 +1,5 @@
 import 'package:celta_inventario/Components/Sale_request/sale_request_products_items.dart';
-import 'package:celta_inventario/Components/Global_widgets/search_product_with_ean_plu_or_name_widget.dart';
+import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/consulting_widget.dart';
@@ -74,6 +74,14 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                         icon: const Icon(
                           Icons.shopping_cart,
                           color: Colors.white,
+                          size: 33,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1, 1),
+                              blurRadius: 3.0,
+                              color: Colors.black,
+                            ),
+                          ],
                         ),
                         onPressed: () {
                           Navigator.of(context).pushNamed(
@@ -120,7 +128,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SearchProductWithEanPluOrNameWidget(
+            SearchWidget(
               consultProductController: _searchProductTextEditingController,
               isLoading: saleRequestProvider.isLoadingProducts,
               onPressSearch: () async {
@@ -190,25 +198,41 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                         ),
                       ],
                     ),
-                    const Text(
-                      "VISUALIZAR",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 255, 242, 0),
-                        fontSize: 17,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(1, 1),
-                            blurRadius: 3.0,
-                            color: Colors.black,
+                    Row(
+                      children: [
+                        const Text(
+                          "VISUALIZAR",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 255, 242, 0),
+                            fontSize: 17,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(1, 1),
+                                blurRadius: 3.0,
+                                color: Colors.black,
+                              ),
+                              // Shadow(
+                              //   offset: Offset(-2, -2),
+                              //   blurRadius: 3.0,
+                              //   color: Colors.white30,
+                              // ),
+                            ],
                           ),
-                          // Shadow(
-                          //   offset: Offset(-2, -2),
-                          //   blurRadius: 3.0,
-                          //   color: Colors.white30,
-                          // ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 5),
+                        const Icon(
+                          Icons.shopping_cart,
+                          color: Color.fromARGB(255, 255, 242, 0),
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1, 1),
+                              blurRadius: 3.0,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
