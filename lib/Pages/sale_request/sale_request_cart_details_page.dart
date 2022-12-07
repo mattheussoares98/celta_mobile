@@ -1,4 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class SaleRequestCartDetailsPage extends StatefulWidget {
 
 final GlobalKey<FormFieldState> _formKey = GlobalKey();
 final TextEditingController searchCostumerController = TextEditingController();
+final FocusNode searchCostumerFocusNode = FocusNode();
 
 class _SaleRequestCartDetailsPageState
     extends State<SaleRequestCartDetailsPage> {
@@ -59,119 +61,39 @@ class _SaleRequestCartDetailsPageState
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Form(
-                    key: _formKey,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            searchCostumerController.clear();
-
-                            // Future.delayed(const Duration(), () {
-                            //   FocusScope.of(context).unfocus();
-                            //   FocusScope.of(context).requestFocus(focusNode);
-                            // });
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: saleRequestProvider.isLoadingCostumer
-                                ? Colors.grey
-                                : Colors.red,
-                          ),
-                        ),
-                        labelText: 'Consultar cliente',
-                        hintText: 'CPF, código ou nome',
-                        labelStyle: TextStyle(
-                          color: saleRequestProvider.isLoadingCostumer
-                              ? Colors.grey
-                              : Theme.of(context).primaryColor,
-                        ),
-                        floatingLabelStyle: TextStyle(
-                          color: saleRequestProvider.isLoadingCostumer
-                              ? Colors.grey
-                              : Theme.of(context).primaryColor,
-                        ),
-                        errorStyle: const TextStyle(
-                          fontSize: 17,
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            style: BorderStyle.solid,
-                            width: 2,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            style: BorderStyle.solid,
-                            width: 2,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      onFieldSubmitted: (value) async {
-                        print("submeteu");
-                      },
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Center(
-                    child: Icon(
-                      Icons.search,
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          SearchWidget(
+            consultProductController: searchCostumerController,
+            isLoading: saleRequestProvider.isLoadingCostumer,
+            onPressSearch: () async {
+              await saleRequestProvider.getCostumers(
+                context: context,
+                searchValueControllerText: searchCostumerController.text,
+              );
+            },
+            focusNodeConsultProduct: searchCostumerFocusNode,
+            hintText: "Código, nome ou CPF",
+            labelText: "Consultar cliente",
+            useCamera: false,
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FittedBox(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Utilizar o cliente "1-Consumidor"',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  Container(
-                    width: 70,
-                    height: 30,
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Switch(
-                        value: _useDefaultCostumer,
-                        onChanged: (value) {
-                          setState(() {
-                            _useDefaultCostumer = value;
-                          });
-                          if (_useDefaultCostumer) {
-                            _selectedCostumer = "1-Consumidor";
-                          }
-                        },
-                        activeColor: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
+            padding: const EdgeInsets.only(top: 5),
+            child: Card(
+              elevation: 5,
+              shape: Border.all(
+                color: const Color.fromARGB(255, 214, 214, 214),
               ),
+              child: CheckboxListTile(
+                  activeColor: Colors.black,
+                  title: const Text("Cliente consumidor"),
+                  value: _useDefaultCostumer,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _useDefaultCostumer = value!;
+                    });
+                    if (_useDefaultCostumer) {
+                      _selectedCostumer = "1-Consumidor";
+                    }
+                  }),
             ),
           ),
           Expanded(
@@ -183,94 +105,6 @@ class _SaleRequestCartDetailsPageState
                     itemBuilder: (context, index) {
                       var product = saleRequestProvider.cartProducts[index];
 
-                      if (1 != 1)
-                        return PersonalizedCard.personalizedCard(
-                          context: context,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          product["Name"] +
-                                              " (${product["PackingQuantity"]})",
-                                          style: const TextStyle(
-                                            letterSpacing: 1,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 25,
-                                            fontFamily: 'BebasNeue',
-                                          ),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Column(
-                                            children: [
-                                              titleAndSubtitle(
-                                                title: "Qtd",
-                                                subtitle: product["Quantity"]
-                                                    .toStringAsFixed(3)
-                                                    .replaceAll(
-                                                        RegExp(r'\.'), ','),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              titleAndSubtitle(
-                                                title: "Preço",
-                                                subtitle:
-                                                    ConvertString.convertToBRL(
-                                                  product["Value"].toString(),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              titleAndSubtitle(
-                                                title: "Total",
-                                                subtitle:
-                                                    ConvertString.convertToBRL(
-                                                  "${(product["Quantity"] * product["Value"])} ",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
                       return PersonalizedCard.personalizedCard(
                         context: context,
                         child: InkWell(
@@ -278,17 +112,44 @@ class _SaleRequestCartDetailsPageState
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Column(
-                                  children: [
-                                    Text((index + 1).toString()),
-                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: FittedBox(
+                                            child: Text(
+                                              (index + 1).toString(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                shadows: [
+                                                  Shadow(
+                                                    offset: Offset(0, 0),
+                                                    blurRadius: 2.0,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(width: 10),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    // crossAxisAlignment:
+                                    //     CrossAxisAlignment.stretch,
                                     children: [
                                       Row(
                                         children: [

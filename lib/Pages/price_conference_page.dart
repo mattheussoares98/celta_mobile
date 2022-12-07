@@ -4,7 +4,7 @@ import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Components/Global_widgets/search_product_with_ean_plu_or_name_widget.dart';
+import '../Components/Global_widgets/search_widget.dart';
 import '../utils/consulting_widget.dart';
 
 class PriceConferencePage extends StatefulWidget {
@@ -55,7 +55,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SearchProductWithEanPluOrNameWidget(
+            SearchWidget(
               focusNodeConsultProduct:
                   priceConferenceProvider.consultProductFocusNode,
               isLoading: priceConferenceProvider.isLoading ||

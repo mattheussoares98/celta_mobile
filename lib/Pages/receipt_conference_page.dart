@@ -1,5 +1,5 @@
 import 'package:celta_inventario/Components/Receipt/receipt_conference_consult_product_without_ean_button.dart';
-import 'package:celta_inventario/Components/Global_widgets/search_product_with_ean_plu_or_name_widget.dart';
+import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_conference_products_items.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/utils/error_message.dart';
@@ -60,7 +60,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SearchProductWithEanPluOrNameWidget(
+            SearchWidget(
               focusNodeConsultProduct:
                   receiptConferenceProvider.consultProductFocusNode,
               isLoading: receiptConferenceProvider.consultingProducts ||

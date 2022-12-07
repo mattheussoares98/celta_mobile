@@ -1,26 +1,30 @@
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 
-class SearchProductWithEanPluOrNameWidget extends StatefulWidget {
+class SearchWidget extends StatefulWidget {
   final bool isLoading;
   final Function onPressSearch;
   final TextEditingController consultProductController;
   final FocusNode focusNodeConsultProduct;
-  const SearchProductWithEanPluOrNameWidget({
+  final String hintText;
+  final String labelText;
+  final bool useCamera;
+  const SearchWidget({
     required this.consultProductController,
     required this.isLoading,
     required this.onPressSearch,
     required this.focusNodeConsultProduct,
+    this.hintText = "PLU, EAN ou nome",
+    this.labelText = "Consultar produto",
+    this.useCamera = true,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SearchProductWithEanPluOrNameWidget> createState() =>
-      _SearchProductWithEanPluOrNameWidgetState();
+  State<SearchWidget> createState() => _SearchWidgetState();
 }
 
-class _SearchProductWithEanPluOrNameWidgetState
-    extends State<SearchProductWithEanPluOrNameWidget> {
+class _SearchWidgetState extends State<SearchWidget> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   isValid() {
@@ -58,7 +62,7 @@ class _SearchProductWithEanPluOrNameWidgetState
                     },
                     validator: (value) {
                       if (value!.isEmpty || value == "") {
-                        return 'PLU, EAN ou nome';
+                        return widget.hintText;
                       } else {
                         return null;
                       }
@@ -78,8 +82,8 @@ class _SearchProductWithEanPluOrNameWidgetState
                           color: widget.isLoading ? Colors.grey : Colors.red,
                         ),
                       ),
-                      hintText: "PLU, EAN ou nome",
-                      labelText: 'Consultar produto',
+                      hintText: widget.hintText,
+                      labelText: widget.labelText,
                       labelStyle: TextStyle(
                         color: widget.isLoading
                             ? Colors.grey
@@ -145,25 +149,26 @@ class _SearchProductWithEanPluOrNameWidgetState
                           },
                     icon: const Icon(Icons.search),
                   ),
-                  IconButton(
-                    color: widget.isLoading
-                        ? Colors.grey
-                        : Theme.of(context).primaryColor,
-                    onPressed: widget.isLoading
-                        ? null
-                        : () async {
-                            FocusScope.of(context).unfocus();
-                            widget.consultProductController.clear();
+                  if (widget.useCamera)
+                    IconButton(
+                      color: widget.isLoading
+                          ? Colors.grey
+                          : Theme.of(context).primaryColor,
+                      onPressed: widget.isLoading
+                          ? null
+                          : () async {
+                              FocusScope.of(context).unfocus();
+                              widget.consultProductController.clear();
 
-                            widget.consultProductController.text =
-                                await ScanBarCode.scanBarcode();
+                              widget.consultProductController.text =
+                                  await ScanBarCode.scanBarcode();
 
-                            if (widget.consultProductController.text != "") {
-                              await widget.onPressSearch();
-                            }
-                          },
-                    icon: const Icon(Icons.photo_camera),
-                  ),
+                              if (widget.consultProductController.text != "") {
+                                await widget.onPressSearch();
+                              }
+                            },
+                      icon: const Icon(Icons.photo_camera),
+                    ),
                 ],
               ),
             ],

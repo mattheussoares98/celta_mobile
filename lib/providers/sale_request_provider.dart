@@ -304,7 +304,7 @@ class SaleRequestProvider with ChangeNotifier {
 
     _costumers.clear();
     _errorMessageCostumer = "";
-    _isLoadingCostumer = false;
+    _isLoadingCostumer = true;
     notifyListeners();
 
     try {
@@ -326,10 +326,10 @@ class SaleRequestProvider with ChangeNotifier {
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
-        _errorMessageRequestType = json.decode(responseInString)["Message"];
-        _isLoadingRequestType = false;
+        _errorMessageCostumer = json.decode(responseInString)["Message"];
+        _isLoadingCostumer = false;
         ShowErrorMessage.showErrorMessage(
-          error: _errorMessageRequestType,
+          error: _errorMessageCostumer,
           context: context,
         );
         notifyListeners();
@@ -349,7 +349,7 @@ class SaleRequestProvider with ChangeNotifier {
       );
     }
 
-    _isLoadingRequestType = false;
+    _isLoadingCostumer = false;
     notifyListeners();
   }
 
