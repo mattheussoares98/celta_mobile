@@ -9,6 +9,7 @@ class SearchWidget extends StatefulWidget {
   final String hintText;
   final String labelText;
   final bool useCamera;
+  final bool autofocus;
   const SearchWidget({
     required this.consultProductController,
     required this.isLoading,
@@ -17,6 +18,7 @@ class SearchWidget extends StatefulWidget {
     this.hintText = "PLU, EAN ou nome",
     this.labelText = "Consultar produto",
     this.useCamera = true,
+    this.autofocus = true,
     Key? key,
   }) : super(key: key);
 
@@ -51,7 +53,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   child: TextFormField(
                     focusNode: focusNode,
                     enabled: widget.isLoading ? false : true,
-                    autofocus: true,
+                    autofocus: widget.autofocus,
                     controller: widget.consultProductController,
                     // focusNode: _consultedProductFocusNode,
                     // inputFormatters: [LengthLimitingTextInputFormatter(10)],

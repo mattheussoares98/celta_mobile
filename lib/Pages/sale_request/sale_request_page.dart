@@ -1,5 +1,8 @@
 import 'package:celta_inventario/Components/Sale_request/sale_request_products_items.dart';
 import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_insert_costumer.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/consulting_widget.dart';
@@ -20,6 +23,26 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
   TextEditingController _searchProductTextEditingController =
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
+
+  int _selectedIndex = 0;
+
+  static const List<Widget> _pages = <Widget>[
+    SaleRequestInsertProductsPage(),
+    SaleRequestInsertCostumer(),
+    SaleRequestCartDetailsPage(),
+  ];
+
+  static const List appBarTitles = [
+    "Inserir produtos",
+    "Inserir cliente",
+    "Produtos do carrinho",
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   bool _isLoaded = false;
   @override
@@ -50,9 +73,9 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const FittedBox(
+          title: FittedBox(
             child: Text(
-              "Inserção de produtos",
+              appBarTitles[_selectedIndex],
             ),
           ),
           leading: IconButton(
@@ -84,9 +107,9 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                           ],
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed(
-                            APPROUTES.SALE_REQUEST_CART_DETAILS,
-                          );
+                          setState(() {
+                            _selectedIndex = 2;
+                          });
                           saleRequestProvider.clearProducts();
                         },
                       ),
@@ -125,119 +148,62 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             ),
           ],
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SearchWidget(
-              consultProductController: _searchProductTextEditingController,
-              isLoading: saleRequestProvider.isLoadingProducts,
-              onPressSearch: () async {
-                _consultedProductController.clear();
-
-                await saleRequestProvider.getProducts(
-                  context: context,
-                  enterpriseCode: 2,
-                  searchValueControllerText:
-                      _searchProductTextEditingController.text,
-                );
-
-                if (saleRequestProvider.productsCount > 0) {
-                  _searchProductTextEditingController.clear();
-                }
-              },
-              focusNodeConsultProduct:
-                  saleRequestProvider.searchProductFocusNode,
+        body: Center(
+          child: _pages.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.add_shopping_cart_sharp,
+                size: 35,
+              ),
+              label: 'Inserir produtos',
             ),
-            if (saleRequestProvider.errorMessageProducts != "")
-              ErrorMessage(
-                errorMessage: saleRequestProvider.errorMessageProducts,
+            const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person_add,
+                size: 35,
               ),
-            if (saleRequestProvider.isLoadingProducts)
-              Expanded(
-                child: ConsultingWidget.consultingWidget(
-                    title: "Consultando produtos"),
-              ),
-            if (saleRequestProvider.productsCount > 0)
-              SaleRequestProductsItems(
-                consultedProductController: _consultedProductController,
-              ),
-            if (MediaQuery.of(context).viewInsets.bottom ==
-                0) //só exibe o botão se o teclado estiver fechado
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  maximumSize: const Size(double.infinity, 50),
-                  shape: const RoundedRectangleBorder(),
-                  // primary: Colors.red,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    APPROUTES.SALE_REQUEST_CART_DETAILS,
-                  );
-                  saleRequestProvider.clearProducts();
-                },
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        const Text("Itens"),
-                        Text(
-                          saleRequestProvider.cartProducts.length.toString(),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        const Text("Total"),
-                        Text(
-                          ConvertString.convertToBRL(
-                            saleRequestProvider.totalCartPrice,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "VISUALIZAR",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 255, 242, 0),
-                            fontSize: 17,
-                            shadows: <Shadow>[
-                              Shadow(
-                                offset: Offset(1, 1),
-                                blurRadius: 3.0,
-                                color: Colors.black,
+              label: 'Cliente',
+            ),
+            BottomNavigationBarItem(
+              label: 'Carrinho',
+              icon: Stack(
+                children: [
+                  const Icon(
+                    Icons.shopping_cart,
+                    size: 35,
+                  ),
+                  if (saleRequestProvider.cartProducts.length > 0)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.red,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: FittedBox(
+                            child: Text(
+                              saleRequestProvider.cartProducts.length
+                                  .toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
-                              // Shadow(
-                              //   offset: Offset(-2, -2),
-                              //   blurRadius: 3.0,
-                              //   color: Colors.white30,
-                              // ),
-                            ],
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 5),
-                        const Icon(
-                          Icons.shopping_cart,
-                          color: Color.fromARGB(255, 255, 242, 0),
-                          shadows: [
-                            Shadow(
-                              offset: Offset(1, 1),
-                              blurRadius: 3.0,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                      ],
+                        maxRadius: 9,
+                      ),
                     ),
-                  ],
-                ),
+                ],
               ),
+            ),
           ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          onTap: _onItemTapped,
         ),
       ),
     );

@@ -153,6 +153,8 @@ class _SaleRequestInsertQuantityFormState
                             return;
 
                           widget.addProductInCart();
+
+                          FocusScope.of(context).unfocus();
                         },
                   child: widget.consultedProductController.text.isEmpty &&
                           widget.totalItensInCart > 0

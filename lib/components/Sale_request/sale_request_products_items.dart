@@ -2,6 +2,8 @@ import 'package:celta_inventario/Components/Sale_request/sale_request_insert_qua
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Models/sale_request_models/sale_request_products_model.dart';
@@ -135,6 +137,15 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 return;
                               }
                               if (selectedIndex != index) {
+                                if (product.RetailPracticedPrice == 0 &&
+                                    product.WholePracticedPrice == 0) {
+                                  ShowErrorMessage.showErrorMessage(
+                                    error:
+                                        "O preço de venda e atacado estão zerados, por isso não é possível inserir a quantidade",
+                                    context: context,
+                                  );
+                                  return;
+                                }
                                 _quantityToAdd = 0;
                                 widget.consultedProductController.text = "0";
                                 changeCursorToLastIndex();
@@ -389,12 +400,19 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               consultedProductFormKey: _consultedProductFormKey,
                               totalItemValue: _totalItemValue,
                               product: product,
-                              addProductInCart: () =>
-                                  saleRequestProvider.addProductInCart(
-                                consultedProductController:
-                                    widget.consultedProductController,
-                                product: product,
-                              ),
+                              addProductInCart: () {
+                                if (_totalItemValue == 0) {
+                                  ShowErrorMessage.showErrorMessage(
+                                    error: "O total dos itens está zerado!",
+                                    context: context,
+                                  );
+                                }
+                                saleRequestProvider.addProductInCart(
+                                  consultedProductController:
+                                      widget.consultedProductController,
+                                  product: product,
+                                );
+                              },
                               totalItensInCart: _totalItensInCart,
                               updateTotalItemValue: () {
                                 setState(() {
