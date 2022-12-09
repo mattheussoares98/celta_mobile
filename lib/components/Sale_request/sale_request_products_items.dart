@@ -2,11 +2,9 @@ import 'package:celta_inventario/Components/Sale_request/sale_request_insert_qua
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Models/sale_request_models/sale_request_products_model.dart';
 
 class SaleRequestProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;

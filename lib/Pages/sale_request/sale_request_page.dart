@@ -1,12 +1,7 @@
-import 'package:celta_inventario/Components/Sale_request/sale_request_products_items.dart';
-import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_costumer.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
-import 'package:celta_inventario/utils/consulting_widget.dart';
-import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

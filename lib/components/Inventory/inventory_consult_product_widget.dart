@@ -81,7 +81,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                         value.contains('.') ||
                         value.contains('-')) {
                       return 'Escreva somente números ou somente letras';
-                    } else if (value.isEmpty || value == null) {
+                    } else if (value.isEmpty) {
                       return "Digite o EAN ou o PLU!";
                     }
                     return null;

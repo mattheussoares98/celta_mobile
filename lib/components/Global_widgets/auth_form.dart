@@ -1,10 +1,5 @@
-import 'package:celta_inventario/utils/base_url.dart';
-import 'package:celta_inventario/utils/show_error_message.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../providers/login_provider.dart';
 
 class AuthForm extends StatefulWidget {

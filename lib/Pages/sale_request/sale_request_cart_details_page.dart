@@ -1,7 +1,7 @@
-import 'package:celta_inventario/Components/Global_widgets/personalized_card.dart';
-import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
+import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -128,7 +128,24 @@ class _SaleRequestCartDetailsPageState
                                               ),
                                             ),
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                saleRequestProvider
+                                                    .removeProductFromCart(
+                                                  product["ProductPackingCode"],
+                                                );
+
+                                                ShowErrorMessage
+                                                    .showErrorMessage(
+                                                  error: "Produto removido",
+                                                  context: context,
+                                                  functionSnackBarAction: () {
+                                                    saleRequestProvider
+                                                        .restoreProductRemoved();
+                                                  },
+                                                  labelSnackBarAction:
+                                                      "Restaurar produto",
+                                                );
+                                              },
                                               icon: const Icon(
                                                 Icons.delete,
                                                 color: Colors.red,

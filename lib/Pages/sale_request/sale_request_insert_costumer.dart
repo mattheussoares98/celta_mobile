@@ -1,9 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:celta_inventario/Components/Sale_request/sale_request_costumer_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Components/Global_widgets/search_widget.dart';
 import '../../providers/sale_request_provider.dart';
+import '../../utils/consulting_widget.dart';
+import '../../utils/error_message.dart';
 
 class SaleRequestInsertCostumer extends StatefulWidget {
   const SaleRequestInsertCostumer({Key? key}) : super(key: key);
@@ -18,7 +20,6 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
       TextEditingController();
   final FocusNode searchCostumerFocusNode = FocusNode();
   bool _useDefaultCostumer = false;
-  String _selectedCostumer = "";
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +58,20 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
                   setState(() {
                     _useDefaultCostumer = value!;
                   });
-                  if (_useDefaultCostumer) {
-                    _selectedCostumer = "1-Consumidor";
-                  }
                 }),
           ),
         ),
+        if (saleRequestProvider.errorMessageCostumer != "")
+          ErrorMessage(
+            errorMessage: saleRequestProvider.errorMessageCostumer,
+          ),
+        if (saleRequestProvider.isLoadingCostumer)
+          Expanded(
+            child: ConsultingWidget.consultingWidget(
+                title: "Consultando clientes"),
+          ),
+        if (saleRequestProvider.costumersCount > 0)
+          const SaleRequestCostumersItems()
       ],
     );
   }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_request_type_model.dart';
-import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +25,7 @@ class SaleRequestProvider with ChangeNotifier {
   String get errorMessageCostumer => _errorMessageCostumer;
   List<SaleRequestCostumerModel> _costumers = [];
   get costumers => [..._costumers];
+  get costumersCount => _costumers.length;
 
   bool _isLoadingProducts = false;
   bool get isLoadingProducts => _isLoadingProducts;
@@ -34,6 +34,8 @@ class SaleRequestProvider with ChangeNotifier {
   List<SaleRequestProductsModel> _products = [];
   get products => [..._products];
   get productsCount => _products.length;
+  var removedProduct;
+  int? indexOfRemovedProduct;
 
   List<Map<String, dynamic>> _cartProducts = [];
   get cartProducts => [..._cartProducts];
@@ -178,10 +180,15 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   removeProductFromCart(int ProductPackingCode) {
-    int index = _cartProducts.indexWhere(
+    indexOfRemovedProduct = _cartProducts.indexWhere(
         (element) => element["ProductPackingCode"] == ProductPackingCode);
 
-    _cartProducts.removeAt(index);
+    removedProduct = _cartProducts.removeAt(indexOfRemovedProduct!);
+    notifyListeners();
+  }
+
+  restoreProductRemoved() {
+    _cartProducts.insert(indexOfRemovedProduct!, removedProduct);
     notifyListeners();
   }
 
@@ -343,10 +350,6 @@ class SaleRequestProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para obter os clientes: $e");
       _errorMessageCostumer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageCostumer,
-        context: context,
-      );
     }
 
     _isLoadingCostumer = false;

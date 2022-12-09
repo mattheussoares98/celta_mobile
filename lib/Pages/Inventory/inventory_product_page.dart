@@ -1,4 +1,3 @@
-import 'package:celta_inventario/utils/consulting_widget.dart';
 import 'package:celta_inventario/utils/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

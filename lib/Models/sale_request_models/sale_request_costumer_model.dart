@@ -1,13 +1,3 @@
-// var x = {
-//   "Code": 5,
-//   "PersonalizedCode": "5",
-//   "Name": "1PessoaFisicaSP",
-//   "ReducedName": "1PessoaFisicaSP",
-//   "CpfCnpjNumber": "13198543894",
-//   "RegistrationNumber": "197741435",
-//   "SexType": "M"
-// };
-
 import 'dart:convert';
 
 class SaleRequestCostumerModel {
@@ -18,6 +8,7 @@ class SaleRequestCostumerModel {
   final String CpfCnpjNumber;
   final String RegistrationNumber;
   final String SexType;
+  bool selected;
 
   SaleRequestCostumerModel({
     required this.Code,
@@ -27,6 +18,7 @@ class SaleRequestCostumerModel {
     required this.CpfCnpjNumber,
     required this.RegistrationNumber,
     required this.SexType,
+    this.selected = false,
   });
 
   static responseAsStringToSaleRequestCostumerModel({

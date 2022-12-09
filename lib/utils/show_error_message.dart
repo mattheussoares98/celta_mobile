@@ -6,15 +6,31 @@ class ShowErrorMessage {
     required BuildContext context,
     //sempre que cai no catch das requisições http é porque não encontrou o
     //servidor. Nesse caso pode exibir uma mensagem padrão
+    String labelSnackBarAction = "",
+    Function? functionSnackBarAction,
+    Color backgroundColor = Colors.red,
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          error,
-          textAlign: TextAlign.center,
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              error,
+              textAlign: TextAlign.center,
+            ),
+            if (labelSnackBarAction != "" && functionSnackBarAction != null)
+              ElevatedButton(
+                onPressed: () => {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                  functionSnackBarAction(),
+                },
+                child: Text(labelSnackBarAction),
+              ),
+          ],
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: backgroundColor,
         duration: const Duration(seconds: 5),
       ),
     );
