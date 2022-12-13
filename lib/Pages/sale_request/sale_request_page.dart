@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_costumer.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,17 +16,8 @@ class SaleRequestPage extends StatefulWidget {
 }
 
 class _SaleRequestPageState extends State<SaleRequestPage> {
-  TextEditingController _searchProductTextEditingController =
-      TextEditingController();
-  TextEditingController _consultedProductController = TextEditingController();
-
   int _selectedIndex = 0;
-
-  static const List<Widget> _pages = <Widget>[
-    SaleRequestInsertProductsPage(),
-    SaleRequestInsertCostumer(),
-    SaleRequestCartDetailsPage(),
-  ];
+  bool _hasDefaultRequestModel = false;
 
   static const List appBarTitles = [
     "Inserir produtos",
@@ -34,6 +26,10 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
   ];
 
   void _onItemTapped(int index) {
+    if (!_hasDefaultRequestModel) {
+      return;
+      //se não houver modelo de pedido padrão selecionado no BS, não permite alterar o bottomNavigationItem
+    }
     setState(() {
       _selectedIndex = index;
     });
@@ -48,7 +44,10 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
       if (arguments["SaleRequestTypeCode"] == 0) {
-        print("precisa configurar");
+        //significa que não possui um modelo de pedido de vendas padrão cadastrado no BS
+        _hasDefaultRequestModel = false;
+      } else {
+        _hasDefaultRequestModel = true;
       }
 
       _isLoaded = true;
@@ -59,6 +58,19 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
+
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+    List<Widget> _pages = <Widget>[
+      _hasDefaultRequestModel
+          ? const SaleRequestInsertProductsPage()
+          : const SaleRequestManualDefaultRequestModelPage(),
+      const SaleRequestInsertCostumer(),
+      SaleRequestCartDetailsPage(
+        enterpriseCode: arguments["Code"],
+        requestTypeCode: arguments["SaleRequestTypeCode"],
+      ),
+    ];
 
     return WillPopScope(
       onWillPop: () async {
@@ -101,12 +113,16 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                             ),
                           ],
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _selectedIndex = 2;
-                          });
-                          saleRequestProvider.clearProducts();
-                        },
+                        //se não houver um modelo de pedido padrão informado,
+                        //desativa o botão pra ir até o carrinho
+                        onPressed: _hasDefaultRequestModel
+                            ? () {
+                                setState(() {
+                                  _selectedIndex = 2;
+                                });
+                                saleRequestProvider.clearProducts();
+                              }
+                            : null,
                       ),
                       Positioned(
                         top: 0,

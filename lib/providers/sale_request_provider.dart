@@ -23,7 +23,18 @@ class SaleRequestProvider with ChangeNotifier {
   bool get isLoadingCostumer => _isLoadingCostumer;
   String _errorMessageCostumer = "";
   String get errorMessageCostumer => _errorMessageCostumer;
-  List<SaleRequestCostumerModel> _costumers = [];
+  List<SaleRequestCostumerModel> _costumers = [
+    SaleRequestCostumerModel(
+      Code: 1,
+      PersonalizedCode: "1",
+      Name: "Consumidor",
+      ReducedName: "",
+      CpfCnpjNumber: "1",
+      RegistrationNumber: "",
+      SexType: "M",
+      selected: false,
+    ),
+  ];
   get costumers => [..._costumers];
   get costumersCount => _costumers.length;
 
@@ -39,6 +50,28 @@ class SaleRequestProvider with ChangeNotifier {
 
   List<Map<String, dynamic>> _cartProducts = [];
   get cartProducts => [..._cartProducts];
+
+  String _errorMessageSaveSaleRequest = "";
+  get errorMessageSaveSaleRequest => _errorMessageSaveSaleRequest;
+  bool _isLoadingSaveSaleRequest = false;
+  get isLoadingSaveSaleRequest => _isLoadingSaveSaleRequest;
+  int _costumerCode =
+      -1; //-1 significa que nenhum foi selecionado ainda, por isso precisa aparecer uma mensagem
+  int get costumerCode {
+    _costumers.forEach((element) {
+      if (element.selected) {
+        _costumerCode = element.Code;
+        return;
+      } else {
+        _costumerCode = -1;
+      }
+    });
+    return _costumerCode;
+  }
+
+  void set costumerCode(int value) {
+    _costumerCode = value;
+  }
 
   double getQuantityToAdd(TextEditingController consultedProductController) {
     if (double.tryParse(
@@ -121,7 +154,7 @@ class SaleRequestProvider with ChangeNotifier {
       "IncrementValue": 0.0,
       "DiscountPercentageOrValue": "0.0",
       "DiscountValue": 0.0,
-      "ExpectedDeliveryDate": DateTime.now(),
+      "ExpectedDeliveryDate": '\"${DateTime.now()}\"',
     };
 
     if (alreadyContainsProduct(
@@ -269,6 +302,17 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateSelectedCostumer(int costumerCode) {
+    _costumers.forEach((element) {
+      if (element.Code == costumerCode) {
+        element.selected = !element.selected;
+      } else {
+        element.selected = false;
+      }
+    });
+    notifyListeners();
+  }
+
   Future<void> getCostumers({
     required BuildContext context,
     required String searchValueControllerText,
@@ -309,7 +353,9 @@ class SaleRequestProvider with ChangeNotifier {
 // 2=ExactCode
 // 3=ApproximateName
 
-    _costumers.clear();
+    _costumers.removeWhere((element) => element.Code != 1);
+//não remove o "consumidor"
+
     _errorMessageCostumer = "";
     _isLoadingCostumer = true;
     notifyListeners();
@@ -331,14 +377,15 @@ class SaleRequestProvider with ChangeNotifier {
 
       print('resposta para consulta do Costumers = $responseInString');
 
+      if (responseInString.contains('\\"Code\\":1,')) {
+        return;
+      }
+
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
         _errorMessageCostumer = json.decode(responseInString)["Message"];
         _isLoadingCostumer = false;
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageCostumer,
-          context: context,
-        );
+
         notifyListeners();
         return;
       }
@@ -350,10 +397,10 @@ class SaleRequestProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para obter os clientes: $e");
       _errorMessageCostumer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoadingCostumer = false;
+      notifyListeners();
     }
-
-    _isLoadingCostumer = false;
-    notifyListeners();
   }
 
   Future<void> _getProducts({
@@ -450,6 +497,79 @@ class SaleRequestProvider with ChangeNotifier {
         searchTypeInt: 2, //ExactPriceLookup == PLU
         context: context,
       );
+    }
+  }
+
+  saveSaleRequest({
+    required int enterpriseCode,
+    required int requestTypeCode,
+    required BuildContext context,
+  }) async {
+    List cartWithoutName = [];
+    _cartProducts.forEach((element) {
+      cartWithoutName.add(json.decode(json.encode(
+          element))); //fazendo uma cópia da lista _cartProducts. Fazendo cópia por atribuição estava apontando pro mesmo local de memória
+    });
+    cartWithoutName.forEach((element) {
+      element
+          .remove("Name"); //na requisição não precisa mandar essas informações
+      element.remove(
+          "PackingQuantity"); //na requisição não precisa mandar essas informações
+    });
+
+    String cartString = cartWithoutName
+        .toString()
+        .replaceAll(RegExp(r'ProductPackingCode'), '\"ProductPackingCode\"')
+        .replaceAll(RegExp(r', Quantity'), ',\"Quantity\"')
+        .replaceAll(RegExp(r', Value'), ',\"value\"')
+        .replaceAll(RegExp(r', IncrementPercentageOrValue'),
+            ',\"IncrementPercentageOrValue\"')
+        .replaceAll(RegExp(r', IncrementValue'), ',\"IncrementValue\"')
+        .replaceAll(RegExp(r', DiscountPercentageOrValue'),
+            ',\"DiscountPercentageOrValue\"')
+        .replaceAll(RegExp(r', DiscountValue'), ',\"DiscountValue\"')
+        .replaceAll(
+            RegExp(r', ExpectedDeliveryDate'), ',\"ExpectedDeliveryDate\"');
+
+    String saleRequestBodyString =
+        "{\"crossId\": \"${UserIdentity.identity}\",\"EnterpriseCode\": $enterpriseCode,\"RequestTypeCode\": $requestTypeCode,\"SellerCode\": 1,\"CustomerCode\": $costumerCode," +
+            "\"Products\": $cartString}";
+
+    _errorMessageSaveSaleRequest = "";
+    _isLoadingSaveSaleRequest = true;
+    notifyListeners();
+
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var request =
+          http.Request('POST', Uri.parse('${BaseUrl.url}/SaleRequest/Insert'));
+      request.body = json.encode(saleRequestBodyString);
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      String responseInString = await response.stream.bytesToString();
+
+      print('resposta para salvar o pedido = $responseInString');
+
+      if (responseInString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageSaveSaleRequest = json.decode(responseInString)["Message"];
+        _isLoadingSaveSaleRequest = false;
+
+        notifyListeners();
+        return;
+      }
+    } catch (e) {
+      print("Erro para obter os produtos: $e");
+      _errorMessageSaveSaleRequest =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessageSaveSaleRequest,
+        context: context,
+      );
+    } finally {
+      _isLoadingSaveSaleRequest = false;
+      notifyListeners();
     }
   }
 }

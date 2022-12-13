@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SaleRequestInsertProductsPage extends StatefulWidget {
-  const SaleRequestInsertProductsPage({Key? key}) : super(key: key);
+  const SaleRequestInsertProductsPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SaleRequestInsertProductsPage> createState() =>

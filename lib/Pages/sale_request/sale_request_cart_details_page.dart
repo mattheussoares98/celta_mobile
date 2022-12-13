@@ -1,12 +1,17 @@
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SaleRequestCartDetailsPage extends StatefulWidget {
-  const SaleRequestCartDetailsPage({Key? key}) : super(key: key);
+  final int enterpriseCode;
+  final int requestTypeCode;
+  const SaleRequestCartDetailsPage({
+    required this.enterpriseCode,
+    required this.requestTypeCode,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SaleRequestCartDetailsPage> createState() =>
@@ -286,24 +291,33 @@ class _SaleRequestCartDetailsPageState
                       ],
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        print("salvando");
-                      },
-                      child: const Text(
-                        "SALVAR PEDIDO",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          // color: Theme.of(context).colorScheme.primary,
-                          fontSize: 17,
-                          shadows: <Shadow>[
-                            const Shadow(
-                              offset: Offset(1.5, 1.5),
-                              blurRadius: 2.0,
-                              color: Colors.black,
+                      onPressed: saleRequestProvider.isLoadingSaveSaleRequest ||
+                              saleRequestProvider.costumerCode == -1
+                          ? null
+                          : () async {
+                              await saleRequestProvider.saveSaleRequest(
+                                enterpriseCode: widget.enterpriseCode,
+                                requestTypeCode: widget.requestTypeCode,
+                                context: context,
+                              );
+                            },
+                      child: saleRequestProvider.costumerCode == -1
+                          ? const Text("INSIRA UM CLIENTE")
+                          : const Text(
+                              "SALVAR PEDIDO",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                // color: Theme.of(context).colorScheme.primary,
+                                fontSize: 17,
+                                shadows: <Shadow>[
+                                  const Shadow(
+                                    offset: Offset(1.5, 1.5),
+                                    blurRadius: 2.0,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
                     ),
                   ],
                 ),

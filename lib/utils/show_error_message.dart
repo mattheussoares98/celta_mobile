@@ -16,12 +16,18 @@ class ShowErrorMessage {
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              error,
-              textAlign: TextAlign.center,
+            Expanded(
+              child: Text(
+                error,
+                textAlign: TextAlign.center,
+              ),
             ),
             if (labelSnackBarAction != "" && functionSnackBarAction != null)
-              ElevatedButton(
+              TextButton(
+                style: TextButton.styleFrom(
+                  elevation: 10,
+                  backgroundColor: Colors.amber,
+                ),
                 onPressed: () => {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                   functionSnackBarAction(),

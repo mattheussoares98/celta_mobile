@@ -71,17 +71,28 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
               itemBuilder: (context, index) {
                 var costumer = saleRequestProvider.costumers[index];
 
+                if (costumer.Code == 1) {
+                  return PersonalizedCard.personalizedCard(
+                    context: context,
+                    child: CheckboxListTile(
+                        activeColor: Theme.of(context).colorScheme.primary,
+                        title: const Text("Cliente consumidor"),
+                        value: costumer.selected,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            saleRequestProvider.updateSelectedCostumer(1);
+                          });
+                        }),
+                  );
+                }
+
                 return PersonalizedCard.personalizedCard(
                   context: context,
                   child: CheckboxListTile(
                     value: costumer.selected,
+                    activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
-                      setState(() {
-                        saleRequestProvider.costumers.forEach((element) {
-                          element.selected = false;
-                        });
-                        costumer.selected = value!;
-                      });
+                      saleRequestProvider.updateSelectedCostumer(costumer.Code);
                     },
                     title: Padding(
                       padding: const EdgeInsets.all(8.0),

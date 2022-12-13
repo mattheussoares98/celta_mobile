@@ -239,60 +239,125 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                                               height: 10),
                                                         ],
                                                       ),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          "Empresa: ",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .headline2,
-                                                        ),
-                                                        Text(
-                                                          product.StockByEnterpriseAssociateds[
-                                                                  index]
-                                                              ["Enterprise"],
-                                                        ),
-                                                      ],
+                                                    if (index == 0 &&
+                                                        product.StockByEnterpriseAssociateds
+                                                                .length >
+                                                            1)
+                                                      Column(
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 40,
+                                                          ),
+                                                          const FittedBox(
+                                                            child: Text(
+                                                              "Estoque nas empresas associadas",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                letterSpacing:
+                                                                    0.3,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 30,
+                                                                fontFamily:
+                                                                    "BebasNeue",
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const Divider(
+                                                            height: 3,
+                                                            color: Colors.grey,
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    FittedBox(
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            "Empresa: ",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline2,
+                                                          ),
+                                                          Text(
+                                                            product.StockByEnterpriseAssociateds[
+                                                                    index]
+                                                                ["Enterprise"],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          "Estoque de venda: ",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .headline2,
-                                                        ),
-                                                        Text(
-                                                          product
-                                                              .StockByEnterpriseAssociateds[
-                                                                  index][
-                                                                  "StockBalanceForSale"]
-                                                              .toStringAsFixed(
-                                                                  3)
-                                                              .replaceAll(
-                                                                  RegExp(r'\.'),
-                                                                  ','),
-                                                        ),
-                                                      ],
+                                                    FittedBox(
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            "Estoque de venda: ",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline2,
+                                                          ),
+                                                          Text(
+                                                            product
+                                                                .StockByEnterpriseAssociateds[
+                                                                    index][
+                                                                    "StockBalanceForSale"]
+                                                                .toStringAsFixed(
+                                                                    3)
+                                                                .replaceAll(
+                                                                    RegExp(
+                                                                        r'\.'),
+                                                                    ','),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          "Estoque de venda: ",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .headline2,
-                                                        ),
-                                                        Text(
-                                                          product.StockByEnterpriseAssociateds[
-                                                                      index][
-                                                                  "StorageAreaAddress"] =
-                                                              null ?? "Não há",
-                                                        ),
-                                                      ],
+                                                    FittedBox(
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            "Endereços: ",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline2,
+                                                          ),
+                                                          Text(
+                                                            product.StockByEnterpriseAssociateds[
+                                                                            index]
+                                                                        [
+                                                                        "StorageAreaAddress"] ==
+                                                                    null
+                                                                ? "Não há"
+                                                                : product
+                                                                    .StockByEnterpriseAssociateds[
+                                                                        index][
+                                                                        "StorageAreaAddress"]
+                                                                    .toString()
+                                                                    .replaceAll(
+                                                                        RegExp(
+                                                                            r'\['),
+                                                                        '- ')
+                                                                    .replaceAll(
+                                                                        RegExp(
+                                                                            r'\]'),
+                                                                        '')
+                                                                    .replaceAll(
+                                                                        RegExp(
+                                                                            r'\, '),
+                                                                        '\n- '),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    const Divider(
+                                                      height: 2,
+                                                      color: Colors.black,
                                                     ),
                                                   ],
                                                 );

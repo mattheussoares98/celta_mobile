@@ -19,7 +19,6 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
   final TextEditingController searchCostumerController =
       TextEditingController();
   final FocusNode searchCostumerFocusNode = FocusNode();
-  bool _useDefaultCostumer = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,24 +42,8 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           labelText: "Consultar cliente",
           useCamera: false,
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Card(
-            elevation: 5,
-            shape: Border.all(
-              color: const Color.fromARGB(255, 214, 214, 214),
-            ),
-            child: CheckboxListTile(
-                activeColor: Colors.black,
-                title: const Text("Cliente consumidor"),
-                value: _useDefaultCostumer,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _useDefaultCostumer = value!;
-                  });
-                }),
-          ),
-        ),
+        if (saleRequestProvider.costumersCount > 0)
+          const SaleRequestCostumersItems(),
         if (saleRequestProvider.errorMessageCostumer != "")
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageCostumer,
@@ -70,8 +53,6 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
             child: ConsultingWidget.consultingWidget(
                 title: "Consultando clientes"),
           ),
-        if (saleRequestProvider.costumersCount > 0)
-          const SaleRequestCostumersItems()
       ],
     );
   }
