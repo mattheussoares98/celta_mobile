@@ -37,24 +37,6 @@ class SaleRequestProvider with ChangeNotifier {
   ];
   get costumers => [..._costumers];
   get costumersCount => _costumers.length;
-
-  bool _isLoadingProducts = false;
-  bool get isLoadingProducts => _isLoadingProducts;
-  String _errorMessageProducts = "";
-  String get errorMessageProducts => _errorMessageProducts;
-  List<SaleRequestProductsModel> _products = [];
-  get products => [..._products];
-  get productsCount => _products.length;
-  var removedProduct;
-  int? indexOfRemovedProduct;
-
-  List<Map<String, dynamic>> _cartProducts = [];
-  get cartProducts => [..._cartProducts];
-
-  String _errorMessageSaveSaleRequest = "";
-  get errorMessageSaveSaleRequest => _errorMessageSaveSaleRequest;
-  bool _isLoadingSaveSaleRequest = false;
-  get isLoadingSaveSaleRequest => _isLoadingSaveSaleRequest;
   int _costumerCode =
       -1; //-1 significa que nenhum foi selecionado ainda, por isso precisa aparecer uma mensagem
   int get costumerCode {
@@ -73,7 +55,46 @@ class SaleRequestProvider with ChangeNotifier {
     _costumerCode = value;
   }
 
-  double getQuantityToAdd(TextEditingController consultedProductController) {
+  bool _isLoadingProducts = false;
+  bool get isLoadingProducts => _isLoadingProducts;
+  String _errorMessageProducts = "";
+  String get errorMessageProducts => _errorMessageProducts;
+  List<SaleRequestProductsModel> _products = [];
+  get products => [..._products];
+  get productsCount => _products.length;
+  var removedProduct;
+  int? indexOfRemovedProduct;
+
+  List<Map<String, dynamic>> _cartProducts = [];
+  get cartProducts => [..._cartProducts];
+  get cartProductsCount => _cartProducts.length;
+
+  String _errorMessageSaveSaleRequest = "";
+  get errorMessageSaveSaleRequest => _errorMessageSaveSaleRequest;
+  bool _isLoadingSaveSaleRequest = false;
+  get isLoadingSaveSaleRequest => _isLoadingSaveSaleRequest;
+
+  String _lastSaleRequestSaved = "";
+  String get lastSaleRequestSaved => _lastSaleRequestSaved;
+
+  _clearCostumers() {
+    _costumers = [
+      SaleRequestCostumerModel(
+        Code: 1,
+        PersonalizedCode: "1",
+        Name: "Consumidor",
+        ReducedName: "",
+        CpfCnpjNumber: "1",
+        RegistrationNumber: "",
+        SexType: "M",
+        selected: false,
+      ),
+    ];
+    notifyListeners();
+  }
+
+  double tryChangeControllerTextToDouble(
+      TextEditingController consultedProductController) {
     if (double.tryParse(
             consultedProductController.text.replaceAll(RegExp(r','), '.')) !=
         null) {
@@ -88,7 +109,8 @@ class SaleRequestProvider with ChangeNotifier {
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
   }) {
-    double _quantityToAdd = getQuantityToAdd(consultedProductController);
+    double _quantityToAdd =
+        tryChangeControllerTextToDouble(consultedProductController);
     double _totalItensInCart = getTotalItensInCart(product.ProductPackingCode);
 
     if (product.MinimumWholeQuantity == 0) {
@@ -105,7 +127,8 @@ class SaleRequestProvider with ChangeNotifier {
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
   }) {
-    double _quantityToAdd = getQuantityToAdd(consultedProductController);
+    double _quantityToAdd =
+        tryChangeControllerTextToDouble(consultedProductController);
 
     double _praticedPrice = getPraticedPrice(
       product: product,
@@ -134,6 +157,28 @@ class SaleRequestProvider with ChangeNotifier {
     );
   }
 
+  _removeNotUsedKeysFromCart() {
+    _cartProducts.forEach((element) {
+      print(element);
+      element.remove("ProductCode");
+      element.remove("PLU");
+      element.remove("PackingQuantity");
+      element.remove("RetailPracticedPrice");
+      element.remove("RetailSalePrice");
+      element.remove("RetailOfferPrice");
+      element.remove("WholePracticedPrice");
+      element.remove("WholeSalePrice");
+      element.remove("WholeOfferPrice");
+      element.remove("ECommercePracticedPrice");
+      element.remove("ECommerceSalePrice");
+      element.remove("ECommerceOfferPrice");
+      element.remove("MinimumWholeQuantity");
+      element.remove("BalanceStockSale");
+      element.remove("StorageAreaAddress");
+      element.remove("StockByEnterpriseAssociateds");
+    });
+  }
+
   dynamic addProductInCart({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
@@ -142,12 +187,16 @@ class SaleRequestProvider with ChangeNotifier {
       product: product,
       consultedProductController: consultedProductController,
     );
-    double quantity = getQuantityToAdd(consultedProductController);
+    double quantity =
+        tryChangeControllerTextToDouble(consultedProductController);
 
-    var value = {
+    //as chaves que estão com o comentário "remove" são removidas para enviar a
+    //requisição de salvar o pedido. Salvei todas informações do produto no
+    //carrinho porque precisa de várias para conseguir editar a quantidade do
+    //produto que já está no carrinho
+    Map<String, Object> value = {
       "ProductPackingCode": product.ProductPackingCode,
       "Name": product.Name,
-      "PackingQuantity": product.PackingQuantity,
       "Quantity": quantity,
       "Value": praticedPrice,
       "IncrementPercentageOrValue": "0.0",
@@ -155,6 +204,23 @@ class SaleRequestProvider with ChangeNotifier {
       "DiscountPercentageOrValue": "0.0",
       "DiscountValue": 0.0,
       "ExpectedDeliveryDate": '\"${DateTime.now()}\"',
+      "ProductCode": product.ProductCode, //remove
+      "PLU": product.PLU, //remove
+      "PackingQuantity": product.PackingQuantity,
+      "RetailPracticedPrice": product.RetailPracticedPrice, //remove
+      "RetailSalePrice": product.RetailSalePrice, //remove
+      "RetailOfferPrice": product.RetailOfferPrice, //remove
+      "WholePracticedPrice": product.WholePracticedPrice, //remove
+      "WholeSalePrice": product.WholeSalePrice, //remove
+      "WholeOfferPrice": product.WholeOfferPrice, //remove
+      "ECommercePracticedPrice": product.ECommercePracticedPrice, //remove
+      "ECommerceSalePrice": product.ECommerceSalePrice, //remove
+      "ECommerceOfferPrice": product.ECommerceOfferPrice, //remove
+      "MinimumWholeQuantity": product.MinimumWholeQuantity, //remove
+      "BalanceStockSale": product.BalanceStockSale, //remove
+      "StorageAreaAddress": product.StorageAreaAddress, //remove
+      "StockByEnterpriseAssociateds":
+          product.StockByEnterpriseAssociateds, //remove
     };
 
     if (alreadyContainsProduct(
@@ -168,7 +234,7 @@ class SaleRequestProvider with ChangeNotifier {
       _cartProducts.add(value);
     }
 
-    consultedProductController.text = "0";
+    consultedProductController.text = "";
 
     _changeCursorToLastIndex(consultedProductController);
 
@@ -209,6 +275,11 @@ class SaleRequestProvider with ChangeNotifier {
 
   clearProducts() {
     _products.clear();
+    notifyListeners();
+  }
+
+  clearCart() {
+    _cartProducts = [];
     notifyListeners();
   }
 
@@ -306,8 +377,16 @@ class SaleRequestProvider with ChangeNotifier {
     _costumers.forEach((element) {
       if (element.Code == costumerCode) {
         element.selected = !element.selected;
-      } else {
-        element.selected = false;
+      }
+    });
+
+    _costumers.forEach((element) {
+      if (element.Code == costumerCode) {
+        if (element.selected) {
+          _costumerCode = element.Code;
+        } else {
+          _costumerCode = -1;
+        }
       }
     });
     notifyListeners();
@@ -517,6 +596,8 @@ class SaleRequestProvider with ChangeNotifier {
           "PackingQuantity"); //na requisição não precisa mandar essas informações
     });
 
+    _removeNotUsedKeysFromCart();
+
     String cartString = cartWithoutName
         .toString()
         .replaceAll(RegExp(r'ProductPackingCode'), '\"ProductPackingCode\"')
@@ -551,10 +632,33 @@ class SaleRequestProvider with ChangeNotifier {
 
       print('resposta para salvar o pedido = $responseInString');
 
-      if (responseInString.contains("Message")) {
+      if (responseInString.contains("sucesso")) {
+        _cartProducts.clear();
+        _clearCostumers();
+        _lastSaleRequestSaved = json.decode(responseInString)["Message"];
+        int index = _lastSaleRequestSaved.indexOf(RegExp(r'\('));
+        _lastSaleRequestSaved = "Último pedido salvo: " +
+            _lastSaleRequestSaved.replaceRange(0, index + 1, "");
+        _lastSaleRequestSaved = _lastSaleRequestSaved
+            .replaceAll(RegExp(r'\)'), '')
+            .trim()
+            .replaceAll(RegExp(r'\n'), '');
+
+        notifyListeners();
+        ShowErrorMessage.showErrorMessage(
+          error: "O pedido foi salvo com sucesso!",
+          context: context,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
+      } else {
         //significa que deu algum erro
         _errorMessageSaveSaleRequest = json.decode(responseInString)["Message"];
         _isLoadingSaveSaleRequest = false;
+
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageSaveSaleRequest,
+          context: context,
+        );
 
         notifyListeners();
         return;
