@@ -39,17 +39,7 @@ class SaleRequestProvider with ChangeNotifier {
   get costumersCount => _costumers.length;
   int _costumerCode =
       -1; //-1 significa que nenhum foi selecionado ainda, por isso precisa aparecer uma mensagem
-  int get costumerCode {
-    _costumers.forEach((element) {
-      if (element.selected) {
-        _costumerCode = element.Code;
-        return;
-      } else {
-        _costumerCode = -1;
-      }
-    });
-    return _costumerCode;
-  }
+  int get costumerCode => _costumerCode;
 
   void set costumerCode(int value) {
     _costumerCode = value;
@@ -137,7 +127,10 @@ class SaleRequestProvider with ChangeNotifier {
 
     double _totalItemValue = _quantityToAdd * _praticedPrice;
 
-    if (consultedProductController.text.isEmpty) {
+    double? controllerInDouble = double.tryParse(
+        consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
+
+    if (controllerInDouble == null) {
       _quantityToAdd = 0;
       _totalItemValue = 0;
     } else {
@@ -157,10 +150,10 @@ class SaleRequestProvider with ChangeNotifier {
     );
   }
 
-  _removeNotUsedKeysFromCart() {
-    _cartProducts.forEach((element) {
-      print(element);
+  _removeNotUsedKeysFromCart(List cartListCopyToRemoveKeys) {
+    cartListCopyToRemoveKeys.forEach((element) {
       element.remove("ProductCode");
+      element.remove("Name");
       element.remove("PLU");
       element.remove("PackingQuantity");
       element.remove("RetailPracticedPrice");
@@ -239,6 +232,20 @@ class SaleRequestProvider with ChangeNotifier {
     _changeCursorToLastIndex(consultedProductController);
 
     jsonSaleRequest["Products"] = _cartProducts;
+    notifyListeners();
+  }
+
+  updateProductFromCart({
+    required int productPackingCode,
+    required double quantity,
+    required double value,
+  }) {
+    _cartProducts.forEach((element) {
+      if (element["ProductPackingCode"] == productPackingCode) {
+        element["Quantity"] = quantity;
+        element["Value"] = value;
+      }
+    });
     notifyListeners();
   }
 
@@ -373,22 +380,17 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedCostumer(int costumerCode) {
+  void updateSelectedCostumer(int index, bool value) {
     _costumers.forEach((element) {
-      if (element.Code == costumerCode) {
-        element.selected = !element.selected;
-      }
+      element.selected = false;
     });
+    _costumers[index].selected = value;
 
-    _costumers.forEach((element) {
-      if (element.Code == costumerCode) {
-        if (element.selected) {
-          _costumerCode = element.Code;
-        } else {
-          _costumerCode = -1;
-        }
-      }
-    });
+    if (_costumers[index].selected) {
+      _costumerCode = _costumers[index].Code;
+    } else {
+      _costumerCode = -1;
+    }
     notifyListeners();
   }
 
@@ -584,21 +586,15 @@ class SaleRequestProvider with ChangeNotifier {
     required int requestTypeCode,
     required BuildContext context,
   }) async {
-    List cartWithoutName = [];
+    List cartListCopyToRemoveKeys = [];
     _cartProducts.forEach((element) {
-      cartWithoutName.add(json.decode(json.encode(
+      cartListCopyToRemoveKeys.add(json.decode(json.encode(
           element))); //fazendo uma cópia da lista _cartProducts. Fazendo cópia por atribuição estava apontando pro mesmo local de memória
     });
-    cartWithoutName.forEach((element) {
-      element
-          .remove("Name"); //na requisição não precisa mandar essas informações
-      element.remove(
-          "PackingQuantity"); //na requisição não precisa mandar essas informações
-    });
 
-    _removeNotUsedKeysFromCart();
+    _removeNotUsedKeysFromCart(cartListCopyToRemoveKeys);
 
-    String cartString = cartWithoutName
+    String cartString = cartListCopyToRemoveKeys
         .toString()
         .replaceAll(RegExp(r'ProductPackingCode'), '\"ProductPackingCode\"')
         .replaceAll(RegExp(r', Quantity'), ',\"Quantity\"')
@@ -613,7 +609,7 @@ class SaleRequestProvider with ChangeNotifier {
             RegExp(r', ExpectedDeliveryDate'), ',\"ExpectedDeliveryDate\"');
 
     String saleRequestBodyString =
-        "{\"crossId\": \"${UserIdentity.identity}\",\"EnterpriseCode\": $enterpriseCode,\"RequestTypeCode\": $requestTypeCode,\"SellerCode\": 1,\"CustomerCode\": $costumerCode," +
+        "{\"crossId\": \"${UserIdentity.identity}\",\"EnterpriseCode\": $enterpriseCode,\"RequestTypeCode\": $requestTypeCode,\"SellerCode\": 0,\"CustomerCode\": $costumerCode," +
             "\"Products\": $cartString}";
 
     _errorMessageSaveSaleRequest = "";

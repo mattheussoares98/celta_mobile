@@ -1,6 +1,7 @@
+import 'package:celta_inventario/Components/Sale_request/sale_request_cart_items.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/show_error_message.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,35 +19,19 @@ class SaleRequestCartDetailsPage extends StatefulWidget {
       _SaleRequestCartDetailsPageState();
 }
 
+String textButtonMessage(SaleRequestProvider saleRequestProvider) {
+  if (saleRequestProvider.cartProductsCount == 0) {
+    return "INSIRA PRODUTOS";
+  } else if (saleRequestProvider.costumerCode == -1) {
+    return "INFORME O CLIENTE";
+  } else {
+    return "SALVAR PEDIDO";
+  }
+}
+
 class _SaleRequestCartDetailsPageState
     extends State<SaleRequestCartDetailsPage> {
-  Widget titleAndSubtitle({
-    required String title,
-    required String subtitle,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 100, 97, 97),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          subtitle,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Colors.grey,
-          ),
-        ),
-        const SizedBox(height: 5),
-      ],
-    );
-  }
+  TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,189 +40,52 @@ class _SaleRequestCartDetailsPageState
 
     return Column(
       children: [
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  color: Colors.grey[200],
-                  child: ListView.builder(
-                    itemCount: saleRequestProvider.cartProducts.length,
-                    itemBuilder: (context, index) {
-                      var product = saleRequestProvider.cartProducts[index];
-
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 3),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 3, top: 4),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 6),
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 12,
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          child: FittedBox(
-                                            child: Text(
-                                              (index + 1).toString(),
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                shadows: [
-                                                  Shadow(
-                                                    offset: Offset(0, 0),
-                                                    blurRadius: 2.0,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      // crossAxisAlignment:
-                                      //     CrossAxisAlignment.stretch,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                product["Name"] +
-                                                    " (${product["PackingQuantity"]})",
-                                                style: const TextStyle(
-                                                  fontFamily: 'OpenSans',
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () {
-                                                saleRequestProvider
-                                                    .removeProductFromCart(
-                                                  product["ProductPackingCode"],
-                                                );
-
-                                                ShowErrorMessage
-                                                    .showErrorMessage(
-                                                  error: "Produto removido",
-                                                  context: context,
-                                                  functionSnackBarAction: () {
-                                                    saleRequestProvider
-                                                        .restoreProductRemoved();
-                                                  },
-                                                  labelSnackBarAction:
-                                                      "Restaurar produto",
-                                                );
-                                              },
-                                              icon: const Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          // mainAxisAlignment:
-                                          //     MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Expanded(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      titleAndSubtitle(
-                                                        title: "Qtd",
-                                                        subtitle: product[
-                                                                "Quantity"]
-                                                            .toStringAsFixed(3)
-                                                            .replaceAll(
-                                                                RegExp(r'\.'),
-                                                                ','),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      titleAndSubtitle(
-                                                        title: "Preço",
-                                                        subtitle: ConvertString
-                                                            .convertToBRL(
-                                                          product["Value"]
-                                                              .toString(),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      titleAndSubtitle(
-                                                        title: "Total",
-                                                        subtitle: ConvertString
-                                                            .convertToBRL(
-                                                          "${(product["Quantity"] * product["Value"])} ",
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 30),
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon: Icon(
-                                                  Icons.edit,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+        SaleRequestCartItems(
+          textEditingController: _textEditingController,
+        ),
+        if (saleRequestProvider.cartProductsCount == 0)
+          Expanded(
+            child: Container(
+              color: Colors.grey[200],
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const FittedBox(
+                    child: Text(
+                      "O carrinho está vazio",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 20,
+                        fontFamily: "OpenSans",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        if (saleRequestProvider.lastSaleRequestSaved != "")
+          Container(
+            color: Colors.grey[200],
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FittedBox(
+                child: Text(
+                  saleRequestProvider.lastSaleRequestSaved,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: "OpenSans",
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
         Container(
           color: Colors.grey[400],
           child: Padding(
@@ -250,74 +98,107 @@ class _SaleRequestCartDetailsPageState
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(
-                      children: [
-                        const Text(
-                          "ITENS",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          saleRequestProvider.cartProducts.length.toString(),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        const Text(
-                          "TOTAL",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          ConvertString.convertToBRL(
-                            saleRequestProvider.totalCartPrice,
-                          ),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                    ElevatedButton(
-                      onPressed: saleRequestProvider.isLoadingSaveSaleRequest ||
-                              saleRequestProvider.costumerCode == -1
-                          ? null
-                          : () async {
-                              await saleRequestProvider.saveSaleRequest(
-                                enterpriseCode: widget.enterpriseCode,
-                                requestTypeCode: widget.requestTypeCode,
-                                context: context,
-                              );
-                            },
-                      child: saleRequestProvider.costumerCode == -1
-                          ? const Text("INSIRA UM CLIENTE")
-                          : const Text(
-                              "SALVAR PEDIDO",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                // color: Theme.of(context).colorScheme.primary,
-                                fontSize: 17,
-                                shadows: <Shadow>[
-                                  const Shadow(
-                                    offset: Offset(1.5, 1.5),
-                                    blurRadius: 2.0,
-                                    color: Colors.black,
-                                  ),
-                                ],
-                              ),
+                    Expanded(
+                      flex: 20,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "ITENS",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
+                          ),
+                          Text(
+                            saleRequestProvider.cartProducts.length.toString(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 20,
+                      child: Column(
+                        children: [
+                          const Text(
+                            "TOTAL",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            ConvertString.convertToBRL(
+                              saleRequestProvider.totalCartPrice,
+                            ),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      flex: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: ElevatedButton(
+                          onPressed: saleRequestProvider
+                                      .isLoadingSaveSaleRequest ||
+                                  saleRequestProvider.costumerCode == -1
+                              ? null
+                              : () async {
+                                  ShowAlertDialog().showAlertDialog(
+                                    context: context,
+                                    title: "Salvar pedido",
+                                    subtitle: "Deseja salvar o pedido?",
+                                    function: () async {
+                                      await saleRequestProvider.saveSaleRequest(
+                                        enterpriseCode: widget.enterpriseCode,
+                                        requestTypeCode: widget.requestTypeCode,
+                                        context: context,
+                                      );
+                                    },
+                                  );
+                                },
+                          child: saleRequestProvider.isLoadingSaveSaleRequest
+                              ? FittedBox(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      const Text("SALVANDO PEDIDO   "),
+                                      Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: FittedBox(
+                                    child: Text(
+                                      textButtonMessage(saleRequestProvider),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -21,11 +21,15 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
   static const List appBarTitles = [
     "Inserir produtos",
-    "Inserir cliente",
-    "Produtos do carrinho",
+    "cliente",
+    "carrinho",
   ];
 
-  void _onItemTapped(int index) {
+  void _onItemTapped({
+    required int index,
+    required SaleRequestProvider saleRequestProvider,
+  }) {
+    if (saleRequestProvider.isLoadingSaveSaleRequest) return;
     if (!_hasDefaultRequestModel) {
       return;
       //se não houver modelo de pedido padrão selecionado no BS, não permite alterar o bottomNavigationItem
@@ -74,6 +78,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     return WillPopScope(
       onWillPop: () async {
+        if (saleRequestProvider.isLoadingSaveSaleRequest) return false;
         saleRequestProvider.clearProducts();
         return true;
       },
@@ -86,10 +91,12 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             ),
           ),
           leading: IconButton(
-            onPressed: () {
-              saleRequestProvider.clearProducts();
-              Navigator.of(context).pop();
-            },
+            onPressed: saleRequestProvider.isLoadingSaveSaleRequest
+                ? null
+                : () {
+                    saleRequestProvider.clearProducts();
+                    Navigator.of(context).pop();
+                  },
             icon: const Icon(
               Icons.arrow_back_outlined,
             ),
@@ -214,7 +221,12 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Theme.of(context).colorScheme.primary,
-          onTap: _onItemTapped,
+          onTap: (index) {
+            _onItemTapped(
+              index: index,
+              saleRequestProvider: saleRequestProvider,
+            );
+          },
         ),
       ),
     );

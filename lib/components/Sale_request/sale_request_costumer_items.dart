@@ -80,7 +80,8 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
                         value: costumer.selected,
                         onChanged: (bool? value) {
                           setState(() {
-                            saleRequestProvider.updateSelectedCostumer(1);
+                            saleRequestProvider.updateSelectedCostumer(
+                                0, value!);
                           });
                         }),
                   );
@@ -92,7 +93,12 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
                     value: costumer.selected,
                     activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
-                      saleRequestProvider.updateSelectedCostumer(costumer.Code);
+                      setState(() {
+                        saleRequestProvider.updateSelectedCostumer(
+                          index,
+                          value!,
+                        );
+                      });
                     },
                     title: Padding(
                       padding: const EdgeInsets.all(8.0),

@@ -88,26 +88,34 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
   }
 
   TextStyle hasMinimumWholeQuantity({
+    bool isSaleRetailPrice = false,
     required double minimumWholeQuantity,
-    required bool isSaleRetailPrice,
   }) {
     var green = TextStyle(
       color: Theme.of(context).colorScheme.primary,
-      fontSize: 15,
+      fontSize: 17,
+      fontWeight: FontWeight.bold,
     );
     var black = const TextStyle(
       color: Colors.black,
-      fontSize: 15,
+      fontSize: 17,
+      fontWeight: FontWeight.bold,
     );
-    double? controllerInDouble =
-        double.tryParse(widget.textEditingController.text);
+    double? controllerInDouble = double.tryParse(
+        widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'));
 
     if (isSaleRetailPrice) {
-      if (controllerInDouble == null) {
+      if (controllerInDouble == null || minimumWholeQuantity <= 0) {
         return green;
-      } else if (controllerInDouble < minimumWholeQuantity) {}
+      } else if (controllerInDouble < minimumWholeQuantity) {
+        return green;
+      } else {
+        return black;
+      }
     } else {
-      if (controllerInDouble >= minimumWholeQuantity) {
+      if (controllerInDouble == null || minimumWholeQuantity <= 0) {
+        return black;
+      } else if (controllerInDouble >= minimumWholeQuantity) {
         return green;
       } else {
         return black;
@@ -115,9 +123,80 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
     }
   }
 
+  String getNewPrice({
+    required double minimumWholeQuantity,
+    required double retailPracticedPrice,
+    required double wholePracticedPrice,
+  }) {
+    double? controllerInDouble = double.tryParse(
+        widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'));
+
+    if (controllerInDouble == null) {
+      return ConvertString.convertToBRL(0);
+    }
+
+    return ConvertString.convertToBRL(
+      getPraticedPrice(
+            minimumWholeQuantity: minimumWholeQuantity,
+            retailPracticedPrice: retailPracticedPrice,
+            wholePracticedPrice: wholePracticedPrice,
+          ) *
+          controllerInDouble,
+    );
+  }
+
+  double getPraticedPrice({
+    required double minimumWholeQuantity,
+    required double retailPracticedPrice,
+    required double wholePracticedPrice,
+  }) {
+    double? controllerInDouble = double.tryParse(
+      widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
+    );
+
+    if (controllerInDouble == null) {
+      return 0;
+    } else if (controllerInDouble >= minimumWholeQuantity &&
+        minimumWholeQuantity > 0) {
+      return wholePracticedPrice;
+    } else {
+      return retailPracticedPrice;
+    }
+  }
+
+  updateProductInCart({
+    required SaleRequestProvider saleRequestProvider,
+    required dynamic product,
+  }) {
+    double? controllerInDouble = double.tryParse(
+      widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
+    );
+
+    bool? isValid = _formKey.currentState!.validate();
+
+    if (controllerInDouble == null || controllerInDouble == 0) return;
+
+    if (isValid) {
+      saleRequestProvider.updateProductFromCart(
+        productPackingCode: product["ProductPackingCode"],
+        quantity: controllerInDouble,
+        value: getPraticedPrice(
+          minimumWholeQuantity: product["MinimumWholeQuantity"],
+          retailPracticedPrice: product["RetailPracticedPrice"],
+          wholePracticedPrice: product["WholePracticedPrice"],
+        ),
+      );
+      widget.textEditingController.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
+    double? controllerInDouble = double.tryParse(
+      widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
+    );
+
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -145,12 +224,16 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                           child: Column(
                             children: [
                               InkWell(
-                                onTap: () async {
-                                  await changeFocus(
-                                    saleRequestProvider: saleRequestProvider,
-                                    index: index,
-                                  );
-                                },
+                                onTap:
+                                    saleRequestProvider.isLoadingSaveSaleRequest
+                                        ? null
+                                        : () async {
+                                            await changeFocus(
+                                              saleRequestProvider:
+                                                  saleRequestProvider,
+                                              index: index,
+                                            );
+                                          },
                                 child: Padding(
                                   padding:
                                       const EdgeInsets.only(left: 3, top: 4),
@@ -212,26 +295,30 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                   ),
                                                 ),
                                                 IconButton(
-                                                  onPressed: () {
-                                                    saleRequestProvider
-                                                        .removeProductFromCart(
-                                                      product[
-                                                          "ProductPackingCode"],
-                                                    );
+                                                  onPressed: saleRequestProvider
+                                                          .isLoadingSaveSaleRequest
+                                                      ? null
+                                                      : () {
+                                                          saleRequestProvider
+                                                              .removeProductFromCart(
+                                                            product[
+                                                                "ProductPackingCode"],
+                                                          );
 
-                                                    ShowErrorMessage
-                                                        .showErrorMessage(
-                                                      error: "Produto removido",
-                                                      context: context,
-                                                      functionSnackBarAction:
-                                                          () {
-                                                        saleRequestProvider
-                                                            .restoreProductRemoved();
-                                                      },
-                                                      labelSnackBarAction:
-                                                          "Restaurar produto",
-                                                    );
-                                                  },
+                                                          ShowErrorMessage
+                                                              .showErrorMessage(
+                                                            error:
+                                                                "Produto removido",
+                                                            context: context,
+                                                            functionSnackBarAction:
+                                                                () {
+                                                              saleRequestProvider
+                                                                  .restoreProductRemoved();
+                                                            },
+                                                            labelSnackBarAction:
+                                                                "Restaurar produto",
+                                                          );
+                                                        },
                                                   icon: const Icon(
                                                     Icons.delete,
                                                     color: Colors.red,
@@ -297,13 +384,16 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                       const EdgeInsets.only(
                                                           left: 30),
                                                   child: IconButton(
-                                                    onPressed: () {
-                                                      changeFocus(
-                                                        saleRequestProvider:
-                                                            saleRequestProvider,
-                                                        index: index,
-                                                      );
-                                                    },
+                                                    onPressed: saleRequestProvider
+                                                            .isLoadingSaveSaleRequest
+                                                        ? null
+                                                        : () {
+                                                            changeFocus(
+                                                              saleRequestProvider:
+                                                                  saleRequestProvider,
+                                                              index: index,
+                                                            );
+                                                          },
                                                     icon: _selectedIndex != -1
                                                         ? Icon(
                                                             Icons.expand_less,
@@ -337,31 +427,133 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      InsertQuantityTextFormField(
-                                        focusNode: _focusNode,
-                                        textEditingController:
-                                            widget.textEditingController,
-                                        formKey: _formKey,
-                                        onChanged: () {
-                                          setState(() {});
-                                        },
-                                        labelText: "Digite a nova quantidade",
-                                        hintText: "Digite a nova quantidade",
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 55,
+                                            child: InsertQuantityTextFormField(
+                                              isLoading: saleRequestProvider
+                                                  .isLoadingSaveSaleRequest,
+                                              lengthLimitingTextInputFormatter:
+                                                  8,
+                                              focusNode: _focusNode,
+                                              textEditingController:
+                                                  widget.textEditingController,
+                                              formKey: _formKey,
+                                              onFieldSubmitted: () {
+                                                updateProductInCart(
+                                                  saleRequestProvider:
+                                                      saleRequestProvider,
+                                                  product: product,
+                                                );
+                                              },
+                                              onChanged: () {
+                                                setState(() {});
+                                              },
+                                              labelText:
+                                                  "Digite a nova quantidade",
+                                              hintText: "Nova quantidade",
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 45,
+                                            child: Column(
+                                              children: [
+                                                const FittedBox(
+                                                  child: Text(
+                                                    " NOVO PREÇO",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                    ),
+                                                  ),
+                                                ),
+                                                FittedBox(
+                                                  child: Text(
+                                                    getNewPrice(
+                                                      minimumWholeQuantity: product[
+                                                          "MinimumWholeQuantity"],
+                                                      retailPracticedPrice: product[
+                                                          "RetailPracticedPrice"],
+                                                      wholePracticedPrice: product[
+                                                          "WholePracticedPrice"],
+                                                    ),
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        "Mín. atacado : ${product["MinimumWholeQuantity"]}",
-                                        style: hasMinimumWholeQuantity(
-                                            product["MinimumWholeQuantity"]),
-                                      ),
-                                      Text(
-                                        "Preço atacado: ${product["WholePracticedPrice"]}",
-                                        style: hasMinimumWholeQuantity(
-                                            product["MinimumWholeQuantity"]),
-                                      ),
-                                      Text(
-                                        "Preço venda: ${ConvertString.convertToBRL(product["RetailPracticedPrice"])}",
-                                        style: hasMinimumWholeQuantity(
-                                            product["MinimumWholeQuantity"]),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            flex: 55,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Preço venda: ${ConvertString.convertToBRL(product["RetailPracticedPrice"])}",
+                                                  style: hasMinimumWholeQuantity(
+                                                      minimumWholeQuantity: product[
+                                                          "MinimumWholeQuantity"],
+                                                      isSaleRetailPrice: true),
+                                                ),
+                                                Text(
+                                                  "Mín. atacado : ${product["MinimumWholeQuantity"]}",
+                                                  style: hasMinimumWholeQuantity(
+                                                      minimumWholeQuantity: product[
+                                                          "MinimumWholeQuantity"]),
+                                                ),
+                                                Text(
+                                                  "Preço atacado: ${ConvertString.convertToBRL(product["WholePracticedPrice"])}",
+                                                  style: hasMinimumWholeQuantity(
+                                                      minimumWholeQuantity: product[
+                                                          "MinimumWholeQuantity"]),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 45,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                fixedSize: const Size(300, 60),
+                                              ),
+                                              onPressed: controllerInDouble ==
+                                                          null ||
+                                                      controllerInDouble == 0
+                                                  ? null
+                                                  : () {
+                                                      updateProductInCart(
+                                                        saleRequestProvider:
+                                                            saleRequestProvider,
+                                                        product: product,
+                                                      );
+                                                      FocusScope.of(context)
+                                                          .unfocus();
+                                                    },
+                                              child: const Text("ATUALIZAR"),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -373,17 +565,20 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                       if (index == saleRequestProvider.cartProductsCount - 1 &&
                           saleRequestProvider.cartProductsCount > 1)
                         TextButton(
-                          onPressed: () {
-                            ShowAlertDialog().showAlertDialog(
-                              context: context,
-                              title: "Limpar carrinho",
-                              subtitle:
-                                  "Deseja realmente limpar todos produtos do carrinho?",
-                              function: () {
-                                saleRequestProvider.clearCart();
-                              },
-                            );
-                          },
+                          onPressed:
+                              saleRequestProvider.isLoadingSaveSaleRequest
+                                  ? null
+                                  : () {
+                                      ShowAlertDialog().showAlertDialog(
+                                        context: context,
+                                        title: "Limpar carrinho",
+                                        subtitle:
+                                            "Deseja realmente limpar todos produtos do carrinho?",
+                                        function: () {
+                                          saleRequestProvider.clearCart();
+                                        },
+                                      );
+                                    },
                           child: const Text(
                             "Limpar carrinho",
                             style: TextStyle(

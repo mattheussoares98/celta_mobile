@@ -78,6 +78,8 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                           1) {
                         //verifica se tem mais de uma vírgula
                         return 'Carácter inválido';
+                      } else if (double.tryParse(value) == 0) {
+                        return "Digite uma quantidade";
                       }
                       return null;
                     },

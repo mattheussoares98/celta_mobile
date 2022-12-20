@@ -1,4 +1,5 @@
-import 'package:celta_inventario/Components/Sale_request/sale_request_insert_quantity_form.dart';
+import 'package:celta_inventario/Components/Sale_request/sale_request_associated_stocks_alert_dialog.dart';
+import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
@@ -98,8 +99,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
               itemBuilder: (context, index) {
                 var product = saleRequestProvider.products[index];
 
-                double _quantityToAdd = saleRequestProvider
-                    .getQuantityToAdd(widget.consultedProductController);
+                double _quantityToAdd =
+                    saleRequestProvider.tryChangeControllerTextToDouble(
+                        widget.consultedProductController);
 
                 double _totalItensInCart = saleRequestProvider
                     .getTotalItensInCart(product.ProductPackingCode);
@@ -145,7 +147,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   return;
                                 }
                                 _quantityToAdd = 0;
-                                widget.consultedProductController.text = "0";
+                                widget.consultedProductController.text = "";
                                 changeCursorToLastIndex();
                                 //necessário apagar o campo da quantidade quando
                                 //mudar de produto selecionado
@@ -174,217 +176,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                           values(
                             title: "PLU",
                             value: product.PLU.toString(),
-                            otherWidget: InkWell(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                          scrollable: true,
-                                          content: Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.5,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.9,
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              itemCount: product
-                                                  .StockByEnterpriseAssociateds
-                                                  .length,
-                                              itemBuilder: (
-                                                BuildContext context,
-                                                int index,
-                                              ) {
-                                                return Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (index == 0)
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          FittedBox(
-                                                            child: Row(
-                                                              children: [
-                                                                Text(
-                                                                  "Endereço na empresa atual: ",
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .headline2,
-                                                                ),
-                                                                Text(
-                                                                  product.StorageAreaAddress ==
-                                                                          ""
-                                                                      ? "não há"
-                                                                      : product
-                                                                          .StorageAreaAddress,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 10),
-                                                          const Divider(
-                                                            height: 3,
-                                                            color: Colors.grey,
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 10),
-                                                        ],
-                                                      ),
-                                                    if (index == 0 &&
-                                                        product.StockByEnterpriseAssociateds
-                                                                .length >
-                                                            1)
-                                                      Column(
-                                                        children: [
-                                                          const SizedBox(
-                                                            height: 40,
-                                                          ),
-                                                          const FittedBox(
-                                                            child: Text(
-                                                              "Estoque nas empresas associadas",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                letterSpacing:
-                                                                    0.3,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 30,
-                                                                fontFamily:
-                                                                    "BebasNeue",
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const Divider(
-                                                            height: 3,
-                                                            color: Colors.grey,
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    FittedBox(
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "Empresa: ",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .headline2,
-                                                          ),
-                                                          Text(
-                                                            product.StockByEnterpriseAssociateds[
-                                                                    index]
-                                                                ["Enterprise"],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    FittedBox(
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "Estoque de venda: ",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .headline2,
-                                                          ),
-                                                          Text(
-                                                            product
-                                                                .StockByEnterpriseAssociateds[
-                                                                    index][
-                                                                    "StockBalanceForSale"]
-                                                                .toStringAsFixed(
-                                                                    3)
-                                                                .replaceAll(
-                                                                    RegExp(
-                                                                        r'\.'),
-                                                                    ','),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    FittedBox(
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "Endereços: ",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .headline2,
-                                                          ),
-                                                          Text(
-                                                            product.StockByEnterpriseAssociateds[
-                                                                            index]
-                                                                        [
-                                                                        "StorageAreaAddress"] ==
-                                                                    null
-                                                                ? "Não há"
-                                                                : product
-                                                                    .StockByEnterpriseAssociateds[
-                                                                        index][
-                                                                        "StorageAreaAddress"]
-                                                                    .toString()
-                                                                    .replaceAll(
-                                                                        RegExp(
-                                                                            r'\['),
-                                                                        '- ')
-                                                                    .replaceAll(
-                                                                        RegExp(
-                                                                            r'\]'),
-                                                                        '')
-                                                                    .replaceAll(
-                                                                        RegExp(
-                                                                            r'\, '),
-                                                                        '\n- '),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const Divider(
-                                                      height: 2,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            ),
-                                          ));
-                                    });
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Estoque",
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 3),
-                                  Icon(
-                                    Icons.info,
-                                    size: 30,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ],
-                              ),
+                            otherWidget: SaleRequestAssociatedStocksWidget
+                                .saleRequestAssociatedStocksWidget(
+                              context: context,
+                              product: product,
                             ),
                           ),
                           values(
@@ -457,7 +252,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                       .replaceAll(RegExp(r'\.'), ','),
                             ),
                           if (selectedIndex == index)
-                            SaleRequestInsertQuantityForm(
+                            SaleRequestInsertProductQuantityForm(
                               consultedProductController:
                                   widget.consultedProductController,
                               consultedProductFormKey: _consultedProductFormKey,

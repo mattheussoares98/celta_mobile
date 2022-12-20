@@ -1,13 +1,12 @@
+import 'package:celta_inventario/Components/Global_widgets/insert_quantity_textformfield.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../../Models/sale_request_models/sale_request_products_model.dart';
 import '../../utils/convert_string.dart';
 import '../../utils/show_alert_dialog.dart';
 
-class SaleRequestInsertQuantityForm extends StatefulWidget {
+class SaleRequestInsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
   final TextEditingController consultedProductController;
   final double totalItensInCart;
@@ -15,7 +14,7 @@ class SaleRequestInsertQuantityForm extends StatefulWidget {
   final SaleRequestProductsModel product;
   final Function addProductInCart;
   final Function updateTotalItemValue;
-  const SaleRequestInsertQuantityForm({
+  const SaleRequestInsertProductQuantityForm({
     required this.consultedProductController,
     required this.consultedProductFormKey,
     required this.totalItensInCart,
@@ -27,12 +26,48 @@ class SaleRequestInsertQuantityForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SaleRequestInsertQuantityForm> createState() =>
-      _SaleRequestInsertQuantityFormState();
+  State<SaleRequestInsertProductQuantityForm> createState() =>
+      _SaleRequestInsertProductQuantityFormState();
 }
 
-class _SaleRequestInsertQuantityFormState
-    extends State<SaleRequestInsertQuantityForm> {
+class _SaleRequestInsertProductQuantityFormState
+    extends State<SaleRequestInsertProductQuantityForm> {
+  correctFunction(
+    SaleRequestProvider saleRequestProvider,
+  ) {
+    if (widget.consultedProductController.text.isEmpty &&
+        widget.totalItensInCart > 0) {
+      return ShowAlertDialog().showAlertDialog(
+        context: context,
+        title: "Confirmar exclusão",
+        subtitle: "Deseja excluir o produto do carrinho?",
+        function: () {
+          setState(() {
+            saleRequestProvider.removeProductFromCart(
+              widget.product.ProductPackingCode,
+            );
+
+            widget.updateTotalItemValue();
+          });
+        },
+      );
+    } else {
+      bool isValid = widget.consultedProductFormKey.currentState!.validate();
+
+      double? controllerInDouble = double.tryParse(widget
+          .consultedProductController.text
+          .replaceAll(RegExp(r'\,'), '.'));
+
+      if (controllerInDouble != null && isValid) {
+        setState(() {
+          widget.addProductInCart();
+        });
+
+        FocusScope.of(context).unfocus();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
@@ -48,43 +83,13 @@ class _SaleRequestInsertQuantityFormState
         ),
         Row(
           children: [
-            Form(
-              key: widget.consultedProductFormKey,
-              child: Expanded(
-                child: TextFormField(
-                  inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                  focusNode: saleRequestProvider.consultedProductFocusNode,
-                  controller: widget.consultedProductController,
-                  keyboardType: TextInputType.number,
-                  onChanged: (text) {
-                    widget.updateTotalItemValue();
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        style: BorderStyle.solid,
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 20,
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          widget.consultedProductController.clear();
-                          widget.updateTotalItemValue();
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+            Expanded(
+              child: InsertQuantityTextFormField(
+                focusNode: saleRequestProvider.consultedProductFocusNode,
+                textEditingController: widget.consultedProductController,
+                formKey: widget.consultedProductFormKey,
+                onChanged: () => {widget.updateTotalItemValue()},
+                onFieldSubmitted: () => correctFunction(saleRequestProvider),
               ),
             ),
             const SizedBox(width: 20),
@@ -131,31 +136,7 @@ class _SaleRequestInsertQuantityFormState
                         ? Colors.red
                         : Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: widget.consultedProductController.text.isEmpty &&
-                          widget.totalItensInCart > 0
-                      ? () {
-                          ShowAlertDialog().showAlertDialog(
-                            context: context,
-                            title: "Confirmar exclusão",
-                            subtitle: "Deseja excluir o produto do carrinho?",
-                            function: () {
-                              saleRequestProvider.removeProductFromCart(
-                                widget.product.ProductPackingCode,
-                              );
-
-                              widget.updateTotalItemValue();
-                            },
-                          );
-                        }
-                      : () {
-                          if (widget.consultedProductController.text.isEmpty ||
-                              widget.consultedProductController.text == "0")
-                            return;
-
-                          widget.addProductInCart();
-
-                          FocusScope.of(context).unfocus();
-                        },
+                  onPressed: () => correctFunction(saleRequestProvider),
                   child: widget.consultedProductController.text.isEmpty &&
                           widget.totalItensInCart > 0
                       ? const Text("Remover produto do carrinho")

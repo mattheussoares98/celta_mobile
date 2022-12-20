@@ -39,6 +39,8 @@ class _SaleRequestInsertProductsPageState
             consultProductController: _searchProductTextEditingController,
             isLoading: saleRequestProvider.isLoadingProducts,
             autofocus: false,
+            hasLegacyCodeSearch: true,
+            legacyIsSelected: false,
             onPressSearch: () async {
               _consultedProductController.clear();
 
