@@ -319,9 +319,12 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                                 "Restaurar produto",
                                                           );
                                                         },
-                                                  icon: const Icon(
+                                                  icon: Icon(
                                                     Icons.delete,
-                                                    color: Colors.red,
+                                                    color: saleRequestProvider
+                                                            .isLoadingSaveSaleRequest
+                                                        ? Colors.grey
+                                                        : Colors.red,
                                                   ),
                                                 ),
                                               ],
@@ -404,10 +407,13 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                           )
                                                         : Icon(
                                                             Icons.edit,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .primary,
+                                                            color: saleRequestProvider
+                                                                    .isLoadingSaveSaleRequest
+                                                                ? Colors.grey
+                                                                : Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .primary,
                                                           ),
                                                   ),
                                                 ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class SearchWidget extends StatefulWidget {
   final bool isLoading;
   final Function onPressSearch;
+  final dynamic changeLegacyIsSelectedFunction;
   final TextEditingController consultProductController;
   final FocusNode focusNodeConsultProduct;
   final String hintText;
@@ -17,7 +18,8 @@ class SearchWidget extends StatefulWidget {
     required this.isLoading,
     required this.onPressSearch,
     required this.focusNodeConsultProduct,
-    this.hintText = "PLU, EAN ou nome",
+    this.changeLegacyIsSelectedFunction = null,
+    this.hintText = "PLU-EAN-NOME",
     this.labelText = "Consultar produto",
     this.useCamera = true,
     this.autofocus = true,
@@ -44,171 +46,183 @@ class _SearchWidgetState extends State<SearchWidget> {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              flex: 70,
-              child: Form(
-                key: _formKey,
-                child: TextFormField(
-                  focusNode: focusNode,
-                  enabled: widget.isLoading ? false : true,
-                  autofocus: widget.autofocus,
-                  controller: widget.consultProductController,
-                  // focusNode: _consultedProductFocusNode,
-                  // inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                  onChanged: (value) {
-                    if (value.isEmpty || value == '-') {
-                      value = '0';
-                    }
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty || value == "") {
-                      return widget.hintText;
-                    } else {
-                      return null;
-                    }
-                  },
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        widget.consultProductController.clear();
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                flex: 85,
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    focusNode: focusNode,
+                    enabled: widget.isLoading ? false : true,
+                    autofocus: widget.autofocus,
+                    controller: widget.consultProductController,
+                    // focusNode: _consultedProductFocusNode,
+                    // inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                    onChanged: (value) {
+                      if (value.isEmpty || value == '-') {
+                        value = '0';
+                      }
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty || value == "") {
+                        return widget.hintText;
+                      } else {
+                        return null;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: IconButton(
+                        onPressed: () {
+                          widget.consultProductController.clear();
 
-                        Future.delayed(const Duration(), () {
-                          FocusScope.of(context).unfocus();
-                          FocusScope.of(context).requestFocus(focusNode);
-                        });
-                      },
-                      icon: Icon(
-                        Icons.delete,
-                        color: widget.isLoading ? Colors.grey : Colors.red,
+                          Future.delayed(const Duration(), () {
+                            FocusScope.of(context).unfocus();
+                            FocusScope.of(context).requestFocus(focusNode);
+                          });
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: widget.isLoading ? Colors.grey : Colors.red,
+                        ),
                       ),
-                    ),
-                    hintText: widget.hintText,
-                    labelText: widget.labelText,
-                    labelStyle: TextStyle(
-                      color: widget.isLoading
-                          ? Colors.grey
-                          : Theme.of(context).primaryColor,
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: widget.isLoading
-                          ? Colors.grey
-                          : Theme.of(context).primaryColor,
-                    ),
-                    errorStyle: const TextStyle(
-                      fontSize: 17,
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        style: BorderStyle.solid,
-                        width: 2,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        style: BorderStyle.solid,
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  onFieldSubmitted: (value) async {
-                    if (!isValid()) {
-                      Future.delayed(const Duration(), () {
-                        FocusScope.of(context)
-                            .requestFocus(widget.focusNodeConsultProduct);
-                      });
-                      return;
-                    }
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                              onTap: widget.isLoading
+                                  ? null
+                                  : () async {
+                                      if (!isValid()) {
+                                        return;
+                                      }
+                                      FocusScope.of(context).unfocus();
 
-                    await widget.onPressSearch();
-                  },
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 30,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
+                                      await widget.onPressSearch();
+                                    },
+                              child: Icon(
+                                Icons.search,
+                                size: 35,
+                                color: widget.isLoading
+                                    ? Colors.grey
+                                    : Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            if (widget.useCamera)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: InkWell(
+                                  onTap: widget.isLoading
+                                      ? null
+                                      : () async {
+                                          FocusScope.of(context).unfocus();
+                                          widget.consultProductController
+                                              .clear();
+
+                                          widget.consultProductController.text =
+                                              await ScanBarCode.scanBarcode();
+
+                                          if (widget.consultProductController
+                                                  .text !=
+                                              "") {
+                                            await widget.onPressSearch();
+                                          }
+                                        },
+                                  child: Icon(
+                                    Icons.photo_camera,
+                                    size: 40,
+                                    color: widget.isLoading
+                                        ? Colors.grey
+                                        : Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      hintText: widget.legacyIsSelected
+                          ? "Código legado"
+                          : widget.hintText,
+                      labelText: widget.labelText,
+                      labelStyle: TextStyle(
                         color: widget.isLoading
                             ? Colors.grey
                             : Theme.of(context).primaryColor,
-                        onPressed: widget.isLoading
-                            ? null
-                            : () async {
-                                if (!isValid()) {
-                                  return;
-                                }
-                                FocusScope.of(context).unfocus();
-
-                                await widget.onPressSearch();
-                              },
-                        icon: const Icon(
-                          Icons.search,
-                          size: 40,
+                      ),
+                      floatingLabelStyle: TextStyle(
+                        color: widget.isLoading
+                            ? Colors.grey
+                            : Theme.of(context).primaryColor,
+                      ),
+                      errorStyle: const TextStyle(
+                        fontSize: 17,
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Colors.grey,
                         ),
                       ),
-                      const SizedBox(width: 5),
-                      if (widget.useCamera)
-                        IconButton(
-                          color: widget.isLoading
-                              ? Colors.grey
-                              : Theme.of(context).primaryColor,
-                          onPressed: widget.isLoading
-                              ? null
-                              : () async {
-                                  FocusScope.of(context).unfocus();
-                                  widget.consultProductController.clear();
-
-                                  widget.consultProductController.text =
-                                      await ScanBarCode.scanBarcode();
-
-                                  if (widget.consultProductController.text !=
-                                      "") {
-                                    await widget.onPressSearch();
-                                  }
-                                },
-                          icon: const Icon(
-                            Icons.photo_camera,
-                            size: 40,
-                          ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                    ],
-                  ),
-                  if (widget.hasLegacyCodeSearch)
-                    FittedBox(
-                      child: Row(children: [
-                        Text(
-                          "LEGADO",
-                          style: TextStyle(fontSize: 30),
-                        ),
-                        Container(
-                          width: 50,
-                          height: 50,
-                          child: Checkbox(
-                            value: true,
-                            onChanged: (value) {},
-                          ),
-                        ),
-                      ]),
+                      ),
                     ),
-                ],
+                    onFieldSubmitted: (value) async {
+                      if (!isValid()) {
+                        Future.delayed(const Duration(), () {
+                          FocusScope.of(context)
+                              .requestFocus(widget.focusNodeConsultProduct);
+                        });
+                        return;
+                      }
+
+                      await widget.onPressSearch();
+                    },
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+              if (widget.hasLegacyCodeSearch)
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "código\nlegado",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        Transform.scale(
+                          scale: 1,
+                          child: Checkbox(
+                            value: widget.legacyIsSelected,
+                            onChanged: (value) {
+                              widget.changeLegacyIsSelectedFunction();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),

@@ -54,6 +54,7 @@ class EnterpriseJsonProvider with ChangeNotifier {
         //significa que deu algum erro
         _errorMessage = json.decode(resultAsString)["Message"];
         _isLoadingEnterprises = false;
+        print(_errorMessage);
 
         notifyListeners();
         return;

@@ -24,6 +24,8 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
     _consultProductController.dispose();
   }
 
+  bool _legacyIsSelected = false;
+
   @override
   Widget build(BuildContext context) {
     PriceConferenceProvider priceConferenceProvider =
@@ -56,12 +58,20 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SearchWidget(
+              hasLegacyCodeSearch: true,
+              changeLegacyIsSelectedFunction: () {
+                setState(() {
+                  _legacyIsSelected = !_legacyIsSelected;
+                });
+              },
+              legacyIsSelected: _legacyIsSelected,
               focusNodeConsultProduct:
                   priceConferenceProvider.consultProductFocusNode,
               isLoading: priceConferenceProvider.isLoading ||
                   priceConferenceProvider.isSendingToPrint,
               onPressSearch: () async {
                 await priceConferenceProvider.getProductByPluEanOrName(
+                  isLegacyCodeSearch: _legacyIsSelected,
                   enterpriseCode: codigoInternoEmpresa,
                   controllerText: _consultProductController.text,
                   context: context,

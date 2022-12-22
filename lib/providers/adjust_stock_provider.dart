@@ -3,6 +3,7 @@ import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_type_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
+import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -113,10 +114,15 @@ class AdjustStockProvider with ChangeNotifier {
     required int index,
     required String consultedProductControllerText,
   }) {
-    double currentStockInDouble = double.tryParse(
-        _products[index].CurrentStock.replaceAll(RegExp(r','), '.'))!;
-    double saldoEstoqueVendaInDouble = double.tryParse(
-        _products[index].SaldoEstoqueVenda.replaceAll(RegExp(r','), '.'))!;
+    double currentStockInDouble = double.tryParse(_products[index]
+        .CurrentStock
+        .replaceAll(RegExp(r'\.'), '')
+        .replaceAll(RegExp(r'\,'), '.'))!;
+
+    double saldoEstoqueVendaInDouble = double.tryParse(_products[index]
+        .SaldoEstoqueVenda
+        .replaceAll(RegExp(r'\.'), '')
+        .replaceAll(RegExp(r'\,'), '.'))!;
 
     dynamic newCurrentStock;
     dynamic newSaldoEstoqueVenda;

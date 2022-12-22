@@ -546,11 +546,25 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required int enterpriseCode,
     required String searchValueControllerText,
+    bool hasSearchByLegacyCode = false,
   }) async {
 // 2=ExactPriceLookUp
 // 4=ExactEan
 // 6=ApproximateName
 // 11=ApproximateLegacyCode
+
+    if (hasSearchByLegacyCode) {
+      //quando seleciona a opção de código legado precisa pesquisar somente pelo
+      //código legado, por isso o sistema já retorna encontrando ou não algum
+      //produto
+      await _getProducts(
+        enterpriseCode: enterpriseCode,
+        searchValueControllerText: searchValueControllerText,
+        searchTypeInt: 11, //ApproximateLegacyCode
+        context: context,
+      );
+      return;
+    }
 
     int? searchTypeInt = int.tryParse(searchValueControllerText);
 

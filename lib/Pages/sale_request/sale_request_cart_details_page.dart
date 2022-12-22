@@ -152,7 +152,8 @@ class _SaleRequestCartDetailsPageState
                         child: ElevatedButton(
                           onPressed: saleRequestProvider
                                       .isLoadingSaveSaleRequest ||
-                                  saleRequestProvider.costumerCode == -1
+                                  saleRequestProvider.costumerCode == -1 ||
+                                  saleRequestProvider.cartProductsCount == 0
                               ? null
                               : () async {
                                   ShowAlertDialog().showAlertDialog(

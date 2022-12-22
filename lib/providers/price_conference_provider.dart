@@ -67,7 +67,6 @@ class PriceConferenceProvider with ChangeNotifier {
     required String controllerText, //em string pq vem de um texfFormField
     required SearchTypes searchTypes,
     required BuildContext context,
-    // required FocusNode consultProductFocusNode,
   }) async {
     _products.clear();
     _errorMessage = "";
@@ -132,44 +131,46 @@ class PriceConferenceProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
-    // required FocusNode consultProductFocusNode,
+    required bool isLegacyCodeSearch,
   }) async {
-    int? isInt = int.tryParse(controllerText);
-    if (isInt != null) {
-      //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
-      await _getProducts(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypes: SearchTypes.GetProductByPLU,
-        context: context,
-      );
-      if (_products.isNotEmpty) return;
-
-      await _getProducts(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypes: SearchTypes.GetProductByEAN,
-        context: context,
-      );
-      if (_products.isNotEmpty) return;
-
+    if (isLegacyCodeSearch) {
       await _getProducts(
         enterpriseCode: enterpriseCode,
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByLegacyCode,
         context: context,
       );
-      if (_products.isNotEmpty) return;
     } else {
-      //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
-      await _getProducts(
-        // consultProductFocusNode: consultProductFocusNode,
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypes: SearchTypes.GetProductByName,
-        context: context,
-      );
+      int? isInt = int.tryParse(controllerText);
+      if (isInt != null) {
+        //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
+        await _getProducts(
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByPLU,
+          context: context,
+        );
+        if (_products.isNotEmpty) return;
+
+        await _getProducts(
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByEAN,
+          context: context,
+        );
+        if (_products.isNotEmpty) return;
+      } else {
+        //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
+        await _getProducts(
+          // consultProductFocusNode: consultProductFocusNode,
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByName,
+          context: context,
+        );
+      }
     }
+
     if (_errorMessage != "") {
       //quando da erro para consultar os produtos, muda o foco novamente para o
       //campo de pesquisa dos produtos
