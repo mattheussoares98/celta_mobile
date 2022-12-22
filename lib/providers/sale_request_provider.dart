@@ -23,20 +23,12 @@ class SaleRequestProvider with ChangeNotifier {
   bool get isLoadingCostumer => _isLoadingCostumer;
   String _errorMessageCostumer = "";
   String get errorMessageCostumer => _errorMessageCostumer;
-  List<SaleRequestCostumerModel> _costumers = [
-    SaleRequestCostumerModel(
-      Code: 1,
-      PersonalizedCode: "1",
-      Name: "Consumidor",
-      ReducedName: "",
-      CpfCnpjNumber: "1",
-      RegistrationNumber: "",
-      SexType: "M",
-      selected: false,
-    ),
-  ];
-  get costumers => [..._costumers];
-  get costumersCount => _costumers.length;
+  Map<int, List<SaleRequestCostumerModel>> _costumers = {};
+
+  costumers(int enterpriseCode) {
+    return _costumers[enterpriseCode];
+  }
+
   int _costumerCode =
       -1; //-1 significa que nenhum foi selecionado ainda, por isso precisa aparecer uma mensagem
   int get costumerCode => _costumerCode;
@@ -67,8 +59,29 @@ class SaleRequestProvider with ChangeNotifier {
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
 
-  _clearCostumers() {
-    _costumers = [
+  insertDefaultCostumer(int enterpriseCode) {
+    //sempre que seleciona a empresa para ir à tela de pedido de vendas, no
+    //initstate precisa adicionar o consumidor padrão para os consumidores serem
+    //informados por empresa. Assim, se voltar e selecionar outra empresa, os
+    //clientes estarão vinculados à essa empresa e não aparecerão nas outras
+    _costumers.putIfAbsent(
+        enterpriseCode,
+        () => [
+              SaleRequestCostumerModel(
+                Code: 1,
+                PersonalizedCode: "1",
+                Name: "Consumidor",
+                ReducedName: "",
+                CpfCnpjNumber: "1",
+                RegistrationNumber: "",
+                SexType: "M",
+                selected: false,
+              ),
+            ]);
+  }
+
+  _clearCostumers(int enterpriseCode) {
+    _costumers[enterpriseCode] = [
       SaleRequestCostumerModel(
         Code: 1,
         PersonalizedCode: "1",
@@ -380,14 +393,18 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedCostumer(int index, bool value) {
-    _costumers.forEach((element) {
+  void updateSelectedCostumer({
+    required int index,
+    required bool value,
+    required int enterpriseCode,
+  }) {
+    _costumers[enterpriseCode]?.forEach((element) {
       element.selected = false;
     });
-    _costumers[index].selected = value;
+    _costumers[enterpriseCode]?[index].selected = value;
 
-    if (_costumers[index].selected) {
-      _costumerCode = _costumers[index].Code;
+    if (_costumers[enterpriseCode]![index].selected) {
+      _costumerCode = _costumers[enterpriseCode]![index].Code;
     } else {
       _costumerCode = -1;
     }
@@ -397,6 +414,7 @@ class SaleRequestProvider with ChangeNotifier {
   Future<void> getCostumers({
     required BuildContext context,
     required String searchValueControllerText,
+    required int enterpriseCode,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
@@ -407,12 +425,14 @@ class SaleRequestProvider with ChangeNotifier {
         context: context,
         searchTypeInt: 3, //ApproximateName
         searchValueControllerText: searchValueControllerText,
+        enterpriseCode: enterpriseCode,
       );
     } else {
       await _getCostumers(
         context: context,
         searchTypeInt: 2, //exactCode
         searchValueControllerText: searchValueControllerText,
+        enterpriseCode: enterpriseCode,
       );
 
       if (_costumers.isNotEmpty) return;
@@ -421,6 +441,7 @@ class SaleRequestProvider with ChangeNotifier {
         context: context,
         searchTypeInt: 1, //exactCnpjCpfNumber
         searchValueControllerText: searchValueControllerText,
+        enterpriseCode: enterpriseCode,
       );
     }
   }
@@ -429,12 +450,13 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required int searchTypeInt,
     required String searchValueControllerText,
+    required int enterpriseCode,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
 
-    _costumers.removeWhere((element) => element.Code != 1);
+    _costumers[enterpriseCode]?.removeWhere((element) => element.Code != 1);
 //não remove o "consumidor"
 
     _errorMessageCostumer = "";
@@ -473,7 +495,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       SaleRequestCostumerModel.responseAsStringToSaleRequestCostumerModel(
         responseAsString: responseInString,
-        listToAdd: _costumers,
+        listToAdd: _costumers[enterpriseCode]!,
       );
     } catch (e) {
       print("Erro para obter os clientes: $e");
@@ -644,7 +666,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       if (responseInString.contains("sucesso")) {
         _cartProducts.clear();
-        _clearCostumers();
+        _clearCostumers(enterpriseCode);
         _lastSaleRequestSaved = json.decode(responseInString)["Message"];
         int index = _lastSaleRequestSaved.indexOf(RegExp(r'\('));
         _lastSaleRequestSaved = "Último pedido salvo: " +

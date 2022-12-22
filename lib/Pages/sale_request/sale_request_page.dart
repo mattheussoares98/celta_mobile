@@ -65,11 +65,13 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
+    saleRequestProvider.insertDefaultCostumer(arguments["Code"]);
+
     List<Widget> _pages = <Widget>[
       _hasDefaultRequestModel
           ? const SaleRequestInsertProductsPage()
           : const SaleRequestManualDefaultRequestModelPage(),
-      const SaleRequestInsertCostumer(),
+      SaleRequestInsertCostumer(enterpriseCode: arguments["Code"]),
       SaleRequestCartDetailsPage(
         enterpriseCode: arguments["Code"],
         requestTypeCode: arguments["SaleRequestTypeCode"],

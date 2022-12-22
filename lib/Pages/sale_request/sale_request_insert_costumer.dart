@@ -8,7 +8,11 @@ import '../../utils/consulting_widget.dart';
 import '../../utils/error_message.dart';
 
 class SaleRequestInsertCostumer extends StatefulWidget {
-  const SaleRequestInsertCostumer({Key? key}) : super(key: key);
+  final int enterpriseCode;
+  const SaleRequestInsertCostumer({
+    required this.enterpriseCode,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SaleRequestInsertCostumer> createState() =>
@@ -25,6 +29,9 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
 
+    int costumersCount =
+        saleRequestProvider.costumers(widget.enterpriseCode).length;
+
     return Column(
       children: [
         SearchWidget(
@@ -35,6 +42,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
             await saleRequestProvider.getCostumers(
               context: context,
               searchValueControllerText: searchCostumerController.text,
+              enterpriseCode: widget.enterpriseCode,
             );
           },
           focusNodeConsultProduct: searchCostumerFocusNode,
@@ -42,8 +50,8 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           labelText: "Consultar cliente",
           useCamera: false,
         ),
-        if (saleRequestProvider.costumersCount > 0)
-          const SaleRequestCostumersItems(),
+        if (costumersCount > 0)
+          SaleRequestCostumersItems(enterpriseCode: widget.enterpriseCode),
         if (saleRequestProvider.errorMessageCostumer != "")
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageCostumer,

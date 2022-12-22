@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SaleRequestCostumersItems extends StatefulWidget {
+  final int enterpriseCode;
   const SaleRequestCostumersItems({
+    required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
@@ -58,30 +60,32 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
       context,
       listen: true,
     );
+    var costumer = saleRequestProvider.costumers(widget.enterpriseCode);
 
     return Expanded(
       child: Column(
-        mainAxisAlignment: saleRequestProvider.costumersCount > 1
+        mainAxisAlignment: costumer.length > 1
             ? MainAxisAlignment.center
             : MainAxisAlignment.start,
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: saleRequestProvider.costumersCount,
+              itemCount: costumer.length,
               itemBuilder: (context, index) {
-                var costumer = saleRequestProvider.costumers[index];
-
-                if (costumer.Code == 1) {
+                if (costumer[index].Code == 1) {
                   return PersonalizedCard.personalizedCard(
                     context: context,
                     child: CheckboxListTile(
                         activeColor: Theme.of(context).colorScheme.primary,
                         title: const Text("Cliente consumidor"),
-                        value: costumer.selected,
+                        value: costumer[index].selected,
                         onChanged: (bool? value) {
                           setState(() {
                             saleRequestProvider.updateSelectedCostumer(
-                                0, value!);
+                              index: index,
+                              value: value!,
+                              enterpriseCode: widget.enterpriseCode,
+                            );
                           });
                         }),
                   );
@@ -90,13 +94,14 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
                 return PersonalizedCard.personalizedCard(
                   context: context,
                   child: CheckboxListTile(
-                    value: costumer.selected,
+                    value: costumer[index].selected,
                     activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (value) {
                       setState(() {
                         saleRequestProvider.updateSelectedCostumer(
-                          index,
-                          value!,
+                          index: index,
+                          value: value!,
+                          enterpriseCode: widget.enterpriseCode,
                         );
                       });
                     },
@@ -107,24 +112,24 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
                         children: [
                           values(
                             title: "Código",
-                            value: costumer.Code.toString(),
+                            value: costumer[index].Code.toString(),
                           ),
                           values(
                             title: "Nome",
-                            value: costumer.Name.toString(),
+                            value: costumer[index].Name.toString(),
                           ),
-                          if (costumer.ReducedName != "")
+                          if (costumer[index].ReducedName != "")
                             values(
                               title: "Nome reduzido",
-                              value: costumer.ReducedName.toString(),
+                              value: costumer[index].ReducedName.toString(),
                             ),
                           values(
                             title: "CPF/CNPJ",
-                            value: costumer.CpfCnpjNumber,
+                            value: costumer[index].CpfCnpjNumber,
                           ),
                           values(
                             title: "Código personalizado",
-                            value: costumer.PersonalizedCode.toString(),
+                            value: costumer[index].PersonalizedCode.toString(),
                           ),
                         ],
                       ),
