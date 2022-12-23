@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:celta_inventario/Components/Global_widgets/enterprise_items.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_request_type_model.dart';
@@ -47,9 +48,23 @@ class SaleRequestProvider with ChangeNotifier {
   var removedProduct;
   int? indexOfRemovedProduct;
 
-  List<Map<String, dynamic>> _cartProducts = [];
-  get cartProducts => [..._cartProducts];
-  get cartProductsCount => _cartProducts.length;
+  Map<int, List<Map<String, dynamic>>> _cartProducts = {};
+  getCartProducts(int enterpriseCode) {
+    return _cartProducts[enterpriseCode];
+  }
+
+  int cartProductsCount(int enterpriseCode) {
+    if (_cartProducts[enterpriseCode] == null) {
+      return 0;
+    } else if (_cartProducts[enterpriseCode]!.isEmpty) {
+      return 0;
+    } else if (!_cartProducts[enterpriseCode]![0]
+        .containsKey("ProductPackingCode")) {
+      return 0;
+    } else {
+      return _cartProducts[enterpriseCode]!.length;
+    }
+  }
 
   String _errorMessageSaveSaleRequest = "";
   get errorMessageSaveSaleRequest => _errorMessageSaveSaleRequest;
@@ -58,6 +73,14 @@ class SaleRequestProvider with ChangeNotifier {
 
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
+
+  // insertEnterpriseKeyOfCartProducts(int enterpriseCode) {
+  //   //precisa inserir o código da empresa como chave do Map dos produtos do
+  //   //carrinho quando acessa a página SaleRequestPage para conseguir adicionar,
+  //   //remover e alterar produtos no carrinho
+  //   _cartProducts.putIfAbsent(enterpriseCode, () => [{}]);
+  //   print(_cartProducts);
+  // }
 
   insertDefaultCostumer(int enterpriseCode) {
     //sempre que seleciona a empresa para ir à tela de pedido de vendas, no
@@ -111,10 +134,14 @@ class SaleRequestProvider with ChangeNotifier {
   double getPraticedPrice({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
+    required int enterpriseCode,
   }) {
     double _quantityToAdd =
         tryChangeControllerTextToDouble(consultedProductController);
-    double _totalItensInCart = getTotalItensInCart(product.ProductPackingCode);
+    double _totalItensInCart = getTotalItensInCart(
+      ProductPackingCode: product.ProductPackingCode,
+      enterpriseCode: enterpriseCode,
+    );
 
     if (product.MinimumWholeQuantity == 0) {
       return product.RetailSalePrice;
@@ -129,6 +156,7 @@ class SaleRequestProvider with ChangeNotifier {
   double getTotalItemValue({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
+    required int enterpriseCode,
   }) {
     double _quantityToAdd =
         tryChangeControllerTextToDouble(consultedProductController);
@@ -136,6 +164,7 @@ class SaleRequestProvider with ChangeNotifier {
     double _praticedPrice = getPraticedPrice(
       product: product,
       consultedProductController: consultedProductController,
+      enterpriseCode: enterpriseCode,
     );
 
     double _totalItemValue = _quantityToAdd * _praticedPrice;
@@ -188,10 +217,12 @@ class SaleRequestProvider with ChangeNotifier {
   dynamic addProductInCart({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
+    required int enterpriseCode,
   }) async {
     double praticedPrice = getPraticedPrice(
       product: product,
       consultedProductController: consultedProductController,
+      enterpriseCode: enterpriseCode,
     );
     double quantity =
         tryChangeControllerTextToDouble(consultedProductController);
@@ -230,14 +261,20 @@ class SaleRequestProvider with ChangeNotifier {
     };
 
     if (alreadyContainsProduct(
-      product.ProductPackingCode,
+      ProductPackingCode: product.ProductPackingCode,
+      enterpriseCode: enterpriseCode,
     )) {
-      int index = _cartProducts.indexWhere((element) =>
+      int index = _cartProducts[enterpriseCode]!.indexWhere((element) =>
           element["ProductPackingCode"] == product.ProductPackingCode);
-      _cartProducts[index]["Quantity"] += quantity;
-      _cartProducts[index]["Value"] = praticedPrice;
+      _cartProducts[index]![enterpriseCode]["Quantity"] += quantity;
+      _cartProducts[index]![enterpriseCode]["Value"] = praticedPrice;
     } else {
-      _cartProducts.add(value);
+      if (_cartProducts[enterpriseCode] == null) {
+        _cartProducts[enterpriseCode] = [{}];
+        _cartProducts[enterpriseCode]![0] = value;
+      } else {
+        _cartProducts[enterpriseCode]!.add(value);
+      }
     }
 
     consultedProductController.text = "";
@@ -252,8 +289,9 @@ class SaleRequestProvider with ChangeNotifier {
     required int productPackingCode,
     required double quantity,
     required double value,
+    required int enterpriseCode,
   }) {
-    _cartProducts.forEach((element) {
+    _cartProducts[enterpriseCode]!.forEach((element) {
       if (element["ProductPackingCode"] == productPackingCode) {
         element["Quantity"] = quantity;
         element["Value"] = value;
@@ -262,17 +300,20 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  double get totalCartPrice {
+  double getTotalCartPrice(int enterpriseCode) {
     double total = 0;
+    if (_cartProducts[enterpriseCode] == null) {
+      return 0;
+    } else {
+      _cartProducts[enterpriseCode]!.forEach((element) {
+        print("element Quantity: ${element["Quantity"]}");
+        print("element Value: ${element["Value"]}");
 
-    _cartProducts.forEach((element) {
-      print("element Quantity: ${element["Quantity"]}");
-      print("element Value: ${element["Value"]}");
+        total += element["Quantity"] * element["Value"];
+      });
 
-      total += element["Quantity"] * element["Value"];
-    });
-
-    return total;
+      return total;
+    }
   }
 
   Map<String, dynamic> jsonSaleRequest = {
@@ -298,46 +339,67 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  clearCart() {
-    _cartProducts = [];
+  clearCart(int enterpriseCode) {
+    if (_cartProducts[enterpriseCode] != null) {
+      _cartProducts[enterpriseCode]!.clear();
+    }
     notifyListeners();
   }
 
-  removeProductFromCart(int ProductPackingCode) {
-    indexOfRemovedProduct = _cartProducts.indexWhere(
+  removeProductFromCart({
+    required int ProductPackingCode,
+    required int enterpriseCode,
+  }) {
+    indexOfRemovedProduct = _cartProducts[enterpriseCode]!.indexWhere(
         (element) => element["ProductPackingCode"] == ProductPackingCode);
 
-    removedProduct = _cartProducts.removeAt(indexOfRemovedProduct!);
+    removedProduct =
+        _cartProducts[enterpriseCode]!.removeAt(indexOfRemovedProduct!);
     notifyListeners();
   }
 
-  restoreProductRemoved() {
-    _cartProducts.insert(indexOfRemovedProduct!, removedProduct);
+  restoreProductRemoved(int enterpriseCode) {
+    _cartProducts[enterpriseCode]!
+        .insert(indexOfRemovedProduct!, removedProduct);
     notifyListeners();
   }
 
-  alreadyContainsProduct(int ProductPackingCode) {
+  alreadyContainsProduct({
+    required int ProductPackingCode,
+    required int enterpriseCode,
+  }) {
     bool alreadyContainsProduct = false;
 
-    _cartProducts.forEach((element) {
-      if (ProductPackingCode == element["ProductPackingCode"]) {
-        alreadyContainsProduct = true;
-      }
-    });
+    if (_cartProducts[enterpriseCode] == null) {
+      return false;
+    } else {
+      _cartProducts[enterpriseCode]!.forEach((element) {
+        if (ProductPackingCode == element["ProductPackingCode"]) {
+          alreadyContainsProduct = true;
+        }
+      });
 
-    return alreadyContainsProduct;
+      return alreadyContainsProduct;
+    }
   }
 
-  double getTotalItensInCart(int ProductPackingCode) {
+  double getTotalItensInCart({
+    required int ProductPackingCode,
+    required int enterpriseCode,
+  }) {
     double atualQuantity = 0;
-    _cartProducts.forEach((element) {
-      // print(element["ProductPackingCode"]);
-      if (element["ProductPackingCode"] == ProductPackingCode) {
-        atualQuantity = double.tryParse(element["Quantity"].toString())!;
-      }
-    });
+    if (_cartProducts[enterpriseCode] == null) {
+      return 0;
+    } else {
+      _cartProducts[enterpriseCode]!.forEach((element) {
+        // print(element["ProductPackingCode"]);
+        if (element["ProductPackingCode"] == ProductPackingCode) {
+          atualQuantity = double.tryParse(element["Quantity"].toString())!;
+        }
+      });
 
-    return atualQuantity;
+      return atualQuantity;
+    }
   }
 
   Future<void> getRequestType({
@@ -623,7 +685,7 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
   }) async {
     List cartListCopyToRemoveKeys = [];
-    _cartProducts.forEach((element) {
+    _cartProducts[enterpriseCode]!.forEach((element) {
       cartListCopyToRemoveKeys.add(json.decode(json.encode(
           element))); //fazendo uma cópia da lista _cartProducts. Fazendo cópia por atribuição estava apontando pro mesmo local de memória
     });
@@ -665,7 +727,7 @@ class SaleRequestProvider with ChangeNotifier {
       print('resposta para salvar o pedido = $responseInString');
 
       if (responseInString.contains("sucesso")) {
-        _cartProducts.clear();
+        _cartProducts[enterpriseCode]!.clear();
         _clearCostumers(enterpriseCode);
         _lastSaleRequestSaved = json.decode(responseInString)["Message"];
         int index = _lastSaleRequestSaved.indexOf(RegExp(r'\('));

@@ -38,9 +38,16 @@ class _SaleRequestCartDetailsPageState
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
 
+    int cartProductsCount =
+        saleRequestProvider.cartProductsCount(widget.enterpriseCode);
+
+    double totalCartPrice =
+        saleRequestProvider.getTotalCartPrice(widget.enterpriseCode);
+
     return Column(
       children: [
         SaleRequestCartItems(
+          enterpriseCode: widget.enterpriseCode,
           textEditingController: _textEditingController,
         ),
         if (saleRequestProvider.cartProductsCount == 0)
@@ -110,7 +117,7 @@ class _SaleRequestCartDetailsPageState
                             ),
                           ),
                           Text(
-                            saleRequestProvider.cartProducts.length.toString(),
+                            cartProductsCount.toString(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
@@ -133,7 +140,7 @@ class _SaleRequestCartDetailsPageState
                           ),
                           Text(
                             ConvertString.convertToBRL(
-                              saleRequestProvider.totalCartPrice,
+                              totalCartPrice,
                             ),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,

@@ -67,9 +67,14 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     saleRequestProvider.insertDefaultCostumer(arguments["Code"]);
 
+    int cartProductsCount =
+        saleRequestProvider.cartProductsCount(arguments["Code"]);
+
     List<Widget> _pages = <Widget>[
       _hasDefaultRequestModel
-          ? const SaleRequestInsertProductsPage()
+          ? SaleRequestInsertProductsPage(
+              enterpriseCode: arguments["Code"],
+            )
           : const SaleRequestManualDefaultRequestModelPage(),
       SaleRequestInsertCostumer(enterpriseCode: arguments["Code"]),
       SaleRequestCartDetailsPage(
@@ -142,8 +147,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                             padding: const EdgeInsets.all(2.0),
                             child: FittedBox(
                               child: Text(
-                                saleRequestProvider.cartProducts.length
-                                    .toString(),
+                                cartProductsCount.toString(),
                               ),
                             ),
                           ),
@@ -156,7 +160,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                     padding: const EdgeInsets.only(right: 5),
                     child: Text(
                       ConvertString.convertToBRL(
-                        saleRequestProvider.totalCartPrice,
+                        saleRequestProvider
+                            .getTotalCartPrice(arguments["Code"]),
                       ),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -195,7 +200,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                     Icons.shopping_cart,
                     size: 35,
                   ),
-                  if (saleRequestProvider.cartProducts.length > 0)
+                  if (cartProductsCount > 0)
                     Positioned(
                       top: 0,
                       right: 0,
@@ -205,8 +210,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                           padding: const EdgeInsets.all(2.0),
                           child: FittedBox(
                             child: Text(
-                              saleRequestProvider.cartProducts.length
-                                  .toString(),
+                              cartProductsCount.toString(),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,

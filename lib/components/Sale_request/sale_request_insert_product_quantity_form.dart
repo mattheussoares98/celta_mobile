@@ -14,8 +14,10 @@ class SaleRequestInsertProductQuantityForm extends StatefulWidget {
   final SaleRequestProductsModel product;
   final Function addProductInCart;
   final Function updateTotalItemValue;
+  final int enterpriseCode;
   const SaleRequestInsertProductQuantityForm({
     required this.consultedProductController,
+    required this.enterpriseCode,
     required this.consultedProductFormKey,
     required this.totalItensInCart,
     required this.totalItemValue,
@@ -44,7 +46,8 @@ class _SaleRequestInsertProductQuantityFormState
         function: () {
           setState(() {
             saleRequestProvider.removeProductFromCart(
-              widget.product.ProductPackingCode,
+              ProductPackingCode: widget.product.ProductPackingCode,
+              enterpriseCode: widget.enterpriseCode,
             );
 
             widget.updateTotalItemValue();

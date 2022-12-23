@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 
 class SaleRequestProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
+  final int enterpriseCode;
 
   const SaleRequestProductsItems({
     required this.consultedProductController,
+    required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
@@ -103,12 +105,16 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                     saleRequestProvider.tryChangeControllerTextToDouble(
                         widget.consultedProductController);
 
-                double _totalItensInCart = saleRequestProvider
-                    .getTotalItensInCart(product.ProductPackingCode);
+                double _totalItensInCart =
+                    saleRequestProvider.getTotalItensInCart(
+                  ProductPackingCode: product.ProductPackingCode,
+                  enterpriseCode: widget.enterpriseCode,
+                );
 
                 double _totalItemValue = saleRequestProvider.getTotalItemValue(
                   product: product,
                   consultedProductController: widget.consultedProductController,
+                  enterpriseCode: widget.enterpriseCode,
                 );
 
                 // double _totalItemValue = saleRequestProvider.getTotalItemValue(
@@ -238,7 +244,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                             ),
                           ),
                           if (saleRequestProvider.alreadyContainsProduct(
-                            product.ProductPackingCode,
+                            ProductPackingCode: product.ProductPackingCode,
+                            enterpriseCode: widget.enterpriseCode,
                           ))
                             values(
                               // titleColor: Theme.of(context).colorScheme.primary,
@@ -246,13 +253,16 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               value: "Quantidade no carrinho: " +
                                   saleRequestProvider
                                       .getTotalItensInCart(
-                                        product.ProductPackingCode,
+                                        ProductPackingCode:
+                                            product.ProductPackingCode,
+                                        enterpriseCode: widget.enterpriseCode,
                                       )
                                       .toStringAsFixed(3)
                                       .replaceAll(RegExp(r'\.'), ','),
                             ),
                           if (selectedIndex == index)
                             SaleRequestInsertProductQuantityForm(
+                              enterpriseCode: widget.enterpriseCode,
                               consultedProductController:
                                   widget.consultedProductController,
                               consultedProductFormKey: _consultedProductFormKey,
@@ -269,6 +279,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   consultedProductController:
                                       widget.consultedProductController,
                                   product: product,
+                                  enterpriseCode: widget.enterpriseCode,
                                 );
                               },
                               totalItensInCart: _totalItensInCart,
@@ -279,6 +290,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     product: product,
                                     consultedProductController:
                                         widget.consultedProductController,
+                                    enterpriseCode: widget.enterpriseCode,
                                   );
                                 });
                               },

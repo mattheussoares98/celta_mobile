@@ -8,8 +8,10 @@ import 'package:provider/provider.dart';
 
 class SaleRequestCartItems extends StatefulWidget {
   final TextEditingController textEditingController;
+  final int enterpriseCode;
   const SaleRequestCartItems({
     required this.textEditingController,
+    required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
@@ -178,6 +180,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
 
     if (isValid) {
       saleRequestProvider.updateProductFromCart(
+        enterpriseCode: widget.enterpriseCode,
         productPackingCode: product["ProductPackingCode"],
         quantity: controllerInDouble,
         value: getPraticedPrice(
@@ -197,6 +200,12 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
       widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
     );
 
+    int cartProductsCount =
+        saleRequestProvider.cartProductsCount(widget.enterpriseCode);
+
+    var cartProducts =
+        saleRequestProvider.getCartProducts(widget.enterpriseCode);
+
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -205,9 +214,9 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
             child: Container(
               color: Colors.grey[200],
               child: ListView.builder(
-                itemCount: saleRequestProvider.cartProductsCount,
+                itemCount: cartProductsCount,
                 itemBuilder: (context, index) {
-                  var product = saleRequestProvider.cartProducts[index];
+                  var product = cartProducts[index];
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -301,8 +310,11 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                       : () {
                                                           saleRequestProvider
                                                               .removeProductFromCart(
-                                                            product[
-                                                                "ProductPackingCode"],
+                                                            ProductPackingCode:
+                                                                product[
+                                                                    "ProductPackingCode"],
+                                                            enterpriseCode: widget
+                                                                .enterpriseCode,
                                                           );
 
                                                           ShowErrorMessage
@@ -313,7 +325,9 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                             functionSnackBarAction:
                                                                 () {
                                                               saleRequestProvider
-                                                                  .restoreProductRemoved();
+                                                                  .restoreProductRemoved(
+                                                                      widget
+                                                                          .enterpriseCode);
                                                             },
                                                             labelSnackBarAction:
                                                                 "Restaurar produto",
@@ -568,8 +582,8 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                           ),
                         ),
                       ),
-                      if (index == saleRequestProvider.cartProductsCount - 1 &&
-                          saleRequestProvider.cartProductsCount > 1)
+                      if (index == cartProductsCount - 1 &&
+                          cartProductsCount > 1)
                         TextButton(
                           onPressed:
                               saleRequestProvider.isLoadingSaveSaleRequest
@@ -581,7 +595,8 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                         subtitle:
                                             "Deseja realmente limpar todos produtos do carrinho?",
                                         function: () {
-                                          saleRequestProvider.clearCart();
+                                          saleRequestProvider
+                                              .clearCart(widget.enterpriseCode);
                                         },
                                       );
                                     },

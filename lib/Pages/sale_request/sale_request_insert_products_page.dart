@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SaleRequestInsertProductsPage extends StatefulWidget {
+  final int enterpriseCode;
   const SaleRequestInsertProductsPage({
+    required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
@@ -77,6 +79,7 @@ class _SaleRequestInsertProductsPageState
           if (saleRequestProvider.productsCount > 0)
             SaleRequestProductsItems(
               consultedProductController: _consultedProductController,
+              enterpriseCode: widget.enterpriseCode,
             ),
         ],
       ),
