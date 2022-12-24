@@ -108,13 +108,13 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                 double _totalItensInCart =
                     saleRequestProvider.getTotalItensInCart(
                   ProductPackingCode: product.ProductPackingCode,
-                  enterpriseCode: widget.enterpriseCode,
+                  enterpriseCode: widget.enterpriseCode.toString(),
                 );
 
                 double _totalItemValue = saleRequestProvider.getTotalItemValue(
                   product: product,
                   consultedProductController: widget.consultedProductController,
-                  enterpriseCode: widget.enterpriseCode,
+                  enterpriseCode: widget.enterpriseCode.toString(),
                 );
 
                 // double _totalItemValue = saleRequestProvider.getTotalItemValue(
@@ -245,7 +245,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                           ),
                           if (saleRequestProvider.alreadyContainsProduct(
                             ProductPackingCode: product.ProductPackingCode,
-                            enterpriseCode: widget.enterpriseCode,
+                            enterpriseCode: widget.enterpriseCode.toString(),
                           ))
                             values(
                               // titleColor: Theme.of(context).colorScheme.primary,
@@ -255,7 +255,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                       .getTotalItensInCart(
                                         ProductPackingCode:
                                             product.ProductPackingCode,
-                                        enterpriseCode: widget.enterpriseCode,
+                                        enterpriseCode:
+                                            widget.enterpriseCode.toString(),
                                       )
                                       .toStringAsFixed(3)
                                       .replaceAll(RegExp(r'\.'), ','),
@@ -279,7 +280,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   consultedProductController:
                                       widget.consultedProductController,
                                   product: product,
-                                  enterpriseCode: widget.enterpriseCode,
+                                  enterpriseCode:
+                                      widget.enterpriseCode.toString(),
                                 );
                               },
                               totalItensInCart: _totalItensInCart,
@@ -290,7 +292,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     product: product,
                                     consultedProductController:
                                         widget.consultedProductController,
-                                    enterpriseCode: widget.enterpriseCode,
+                                    enterpriseCode:
+                                        widget.enterpriseCode.toString(),
                                   );
                                 });
                               },

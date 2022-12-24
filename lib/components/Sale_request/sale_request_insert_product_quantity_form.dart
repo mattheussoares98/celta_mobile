@@ -47,7 +47,7 @@ class _SaleRequestInsertProductQuantityFormState
           setState(() {
             saleRequestProvider.removeProductFromCart(
               ProductPackingCode: widget.product.ProductPackingCode,
-              enterpriseCode: widget.enterpriseCode,
+              enterpriseCode: widget.enterpriseCode.toString(),
             );
 
             widget.updateTotalItemValue();

@@ -42,7 +42,7 @@ class _SaleRequestCartDetailsPageState
         saleRequestProvider.cartProductsCount(widget.enterpriseCode);
 
     double totalCartPrice =
-        saleRequestProvider.getTotalCartPrice(widget.enterpriseCode);
+        saleRequestProvider.getTotalCartPrice(widget.enterpriseCode.toString());
 
     return Column(
       children: [
@@ -169,7 +169,8 @@ class _SaleRequestCartDetailsPageState
                                     subtitle: "Deseja salvar o pedido?",
                                     function: () async {
                                       await saleRequestProvider.saveSaleRequest(
-                                        enterpriseCode: widget.enterpriseCode,
+                                        enterpriseCode:
+                                            widget.enterpriseCode.toString(),
                                         requestTypeCode: widget.requestTypeCode,
                                         context: context,
                                       );

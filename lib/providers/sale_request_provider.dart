@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:celta_inventario/Components/Global_widgets/enterprise_items.dart';
+import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_request_type_model.dart';
@@ -8,6 +9,7 @@ import 'package:celta_inventario/utils/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/base_url.dart';
 import '../utils/default_error_message_to_find_server.dart';
@@ -48,21 +50,16 @@ class SaleRequestProvider with ChangeNotifier {
   var removedProduct;
   int? indexOfRemovedProduct;
 
-  Map<int, List<Map<String, dynamic>>> _cartProducts = {};
+  Map<String, List<SaleRequestCartProductsModel>> _cartProducts = {};
   getCartProducts(int enterpriseCode) {
-    return _cartProducts[enterpriseCode];
+    return _cartProducts[enterpriseCode.toString()] ?? 0;
   }
 
   int cartProductsCount(int enterpriseCode) {
-    if (_cartProducts[enterpriseCode] == null) {
-      return 0;
-    } else if (_cartProducts[enterpriseCode]!.isEmpty) {
-      return 0;
-    } else if (!_cartProducts[enterpriseCode]![0]
-        .containsKey("ProductPackingCode")) {
+    if (_cartProducts[enterpriseCode.toString()] == null) {
       return 0;
     } else {
-      return _cartProducts[enterpriseCode]!.length;
+      return _cartProducts[enterpriseCode.toString()]!.length;
     }
   }
 
@@ -134,7 +131,7 @@ class SaleRequestProvider with ChangeNotifier {
   double getPraticedPrice({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) {
     double _quantityToAdd =
         tryChangeControllerTextToDouble(consultedProductController);
@@ -156,7 +153,7 @@ class SaleRequestProvider with ChangeNotifier {
   double getTotalItemValue({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) {
     double _quantityToAdd =
         tryChangeControllerTextToDouble(consultedProductController);
@@ -214,10 +211,41 @@ class SaleRequestProvider with ChangeNotifier {
     });
   }
 
+  addProductInDatabase(String enterpriseCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("cart");
+    await prefs.setString("cart", json.encode(_cartProducts));
+  }
+
+  restoreProducts(String enterpriseCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('cart') != "" && prefs.getString('cart') != null) {
+      var _key = prefs.getString("cart")!;
+      Map cartProductsInDatabase = jsonDecode(_key);
+
+      List<SaleRequestCartProductsModel> cartProductsTemp = [];
+      cartProductsInDatabase.forEach((key, value) {
+        if (key == enterpriseCode) {
+          value.forEach((element) {
+            cartProductsTemp
+                .add(SaleRequestCartProductsModel.fromJson(element));
+          });
+        }
+      });
+
+      _cartProducts[enterpriseCode] = cartProductsTemp;
+      // var cart = SaleRequestCartProductsModel.fromJson(cartProductsInDatabase);
+
+      // _cartProducts[enterpriseCode] = cartProductsInDatabase[enterpriseCode];
+      notifyListeners();
+    }
+  }
+
   dynamic addProductInCart({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) async {
     double praticedPrice = getPraticedPrice(
       product: product,
@@ -227,53 +255,55 @@ class SaleRequestProvider with ChangeNotifier {
     double quantity =
         tryChangeControllerTextToDouble(consultedProductController);
 
+    SaleRequestCartProductsModel cartProductsModel =
+        SaleRequestCartProductsModel(
+      ProductPackingCode: product.ProductPackingCode,
+      Name: product.Name,
+      Quantity: quantity,
+      Value: praticedPrice,
+      IncrementPercentageOrValue: "0.0",
+      IncrementValue: 0.0,
+      DiscountPercentageOrValue: "0.0",
+      DiscountValue: 0.0,
+      ExpectedDeliveryDate: DateTime.now().toString(),
+      ProductCode: product.ProductCode, //remove
+      PLU: product.PLU, //remove
+      PackingQuantity: product.PackingQuantity,
+      RetailPracticedPrice: product.RetailPracticedPrice, //remove
+      RetailSalePrice: product.RetailSalePrice, //remove
+      RetailOfferPrice: product.RetailOfferPrice, //remove
+      WholePracticedPrice: product.WholePracticedPrice, //remove
+      WholeSalePrice: product.WholeSalePrice, //remove
+      WholeOfferPrice: product.WholeOfferPrice, //remove
+      ECommercePracticedPrice: product.ECommercePracticedPrice, //remove
+      ECommerceSalePrice: product.ECommerceSalePrice, //remove
+      ECommerceOfferPrice: product.ECommerceOfferPrice, //remove
+      MinimumWholeQuantity: product.MinimumWholeQuantity, //remove
+      BalanceStockSale: product.BalanceStockSale, //remove
+      StorageAreaAddress: product.StorageAreaAddress, //remove
+      StockByEnterpriseAssociateds: product.StockByEnterpriseAssociateds,
+    );
+
     //as chaves que estão com o comentário "remove" são removidas para enviar a
     //requisição de salvar o pedido. Salvei todas informações do produto no
     //carrinho porque precisa de várias para conseguir editar a quantidade do
     //produto que já está no carrinho
-    Map<String, Object> value = {
-      "ProductPackingCode": product.ProductPackingCode,
-      "Name": product.Name,
-      "Quantity": quantity,
-      "Value": praticedPrice,
-      "IncrementPercentageOrValue": "0.0",
-      "IncrementValue": 0.0,
-      "DiscountPercentageOrValue": "0.0",
-      "DiscountValue": 0.0,
-      "ExpectedDeliveryDate": '\"${DateTime.now()}\"',
-      "ProductCode": product.ProductCode, //remove
-      "PLU": product.PLU, //remove
-      "PackingQuantity": product.PackingQuantity,
-      "RetailPracticedPrice": product.RetailPracticedPrice, //remove
-      "RetailSalePrice": product.RetailSalePrice, //remove
-      "RetailOfferPrice": product.RetailOfferPrice, //remove
-      "WholePracticedPrice": product.WholePracticedPrice, //remove
-      "WholeSalePrice": product.WholeSalePrice, //remove
-      "WholeOfferPrice": product.WholeOfferPrice, //remove
-      "ECommercePracticedPrice": product.ECommercePracticedPrice, //remove
-      "ECommerceSalePrice": product.ECommerceSalePrice, //remove
-      "ECommerceOfferPrice": product.ECommerceOfferPrice, //remove
-      "MinimumWholeQuantity": product.MinimumWholeQuantity, //remove
-      "BalanceStockSale": product.BalanceStockSale, //remove
-      "StorageAreaAddress": product.StorageAreaAddress, //remove
-      "StockByEnterpriseAssociateds":
-          product.StockByEnterpriseAssociateds, //remove
-    };
 
     if (alreadyContainsProduct(
       ProductPackingCode: product.ProductPackingCode,
       enterpriseCode: enterpriseCode,
     )) {
       int index = _cartProducts[enterpriseCode]!.indexWhere((element) =>
-          element["ProductPackingCode"] == product.ProductPackingCode);
-      _cartProducts[index]![enterpriseCode]["Quantity"] += quantity;
-      _cartProducts[index]![enterpriseCode]["Value"] = praticedPrice;
+          element.ProductPackingCode == product.ProductPackingCode);
+
+      _cartProducts[enterpriseCode]![index].Quantity += quantity;
+      _cartProducts[enterpriseCode]![index].Value = praticedPrice;
     } else {
-      if (_cartProducts[enterpriseCode] == null) {
-        _cartProducts[enterpriseCode] = [{}];
-        _cartProducts[enterpriseCode]![0] = value;
+      if (_cartProducts[enterpriseCode.toString()] != null) {
+        _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);
       } else {
-        _cartProducts[enterpriseCode]!.add(value);
+        _cartProducts.putIfAbsent(
+            enterpriseCode.toString(), () => [cartProductsModel]);
       }
     }
 
@@ -282,6 +312,8 @@ class SaleRequestProvider with ChangeNotifier {
     _changeCursorToLastIndex(consultedProductController);
 
     jsonSaleRequest["Products"] = _cartProducts;
+
+    await addProductInDatabase(enterpriseCode);
     notifyListeners();
   }
 
@@ -289,27 +321,24 @@ class SaleRequestProvider with ChangeNotifier {
     required int productPackingCode,
     required double quantity,
     required double value,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) {
     _cartProducts[enterpriseCode]!.forEach((element) {
-      if (element["ProductPackingCode"] == productPackingCode) {
-        element["Quantity"] = quantity;
-        element["Value"] = value;
+      if (element.ProductPackingCode == productPackingCode) {
+        element.Quantity = quantity;
+        element.Value = value;
       }
     });
     notifyListeners();
   }
 
-  double getTotalCartPrice(int enterpriseCode) {
+  double getTotalCartPrice(String enterpriseCode) {
     double total = 0;
     if (_cartProducts[enterpriseCode] == null) {
       return 0;
     } else {
       _cartProducts[enterpriseCode]!.forEach((element) {
-        print("element Quantity: ${element["Quantity"]}");
-        print("element Value: ${element["Value"]}");
-
-        total += element["Quantity"] * element["Value"];
+        total += element.Quantity * element.Value;
       });
 
       return total;
@@ -348,17 +377,24 @@ class SaleRequestProvider with ChangeNotifier {
 
   removeProductFromCart({
     required int ProductPackingCode,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) {
+    // removedProduct = _cartProducts[enterpriseCode]!.firstWhere(
+    //     (element) => element.ProductPackingCode == ProductPackingCode);
+
     indexOfRemovedProduct = _cartProducts[enterpriseCode]!.indexWhere(
-        (element) => element["ProductPackingCode"] == ProductPackingCode);
+        (element) => element.ProductPackingCode == ProductPackingCode);
 
     removedProduct =
         _cartProducts[enterpriseCode]!.removeAt(indexOfRemovedProduct!);
+
+    // _cartProducts[enterpriseCode]!.removeWhere(
+    //     (element) => element.ProductPackingCode == ProductPackingCode);
+
     notifyListeners();
   }
 
-  restoreProductRemoved(int enterpriseCode) {
+  restoreProductRemoved(String enterpriseCode) {
     _cartProducts[enterpriseCode]!
         .insert(indexOfRemovedProduct!, removedProduct);
     notifyListeners();
@@ -366,7 +402,7 @@ class SaleRequestProvider with ChangeNotifier {
 
   alreadyContainsProduct({
     required int ProductPackingCode,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) {
     bool alreadyContainsProduct = false;
 
@@ -374,7 +410,7 @@ class SaleRequestProvider with ChangeNotifier {
       return false;
     } else {
       _cartProducts[enterpriseCode]!.forEach((element) {
-        if (ProductPackingCode == element["ProductPackingCode"]) {
+        if (ProductPackingCode == element.ProductPackingCode) {
           alreadyContainsProduct = true;
         }
       });
@@ -385,16 +421,17 @@ class SaleRequestProvider with ChangeNotifier {
 
   double getTotalItensInCart({
     required int ProductPackingCode,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) {
     double atualQuantity = 0;
+
     if (_cartProducts[enterpriseCode] == null) {
       return 0;
     } else {
       _cartProducts[enterpriseCode]!.forEach((element) {
         // print(element["ProductPackingCode"]);
-        if (element["ProductPackingCode"] == ProductPackingCode) {
-          atualQuantity = double.tryParse(element["Quantity"].toString())!;
+        if (element.ProductPackingCode == ProductPackingCode) {
+          atualQuantity = element.Quantity;
         }
       });
 
@@ -680,7 +717,7 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   saveSaleRequest({
-    required int enterpriseCode,
+    required String enterpriseCode,
     required int requestTypeCode,
     required BuildContext context,
   }) async {
@@ -728,7 +765,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       if (responseInString.contains("sucesso")) {
         _cartProducts[enterpriseCode]!.clear();
-        _clearCostumers(enterpriseCode);
+        _clearCostumers(int.parse(enterpriseCode));
         _lastSaleRequestSaved = json.decode(responseInString)["Message"];
         int index = _lastSaleRequestSaved.indexOf(RegExp(r'\('));
         _lastSaleRequestSaved = "Último pedido salvo: " +

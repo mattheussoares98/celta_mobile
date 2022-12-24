@@ -41,8 +41,13 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
   bool _isLoaded = false;
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
+
+    SaleRequestProvider saleRequestProvider = Provider.of(
+      context,
+      listen: false,
+    );
 
     if (!_isLoaded) {
       Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
@@ -53,6 +58,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       } else {
         _hasDefaultRequestModel = true;
       }
+
+      await saleRequestProvider.restoreProducts(arguments["Code"].toString());
 
       _isLoaded = true;
     }
@@ -161,7 +168,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                     child: Text(
                       ConvertString.convertToBRL(
                         saleRequestProvider
-                            .getTotalCartPrice(arguments["Code"]),
+                            .getTotalCartPrice(arguments["Code"].toString())
+                            .toString(),
                       ),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,

@@ -180,13 +180,13 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
 
     if (isValid) {
       saleRequestProvider.updateProductFromCart(
-        enterpriseCode: widget.enterpriseCode,
-        productPackingCode: product["ProductPackingCode"],
+        enterpriseCode: widget.enterpriseCode.toString(),
+        productPackingCode: product.ProductPackingCode,
         quantity: controllerInDouble,
         value: getPraticedPrice(
-          minimumWholeQuantity: product["MinimumWholeQuantity"],
-          retailPracticedPrice: product["RetailPracticedPrice"],
-          wholePracticedPrice: product["WholePracticedPrice"],
+          minimumWholeQuantity: product.MinimumWholeQuantity,
+          retailPracticedPrice: product.RetailPracticedPrice,
+          wholePracticedPrice: product.WholePracticedPrice,
         ),
       );
       widget.textEditingController.clear();
@@ -291,9 +291,9 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                               children: [
                                                 Expanded(
                                                   child: Text(
-                                                    product["Name"] +
-                                                        " (${product["PackingQuantity"]})" +
-                                                        '\nplu: ${product["PLU"]}',
+                                                    product.Name +
+                                                        " (${product.PackingQuantity})" +
+                                                        '\nplu: ${product.PLU}',
                                                     style: const TextStyle(
                                                       fontFamily: 'OpenSans',
                                                       fontSize: 17,
@@ -311,10 +311,11 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                           saleRequestProvider
                                                               .removeProductFromCart(
                                                             ProductPackingCode:
-                                                                product[
-                                                                    "ProductPackingCode"],
+                                                                product
+                                                                    .ProductPackingCode,
                                                             enterpriseCode: widget
-                                                                .enterpriseCode,
+                                                                .enterpriseCode
+                                                                .toString(),
                                                           );
 
                                                           ShowErrorMessage
@@ -325,9 +326,9 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                             functionSnackBarAction:
                                                                 () {
                                                               saleRequestProvider
-                                                                  .restoreProductRemoved(
-                                                                      widget
-                                                                          .enterpriseCode);
+                                                                  .restoreProductRemoved(widget
+                                                                      .enterpriseCode
+                                                                      .toString());
                                                             },
                                                             labelSnackBarAction:
                                                                 "Restaurar produto",
@@ -357,10 +358,10 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                         children: [
                                                           titleAndSubtitle(
                                                             title: "Qtd",
-                                                            subtitle: product[
-                                                                    "Quantity"]
-                                                                .toStringAsFixed(
-                                                                    3)
+                                                            subtitle: product
+                                                                        .Quantity
+                                                                    .toStringAsFixed(
+                                                                        3)
                                                                 .replaceAll(
                                                                     RegExp(
                                                                         r'\.'),
@@ -375,7 +376,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                             subtitle:
                                                                 ConvertString
                                                                     .convertToBRL(
-                                                              product["Value"]
+                                                              product.Value
                                                                   .toString(),
                                                             ),
                                                           ),
@@ -388,7 +389,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                             subtitle:
                                                                 ConvertString
                                                                     .convertToBRL(
-                                                              "${(product["Quantity"] * product["Value"])} ",
+                                                              "${(product.Quantity * product.Value)} ",
                                                             ),
                                                           ),
                                                         ],
@@ -494,12 +495,12 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                 FittedBox(
                                                   child: Text(
                                                     getNewPrice(
-                                                      minimumWholeQuantity: product[
-                                                          "MinimumWholeQuantity"],
-                                                      retailPracticedPrice: product[
-                                                          "RetailPracticedPrice"],
-                                                      wholePracticedPrice: product[
-                                                          "WholePracticedPrice"],
+                                                      minimumWholeQuantity: product
+                                                          .MinimumWholeQuantity,
+                                                      retailPracticedPrice: product
+                                                          .RetailPracticedPrice,
+                                                      wholePracticedPrice: product
+                                                          .WholePracticedPrice,
                                                     ),
                                                     style: TextStyle(
                                                       fontSize: 20,
@@ -530,23 +531,23 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "Preço venda: ${ConvertString.convertToBRL(product["RetailPracticedPrice"])}",
+                                                  "Preço venda: ${ConvertString.convertToBRL(product.RetailPracticedPrice)}",
                                                   style: hasMinimumWholeQuantity(
-                                                      minimumWholeQuantity: product[
-                                                          "MinimumWholeQuantity"],
+                                                      minimumWholeQuantity: product
+                                                          .MinimumWholeQuantity,
                                                       isSaleRetailPrice: true),
                                                 ),
                                                 Text(
-                                                  "Mín. atacado : ${product["MinimumWholeQuantity"]}",
+                                                  "Mín. atacado : ${product.MinimumWholeQuantity}",
                                                   style: hasMinimumWholeQuantity(
-                                                      minimumWholeQuantity: product[
-                                                          "MinimumWholeQuantity"]),
+                                                      minimumWholeQuantity: product
+                                                          .MinimumWholeQuantity),
                                                 ),
                                                 Text(
-                                                  "Preço atacado: ${ConvertString.convertToBRL(product["WholePracticedPrice"])}",
+                                                  "Preço atacado: ${ConvertString.convertToBRL(product.WholePracticedPrice)}",
                                                   style: hasMinimumWholeQuantity(
-                                                      minimumWholeQuantity: product[
-                                                          "MinimumWholeQuantity"]),
+                                                      minimumWholeQuantity: product
+                                                          .MinimumWholeQuantity),
                                                 ),
                                               ],
                                             ),
