@@ -60,6 +60,9 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       }
 
       await saleRequestProvider.restoreProducts(arguments["Code"].toString());
+      await saleRequestProvider.restoreCostumers(arguments["Code"].toString());
+      await saleRequestProvider
+          .insertDefaultCostumer(arguments["Code"].toString());
 
       _isLoaded = true;
     }
@@ -72,10 +75,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    saleRequestProvider.insertDefaultCostumer(arguments["Code"]);
-
     int cartProductsCount =
-        saleRequestProvider.cartProductsCount(arguments["Code"]);
+        saleRequestProvider.cartProductsCount(arguments["Code"].toString());
 
     List<Widget> _pages = <Widget>[
       _hasDefaultRequestModel

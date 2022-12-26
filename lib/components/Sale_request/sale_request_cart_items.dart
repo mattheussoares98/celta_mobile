@@ -201,7 +201,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
     );
 
     int cartProductsCount =
-        saleRequestProvider.cartProductsCount(widget.enterpriseCode);
+        saleRequestProvider.cartProductsCount(widget.enterpriseCode.toString());
 
     var cartProducts =
         saleRequestProvider.getCartProducts(widget.enterpriseCode);
@@ -596,8 +596,8 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                         subtitle:
                                             "Deseja realmente limpar todos produtos do carrinho?",
                                         function: () {
-                                          saleRequestProvider
-                                              .clearCart(widget.enterpriseCode);
+                                          saleRequestProvider.clearCart(
+                                              widget.enterpriseCode.toString());
                                         },
                                       );
                                     },

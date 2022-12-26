@@ -19,19 +19,21 @@ class SaleRequestCartDetailsPage extends StatefulWidget {
       _SaleRequestCartDetailsPageState();
 }
 
-String textButtonMessage(SaleRequestProvider saleRequestProvider) {
-  if (saleRequestProvider.cartProductsCount == 0) {
-    return "INSIRA PRODUTOS";
-  } else if (saleRequestProvider.costumerCode == -1) {
-    return "INFORME O CLIENTE";
-  } else {
-    return "SALVAR PEDIDO";
-  }
-}
-
 class _SaleRequestCartDetailsPageState
     extends State<SaleRequestCartDetailsPage> {
   TextEditingController _textEditingController = TextEditingController();
+
+  String textButtonMessage(SaleRequestProvider saleRequestProvider) {
+    if (saleRequestProvider.cartProductsCount == 0) {
+      return "INSIRA PRODUTOS";
+    } else if (saleRequestProvider
+            .getCostumerCode(widget.enterpriseCode.toString()) ==
+        -1) {
+      return "INFORME O CLIENTE";
+    } else {
+      return "SALVAR PEDIDO";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class _SaleRequestCartDetailsPageState
         Provider.of(context, listen: true);
 
     int cartProductsCount =
-        saleRequestProvider.cartProductsCount(widget.enterpriseCode);
+        saleRequestProvider.cartProductsCount(widget.enterpriseCode.toString());
 
     double totalCartPrice =
         saleRequestProvider.getTotalCartPrice(widget.enterpriseCode.toString());
@@ -50,7 +52,9 @@ class _SaleRequestCartDetailsPageState
           enterpriseCode: widget.enterpriseCode,
           textEditingController: _textEditingController,
         ),
-        if (saleRequestProvider.cartProductsCount == 0)
+        if (saleRequestProvider
+                .cartProductsCount(widget.enterpriseCode.toString()) ==
+            0)
           Expanded(
             child: Container(
               color: Colors.grey[200],
@@ -159,7 +163,9 @@ class _SaleRequestCartDetailsPageState
                         child: ElevatedButton(
                           onPressed: saleRequestProvider
                                       .isLoadingSaveSaleRequest ||
-                                  saleRequestProvider.costumerCode == -1 ||
+                                  saleRequestProvider.getCostumerCode(
+                                          widget.enterpriseCode.toString()) ==
+                                      -1 ||
                                   saleRequestProvider.cartProductsCount == 0
                               ? null
                               : () async {

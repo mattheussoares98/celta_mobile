@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:celta_inventario/Components/Global_widgets/enterprise_items.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
@@ -26,18 +24,41 @@ class SaleRequestProvider with ChangeNotifier {
   bool get isLoadingCostumer => _isLoadingCostumer;
   String _errorMessageCostumer = "";
   String get errorMessageCostumer => _errorMessageCostumer;
-  Map<int, List<SaleRequestCostumerModel>> _costumers = {};
+  Map<String, List<SaleRequestCostumerModel>> _costumers = {};
 
-  costumers(int enterpriseCode) {
+  costumers(String enterpriseCode) {
     return _costumers[enterpriseCode];
   }
 
-  int _costumerCode =
-      -1; //-1 significa que nenhum foi selecionado ainda, por isso precisa aparecer uma mensagem
-  int get costumerCode => _costumerCode;
+  getCostumerCode(String enterpriseCode) {
+    int costumerCode = -1;
+    if (_costumers[enterpriseCode] != null)
+      _costumers[enterpriseCode]!.forEach((element) {
+        if (element.selected) {
+          costumerCode = element.Code;
+        }
+      });
+    else {
+      costumerCode = -1;
+    }
+    return costumerCode;
+  }
 
-  void set costumerCode(int value) {
-    _costumerCode = value;
+  insertDefaultCostumer(String enterpriseCode) {
+    _costumers.putIfAbsent(
+        enterpriseCode,
+        () => [
+              SaleRequestCostumerModel(
+                Code: 1,
+                PersonalizedCode: "1",
+                Name: "Consumidor",
+                ReducedName: "",
+                CpfCnpjNumber: "1",
+                RegistrationNumber: "",
+                SexType: "M",
+                selected: false,
+              ),
+            ]);
   }
 
   bool _isLoadingProducts = false;
@@ -55,11 +76,13 @@ class SaleRequestProvider with ChangeNotifier {
     return _cartProducts[enterpriseCode.toString()] ?? 0;
   }
 
-  int cartProductsCount(int enterpriseCode) {
-    if (_cartProducts[enterpriseCode.toString()] == null) {
+  int cartProductsCount(String enterpriseCode) {
+    if (_cartProducts[enterpriseCode] == null) {
+      return 0;
+    } else if (_cartProducts[enterpriseCode]!.isEmpty) {
       return 0;
     } else {
-      return _cartProducts[enterpriseCode.toString()]!.length;
+      return _cartProducts[enterpriseCode]!.length;
     }
   }
 
@@ -79,28 +102,33 @@ class SaleRequestProvider with ChangeNotifier {
   //   print(_cartProducts);
   // }
 
-  insertDefaultCostumer(int enterpriseCode) {
-    //sempre que seleciona a empresa para ir à tela de pedido de vendas, no
-    //initstate precisa adicionar o consumidor padrão para os consumidores serem
-    //informados por empresa. Assim, se voltar e selecionar outra empresa, os
-    //clientes estarão vinculados à essa empresa e não aparecerão nas outras
-    _costumers.putIfAbsent(
-        enterpriseCode,
-        () => [
-              SaleRequestCostumerModel(
-                Code: 1,
-                PersonalizedCode: "1",
-                Name: "Consumidor",
-                ReducedName: "",
-                CpfCnpjNumber: "1",
-                RegistrationNumber: "",
-                SexType: "M",
-                selected: false,
-              ),
-            ]);
+  _updateCostumerInDatabase() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove("costumers");
+    await prefs.setString("costumers", json.encode(_costumers));
   }
 
-  _clearCostumers(int enterpriseCode) {
+  restoreCostumers(String enterpriseCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('costumers') != "" &&
+        prefs.getString('costumers') != null) {
+      var _key = prefs.getString("costumers")!;
+      Map costumersInDatabase = jsonDecode(_key);
+
+      List<SaleRequestCostumerModel> costumersTemp = [];
+      costumersInDatabase.forEach((key, value) {
+        if (key == enterpriseCode) {
+          value.forEach((element) {
+            costumersTemp.add(SaleRequestCostumerModel.fromJson(element));
+          });
+        }
+      });
+
+      notifyListeners();
+    }
+  }
+
+  _clearCostumers(String enterpriseCode) async {
     _costumers[enterpriseCode] = [
       SaleRequestCostumerModel(
         Code: 1,
@@ -113,6 +141,7 @@ class SaleRequestProvider with ChangeNotifier {
         selected: false,
       ),
     ];
+    await _updateCostumerInDatabase();
     notifyListeners();
   }
 
@@ -211,9 +240,8 @@ class SaleRequestProvider with ChangeNotifier {
     });
   }
 
-  addProductInDatabase(String enterpriseCode) async {
+  _updateCartInDatabase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     await prefs.remove("cart");
     await prefs.setString("cart", json.encode(_cartProducts));
   }
@@ -265,7 +293,7 @@ class SaleRequestProvider with ChangeNotifier {
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
       DiscountValue: 0.0,
-      ExpectedDeliveryDate: DateTime.now().toString(),
+      ExpectedDeliveryDate: "\"${DateTime.now().toString()}\"",
       ProductCode: product.ProductCode, //remove
       PLU: product.PLU, //remove
       PackingQuantity: product.PackingQuantity,
@@ -313,7 +341,7 @@ class SaleRequestProvider with ChangeNotifier {
 
     jsonSaleRequest["Products"] = _cartProducts;
 
-    await addProductInDatabase(enterpriseCode);
+    await _updateCartInDatabase();
     notifyListeners();
   }
 
@@ -368,17 +396,19 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  clearCart(int enterpriseCode) {
+  clearCart(String enterpriseCode) async {
     if (_cartProducts[enterpriseCode] != null) {
       _cartProducts[enterpriseCode]!.clear();
     }
+
+    await _updateCartInDatabase();
     notifyListeners();
   }
 
   removeProductFromCart({
     required int ProductPackingCode,
     required String enterpriseCode,
-  }) {
+  }) async {
     // removedProduct = _cartProducts[enterpriseCode]!.firstWhere(
     //     (element) => element.ProductPackingCode == ProductPackingCode);
 
@@ -391,12 +421,16 @@ class SaleRequestProvider with ChangeNotifier {
     // _cartProducts[enterpriseCode]!.removeWhere(
     //     (element) => element.ProductPackingCode == ProductPackingCode);
 
+    await _updateCartInDatabase();
+
     notifyListeners();
   }
 
-  restoreProductRemoved(String enterpriseCode) {
+  restoreProductRemoved(String enterpriseCode) async {
     _cartProducts[enterpriseCode]!
         .insert(indexOfRemovedProduct!, removedProduct);
+
+    await _updateCartInDatabase();
     notifyListeners();
   }
 
@@ -495,25 +529,21 @@ class SaleRequestProvider with ChangeNotifier {
   void updateSelectedCostumer({
     required int index,
     required bool value,
-    required int enterpriseCode,
-  }) {
+    required String enterpriseCode,
+  }) async {
     _costumers[enterpriseCode]?.forEach((element) {
       element.selected = false;
     });
     _costumers[enterpriseCode]?[index].selected = value;
 
-    if (_costumers[enterpriseCode]![index].selected) {
-      _costumerCode = _costumers[enterpriseCode]![index].Code;
-    } else {
-      _costumerCode = -1;
-    }
+    await _updateCostumerInDatabase();
     notifyListeners();
   }
 
   Future<void> getCostumers({
     required BuildContext context,
     required String searchValueControllerText,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
@@ -549,7 +579,7 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required int searchTypeInt,
     required String searchValueControllerText,
-    required int enterpriseCode,
+    required String enterpriseCode,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
@@ -743,6 +773,8 @@ class SaleRequestProvider with ChangeNotifier {
         .replaceAll(
             RegExp(r', ExpectedDeliveryDate'), ',\"ExpectedDeliveryDate\"');
 
+    int costumerCode = getCostumerCode(enterpriseCode);
+
     String saleRequestBodyString =
         "{\"crossId\": \"${UserIdentity.identity}\",\"EnterpriseCode\": $enterpriseCode,\"RequestTypeCode\": $requestTypeCode,\"SellerCode\": 0,\"CustomerCode\": $costumerCode," +
             "\"Products\": $cartString}";
@@ -764,8 +796,10 @@ class SaleRequestProvider with ChangeNotifier {
       print('resposta para salvar o pedido = $responseInString');
 
       if (responseInString.contains("sucesso")) {
-        _cartProducts[enterpriseCode]!.clear();
-        _clearCostumers(int.parse(enterpriseCode));
+        await clearCart(enterpriseCode);
+
+        await _clearCostumers(enterpriseCode);
+
         _lastSaleRequestSaved = json.decode(responseInString)["Message"];
         int index = _lastSaleRequestSaved.indexOf(RegExp(r'\('));
         _lastSaleRequestSaved = "Último pedido salvo: " +

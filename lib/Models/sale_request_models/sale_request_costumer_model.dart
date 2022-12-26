@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class SaleRequestCostumerModel {
-  final int Code;
-  final String PersonalizedCode;
-  final String Name;
-  final String ReducedName;
-  final String CpfCnpjNumber;
-  final String RegistrationNumber;
-  final String SexType;
+  int Code;
+  String PersonalizedCode;
+  String Name;
+  String ReducedName;
+  String CpfCnpjNumber;
+  String RegistrationNumber;
+  String SexType;
   bool selected;
 
   SaleRequestCostumerModel({
@@ -53,4 +53,25 @@ class SaleRequestCostumerModel {
       );
     });
   }
+
+  SaleRequestCostumerModel.fromJson(Map json)
+      : Code = json["Code"],
+        PersonalizedCode = json["PersonalizedCode"],
+        Name = json["Name"],
+        ReducedName = json["ReducedName"],
+        CpfCnpjNumber = json["CpfCnpjNumber"],
+        selected = json["selected"] ?? false,
+        RegistrationNumber = json["RegistrationNumber"],
+        SexType = json["SexType"];
+
+  Map<String, dynamic> toJson() => {
+        "Code": Code,
+        "PersonalizedCode": PersonalizedCode,
+        "Name": Name,
+        "ReducedName": ReducedName,
+        "CpfCnpjNumber": CpfCnpjNumber,
+        "selected": selected,
+        "RegistrationNumber": RegistrationNumber,
+        "SexType": SexType,
+      };
 }

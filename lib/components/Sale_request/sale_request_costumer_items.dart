@@ -60,7 +60,8 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
       context,
       listen: true,
     );
-    var costumer = saleRequestProvider.costumers(widget.enterpriseCode);
+    var costumer =
+        saleRequestProvider.costumers(widget.enterpriseCode.toString());
 
     return Expanded(
       child: Column(
@@ -84,7 +85,7 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
                             saleRequestProvider.updateSelectedCostumer(
                               index: index,
                               value: value!,
-                              enterpriseCode: widget.enterpriseCode,
+                              enterpriseCode: widget.enterpriseCode.toString(),
                             );
                           });
                         }),
@@ -101,7 +102,7 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
                         saleRequestProvider.updateSelectedCostumer(
                           index: index,
                           value: value!,
-                          enterpriseCode: widget.enterpriseCode,
+                          enterpriseCode: widget.enterpriseCode.toString(),
                         );
                       });
                     },

@@ -29,9 +29,6 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
 
-    int costumersCount =
-        saleRequestProvider.costumers(widget.enterpriseCode).length;
-
     return Column(
       children: [
         SearchWidget(
@@ -42,7 +39,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
             await saleRequestProvider.getCostumers(
               context: context,
               searchValueControllerText: searchCostumerController.text,
-              enterpriseCode: widget.enterpriseCode,
+              enterpriseCode: widget.enterpriseCode.toString(),
             );
           },
           focusNodeConsultProduct: searchCostumerFocusNode,
@@ -50,8 +47,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           labelText: "Consultar cliente",
           useCamera: false,
         ),
-        if (costumersCount > 0)
-          SaleRequestCostumersItems(enterpriseCode: widget.enterpriseCode),
+        SaleRequestCostumersItems(enterpriseCode: widget.enterpriseCode),
         if (saleRequestProvider.errorMessageCostumer != "")
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageCostumer,
