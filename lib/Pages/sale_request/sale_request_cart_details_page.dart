@@ -23,22 +23,24 @@ class _SaleRequestCartDetailsPageState
     extends State<SaleRequestCartDetailsPage> {
   TextEditingController _textEditingController = TextEditingController();
 
-  String textButtonMessage(SaleRequestProvider saleRequestProvider) {
-    if (saleRequestProvider.cartProductsCount == 0) {
-      return "INSIRA PRODUTOS";
-    } else if (saleRequestProvider
-            .getCostumerCode(widget.enterpriseCode.toString()) ==
-        -1) {
-      return "INFORME O CLIENTE";
-    } else {
-      return "SALVAR PEDIDO";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
+
+    String textButtonMessage(SaleRequestProvider saleRequestProvider) {
+      if (saleRequestProvider
+              .cartProductsCount(widget.enterpriseCode.toString()) ==
+          0) {
+        return "INSIRA PRODUTOS";
+      } else if (saleRequestProvider
+              .getCostumerCode(widget.enterpriseCode.toString()) ==
+          -1) {
+        return "INFORME O CLIENTE";
+      } else {
+        return "SALVAR PEDIDO";
+      }
+    }
 
     int cartProductsCount =
         saleRequestProvider.cartProductsCount(widget.enterpriseCode.toString());
@@ -166,7 +168,9 @@ class _SaleRequestCartDetailsPageState
                                   saleRequestProvider.getCostumerCode(
                                           widget.enterpriseCode.toString()) ==
                                       -1 ||
-                                  saleRequestProvider.cartProductsCount == 0
+                                  saleRequestProvider.cartProductsCount(
+                                          widget.enterpriseCode.toString()) ==
+                                      0
                               ? null
                               : () async {
                                   ShowAlertDialog().showAlertDialog(

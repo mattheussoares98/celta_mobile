@@ -123,6 +123,7 @@ class SaleRequestProvider with ChangeNotifier {
           });
         }
       });
+      _costumers[enterpriseCode] = costumersTemp;
 
       notifyListeners();
     }
