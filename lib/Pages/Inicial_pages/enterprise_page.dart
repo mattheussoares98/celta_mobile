@@ -1,7 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/enterprise_items.dart';
 import 'package:celta_inventario/providers/enterprise_provider.dart';
-import 'package:celta_inventario/utils/consulting_widget.dart';
-import 'package:celta_inventario/utils/try_again.dart';
+import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
+import 'package:celta_inventario/Components/Global_widgets/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

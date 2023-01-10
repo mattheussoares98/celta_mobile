@@ -2,10 +2,10 @@ import 'package:celta_inventario/Components/Receipt/receipt_conference_consult_p
 import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_conference_products_items.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
-import 'package:celta_inventario/utils/error_message.dart';
+import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../utils/consulting_widget.dart';
+import '../Components/Global_widgets/consulting_widget.dart';
 
 class ReceiptConferencePage extends StatefulWidget {
   const ReceiptConferencePage({Key? key}) : super(key: key);

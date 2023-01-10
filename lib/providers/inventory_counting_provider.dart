@@ -1,7 +1,7 @@
 import 'package:celta_inventario/Models/inventory/countings_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/utils/show_error_message.dart';
+import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

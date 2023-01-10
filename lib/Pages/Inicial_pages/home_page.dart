@@ -1,10 +1,10 @@
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
-import 'package:celta_inventario/utils/show_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Components/Global_widgets/image_component.dart';
+import '../../Components/Global_widgets/show_alert_dialog.dart';
 import '../../providers/login_provider.dart';
 
 class HomePage extends StatefulWidget {

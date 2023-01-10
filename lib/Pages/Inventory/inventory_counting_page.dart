@@ -1,5 +1,5 @@
-import 'package:celta_inventario/utils/consulting_widget.dart';
-import 'package:celta_inventario/utils/try_again.dart';
+import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
+import 'package:celta_inventario/Components/Global_widgets/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Inventory/inventory_counting_items.dart';

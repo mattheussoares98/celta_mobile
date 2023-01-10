@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../Components/Global_widgets/search_widget.dart';
 import '../../providers/sale_request_provider.dart';
-import '../../utils/consulting_widget.dart';
-import '../../utils/error_message.dart';
+import '../../Components/Global_widgets/consulting_widget.dart';
+import '../../Components/Global_widgets/error_message.dart';
 
 class SaleRequestInsertCostumer extends StatefulWidget {
   final int enterpriseCode;

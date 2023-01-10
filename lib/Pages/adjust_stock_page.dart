@@ -1,11 +1,11 @@
 import 'package:celta_inventario/Components/Adjust_stock/adjust_stock_products_items.dart';
 import 'package:celta_inventario/components/Adjust_stock/adjust_stock_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
-import 'package:celta_inventario/utils/error_message.dart';
+import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Components/Global_widgets/search_widget.dart';
-import '../utils/consulting_widget.dart';
+import '../Components/Global_widgets/consulting_widget.dart';
 
 class AdjustStockPage extends StatefulWidget {
   const AdjustStockPage({Key? key}) : super(key: key);

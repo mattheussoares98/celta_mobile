@@ -3,7 +3,7 @@ import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_pr
 import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_request_type_model.dart';
-import 'package:celta_inventario/utils/show_error_message.dart';
+import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
