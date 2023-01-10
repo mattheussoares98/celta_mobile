@@ -88,6 +88,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       SaleRequestCartDetailsPage(
         enterpriseCode: arguments["Code"],
         requestTypeCode: arguments["SaleRequestTypeCode"],
+        keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,
       ),
     ];
 

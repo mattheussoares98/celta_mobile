@@ -8,9 +8,11 @@ import 'package:provider/provider.dart';
 class SaleRequestCartDetailsPage extends StatefulWidget {
   final int enterpriseCode;
   final int requestTypeCode;
+  final bool keyboardIsOpen;
   const SaleRequestCartDetailsPage({
     required this.enterpriseCode,
     required this.requestTypeCode,
+    required this.keyboardIsOpen,
     Key? key,
   }) : super(key: key);
 
@@ -99,132 +101,139 @@ class _SaleRequestCartDetailsPageState
               ),
             ),
           ),
-        Container(
-          color: Colors.grey[400],
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 5.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      flex: 20,
-                      child: Column(
-                        children: [
-                          const Text(
-                            "ITENS",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
+        if (widget.keyboardIsOpen)
+          Container(
+            color: Colors.grey[400],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex: 20,
+                        child: Column(
+                          children: [
+                            const Text(
+                              "ITENS",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
-                          Text(
-                            cartProductsCount.toString(),
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                            Text(
+                              cartProductsCount.toString(),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 20,
-                      child: Column(
-                        children: [
-                          const Text(
-                            "TOTAL",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                      Expanded(
+                        flex: 20,
+                        child: Column(
+                          children: [
+                            const Text(
+                              "TOTAL",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
-                          Text(
-                            ConvertString.convertToBRL(
-                              totalCartPrice,
+                            Text(
+                              ConvertString.convertToBRL(
+                                totalCartPrice,
+                              ),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      flex: 60,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: ElevatedButton(
-                          onPressed: saleRequestProvider
-                                      .isLoadingSaveSaleRequest ||
-                                  saleRequestProvider.getCostumerCode(
-                                          widget.enterpriseCode.toString()) ==
-                                      -1 ||
-                                  saleRequestProvider.cartProductsCount(
-                                          widget.enterpriseCode.toString()) ==
-                                      0
-                              ? null
-                              : () async {
-                                  ShowAlertDialog().showAlertDialog(
-                                    context: context,
-                                    title: "Salvar pedido",
-                                    subtitle: "Deseja salvar o pedido?",
-                                    function: () async {
-                                      await saleRequestProvider.saveSaleRequest(
-                                        enterpriseCode:
-                                            widget.enterpriseCode.toString(),
-                                        requestTypeCode: widget.requestTypeCode,
-                                        context: context,
-                                      );
-                                    },
-                                  );
-                                },
-                          child: saleRequestProvider.isLoadingSaveSaleRequest
-                              ? FittedBox(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      const Text("SALVANDO PEDIDO   "),
-                                      Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: const CircularProgressIndicator(
-                                          color: Colors.grey,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 60,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: ElevatedButton(
+                            onPressed:
+                                saleRequestProvider.isLoadingSaveSaleRequest ||
+                                        saleRequestProvider.getCostumerCode(
+                                                widget.enterpriseCode
+                                                    .toString()) ==
+                                            -1 ||
+                                        saleRequestProvider.cartProductsCount(
+                                                widget.enterpriseCode
+                                                    .toString()) ==
+                                            0
+                                    ? null
+                                    : () async {
+                                        ShowAlertDialog().showAlertDialog(
+                                          context: context,
+                                          title: "Salvar pedido",
+                                          subtitle: "Deseja salvar o pedido?",
+                                          function: () async {
+                                            await saleRequestProvider
+                                                .saveSaleRequest(
+                                              enterpriseCode: widget
+                                                  .enterpriseCode
+                                                  .toString(),
+                                              requestTypeCode:
+                                                  widget.requestTypeCode,
+                                              context: context,
+                                            );
+                                          },
+                                        );
+                                      },
+                            child: saleRequestProvider.isLoadingSaveSaleRequest
+                                ? FittedBox(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        const Text("SALVANDO PEDIDO   "),
+                                        Container(
+                                          height: 20,
+                                          width: 20,
+                                          child:
+                                              const CircularProgressIndicator(
+                                            color: Colors.grey,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: FittedBox(
-                                    child: Text(
-                                      textButtonMessage(saleRequestProvider),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
+                                      ],
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: FittedBox(
+                                      child: Text(
+                                        textButtonMessage(saleRequestProvider),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
