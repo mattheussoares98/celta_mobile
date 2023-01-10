@@ -184,7 +184,9 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
-                                        product.EtiquetaPendenteDescricao,
+                                        product.EtiquetaPendente == true
+                                            ? "Sim"
+                                            : "Não",
                                         style: _fontBoldStyle,
                                         maxLines: 2,
                                       ),

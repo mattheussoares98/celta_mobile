@@ -235,13 +235,8 @@ class PriceConferenceProvider with ChangeNotifier {
         return;
       }
 
-      if (_products[index].EtiquetaPendenteDescricao == "Sim") {
-        _products[index].EtiquetaPendenteDescricao = "Não";
-      } else {
-        _products[index].EtiquetaPendenteDescricao = "Sim";
-      }
-      //caso dê certo a alteração, vai alterar o valor localmente para o usuário
-      //saber que deu certo a requisição
+      _products[index].EtiquetaPendente = !_products[index].EtiquetaPendente;
+      //como deu certo a marcação/desmarcação, precisa atualizar na lista local se está marcado ou não
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorSendToPrint = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
