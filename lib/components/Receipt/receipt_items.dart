@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_liberate_check_buttons.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
@@ -21,18 +22,6 @@ class _ReceiptItemsState extends State<ReceiptItems> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle _fontStyle = const TextStyle(
-      fontSize: 20,
-      color: Colors.black,
-      fontFamily: 'OpenSans',
-    );
-    TextStyle _fontBoldStyle = const TextStyle(
-      fontFamily: 'OpenSans',
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    );
-
     return Column(
       children: [
         Padding(
@@ -52,10 +41,16 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                     //não permite mudar o recebimento enquanto está carregando uma liberação
                     return;
                   }
-                  setState(() {
-                    selectedIndex = index;
-                    //isso faz com que apareça os botões de "conferir" e "liberar" somente no item selecionado
-                  });
+                  if (selectedIndex == index) {
+                    setState(() {
+                      selectedIndex = -1;
+                    });
+                  } else {
+                    setState(() {
+                      selectedIndex = index;
+                      //isso faz com que apareça os botões de "conferir" e "liberar" somente no item selecionado
+                    });
+                  }
                 },
                 //sem esse Card, não funciona o gesture detector no campo inteiro
                 child: PersonalizedCard.personalizedCard(
@@ -66,56 +61,28 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Número do recebimento: ',
-                              style: _fontStyle,
-                            ),
-                            const SizedBox(height: 25),
-                            Expanded(
-                              child: Text(
-                                widget.receiptProvider.receipts[index]
-                                    .Numero_ProcRecebDoc,
-                                style: _fontBoldStyle,
-                                maxLines: 2,
-                              ),
-                            ),
-                          ],
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Número do recebimento",
+                          value: widget.receiptProvider.receipts[index]
+                              .Numero_ProcRecebDoc,
                         ),
-                        const SizedBox(height: 5),
-                        FittedBox(
-                          child: Row(
-                            children: [
-                              Text(
-                                'Emitente: ',
-                                style: _fontStyle,
-                              ),
-                              Text(
-                                widget.receiptProvider.receipts[index]
-                                    .EmitterName,
-                                style: _fontBoldStyle,
-                              )
-                            ],
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Emitente",
+                          value: widget
+                              .receiptProvider.receipts[index].EmitterName,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Status",
+                          value: widget.receiptProvider.receipts[index].Status
+                              .toString(),
+                          otherWidget: Icon(
+                            selectedIndex != index
+                                ? Icons.arrow_drop_down_sharp
+                                : Icons.arrow_drop_up_sharp,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 30,
                           ),
                         ),
-                        const SizedBox(height: 5),
-                        FittedBox(
-                          child: Row(
-                            children: [
-                              Text(
-                                'Status: ',
-                                style: _fontStyle,
-                              ),
-                              Text(
-                                widget.receiptProvider.receipts[index].Status
-                                    .toString(),
-                                style: _fontBoldStyle,
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 15),
                         if (selectedIndex == index)
                           LiberateCheckButtons(
                             grDocCode: widget.receiptProvider.receipts[index]

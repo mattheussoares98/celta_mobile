@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:date_format/date_format.dart';
@@ -14,18 +15,6 @@ class InventoryItems extends StatelessWidget {
     InventoryProvider inventoryProvider = Provider.of(context);
     final codigoInternoEmpresa =
         ModalRoute.of(context)!.settings.arguments as int;
-
-    TextStyle _fontStyle = const TextStyle(
-      fontSize: 20,
-      color: Colors.black,
-      fontFamily: 'OpenSans',
-    );
-    TextStyle _fontBoldStyle = const TextStyle(
-      fontFamily: 'OpenSans',
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    );
 
     return Column(
       children: [
@@ -61,85 +50,30 @@ class InventoryItems extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Empresa: ',
-                              style: _fontStyle,
-                            ),
-                            const SizedBox(height: 25),
-                            Expanded(
-                              child: Text(
-                                inventoryProvider.inventorys[index].nomeempresa,
-                                style: _fontBoldStyle,
-                                maxLines: 2,
-                              ),
-                            ),
-                          ],
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Empresa",
+                          value:
+                              inventoryProvider.inventorys[index].nomeempresa,
                         ),
-                        const SizedBox(height: 5),
-                        FittedBox(
-                          child: Row(
-                            children: [
-                              Text(
-                                'Tipo de estoque: ',
-                                style: _fontStyle,
-                              ),
-                              Text(
-                                inventoryProvider
-                                    .inventorys[index].nomeTipoEstoque,
-                                style: _fontBoldStyle,
-                              )
-                            ],
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Tipo de estoque",
+                          value: inventoryProvider
+                              .inventorys[index].nomeTipoEstoque,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Responsável",
+                          value: inventoryProvider
+                              .inventorys[index].nomefuncionario,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Congelado em",
+                          value: formatDate(
+                            inventoryProvider
+                                .inventorys[index].dataCongelamentoInventario,
+                            [dd, '/', mm, '/', yyyy, ' ', HH, ':', mm, ':', ss],
                           ),
                         ),
-                        const SizedBox(height: 5),
-                        FittedBox(
-                          child: Row(
-                            children: [
-                              Text(
-                                'Responsável: ',
-                                style: _fontStyle,
-                              ),
-                              const SizedBox(height: 25),
-                              Text(
-                                inventoryProvider
-                                    .inventorys[index].nomefuncionario,
-                                style: _fontBoldStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        FittedBox(
-                          child: Row(children: [
-                            Text(
-                              'Congelado em: ',
-                              style: _fontStyle,
-                            ),
-                            const SizedBox(height: 25),
-                            Text(
-                              formatDate(
-                                inventoryProvider.inventorys[index]
-                                    .dataCongelamentoInventario,
-                                [
-                                  dd,
-                                  '/',
-                                  mm,
-                                  '/',
-                                  yyyy,
-                                  ' ',
-                                  HH,
-                                  ':',
-                                  mm,
-                                  ':',
-                                  ss
-                                ],
-                              ),
-                              style: _fontBoldStyle,
-                            ),
-                          ]),
-                        ),
+
                         //data de criação do inventário
                         // const SizedBox(height: 5),
                         // Row(children: [
@@ -157,47 +91,14 @@ class InventoryItems extends StatelessWidget {
                         //     style: _fontBoldStyle,
                         //   ),
                         // ]),
-                        const SizedBox(height: 5),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Observações: ',
-                              style: _fontStyle,
-                            ),
-                            if (inventoryProvider
-                                    .inventorys[index].obsInventario.length <
-                                19)
-                              //se houver poucos caracteres na observação, exibe na mesma linha...
-                              Expanded(
-                                child: Text(
-                                  inventoryProvider.inventorys[index]
-                                          .obsInventario.isEmpty
-                                      ? 'Não há observações'
-                                      : inventoryProvider
-                                          .inventorys[index].obsInventario,
-                                  style: _fontBoldStyle,
-                                ),
-                              ),
-                          ],
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Observações",
+                          value: inventoryProvider
+                                  .inventorys[index].obsInventario.isEmpty
+                              ? 'Não há observações'
+                              : inventoryProvider
+                                  .inventorys[index].obsInventario,
                         ),
-                        if (inventoryProvider
-                                .inventorys[index].obsInventario.length >
-                            19)
-                          //se houver bastante caracteres, quebra a linha pra exibir melhor
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  inventoryProvider
-                                      .inventorys[index].obsInventario,
-                                  style: _fontBoldStyle,
-                                ),
-                              ),
-                            ],
-                          ),
-                        const SizedBox(height: 5),
                       ],
                     ),
                   ),

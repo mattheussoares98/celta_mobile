@@ -1,4 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
+import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
@@ -27,48 +28,6 @@ class ReceiptConferenceProductsItems extends StatefulWidget {
 class _ReceiptConferenceProductsItemsState
     extends State<ReceiptConferenceProductsItems> {
   int selectedIndex = -1;
-
-  TextStyle _fontStyle = const TextStyle(
-    fontSize: 17,
-    color: Colors.black,
-    fontFamily: 'OpenSans',
-  );
-  TextStyle _fontBoldStyle = const TextStyle(
-    fontFamily: 'OpenSans',
-    fontSize: 17,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
-
-  Column values({
-    required String title,
-    required String value,
-    required int index,
-    required ReceiptConferenceProvider receiptConferenceProvider,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          children: [
-            Text(
-              "${title}: ",
-              style: _fontStyle,
-            ),
-            // const SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                value,
-                style: _fontBoldStyle,
-                maxLines: 2,
-              ),
-            ),
-          ],
-        ),
-        // const SizedBox(height: 5),
-      ],
-    );
-  }
 
   final GlobalKey<FormState> consultedProductFormKey = GlobalKey();
 
@@ -202,68 +161,33 @@ class _ReceiptConferenceProductsItemsState
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: [
-                                values(
+                                TitleAndSubtitle.titleAndSubtitle(
                                   title: "Nome",
                                   value: product.Nome_Produto,
-                                  index: index,
-                                  receiptConferenceProvider:
-                                      widget.receiptConferenceProvider,
                                 ),
-                                values(
+                                TitleAndSubtitle.titleAndSubtitle(
                                   title: "PLU",
                                   value: product.CodigoPlu_ProEmb,
-                                  index: index,
-                                  receiptConferenceProvider:
-                                      widget.receiptConferenceProvider,
                                 ),
-                                values(
+                                TitleAndSubtitle.titleAndSubtitle(
                                   title: "Embalagem",
                                   value: product.PackingQuantity,
-                                  index: index,
-                                  receiptConferenceProvider:
-                                      widget.receiptConferenceProvider,
                                 ),
-                                Container(
-                                  // color: Colors.amber,
-                                  height: 22,
-                                  child: Row(
-                                    // mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "EANs: ",
-                                            style: _fontStyle,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            widget
-                                                        .receiptConferenceProvider
-                                                        .products[index]
-                                                        .AllEans !=
-                                                    ""
-                                                ? widget
-                                                    .receiptConferenceProvider
-                                                    .products[index]
-                                                    .AllEans
-                                                : "Nenhum",
-                                            style: _fontBoldStyle,
-                                            maxLines: 2,
-                                          ),
-                                        ],
-                                      ),
-                                      Icon(
-                                        selectedIndex != index
-                                            ? Icons.arrow_drop_down_sharp
-                                            : Icons.arrow_drop_up_sharp,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 40,
-                                      ),
-                                    ],
+                                TitleAndSubtitle.titleAndSubtitle(
+                                  title: "EANs",
+                                  value: widget.receiptConferenceProvider
+                                              .products[index].AllEans !=
+                                          ""
+                                      ? widget.receiptConferenceProvider
+                                          .products[index].AllEans
+                                      : "Nenhum",
+                                  otherWidget: Icon(
+                                    selectedIndex != index
+                                        ? Icons.arrow_drop_down_sharp
+                                        : Icons.arrow_drop_up_sharp,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    size: 30,
                                   ),
                                 ),
                                 if (selectedIndex == index)
@@ -273,7 +197,7 @@ class _ReceiptConferenceProductsItemsState
                                   //a quantidade quando clica no produto
                                   Column(
                                     children: [
-                                      values(
+                                      TitleAndSubtitle.titleAndSubtitle(
                                         title: "Quantidade contada",
                                         value: widget
                                                     .receiptConferenceProvider
@@ -292,9 +216,6 @@ class _ReceiptConferenceProductsItemsState
                                                     .toString())!
                                                 .toStringAsFixed(3)
                                                 .replaceAll(RegExp(r'\.'), ','),
-                                        index: index,
-                                        receiptConferenceProvider:
-                                            widget.receiptConferenceProvider,
                                       ),
                                       const SizedBox(height: 10),
                                       AddSubtractOrAnullWidget(

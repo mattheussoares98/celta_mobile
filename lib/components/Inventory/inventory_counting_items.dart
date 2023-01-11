@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -49,70 +50,17 @@ class InventoryCountingItems extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            const Text(
-                              'Número da contagem: ',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontFamily: 'OpenSans',
-                              ),
-                            ),
-                            Text(
-                              inventoryCountingProvider
-                                  .countings[index].numeroContagemInvCont
-                                  .toString(),
-                              style: const TextStyle(
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Número da contagem",
+                          value: inventoryCountingProvider
+                              .countings[index].numeroContagemInvCont
+                              .toString(),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Text(
-                              'Observações: ',
-                              style: const TextStyle(
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                            ),
-                            if (inventoryCountingProvider
-                                    .countings[index].obsInvCont.length <
-                                19)
-                              Expanded(
-                                child: Text(
-                                  inventoryCountingProvider
-                                      .countings[index].obsInvCont,
-                                ),
-                              ),
-                          ],
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Observações",
+                          value: inventoryCountingProvider
+                              .countings[index].obsInvCont,
                         ),
-                        if (inventoryCountingProvider
-                                .countings[index].obsInvCont.length >
-                            19)
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  inventoryCountingProvider
-                                      .countings[index].obsInvCont,
-                                  style: const TextStyle(
-                                    fontFamily: 'OpenSans',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                       ],
                     ),
                   ),

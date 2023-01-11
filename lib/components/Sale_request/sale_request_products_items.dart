@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_associated_stocks_alert_dialog.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
@@ -24,44 +25,6 @@ class SaleRequestProductsItems extends StatefulWidget {
 
 class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
   int selectedIndex = -1;
-
-  TextStyle _fontStyle({Color? color = Colors.black}) => TextStyle(
-        fontSize: 17,
-        color: color,
-        fontFamily: 'OpenSans',
-      );
-  TextStyle _fontBoldStyle({Color? color = Colors.black}) => TextStyle(
-        fontFamily: 'OpenSans',
-        fontSize: 17,
-        fontWeight: FontWeight.bold,
-        color: color,
-      );
-
-  Widget values({
-    Color? titleColor,
-    Color? subtitleColor,
-    Widget? otherWidget,
-    String? title,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Text(
-          title == null ? "" : "${title}: ",
-          style: _fontStyle(color: titleColor),
-        ),
-        const SizedBox(width: 5),
-        Expanded(
-          child: Text(
-            value,
-            style: _fontBoldStyle(color: subtitleColor),
-            maxLines: 2,
-          ),
-        ),
-        if (otherWidget != null) otherWidget,
-      ],
-    );
-  }
 
   GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
 
@@ -179,7 +142,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "PLU",
                             value: product.PLU.toString(),
                             otherWidget: SaleRequestAssociatedStocksWidget
@@ -188,12 +151,12 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               product: product,
                             ),
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Produto",
                             value: product.Name.toString() +
                                 " (${product.PackingQuantity})",
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Preço de venda",
                             value: ConvertString.convertToBRL(
                               product.RetailPracticedPrice,
@@ -211,7 +174,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     : Colors.black
                                 : Colors.black,
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Preço de atacado",
                             value: ConvertString.convertToBRL(
                               product.WholePracticedPrice,
@@ -228,11 +191,11 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     : Theme.of(context).colorScheme.primary
                                 : Colors.black,
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Quantidade mínima para atacado",
                             value: product.MinimumWholeQuantity.toString(),
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Saldo estoque de venda",
                             value: product.BalanceStockSale.toString(),
                             otherWidget: Icon(
@@ -247,7 +210,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                             ProductPackingCode: product.ProductPackingCode,
                             enterpriseCode: widget.enterpriseCode.toString(),
                           ))
-                            values(
+                            TitleAndSubtitle.titleAndSubtitle(
                               // titleColor: Theme.of(context).colorScheme.primary,
                               subtitleColor: Colors.green[700],
                               value: "Quantidade no carrinho: " +

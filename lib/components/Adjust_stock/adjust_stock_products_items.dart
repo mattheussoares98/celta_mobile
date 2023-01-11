@@ -1,6 +1,7 @@
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import '../Global_widgets/title_and_value.dart';
 import 'adjust_stock_insert_quantity.dart';
 
 class AdjustStockProductsItems extends StatefulWidget {
@@ -25,41 +26,6 @@ class AdjustStockProductsItems extends StatefulWidget {
 
 class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
   int selectedIndex = -1;
-
-  TextStyle _fontStyle = const TextStyle(
-    fontSize: 17,
-    color: Colors.black,
-    fontFamily: 'OpenSans',
-  );
-  TextStyle _fontBoldStyle = const TextStyle(
-    fontFamily: 'OpenSans',
-    fontSize: 17,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-  );
-
-  Widget values({
-    required String title,
-    required String value,
-  }) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(
-          "${title}: ",
-          style: _fontStyle,
-        ),
-        const SizedBox(width: 5),
-        Expanded(
-          child: Text(
-            value,
-            style: _fontBoldStyle,
-            maxLines: 2,
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,51 +106,31 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Nome",
                             value: product.Name,
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "PLU",
                             value: product.PriceLookUp,
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Embalagem",
                             value: product.PackingQuantity,
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Estoque atual",
                             value: product.CurrentStock,
                           ),
-                          Container(
-                            // color: Colors.amber,
-                            height: 22,
-                            child: Row(
-                              // mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Saldo estoque de venda: ",
-                                      style: _fontStyle,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      product.SaldoEstoqueVenda,
-                                      style: _fontBoldStyle,
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  selectedIndex != index
-                                      ? Icons.arrow_drop_down_sharp
-                                      : Icons.arrow_drop_up_sharp,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 40,
-                                ),
-                              ],
+                          TitleAndSubtitle.titleAndSubtitle(
+                            title: "Saldo estoque de venda",
+                            value: product.SaldoEstoqueVenda,
+                            otherWidget: Icon(
+                              selectedIndex != index
+                                  ? Icons.arrow_drop_down_sharp
+                                  : Icons.arrow_drop_up_sharp,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 30,
                             ),
                           ),
                           if (selectedIndex == index)

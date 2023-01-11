@@ -2,7 +2,7 @@ import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:flutter/material.dart';
 
 class PriceConferenceSendPrintButton extends StatefulWidget {
-  final String etiquetaPendenteDescricao;
+  final bool etiquetaPendente;
   final PriceConferenceProvider priceConferenceProvider;
   final int internalEnterpriseCode;
   final int productPackingCode;
@@ -12,7 +12,7 @@ class PriceConferenceSendPrintButton extends StatefulWidget {
     required this.index,
     required this.priceConferenceProvider,
     required this.productPackingCode,
-    required this.etiquetaPendenteDescricao,
+    required this.etiquetaPendente,
     Key? key,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class _PriceConferenceSendPrintButtonState
       children: [
         TextButton(
           style: TextButton.styleFrom(
-            primary: widget.etiquetaPendenteDescricao == "Não"
+            primary: widget.etiquetaPendente == false
                 ? Theme.of(context).colorScheme.primary
                 : Colors.red,
           ),
@@ -62,11 +62,11 @@ class _PriceConferenceSendPrintButtonState
               : Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(widget.etiquetaPendenteDescricao == "Sim"
+                    Text(widget.etiquetaPendente == true
                         ? "Desmarcar para impressão  "
                         : "Marcar para impressão  "),
                     Icon(
-                      widget.etiquetaPendenteDescricao == "Sim"
+                      widget.etiquetaPendente == true
                           ? Icons.print_disabled
                           : Icons.print,
                     )

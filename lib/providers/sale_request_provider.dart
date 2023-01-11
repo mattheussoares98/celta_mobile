@@ -684,10 +684,6 @@ class SaleRequestProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageProducts,
-        context: context,
-      );
     } finally {
       _isLoadingProducts = false;
       notifyListeners();
@@ -715,6 +711,7 @@ class SaleRequestProvider with ChangeNotifier {
         searchTypeInt: 11, //ApproximateLegacyCode
         context: context,
       );
+
       return;
     }
 

@@ -1,4 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
+import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:flutter/material.dart';
@@ -108,106 +109,37 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            FittedBox(
-              child: Row(
-                children: [
-                  const Text(
-                    'Produto: ',
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  //26
-                  Text(
-                    inventoryProductProvider.products[0].productName.length > 26
-                        //se o nome do produto tiver mais de 26 caracteres, vai ficar ruim a exibição somente em uma linha, aí ele quebra a linha no 26º caracter
-                        ? inventoryProductProvider.products[0].productName
-                                .replaceRange(
-                                    26,
-                                    inventoryProductProvider
-                                        .products[0].productName.length,
-                                    '\n') +
-                            inventoryProductProvider.products[0].productName
-                                .substring(26)
-                                .replaceFirst(
-                                  RegExp(r'\('),
-                                  '\n\(',
-                                )
-                        : inventoryProductProvider.products[0].productName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+            TitleAndSubtitle.titleAndSubtitle(
+              title: "Produto",
+              value: inventoryProductProvider.products[0].productName,
+              fontSize: 20,
             ),
-            const SizedBox(height: 8),
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'PLU: ',
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                Text(
-                  inventoryProductProvider.products[0].plu,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            TitleAndSubtitle.titleAndSubtitle(
+              title: "PLU",
+              value: inventoryProductProvider.products[0].plu,
+              fontSize: 20,
             ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                //precisei colocar o flexible porque pelo fittedbox não estava funcionando como queria
-                const Flexible(
-                  flex: 20,
-                  child: Text(
-                    'Quantidade contada: ',
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Flexible(
-                  flex: 15,
-                  child: FittedBox(
-                    child: Text(
-                      inventoryProductProvider
-                                  .products[0].quantidadeInvContProEmb ==
-                              double
-                          ? double.tryParse(inventoryProductProvider
-                                  .products[0].quantidadeInvContProEmb
-                                  .toString())!
-                              .toStringAsFixed(3)
-                              .replaceAll(RegExp(r'\.'), ',')
-                          : inventoryProductProvider
-                                      .products[0].quantidadeInvContProEmb ==
-                                  -1
-                              //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
-                              ? 'Sem contagem'
-                              : double.tryParse(inventoryProductProvider
-                                      .products[0].quantidadeInvContProEmb
-                                      .toString())!
-                                  .toStringAsFixed(3)
-                                  .replaceAll(RegExp(r'\.'), ','),
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'OpenSans',
-                      ),
-                    ),
-                  ),
-                )
-              ],
+            TitleAndSubtitle.titleAndSubtitle(
+              title: "Quantidade contada",
+              value: inventoryProductProvider
+                          .products[0].quantidadeInvContProEmb ==
+                      double
+                  ? double.tryParse(inventoryProductProvider
+                          .products[0].quantidadeInvContProEmb
+                          .toString())!
+                      .toStringAsFixed(3)
+                      .replaceAll(RegExp(r'\.'), ',')
+                  : inventoryProductProvider
+                              .products[0].quantidadeInvContProEmb ==
+                          -1
+                      //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
+                      ? 'Sem contagem'
+                      : double.tryParse(inventoryProductProvider
+                              .products[0].quantidadeInvContProEmb
+                              .toString())!
+                          .toStringAsFixed(3)
+                          .replaceAll(RegExp(r'\.'), ','),
+              fontSize: 20,
             ),
             if (inventoryProductProvider.lastQuantityAdded != '')
               const SizedBox(height: 3),

@@ -79,7 +79,8 @@ class SaleRequestProductsModel {
           MinimumWholeQuantity: data["MinimumWholeQuantity"],
           BalanceStockSale: data["BalanceStockSale"],
           StorageAreaAddress: data["StorageAreaAddress"],
-          StockByEnterpriseAssociateds: data["StockByEnterpriseAssociateds"],
+          StockByEnterpriseAssociateds:
+              data["StockByEnterpriseAssociateds"] ?? [],
         ),
       );
     });

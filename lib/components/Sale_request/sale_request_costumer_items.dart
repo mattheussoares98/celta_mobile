@@ -1,4 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,44 +17,6 @@ class SaleRequestCostumersItems extends StatefulWidget {
 }
 
 class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
-  TextStyle _fontStyle({Color? color = Colors.black}) => TextStyle(
-        fontSize: 17,
-        color: color,
-        fontFamily: 'OpenSans',
-      );
-  TextStyle _fontBoldStyle({Color? color = Colors.black}) => TextStyle(
-        fontFamily: 'OpenSans',
-        fontSize: 17,
-        fontWeight: FontWeight.bold,
-        color: color,
-      );
-
-  Widget values({
-    Color? titleColor,
-    Color? subtitleColor,
-    Widget? otherWidget,
-    String? title,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Text(
-          title == null ? "" : "${title}: ",
-          style: _fontStyle(color: titleColor),
-        ),
-        const SizedBox(width: 5),
-        Expanded(
-          child: Text(
-            value,
-            style: _fontBoldStyle(color: subtitleColor),
-            maxLines: 2,
-          ),
-        ),
-        if (otherWidget != null) otherWidget,
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
@@ -111,24 +74,24 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Código",
                             value: costumer[index].Code.toString(),
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Nome",
                             value: costumer[index].Name.toString(),
                           ),
                           if (costumer[index].ReducedName != "")
-                            values(
+                            TitleAndSubtitle.titleAndSubtitle(
                               title: "Nome reduzido",
                               value: costumer[index].ReducedName.toString(),
                             ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "CPF/CNPJ",
                             value: costumer[index].CpfCnpjNumber,
                           ),
-                          values(
+                          TitleAndSubtitle.titleAndSubtitle(
                             title: "Código personalizado",
                             value: costumer[index].PersonalizedCode.toString(),
                           ),
