@@ -78,10 +78,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
         //significa que tem algum erro
         _errorMessageGetProducts = json.decode(resultAsString)["Message"];
         _consultingProducts = false;
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageGetProducts,
-          context: context,
-        );
+
         notifyListeners();
         return;
       } else {
@@ -375,10 +372,6 @@ class ReceiptConferenceProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageGetProducts,
-        context: context,
-      );
     }
     _consultingProducts = false;
     notifyListeners();
