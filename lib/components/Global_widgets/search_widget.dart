@@ -47,7 +47,7 @@ class _SearchWidgetState extends State<SearchWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -198,24 +198,20 @@ class _SearchWidgetState extends State<SearchWidget> {
                 ),
               ),
               if (widget.hasLegacyCodeSearch)
-                FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.changeLegacyIsSelectedFunction();
+                    },
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
-                          "código\nlegado",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        Transform.scale(
-                          scale: 1,
-                          child: Checkbox(
-                            value: widget.legacyIsSelected,
-                            onChanged: (value) {
-                              widget.changeLegacyIsSelectedFunction();
-                            },
-                          ),
+                        const Text("código\nlegado"),
+                        Icon(
+                          widget.legacyIsSelected
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -225,7 +221,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           ),
         ),
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
+          padding: EdgeInsets.only(left: 8, right: 8, top: 4),
           child: Divider(
             height: 6,
             color: Colors.grey,
