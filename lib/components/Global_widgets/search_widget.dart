@@ -201,9 +201,11 @@ class _SearchWidgetState extends State<SearchWidget> {
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: GestureDetector(
-                    onTap: () {
-                      widget.changeLegacyIsSelectedFunction();
-                    },
+                    onTap: widget.isLoading
+                        ? null
+                        : () {
+                            widget.changeLegacyIsSelectedFunction();
+                          },
                     child: Column(
                       children: [
                         const Text("código\nlegado"),
@@ -211,7 +213,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                           widget.legacyIsSelected
                               ? Icons.check_box
                               : Icons.check_box_outline_blank,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: widget.isLoading
+                              ? Colors.grey
+                              : Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),

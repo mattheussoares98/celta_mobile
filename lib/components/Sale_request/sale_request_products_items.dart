@@ -80,6 +80,16 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                   enterpriseCode: widget.enterpriseCode.toString(),
                 );
 
+                if (saleRequestProvider.productsCount == 1 &&
+                    selectedIndex != index) {
+                  selectedIndex = index;
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    FocusScope.of(context).requestFocus(
+                      saleRequestProvider.consultedProductFocusNode,
+                    );
+                  });
+                }
+
                 // double _totalItemValue = saleRequestProvider.getTotalItemValue(
                 //   product: product,
                 //   consultedProductController: widget.consultedProductController,
@@ -105,6 +115,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 });
                                 return;
                               }
+
                               if (selectedIndex != index) {
                                 if (product.RetailPracticedPrice == 0 &&
                                     product.WholePracticedPrice == 0) {
@@ -116,8 +127,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   return;
                                 }
                                 _quantityToAdd = 0;
-                                widget.consultedProductController.text = "";
-                                changeCursorToLastIndex();
+                                widget.consultedProductController.text = "1";
                                 //necessário apagar o campo da quantidade quando
                                 //mudar de produto selecionado
 
