@@ -256,6 +256,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   enterpriseCode:
                                       widget.enterpriseCode.toString(),
                                 );
+                                setState(() {
+                                  selectedIndex = -1;
+                                });
                               },
                               totalItensInCart: _totalItensInCart,
                               updateTotalItemValue: () {

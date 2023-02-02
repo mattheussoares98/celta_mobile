@@ -12,6 +12,7 @@ class InsertQuantityTextFormField extends StatefulWidget {
   final Function onChanged;
   final int lengthLimitingTextInputFormatter;
   final Function onFieldSubmitted;
+  final bool canReceiveEmptyValue;
   const InsertQuantityTextFormField({
     required this.focusNode,
     required this.textEditingController,
@@ -20,6 +21,7 @@ class InsertQuantityTextFormField extends StatefulWidget {
     required this.onFieldSubmitted,
     this.isLoading = false,
     this.autoFocus = false,
+    this.canReceiveEmptyValue = false,
     this.labelText = "Digite a quantidade",
     this.hintText = "Digite a quantidade",
     this.lengthLimitingTextInputFormatter = 10,
@@ -57,7 +59,7 @@ class _InsertQuantityTextFormFieldState
           widget.onChanged();
         },
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value!.isEmpty && !widget.canReceiveEmptyValue) {
             return 'Digite uma quantidade';
           } else if (value == '0' || value == '0.' || value == '0,') {
             return 'Digite uma quantidade';

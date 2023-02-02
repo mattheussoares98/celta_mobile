@@ -40,7 +40,12 @@ class _SaleRequestInsertProductQuantityFormState
     double? controllerInDouble = double.tryParse(
         widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
 
-    if (controllerInDouble != null && isValid) {
+    if (controllerInDouble == null) {
+      //se não conseguir converter, é porque vai adicionar uma unidade
+      controllerInDouble = 1;
+    }
+
+    if (isValid) {
       setState(() {
         widget.addProductInCart();
       });
@@ -71,6 +76,10 @@ class _SaleRequestInsertProductQuantityFormState
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
+
+    double? quantityToAdd = double.tryParse(
+        widget.consultedProductController.text.replaceAll(RegExp(r','), '.'));
+
     return Column(
       children: [
         const Padding(
@@ -89,6 +98,7 @@ class _SaleRequestInsertProductQuantityFormState
                 formKey: widget.consultedProductFormKey,
                 onChanged: () => {widget.updateTotalItemValue()},
                 onFieldSubmitted: () => addItemInCart(),
+                canReceiveEmptyValue: true,
               ),
             ),
             const SizedBox(width: 20),
@@ -178,9 +188,11 @@ class _SaleRequestInsertProductQuantityFormState
                         child: FittedBox(
                           child: Row(
                             children: [
-                              const Text(
-                                "ADICIONAR",
-                                style: TextStyle(fontSize: 17),
+                              Text(
+                                quantityToAdd == null
+                                    ? "ADICIONAR +1"
+                                    : "ADICIONAR",
+                                style: const TextStyle(fontSize: 17),
                               ),
                               const Icon(
                                 Icons.shopping_cart,
@@ -199,9 +211,6 @@ class _SaleRequestInsertProductQuantityFormState
             IconButton(
               color: Theme.of(context).colorScheme.primary,
               onPressed: () {
-                double? quantityToAdd = double.tryParse(widget
-                    .consultedProductController.text
-                    .replaceAll(RegExp(r','), '.'));
                 if (quantityToAdd == null) return;
 
                 setState(() {

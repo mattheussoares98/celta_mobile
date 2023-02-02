@@ -188,6 +188,13 @@ class SaleRequestProvider with ChangeNotifier {
     double _quantityToAdd =
         tryChangeControllerTextToDouble(consultedProductController);
 
+    if (_quantityToAdd == 0) {
+      //quando o campo de quantidade estiver sem dados ou não conseguir
+      //converter a informação para inteiro, o aplicativo vai informar que a
+      //quanitdade a ser inserida será "1"
+      _quantityToAdd = 1;
+    }
+
     double _praticedPrice = getPraticedPrice(
       product: product,
       consultedProductController: consultedProductController,
@@ -199,10 +206,7 @@ class SaleRequestProvider with ChangeNotifier {
     double? controllerInDouble = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
 
-    if (controllerInDouble == null) {
-      _quantityToAdd = 0;
-      _totalItemValue = 0;
-    } else {
+    if (controllerInDouble != null) {
       _quantityToAdd = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r','), '\.'),
       )!;
@@ -283,6 +287,10 @@ class SaleRequestProvider with ChangeNotifier {
     );
     double quantity =
         tryChangeControllerTextToDouble(consultedProductController);
+
+    if (quantity == 0) {
+      quantity = 1; //quando retornar zero, precisa adicionar uma unidade
+    }
 
     SaleRequestCartProductsModel cartProductsModel =
         SaleRequestCartProductsModel(
