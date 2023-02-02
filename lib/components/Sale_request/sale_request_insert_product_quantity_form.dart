@@ -34,41 +34,37 @@ class SaleRequestInsertProductQuantityForm extends StatefulWidget {
 
 class _SaleRequestInsertProductQuantityFormState
     extends State<SaleRequestInsertProductQuantityForm> {
-  correctFunction(
-    SaleRequestProvider saleRequestProvider,
-  ) {
-    if (widget.consultedProductController.text.isEmpty &&
-        widget.totalItensInCart > 0) {
-      return ShowAlertDialog().showAlertDialog(
-        context: context,
-        title: "Confirmar exclusão",
-        subtitle: "Deseja excluir o produto do carrinho?",
-        function: () {
-          setState(() {
-            saleRequestProvider.removeProductFromCart(
-              ProductPackingCode: widget.product.ProductPackingCode,
-              enterpriseCode: widget.enterpriseCode.toString(),
-            );
+  addItemInCart() {
+    bool isValid = widget.consultedProductFormKey.currentState!.validate();
 
-            widget.updateTotalItemValue();
-          });
-        },
-      );
-    } else {
-      bool isValid = widget.consultedProductFormKey.currentState!.validate();
+    double? controllerInDouble = double.tryParse(
+        widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
 
-      double? controllerInDouble = double.tryParse(widget
-          .consultedProductController.text
-          .replaceAll(RegExp(r'\,'), '.'));
+    if (controllerInDouble != null && isValid) {
+      setState(() {
+        widget.addProductInCart();
+      });
 
-      if (controllerInDouble != null && isValid) {
-        setState(() {
-          widget.addProductInCart();
-        });
-
-        FocusScope.of(context).unfocus();
-      }
+      FocusScope.of(context).unfocus();
     }
+  }
+
+  void removeProduct(SaleRequestProvider saleRequestProvider) {
+    ShowAlertDialog().showAlertDialog(
+      context: context,
+      title: "Confirmar exclusão",
+      subtitle: "Deseja excluir o produto do carrinho?",
+      function: () {
+        setState(() {
+          saleRequestProvider.removeProductFromCart(
+            ProductPackingCode: widget.product.ProductPackingCode,
+            enterpriseCode: widget.enterpriseCode.toString(),
+          );
+
+          widget.updateTotalItemValue();
+        });
+      },
+    );
   }
 
   @override
@@ -92,7 +88,7 @@ class _SaleRequestInsertProductQuantityFormState
                 textEditingController: widget.consultedProductController,
                 formKey: widget.consultedProductFormKey,
                 onChanged: () => {widget.updateTotalItemValue()},
-                onFieldSubmitted: () => correctFunction(saleRequestProvider),
+                onFieldSubmitted: () => addItemInCart(),
               ),
             ),
             const SizedBox(width: 20),
@@ -130,51 +126,72 @@ class _SaleRequestInsertProductQuantityFormState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
+              flex: 3,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  primary:
+                      widget.totalItensInCart > 0 ? Colors.red : Colors.grey,
+                ),
+                onPressed: widget.totalItensInCart > 0
+                    ? () => removeProduct(saleRequestProvider)
+                    : null,
+                child: FittedBox(
+                  child: Column(
+                    children: [
+                      const Text("Remover\nproduto"),
+                      const Icon(Icons.delete),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Expanded(
+              flex: 10,
               child: Container(
                 height: 60,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: widget.consultedProductController.text.isEmpty &&
-                            widget.totalItensInCart > 0
-                        ? Colors.red
-                        : Theme.of(context).colorScheme.primary,
-                  ),
-                  onPressed: () => correctFunction(saleRequestProvider),
-                  child: widget.consultedProductController.text.isEmpty &&
-                          widget.totalItensInCart > 0
-                      ? const Text("Remover produto do carrinho")
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  const Text("Total"),
-                                  Text(
-                                    ConvertString.convertToBRL(
-                                      widget.totalItemValue,
-                                    ),
-                                  ),
-                                ],
+                  onPressed: () => addItemInCart(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(height: 5),
+                      Expanded(
+                        flex: 10,
+                        child: FittedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Text("Total: "),
+                              Text(
+                                ConvertString.convertToBRL(
+                                  widget.totalItemValue,
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  const Text(
-                                    "Adicionar",
-                                    style: TextStyle(fontSize: 17),
-                                  ),
-                                  const Icon(
-                                    Icons.shopping_cart,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 5),
+                      Expanded(
+                        flex: 8,
+                        child: FittedBox(
+                          child: Row(
+                            children: [
+                              const Text(
+                                "ADICIONAR",
+                                style: TextStyle(fontSize: 17),
+                              ),
+                              const Icon(
+                                Icons.shopping_cart,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                    ],
+                  ),
                 ),
               ),
             ),

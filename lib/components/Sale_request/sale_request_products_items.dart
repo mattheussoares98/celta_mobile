@@ -127,7 +127,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   return;
                                 }
                                 _quantityToAdd = 0;
-                                widget.consultedProductController.text = "1";
+                                widget.consultedProductController.clear();
                                 //necessário apagar o campo da quantidade quando
                                 //mudar de produto selecionado
 
@@ -222,7 +222,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                           ))
                             TitleAndSubtitle.titleAndSubtitle(
                               // titleColor: Theme.of(context).colorScheme.primary,
-                              subtitleColor: Colors.green[700],
+                              subtitleColor: Colors.red,
                               value: "Quantidade no carrinho: " +
                                   saleRequestProvider
                                       .getTotalItensInCart(
