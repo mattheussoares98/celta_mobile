@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../Components/Global_widgets/insert_individual_product_widget.dart';
 import '../../providers/inventory_product_provider.dart';
 import '../../Components/Inventory/inventory_consult_product_widget.dart';
 import '../../Components/Inventory/inventory_consulted_product_widget.dart';
@@ -73,39 +74,20 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                         consultProductController: _consultProductController,
                         consultedProductController: _consultedProductController,
                       ),
-                      FittedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const FittedBox(
-                              child: Text(
-                                'Inserir produto individualmente',
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: 30,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            Switch(
-                              value: _isIndividual,
-                              onChanged: inventoryProductProvider.isLoading ||
-                                      inventoryProductProvider.isLoadingQuantity
-                                  ? null
-                                  : (value) {
-                                      setState(() {
-                                        _isIndividual = value;
-                                      });
-                                      if (_isIndividual) {
-                                        inventoryProductProvider
-                                            .alterFocusToConsultProduct(
-                                          context: context,
-                                        );
-                                      }
-                                    },
-                            ),
-                          ],
-                        ),
+                      InsertIndividualProductWidget(
+                        isIndividual: _isIndividual,
+                        isLoading: inventoryProductProvider.isLoading ||
+                            inventoryProductProvider.isLoadingQuantity,
+                        changeFocus: () {
+                          inventoryProductProvider.alterFocusToConsultProduct(
+                            context: context,
+                          );
+                        },
+                        changeValue: () {
+                          setState(() {
+                            _isIndividual = !_isIndividual;
+                          });
+                        },
                       ),
                     ],
                   ),
