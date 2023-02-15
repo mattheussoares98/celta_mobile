@@ -1,4 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/insert_quantity_textformfield.dart';
+import 'package:celta_inventario/Components/Sale_request/sale_request_cart_products_items.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
@@ -232,229 +233,18 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                           ),
                           child: Column(
                             children: [
-                              InkWell(
-                                onTap:
-                                    saleRequestProvider.isLoadingSaveSaleRequest
-                                        ? null
-                                        : () async {
-                                            await changeFocus(
-                                              saleRequestProvider:
-                                                  saleRequestProvider,
-                                              index: index,
-                                            );
-                                          },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 3, top: 4),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 6),
-                                        child: Row(
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 12,
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              child: FittedBox(
-                                                child: Text(
-                                                  (index + 1).toString(),
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    shadows: [
-                                                      Shadow(
-                                                        offset: Offset(0, 0),
-                                                        blurRadius: 2.0,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          // crossAxisAlignment:
-                                          //     CrossAxisAlignment.stretch,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    product.Name +
-                                                        " (${product.PackingQuantity})" +
-                                                        '\nplu: ${product.PLU}',
-                                                    style: const TextStyle(
-                                                      fontFamily: 'OpenSans',
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: saleRequestProvider
-                                                          .isLoadingSaveSaleRequest
-                                                      ? null
-                                                      : () {
-                                                          ShowAlertDialog()
-                                                              .showAlertDialog(
-                                                            context: context,
-                                                            title:
-                                                                "Remover item",
-                                                            subtitle:
-                                                                "Deseja realmente remover o item do carrinho?",
-                                                            function: () {
-                                                              saleRequestProvider
-                                                                  .removeProductFromCart(
-                                                                ProductPackingCode:
-                                                                    product
-                                                                        .ProductPackingCode,
-                                                                enterpriseCode: widget
-                                                                    .enterpriseCode
-                                                                    .toString(),
-                                                              );
-                                                              setState(() {
-                                                                _selectedIndex =
-                                                                    -1;
-                                                              });
-
-                                                              ShowErrorMessage
-                                                                  .showErrorMessage(
-                                                                error:
-                                                                    "Produto removido",
-                                                                context:
-                                                                    context,
-                                                                functionSnackBarAction:
-                                                                    () {
-                                                                  saleRequestProvider
-                                                                      .restoreProductRemoved(widget
-                                                                          .enterpriseCode
-                                                                          .toString());
-                                                                },
-                                                                labelSnackBarAction:
-                                                                    "Restaurar produto",
-                                                              );
-                                                            },
-                                                          );
-                                                        },
-                                                  icon: Icon(
-                                                    Icons.delete,
-                                                    color: saleRequestProvider
-                                                            .isLoadingSaveSaleRequest
-                                                        ? Colors.grey
-                                                        : Colors.red,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              // mainAxisAlignment:
-                                              //     MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Expanded(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        children: [
-                                                          titleAndSubtitle(
-                                                            title: "Qtd",
-                                                            subtitle: product
-                                                                        .Quantity
-                                                                    .toStringAsFixed(
-                                                                        3)
-                                                                .replaceAll(
-                                                                    RegExp(
-                                                                        r'\.'),
-                                                                    ','),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          titleAndSubtitle(
-                                                            title: "Preço",
-                                                            subtitle:
-                                                                ConvertString
-                                                                    .convertToBRL(
-                                                              product.Value
-                                                                  .toString(),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          titleAndSubtitle(
-                                                            title: "Total",
-                                                            subtitle:
-                                                                ConvertString
-                                                                    .convertToBRL(
-                                                              "${(product.Quantity * product.Value)} ",
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 30),
-                                                  child: IconButton(
-                                                    onPressed: saleRequestProvider
-                                                            .isLoadingSaveSaleRequest
-                                                        ? null
-                                                        : () {
-                                                            changeFocus(
-                                                              saleRequestProvider:
-                                                                  saleRequestProvider,
-                                                              index: index,
-                                                            );
-                                                          },
-                                                    icon: _selectedIndex != -1
-                                                        ? Icon(
-                                                            Icons.expand_less,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .primary,
-                                                          )
-                                                        : Icon(
-                                                            Icons.edit,
-                                                            color: saleRequestProvider
-                                                                    .isLoadingSaveSaleRequest
-                                                                ? Colors.grey
-                                                                : Theme.of(
-                                                                        context)
-                                                                    .colorScheme
-                                                                    .primary,
-                                                          ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                              SaleRequestCartProductsItems
+                                  .saleRequestCartProductsItems(
+                                saleRequestProvider: saleRequestProvider,
+                                changeFocus: () => changeFocus(
+                                  saleRequestProvider: saleRequestProvider,
+                                  index: index,
                                 ),
+                                context: context,
+                                index: index,
+                                product: product,
+                                enterpriseCode: widget.enterpriseCode,
+                                selectedIndex: _selectedIndex,
                               ),
                               if (_selectedIndex == index)
                                 Padding(

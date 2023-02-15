@@ -115,29 +115,34 @@ class _SaleRequestCartDetailsPageState
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Expanded(
-                        flex: 20,
+                        flex: 15,
                         child: Column(
                           children: [
-                            const Text(
-                              "ITENS",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                            const FittedBox(
+                              child: Text(
+                                "ITENS",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
-                            Text(
-                              cartProductsCount.toString(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                            FittedBox(
+                              child: Text(
+                                cartProductsCount.toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
+                      const SizedBox(width: 10),
                       Expanded(
-                        flex: 20,
+                        flex: 40,
                         child: Column(
                           children: [
                             const Text(
