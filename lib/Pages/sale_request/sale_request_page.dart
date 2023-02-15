@@ -50,6 +50,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     );
 
     if (!_isLoaded) {
+      _isLoaded = true;
       Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
       if (arguments["SaleRequestTypeCode"] == 0) {
@@ -61,10 +62,20 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
       await saleRequestProvider.restoreProducts(arguments["Code"].toString());
       await saleRequestProvider.restoreCostumers(arguments["Code"].toString());
-      await saleRequestProvider
-          .insertDefaultCostumer(arguments["Code"].toString());
 
-      _isLoaded = true;
+      int costumersCount =
+          saleRequestProvider.costumersCount(arguments["Code"].toString());
+      if (costumersCount == 0) {
+        //logo que entra na tela de pedido de vendas, o app recupera os clientes
+        //que foram pesquisados e marcados. Caso consulte os clientes, vai
+        //apagar esses dados, por isso só pode pesquisar automaticamente quando
+        //entrar na página de pedido de vendas se não houver clientes
+        await saleRequestProvider.getCostumers(
+          context: context,
+          searchValueControllerText: "-1",
+          enterpriseCode: arguments["Code"].toString(),
+        );
+      }
     }
   }
 

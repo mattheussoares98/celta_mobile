@@ -45,6 +45,12 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     );
   }
 
+  bool hasOneProductAndIsExpandedQuantityForm = false;
+  //quando só retorna um produto na consulta, já expande a opção de inserção de
+  //quantidade dos itens. Esse bool serve para saber quando já foi expandido uma
+  //vez automaticamente o campo para digitação da quantidade, senão vai ficar
+  //abrindo direto o campo para digitação, mesmo quando já inseriu a quantidade.
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
@@ -80,14 +86,14 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                   enterpriseCode: widget.enterpriseCode.toString(),
                 );
 
-                if (saleRequestProvider.productsCount == 1 &&
-                    selectedIndex != index) {
+                if (saleRequestProvider.canShowInsertProductQuantityForm) {
                   selectedIndex = index;
                   Future.delayed(const Duration(milliseconds: 300), () {
                     FocusScope.of(context).requestFocus(
                       saleRequestProvider.consultedProductFocusNode,
                     );
                   });
+                  saleRequestProvider.canShowInsertProductQuantityForm = false;
                 }
 
                 // double _totalItemValue = saleRequestProvider.getTotalItemValue(
@@ -159,6 +165,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 .saleRequestAssociatedStocksWidget(
                               context: context,
                               product: product,
+                              hasAssociatedsStock: product.StorageAreaAddress !=
+                                      "" ||
+                                  product.StockByEnterpriseAssociateds.length >
+                                      0,
                             ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(

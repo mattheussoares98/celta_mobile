@@ -6,6 +6,8 @@ class ShowAlertDialog {
     required String title,
     required Function() function,
     String? subtitle,
+    double titleSize = 30,
+    double subtitleSize = 20,
   }) {
     showDialog(
       context: context,
@@ -14,13 +16,16 @@ class ShowAlertDialog {
           title: Text(
             title,
             textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: titleSize,
+            ),
           ),
           content: subtitle == null
               ? null
               : Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 32,
+                  style: TextStyle(
+                    fontSize: subtitleSize,
                   ),
                   textAlign: TextAlign.center,
                 ),

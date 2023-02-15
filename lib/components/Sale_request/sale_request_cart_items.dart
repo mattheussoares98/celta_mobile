@@ -308,30 +308,45 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                           .isLoadingSaveSaleRequest
                                                       ? null
                                                       : () {
-                                                          saleRequestProvider
-                                                              .removeProductFromCart(
-                                                            ProductPackingCode:
-                                                                product
-                                                                    .ProductPackingCode,
-                                                            enterpriseCode: widget
-                                                                .enterpriseCode
-                                                                .toString(),
-                                                          );
-
-                                                          ShowErrorMessage
-                                                              .showErrorMessage(
-                                                            error:
-                                                                "Produto removido",
+                                                          ShowAlertDialog()
+                                                              .showAlertDialog(
                                                             context: context,
-                                                            functionSnackBarAction:
-                                                                () {
+                                                            title:
+                                                                "Remover item",
+                                                            subtitle:
+                                                                "Deseja realmente remover o item do carrinho?",
+                                                            function: () {
                                                               saleRequestProvider
-                                                                  .restoreProductRemoved(widget
-                                                                      .enterpriseCode
-                                                                      .toString());
+                                                                  .removeProductFromCart(
+                                                                ProductPackingCode:
+                                                                    product
+                                                                        .ProductPackingCode,
+                                                                enterpriseCode: widget
+                                                                    .enterpriseCode
+                                                                    .toString(),
+                                                              );
+                                                              setState(() {
+                                                                _selectedIndex =
+                                                                    -1;
+                                                              });
+
+                                                              ShowErrorMessage
+                                                                  .showErrorMessage(
+                                                                error:
+                                                                    "Produto removido",
+                                                                context:
+                                                                    context,
+                                                                functionSnackBarAction:
+                                                                    () {
+                                                                  saleRequestProvider
+                                                                      .restoreProductRemoved(widget
+                                                                          .enterpriseCode
+                                                                          .toString());
+                                                                },
+                                                                labelSnackBarAction:
+                                                                    "Restaurar produto",
+                                                              );
                                                             },
-                                                            labelSnackBarAction:
-                                                                "Restaurar produto",
                                                           );
                                                         },
                                                   icon: Icon(
@@ -462,10 +477,17 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                   widget.textEditingController,
                                               formKey: _formKey,
                                               onFieldSubmitted: () {
-                                                updateProductInCart(
-                                                  saleRequestProvider:
-                                                      saleRequestProvider,
-                                                  product: product,
+                                                ShowAlertDialog()
+                                                    .showAlertDialog(
+                                                  context: context,
+                                                  title: "Atualizar o preço",
+                                                  subtitle:
+                                                      "Deseja realmente atualizar a quantidade e o preço?",
+                                                  function: updateProductInCart(
+                                                    saleRequestProvider:
+                                                        saleRequestProvider,
+                                                    product: product,
+                                                  ),
                                                 );
                                               },
                                               onChanged: () {
@@ -563,13 +585,25 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                       controllerInDouble == 0
                                                   ? null
                                                   : () {
-                                                      updateProductInCart(
-                                                        saleRequestProvider:
-                                                            saleRequestProvider,
-                                                        product: product,
-                                                      );
-                                                      FocusScope.of(context)
-                                                          .unfocus();
+                                                      ShowAlertDialog()
+                                                          .showAlertDialog(
+                                                              context: context,
+                                                              title:
+                                                                  "Atualizar o preço",
+                                                              subtitle:
+                                                                  "Deseja realmente atualizar a quantidade e o preço?",
+                                                              function: () {
+                                                                updateProductInCart(
+                                                                  saleRequestProvider:
+                                                                      saleRequestProvider,
+                                                                  product:
+                                                                      product,
+                                                                );
+
+                                                                FocusScope.of(
+                                                                        context)
+                                                                    .unfocus();
+                                                              });
                                                     },
                                               child: const Text("ATUALIZAR"),
                                             ),

@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:flutter/material.dart';
 
 import '../../Models/sale_request_models/sale_request_products_model.dart';
@@ -6,9 +7,35 @@ class SaleRequestAssociatedStocksWidget {
   static saleRequestAssociatedStocksWidget({
     required BuildContext context,
     required SaleRequestProductsModel product,
+    required bool hasAssociatedsStock,
   }) {
     return InkWell(
+      child: Row(
+        children: [
+          Text(
+            "Estoque",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 20,
+            ),
+          ),
+          const SizedBox(width: 3),
+          Icon(
+            Icons.info,
+            size: 30,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ],
+      ),
       onTap: () {
+        if (!hasAssociatedsStock) {
+          ShowErrorMessage.showErrorMessage(
+            error:
+                "Esse produto não possui endereço de estoque ou estoque associado à outras empresas",
+            context: context,
+          );
+          return;
+        }
         showDialog(
             context: context,
             builder: (context) {
@@ -161,23 +188,6 @@ class SaleRequestAssociatedStocksWidget {
               );
             });
       },
-      child: Row(
-        children: [
-          Text(
-            "Estoque",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 20,
-            ),
-          ),
-          const SizedBox(width: 3),
-          Icon(
-            Icons.info,
-            size: 30,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ],
-      ),
     );
   }
 }

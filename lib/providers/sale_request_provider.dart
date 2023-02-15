@@ -25,6 +25,24 @@ class SaleRequestProvider with ChangeNotifier {
   String _errorMessageCostumer = "";
   String get errorMessageCostumer => _errorMessageCostumer;
   Map<String, List<SaleRequestCostumerModel>> _costumers = {};
+  int costumersCount(String enterpriseCode) {
+    if (_costumers[enterpriseCode] == null) {
+      return 0;
+    } else {
+      return _costumers[enterpriseCode]!.length;
+    }
+  }
+
+  bool get canShowInsertProductQuantityForm =>
+      _canShowInsertProductQuantityForm;
+  set canShowInsertProductQuantityForm(bool value) {
+    _canShowInsertProductQuantityForm = value;
+  }
+
+  bool _canShowInsertProductQuantityForm = true;
+  //quando consulta os produtos e retorna somente um produto, já expande a opção
+  //do "InsertQuantityTextFormField". A partir da consulta de produtos faz esse
+  //controle para indicar se pode ou não expandir o campo
 
   costumers(String enterpriseCode) {
     return _costumers[enterpriseCode];
@@ -42,23 +60,6 @@ class SaleRequestProvider with ChangeNotifier {
       costumerCode = -1;
     }
     return costumerCode;
-  }
-
-  insertDefaultCostumer(String enterpriseCode) {
-    _costumers.putIfAbsent(
-        enterpriseCode,
-        () => [
-              SaleRequestCostumerModel(
-                Code: 1,
-                PersonalizedCode: "1",
-                Name: "Consumidor",
-                ReducedName: "",
-                CpfCnpjNumber: "1",
-                RegistrationNumber: "",
-                SexType: "M",
-                selected: false,
-              ),
-            ]);
   }
 
   bool _isLoadingProducts = false;
@@ -112,7 +113,7 @@ class SaleRequestProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('costumers') != "" &&
         prefs.getString('costumers') != null) {
-      var _key = prefs.getString("costumers")!;
+      var _key = await prefs.getString("costumers")!;
       Map costumersInDatabase = jsonDecode(_key);
 
       List<SaleRequestCostumerModel> costumersTemp = [];
@@ -130,18 +131,17 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _clearCostumers(String enterpriseCode) async {
-    _costumers[enterpriseCode] = [
-      SaleRequestCostumerModel(
-        Code: 1,
-        PersonalizedCode: "1",
-        Name: "Consumidor",
-        ReducedName: "",
-        CpfCnpjNumber: "1",
-        RegistrationNumber: "",
-        SexType: "M",
-        selected: false,
-      ),
-    ];
+    if (_costumers[enterpriseCode] != null) {
+      if (_costumers[enterpriseCode]!.isNotEmpty) {
+        var costumerConsumer = _costumers[enterpriseCode]![0];
+        costumerConsumer.selected =
+            false; //Se salvar um pedido com o cliente consumidor informado, precisa "desselecionar" ele para não manter ele selecionado em um pedido novo
+        //o cliente consumidor precisa sempre ficar disponível de forma fixa em primeiro na lista. Por isso salvei ele como "temp" antes de apagar todos clientes pra depois adicionar ele novamente no índice 0
+        _costumers[enterpriseCode]!.clear(); //remove todos clientes
+        _costumers[enterpriseCode]?.add(costumerConsumer);
+        //adiciona o consumidor novamente
+      }
+    }
     await _updateCostumerInDatabase();
     notifyListeners();
   }
@@ -594,8 +594,7 @@ class SaleRequestProvider with ChangeNotifier {
 // 2=ExactCode
 // 3=ApproximateName
 
-    _costumers[enterpriseCode]?.removeWhere((element) => element.Code != 1);
-//não remove o "consumidor"
+    _clearCostumers(enterpriseCode);
 
     _errorMessageCostumer = "";
     _isLoadingCostumer = true;
@@ -618,10 +617,6 @@ class SaleRequestProvider with ChangeNotifier {
 
       print('resposta para consulta do Costumers = $responseInString');
 
-      if (responseInString.contains('\\"Code\\":1,')) {
-        return;
-      }
-
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
         _errorMessageCostumer = json.decode(responseInString)["Message"];
@@ -635,6 +630,8 @@ class SaleRequestProvider with ChangeNotifier {
         responseAsString: responseInString,
         listToAdd: _costumers[enterpriseCode]!,
       );
+
+      await _updateCostumerInDatabase();
     } catch (e) {
       print("Erro para obter os clientes: $e");
       _errorMessageCostumer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -689,6 +686,15 @@ class SaleRequestProvider with ChangeNotifier {
         responseAsString: responseInString,
         listToAdd: _products,
       );
+
+      if (productsCount == 1) {
+        //quando consulta os produtos, caso tenha somente um produto na lista,
+        //precisa expandir o campo de digitação das quantidades. Senão, não pode
+        //expandir
+        _canShowInsertProductQuantityForm = true;
+      } else {
+        _canShowInsertProductQuantityForm = false;
+      }
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

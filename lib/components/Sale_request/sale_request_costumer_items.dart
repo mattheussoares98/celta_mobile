@@ -26,15 +26,18 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
     var costumer =
         saleRequestProvider.costumers(widget.enterpriseCode.toString());
 
+    int costumersCount =
+        saleRequestProvider.costumersCount(widget.enterpriseCode.toString());
+
     return Expanded(
       child: Column(
-        mainAxisAlignment: costumer.length > 1
+        mainAxisAlignment: costumersCount > 1
             ? MainAxisAlignment.center
             : MainAxisAlignment.start,
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: costumer.length,
+              itemCount: costumersCount,
               itemBuilder: (context, index) {
                 if (costumer[index].Code == 1) {
                   return PersonalizedCard.personalizedCard(
