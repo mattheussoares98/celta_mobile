@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Components/Global_widgets/search_widget.dart';
+import '../../Components/Global_widgets/try_again.dart';
 import '../../providers/sale_request_provider.dart';
 import '../../Components/Global_widgets/consulting_widget.dart';
 import '../../Components/Global_widgets/error_message.dart';
@@ -47,8 +48,31 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           labelText: "Consultar cliente",
           useCamera: false,
         ),
-        SaleRequestCostumersItems(enterpriseCode: widget.enterpriseCode),
-        if (saleRequestProvider.errorMessageCostumer != "")
+        if (saleRequestProvider
+                .costumersCount(widget.enterpriseCode.toString()) >
+            0)
+          SaleRequestCostumersItems(enterpriseCode: widget.enterpriseCode),
+        if (saleRequestProvider.errorMessageCostumer != "" &&
+            saleRequestProvider
+                    .costumersCount(widget.enterpriseCode.toString()) ==
+                0)
+          Expanded(
+            child: TryAgainWidget.tryAgain(
+              errorMessage:
+                  'Ocorreu um erro para consultar o cliente "consumidor"',
+              request: () async {
+                await saleRequestProvider.getCostumers(
+                  context: context,
+                  searchValueControllerText: "-1",
+                  enterpriseCode: widget.enterpriseCode.toString(),
+                );
+              },
+            ),
+          ),
+        if (saleRequestProvider.errorMessageCostumer != "" &&
+            saleRequestProvider
+                    .costumersCount(widget.enterpriseCode.toString()) >
+                0)
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageCostumer,
           ),
