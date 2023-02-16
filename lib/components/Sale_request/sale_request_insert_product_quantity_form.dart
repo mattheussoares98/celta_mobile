@@ -54,24 +54,6 @@ class _SaleRequestInsertProductQuantityFormState
     }
   }
 
-  void removeProduct(SaleRequestProvider saleRequestProvider) {
-    ShowAlertDialog().showAlertDialog(
-      context: context,
-      title: "Confirmar exclusão",
-      subtitle: "Deseja excluir o produto do carrinho?",
-      function: () {
-        setState(() {
-          saleRequestProvider.removeProductFromCart(
-            ProductPackingCode: widget.product.ProductPackingCode,
-            enterpriseCode: widget.enterpriseCode.toString(),
-          );
-
-          widget.updateTotalItemValue();
-        });
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
@@ -82,16 +64,81 @@ class _SaleRequestInsertProductQuantityFormState
 
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Divider(
-            color: Colors.grey,
-            height: 3,
-          ),
+        const Divider(
+          color: Colors.grey,
+          height: 3,
         ),
         Row(
           children: [
             Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    color: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      if (quantityToAdd == null) return;
+
+                      setState(() {
+                        if (quantityToAdd! <= 1) {
+                          widget.consultedProductController.text = "";
+                          widget.consultedProductController.clear();
+                        } else {
+                          quantityToAdd = quantityToAdd! - 1;
+                          widget.consultedProductController.text =
+                              quantityToAdd!
+                                  .toStringAsFixed(3)
+                                  .replaceAll(RegExp(r'\.'), ',');
+                        }
+
+                        widget.updateTotalItemValue();
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove,
+                      color: widget.consultedProductController.text.isEmpty
+                          ? Colors.grey
+                          : Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  IconButton(
+                    color: Theme.of(context).colorScheme.primary,
+                    onPressed: () {
+                      if (widget.consultedProductController.text.isEmpty ||
+                          widget.consultedProductController.text == "0") {
+                        widget.consultedProductController.text = "1,000";
+                        widget.updateTotalItemValue();
+                      } else {
+                        double? quantityToAdd = double.tryParse(widget
+                            .consultedProductController.text
+                            .replaceAll(RegExp(r','), '.'));
+
+                        if (quantityToAdd != null) {
+                          quantityToAdd++;
+
+                          widget.consultedProductController.text = quantityToAdd
+                              .toStringAsFixed(3)
+                              .replaceAll(RegExp(r'\.'), ',');
+                        }
+                        widget.updateTotalItemValue();
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.add,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              flex: 10,
               child: InsertQuantityTextFormField(
                 focusNode: saleRequestProvider.consultedProductFocusNode,
                 textEditingController: widget.consultedProductController,
@@ -99,60 +146,7 @@ class _SaleRequestInsertProductQuantityFormState
                 onChanged: () => {widget.updateTotalItemValue()},
                 onFieldSubmitted: () => addItemInCart(),
                 canReceiveEmptyValue: true,
-              ),
-            ),
-            const SizedBox(width: 20),
-            IconButton(
-              color: Theme.of(context).colorScheme.primary,
-              onPressed: () {
-                if (widget.consultedProductController.text.isEmpty ||
-                    widget.consultedProductController.text == "0") {
-                  widget.consultedProductController.text = "1,000";
-                  widget.updateTotalItemValue();
-                } else {
-                  double? quantityToAdd = double.tryParse(widget
-                      .consultedProductController.text
-                      .replaceAll(RegExp(r','), '.'));
-
-                  if (quantityToAdd != null) {
-                    quantityToAdd++;
-
-                    widget.consultedProductController.text = quantityToAdd
-                        .toStringAsFixed(3)
-                        .replaceAll(RegExp(r'\.'), ',');
-                  }
-                  widget.updateTotalItemValue();
-                }
-              },
-              icon: const Icon(
-                Icons.add,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        Row(
-          // mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              flex: 3,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  primary:
-                      widget.totalItensInCart > 0 ? Colors.red : Colors.grey,
-                ),
-                onPressed: widget.totalItensInCart > 0
-                    ? () => removeProduct(saleRequestProvider)
-                    : null,
-                child: FittedBox(
-                  child: Column(
-                    children: [
-                      const Text("Remover\nproduto"),
-                      const Icon(Icons.delete),
-                    ],
-                  ),
-                ),
+                hintText: "Quantidade",
               ),
             ),
             const SizedBox(width: 5),
@@ -207,35 +201,9 @@ class _SaleRequestInsertProductQuantityFormState
                 ),
               ),
             ),
-            const SizedBox(width: 20),
-            IconButton(
-              color: Theme.of(context).colorScheme.primary,
-              onPressed: () {
-                if (quantityToAdd == null) return;
-
-                setState(() {
-                  if (quantityToAdd! <= 1) {
-                    widget.consultedProductController.text = "";
-                    widget.consultedProductController.clear();
-                  } else {
-                    quantityToAdd = quantityToAdd! - 1;
-                    widget.consultedProductController.text = quantityToAdd!
-                        .toStringAsFixed(3)
-                        .replaceAll(RegExp(r'\.'), ',');
-                  }
-
-                  widget.updateTotalItemValue();
-                });
-              },
-              icon: Icon(
-                Icons.remove,
-                color: widget.consultedProductController.text.isEmpty
-                    ? Colors.grey
-                    : Theme.of(context).colorScheme.primary,
-              ),
-            ),
           ],
         ),
+        const SizedBox(height: 5),
       ],
     );
   }

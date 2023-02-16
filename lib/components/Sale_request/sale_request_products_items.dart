@@ -8,6 +8,8 @@ import 'package:celta_inventario/Components/Global_widgets/show_error_message.da
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../Global_widgets/show_alert_dialog.dart';
+
 class SaleRequestProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final int enterpriseCode;
@@ -50,6 +52,34 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
   //quantidade dos itens. Esse bool serve para saber quando já foi expandido uma
   //vez automaticamente o campo para digitação da quantidade, senão vai ficar
   //abrindo direto o campo para digitação, mesmo quando já inseriu a quantidade.
+
+  void removeProduct({
+    required SaleRequestProvider saleRequestProvider,
+    required double totalItemValue,
+    required dynamic product,
+  }) {
+    ShowAlertDialog().showAlertDialog(
+      context: context,
+      title: "Confirmar exclusão",
+      subtitle: "Deseja excluir o produto do carrinho?",
+      function: () {
+        setState(() {
+          saleRequestProvider.removeProductFromCart(
+            ProductPackingCode: product.ProductPackingCode,
+            enterpriseCode: widget.enterpriseCode.toString(),
+          );
+
+          setState(() {
+            totalItemValue = saleRequestProvider.getTotalItemValue(
+              product: product,
+              consultedProductController: widget.consultedProductController,
+              enterpriseCode: widget.enterpriseCode.toString(),
+            );
+          });
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +167,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 //necessário apagar o campo da quantidade quando
                                 //mudar de produto selecionado
 
+                                FocusScope.of(context).unfocus();
+
                                 Future.delayed(
                                     const Duration(milliseconds: 100), () {
                                   FocusScope.of(context).requestFocus(
@@ -223,26 +255,69 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   ? Icons.arrow_drop_down_sharp
                                   : Icons.arrow_drop_up_sharp,
                               color: Theme.of(context).colorScheme.primary,
-                              size: 40,
+                              size: 30,
                             ),
                           ),
                           if (saleRequestProvider.alreadyContainsProduct(
                             ProductPackingCode: product.ProductPackingCode,
                             enterpriseCode: widget.enterpriseCode.toString(),
                           ))
-                            TitleAndSubtitle.titleAndSubtitle(
-                              // titleColor: Theme.of(context).colorScheme.primary,
-                              subtitleColor: Colors.red,
-                              value: "Quantidade no carrinho: " +
-                                  saleRequestProvider
-                                      .getTotalItensInCart(
-                                        ProductPackingCode:
-                                            product.ProductPackingCode,
-                                        enterpriseCode:
-                                            widget.enterpriseCode.toString(),
-                                      )
-                                      .toStringAsFixed(3)
-                                      .replaceAll(RegExp(r'\.'), ','),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                FittedBox(
+                                  child: Text(
+                                    "Qtd no carrinho: " +
+                                        saleRequestProvider
+                                            .getTotalItensInCart(
+                                              ProductPackingCode:
+                                                  product.ProductPackingCode,
+                                              enterpriseCode: widget
+                                                  .enterpriseCode
+                                                  .toString(),
+                                            )
+                                            .toStringAsFixed(3)
+                                            .replaceAll(RegExp(r'\.'), ','),
+                                    style: TextStyle(
+                                      color: _totalItensInCart > 0
+                                          ? Colors.red
+                                          : Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                FittedBox(
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      // primary: _totalItensInCart > 0
+                                      //     ? Colors.red
+                                      //     : Colors.grey,
+                                    ),
+                                    onPressed: _totalItensInCart > 0
+                                        ? () => removeProduct(
+                                              saleRequestProvider:
+                                                  saleRequestProvider,
+                                              totalItemValue: _totalItemValue,
+                                              product: product,
+                                            )
+                                        : null,
+                                    child: Row(
+                                      children: [
+                                        const Text(
+                                          "Remover produto",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           if (selectedIndex == index)
                             SaleRequestInsertProductQuantityForm(
