@@ -88,8 +88,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     required double quantityToAdd,
     required double totalItensInCart,
   }) {
-    if (selectedIndex == index &&
-        product.MinimumWholeQuantity > 0 &&
+    if (product.MinimumWholeQuantity > 0 &&
         product.WholePracticedPrice > 0 &&
         (quantityToAdd + totalItensInCart) >= product.MinimumWholeQuantity) {
       return true;
