@@ -33,16 +33,19 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  bool get canShowInsertProductQuantityForm =>
-      _canShowInsertProductQuantityForm;
-  set canShowInsertProductQuantityForm(bool value) {
-    _canShowInsertProductQuantityForm = value;
+  bool canShowInsertProductQuantityForm({
+    required SaleRequestProductsModel product,
+    required int selectedIndex,
+    required int index,
+  }) {
+    if (selectedIndex != index &&
+        productsCount == 1 &&
+        product.WholePracticedPrice > 0)
+      return true;
+    else {
+      return false;
+    }
   }
-
-  bool _canShowInsertProductQuantityForm = true;
-  //quando consulta os produtos e retorna somente um produto, já expande a opção
-  //do "InsertQuantityTextFormField". A partir da consulta de produtos faz esse
-  //controle para indicar se pode ou não expandir o campo
 
   costumers(String enterpriseCode) {
     return _costumers[enterpriseCode];
@@ -170,7 +173,7 @@ class SaleRequestProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
     );
 
-    if (product.MinimumWholeQuantity == 0) {
+    if (product.MinimumWholeQuantity == 0 || product.WholePracticedPrice == 0) {
       return product.RetailSalePrice;
     } else if ((_quantityToAdd + _totalItensInCart) <
         product.MinimumWholeQuantity) {
@@ -686,15 +689,6 @@ class SaleRequestProvider with ChangeNotifier {
         responseAsString: responseInString,
         listToAdd: _products,
       );
-
-      if (productsCount == 1) {
-        //quando consulta os produtos, caso tenha somente um produto na lista,
-        //precisa expandir o campo de digitação das quantidades. Senão, não pode
-        //expandir
-        _canShowInsertProductQuantityForm = true;
-      } else {
-        _canShowInsertProductQuantityForm = false;
-      }
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

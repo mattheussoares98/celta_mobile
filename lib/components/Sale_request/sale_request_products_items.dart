@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_associated_stocks_alert_dialog.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
+import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
@@ -81,6 +82,21 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     );
   }
 
+  bool isWholePracticedPrice({
+    required int index,
+    required SaleRequestProductsModel product,
+    required double quantityToAdd,
+    required double totalItensInCart,
+  }) {
+    if (selectedIndex == index &&
+        product.MinimumWholeQuantity > 0 &&
+        product.WholePracticedPrice > 0 &&
+        (quantityToAdd + totalItensInCart) >= product.MinimumWholeQuantity) {
+      return true;
+    } else
+      return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
@@ -116,14 +132,16 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                   enterpriseCode: widget.enterpriseCode.toString(),
                 );
 
-                if (saleRequestProvider.canShowInsertProductQuantityForm) {
+                if (saleRequestProvider.canShowInsertProductQuantityForm(
+                    product: product,
+                    selectedIndex: selectedIndex,
+                    index: index)) {
                   selectedIndex = index;
                   Future.delayed(const Duration(milliseconds: 300), () {
                     FocusScope.of(context).requestFocus(
                       saleRequestProvider.consultedProductFocusNode,
                     );
                   });
-                  saleRequestProvider.canShowInsertProductQuantityForm = false;
                 }
 
                 // double _totalItemValue = saleRequestProvider.getTotalItemValue(
@@ -213,34 +231,27 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                             value: ConvertString.convertToBRL(
                               product.RetailPracticedPrice,
                             ),
-                            subtitleColor: selectedIndex == index
-                                ? _quantityToAdd + _totalItensInCart <
-                                            saleRequestProvider
-                                                .products[selectedIndex]
-                                                .MinimumWholeQuantity ||
-                                        saleRequestProvider
-                                                .products[selectedIndex]
-                                                .MinimumWholeQuantity ==
-                                            0
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.black
-                                : Colors.black,
+                            subtitleColor: isWholePracticedPrice(
+                              index: index,
+                              product: product,
+                              quantityToAdd: _quantityToAdd,
+                              totalItensInCart: _totalItensInCart,
+                            )
+                                ? Colors.black
+                                : Theme.of(context).colorScheme.primary,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Preço de atacado",
                             value: ConvertString.convertToBRL(
                               product.WholePracticedPrice,
                             ),
-                            subtitleColor: selectedIndex == index &&
-                                    saleRequestProvider.products[selectedIndex]
-                                            .MinimumWholeQuantity >
-                                        0
-                                ? _quantityToAdd + _totalItensInCart <
-                                        saleRequestProvider
-                                            .products[selectedIndex]
-                                            .MinimumWholeQuantity
-                                    ? Colors.black
-                                    : Theme.of(context).colorScheme.primary
+                            subtitleColor: isWholePracticedPrice(
+                              index: index,
+                              product: product,
+                              quantityToAdd: _quantityToAdd,
+                              totalItensInCart: _totalItensInCart,
+                            )
+                                ? Theme.of(context).colorScheme.primary
                                 : Colors.black,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
