@@ -168,16 +168,20 @@ class SaleRequestProvider with ChangeNotifier {
   }) {
     double _quantityToAdd =
         tryChangeControllerTextToDouble(consultedProductController);
+    if (_quantityToAdd == 0) {
+      _quantityToAdd++;
+    }
+
     double _totalItensInCart = getTotalItensInCart(
       ProductPackingCode: product.ProductPackingCode,
       enterpriseCode: enterpriseCode,
     );
 
     if (product.MinimumWholeQuantity == 0 || product.WholePracticedPrice == 0) {
-      return product.RetailSalePrice;
+      return product.RetailPracticedPrice;
     } else if ((_quantityToAdd + _totalItensInCart) <
         product.MinimumWholeQuantity) {
-      return product.RetailSalePrice;
+      return product.RetailPracticedPrice;
     } else {
       return product.WholeSalePrice;
     }
@@ -627,6 +631,10 @@ class SaleRequestProvider with ChangeNotifier {
 
         notifyListeners();
         return;
+      }
+
+      if (_costumers[enterpriseCode] == null) {
+        _costumers[enterpriseCode] = [];
       }
 
       SaleRequestCostumerModel.responseAsStringToSaleRequestCostumerModel(

@@ -88,6 +88,9 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     required double quantityToAdd,
     required double totalItensInCart,
   }) {
+    if (widget.consultedProductController.text.isEmpty) {
+      quantityToAdd++;
+    }
     if (product.MinimumWholeQuantity > 0 &&
         product.WholePracticedPrice > 0 &&
         (quantityToAdd + totalItensInCart) >= product.MinimumWholeQuantity) {
@@ -231,11 +234,12 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               product.RetailPracticedPrice,
                             ),
                             subtitleColor: isWholePracticedPrice(
-                              index: index,
-                              product: product,
-                              quantityToAdd: _quantityToAdd,
-                              totalItensInCart: _totalItensInCart,
-                            )
+                                      index: index,
+                                      product: product,
+                                      quantityToAdd: _quantityToAdd,
+                                      totalItensInCart: _totalItensInCart,
+                                    ) ||
+                                    selectedIndex != index
                                 ? Colors.black
                                 : Theme.of(context).colorScheme.primary,
                           ),
@@ -245,11 +249,12 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               product.WholePracticedPrice,
                             ),
                             subtitleColor: isWholePracticedPrice(
-                              index: index,
-                              product: product,
-                              quantityToAdd: _quantityToAdd,
-                              totalItensInCart: _totalItensInCart,
-                            )
+                                      index: index,
+                                      product: product,
+                                      quantityToAdd: _quantityToAdd,
+                                      totalItensInCart: _totalItensInCart,
+                                    ) &&
+                                    selectedIndex == index
                                 ? Theme.of(context).colorScheme.primary
                                 : Colors.black,
                           ),
