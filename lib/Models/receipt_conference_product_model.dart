@@ -11,6 +11,7 @@ class ReceiptConferenceProductModel {
   final dynamic Quantidade_ProcRecebDocProEmb; //pode vir como nulo ou double
   final dynamic ReferenciaXml_ProcRecebDocProEmb;
   final String AllEans;
+  String DataValidade_ProcRecebDocProEmb;
 
   ReceiptConferenceProductModel({
     required this.Nome_Produto,
@@ -23,6 +24,7 @@ class ReceiptConferenceProductModel {
     required this.Quantidade_ProcRecebDocProEmb,
     required this.ReferenciaXml_ProcRecebDocProEmb,
     required this.AllEans,
+    required this.DataValidade_ProcRecebDocProEmb,
   });
 
   static resultAsStringToReceiptConferenceModel({
@@ -46,6 +48,10 @@ class ReceiptConferenceProductModel {
           ReferenciaXml_ProcRecebDocProEmb:
               data["ReferenciaXml_ProcRecebDocProEmb"],
           AllEans: data["AllEans"],
+          DataValidade_ProcRecebDocProEmb:
+              data["DataValidade_ProcRecebDocProEmb"] == null
+                  ? ""
+                  : data["DataValidade_ProcRecebDocProEmb"],
         ),
       );
     });

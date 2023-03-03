@@ -42,6 +42,9 @@ class ReceiptConferenceProvider with ChangeNotifier {
     return _errorMessageUpdateQuantity;
   }
 
+  bool _isLoadingValidityDate = false;
+  get isLoadingValidityDate => _isLoadingValidityDate;
+
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
@@ -128,6 +131,8 @@ class ReceiptConferenceProvider with ChangeNotifier {
       ReferenciaXml_ProcRecebDocProEmb:
           _products[index].ReferenciaXml_ProcRecebDocProEmb,
       AllEans: _products[index].AllEans,
+      DataValidade_ProcRecebDocProEmb:
+          _products[index].DataValidade_ProcRecebDocProEmb,
     );
 
     _products[index] = productWithNewQuantity;
@@ -149,6 +154,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
     required int index,
     required BuildContext context,
     required bool isSubtract,
+    String? validityDate,
   }) async {
     quantityText = quantityText.replaceAll(RegExp(r','), '.');
     var quantity = double.tryParse(quantityText);
@@ -174,6 +180,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
       return;
     }
 
+    _isLoadingValidityDate = true;
     _errorMessageUpdateQuantity = "";
     _isUpdatingQuantity = true;
 
@@ -188,7 +195,8 @@ class ReceiptConferenceProvider with ChangeNotifier {
           Uri.parse(
             "${BaseUrl.url}/GoodsReceiving/EntryQuantity?grDocCode=${docCode}" +
                 "&productgCode=${productgCode}&productPackingCode=${productPackingCode}" +
-                "&quantity=-${quantity}",
+                "&quantity=-${quantity}" +
+                "&&validityDate=${validityDate}",
           ),
         );
       } else {
@@ -197,7 +205,8 @@ class ReceiptConferenceProvider with ChangeNotifier {
           Uri.parse(
             "${BaseUrl.url}/GoodsReceiving/EntryQuantity?grDocCode=${docCode}" +
                 "&productgCode=${productgCode}&productPackingCode=${productPackingCode}" +
-                "&quantity=${quantity}",
+                "&quantity=${quantity}" +
+                "&&validityDate=${validityDate}",
           ),
         );
       }
@@ -232,6 +241,12 @@ class ReceiptConferenceProvider with ChangeNotifier {
       Future.delayed(const Duration(milliseconds: 100), () {
         FocusScope.of(context).requestFocus(consultedProductFocusNode);
       });
+
+      if (validityDate != null) {
+        _products[index].DataValidade_ProcRecebDocProEmb =
+            validityDate.toString();
+        notifyListeners();
+      }
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
@@ -240,10 +255,11 @@ class ReceiptConferenceProvider with ChangeNotifier {
         error: _errorMessageUpdateQuantity,
         context: context,
       );
+    } finally {
+      _isLoadingValidityDate = false;
+      _isUpdatingQuantity = false;
+      notifyListeners();
     }
-
-    _isUpdatingQuantity = false;
-    notifyListeners();
   }
 
   anullQuantity({

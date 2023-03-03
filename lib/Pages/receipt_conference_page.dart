@@ -97,7 +97,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
             if (!receiptConferenceProvider.consultingProducts)
               ReceiptConferenceProductsItems(
                 docCode: arguments["grDocCode"],
-                receiptConferenceProvider: receiptConferenceProvider,
                 consultedProductController: _consultedProductController,
                 consultProductController: _consultProductController,
               ),
@@ -105,7 +104,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 receiptConferenceProvider.productsCount == 0)
               ConferenceConsultProductWithoutEanButton(
                 docCode: arguments["grDocCode"],
-                receiptConferenceProvider: receiptConferenceProvider,
               ),
           ],
         ),

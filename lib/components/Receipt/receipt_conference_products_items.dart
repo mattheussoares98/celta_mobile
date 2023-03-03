@@ -4,19 +4,18 @@ import 'package:celta_inventario/components/Global_widgets/personalized_card.dar
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Global_widgets/show_alert_dialog.dart';
 
 class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;
-  final ReceiptConferenceProvider receiptConferenceProvider;
   final TextEditingController consultedProductController;
   final TextEditingController consultProductController;
   const ReceiptConferenceProductsItems({
     required this.consultedProductController,
     required this.consultProductController,
     required this.docCode,
-    required this.receiptConferenceProvider,
     Key? key,
   }) : super(key: key);
 
@@ -34,29 +33,36 @@ class _ReceiptConferenceProductsItemsState
   updateQuantity({
     required bool isSubtract,
     required int index,
+    required ReceiptConferenceProvider receiptConferenceProvider,
+    required String quantityText,
+    String? validityDate,
   }) async {
-    await widget.receiptConferenceProvider.updateQuantity(
-      quantityText: widget.consultedProductController.text,
+    await receiptConferenceProvider.updateQuantity(
+      quantityText: quantityText,
       docCode: widget.docCode,
-      productgCode: widget
-          .receiptConferenceProvider.products[index].CodigoInterno_Produto,
+      productgCode:
+          receiptConferenceProvider.products[index].CodigoInterno_Produto,
       productPackingCode:
-          widget.receiptConferenceProvider.products[index].CodigoInterno_ProEmb,
+          receiptConferenceProvider.products[index].CodigoInterno_ProEmb,
       index: index,
       context: context,
       isSubtract: isSubtract,
+      validityDate: validityDate,
     );
 
-    if (widget.receiptConferenceProvider.errorMessageUpdateQuantity == "") {
+    if (receiptConferenceProvider.errorMessageUpdateQuantity == "") {
       widget.consultedProductController.clear();
     }
   }
 
-  anullQuantity(int index) async {
+  anullQuantity({
+    required int index,
+    required ReceiptConferenceProvider receiptConferenceProvider,
+  }) async {
     FocusScope.of(context).unfocus();
 
-    if (widget.receiptConferenceProvider.products[index]
-            .Quantidade_ProcRecebDocProEmb ==
+    if (receiptConferenceProvider
+            .products[index].Quantidade_ProcRecebDocProEmb ==
         null) {
       ShowErrorMessage.showErrorMessage(
         error: "A quantidade já está nula!",
@@ -69,17 +75,17 @@ class _ReceiptConferenceProductsItemsState
       context: context,
       title: "Deseja realmente anular a quantidade?",
       function: () async {
-        await widget.receiptConferenceProvider.anullQuantity(
+        await receiptConferenceProvider.anullQuantity(
           docCode: widget.docCode,
-          productgCode: widget
-              .receiptConferenceProvider.products[index].CodigoInterno_Produto,
-          productPackingCode: widget
-              .receiptConferenceProvider.products[index].CodigoInterno_ProEmb,
+          productgCode:
+              receiptConferenceProvider.products[index].CodigoInterno_Produto,
+          productPackingCode:
+              receiptConferenceProvider.products[index].CodigoInterno_ProEmb,
           index: index,
           context: context,
         );
 
-        if (widget.receiptConferenceProvider.errorMessageUpdateQuantity == "") {
+        if (receiptConferenceProvider.errorMessageUpdateQuantity == "") {
           widget.consultedProductController.clear();
         }
       },
@@ -88,25 +94,23 @@ class _ReceiptConferenceProductsItemsState
 
   @override
   Widget build(BuildContext context) {
+    ReceiptConferenceProvider receiptConferenceProvider = Provider.of(context);
     return Expanded(
       child: Column(
         children: [
           Expanded(
-            child: widget.receiptConferenceProvider.productsCount <= 0
+            child: receiptConferenceProvider.productsCount <= 0
                 ? Container()
                 : ListView.builder(
-                    itemCount: widget.receiptConferenceProvider.productsCount,
+                    itemCount: receiptConferenceProvider.productsCount,
                     itemBuilder: (context, index) {
-                      var product =
-                          widget.receiptConferenceProvider.products[index];
+                      var product = receiptConferenceProvider.products[index];
                       return GestureDetector(
-                        onTap: widget.receiptConferenceProvider
-                                    .isUpdatingQuantity ||
-                                widget.receiptConferenceProvider
-                                    .consultingProducts
+                        onTap: receiptConferenceProvider.isUpdatingQuantity ||
+                                receiptConferenceProvider.consultingProducts
                             ? null
                             : () {
-                                if (!widget.receiptConferenceProvider
+                                if (!receiptConferenceProvider
                                         .consultedProductFocusNode.hasFocus &&
                                     selectedIndex == index) {
                                   //só cai aqui quando está exibindo a opção de
@@ -120,7 +124,7 @@ class _ReceiptConferenceProductsItemsState
                                     //se não colocar em um future pra mudar o foco,
                                     //não funciona corretamente
                                     FocusScope.of(context).requestFocus(
-                                      widget.receiptConferenceProvider
+                                      receiptConferenceProvider
                                           .consultedProductFocusNode,
                                     );
                                   });
@@ -135,7 +139,7 @@ class _ReceiptConferenceProductsItemsState
                                     //se não colocar em um future pra mudar o foco,
                                     //não funciona corretamente
                                     FocusScope.of(context).requestFocus(
-                                      widget.receiptConferenceProvider
+                                      receiptConferenceProvider
                                           .consultedProductFocusNode,
                                     );
                                   });
@@ -174,11 +178,109 @@ class _ReceiptConferenceProductsItemsState
                                   value: product.PackingQuantity,
                                 ),
                                 TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Quantidade contada",
+                                  value: receiptConferenceProvider
+                                              .products[index]
+                                              .Quantidade_ProcRecebDocProEmb ==
+                                          null
+                                      //se o valor for nulo, basta convertê-lo
+                                      //para String. Se não for nulo, basta
+                                      //alterar os pontos por vírgula e
+                                      //mostrar no máximo 3 casas decimais
+                                      ? "nula"
+                                      : double.tryParse(
+                                              receiptConferenceProvider
+                                                  .products[index]
+                                                  .Quantidade_ProcRecebDocProEmb
+                                                  .toString())!
+                                          .toStringAsFixed(3)
+                                          .replaceAll(RegExp(r'\.'), ','),
+                                  subtitleColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                TitleAndSubtitle.titleAndSubtitle(
+                                  title: "Validade",
+                                  value: receiptConferenceProvider
+                                              .products[index]
+                                              .DataValidade_ProcRecebDocProEmb ==
+                                          ""
+                                      ? "Nenhuma"
+                                      : receiptConferenceProvider
+                                          .products[index]
+                                          .DataValidade_ProcRecebDocProEmb
+                                          .toString()
+                                          .replaceRange(10, null, ""),
+                                  otherWidget: GestureDetector(
+                                    onTap: receiptConferenceProvider
+                                                .isUpdatingQuantity ||
+                                            receiptConferenceProvider
+                                                .consultingProducts ||
+                                            receiptConferenceProvider
+                                                .isLoadingValidityDate
+                                        ? null
+                                        : () async {
+                                            DateTime? validityDate =
+                                                await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime.now(),
+                                              lastDate: DateTime.now().add(
+                                                const Duration(days: 3650),
+                                              ),
+                                            );
+
+                                            if (validityDate != null) {
+                                              await updateQuantity(
+                                                isSubtract: false,
+                                                index: index,
+                                                receiptConferenceProvider:
+                                                    receiptConferenceProvider,
+                                                quantityText: "0",
+                                                validityDate:
+                                                    validityDate.toString(),
+                                              );
+                                            }
+                                          },
+                                    child:
+                                        receiptConferenceProvider
+                                                .isLoadingValidityDate
+                                            ? Row(
+                                                children: [
+                                                  const Text("Alterando...  "),
+                                                  Container(
+                                                    child:
+                                                        const CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Colors.grey,
+                                                    ),
+                                                    height: 17,
+                                                    width: 17,
+                                                  ),
+                                                ],
+                                              )
+                                            : Text(
+                                                "Alterar validade",
+                                                style: TextStyle(
+                                                  color: receiptConferenceProvider.isUpdatingQuantity ||
+                                                          receiptConferenceProvider
+                                                              .consultingProducts ||
+                                                          receiptConferenceProvider
+                                                              .isLoadingValidityDate
+                                                      ? Colors.black
+                                                      : Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                  ),
+                                ),
+                                TitleAndSubtitle.titleAndSubtitle(
                                   title: "EANs",
-                                  value: widget.receiptConferenceProvider
+                                  value: receiptConferenceProvider
                                               .products[index].AllEans !=
                                           ""
-                                      ? widget.receiptConferenceProvider
+                                      ? receiptConferenceProvider
                                           .products[index].AllEans
                                       : "Nenhum",
                                   otherWidget: Icon(
@@ -197,57 +299,52 @@ class _ReceiptConferenceProductsItemsState
                                   //a quantidade quando clica no produto
                                   Column(
                                     children: [
-                                      TitleAndSubtitle.titleAndSubtitle(
-                                        title: "Quantidade contada",
-                                        value: widget
-                                                    .receiptConferenceProvider
-                                                    .products[index]
-                                                    .Quantidade_ProcRecebDocProEmb ==
-                                                null
-                                            //se o valor for nulo, basta convertê-lo
-                                            //para String. Se não for nulo, basta
-                                            //alterar os pontos por vírgula e
-                                            //mostrar no máximo 3 casas decimais
-                                            ? "nula"
-                                            : double.tryParse(widget
-                                                    .receiptConferenceProvider
-                                                    .products[index]
-                                                    .Quantidade_ProcRecebDocProEmb
-                                                    .toString())!
-                                                .toStringAsFixed(3)
-                                                .replaceAll(RegExp(r'\.'), ','),
-                                      ),
                                       const SizedBox(height: 10),
                                       AddSubtractOrAnullWidget(
                                         consultedProductController:
                                             widget.consultedProductController,
                                         consultedProductFormKey:
                                             consultedProductFormKey,
-                                        consultedProductFocusNode: widget
-                                            .receiptConferenceProvider
-                                            .consultedProductFocusNode,
-                                        isUpdatingQuantity: widget
-                                            .receiptConferenceProvider
-                                            .isUpdatingQuantity,
-                                        isLoading: widget
-                                                .receiptConferenceProvider
+                                        consultedProductFocusNode:
+                                            receiptConferenceProvider
+                                                .consultedProductFocusNode,
+                                        isUpdatingQuantity:
+                                            receiptConferenceProvider
+                                                .isUpdatingQuantity,
+                                        isLoading: receiptConferenceProvider
                                                 .isUpdatingQuantity ||
-                                            widget.receiptConferenceProvider
-                                                .consultingProducts,
+                                            receiptConferenceProvider
+                                                .consultingProducts ||
+                                            receiptConferenceProvider
+                                                .isLoadingValidityDate,
                                         addQuantityFunction: () async {
                                           await updateQuantity(
                                             isSubtract: false,
                                             index: index,
+                                            receiptConferenceProvider:
+                                                receiptConferenceProvider,
+                                            quantityText: widget
+                                                .consultedProductController
+                                                .text,
                                           );
                                         },
                                         subtractQuantityFunction: () async {
                                           await updateQuantity(
                                             isSubtract: true,
                                             index: index,
+                                            receiptConferenceProvider:
+                                                receiptConferenceProvider,
+                                            quantityText: widget
+                                                .consultedProductController
+                                                .text,
                                           );
                                         },
                                         anullFunction: () async {
-                                          await anullQuantity(index);
+                                          await anullQuantity(
+                                            index: index,
+                                            receiptConferenceProvider:
+                                                receiptConferenceProvider,
+                                          );
                                         },
                                       ),
                                     ],
