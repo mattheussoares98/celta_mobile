@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
+import 'package:celta_inventario/Models/receipt_conference_product_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
@@ -35,15 +36,14 @@ class _ReceiptConferenceProductsItemsState
     required int index,
     required ReceiptConferenceProvider receiptConferenceProvider,
     required String quantityText,
-    String? validityDate,
+    required String validityDate,
+    required ReceiptConferenceProductModel product,
   }) async {
     await receiptConferenceProvider.updateQuantity(
       quantityText: quantityText,
       docCode: widget.docCode,
-      productgCode:
-          receiptConferenceProvider.products[index].CodigoInterno_Produto,
-      productPackingCode:
-          receiptConferenceProvider.products[index].CodigoInterno_ProEmb,
+      productgCode: product.CodigoInterno_Produto,
+      productPackingCode: product.CodigoInterno_ProEmb,
       index: index,
       context: context,
       isSubtract: isSubtract,
@@ -179,8 +179,7 @@ class _ReceiptConferenceProductsItemsState
                                 ),
                                 TitleAndSubtitle.titleAndSubtitle(
                                   title: "Quantidade contada",
-                                  value: receiptConferenceProvider
-                                              .products[index]
+                                  value: product
                                               .Quantidade_ProcRecebDocProEmb ==
                                           null
                                       //se o valor for nulo, basta convertê-lo
@@ -188,11 +187,9 @@ class _ReceiptConferenceProductsItemsState
                                       //alterar os pontos por vírgula e
                                       //mostrar no máximo 3 casas decimais
                                       ? "nula"
-                                      : double.tryParse(
-                                              receiptConferenceProvider
-                                                  .products[index]
+                                      : double.tryParse(product
                                                   .Quantidade_ProcRecebDocProEmb
-                                                  .toString())!
+                                              .toString())!
                                           .toStringAsFixed(3)
                                           .replaceAll(RegExp(r'\.'), ','),
                                   subtitleColor:
@@ -200,15 +197,12 @@ class _ReceiptConferenceProductsItemsState
                                 ),
                                 TitleAndSubtitle.titleAndSubtitle(
                                   title: "Validade",
-                                  value: receiptConferenceProvider
-                                              .products[index]
+                                  value: product
                                               .DataValidade_ProcRecebDocProEmb ==
                                           ""
                                       ? "Nenhuma"
-                                      : receiptConferenceProvider
-                                          .products[index]
-                                          .DataValidade_ProcRecebDocProEmb
-                                          .toString()
+                                      : product.DataValidade_ProcRecebDocProEmb
+                                              .toString()
                                           .replaceRange(10, null, ""),
                                   otherWidget: GestureDetector(
                                     onTap: receiptConferenceProvider
@@ -230,15 +224,10 @@ class _ReceiptConferenceProductsItemsState
                                             );
 
                                             if (validityDate != null) {
-                                              await updateQuantity(
-                                                isSubtract: false,
-                                                index: index,
-                                                receiptConferenceProvider:
-                                                    receiptConferenceProvider,
-                                                quantityText: "0",
-                                                validityDate:
-                                                    validityDate.toString(),
-                                              );
+                                              setState(() {
+                                                product.DataValidade_ProcRecebDocProEmb =
+                                                    validityDate.toString();
+                                              });
                                             }
                                           },
                                     child:
@@ -277,11 +266,8 @@ class _ReceiptConferenceProductsItemsState
                                 ),
                                 TitleAndSubtitle.titleAndSubtitle(
                                   title: "EANs",
-                                  value: receiptConferenceProvider
-                                              .products[index].AllEans !=
-                                          ""
-                                      ? receiptConferenceProvider
-                                          .products[index].AllEans
+                                  value: product.AllEans != ""
+                                      ? product.AllEans
                                       : "Nenhum",
                                   otherWidget: Icon(
                                     selectedIndex != index
@@ -326,6 +312,9 @@ class _ReceiptConferenceProductsItemsState
                                             quantityText: widget
                                                 .consultedProductController
                                                 .text,
+                                            validityDate: product
+                                                .DataValidade_ProcRecebDocProEmb,
+                                            product: product,
                                           );
                                         },
                                         subtractQuantityFunction: () async {
@@ -337,6 +326,9 @@ class _ReceiptConferenceProductsItemsState
                                             quantityText: widget
                                                 .consultedProductController
                                                 .text,
+                                            validityDate: product
+                                                .DataValidade_ProcRecebDocProEmb,
+                                            product: product,
                                           );
                                         },
                                         anullFunction: () async {

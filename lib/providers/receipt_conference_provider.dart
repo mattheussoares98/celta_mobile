@@ -154,7 +154,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
     required int index,
     required BuildContext context,
     required bool isSubtract,
-    String? validityDate,
+    required String validityDate,
   }) async {
     quantityText = quantityText.replaceAll(RegExp(r','), '.');
     var quantity = double.tryParse(quantityText);
