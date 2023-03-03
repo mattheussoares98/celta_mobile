@@ -287,6 +287,10 @@ class _ReceiptConferenceProductsItemsState
                                     children: [
                                       const SizedBox(height: 10),
                                       AddSubtractOrAnullWidget(
+                                        addButtonText:
+                                            "SOMAR E CONFIRMAR VALIDADE",
+                                        subtractButtonText:
+                                            "SUBTRAIR E\nCONFIRMAR\nVALIDADE",
                                         consultedProductController:
                                             widget.consultedProductController,
                                         consultedProductFormKey:

@@ -11,6 +11,8 @@ class AddSubtractOrAnullWidget extends StatefulWidget {
   final Function anullFunction;
   final Function addQuantityFunction;
   final Function subtractQuantityFunction;
+  final String subtractButtonText;
+  final String addButtonText;
   const AddSubtractOrAnullWidget({
     required this.isUpdatingQuantity,
     required this.addQuantityFunction,
@@ -20,6 +22,8 @@ class AddSubtractOrAnullWidget extends StatefulWidget {
     required this.consultedProductController,
     required this.consultedProductFormKey,
     required this.consultedProductFocusNode,
+    required this.subtractButtonText,
+    required this.addButtonText,
     Key? key,
   }) : super(key: key);
 
@@ -165,6 +169,8 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
               Flexible(
                 flex: 4,
                 child: AddOrSubtractButton(
+                  addButtonText: widget.addButtonText,
+                  subtractButtonText: widget.subtractButtonText,
                   isLoading: widget.isUpdatingQuantity,
                   function: () async {
                     await widget.subtractQuantityFunction();
@@ -178,6 +184,8 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
               Flexible(
                 flex: 10,
                 child: AddOrSubtractButton(
+                  addButtonText: widget.addButtonText,
+                  subtractButtonText: widget.subtractButtonText,
                   isLoading: widget.isUpdatingQuantity,
                   function: () async {
                     await widget.addQuantityFunction();

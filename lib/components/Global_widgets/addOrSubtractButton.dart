@@ -6,6 +6,8 @@ class AddOrSubtractButton extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final bool isIndividual;
   final bool isLoading;
+  final String subtractButtonText;
+  final String addButtonText;
 
   AddOrSubtractButton({
     required this.isLoading,
@@ -13,6 +15,8 @@ class AddOrSubtractButton extends StatefulWidget {
     required this.isSubtract,
     required this.formKey,
     required this.isIndividual,
+    required this.subtractButtonText,
+    required this.addButtonText,
     Key? key,
   }) : super(key: key);
 
@@ -63,7 +67,9 @@ class _AddOrSubtractButtonState extends State<AddOrSubtractButton> {
             )
           : FittedBox(
               child: Text(
-                widget.isSubtract ? 'SUBTRAIR' : 'SOMAR',
+                widget.isSubtract
+                    ? widget.subtractButtonText
+                    : widget.addButtonText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,

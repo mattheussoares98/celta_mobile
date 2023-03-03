@@ -164,6 +164,8 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
             const SizedBox(height: 8),
             if (!widget.isIndividual)
               AddSubtractOrAnullWidget(
+                addButtonText: "SOMAR",
+                subtractButtonText: "SUBTRAIR",
                 isUpdatingQuantity: inventoryProductProvider.isLoadingQuantity,
                 addQuantityFunction: () async {
                   await addQuantity(
