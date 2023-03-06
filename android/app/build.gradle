@@ -52,8 +52,12 @@ android {
         applicationId "br.com.celtaware.inventario"
         minSdkVersion 16
         targetSdkVersion 33
-        versionCode 4
+        versionCode 9
         versionName flutterVersionName
+        ndkVersion "23.1.7779620"
+        ndk {
+            debugSymbolLevel 'FULL'
+        }
     }
 
     signingConfigs {
@@ -67,8 +71,18 @@ android {
     buildTypes {
        release {
            signingConfig signingConfigs.release
+           minifyEnabled true
+           shrinkResources true
+           proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+           ndk {
+                debugSymbolLevel 'FULL'
+            }
        }
    }
+
+   configurations {
+    compile.exclude group: 'com.google.zxing'
+  }
 }
 
 flutter {
