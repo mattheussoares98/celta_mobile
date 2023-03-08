@@ -242,11 +242,9 @@ class ReceiptConferenceProvider with ChangeNotifier {
         FocusScope.of(context).requestFocus(consultedProductFocusNode);
       });
 
-      if (validityDate != null) {
-        _products[index].DataValidade_ProcRecebDocProEmb =
-            validityDate.toString();
-        notifyListeners();
-      }
+      _products[index].DataValidade_ProcRecebDocProEmb =
+          validityDate.toString();
+      notifyListeners();
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
