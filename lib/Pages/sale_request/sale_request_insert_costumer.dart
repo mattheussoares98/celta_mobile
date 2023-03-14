@@ -44,7 +44,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
             );
           },
           focusNodeConsultProduct: searchCostumerFocusNode,
-          hintText: "Código, nome ou CPF",
+          hintText: "Código, nome, CPF ou CNPJ",
           labelText: "Consultar cliente",
           useCamera: false,
         ),

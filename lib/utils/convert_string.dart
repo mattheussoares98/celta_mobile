@@ -12,7 +12,7 @@ class ConvertString {
 
     value = double.parse(value);
     final formatter = new NumberFormat("#,##0.00", "pt_BR");
-    String newText = "R\$ " + formatter.format(value);
+    String newText = formatter.format(value) + " R\$";
 
     return newText;
   }

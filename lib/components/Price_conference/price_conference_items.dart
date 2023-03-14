@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Components/Price_conference/price_conference_send_print_button.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 
 import '../../providers/price_conference_provider.dart';
@@ -67,10 +68,23 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                               value: product.PackingQuantity,
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
-                                title: "Preço",
-                                value: product.SalePracticedRetail + " R\$",
-                                subtitleColor: Colors.green),
-
+                              title: "Preço",
+                              value: ConvertString.convertToBRL(
+                                product.SalePracticedRetail,
+                              ),
+                              subtitleColor: Colors.green,
+                            ),
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Preço de atacado",
+                              value: ConvertString.convertToBRL(
+                                product.SalePracticedWholeSale,
+                              ),
+                              subtitleColor: Colors.green,
+                            ),
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Quantidade mínima para atacado",
+                              value: product.MinimumWholeQuantity.toString(),
+                            ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Permite venda",
                               value: product.AllowSale == 1 ? "Sim" : "Não",
@@ -78,26 +92,7 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Estoque atual",
                               value: product.CurrentStock,
-                              //  == null
-                              //     ? product.CurrentStock.toString()
-                              //     : double.tryParse(
-                              //             product.CurrentStock.toString()
-                              //                 .replaceAll(RegExp(r','), '.'))!
-                              //         .toStringAsFixed(3)
-                              //         .replaceAll(RegExp(r'\.'), ','),
                             ),
-                            // TitleAndSubtitle.titleAndSubtitle(
-                            //   title: "Custo de reposição",
-                            //   value: product.ReplacementCost == null
-                            //       ? product.ReplacementCost.toString()
-                            //       : double.tryParse(
-                            //                   product.ReplacementCost.toString()
-                            //                       .replaceAll(
-                            //                           RegExp(r','), '.'))!
-                            //               .toStringAsFixed(2)
-                            //               .replaceAll(RegExp(r'\.'), ',') +
-                            //           " R\$",
-                            // ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Etiqueta pendente",
                               value: product.EtiquetaPendente == true
