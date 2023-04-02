@@ -260,11 +260,15 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Quantidade mínima para atacado",
-                            value: product.MinimumWholeQuantity.toString(),
+                            value: ConvertString.convertToBrazilianNumber(
+                              product.MinimumWholeQuantity.toString(),
+                            ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Saldo estoque de venda",
-                            value: product.BalanceStockSale.toString(),
+                            value: ConvertString.convertToBrazilianNumber(
+                              product.BalanceStockSale.toString(),
+                            ),
                             otherWidget: Icon(
                               selectedIndex != index
                                   ? Icons.arrow_drop_down_sharp

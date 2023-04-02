@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:celta_inventario/Models/consult_price_model.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
@@ -45,21 +46,6 @@ class PriceConferenceProvider with ChangeNotifier {
 
   changeFocusToConsultProduct({required BuildContext context}) {
     FocusScope.of(context).requestFocus(consultProductFocusNode);
-  }
-
-  String _convertToBrazilianNumber(String valueInString) {
-    int lastIndex = valueInString.lastIndexOf("\.");
-
-    //se não houver pontuação, vai resultar em -1
-    if (lastIndex != -1) {
-      valueInString = valueInString.replaceRange(lastIndex, lastIndex + 1, ',');
-    }
-    if (lastIndex > 4) {
-      valueInString = valueInString.replaceFirst(RegExp(r'\,'), '.');
-      return valueInString;
-    } else {
-      return valueInString;
-    }
   }
 
   Future<void> _getProducts({
@@ -112,10 +98,10 @@ class PriceConferenceProvider with ChangeNotifier {
       );
 
       _products.forEach((element) {
-        element.CurrentStock =
-            _convertToBrazilianNumber(element.CurrentStock.toString());
-        element.SalePracticedRetail =
-            _convertToBrazilianNumber(element.SalePracticedRetail.toString());
+        element.CurrentStock = ConvertString.convertToBrazilianNumber(
+            element.CurrentStock.toString());
+        element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
+            element.SalePracticedRetail.toString());
       });
     } catch (e) {
       print("Erro para efetuar a requisição $searchType: $e");

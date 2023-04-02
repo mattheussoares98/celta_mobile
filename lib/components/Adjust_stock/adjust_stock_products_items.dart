@@ -1,4 +1,5 @@
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import '../Global_widgets/title_and_value.dart';
@@ -120,7 +121,9 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Estoque atual",
-                            value: product.CurrentStock,
+                            value: ConvertString.convertToBrazilianNumber(
+                              product.CurrentStock,
+                            ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Saldo estoque de venda",

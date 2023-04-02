@@ -4,6 +4,7 @@ import 'package:celta_inventario/Models/receipt_conference_product_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -187,11 +188,9 @@ class _ReceiptConferenceProductsItemsState
                                       //alterar os pontos por vírgula e
                                       //mostrar no máximo 3 casas decimais
                                       ? "nula"
-                                      : double.tryParse(product
-                                                  .Quantidade_ProcRecebDocProEmb
-                                              .toString())!
-                                          .toStringAsFixed(3)
-                                          .replaceAll(RegExp(r'\.'), ','),
+                                      : ConvertString.convertToBrazilianNumber(
+                                          product.Quantidade_ProcRecebDocProEmb
+                                              .toString()),
                                   subtitleColor:
                                       Theme.of(context).colorScheme.primary,
                                 ),

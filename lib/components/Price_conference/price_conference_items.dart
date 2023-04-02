@@ -83,7 +83,9 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Quantidade mínima para atacado",
-                              value: product.MinimumWholeQuantity.toString(),
+                              value: ConvertString.convertToBrazilianNumber(
+                                product.MinimumWholeQuantity.toString(),
+                              ),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Permite venda",
@@ -91,7 +93,9 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Estoque atual",
-                              value: product.CurrentStock,
+                              value: ConvertString.convertToBrazilianNumber(
+                                product.CurrentStock,
+                              ),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Etiqueta pendente",
