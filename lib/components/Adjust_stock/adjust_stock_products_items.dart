@@ -127,7 +127,9 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Saldo estoque de venda",
-                            value: product.SaldoEstoqueVenda,
+                            value: ConvertString.convertToBrazilianNumber(
+                              product.SaldoEstoqueVenda,
+                            ),
                             otherWidget: Icon(
                               selectedIndex != index
                                   ? Icons.arrow_drop_down_sharp
