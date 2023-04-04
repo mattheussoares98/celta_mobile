@@ -6,12 +6,9 @@ class ConvertString {
 
     int pointQuantity = ".".allMatches(value).length;
     for (var x = 0; x < pointQuantity; x++) {
-      if (x != pointQuantity) {
+      if (x != pointQuantity && pointQuantity > 1) {
         value = value.toString().replaceFirst(RegExp(r'\.'), '');
       }
-    }
-    if (value.toString().contains(",")) {
-      value = value.toString().replaceAll(RegExp(r','), '.');
     }
 
     if (value.toString().contains(",")) {
