@@ -88,6 +88,8 @@ class _AuthFormState extends State<AuthForm>
     super.dispose();
   }
 
+  bool _passwordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     LoginProvider _loginProvider = Provider.of(context, listen: true);
@@ -191,6 +193,16 @@ class _AuthFormState extends State<AuthForm>
                         return null;
                       },
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                          icon: _passwordVisible
+                              ? const Icon(Icons.remove_red_eye)
+                              : const Icon(Icons.visibility_off),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
@@ -202,7 +214,7 @@ class _AuthFormState extends State<AuthForm>
                           color: Colors.grey,
                         ),
                       ),
-                      obscureText: true,
+                      obscureText: _passwordVisible ? false : true,
                     ),
                   ),
                   const SizedBox(height: 10),
