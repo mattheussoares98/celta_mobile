@@ -70,7 +70,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
               isLoading: priceConferenceProvider.isLoading ||
                   priceConferenceProvider.isSendingToPrint,
               onPressSearch: () async {
-                await priceConferenceProvider.getProductByPluEanOrName(
+                await priceConferenceProvider.getProduct(
                   isLegacyCodeSearch: _legacyIsSelected,
                   enterpriseCode: codigoInternoEmpresa,
                   controllerText: _consultProductController.text,
