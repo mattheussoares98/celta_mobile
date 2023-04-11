@@ -332,6 +332,63 @@ class ReceiptConferenceProvider with ChangeNotifier {
 
   Future<void> _getProducts({
     required int docCode,
+    required String controllerText,
+    required BuildContext context,
+    required bool isLegacyCodeSearch,
+  }) async {
+    _products.clear();
+    _errorMessageGetProducts = "";
+    _consultingProducts = true;
+    notifyListeners();
+    http.Request? request;
+
+    if (isLegacyCodeSearch) {
+      request = http.Request(
+        'POST',
+        Uri.parse(
+            '${BaseUrl.url}/GoodsReceiving/GetProductByLegacyCode?docCode=$docCode&searchValue=$controllerText'),
+      );
+    } else {
+      request = http.Request(
+        'POST',
+        Uri.parse(
+            '${BaseUrl.url}/GoodsReceiving/GetProduct?docCode=$docCode&searchValue=$controllerText'),
+      );
+    }
+
+    try {
+      var headers = {'Content-Type': 'application/json'};
+
+      request.body = json.encode(UserIdentity.identity);
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String resultAsString = await response.stream.bytesToString();
+      print(
+          "resultAsString consulta da consulta nova do produto: $resultAsString");
+
+      if (resultAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageGetProducts = json.decode(resultAsString)["Message"];
+        _consultingProducts = false;
+
+        notifyListeners();
+        return;
+      }
+
+      ReceiptConferenceProductModel.resultAsStringToReceiptConferenceModel(
+        resultAsString: resultAsString,
+        listToAdd: _products,
+      );
+    } catch (e) {
+      print("Erro para efetuar a requisição: $e");
+      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    }
+    _consultingProducts = false;
+    notifyListeners();
+  }
+
+  Future<void> _getProductsOld({
+    required int docCode,
     required SearchTypes searchTypes,
     required String controllerText,
     required BuildContext context,
@@ -385,21 +442,33 @@ class ReceiptConferenceProvider with ChangeNotifier {
       );
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _consultingProducts = false;
     notifyListeners();
   }
 
-  Future<void> getProductByPluEanOrName({
+  Future<void> getProduct({
     required docCode,
     required controllerText,
     required BuildContext context,
+    required bool isLegacyCodeSearch,
   }) async {
+    await _getProducts(
+      docCode: docCode,
+      controllerText: controllerText,
+      context: context,
+      isLegacyCodeSearch: isLegacyCodeSearch,
+    );
+
+    if (_products.isNotEmpty && _errorMessageGetProducts == "") {
+      return;
+    }
+    //primeiro faz a consulta pelo método novo e somente se não encontrar produtos que vai pesquisar do método antigo
+
     int? isInt = int.tryParse(controllerText);
     if (isInt != null) {
       //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
-      await _getProducts(
+      await _getProductsOld(
         docCode: docCode,
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByEAN,
@@ -407,7 +476,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
       );
       if (productsCount > 0) return;
 
-      await _getProducts(
+      await _getProductsOld(
         docCode: docCode,
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByPLU,
@@ -416,7 +485,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
       if (productsCount > 0) return;
     } else {
       //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
-      await _getProducts(
+      await _getProductsOld(
         docCode: docCode,
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByName,

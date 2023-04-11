@@ -24,6 +24,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
   }
 
   TextEditingController _consultedProductController = TextEditingController();
+  bool _legacyIsSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +62,20 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SearchWidget(
+              legacyIsSelected: _legacyIsSelected,
+              hasLegacyCodeSearch: true,
+              changeLegacyIsSelectedFunction: () {
+                setState(() {
+                  _legacyIsSelected = !_legacyIsSelected;
+                });
+              },
               focusNodeConsultProduct:
                   receiptConferenceProvider.consultProductFocusNode,
               isLoading: receiptConferenceProvider.consultingProducts ||
                   receiptConferenceProvider.isUpdatingQuantity,
               onPressSearch: () async {
-                await receiptConferenceProvider.getProductByPluEanOrName(
+                await receiptConferenceProvider.getProduct(
+                  isLegacyCodeSearch: _legacyIsSelected,
                   docCode: arguments["grDocCode"],
                   controllerText: _consultProductController.text,
                   context: context,
