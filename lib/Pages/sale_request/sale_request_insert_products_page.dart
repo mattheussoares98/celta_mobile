@@ -54,7 +54,7 @@ class _SaleRequestInsertProductsPageState
               _consultedProductController.clear();
 
               await saleRequestProvider.getProducts(
-                hasSearchByLegacyCode: _legacyIsSelected,
+                isLegacyCodeSearch: _legacyIsSelected,
                 context: context,
                 enterpriseCode: widget.enterpriseCode,
                 searchValueControllerText:

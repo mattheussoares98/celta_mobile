@@ -655,6 +655,66 @@ class SaleRequestProvider with ChangeNotifier {
   Future<void> _getProducts({
     required int enterpriseCode,
     required String searchValueControllerText,
+    required BuildContext context,
+    required bool isLegacyCodeSearch,
+  }) async {
+    _products.clear();
+    _errorMessageProducts = "";
+    _isLoadingProducts = true;
+    notifyListeners();
+
+    var headers = {'Content-Type': 'application/json'};
+    http.Request? request;
+
+    if (isLegacyCodeSearch) {
+      request = http.Request(
+        'GET',
+        Uri.parse(
+          '${BaseUrl.url}/SaleRequest/ProductByLegacyCode?enterpriseCode=$enterpriseCode&searchValue=$searchValueControllerText',
+        ),
+      );
+    } else {
+      request = http.Request(
+        'GET',
+        Uri.parse(
+          '${BaseUrl.url}/SaleRequest/GetProduct?enterpriseCode=$enterpriseCode&searchValue=$searchValueControllerText',
+        ),
+      );
+    }
+    try {
+      request.body = json.encode(UserIdentity.identity);
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      String responseInString = await response.stream.bytesToString();
+
+      print('resposta para NOVA consulta dos produtos = $responseInString');
+
+      if (responseInString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageProducts = json.decode(responseInString)["Message"];
+        _isLoadingRequestType = false;
+
+        notifyListeners();
+        return;
+      }
+
+      SaleRequestProductsModel.responseAsStringToSaleRequestProductsModel(
+        responseAsString: responseInString,
+        listToAdd: _products,
+      );
+    } catch (e) {
+      print("Erro para obter os produtos: $e");
+      _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoadingProducts = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _getProductsOld({
+    required int enterpriseCode,
+    required String searchValueControllerText,
     required int searchTypeInt,
     required BuildContext context,
   }) async {
@@ -710,24 +770,32 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required int enterpriseCode,
     required String searchValueControllerText,
-    bool hasSearchByLegacyCode = false,
+    required bool isLegacyCodeSearch,
   }) async {
+    await _getProducts(
+      enterpriseCode: enterpriseCode,
+      searchValueControllerText: searchValueControllerText,
+      context: context,
+      isLegacyCodeSearch: isLegacyCodeSearch,
+    );
+
+    if (_products.isNotEmpty && _errorMessageProducts == "") return;
+
 // 2=ExactPriceLookUp
 // 4=ExactEan
 // 6=ApproximateName
 // 11=ApproximateLegacyCode
 
-    if (hasSearchByLegacyCode) {
+    if (isLegacyCodeSearch) {
       //quando seleciona a opção de código legado precisa pesquisar somente pelo
       //código legado, por isso o sistema já retorna encontrando ou não algum
       //produto
-      await _getProducts(
+      await _getProductsOld(
         enterpriseCode: enterpriseCode,
         searchValueControllerText: searchValueControllerText,
         searchTypeInt: 11, //ApproximateLegacyCode
         context: context,
       );
-
       return;
     }
 
@@ -735,14 +803,14 @@ class SaleRequestProvider with ChangeNotifier {
 
     if (searchTypeInt == null) {
       //como não conseguiu converter para inteiro, significa que precisa consultar por nome
-      await _getProducts(
+      await _getProductsOld(
         enterpriseCode: enterpriseCode,
         searchValueControllerText: searchValueControllerText,
         searchTypeInt: 6, //approximateName
         context: context,
       );
     } else {
-      await _getProducts(
+      await _getProductsOld(
         enterpriseCode: enterpriseCode,
         searchValueControllerText: searchValueControllerText,
         searchTypeInt: 4, //ExactEan
@@ -751,7 +819,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       if (_products.isNotEmpty) return;
 
-      await _getProducts(
+      await _getProductsOld(
         enterpriseCode: enterpriseCode,
         searchValueControllerText: searchValueControllerText,
         searchTypeInt: 2, //ExactPriceLookup == PLU
