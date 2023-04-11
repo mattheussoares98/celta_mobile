@@ -1,9 +1,9 @@
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class AdjustStockInsertQuantity extends StatefulWidget {
-  final AdjustStockProvider adjustStockProvider;
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
@@ -11,7 +11,6 @@ class AdjustStockInsertQuantity extends StatefulWidget {
   final int index;
 
   const AdjustStockInsertQuantity({
-    required this.adjustStockProvider,
     required this.internalEnterpriseCode,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
@@ -28,6 +27,7 @@ class AdjustStockInsertQuantity extends StatefulWidget {
 class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
   @override
   Widget build(BuildContext context) {
+    AdjustStockProvider adjustStockProvider = Provider.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Column(
@@ -40,12 +40,11 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                   flex: 10,
                   child: TextFormField(
                     // autofocus: true,
-                    focusNode:
-                        widget.adjustStockProvider.consultedProductFocusNode,
-                    enabled: widget.adjustStockProvider.isLoadingProducts ||
-                            widget.adjustStockProvider
+                    focusNode: adjustStockProvider.consultedProductFocusNode,
+                    enabled: adjustStockProvider.isLoadingProducts ||
+                            adjustStockProvider
                                 .isLoadingTypeStockAndJustifications ||
-                            widget.adjustStockProvider.isLoadingAdjustStock
+                            adjustStockProvider.isLoadingAdjustStock
                         ? false
                         : true,
                     controller: widget.consultedProductController,
@@ -86,10 +85,10 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                     decoration: InputDecoration(
                       labelText: 'Digite a quantidade aqui',
                       floatingLabelStyle: TextStyle(
-                        color: widget.adjustStockProvider.isLoadingProducts ||
-                                widget.adjustStockProvider
+                        color: adjustStockProvider.isLoadingProducts ||
+                                adjustStockProvider
                                     .isLoadingTypeStockAndJustifications ||
-                                widget.adjustStockProvider.isLoadingAdjustStock
+                                adjustStockProvider.isLoadingAdjustStock
                             ? Colors.grey
                             : Theme.of(context).primaryColor,
                       ),
@@ -113,10 +112,10 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                         ),
                       ),
                       labelStyle: TextStyle(
-                        color: widget.adjustStockProvider.isLoadingProducts ||
-                                widget.adjustStockProvider
+                        color: adjustStockProvider.isLoadingProducts ||
+                                adjustStockProvider
                                     .isLoadingTypeStockAndJustifications ||
-                                widget.adjustStockProvider.isLoadingAdjustStock
+                                adjustStockProvider.isLoadingAdjustStock
                             ? Colors.grey
                             : Theme.of(context).primaryColor,
                       ),
@@ -129,9 +128,13 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                 ),
                 const SizedBox(width: 5),
                 Flexible(
-                  flex: 5,
+                  flex: 9,
                   child: ElevatedButton(
-                    onPressed: widget.adjustStockProvider.isLoadingAdjustStock
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 60),
+                      maximumSize: const Size(double.infinity, 60),
+                    ),
+                    onPressed: adjustStockProvider.isLoadingAdjustStock
                         ? null
                         : () async {
                             widget.dropDownFormKey.currentState!.validate();
@@ -144,56 +147,71 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                                     .validate()) {
                               print("formulários corretos. Pode salvar");
 
-                              widget.adjustStockProvider
-                                      .jsonAdjustStock["Quantity"] =
+                              adjustStockProvider.jsonAdjustStock["Quantity"] =
                                   widget.consultedProductController.text;
 
-                              widget.adjustStockProvider
+                              adjustStockProvider
                                       .jsonAdjustStock["EnterpriseCode"] =
                                   widget.internalEnterpriseCode.toString();
 
-                              await widget.adjustStockProvider
-                                  .confirmAdjustStock(
+                              await adjustStockProvider.confirmAdjustStock(
                                 context: context,
                                 indexOfProduct: widget.index,
                                 consultedProductControllerText:
                                     widget.consultedProductController.text,
                               );
 
-                              if (widget.adjustStockProvider
-                                      .errorMessageAdjustStock ==
+                              if (adjustStockProvider.errorMessageAdjustStock ==
                                   "") {
                                 widget.consultedProductController.clear();
                               }
                             }
                           },
-                    child: FittedBox(
-                      child: Text(
-                        widget.adjustStockProvider.isLoadingAdjustStock
-                            ? "Aguarde"
-                            : "Confirmar",
-                        style: const TextStyle(
-                          fontSize: 50,
-                        ),
-                      ),
-                    ),
+                    child: adjustStockProvider.isLoadingAdjustStock
+                        ? FittedBox(
+                            child: Row(
+                              children: [
+                                const Text(
+                                  "AGUARDE",
+                                  style: const TextStyle(
+                                    fontSize: 50,
+                                  ),
+                                ),
+                                const SizedBox(width: 30),
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const FittedBox(
+                            child: Text(
+                              "CONFIRMAR",
+                              style: const TextStyle(
+                                fontSize: 50,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
               ],
             ),
           ),
-          if (widget.adjustStockProvider.lastUpdatedQuantity != "" &&
-              // widget.adjustStockProvider
+          if (adjustStockProvider.lastUpdatedQuantity != "" &&
+              // adjustStockProvider
               //         .indexOfLastProductChangedStockQuantity !=
               //     -1 &&
-              widget.adjustStockProvider
-                      .indexOfLastProductChangedStockQuantity ==
+              adjustStockProvider.indexOfLastProductChangedStockQuantity ==
                   widget.index)
             FittedBox(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  "Última quantidade confirmada: ${widget.adjustStockProvider.lastUpdatedQuantity}",
+                  "Última quantidade confirmada: ${adjustStockProvider.lastUpdatedQuantity}",
                   style: TextStyle(
                     fontSize: 100,
                     color: Theme.of(context).colorScheme.primary,

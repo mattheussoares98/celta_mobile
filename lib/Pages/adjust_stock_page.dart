@@ -29,6 +29,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
     _consultProductController.dispose();
   }
 
+  bool _isLegacyCodeSearch = false;
+
   @override
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider =
@@ -66,15 +68,23 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
             Column(
               children: [
                 SearchWidget(
+                  hasLegacyCodeSearch: true,
+                  changeLegacyIsSelectedFunction: () {
+                    setState(() {
+                      _isLegacyCodeSearch = !_isLegacyCodeSearch;
+                    });
+                  },
+                  legacyIsSelected: _isLegacyCodeSearch,
                   focusNodeConsultProduct:
                       adjustStockProvider.consultProductFocusNode,
                   isLoading: adjustStockProvider.isLoadingProducts ||
                       adjustStockProvider.isLoadingAdjustStock,
                   onPressSearch: () async {
-                    await adjustStockProvider.getProductByPluEanOrName(
+                    await adjustStockProvider.getProducts(
                       enterpriseCode: codigoInternoEmpresa,
                       controllerText: _consultProductController.text,
                       context: context,
+                      isLegacyCodeSearch: _isLegacyCodeSearch,
                     );
 
                     //não estava funcionando passar o productsCount como parâmetro

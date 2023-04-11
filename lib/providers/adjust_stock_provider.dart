@@ -198,6 +198,59 @@ class AdjustStockProvider with ChangeNotifier {
   Future<void> _getProducts({
     required int enterpriseCode,
     required String controllerText, //em string pq vem de um texfFormField
+    required BuildContext context,
+    required bool isLegacyCodeSearch,
+  }) async {
+    _errorMessageGetProducts = "";
+    _isLoadingProducts = true;
+    notifyListeners();
+
+    http.Request? request;
+    var headers = {'Content-Type': 'application/json'};
+
+    if (isLegacyCodeSearch) {
+      request = http.Request(
+          'POST',
+          Uri.parse(
+              '${BaseUrl.url}/AdjustStock/GetProductByLegacyCode?enterpriseCode=$enterpriseCode&searchValue=$controllerText'));
+    } else {
+      request = http.Request(
+          'POST',
+          Uri.parse(
+              '${BaseUrl.url}/AdjustStock/GetProduct?enterpriseCode=$enterpriseCode&searchValue=$controllerText'));
+    }
+    try {
+      request.body = json.encode(UserIdentity.identity);
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      String resultAsString = await response.stream.bytesToString();
+      print(
+          "resultAsString consulta da nova forma de consulta: $resultAsString");
+
+      if (resultAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageGetProducts = json.decode(resultAsString)["Message"];
+        _isLoadingProducts = false;
+
+        notifyListeners();
+        return;
+      }
+
+      AdjustStockProductModel.resultAsStringToAdjustStockProductModel(
+        resultAsString: resultAsString,
+        listToAdd: _products,
+      );
+    } catch (e) {
+      print("Erro para efetuar a requisição na nova forma de consulta: $e");
+      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    }
+    _isLoadingProducts = false;
+    notifyListeners();
+  }
+
+  Future<void> _getProductsOld({
+    required int enterpriseCode,
+    required String controllerText, //em string pq vem de um texfFormField
     required SearchTypes searchTypes,
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
@@ -251,48 +304,51 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getProductByPluEanOrName({
+  Future<void> getProducts({
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
-    // required FocusNode consultProductFocusNode,
+    required bool isLegacyCodeSearch,
   }) async {
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
     _products.clear();
     notifyListeners();
 
-    int? isInt = int.tryParse(controllerText);
+    await _getProducts(
+      enterpriseCode: enterpriseCode,
+      controllerText: controllerText,
+      context: context,
+      isLegacyCodeSearch: isLegacyCodeSearch,
+    );
 
-    if (!_isLoadingTypeStockAndJustifications) {
-      //logo que entra na tela de consulta de produtos, já começa a consultar os
-      //tipos de estoque e justificativas. Se ainda estiver consultando e
-      //colocar pra consultar os produtos, vai tentar consultar novamente os
-      //tipos de estoque e justificativas
-      _getStockTypeAndJustifications(context);
-    }
+    await _getStockTypeAndJustifications(context);
+
+    if (_products.isNotEmpty && _errorMessageGetProducts == "") return;
+
+    int? isInt = int.tryParse(controllerText);
     if (isInt != null) {
       //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
-      await _getProducts(
+      await _getProductsOld(
         enterpriseCode: enterpriseCode,
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByPLU,
         context: context,
       );
-      _justificationHasStockType = false;
+
       if (_products.isNotEmpty) return;
 
-      await _getProducts(
+      await _getProductsOld(
         enterpriseCode: enterpriseCode,
         controllerText: controllerText,
         searchTypes: SearchTypes.GetProductByEAN,
         context: context,
       );
-      _justificationHasStockType = false;
+
       if (_products.isNotEmpty) return;
     } else {
       //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
-      await _getProducts(
+      await _getProductsOld(
         // consultProductFocusNode: consultProductFocusNode,
         enterpriseCode: enterpriseCode,
         controllerText: controllerText,
@@ -314,7 +370,6 @@ class AdjustStockProvider with ChangeNotifier {
       // );
     }
 
-    _justificationHasStockType = false;
     notifyListeners();
   }
 
@@ -397,7 +452,7 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _getStockTypeAndJustifications(BuildContext context) async {
+  Future<void> _getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
     notifyListeners();

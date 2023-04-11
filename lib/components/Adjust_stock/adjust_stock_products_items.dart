@@ -140,7 +140,6 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                           ),
                           if (selectedIndex == index)
                             AdjustStockInsertQuantity(
-                              adjustStockProvider: widget.adjustStockProvider,
                               consultedProductController:
                                   widget.consultedProductController,
                               dropDownFormKey: widget.dropDownFormKey,
