@@ -1,12 +1,11 @@
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AdjustStockJustificationsStockDropwdownWidget extends StatefulWidget {
-  final AdjustStockProvider adjustStockProvider;
   final GlobalKey<FormState> dropDownFormKey;
 
   const AdjustStockJustificationsStockDropwdownWidget({
-    required this.adjustStockProvider,
     required this.dropDownFormKey,
     Key? key,
   }) : super(key: key);
@@ -32,7 +31,9 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
 
   @override
   Widget build(BuildContext context) {
-    if (widget.adjustStockProvider.isLoadingTypeStockAndJustifications) {
+    AdjustStockProvider adjustStockProvider = Provider.of(context);
+
+    if (adjustStockProvider.isLoadingTypeStockAndJustifications) {
       _keyJustifications.currentState?.reset();
       _keyStockType.currentState?.reset();
     }
@@ -49,14 +50,22 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FittedBox(
-                    child: Center(
-                      child: Text(
-                        widget.adjustStockProvider
-                                .isLoadingTypeStockAndJustifications
-                            ? "Consultando"
-                            : "Justificativas",
-                        textAlign: TextAlign.center,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          adjustStockProvider
+                                  .isLoadingTypeStockAndJustifications
+                              ? "Consultando"
+                              : "Justificativas",
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(width: 30),
+                        Container(
+                          height: 45,
+                          width: 45,
+                          child: const CircularProgressIndicator(),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -77,19 +86,20 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                 }
                 return null;
               },
-              onChanged: widget.adjustStockProvider
-                          .isLoadingTypeStockAndJustifications ||
-                      widget.adjustStockProvider.isLoadingAdjustStock
-                  ? null
-                  : (value) {
-                      // print(value);
-                    },
-              items: widget.adjustStockProvider.justifications
+              onChanged:
+                  adjustStockProvider.isLoadingTypeStockAndJustifications ||
+                          adjustStockProvider.isLoadingAdjustStock ||
+                          adjustStockProvider.isLoadingProducts
+                      ? null
+                      : (value) {
+                          // print(value);
+                        },
+              items: adjustStockProvider.justifications
                   .map(
                     (value) => DropdownMenuItem(
                       alignment: Alignment.center,
                       onTap: () {
-                        widget.adjustStockProvider
+                        adjustStockProvider
                                 .jsonAdjustStock["JustificationCode"] =
                             value.Code.toString();
 
@@ -101,17 +111,14 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           //precisa ser enviado na requisição do tipo de
                           //estoque
 
-                          widget.adjustStockProvider.justificationHasStockType =
-                              true;
+                          adjustStockProvider.justificationHasStockType = true;
 
-                          widget.adjustStockProvider
-                                  .jsonAdjustStock["StockTypeCode"] =
+                          adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
                               value.StockType["Code"];
                         } else {
-                          widget.adjustStockProvider.justificationHasStockType =
-                              false;
+                          adjustStockProvider.justificationHasStockType = false;
                         }
-                        widget.adjustStockProvider.typeOperator = value
+                        adjustStockProvider.typeOperator = value
                             .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
 
                         if (value.StockType["Name"] ==
@@ -124,7 +131,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                             _justificationStockTypeName =
                                 value.StockType["Name"];
 
-                            widget.adjustStockProvider.stockTypeName =
+                            adjustStockProvider.stockTypeName =
                                 value.StockType["Name"];
                             //quando for o estoque atual, se der certo a alteração, vai alterar a quantidade do estoque atual do produto
                           });
@@ -162,11 +169,10 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                       FittedBox(
                         child: Center(
                           child: Text(
-                            widget.adjustStockProvider
+                            adjustStockProvider
                                     .isLoadingTypeStockAndJustifications
                                 ? "Consultando"
-                                : widget.adjustStockProvider
-                                        .justificationHasStockType
+                                : adjustStockProvider.justificationHasStockType
                                     ? _justificationStockTypeName
                                     : "Tipos de estoque",
                           ),
@@ -187,28 +193,28 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                 ),
               ),
               validator: (value) {
-                if (widget.adjustStockProvider.justificationHasStockType) {
+                if (adjustStockProvider.justificationHasStockType) {
                   return null;
                 } else if (value == null) {
                   return 'Selecione um tipo de estoque!';
                 }
                 return null;
               },
-              onChanged: widget.adjustStockProvider
-                          .isLoadingTypeStockAndJustifications ||
-                      widget.adjustStockProvider.isLoadingAdjustStock ||
-                      widget.adjustStockProvider.justificationHasStockType
-                  ? null
-                  : (value) {},
-              items: widget.adjustStockProvider.stockTypes
+              onChanged:
+                  adjustStockProvider.isLoadingTypeStockAndJustifications ||
+                          adjustStockProvider.isLoadingAdjustStock ||
+                          adjustStockProvider.isLoadingProducts ||
+                          adjustStockProvider.justificationHasStockType
+                      ? null
+                      : (value) {},
+              items: adjustStockProvider.stockTypes
                   .map(
                     (value) => DropdownMenuItem(
                       alignment: Alignment.center,
                       onTap: () {
-                        widget.adjustStockProvider
-                                .jsonAdjustStock["StockTypeCode"] =
+                        adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
                             value.Code.toString();
-                        widget.adjustStockProvider.stockTypeName = value.Name;
+                        adjustStockProvider.stockTypeName = value.Name;
                       },
                       value: value.Name,
                       child: FittedBox(
@@ -217,8 +223,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           children: [
                             Center(
                               child: Text(
-                                widget.adjustStockProvider
-                                        .justificationHasStockType
+                                adjustStockProvider.justificationHasStockType
                                     ? _justificationStockTypeName
                                     : value.Name,
                                 style: const TextStyle(

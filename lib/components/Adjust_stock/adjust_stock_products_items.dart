@@ -2,11 +2,11 @@ import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:provider/provider.dart';
 import '../Global_widgets/title_and_value.dart';
 import 'adjust_stock_insert_quantity.dart';
 
 class AdjustStockProductsItems extends StatefulWidget {
-  final AdjustStockProvider adjustStockProvider;
   final int internalEnterpriseCode;
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
@@ -14,7 +14,6 @@ class AdjustStockProductsItems extends StatefulWidget {
   const AdjustStockProductsItems({
     required this.internalEnterpriseCode,
     required this.consultedProductController,
-    required this.adjustStockProvider,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
     Key? key,
@@ -30,28 +29,28 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
 
   @override
   Widget build(BuildContext context) {
+    AdjustStockProvider adjustStockProvider = Provider.of(context);
     return Expanded(
       child: Column(
-        mainAxisAlignment: widget.adjustStockProvider.productsCount > 1
+        mainAxisAlignment: adjustStockProvider.productsCount > 1
             ? MainAxisAlignment.center
             : MainAxisAlignment.start,
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: widget.adjustStockProvider.productsCount,
+              itemCount: adjustStockProvider.productsCount,
               itemBuilder: (context, index) {
-                var product = widget.adjustStockProvider.products[index];
+                var product = adjustStockProvider.products[index];
                 return GestureDetector(
-                  onTap: widget.adjustStockProvider.isLoadingAdjustStock
+                  onTap: adjustStockProvider.isLoadingTypeStockAndJustifications
                       ? null
                       : () {
-                          widget.adjustStockProvider
+                          adjustStockProvider
                                   .jsonAdjustStock["ProductPackingCode"] =
                               product.ProductPackingCode.toString();
-                          widget.adjustStockProvider
-                                  .jsonAdjustStock["ProductCode"] =
+                          adjustStockProvider.jsonAdjustStock["ProductCode"] =
                               product.ProductCode.toString();
-                          if (!widget.adjustStockProvider
+                          if (!adjustStockProvider
                                   .consultedProductFocusNode.hasFocus &&
                               selectedIndex == index) {
                             //só cai aqui quando está exibindo a opção de
@@ -65,8 +64,7 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                               //se não colocar em um future pra mudar o foco,
                               //não funciona corretamente
                               FocusScope.of(context).requestFocus(
-                                widget.adjustStockProvider
-                                    .consultedProductFocusNode,
+                                adjustStockProvider.consultedProductFocusNode,
                               );
                             });
                             return;
@@ -80,8 +78,7 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                               //se não colocar em um future pra mudar o foco,
                               //não funciona corretamente
                               FocusScope.of(context).requestFocus(
-                                widget.adjustStockProvider
-                                    .consultedProductFocusNode,
+                                adjustStockProvider.consultedProductFocusNode,
                               );
                             });
 

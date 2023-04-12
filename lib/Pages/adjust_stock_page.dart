@@ -101,7 +101,6 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                   consultProductController: _consultProductController,
                 ),
                 AdjustStockJustificationsStockDropwdownWidget(
-                  adjustStockProvider: adjustStockProvider,
                   dropDownFormKey: _dropDownFormKey,
                 ),
               ],
@@ -119,7 +118,6 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
             if (!adjustStockProvider.isLoadingProducts)
               AdjustStockProductsItems(
                 internalEnterpriseCode: codigoInternoEmpresa,
-                adjustStockProvider: adjustStockProvider,
                 consultedProductController: _consultedProductController,
                 dropDownFormKey: _dropDownFormKey,
                 insertQuantityFormKey: _insertQuantityFormKey,
