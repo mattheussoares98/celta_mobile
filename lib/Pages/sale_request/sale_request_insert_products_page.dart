@@ -57,8 +57,7 @@ class _SaleRequestInsertProductsPageState
                 isLegacyCodeSearch: _legacyIsSelected,
                 context: context,
                 enterpriseCode: widget.enterpriseCode,
-                searchValueControllerText:
-                    _searchProductTextEditingController.text,
+                controllerText: _searchProductTextEditingController.text,
               );
 
               if (saleRequestProvider.productsCount > 0) {

@@ -72,7 +72,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         //entrar na página de pedido de vendas se não houver clientes
         await saleRequestProvider.getCostumers(
           context: context,
-          searchValueControllerText: "-1",
+          controllerText: "-1",
           enterpriseCode: arguments["Code"].toString(),
         );
       }

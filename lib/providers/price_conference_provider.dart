@@ -50,6 +50,7 @@ class PriceConferenceProvider with ChangeNotifier {
     _products.clear();
     _errorMessage = "";
     _isLoading = true;
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
     notifyListeners();
     dynamic value = int.tryParse(controllerText);
     //o valor pode ser em inteiro ou em texto
@@ -122,22 +123,12 @@ class PriceConferenceProvider with ChangeNotifier {
     required BuildContext context,
     required bool isLegacyCodeSearch,
   }) async {
-    if (isLegacyCodeSearch) {
-      await _getProducts(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        context: context,
-        isLegacyCodeSearch: true,
-      );
-    } else {
-      await _getProducts(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        context: context,
-        isLegacyCodeSearch: false,
-      );
-      if (_products.isNotEmpty) return;
-    }
+    await _getProducts(
+      enterpriseCode: enterpriseCode,
+      controllerText: controllerText,
+      context: context,
+      isLegacyCodeSearch: isLegacyCodeSearch,
+    );
 
     if (_errorMessage != "") {
       //quando da erro para consultar os produtos, muda o foco novamente para o

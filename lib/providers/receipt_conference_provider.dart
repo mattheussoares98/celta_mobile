@@ -339,6 +339,7 @@ class ReceiptConferenceProvider with ChangeNotifier {
     _products.clear();
     _errorMessageGetProducts = "";
     _consultingProducts = true;
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
     notifyListeners();
     http.Request? request;
 

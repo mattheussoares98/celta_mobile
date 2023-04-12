@@ -217,6 +217,7 @@ class AdjustStockProvider with ChangeNotifier {
 
     notifyListeners();
 
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
     http.Request? request;
     var headers = {'Content-Type': 'application/json'};
 
@@ -267,6 +268,7 @@ class AdjustStockProvider with ChangeNotifier {
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
   }) async {
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
     String searchType =

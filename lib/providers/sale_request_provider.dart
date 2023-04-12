@@ -558,25 +558,25 @@ class SaleRequestProvider with ChangeNotifier {
 
   Future<void> getCostumers({
     required BuildContext context,
-    required String searchValueControllerText,
+    required String controllerText,
     required String enterpriseCode,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
-    int? codeValue = int.tryParse(searchValueControllerText);
+    int? codeValue = int.tryParse(controllerText);
     if (codeValue == null) {
       await _getCostumers(
         context: context,
         searchTypeInt: 3, //ApproximateName
-        searchValueControllerText: searchValueControllerText,
+        controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else {
       await _getCostumers(
         context: context,
         searchTypeInt: 2, //exactCode
-        searchValueControllerText: searchValueControllerText,
+        controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
 
@@ -585,7 +585,7 @@ class SaleRequestProvider with ChangeNotifier {
       await _getCostumers(
         context: context,
         searchTypeInt: 1, //exactCnpjCpfNumber
-        searchValueControllerText: searchValueControllerText,
+        controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     }
@@ -594,7 +594,7 @@ class SaleRequestProvider with ChangeNotifier {
   Future<void> _getCostumers({
     required BuildContext context,
     required int searchTypeInt,
-    required String searchValueControllerText,
+    required String controllerText,
     required String enterpriseCode,
   }) async {
 // 1=ExactCnpjCpfNumber
@@ -612,7 +612,7 @@ class SaleRequestProvider with ChangeNotifier {
       var request = http.Request(
         'GET',
         Uri.parse(
-          '${BaseUrl.url}/Customer/Customer?searchTypeInt=$searchTypeInt&searchValue=$searchValueControllerText',
+          '${BaseUrl.url}/Customer/Customer?searchTypeInt=$searchTypeInt&searchValue=$controllerText',
         ),
       );
 
@@ -654,7 +654,7 @@ class SaleRequestProvider with ChangeNotifier {
 
   Future<void> _getProducts({
     required int enterpriseCode,
-    required String searchValueControllerText,
+    required String controllerText,
     required BuildContext context,
     required bool isLegacyCodeSearch,
   }) async {
@@ -663,6 +663,7 @@ class SaleRequestProvider with ChangeNotifier {
     _isLoadingProducts = true;
     notifyListeners();
 
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
     var headers = {'Content-Type': 'application/json'};
     http.Request? request;
 
@@ -670,14 +671,14 @@ class SaleRequestProvider with ChangeNotifier {
       request = http.Request(
         'GET',
         Uri.parse(
-          '${BaseUrl.url}/SaleRequest/ProductByLegacyCode?enterpriseCode=$enterpriseCode&searchValue=$searchValueControllerText',
+          '${BaseUrl.url}/SaleRequest/ProductByLegacyCode?enterpriseCode=$enterpriseCode&searchValue=$controllerText',
         ),
       );
     } else {
       request = http.Request(
         'GET',
         Uri.parse(
-          '${BaseUrl.url}/SaleRequest/GetProduct?enterpriseCode=$enterpriseCode&searchValue=$searchValueControllerText',
+          '${BaseUrl.url}/SaleRequest/GetProduct?enterpriseCode=$enterpriseCode&searchValue=$controllerText',
         ),
       );
     }
@@ -714,7 +715,7 @@ class SaleRequestProvider with ChangeNotifier {
 
   Future<void> _getProductsOld({
     required int enterpriseCode,
-    required String searchValueControllerText,
+    required String controllerText,
     required int searchTypeInt,
     required BuildContext context,
   }) async {
@@ -726,6 +727,7 @@ class SaleRequestProvider with ChangeNotifier {
     _products.clear();
     _errorMessageProducts = "";
     _isLoadingProducts = true;
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
     notifyListeners();
 
     try {
@@ -733,7 +735,7 @@ class SaleRequestProvider with ChangeNotifier {
       var request = http.Request(
         'GET',
         Uri.parse(
-          '${BaseUrl.url}/SaleRequest/Product?enterpriseCode=$enterpriseCode&searchTypeInt=$searchTypeInt&searchValue=$searchValueControllerText',
+          '${BaseUrl.url}/SaleRequest/Product?enterpriseCode=$enterpriseCode&searchTypeInt=$searchTypeInt&searchValue=$controllerText',
         ),
       );
       request.body = json.encode(UserIdentity.identity);
@@ -769,12 +771,12 @@ class SaleRequestProvider with ChangeNotifier {
   Future<void> getProducts({
     required BuildContext context,
     required int enterpriseCode,
-    required String searchValueControllerText,
+    required String controllerText,
     required bool isLegacyCodeSearch,
   }) async {
     await _getProducts(
       enterpriseCode: enterpriseCode,
-      searchValueControllerText: searchValueControllerText,
+      controllerText: controllerText,
       context: context,
       isLegacyCodeSearch: isLegacyCodeSearch,
     );
@@ -792,27 +794,27 @@ class SaleRequestProvider with ChangeNotifier {
       //produto
       await _getProductsOld(
         enterpriseCode: enterpriseCode,
-        searchValueControllerText: searchValueControllerText,
+        controllerText: controllerText,
         searchTypeInt: 11, //ApproximateLegacyCode
         context: context,
       );
       return;
     }
 
-    int? searchTypeInt = int.tryParse(searchValueControllerText);
+    int? searchTypeInt = int.tryParse(controllerText);
 
     if (searchTypeInt == null) {
       //como não conseguiu converter para inteiro, significa que precisa consultar por nome
       await _getProductsOld(
         enterpriseCode: enterpriseCode,
-        searchValueControllerText: searchValueControllerText,
+        controllerText: controllerText,
         searchTypeInt: 6, //approximateName
         context: context,
       );
     } else {
       await _getProductsOld(
         enterpriseCode: enterpriseCode,
-        searchValueControllerText: searchValueControllerText,
+        controllerText: controllerText,
         searchTypeInt: 4, //ExactEan
         context: context,
       );
@@ -821,7 +823,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       await _getProductsOld(
         enterpriseCode: enterpriseCode,
-        searchValueControllerText: searchValueControllerText,
+        controllerText: controllerText,
         searchTypeInt: 2, //ExactPriceLookup == PLU
         context: context,
       );

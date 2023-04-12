@@ -124,7 +124,7 @@ class InventoryProductProvider with ChangeNotifier {
     _errorMessageGetProducts = '';
     _isLoading = true;
     _lastQuantityAdded = "";
-    controllerText.replaceAll(RegExp(r'%'), '%25');
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
 
     notifyListeners();
 

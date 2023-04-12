@@ -39,7 +39,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           onPressSearch: () async {
             await saleRequestProvider.getCostumers(
               context: context,
-              searchValueControllerText: searchCostumerController.text,
+              controllerText: searchCostumerController.text,
               enterpriseCode: widget.enterpriseCode.toString(),
             );
           },
@@ -63,7 +63,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
               request: () async {
                 await saleRequestProvider.getCostumers(
                   context: context,
-                  searchValueControllerText: "-1",
+                  controllerText: "-1",
                   enterpriseCode: widget.enterpriseCode.toString(),
                 );
               },
