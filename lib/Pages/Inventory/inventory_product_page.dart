@@ -16,8 +16,6 @@ class InventoryProductsPage extends StatefulWidget {
 class _InventoryProductsPageState extends State<InventoryProductsPage> {
   bool _isIndividual = false;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController _consultProductController =
       TextEditingController();
 
@@ -29,7 +27,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     super.dispose();
     _consultProductController.dispose();
     _consultedProductController.dispose();
-    _formKey.currentState?.dispose();
   }
 
   @override
@@ -69,7 +66,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                   Column(
                     children: [
                       ConsultProductWidget(
-                        formKey: _formKey,
                         isIndividual: _isIndividual,
                         consultProductController: _consultProductController,
                         consultedProductController: _consultedProductController,
@@ -92,13 +88,14 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                     ],
                   ),
                   if (inventoryProductProvider.productsCount == 0 &&
-                      inventoryProductProvider.errorMessage != "")
+                      inventoryProductProvider.errorMessageGetProducts != "")
                     Container(
                       height: 300,
                       child: Column(
                         children: [
                           ErrorMessage(
-                            errorMessage: inventoryProductProvider.errorMessage,
+                            errorMessage: inventoryProductProvider
+                                .errorMessageGetProducts,
                           ),
                         ],
                       ),

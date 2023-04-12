@@ -1,4 +1,6 @@
+import 'package:celta_inventario/providers/inventory_product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InsertIndividualProductWidget extends StatefulWidget {
   final bool isIndividual;
@@ -22,6 +24,7 @@ class _InsertIndividualProductWidgetState
     extends State<InsertIndividualProductWidget> {
   @override
   Widget build(BuildContext context) {
+    InventoryProductProvider inventoryProductProvider = Provider.of(context);
     return FittedBox(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -31,11 +34,14 @@ class _InsertIndividualProductWidgetState
               style: TextButton.styleFrom(
                 primary: Colors.blue,
               ),
-              onPressed: () {
-                setState(() {
-                  widget.changeValue();
-                });
-              },
+              onPressed: inventoryProductProvider.isLoading ||
+                      inventoryProductProvider.isLoadingQuantity
+                  ? null
+                  : () {
+                      setState(() {
+                        widget.changeValue();
+                      });
+                    },
               child: const Text('Inserir produto individualmente',
                   maxLines: 1,
                   style: TextStyle(

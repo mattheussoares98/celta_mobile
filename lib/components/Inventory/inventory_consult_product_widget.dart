@@ -1,21 +1,17 @@
+import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../providers/inventory_product_provider.dart';
 
 class ConsultProductWidget extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
   final bool isIndividual;
-  // final Function() consultAndAddProduct;
   final TextEditingController consultProductController;
   final TextEditingController consultedProductController;
   const ConsultProductWidget({
     Key? key,
-    required this.formKey,
     required this.isIndividual,
     required this.consultedProductController,
-    // required this.consultAndAddProduct,
     required this.consultProductController,
   }) : super(key: key);
 
@@ -24,6 +20,46 @@ class ConsultProductWidget extends StatefulWidget {
 }
 
 class _ConsultProductWidgetState extends State<ConsultProductWidget> {
+  Future<void> _searchProduct({
+    required InventoryProductProvider inventoryProductProvider,
+    required dynamic arguments,
+  }) async {
+    widget.consultedProductController.clear();
+
+    if (widget.consultProductController.text.isEmpty) {
+      //se não digitar o ean ou plu, vai abrir a câmera
+      widget.consultProductController.text = await ScanBarCode.scanBarcode();
+    }
+
+    if (widget.consultProductController.text.isEmpty) return;
+
+    //se ler algum código, vai consultar o produto
+    await inventoryProductProvider.getProductsAndAddIfIsIndividual(
+      isLegacyCodeSearch: _isLegacyCodeSearch,
+      controllerText: widget.consultProductController.text,
+      enterpriseCode: arguments["codigoInternoEmpresa"],
+      inventoryProcessCode:
+          arguments["InventoryCountingsModel"].codigoInternoInventario,
+      codigoInternoInvCont:
+          arguments["InventoryCountingsModel"].codigoInternoInvCont,
+      context: context,
+      isIndividual: widget.isIndividual,
+      consultedProductController: widget.consultProductController,
+    );
+
+    if (inventoryProductProvider.products.isNotEmpty && widget.isIndividual) {
+      inventoryProductProvider.alterFocusToConsultProduct(
+        context: context,
+      );
+    }
+
+    if (widget.consultProductController.text.isEmpty) {
+      widget.consultProductController.clear();
+    }
+  }
+
+  bool _isLegacyCodeSearch = false;
+
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
@@ -33,109 +69,25 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
 
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Form(
-                key: widget.formKey,
-                child: TextFormField(
-                  focusNode: inventoryProductProvider.consultProductFocusNode,
-                  onFieldSubmitted: (value) async {
-                    if (!widget.formKey.currentState!.validate()) {
-                      Future.delayed(const Duration(microseconds: 100), () {
-                        FocusScope.of(context).requestFocus(
-                            inventoryProductProvider.consultProductFocusNode);
-                      });
-                      return;
-                    }
-                    await inventoryProductProvider
-                        .getProductsAndAddIfIsIndividual(
-                      controllerText: widget.consultProductController.text,
-                      enterpriseCode: arguments["codigoInternoEmpresa"],
-                      inventoryProcessCode: arguments["InventoryCountingsModel"]
-                          .codigoInternoInventario,
-                      codigoInternoInvCont: arguments["InventoryCountingsModel"]
-                          .codigoInternoInvCont,
-                      context: context,
-                      isIndividual: widget.isIndividual,
-                      consultedProductController:
-                          widget.consultProductController,
-                    );
-                    widget.consultProductController.clear();
-                    widget.consultedProductController.clear();
-                  },
-                  enabled: inventoryProductProvider.isLoading ||
-                          inventoryProductProvider.isLoadingQuantity
-                      ? false
-                      : true,
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                  inputFormatters: [LengthLimitingTextInputFormatter(14)],
-                  controller: widget.consultProductController,
-                  onChanged: (value) => setState(() {}),
-                  validator: (value) {
-                    if (value!.contains(',') ||
-                        value.contains('.') ||
-                        value.contains('-')) {
-                      return 'Escreva somente números ou somente letras';
-                    } else if (value.isEmpty) {
-                      return "Digite o EAN ou o PLU!";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Digite o EAN ou o PLU',
-                    labelStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        style: BorderStyle.solid,
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 2,
-                        style: BorderStyle.solid,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: inventoryProductProvider.isLoading ||
-                      inventoryProductProvider.isLoadingQuantity
-                  ? null
-                  : () {
-                      widget.consultProductController.clear();
-
-                      if (!inventoryProductProvider
-                          .consultProductFocusNode.hasFocus) {
-                        inventoryProductProvider.alterFocusToConsultProduct(
-                          context: context,
-                        );
-                      }
-                    },
-              icon: Icon(
-                Icons.delete,
-                color: inventoryProductProvider.isLoading ||
-                        inventoryProductProvider.isLoadingQuantity
-                    ? null
-                    : Colors.red,
-                size: 40,
-              ),
-            ),
-          ],
+        SearchWidget(
+          changeLegacyIsSelectedFunction: () {
+            setState(() {
+              _isLegacyCodeSearch = !_isLegacyCodeSearch;
+            });
+          },
+          legacyIsSelected: _isLegacyCodeSearch,
+          hasLegacyCodeSearch: true,
+          consultProductController: widget.consultProductController,
+          isLoading: inventoryProductProvider.isLoading ||
+              inventoryProductProvider.isLoadingQuantity,
+          onPressSearch: () async {
+            await _searchProduct(
+              inventoryProductProvider: inventoryProductProvider,
+              arguments: arguments,
+            );
+          },
+          focusNodeConsultProduct:
+              inventoryProductProvider.consultProductFocusNode,
         ),
         const SizedBox(height: 8),
         Row(
@@ -208,42 +160,10 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                         inventoryProductProvider.isLoadingQuantity
                     ? null
                     : () async {
-                        widget.consultedProductController.clear();
-
-                        if (widget.consultProductController.text.isEmpty) {
-                          //se não digitar o ean ou plu, vai abrir a câmera
-                          widget.consultProductController.text =
-                              await ScanBarCode.scanBarcode();
-                        }
-
-                        //se ler algum código, vai consultar o produto
-                        if (widget.formKey.currentState!.validate()) {
-                          await inventoryProductProvider
-                              .getProductsAndAddIfIsIndividual(
-                            controllerText:
-                                widget.consultProductController.text,
-                            enterpriseCode: arguments["codigoInternoEmpresa"],
-                            inventoryProcessCode:
-                                arguments["InventoryCountingsModel"]
-                                    .codigoInternoInventario,
-                            codigoInternoInvCont:
-                                arguments["InventoryCountingsModel"]
-                                    .codigoInternoInvCont,
-                            context: context,
-                            isIndividual: widget.isIndividual,
-                            consultedProductController:
-                                widget.consultProductController,
-                          );
-                        }
-
-                        if (inventoryProductProvider.products.isNotEmpty &&
-                            widget.isIndividual) {
-                          widget.consultProductController.clear();
-
-                          inventoryProductProvider.alterFocusToConsultProduct(
-                            context: context,
-                          );
-                        }
+                        await _searchProduct(
+                          inventoryProductProvider: inventoryProductProvider,
+                          arguments: arguments,
+                        );
                       },
               ),
             ),

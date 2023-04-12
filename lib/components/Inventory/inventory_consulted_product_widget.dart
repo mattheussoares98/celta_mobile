@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/inventory_product_provider.dart';
@@ -120,30 +121,21 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
               fontSize: 20,
             ),
             TitleAndSubtitle.titleAndSubtitle(
-              title: "Quantidade contada",
+              title: "Qtd contada",
               value: inventoryProductProvider
                           .products[0].quantidadeInvContProEmb ==
-                      double
-                  ? double.tryParse(inventoryProductProvider
-                          .products[0].quantidadeInvContProEmb
-                          .toString())!
-                      .toStringAsFixed(3)
-                      .replaceAll(RegExp(r'\.'), ',')
-                  : inventoryProductProvider
-                              .products[0].quantidadeInvContProEmb ==
-                          -1
-                      //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
-                      ? 'Sem contagem'
-                      : double.tryParse(inventoryProductProvider
-                              .products[0].quantidadeInvContProEmb
-                              .toString())!
-                          .toStringAsFixed(3)
-                          .replaceAll(RegExp(r'\.'), ','),
+                      -1
+                  //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
+                  ? 'Sem contagem'
+                  : ConvertString.convertToBrazilianNumber(
+                      inventoryProductProvider
+                          .products[0].quantidadeInvContProEmb,
+                    ),
               fontSize: 20,
             ),
-            if (inventoryProductProvider.lastQuantityAdded != '')
+            if (inventoryProductProvider.lastQuantityAdded != 0)
               const SizedBox(height: 3),
-            if (inventoryProductProvider.lastQuantityAdded != '')
+            if (inventoryProductProvider.lastQuantityAdded != 0)
               FittedBox(
                 child: Text(
                   inventoryProductProvider.lastQuantityAdded != 0

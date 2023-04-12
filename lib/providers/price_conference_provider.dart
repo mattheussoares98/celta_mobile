@@ -64,7 +64,7 @@ class PriceConferenceProvider with ChangeNotifier {
     var request = http.Request(
         'POST',
         Uri.parse(
-            '${BaseUrl.url}/PriceConference/GetProduct?enterpriseCode=$enterpriseCode&searchValue=$value'));
+            '${BaseUrl.url}/PriceConference/GetProduct?enterpriseCode=$enterpriseCode&searchValue=${value}'));
     if (isLegacyCodeSearch) {
       request = http.Request(
           'POST',

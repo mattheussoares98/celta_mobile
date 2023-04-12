@@ -27,10 +27,10 @@ class InventoryProductProvider with ChangeNotifier {
 
   int get productsCount => _products.length;
 
-  String _errorMessage = '';
+  String _errorMessageGetProducts = '';
 
-  get errorMessage {
-    return _errorMessage;
+  get errorMessageGetProducts {
+    return _errorMessageGetProducts;
   }
 
   clearProducts() {
@@ -44,11 +44,88 @@ class InventoryProductProvider with ChangeNotifier {
     required int inventoryProcessCode,
     required int inventoryCountingCode,
     required BuildContext context,
+    required bool isLegacyCodeSearch,
+  }) async {
+    _products.clear();
+    _errorMessageGetProducts = '';
+    _isLoading = true;
+    _lastQuantityAdded = "";
+    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
+
+    notifyListeners();
+
+    http.Request? request;
+
+    if (isLegacyCodeSearch) {
+      request = http.Request(
+        'POST',
+        Uri.parse(
+            '${BaseUrl.url}/Inventory/ProductByLegacyCode?searchValue=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
+      );
+    } else {
+      request = http.Request(
+        'POST',
+        Uri.parse(
+            '${BaseUrl.url}/Inventory/GetProduct?searchValue=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
+      );
+    }
+
+    try {
+      var headers = {'Content-Type': 'application/json'};
+
+      request.body = json.encode(UserIdentity.identity);
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      String responseInString = await response.stream.bytesToString();
+
+      print('resposta para NOVA consulta de produtos = $responseInString');
+
+      if (responseInString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageGetProducts = json.decode(responseInString)["Message"];
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      InventoryProductModel.responseInStringToInventoryProductModel(
+        responseInString: responseInString,
+        listToAdd: _products,
+      );
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        //se não colocar em um future pra mudar o foco, não funciona corretamente
+        FocusScope.of(context).requestFocus(consultedProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
+      });
+    } catch (e) {
+      print("Erro para efetuar a requisição: $e");
+      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _isLoading = false;
+      notifyListeners();
+    }
+
+    if (products.isNotEmpty) {
+      _isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> _getProductsOld({
+    required String controllerText,
+    required int enterpriseCode,
+    required int inventoryProcessCode,
+    required int inventoryCountingCode,
+    required BuildContext context,
     required SearchTypes searchTypes,
   }) async {
     _products.clear();
-    _errorMessage = '';
+    _errorMessageGetProducts = '';
     _isLoading = true;
+    _lastQuantityAdded = "";
+    controllerText.replaceAll(RegExp(r'%'), '%25');
+
     notifyListeners();
 
     http.Request request;
@@ -80,7 +157,7 @@ class InventoryProductProvider with ChangeNotifier {
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
-        _errorMessage = json.decode(responseInString)["Message"];
+        _errorMessageGetProducts = json.decode(responseInString)["Message"];
         _isLoading = false;
         notifyListeners();
         return;
@@ -98,7 +175,7 @@ class InventoryProductProvider with ChangeNotifier {
       });
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       _isLoading = false;
       notifyListeners();
     }
@@ -117,6 +194,7 @@ class InventoryProductProvider with ChangeNotifier {
     required BuildContext context,
     required bool isIndividual,
     required TextEditingController consultedProductController,
+    required bool isLegacyCodeSearch,
   }) async {
     await _getProducts(
       controllerText: controllerText,
@@ -124,21 +202,32 @@ class InventoryProductProvider with ChangeNotifier {
       inventoryProcessCode: inventoryProcessCode,
       inventoryCountingCode: codigoInternoInvCont,
       context: context,
-      searchTypes: SearchTypes.GetProductByPLU,
+      isLegacyCodeSearch: isLegacyCodeSearch,
     );
 
-    if (_products.length == 0) {
-      await _getProducts(
+    if (_products.isEmpty && _errorMessageGetProducts != "") {
+      await _getProductsOld(
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
         inventoryProcessCode: inventoryProcessCode,
         inventoryCountingCode: codigoInternoInvCont,
         context: context,
-        searchTypes: SearchTypes.GetProductByEAN,
+        searchTypes: SearchTypes.GetProductByPLU,
       );
+
+      if (_products.isEmpty) {
+        await _getProductsOld(
+          controllerText: controllerText,
+          enterpriseCode: enterpriseCode,
+          inventoryProcessCode: inventoryProcessCode,
+          inventoryCountingCode: codigoInternoInvCont,
+          context: context,
+          searchTypes: SearchTypes.GetProductByEAN,
+        );
+      }
     }
 
-    if (_errorMessage != '') {
+    if (_errorMessageGetProducts != '') {
       Future.delayed(const Duration(milliseconds: 100), () {
         //se não colocar em um future pra mudar o foco, não funciona corretamente
         FocusScope.of(context).requestFocus(consultProductFocusNode);
@@ -146,7 +235,7 @@ class InventoryProductProvider with ChangeNotifier {
       });
     }
 
-    if (_errorMessage == '' && isIndividual) {
+    if (_errorMessageGetProducts == '' && isIndividual) {
       //se estiver habilitado pra inserir individualmente, assim que efetuar a consulta do produto já vai tentar adicionar uma unidade
 
       await addQuantity(
@@ -228,7 +317,6 @@ class InventoryProductProvider with ChangeNotifier {
     _isLoadingQuantity = true;
     _errorMessageQuantity = '';
     _canChangeTheFocus = false;
-    _lastQuantityAdded = '';
     notifyListeners();
 
     try {
@@ -380,7 +468,7 @@ class InventoryProductProvider with ChangeNotifier {
     required TextEditingController consultedProductController,
   }) async {
     double quantity = 0;
-    if (consultedProductController.text.isNotEmpty) {
+    if (consultedProductController.text.isNotEmpty && !isIndividual) {
       quantity = double.tryParse(
           consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
     }
