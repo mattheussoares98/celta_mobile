@@ -131,8 +131,9 @@ class ReceiptConferenceProvider with ChangeNotifier {
       ReferenciaXml_ProcRecebDocProEmb:
           _products[index].ReferenciaXml_ProcRecebDocProEmb,
       AllEans: _products[index].AllEans,
-      DataValidade_ProcRecebDocProEmb:
-          _products[index].DataValidade_ProcRecebDocProEmb,
+      DataValidade_ProcRecebDocProEmb: isAnnulQuantity
+          ? ""
+          : _products[index].DataValidade_ProcRecebDocProEmb,
     );
 
     _products[index] = productWithNewQuantity;
