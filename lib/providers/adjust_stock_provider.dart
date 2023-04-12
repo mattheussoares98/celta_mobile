@@ -58,6 +58,13 @@ class AdjustStockProvider with ChangeNotifier {
 
   String _errorMessageAdjustStock = '';
 
+  String _justificationStockTypeName = "";
+  String get justificationStockTypeName => _justificationStockTypeName;
+  updateJustificationStockTypeName(String newValue) {
+    _justificationStockTypeName = newValue;
+    notifyListeners();
+  }
+
   String _lastUpdatedQuantity = "";
   int _indexOfLastProductChangedStockQuantity =
       -1; //index do último produto alterado. Serve para só exibir a mensagem da última quantidade alterada no produto correto
@@ -203,6 +210,11 @@ class AdjustStockProvider with ChangeNotifier {
   }) async {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
+    _stockTypes.clear();
+    _justifications.clear();
+    _justificationStockTypeName = "";
+    _justificationHasStockType = false;
+
     notifyListeners();
 
     http.Request? request;
@@ -322,54 +334,55 @@ class AdjustStockProvider with ChangeNotifier {
       isLegacyCodeSearch: isLegacyCodeSearch,
     );
 
-    await _getStockTypeAndJustifications(context);
+    if (_products.isEmpty && _errorMessageGetProducts != "") {
+      int? isInt = int.tryParse(controllerText);
+      if (isInt != null) {
+        //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
+        await _getProductsOld(
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByPLU,
+          context: context,
+        );
 
-    if (_products.isNotEmpty && _errorMessageGetProducts == "") return;
+        if (_products.isNotEmpty) return;
 
-    int? isInt = int.tryParse(controllerText);
-    if (isInt != null) {
-      //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
-      await _getProductsOld(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypes: SearchTypes.GetProductByPLU,
-        context: context,
-      );
+        await _getProductsOld(
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByEAN,
+          context: context,
+        );
 
-      if (_products.isNotEmpty) return;
-
-      await _getProductsOld(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypes: SearchTypes.GetProductByEAN,
-        context: context,
-      );
-
-      if (_products.isNotEmpty) return;
-    } else {
-      //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
-      await _getProductsOld(
-        // consultProductFocusNode: consultProductFocusNode,
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypes: SearchTypes.GetProductByName,
-        context: context,
-      );
-    }
-    if (_errorMessageGetProducts != "") {
-      //quando da erro para consultar os produtos, muda o foco novamente para o
-      //campo de pesquisa dos produtos
-      Future.delayed(const Duration(milliseconds: 100), () {
-        //se não colocar em um future pra mudar o foco, não funciona corretamente
-        FocusScope.of(context).requestFocus(consultProductFocusNode);
-        //altera o foco para o campo de pesquisa novamente
-      });
-      // ShowErrorMessage.showErrorMessage(
-      //   error: _errorMessageGetProducts,
-      //   context: context,
-      // );
+        if (_products.isNotEmpty) return;
+      } else {
+        //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
+        await _getProductsOld(
+          // consultProductFocusNode: consultProductFocusNode,
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByName,
+          context: context,
+        );
+      }
+      if (_errorMessageGetProducts != "") {
+        //quando da erro para consultar os produtos, muda o foco novamente para o
+        //campo de pesquisa dos produtos
+        Future.delayed(const Duration(milliseconds: 100), () {
+          //se não colocar em um future pra mudar o foco, não funciona corretamente
+          FocusScope.of(context).requestFocus(consultProductFocusNode);
+          //altera o foco para o campo de pesquisa novamente
+        });
+        // ShowErrorMessage.showErrorMessage(
+        //   error: _errorMessageGetProducts,
+        //   context: context,
+        // );
+      }
     }
 
+    if (_products.isNotEmpty) {
+      await _getStockTypeAndJustifications(context);
+    }
     notifyListeners();
   }
 
@@ -455,6 +468,7 @@ class AdjustStockProvider with ChangeNotifier {
   Future<void> _getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
+    _justificationHasStockType = false;
     notifyListeners();
 
     await _getStockType();

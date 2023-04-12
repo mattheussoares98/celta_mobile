@@ -20,8 +20,6 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
   final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
   final GlobalKey<FormFieldState> _keyStockType = GlobalKey();
 
-  String _justificationStockTypeName = "";
-
   //se a justificativa possuir um código de estoque atrelado, significa que
   //somente esse estoque pode ser alterado quando selecionar essa justificativa.
   //Por isso, quando selecionar a justificativa, está validando se ela possui um
@@ -46,30 +44,29 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
             DropdownButtonFormField<dynamic>(
               // isDense: false,
               key: _keyJustifications,
-              disabledHint: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox(
-                    child: Row(
-                      children: [
-                        Text(
-                          adjustStockProvider
-                                  .isLoadingTypeStockAndJustifications
-                              ? "Consultando"
-                              : "Justificativas",
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(width: 30),
-                        Container(
-                          height: 45,
-                          width: 45,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              disabledHint:
+                  adjustStockProvider.isLoadingTypeStockAndJustifications
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const FittedBox(
+                              child: Text(
+                                "Consultando",
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 60,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Container(
+                              height: 15,
+                              width: 15,
+                              child: const CircularProgressIndicator(),
+                            ),
+                          ],
+                        )
+                      : const Center(child: Text("Justificativas")),
               isExpanded: true,
               hint: Center(
                 child: Text(
@@ -89,7 +86,8 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
               onChanged:
                   adjustStockProvider.isLoadingTypeStockAndJustifications ||
                           adjustStockProvider.isLoadingAdjustStock ||
-                          adjustStockProvider.isLoadingProducts
+                          adjustStockProvider.isLoadingProducts ||
+                          adjustStockProvider.products.isEmpty
                       ? null
                       : (value) {
                           // print(value);
@@ -122,14 +120,16 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                             .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
 
                         if (value.StockType["Name"] ==
-                            _justificationStockTypeName) {
+                            adjustStockProvider.justificationStockTypeName) {
                           //se a variável já estiver com o mesmo nome do
                           //tipo de estoque não precisa alterar
                           return;
                         } else if (value.StockType["Name"] != null) {
                           setState(() {
-                            _justificationStockTypeName =
-                                value.StockType["Name"];
+                            adjustStockProvider
+                                .updateJustificationStockTypeName(
+                              value.StockType["Name"],
+                            );
 
                             adjustStockProvider.stockTypeName =
                                 value.StockType["Name"];
@@ -161,27 +161,35 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
             DropdownButtonFormField<dynamic>(
               // isDense: false,
               key: _keyStockType,
-              disabledHint: Center(
-                child: FittedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FittedBox(
-                        child: Center(
+              disabledHint:
+                  adjustStockProvider.isLoadingTypeStockAndJustifications
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const FittedBox(
+                              child: Text(
+                                "Consultando",
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 60,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Container(
+                              height: 15,
+                              width: 15,
+                              child: const CircularProgressIndicator(),
+                            ),
+                          ],
+                        )
+                      : Center(
                           child: Text(
-                            adjustStockProvider
-                                    .isLoadingTypeStockAndJustifications
-                                ? "Consultando"
-                                : adjustStockProvider.justificationHasStockType
-                                    ? _justificationStockTypeName
-                                    : "Tipos de estoque",
+                            adjustStockProvider.justificationHasStockType
+                                ? adjustStockProvider.justificationStockTypeName
+                                : "Tipos de estoque",
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               isExpanded: true,
               hint: Center(
                 child: Text(
@@ -204,7 +212,8 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                   adjustStockProvider.isLoadingTypeStockAndJustifications ||
                           adjustStockProvider.isLoadingAdjustStock ||
                           adjustStockProvider.isLoadingProducts ||
-                          adjustStockProvider.justificationHasStockType
+                          adjustStockProvider.justificationHasStockType ||
+                          adjustStockProvider.products.isEmpty
                       ? null
                       : (value) {},
               items: adjustStockProvider.stockTypes
@@ -224,7 +233,8 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                             Center(
                               child: Text(
                                 adjustStockProvider.justificationHasStockType
-                                    ? _justificationStockTypeName
+                                    ? adjustStockProvider
+                                        .justificationStockTypeName
                                     : value.Name,
                                 style: const TextStyle(
                                   fontSize: 15,
