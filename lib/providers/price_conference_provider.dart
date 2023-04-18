@@ -9,6 +9,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../utils/base_url.dart';
 
+enum SearchTypes {
+  GetProductByName,
+  GetProductByEAN,
+  GetProductByPLU,
+  GetProductByLegacyCode,
+}
+
 class PriceConferenceProvider with ChangeNotifier {
   List<ConsultPriceProductsModel> _products = [];
 
@@ -39,6 +46,130 @@ class PriceConferenceProvider with ChangeNotifier {
 
   changeFocusToConsultProduct({required BuildContext context}) {
     FocusScope.of(context).requestFocus(consultProductFocusNode);
+  }
+
+  Future<void> _getProductsOld({
+    required int enterpriseCode,
+    required String controllerText, //em string pq vem de um texfFormField
+    required SearchTypes searchTypes,
+    required BuildContext context,
+  }) async {
+    _products.clear();
+    _errorMessage = "";
+    _isLoading = true;
+    String searchType =
+        searchTypes.toString().replaceAll(RegExp(r'SearchTypes.'), '');
+    notifyListeners();
+    dynamic value = int.tryParse(controllerText);
+    //o valor pode ser em inteiro ou em texto
+    if (value == null) {
+      //retorna nulo quando não consegue converter para inteiro. Se não
+      //conseguir converter precisa consultar por nome, por isso pode usar o
+      //próprio texto do "controllerText"
+      value = controllerText;
+    }
+
+    var headers = {'Content-Type': 'application/json'};
+    // print(searchType);
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            '${BaseUrl.url}/PriceConference/$searchType?enterpriseCode=$enterpriseCode&searchValue=$value'));
+    request.body = json.encode(UserIdentity.identity);
+    request.headers.addAll(headers);
+
+    try {
+      http.StreamedResponse response = await request.send();
+      String resultAsString = await response.stream.bytesToString();
+      print("resultAsString consulta do $searchType: $resultAsString");
+
+      if (resultAsString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessage = json.decode(resultAsString)["Message"];
+        _isLoading = false;
+
+        notifyListeners();
+        return;
+      }
+
+      ConsultPriceProductsModel.resultAsStringToConsultPriceModel(
+        resultAsString: resultAsString,
+        listToAdd: _products,
+      );
+
+      _products.forEach((element) {
+        element.CurrentStock = ConvertString.convertToBrazilianNumber(
+            element.CurrentStock.toString());
+        element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
+            element.SalePracticedRetail.toString());
+      });
+    } catch (e) {
+      print("Erro para efetuar a requisição $searchType: $e");
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getProductByPluEanOrName({
+    required int enterpriseCode,
+    required String controllerText,
+    required BuildContext context,
+    required bool isLegacyCodeSearch,
+  }) async {
+    if (isLegacyCodeSearch) {
+      await _getProductsOld(
+        enterpriseCode: enterpriseCode,
+        controllerText: controllerText,
+        searchTypes: SearchTypes.GetProductByLegacyCode,
+        context: context,
+      );
+    } else {
+      int? isInt = int.tryParse(controllerText);
+      if (isInt != null) {
+        //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
+        await _getProductsOld(
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByPLU,
+          context: context,
+        );
+        if (_products.isNotEmpty) return;
+
+        await _getProductsOld(
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByEAN,
+          context: context,
+        );
+        if (_products.isNotEmpty) return;
+      } else {
+        //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
+        await _getProductsOld(
+          // consultProductFocusNode: consultProductFocusNode,
+          enterpriseCode: enterpriseCode,
+          controllerText: controllerText,
+          searchTypes: SearchTypes.GetProductByName,
+          context: context,
+        );
+      }
+    }
+
+    if (_errorMessage != "") {
+      //quando da erro para consultar os produtos, muda o foco novamente para o
+      //campo de pesquisa dos produtos
+      Future.delayed(const Duration(milliseconds: 100), () {
+        //se não colocar em um future pra mudar o foco, não funciona corretamente
+        FocusScope.of(context).requestFocus(consultProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
+      });
+      // ShowErrorMessage.showErrorMessage(
+      //   error: _errorMessage,
+      //   context: context,
+      // );
+    }
+
+    notifyListeners();
   }
 
   Future<void> _getProducts({
@@ -129,6 +260,14 @@ class PriceConferenceProvider with ChangeNotifier {
       context: context,
       isLegacyCodeSearch: isLegacyCodeSearch,
     );
+    if (_products.isEmpty && _errorMessage != "") {
+      await getProductByPluEanOrName(
+        enterpriseCode: enterpriseCode,
+        controllerText: controllerText,
+        context: context,
+        isLegacyCodeSearch: isLegacyCodeSearch,
+      );
+    }
 
     if (_errorMessage != "") {
       //quando da erro para consultar os produtos, muda o foco novamente para o
