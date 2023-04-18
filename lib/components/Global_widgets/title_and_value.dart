@@ -26,6 +26,7 @@ class TitleAndSubtitle {
     String? value,
   }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title == null ? "" : "${title}: ",

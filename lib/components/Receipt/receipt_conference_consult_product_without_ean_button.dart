@@ -39,7 +39,7 @@ class _ConferenceConsultProductWithoutEanButtonState
           receiptConferenceProvider.consultingProducts ||
                   receiptConferenceProvider.isUpdatingQuantity
               ? "Aguarde o término da consulta/alteração"
-              : "Consultar todos produtos sem EAN",
+              : "Consultar todos produtos do recebimento",
         ),
       ),
     );
