@@ -580,7 +580,7 @@ class SaleRequestProvider with ChangeNotifier {
         enterpriseCode: enterpriseCode,
       );
 
-      if (_costumers.length > 1) return;
+      if (costumersCount(enterpriseCode) > 1) return;
 
       await _getCostumers(
         context: context,

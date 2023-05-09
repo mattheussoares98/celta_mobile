@@ -41,15 +41,7 @@ class SaleRequestCostumerModel {
 
     responseAsMap.forEach((id, data) {
       listToAdd.add(
-        SaleRequestCostumerModel(
-          Code: data["Code"],
-          PersonalizedCode: data["PersonalizedCode"],
-          Name: data["Name"],
-          ReducedName: data["ReducedName"],
-          CpfCnpjNumber: data["CpfCnpjNumber"],
-          RegistrationNumber: data["RegistrationNumber"],
-          SexType: data["SexType"],
-        ),
+        SaleRequestCostumerModel.fromJson(data),
       );
     });
   }
