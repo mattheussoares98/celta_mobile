@@ -19,7 +19,7 @@ class SearchWidget extends StatefulWidget {
     required this.onPressSearch,
     required this.focusNodeConsultProduct,
     this.changeLegacyIsSelectedFunction = null,
-    this.hintText = "PLU-EAN-NOME",
+    this.hintText = "PLU-EAN-NOME-%",
     this.labelText = "Consultar produto",
     this.useCamera = true,
     this.autofocus = true,
