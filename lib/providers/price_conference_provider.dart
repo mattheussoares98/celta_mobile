@@ -39,6 +39,25 @@ class PriceConferenceProvider with ChangeNotifier {
     return _errorMessage;
   }
 
+  convertSalePracticedRetailToDouble() {
+    _products.forEach((element) {
+      element.SalePracticedRetail =
+          element.SalePracticedRetail.toString().replaceAll(RegExp(r','), '.');
+
+      int pointQuantity =
+          ".".allMatches(element.SalePracticedRetail.toString()).length;
+      for (var x = 1; x < pointQuantity; x++) {
+        if (x < pointQuantity && pointQuantity > 1) {
+          element.SalePracticedRetail = element.SalePracticedRetail.toString()
+              .replaceFirst(RegExp(r'\.'), '');
+        }
+      }
+
+      element.SalePracticedRetail =
+          double.tryParse(element.SalePracticedRetail);
+    });
+  }
+
   clearProducts() {
     _products.clear();
     notifyListeners();
@@ -97,12 +116,12 @@ class PriceConferenceProvider with ChangeNotifier {
         listToAdd: _products,
       );
 
-      _products.forEach((element) {
-        element.CurrentStock = ConvertString.convertToBrazilianNumber(
-            element.CurrentStock.toString());
-        element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
-            element.SalePracticedRetail.toString());
-      });
+      // _products.forEach((element) {
+      //   element.CurrentStock = ConvertString.convertToBrazilianNumber(
+      //       element.CurrentStock.toString());
+      //   element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
+      //       element.SalePracticedRetail.toString());
+      // });
     } catch (e) {
       print("Erro para efetuar a requisição $searchType: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -232,12 +251,12 @@ class PriceConferenceProvider with ChangeNotifier {
         listToAdd: _products,
       );
 
-      _products.forEach((element) {
-        element.CurrentStock = ConvertString.convertToBrazilianNumber(
-            element.CurrentStock.toString());
-        element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
-            element.SalePracticedRetail.toString());
-      });
+      // _products.forEach((element) {
+      //   element.CurrentStock = ConvertString.convertToBrazilianNumber(
+      //       element.CurrentStock.toString());
+      //   element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
+      //       element.SalePracticedRetail.toString());
+      // });
     } catch (e) {
       print("Erro para efetuar a requisição : $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -349,40 +368,19 @@ class PriceConferenceProvider with ChangeNotifier {
   }
 
   orderByUpPrice() {
-    //precisei fazer esse foreach para converter a string para um double e conseguir ordenar corretamente os preços. Depois da ordenação, aí converto novamente para uma String
-    _products.forEach((element) {
-      element.SalePracticedRetail =
-          element.SalePracticedRetail.replaceAll(RegExp(r','), '.');
-
-      element.SalePracticedRetail =
-          double.tryParse(element.SalePracticedRetail);
-    });
-
+    convertSalePracticedRetailToDouble();
     _products
         .sort((a, b) => a.SalePracticedRetail.compareTo(b.SalePracticedRetail));
 
-    _products.forEach((element) {
-      element.SalePracticedRetail =
-          element.SalePracticedRetail.toString().replaceAll(RegExp(r'\.'), ',');
-    });
     notifyListeners();
   }
 
   orderByDownPrice() {
-    _products.forEach((element) {
-      element.SalePracticedRetail =
-          element.SalePracticedRetail.replaceAll(RegExp(r','), '.');
+    convertSalePracticedRetailToDouble();
 
-      element.SalePracticedRetail =
-          double.tryParse(element.SalePracticedRetail);
-    });
     _products
         .sort((a, b) => b.SalePracticedRetail.compareTo(a.SalePracticedRetail));
 
-    _products.forEach((element) {
-      element.SalePracticedRetail =
-          element.SalePracticedRetail.toString().replaceAll(RegExp(r'\.'), ',');
-    });
     notifyListeners();
   }
 
