@@ -120,74 +120,34 @@ class AdjustStockProvider with ChangeNotifier {
     required int index,
     required String consultedProductControllerText,
   }) {
-    double currentStockInDouble = double.tryParse(_products[index]
-        .CurrentStock
-        .replaceAll(RegExp(r'\.'), '')
-        .replaceAll(RegExp(r'\,'), '.'))!;
+    _products[index].CurrentStock =
+        _products[index].CurrentStock.replaceAll(RegExp(r'\,'), '');
+    _products[index].SaldoEstoqueVenda =
+        _products[index].SaldoEstoqueVenda.replaceAll(RegExp(r'\,'), '');
 
-    double saldoEstoqueVendaInDouble = double.tryParse(_products[index]
-        .SaldoEstoqueVenda
-        .replaceAll(RegExp(r'\.'), '')
-        .replaceAll(RegExp(r'\,'), '.'))!;
-
-    dynamic newCurrentStock;
-    dynamic newSaldoEstoqueVenda;
+    double currentStockInDouble =
+        double.tryParse(_products[index].CurrentStock)!;
+    double saldoEstoqueVendaInDouble =
+        double.tryParse(_products[index].SaldoEstoqueVenda)!;
+    double consultedProductControllerInDouble =
+        double.tryParse(consultedProductControllerText)!;
 
     if (typeOperator.contains("+")) {
-      newCurrentStock = currentStockInDouble +
-          double.tryParse(consultedProductControllerText)!;
+      _products[index].CurrentStock =
+          (currentStockInDouble + consultedProductControllerInDouble)
+              .toString();
 
-      newSaldoEstoqueVenda = saldoEstoqueVendaInDouble +
-          double.tryParse(consultedProductControllerText)!;
+      _products[index].SaldoEstoqueVenda =
+          (saldoEstoqueVendaInDouble + consultedProductControllerInDouble)
+              .toString();
     } else {
-      newCurrentStock = currentStockInDouble -
-          double.tryParse(consultedProductControllerText)!;
-      newSaldoEstoqueVenda = currentStockInDouble -
-          double.tryParse(consultedProductControllerText)!;
-    }
+      _products[index].CurrentStock =
+          (currentStockInDouble - consultedProductControllerInDouble)
+              .toString();
 
-    print(stockTypeName.toLowerCase());
-    if (stockTypeName.toLowerCase() == "estoque atual") {
-      newCurrentStock =
-          newCurrentStock.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',');
-      newSaldoEstoqueVenda = newSaldoEstoqueVenda
-          .toStringAsFixed(3)
-          .replaceAll(RegExp(r'\.'), ',');
-
-      AdjustStockProductModel newProduct = AdjustStockProductModel(
-        CurrentStock: newCurrentStock.toString(),
-        SaldoEstoqueVenda: newSaldoEstoqueVenda.toString(),
-        ProductCode: _products[index].ProductCode,
-        ProductPackingCode: _products[index].ProductPackingCode,
-        PriceLookUp: _products[index].PriceLookUp,
-        ProductName: _products[index].ProductName,
-        CodigoPlu_ProEmb: _products[index].CodigoPlu_ProEmb,
-        Nome_Produto: _products[index].Nome_Produto,
-        Packing: _products[index].Packing,
-        PackingQuantity: _products[index].PackingQuantity,
-        Name: _products[index].Name,
-        ReducedName: _products[index].ReducedName,
-        PersonalizedCode: _products[index].PersonalizedCode,
-        AllowTransfer: _products[index].AllowTransfer,
-        AllowSale: _products[index].AllowSale,
-        AllowBuy: _products[index].AllowBuy,
-        MinimumWholeQuantity: _products[index].MinimumWholeQuantity,
-        SalePracticedRetail: _products[index].SalePracticedRetail,
-        SalePracticedWholeSale: _products[index].SalePracticedWholeSale,
-        OperationalCost: _products[index].OperationalCost,
-        ReplacementCost: _products[index].ReplacementCost,
-        ReplacementCostMidle: _products[index].ReplacementCostMidle,
-        LiquidCost: _products[index].LiquidCost,
-        LiquidCostMidle: _products[index].LiquidCostMidle,
-        RealCost: _products[index].RealCost,
-        RealLiquidCost: _products[index].RealLiquidCost,
-        FiscalCost: _products[index].FiscalCost,
-        FiscalLiquidCost: _products[index].FiscalLiquidCost,
-        CurrentStockString: _products[index].CurrentStockString,
-        EtiquetaPendente: _products[index].EtiquetaPendente,
-        EtiquetaPendenteDescricao: _products[index].EtiquetaPendenteDescricao,
-      );
-      _products[index] = newProduct;
+      _products[index].SaldoEstoqueVenda =
+          (currentStockInDouble - consultedProductControllerInDouble)
+              .toString();
     }
   }
 

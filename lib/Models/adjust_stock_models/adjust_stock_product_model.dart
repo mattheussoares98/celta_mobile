@@ -21,9 +21,7 @@ class AdjustStockProductModel {
   final String RealLiquidCost; /* ": "100,0000", */
   final String FiscalCost; /* ": "100,0000", */
   final String FiscalLiquidCost; /* ": "100,0000", */
-  final String CurrentStock; /* ": "-19,000", */
   final String CurrentStockString; /* ": "Estoque atual: -19,000", */
-  final String SaldoEstoqueVenda; /* ": "-20,000", */
   final String EtiquetaPendenteDescricao; /* ": "Sim" */
   final bool EtiquetaPendente; /* ": true, */
   final int AllowTransfer; /* ": 1, */
@@ -32,6 +30,8 @@ class AdjustStockProductModel {
   final double MinimumWholeQuantity; /* ": 3.000, */
   final int ProductCode; /* ": 4, */
   final int ProductPackingCode; /* ": 3, */
+  String CurrentStock; /* ": "-19,000", */
+  String SaldoEstoqueVenda; /* ": "-20,000", */
 
   AdjustStockProductModel({
     required this.ProductCode,

@@ -53,6 +53,17 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                       if (value.isEmpty || value == '-') {
                         value = '0';
                       }
+                      if (value.startsWith(",") || value.startsWith(".")) {
+                        widget.consultedProductController.text =
+                            "0" + widget.consultedProductController.text;
+                        widget.consultedProductController.selection =
+                            TextSelection.fromPosition(
+                          TextPosition(
+                            offset:
+                                widget.consultedProductController.text.length,
+                          ),
+                        );
+                      }
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -147,6 +158,12 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                                     .validate()) {
                               print("formulários corretos. Pode salvar");
 
+                              if (widget.consultedProductController.text
+                                  .contains("\,")) {
+                                widget.consultedProductController.text = widget
+                                    .consultedProductController.text
+                                    .replaceAll(RegExp(r'\,'), '.');
+                              }
                               adjustStockProvider.jsonAdjustStock["Quantity"] =
                                   widget.consultedProductController.text;
 
