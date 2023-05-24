@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -88,6 +89,7 @@ class LoginProvider with ChangeNotifier {
     _errorMessage = '';
     _isLoading = true;
     notifyListeners();
+    password = ConvertString.convertToRemoveSpecialCaracters(password);
 
     try {
       var request = http.Request(
