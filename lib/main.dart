@@ -7,11 +7,9 @@ import 'package:celta_inventario/Pages/receipt_conference_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/providers/enterprise_json_provider.dart';
-import 'package:celta_inventario/providers/inventory_counting_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
-import 'package:celta_inventario/providers/inventory_product_provider.dart';
 import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
@@ -50,8 +48,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => InventoryProvider()),
         ChangeNotifierProvider(create: (_) => EnterpriseProvider()),
-        ChangeNotifierProvider(create: (_) => InventoryCountingProvider()),
-        ChangeNotifierProvider(create: (_) => InventoryProductProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptConferenceProvider()),
         ChangeNotifierProvider(create: (_) => PriceConferenceProvider()),
@@ -63,7 +59,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: ColorsTheme.principalColor,
           secondaryHeaderColor: ColorsTheme.text,
-          backgroundColor: Colors.lightGreen[100],
           appBarTheme: ThemeData().appBarTheme.copyWith(
                 actionsIconTheme: const IconThemeData(
                   color: Colors.black,
@@ -80,35 +75,48 @@ class MyApp extends StatelessWidget {
               ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
+              foregroundColor: ColorsTheme.text,
+              backgroundColor: ColorsTheme.principalColor,
               textStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontFamily: 'OpenSans',
                 color: ColorsTheme.elevatedButtonTextColor,
               ),
-              primary: ColorsTheme.principalColor,
-              onPrimary: ColorsTheme.text,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
           ),
+          colorScheme: const ColorScheme(
+            brightness: Brightness.light,
+            primary: ColorsTheme.principalColor,
+            onPrimary: ColorsTheme.principalColor,
+            secondary: const Color.fromARGB(255, 92, 152, 94),
+            onSecondary: const Color.fromARGB(255, 92, 152, 94),
+            error: Colors.red,
+            onError: Colors.red,
+            background: ColorsTheme.principalColor,
+            onBackground: ColorsTheme.principalColor,
+            surface: const Color.fromARGB(255, 255, 242, 94),
+            onSurface: const Color.fromARGB(255, 255, 242, 94),
+          ),
         ).copyWith(
           textTheme: ThemeData.light().textTheme.copyWith(
-                headline6: const TextStyle(
+                titleLarge: const TextStyle(
                   letterSpacing: 1,
                   fontWeight: FontWeight.bold,
                   color: ColorsTheme.headline6,
                   fontSize: ResponsiveItems.headline6,
                   fontFamily: 'BebasNeue',
                 ),
-                headline2: const TextStyle(
+                displayMedium: const TextStyle(
                   // letterSpacing: 1,
                   fontWeight: FontWeight.bold,
                   color: ColorsTheme.headline2,
                   fontSize: 17,
                   fontFamily: 'OpenSans',
                 ),
-                bodyText1: const TextStyle(
+                bodyLarge: const TextStyle(
                   fontFamily: 'OpenSans',
                   color: ColorsTheme.headline6,
                   fontWeight: FontWeight.bold,

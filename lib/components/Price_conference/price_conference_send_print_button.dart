@@ -30,7 +30,7 @@ class _PriceConferenceSendPrintButtonState
       children: [
         TextButton(
           style: TextButton.styleFrom(
-            primary: widget.etiquetaPendente == false
+            foregroundColor: widget.etiquetaPendente == false
                 ? Theme.of(context).colorScheme.primary
                 : Colors.red,
           ),

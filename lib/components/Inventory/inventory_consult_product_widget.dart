@@ -1,8 +1,8 @@
 import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/inventory_product_provider.dart';
 
 class ConsultProductWidget extends StatefulWidget {
   final bool isIndividual;
@@ -21,7 +21,7 @@ class ConsultProductWidget extends StatefulWidget {
 
 class _ConsultProductWidgetState extends State<ConsultProductWidget> {
   Future<void> _searchProduct({
-    required InventoryProductProvider inventoryProductProvider,
+    required InventoryProvider inventoryProvider,
     required dynamic arguments,
   }) async {
     widget.consultedProductController.clear();
@@ -34,7 +34,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
     if (widget.consultProductController.text.isEmpty) return;
 
     //se ler algum código, vai consultar o produto
-    await inventoryProductProvider.getProductsAndAddIfIsIndividual(
+    await inventoryProvider.getProductsAndAddIfIsIndividual(
       isLegacyCodeSearch: _isLegacyCodeSearch,
       controllerText: widget.consultProductController.text,
       enterpriseCode: arguments["codigoInternoEmpresa"],
@@ -47,8 +47,8 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
       consultedProductController: widget.consultProductController,
     );
 
-    if (inventoryProductProvider.products.isNotEmpty && widget.isIndividual) {
-      inventoryProductProvider.alterFocusToConsultProduct(
+    if (inventoryProvider.products.isNotEmpty && widget.isIndividual) {
+      inventoryProvider.alterFocusToConsultProduct(
         context: context,
       );
     }
@@ -64,8 +64,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    InventoryProductProvider inventoryProductProvider =
-        Provider.of(context, listen: true);
+    InventoryProvider inventoryProvider = Provider.of(context, listen: true);
 
     return Column(
       children: [
@@ -78,16 +77,15 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
           legacyIsSelected: _isLegacyCodeSearch,
           hasLegacyCodeSearch: true,
           consultProductController: widget.consultProductController,
-          isLoading: inventoryProductProvider.isLoading ||
-              inventoryProductProvider.isLoadingQuantity,
+          isLoading: inventoryProvider.isLoading ||
+              inventoryProvider.isLoadingQuantity,
           onPressSearch: () async {
             await _searchProduct(
-              inventoryProductProvider: inventoryProductProvider,
+              inventoryProvider: inventoryProvider,
               arguments: arguments,
             );
           },
-          focusNodeConsultProduct:
-              inventoryProductProvider.consultProductFocusNode,
+          focusNodeConsultProduct: inventoryProvider.consultProductFocusNode,
         ),
         const SizedBox(height: 8),
         Row(
@@ -98,13 +96,13 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                   minimumSize: const Size(double.infinity, 70),
                   maximumSize: const Size(double.infinity, 70),
                 ),
-                child: inventoryProductProvider.isLoading ||
-                        inventoryProductProvider.isLoadingQuantity
+                child: inventoryProvider.isLoading ||
+                        inventoryProvider.isLoadingQuantity
                     ? FittedBox(
                         child: Row(
                           children: [
                             Text(
-                              inventoryProductProvider.isLoadingQuantity
+                              inventoryProvider.isLoadingQuantity
                                   ? 'ADICIONANDO QUANTIDADE...'
                                   : 'CONSULTANDO O PRODUTO...',
                               style: const TextStyle(
@@ -156,12 +154,12 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                           ],
                         ),
                       ),
-                onPressed: inventoryProductProvider.isLoading ||
-                        inventoryProductProvider.isLoadingQuantity
+                onPressed: inventoryProvider.isLoading ||
+                        inventoryProvider.isLoadingQuantity
                     ? null
                     : () async {
                         await _searchProduct(
-                          inventoryProductProvider: inventoryProductProvider,
+                          inventoryProvider: inventoryProvider,
                           arguments: arguments,
                         );
                       },

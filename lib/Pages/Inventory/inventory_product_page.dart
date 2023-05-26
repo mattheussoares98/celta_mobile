@@ -1,8 +1,8 @@
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/insert_individual_product_widget.dart';
-import '../../providers/inventory_product_provider.dart';
 import '../../Components/Inventory/inventory_consult_product_widget.dart';
 import '../../Components/Inventory/inventory_consulted_product_widget.dart';
 
@@ -31,13 +31,12 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    InventoryProductProvider inventoryProductProvider =
-        Provider.of(context, listen: true);
+    InventoryProvider inventoryProvider = Provider.of(context, listen: true);
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
       onWillPop: () async {
-        inventoryProductProvider.clearProducts();
+        inventoryProvider.clearProducts();
         return true;
       },
       child: Scaffold(
@@ -47,7 +46,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
           ),
           leading: IconButton(
             onPressed: () {
-              inventoryProductProvider.clearProducts();
+              inventoryProvider.clearProducts();
               Navigator.of(context).pop();
             },
             icon: const Icon(
@@ -72,10 +71,10 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                       ),
                       InsertIndividualProductWidget(
                         isIndividual: _isIndividual,
-                        isLoading: inventoryProductProvider.isLoading ||
-                            inventoryProductProvider.isLoadingQuantity,
+                        isLoading: inventoryProvider.isLoading ||
+                            inventoryProvider.isLoadingQuantity,
                         changeFocus: () {
-                          inventoryProductProvider.alterFocusToConsultProduct(
+                          inventoryProvider.alterFocusToConsultProduct(
                             context: context,
                           );
                         },
@@ -87,20 +86,20 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                       ),
                     ],
                   ),
-                  if (inventoryProductProvider.productsCount == 0 &&
-                      inventoryProductProvider.errorMessageGetProducts != "")
+                  if (inventoryProvider.productsCount == 0 &&
+                      inventoryProvider.errorMessageGetProducts != "")
                     Container(
                       height: 300,
                       child: Column(
                         children: [
                           ErrorMessage(
-                            errorMessage: inventoryProductProvider
-                                .errorMessageGetProducts,
+                            errorMessage:
+                                inventoryProvider.errorMessageGetProducts,
                           ),
                         ],
                       ),
                     ),
-                  if (inventoryProductProvider.products.isNotEmpty)
+                  if (inventoryProvider.products.isNotEmpty)
                     ConsultedProductWidget(
                       isIndividual: _isIndividual,
                       countingCode: arguments["InventoryCountingsModel"]

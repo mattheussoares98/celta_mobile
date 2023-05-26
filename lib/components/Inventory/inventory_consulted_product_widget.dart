@@ -2,10 +2,10 @@ import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/inventory_product_provider.dart';
 import '../Global_widgets/show_alert_dialog.dart';
 import 'inventory_insert_one_quantity.dart';
 
@@ -31,7 +31,7 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
 
   addQuantity({
     required bool isSubtract,
-    required InventoryProductProvider inventoryProductProvider,
+    required InventoryProvider inventoryProvider,
   }) async {
     double quantity = double.tryParse(
         widget.consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
@@ -45,7 +45,7 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
             ? 'Quantidade digitada: -${quantity.toStringAsFixed(3)}'
             : 'Quantidade digitada: ${quantity.toStringAsFixed(3)}',
         function: () async {
-          await inventoryProductProvider.addQuantity(
+          await inventoryProvider.addQuantity(
             consultedProductController: widget.consultedProductController,
             isIndividual: widget.isIndividual,
             context: context,
@@ -56,7 +56,7 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
       );
     } else {
       //se a quantidade digitada for menor do que 10.000, vai adicionar direto a quantidade, sem o alertDialog pra confirmar
-      await inventoryProductProvider.addQuantity(
+      await inventoryProvider.addQuantity(
         consultedProductController: widget.consultedProductController,
         isIndividual: widget.isIndividual,
         context: context,
@@ -67,11 +67,11 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
   }
 
   anullQuantity(
-    InventoryProductProvider inventoryProductProvider,
+    InventoryProvider inventoryProvider,
   ) async {
     FocusScope.of(context).unfocus();
     print("ts");
-    if (inventoryProductProvider.products[0].quantidadeInvContProEmb == -1) {
+    if (inventoryProvider.products[0].quantidadeInvContProEmb == -1) {
       ShowErrorMessage.showErrorMessage(
         error: "A quantidade já está nula!",
         context: context,
@@ -83,10 +83,9 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
       context: context,
       title: "Deseja realmente anular a quantidade?",
       function: () async {
-        await inventoryProductProvider.anullQuantity(
+        await inventoryProvider.anullQuantity(
           countingCode: widget.countingCode,
-          productPackingCode:
-              inventoryProductProvider.products[0].codigoInternoProEmb,
+          productPackingCode: inventoryProvider.products[0].codigoInternoProEmb,
           context: context,
         );
       },
@@ -95,8 +94,7 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-    InventoryProductProvider inventoryProductProvider =
-        Provider.of(context, listen: true);
+    InventoryProvider inventoryProvider = Provider.of(context, listen: true);
 
     return PersonalizedCard.personalizedCard(
       context: context,
@@ -112,35 +110,32 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
             const SizedBox(height: 8),
             TitleAndSubtitle.titleAndSubtitle(
               title: "Produto",
-              value: inventoryProductProvider.products[0].productName,
+              value: inventoryProvider.products[0].productName,
               fontSize: 20,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "PLU",
-              value: inventoryProductProvider.products[0].plu,
+              value: inventoryProvider.products[0].plu,
               fontSize: 20,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "Qtd contada",
-              value: inventoryProductProvider
-                          .products[0].quantidadeInvContProEmb ==
-                      -1
+              value: inventoryProvider.products[0].quantidadeInvContProEmb == -1
                   //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
                   ? 'Sem contagem'
                   : ConvertString.convertToBrazilianNumber(
-                      inventoryProductProvider
-                          .products[0].quantidadeInvContProEmb,
+                      inventoryProvider.products[0].quantidadeInvContProEmb,
                     ),
               fontSize: 20,
             ),
-            if (inventoryProductProvider.lastQuantityAdded != 0)
+            if (inventoryProvider.lastQuantityAdded != 0)
               const SizedBox(height: 3),
-            if (inventoryProductProvider.lastQuantityAdded != 0)
+            if (inventoryProvider.lastQuantityAdded != 0)
               FittedBox(
                 child: Text(
-                  inventoryProductProvider.lastQuantityAdded != 0
-                      ? 'Última quantidade adicionada:  ${inventoryProductProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} '
-                      : 'Última quantidade adicionada:  ${inventoryProductProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} ',
+                  inventoryProvider.lastQuantityAdded != 0
+                      ? 'Última quantidade adicionada:  ${inventoryProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} '
+                      : 'Última quantidade adicionada:  ${inventoryProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')} ',
                   style: TextStyle(
                     fontSize: 100,
                     color: Theme.of(context).colorScheme.primary,
@@ -158,30 +153,29 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
               AddSubtractOrAnullWidget(
                 addButtonText: "SOMAR",
                 subtractButtonText: "SUBTRAIR",
-                isUpdatingQuantity: inventoryProductProvider.isLoadingQuantity,
+                isUpdatingQuantity: inventoryProvider.isLoadingQuantity,
                 addQuantityFunction: () async {
                   await addQuantity(
                     isSubtract: false,
-                    inventoryProductProvider: inventoryProductProvider,
+                    inventoryProvider: inventoryProvider,
                   );
                 },
                 subtractQuantityFunction: () async {
                   await addQuantity(
                     isSubtract: true,
-                    inventoryProductProvider: inventoryProductProvider,
+                    inventoryProvider: inventoryProvider,
                   );
                 },
                 anullFunction: () async {
                   await anullQuantity(
-                    inventoryProductProvider,
+                    inventoryProvider,
                   );
                 },
-                isLoading:
-                    inventoryProductProvider.isLoadingQuantity ? true : false,
+                isLoading: inventoryProvider.isLoadingQuantity ? true : false,
                 consultedProductController: widget.consultedProductController,
                 consultedProductFormKey: _formKey,
                 consultedProductFocusNode:
-                    inventoryProductProvider.consultedProductFocusNode,
+                    inventoryProvider.consultedProductFocusNode,
               ),
             if (widget.isIndividual)
               InsertOneQuantity(

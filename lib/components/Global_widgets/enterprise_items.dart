@@ -26,7 +26,7 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Selecione a empresa',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         Expanded(

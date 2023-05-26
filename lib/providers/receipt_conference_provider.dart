@@ -7,6 +7,8 @@ import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/convert_string.dart';
+
 enum SearchTypes {
   GetProductByName,
   GetProductByEAN,
@@ -340,7 +342,8 @@ class ReceiptConferenceProvider with ChangeNotifier {
     _products.clear();
     _errorMessageGetProducts = "";
     _consultingProducts = true;
-    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
+    controllerText =
+        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     notifyListeners();
     http.Request? request;
 

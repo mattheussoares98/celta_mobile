@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.celtaware.inventario">
-    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="Celta mobile"
         android:icon="@mipmap/ic_launcher">
@@ -42,4 +41,5 @@
             android:value="2" />
     </application>
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

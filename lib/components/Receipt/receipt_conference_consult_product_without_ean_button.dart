@@ -24,7 +24,7 @@ class _ConferenceConsultProductWithoutEanButtonState
       color: Theme.of(context).colorScheme.primary,
       child: TextButton(
         style: TextButton.styleFrom(
-          primary: Colors.white,
+          foregroundColor: Colors.white,
         ),
         onPressed: receiptConferenceProvider.consultingProducts ||
                 receiptConferenceProvider.isUpdatingQuantity

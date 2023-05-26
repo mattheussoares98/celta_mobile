@@ -1,10 +1,9 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/inventory_counting_provider.dart';
 
 class InventoryCountingItems extends StatelessWidget {
   final int codigoInternoEmpresa;
@@ -15,8 +14,7 @@ class InventoryCountingItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    InventoryCountingProvider inventoryCountingProvider =
-        Provider.of(context, listen: true);
+    InventoryProvider inventoryProvider = Provider.of(context, listen: true);
 
     return Column(
       children: [
@@ -24,12 +22,12 @@ class InventoryCountingItems extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Selecione a contagem',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: inventoryCountingProvider.countingsQuantity,
+            itemCount: inventoryProvider.countingsQuantity,
             itemBuilder: (ctx, index) {
               return GestureDetector(
                 onTap: () {
@@ -37,7 +35,7 @@ class InventoryCountingItems extends StatelessWidget {
                     APPROUTES.INVENTORY_PRODUCTS,
                     arguments: {
                       "InventoryCountingsModel":
-                          inventoryCountingProvider.countings[index],
+                          inventoryProvider.countings[index],
                       "codigoInternoEmpresa": codigoInternoEmpresa,
                     },
                   );
@@ -52,14 +50,13 @@ class InventoryCountingItems extends StatelessWidget {
                       children: [
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Número da contagem",
-                          value: inventoryCountingProvider
+                          value: inventoryProvider
                               .countings[index].numeroContagemInvCont
                               .toString(),
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Observações",
-                          value: inventoryCountingProvider
-                              .countings[index].obsInvCont,
+                          value: inventoryProvider.countings[index].obsInvCont,
                         ),
                       ],
                     ),

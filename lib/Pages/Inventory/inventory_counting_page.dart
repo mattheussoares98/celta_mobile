@@ -1,9 +1,9 @@
 import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/try_again.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Inventory/inventory_counting_items.dart';
-import '../../providers/inventory_counting_provider.dart';
 
 class CountingPage extends StatefulWidget {
   const CountingPage({Key? key}) : super(key: key);
@@ -19,11 +19,10 @@ class _CountingPageState extends State<CountingPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    InventoryCountingProvider inventoryCountingProvider =
-        Provider.of(context, listen: true);
+    InventoryProvider inventoryProvider = Provider.of(context, listen: true);
 
     if (!isLoaded) {
-      inventoryCountingProvider.getCountings(
+      inventoryProvider.getCountings(
         inventoryProcessCode: arguments["codigoInternoInventario"],
         context: context,
       );
@@ -33,8 +32,7 @@ class _CountingPageState extends State<CountingPage> {
 
   @override
   Widget build(BuildContext context) {
-    InventoryCountingProvider inventoryCountingProvider =
-        Provider.of(context, listen: true);
+    InventoryProvider inventoryProvider = Provider.of(context, listen: true);
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Scaffold(
@@ -45,24 +43,26 @@ class _CountingPageState extends State<CountingPage> {
       ),
       body: Column(
         children: [
-          if (inventoryCountingProvider.isLoadingCountings)
+          if (inventoryProvider.isLoadingCountings)
             Expanded(
-                child: ConsultingWidget.consultingWidget(
-                    title: 'Consultando contagens')),
-          if (inventoryCountingProvider.errorMessage != '')
+              child: ConsultingWidget.consultingWidget(
+                title: 'Consultando contagens',
+              ),
+            ),
+          if (inventoryProvider.errorMessageCountings != '')
             Expanded(
               child: TryAgainWidget.tryAgain(
-                errorMessage: inventoryCountingProvider.errorMessage,
+                errorMessage: inventoryProvider.errorMessageCountings,
                 request: () async => setState(() {
-                  inventoryCountingProvider.getCountings(
+                  inventoryProvider.getCountings(
                     inventoryProcessCode: arguments["codigoInternoInventario"],
                     context: context,
                   );
                 }),
               ),
             ),
-          if (inventoryCountingProvider.errorMessage == "" &&
-              !inventoryCountingProvider.isLoadingCountings)
+          if (inventoryProvider.errorMessageCountings == "" &&
+              !inventoryProvider.isLoadingCountings)
             Expanded(
               child: InventoryCountingItems(
                 codigoInternoEmpresa: arguments["codigoInternoEmpresa"],

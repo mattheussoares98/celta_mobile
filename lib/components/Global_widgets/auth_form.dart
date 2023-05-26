@@ -263,11 +263,10 @@ class _AuthFormState extends State<AuthForm>
                     animation: _animationController!,
                     builder: (context, widget) => ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size(_animationWidth!.value, 60),
-                        maximumSize: Size(_animationWidth!.value, 60),
-                        primary: _loginProvider.isLoading
+                        minimumSize: Size(_animationWidth!.value, 60), backgroundColor: _loginProvider.isLoading
                             ? Colors.grey
                             : Theme.of(context).colorScheme.primary,
+                        maximumSize: Size(_animationWidth!.value, 60),
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(_animationBorder!.value),

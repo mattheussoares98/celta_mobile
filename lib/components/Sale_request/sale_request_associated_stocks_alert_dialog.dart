@@ -65,7 +65,7 @@ class SaleRequestAssociatedStocksWidget {
                                         "Endereço na empresa atual: ",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline2,
+                                            .displayMedium,
                                       ),
                                       Text(
                                         product.StorageAreaAddress == ""
@@ -85,12 +85,12 @@ class SaleRequestAssociatedStocksWidget {
                             ),
                           if (index == 0 &&
                               product.StockByEnterpriseAssociateds.length > 1)
-                            Column(
+                            const Column(
                               children: [
-                                const SizedBox(
+                                SizedBox(
                                   height: 40,
                                 ),
-                                const FittedBox(
+                                FittedBox(
                                   child: Text(
                                     "Estoque nas empresas associadas",
                                     style: TextStyle(
@@ -102,7 +102,7 @@ class SaleRequestAssociatedStocksWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   height: 10,
                                 ),
                               ],
@@ -122,7 +122,7 @@ class SaleRequestAssociatedStocksWidget {
                                     Text(
                                       "Empresa: ",
                                       style:
-                                          Theme.of(context).textTheme.headline2,
+                                          Theme.of(context).textTheme.displayMedium,
                                     ),
                                     Text(
                                       product.StockByEnterpriseAssociateds[
@@ -137,7 +137,7 @@ class SaleRequestAssociatedStocksWidget {
                                     Text(
                                       "Estoque de venda: ",
                                       style:
-                                          Theme.of(context).textTheme.headline2,
+                                          Theme.of(context).textTheme.displayMedium,
                                     ),
                                     Text(
                                       product
@@ -155,7 +155,7 @@ class SaleRequestAssociatedStocksWidget {
                                     Text(
                                       "Endereços: ",
                                       style:
-                                          Theme.of(context).textTheme.headline2,
+                                          Theme.of(context).textTheme.displayMedium,
                                     ),
                                     Text(
                                       product.StockByEnterpriseAssociateds[

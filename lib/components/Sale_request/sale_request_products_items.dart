@@ -322,13 +322,13 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                               product: product,
                                             )
                                         : null,
-                                    child: Row(
+                                    child: const Row(
                                       children: [
-                                        const Text(
+                                        Text(
                                           "Remover produto",
                                           style: TextStyle(color: Colors.white),
                                         ),
-                                        const Icon(
+                                        Icon(
                                           Icons.delete,
                                           color: Colors.white,
                                         ),

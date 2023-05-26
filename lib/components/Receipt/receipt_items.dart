@@ -28,7 +28,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
           padding: const EdgeInsets.only(top: 8),
           child: Text(
             'Selecione o recebimento',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         Expanded(

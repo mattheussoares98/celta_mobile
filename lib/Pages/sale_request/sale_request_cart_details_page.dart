@@ -63,10 +63,10 @@ class _SaleRequestCartDetailsPageState
             child: Container(
               color: Colors.grey[200],
               width: double.infinity,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const FittedBox(
+                  FittedBox(
                     child: Text(
                       "O carrinho está vazio",
                       style: TextStyle(

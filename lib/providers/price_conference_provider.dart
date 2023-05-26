@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:celta_inventario/Models/consult_price_model.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../utils/base_url.dart';
+import '../utils/convert_string.dart';
 
 enum SearchTypes {
   GetProductByName,
@@ -200,7 +200,8 @@ class PriceConferenceProvider with ChangeNotifier {
     _products.clear();
     _errorMessage = "";
     _isLoading = true;
-    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
+    controllerText =
+        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     notifyListeners();
     dynamic value = int.tryParse(controllerText);
     //o valor pode ser em inteiro ou em texto

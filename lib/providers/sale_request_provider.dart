@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/base_url.dart';
+import '../utils/convert_string.dart';
 import '../utils/default_error_message_to_find_server.dart';
 
 class SaleRequestProvider with ChangeNotifier {
@@ -663,7 +664,8 @@ class SaleRequestProvider with ChangeNotifier {
     _isLoadingProducts = true;
     notifyListeners();
 
-    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
+    controllerText =
+        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     var headers = {'Content-Type': 'application/json'};
     http.Request? request;
 
@@ -727,7 +729,8 @@ class SaleRequestProvider with ChangeNotifier {
     _products.clear();
     _errorMessageProducts = "";
     _isLoadingProducts = true;
-    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
+    controllerText =
+        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     notifyListeners();
 
     try {

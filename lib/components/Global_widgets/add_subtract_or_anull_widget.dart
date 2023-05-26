@@ -140,7 +140,7 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                 flex: 3,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
+                    backgroundColor: Colors.red,
                     minimumSize: const Size(double.infinity, 50),
                     maximumSize: const Size(double.infinity, 50),
                   ),

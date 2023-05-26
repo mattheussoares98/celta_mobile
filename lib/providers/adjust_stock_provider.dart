@@ -2,6 +2,7 @@ import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_justifi
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_type_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
@@ -177,7 +178,8 @@ class AdjustStockProvider with ChangeNotifier {
 
     notifyListeners();
 
-    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
+    controllerText =
+        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     http.Request? request;
     var headers = {'Content-Type': 'application/json'};
 
@@ -228,7 +230,8 @@ class AdjustStockProvider with ChangeNotifier {
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
   }) async {
-    controllerText = controllerText.replaceAll(RegExp(r'\%'), '\%25');
+    controllerText =
+        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
     String searchType =
@@ -296,6 +299,11 @@ class AdjustStockProvider with ChangeNotifier {
       isLegacyCodeSearch: isLegacyCodeSearch,
     );
 
+    if (_products.isNotEmpty) {
+      await _getStockTypeAndJustifications(context);
+      return;
+    }
+
     if (_products.isEmpty && _errorMessageGetProducts != "") {
       int? isInt = int.tryParse(controllerText);
       if (isInt != null) {
@@ -307,7 +315,10 @@ class AdjustStockProvider with ChangeNotifier {
           context: context,
         );
 
-        if (_products.isNotEmpty) return;
+        if (_products.isNotEmpty) {
+          await _getStockTypeAndJustifications(context);
+          return;
+        }
 
         await _getProductsOld(
           enterpriseCode: enterpriseCode,
@@ -316,7 +327,10 @@ class AdjustStockProvider with ChangeNotifier {
           context: context,
         );
 
-        if (_products.isNotEmpty) return;
+        if (_products.isNotEmpty) {
+          await _getStockTypeAndJustifications(context);
+          return;
+        }
       } else {
         //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
         await _getProductsOld(
@@ -326,24 +340,26 @@ class AdjustStockProvider with ChangeNotifier {
           searchTypes: SearchTypes.GetProductByName,
           context: context,
         );
-      }
-      if (_errorMessageGetProducts != "") {
-        //quando da erro para consultar os produtos, muda o foco novamente para o
-        //campo de pesquisa dos produtos
-        Future.delayed(const Duration(milliseconds: 100), () {
-          //se não colocar em um future pra mudar o foco, não funciona corretamente
-          FocusScope.of(context).requestFocus(consultProductFocusNode);
-          //altera o foco para o campo de pesquisa novamente
-        });
-        // ShowErrorMessage.showErrorMessage(
-        //   error: _errorMessageGetProducts,
-        //   context: context,
-        // );
+
+        if (_products.isNotEmpty) {
+          await _getStockTypeAndJustifications(context);
+          return;
+        }
       }
     }
 
-    if (_products.isNotEmpty) {
-      await _getStockTypeAndJustifications(context);
+    if (_errorMessageGetProducts != "") {
+      //quando da erro para consultar os produtos, muda o foco novamente para o
+      //campo de pesquisa dos produtos
+      Future.delayed(const Duration(milliseconds: 100), () {
+        //se não colocar em um future pra mudar o foco, não funciona corretamente
+        FocusScope.of(context).requestFocus(consultProductFocusNode);
+        //altera o foco para o campo de pesquisa novamente
+      });
+      // ShowErrorMessage.showErrorMessage(
+      //   error: _errorMessageGetProducts,
+      //   context: context,
+      // );
     }
     notifyListeners();
   }

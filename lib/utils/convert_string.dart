@@ -75,6 +75,7 @@ class ConvertString {
     value = value.toString().replaceAll(RegExp(r'\|'), '%7C');
     value = value.toString().replaceAll(RegExp(r'}'), '%7D');
     value = value.toString().replaceAll(RegExp(r'~'), '%7E');
+    value = value.toString().replaceAll(RegExp(r'\%'), '%25');
 
     return value;
   }

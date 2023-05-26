@@ -1,4 +1,4 @@
-import 'package:celta_inventario/providers/inventory_product_provider.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +20,7 @@ class InsertOneQuantity extends StatefulWidget {
 class _InsertOneQuantityState extends State<InsertOneQuantity> {
   @override
   Widget build(BuildContext context) {
-    InventoryProductProvider inventoryProductProvider =
-        Provider.of(context, listen: true);
+    InventoryProvider inventoryProvider = Provider.of(context, listen: true);
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -35,7 +34,7 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
             ),
             child: FittedBox(
               child: Text(
-                inventoryProductProvider.isLoadingQuantity
+                inventoryProvider.isLoadingQuantity
                     ? "Subtraindo unidade"
                     : "Subtrair 1",
                 style: const TextStyle(
@@ -44,10 +43,10 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
                 ),
               ),
             ),
-            onPressed: inventoryProductProvider.isLoadingQuantity
+            onPressed: inventoryProvider.isLoadingQuantity
                 ? null
                 : () {
-                    inventoryProductProvider.addQuantity(
+                    inventoryProvider.addQuantity(
                       isIndividual: widget.isIndividual,
                       context: context,
                       codigoInternoInvCont: widget.codigoInternoInvCont,
@@ -68,7 +67,7 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
             ),
             child: FittedBox(
               child: Text(
-                inventoryProductProvider.isLoadingQuantity
+                inventoryProvider.isLoadingQuantity
                     ? "Inserindo unidade"
                     : "Adicionar 1",
                 style: const TextStyle(
@@ -77,10 +76,10 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
                 ),
               ),
             ),
-            onPressed: inventoryProductProvider.isLoadingQuantity
+            onPressed: inventoryProvider.isLoadingQuantity
                 ? null
                 : () async {
-                    await inventoryProductProvider.addQuantity(
+                    await inventoryProvider.addQuantity(
                       isIndividual: widget.isIndividual,
                       context: context,
                       codigoInternoInvCont: widget.codigoInternoInvCont,

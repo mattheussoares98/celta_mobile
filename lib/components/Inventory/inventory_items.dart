@@ -22,7 +22,7 @@ class InventoryItems extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8),
           child: Text(
             'Selecione o inventário',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         Expanded(
@@ -73,24 +73,6 @@ class InventoryItems extends StatelessWidget {
                             [dd, '/', mm, '/', yyyy, ' ', HH, ':', mm, ':', ss],
                           ),
                         ),
-
-                        //data de criação do inventário
-                        // const SizedBox(height: 5),
-                        // Row(children: [
-                        //   Text(
-                        //     'Criado em: ',
-                        //     style: _fontStyle,
-                        //   ),
-                        //   const SizedBox(height: 25),
-                        //   Text(
-                        //     formatDate(
-                        //       inventoryProvider
-                        //           .inventorys[index].dataCriacaoInventario,
-                        //       [dd, '-', mm, '-', yyyy, ' ', hh, ':', mm, ':', ss],
-                        //     ),
-                        //     style: _fontBoldStyle,
-                        //   ),
-                        // ]),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Observações",
                           value: inventoryProvider

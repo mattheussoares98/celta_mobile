@@ -1,4 +1,4 @@
-import 'package:celta_inventario/providers/inventory_product_provider.dart';
+import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +24,7 @@ class _InsertIndividualProductWidgetState
     extends State<InsertIndividualProductWidget> {
   @override
   Widget build(BuildContext context) {
-    InventoryProductProvider inventoryProductProvider = Provider.of(context);
+    InventoryProvider inventoryProvider = Provider.of(context);
     return FittedBox(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -32,10 +32,10 @@ class _InsertIndividualProductWidgetState
           FittedBox(
             child: TextButton(
               style: TextButton.styleFrom(
-                primary: Colors.blue,
+                foregroundColor: Colors.blue,
               ),
-              onPressed: inventoryProductProvider.isLoading ||
-                      inventoryProductProvider.isLoadingQuantity
+              onPressed: inventoryProvider.isLoading ||
+                      inventoryProvider.isLoadingQuantity
                   ? null
                   : () {
                       setState(() {
@@ -56,6 +56,8 @@ class _InsertIndividualProductWidgetState
             child: FittedBox(
               fit: BoxFit.fill,
               child: Switch(
+                activeColor: Colors.blue,
+                inactiveThumbColor: Colors.blue,
                 value: widget.isIndividual,
                 onChanged: widget.isLoading
                     ? null
