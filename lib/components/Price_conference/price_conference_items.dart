@@ -115,8 +115,6 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                                 internalEnterpriseCode:
                                     widget.internalEnterpriseCode,
                                 index: index,
-                                priceConferenceProvider:
-                                    widget.priceConferenceProvider,
                                 productPackingCode: product.ProductPackingCode,
                                 etiquetaPendente: product.EtiquetaPendente,
                               ),

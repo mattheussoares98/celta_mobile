@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:celta_inventario/Models/consult_price_model.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -115,13 +113,6 @@ class PriceConferenceProvider with ChangeNotifier {
         resultAsString: resultAsString,
         listToAdd: _products,
       );
-
-      // _products.forEach((element) {
-      //   element.CurrentStock = ConvertString.convertToBrazilianNumber(
-      //       element.CurrentStock.toString());
-      //   element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
-      //       element.SalePracticedRetail.toString());
-      // });
     } catch (e) {
       print("Erro para efetuar a requisição $searchType: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -297,10 +288,6 @@ class PriceConferenceProvider with ChangeNotifier {
         FocusScope.of(context).requestFocus(consultProductFocusNode);
         //altera o foco para o campo de pesquisa novamente
       });
-      // ShowErrorMessage.showErrorMessage(
-      //   error: _errorMessage,
-      //   context: context,
-      // );
     }
 
     notifyListeners();
@@ -342,13 +329,9 @@ class PriceConferenceProvider with ChangeNotifier {
 
       if (resultAsString.contains("Message")) {
         //significa que deu algum erro
-        _errorMessage = json.decode(resultAsString)["Message"];
+        _errorSendToPrint = json.decode(resultAsString)["Message"];
         _isLoading = false;
 
-        ShowErrorMessage.showErrorMessage(
-          error: _errorSendToPrint,
-          context: context,
-        );
         notifyListeners();
         return;
       }
@@ -358,10 +341,6 @@ class PriceConferenceProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorSendToPrint = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorSendToPrint,
-        context: context,
-      );
     } finally {
       _isSendingToPrint = false;
       notifyListeners();

@@ -1,16 +1,17 @@
 import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../Global_widgets/show_error_message.dart';
 
 class PriceConferenceSendPrintButton extends StatefulWidget {
   final bool etiquetaPendente;
-  final PriceConferenceProvider priceConferenceProvider;
   final int internalEnterpriseCode;
   final int productPackingCode;
   final int index;
   const PriceConferenceSendPrintButton({
     required this.internalEnterpriseCode,
     required this.index,
-    required this.priceConferenceProvider,
     required this.productPackingCode,
     required this.etiquetaPendente,
     Key? key,
@@ -25,6 +26,7 @@ class _PriceConferenceSendPrintButtonState
     extends State<PriceConferenceSendPrintButton> {
   @override
   Widget build(BuildContext context) {
+    PriceConferenceProvider priceConferenceProvider = Provider.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -34,18 +36,25 @@ class _PriceConferenceSendPrintButtonState
                 ? Theme.of(context).colorScheme.primary
                 : Colors.red,
           ),
-          onPressed: widget.priceConferenceProvider.isSendingToPrint
+          onPressed: priceConferenceProvider.isSendingToPrint
               ? null
               : () async {
-                  await widget.priceConferenceProvider.sendToPrint(
+                  await priceConferenceProvider.sendToPrint(
                     enterpriseCode: widget.internalEnterpriseCode,
                     productPackingCode: widget.productPackingCode,
                     index: widget.index,
                     context: context,
                   );
+
+                  if (priceConferenceProvider.errorSendToPrint != "") {
+                    ShowErrorMessage.showErrorMessage(
+                      error: priceConferenceProvider.errorSendToPrint,
+                      context: context,
+                    );
+                  }
                 },
-          child: widget.priceConferenceProvider.isSendingToPrint ||
-                  widget.priceConferenceProvider.isLoading
+          child: priceConferenceProvider.isSendingToPrint ||
+                  priceConferenceProvider.isLoading
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
