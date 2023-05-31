@@ -362,18 +362,19 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  updateProductFromCart({
+  Future<void> updateProductFromCart({
     required int productPackingCode,
     required double quantity,
     required double value,
     required String enterpriseCode,
-  }) {
+  }) async {
     _cartProducts[enterpriseCode]!.forEach((element) {
       if (element.ProductPackingCode == productPackingCode) {
         element.Quantity = quantity;
         element.Value = value;
       }
     });
+    await _updateCartInDatabase();
     notifyListeners();
   }
 
