@@ -242,13 +242,6 @@ class PriceConferenceProvider with ChangeNotifier {
         resultAsString: resultAsString,
         listToAdd: _products,
       );
-
-      // _products.forEach((element) {
-      //   element.CurrentStock = ConvertString.convertToBrazilianNumber(
-      //       element.CurrentStock.toString());
-      //   element.SalePracticedRetail = ConvertString.convertToBrazilianNumber(
-      //       element.SalePracticedRetail.toString());
-      // });
     } catch (e) {
       print("Erro para efetuar a requisição : $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

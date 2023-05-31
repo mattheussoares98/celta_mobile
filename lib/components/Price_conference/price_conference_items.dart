@@ -97,6 +97,14 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                                 product.CurrentStock,
                               ),
                             ),
+                            if (!product.LiquidCost.toString().contains("-1"))
+                              //quando o usuário não possui permissão para consultar o estoque, a API retorna "-1.0"
+                              TitleAndSubtitle.titleAndSubtitle(
+                                title: "Custo líquido",
+                                value: ConvertString.convertToBRL(
+                                  product.LiquidCost,
+                                ),
+                              ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Etiqueta pendente",
                               value: product.EtiquetaPendente == true
