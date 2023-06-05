@@ -51,9 +51,9 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         multiDexEnabled true
         applicationId "br.com.celtaware.inventario"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 33
-        versionCode 25
+        versionCode 37
         versionName flutterVersionName
         ndkVersion "23.1.7779620"
         ndk {
