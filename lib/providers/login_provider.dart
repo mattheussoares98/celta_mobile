@@ -39,9 +39,14 @@ class LoginProvider with ChangeNotifier {
     required String url,
     required String user,
   }) async {
-    BaseUrl.url = url;
+    BaseUrl.url = url.toLowerCase();
+
+    if (!BaseUrl.url.endsWith("/api")) {
+      BaseUrl.url = BaseUrl.url += "/api";
+    }
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('url', url);
+    await prefs.setString('url', BaseUrl.url);
     await prefs.setString('user', user);
   }
 
@@ -82,9 +87,6 @@ class LoginProvider with ChangeNotifier {
     required BuildContext context,
   }) async {
     await _saveUrlAndUser(url: url, user: user);
-    print(url);
-    print(user);
-    print(BaseUrl.url);
 
     _errorMessage = '';
     _isLoading = true;

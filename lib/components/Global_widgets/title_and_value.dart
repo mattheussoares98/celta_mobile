@@ -18,25 +18,39 @@ class TitleAndSubtitle {
       );
 
   static Widget titleAndSubtitle({
-    Color? titleColor,
-    Color? subtitleColor,
+    Color? titleColor = Colors.black,
+    Color? subtitleColor = Colors.black,
     Widget? otherWidget,
     String? title,
     double? fontSize = 17,
     String? value,
   }) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title == null ? "" : "${title}: ",
-          style: _fontStyle(color: titleColor, fontSize: fontSize),
-        ),
-        const SizedBox(width: 5),
+      children: <Widget>[
         Expanded(
-          child: Text(
-            value ?? "",
-            style: _fontBoldStyle(color: subtitleColor, fontSize: fontSize),
+          child: RichText(
+            text: TextSpan(
+              // style: _fontStyle(color: titleColor, fontSize: fontSize),
+              children: <TextSpan>[
+                TextSpan(
+                  text: title == null ? "" : "${title}: ",
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    color: titleColor,
+                    fontFamily: 'OpenSans',
+                  ),
+                ),
+                TextSpan(
+                  text: value ?? "",
+                  style: TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: subtitleColor,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         if (otherWidget != null) otherWidget,

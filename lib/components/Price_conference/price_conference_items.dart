@@ -82,7 +82,7 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                               subtitleColor: Colors.green,
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
-                              title: "Quantidade mínima para atacado",
+                              title: "Qtd mínima para atacado",
                               value: ConvertString.convertToBrazilianNumber(
                                 product.MinimumWholeQuantity.toString(),
                               ),

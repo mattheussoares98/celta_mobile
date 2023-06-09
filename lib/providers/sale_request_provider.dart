@@ -681,7 +681,7 @@ class SaleRequestProvider with ChangeNotifier {
       request = http.Request(
         'GET',
         Uri.parse(
-          '${BaseUrl.url}/SaleRequest/GetProduct?enterpriseCode=$enterpriseCode&searchValue=$controllerText',
+          '${BaseUrl.url}/SaleRequest/Product?enterpriseCode=$enterpriseCode&searchValue=$controllerText',
         ),
       );
     }
