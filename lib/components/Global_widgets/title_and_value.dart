@@ -1,22 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TitleAndSubtitle {
-  static TextStyle _fontStyle(
-          {Color? color = Colors.black, double? fontSize = 17}) =>
-      TextStyle(
-        fontSize: fontSize,
-        color: color,
-        fontFamily: 'OpenSans',
-      );
-  static TextStyle _fontBoldStyle(
-          {Color? color = Colors.black, double? fontSize = 17}) =>
-      TextStyle(
-        fontFamily: 'OpenSans',
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-        color: color,
-      );
-
   static Widget titleAndSubtitle({
     Color? titleColor = Colors.black,
     Color? subtitleColor = Colors.black,

@@ -1,6 +1,6 @@
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
 import 'package:celta_inventario/Pages/adjust_stock_page.dart';
-import 'package:celta_inventario/Pages/enterprise_json_page.dart';
+import 'package:celta_inventario/Pages/Inicial_pages/enterprise_json_page.dart';
 import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
 import 'package:celta_inventario/Pages/receipt_conference_page.dart';

@@ -24,15 +24,18 @@ class EnterpriseJsonModel {
     required List listToAdd,
   }) {
     print(resultAsString);
-    resultAsString = resultAsString
-        .replaceAll(RegExp(r'\\'), '')
-        .replaceAll(RegExp(r'\n'), '')
-        .replaceFirst(RegExp(r'"'), '');
 
-    int lastIndex = resultAsString.lastIndexOf('"');
-    resultAsString = resultAsString.replaceRange(lastIndex, lastIndex + 1, "");
-    //precisei fazer esse tratamento acima porque o estava retornando "\", "\n"
-    //e sinal de " a mais, causando erro no decode
+    if (resultAsString.contains("\\")) {
+      //foi corrigido para não ficar mandando "\", "\n" e sinal de " a mais nos retornos. Somente quando estiver desatualido o CMX que vai enviar dessa forma
+      resultAsString = resultAsString
+          .replaceAll(RegExp(r'\\'), '')
+          .replaceAll(RegExp(r'\n'), '')
+          .replaceFirst(RegExp(r'"'), '');
+
+      int lastIndex = resultAsString.lastIndexOf('"');
+      resultAsString =
+          resultAsString.replaceRange(lastIndex, lastIndex + 1, "");
+    }
 
     List resultAsList = json.decode(resultAsString);
     Map resultAsMap = resultAsList.asMap();
