@@ -1,11 +1,9 @@
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_costumer.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../utils/convert_string.dart';
 
 class SaleRequestPage extends StatefulWidget {
@@ -17,7 +15,6 @@ class SaleRequestPage extends StatefulWidget {
 
 class _SaleRequestPageState extends State<SaleRequestPage> {
   int _selectedIndex = 0;
-  bool _hasDefaultRequestModel = false;
 
   static const List appBarTitles = [
     "Inserir produtos",
@@ -29,11 +26,9 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     required int index,
     required SaleRequestProvider saleRequestProvider,
   }) {
-    if (saleRequestProvider.isLoadingSaveSaleRequest) return;
-    if (!_hasDefaultRequestModel) {
-      return;
-      //se não houver modelo de pedido padrão selecionado no BS, não permite alterar o bottomNavigationItem
-    }
+    if (saleRequestProvider.isLoadingSaveSaleRequest ||
+        saleRequestProvider.isLoadingProcessCart) return;
+
     setState(() {
       _selectedIndex = index;
     });
@@ -53,24 +48,17 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       _isLoaded = true;
       Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-      if (arguments["SaleRequestTypeCode"] == 0) {
-        //significa que não possui um modelo de pedido de vendas padrão cadastrado no BS
-        _hasDefaultRequestModel = false;
-      } else {
-        _hasDefaultRequestModel = true;
-      }
-
       await saleRequestProvider.restoreProducts(arguments["Code"].toString());
-      await saleRequestProvider.restoreCostumers(arguments["Code"].toString());
+      await saleRequestProvider.restorecustomers(arguments["Code"].toString());
 
       int costumersCount =
-          saleRequestProvider.costumersCount(arguments["Code"].toString());
+          saleRequestProvider.customersCount(arguments["Code"].toString());
       if (costumersCount == 0) {
         //logo que entra na tela de pedido de vendas, o app recupera os clientes
         //que foram pesquisados e marcados. Caso consulte os clientes, vai
         //apagar esses dados, por isso só pode pesquisar automaticamente quando
         //entrar na página de pedido de vendas se não houver clientes
-        await saleRequestProvider.getCostumers(
+        await saleRequestProvider.getCustomers(
           context: context,
           controllerText: "-1",
           enterpriseCode: arguments["Code"].toString(),
@@ -90,11 +78,9 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         saleRequestProvider.cartProductsCount(arguments["Code"].toString());
 
     List<Widget> _pages = <Widget>[
-      _hasDefaultRequestModel
-          ? SaleRequestInsertProductsPage(
-              enterpriseCode: arguments["Code"],
-            )
-          : const SaleRequestManualDefaultRequestModelPage(),
+      SaleRequestInsertProductsPage(
+        enterpriseCode: arguments["Code"],
+      ),
       SaleRequestInsertCostumer(enterpriseCode: arguments["Code"]),
       SaleRequestCartDetailsPage(
         enterpriseCode: arguments["Code"],
@@ -105,7 +91,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (saleRequestProvider.isLoadingSaveSaleRequest) return false;
+        if (saleRequestProvider.isLoadingSaveSaleRequest ||
+            saleRequestProvider.isLoadingProcessCart) return false;
         saleRequestProvider.clearProducts();
         return true;
       },
@@ -118,7 +105,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             ),
           ),
           leading: IconButton(
-            onPressed: saleRequestProvider.isLoadingSaveSaleRequest
+            onPressed: saleRequestProvider.isLoadingSaveSaleRequest ||
+                    saleRequestProvider.isLoadingProcessCart
                 ? null
                 : () {
                     saleRequestProvider.clearProducts();
@@ -149,14 +137,12 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                         ),
                         //se não houver um modelo de pedido padrão informado,
                         //desativa o botão pra ir até o carrinho
-                        onPressed: _hasDefaultRequestModel
-                            ? () {
-                                setState(() {
-                                  _selectedIndex = 2;
-                                });
-                                saleRequestProvider.clearProducts();
-                              }
-                            : null,
+                        onPressed: () {
+                          setState(() {
+                            _selectedIndex = 2;
+                          });
+                          saleRequestProvider.clearProducts();
+                        },
                       ),
                       Positioned(
                         top: 0,

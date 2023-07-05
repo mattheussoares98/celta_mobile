@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Adjust_stock/adjust_stock_all_stocks.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -111,6 +112,12 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "PLU",
                             value: product.PriceLookUp,
+                            otherWidget:
+                                AdjustStockAllStocks.adjustStockAllStocks(
+                              context: context,
+                              hasStocks: product.Stocks.length > 0,
+                              product: product,
+                            ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Embalagem",

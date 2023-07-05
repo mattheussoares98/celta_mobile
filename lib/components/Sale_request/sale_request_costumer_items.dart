@@ -24,10 +24,10 @@ class _SaleRequestCostumersItemsState extends State<SaleRequestCostumersItems> {
       listen: true,
     );
     var costumer =
-        saleRequestProvider.costumers(widget.enterpriseCode.toString());
+        saleRequestProvider.customers(widget.enterpriseCode.toString());
 
     int costumersCount =
-        saleRequestProvider.costumersCount(widget.enterpriseCode.toString());
+        saleRequestProvider.customersCount(widget.enterpriseCode.toString());
 
     return Expanded(
       child: Column(

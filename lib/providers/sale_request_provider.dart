@@ -1,36 +1,44 @@
 import 'dart:convert';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
+import 'package:celta_inventario/Models/sale_request_models/sale_request_process_cart_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_request_type_model.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Models/sale_request_models/sale_requests_model.dart';
 import '../utils/base_url.dart';
 import '../utils/convert_string.dart';
 import '../utils/default_error_message_to_find_server.dart';
 
 class SaleRequestProvider with ChangeNotifier {
-  bool _isLoadingRequestType = false;
-  bool get isLoadingRequestType => _isLoadingRequestType;
-  String _errorMessageRequestType = "";
-  String get errorMessageRequestType => _errorMessageRequestType;
-  List<SaleRequestRequestTypeModel> _requests = [];
+  bool _isLoadingRequests = false;
+  bool get isLoadingRequests => _isLoadingRequests;
+  String _errorMessageRequests = "";
+  String get errorMessageRequests => _errorMessageRequests;
+  List<SaleRequestsModel> _requests = [];
   get requests => [..._requests];
+  get requestsCount => _requests.length;
+
+  bool _updatedCart = true;
+  bool get updatedCart => _updatedCart;
+  set updatedCart(bool) {
+    _updatedCart = true;
+  }
 
   bool _isLoadingCostumer = false;
   bool get isLoadingCostumer => _isLoadingCostumer;
   String _errorMessageCostumer = "";
   String get errorMessageCostumer => _errorMessageCostumer;
-  Map<String, List<SaleRequestCostumerModel>> _costumers = {};
-  int costumersCount(String enterpriseCode) {
-    if (_costumers[enterpriseCode] == null) {
+  Map<String, List<SaleRequestCostumerModel>> _customers = {};
+  int customersCount(String enterpriseCode) {
+    if (_customers[enterpriseCode] == null) {
       return 0;
     } else {
-      return _costumers[enterpriseCode]!.length;
+      return _customers[enterpriseCode]!.length;
     }
   }
 
@@ -48,22 +56,22 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  costumers(String enterpriseCode) {
-    return _costumers[enterpriseCode];
+  customers(String enterpriseCode) {
+    return _customers[enterpriseCode];
   }
 
-  getCostumerCode(String enterpriseCode) {
-    int costumerCode = -1;
-    if (_costumers[enterpriseCode] != null)
-      _costumers[enterpriseCode]!.forEach((element) {
+  getSelectedCustomerCode(String enterpriseCode) {
+    int customerCode = -1;
+    if (_customers[enterpriseCode] != null)
+      _customers[enterpriseCode]!.forEach((element) {
         if (element.selected) {
-          costumerCode = element.Code;
+          customerCode = element.Code;
         }
       });
     else {
-      costumerCode = -1;
+      customerCode = -1;
     }
-    return costumerCode;
+    return customerCode;
   }
 
   bool _isLoadingProducts = false;
@@ -96,53 +104,55 @@ class SaleRequestProvider with ChangeNotifier {
   bool _isLoadingSaveSaleRequest = false;
   get isLoadingSaveSaleRequest => _isLoadingSaveSaleRequest;
 
+  String _errorMessageProcessCart = "";
+  get errorMessageProcessCart => _errorMessageProcessCart;
+  bool _isLoadingProcessCart = false;
+  get isLoadingProcessCart => _isLoadingProcessCart;
+
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
 
-  // insertEnterpriseKeyOfCartProducts(int enterpriseCode) {
-  //   //precisa inserir o código da empresa como chave do Map dos produtos do
-  //   //carrinho quando acessa a página SaleRequestPage para conseguir adicionar,
-  //   //remover e alterar produtos no carrinho
-  //   _cartProducts.putIfAbsent(enterpriseCode, () => [{}]);
-  //   print(_cartProducts);
-  // }
+  void clearRequests() {
+    _requests.clear();
+    notifyListeners();
+  }
 
   _updateCostumerInDatabase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("costumers");
-    await prefs.setString("costumers", json.encode(_costumers));
+    await prefs.remove("customers");
+    await prefs.setString("customers", json.encode(_customers));
   }
 
-  restoreCostumers(String enterpriseCode) async {
+  restorecustomers(String enterpriseCode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('costumers') != "" &&
-        prefs.getString('costumers') != null) {
-      var _key = await prefs.getString("costumers")!;
-      Map costumersInDatabase = jsonDecode(_key);
+    if (prefs.getString('customers') != "" &&
+        prefs.getString('customers') != null) {
+      var _key = await prefs.getString("customers")!;
+      Map customersInDatabase = jsonDecode(_key);
 
-      List<SaleRequestCostumerModel> costumersTemp = [];
-      costumersInDatabase.forEach((key, value) {
+      List<SaleRequestCostumerModel> customersTemp = [];
+      customersInDatabase.forEach((key, value) {
         if (key == enterpriseCode) {
           value.forEach((element) {
-            costumersTemp.add(SaleRequestCostumerModel.fromJson(element));
+            customersTemp.add(SaleRequestCostumerModel.fromJson(element));
           });
         }
       });
-      _costumers[enterpriseCode] = costumersTemp;
+      _customers[enterpriseCode] = customersTemp;
 
       notifyListeners();
     }
   }
 
-  _clearCostumers(String enterpriseCode) async {
-    if (_costumers[enterpriseCode] != null) {
-      if (_costumers[enterpriseCode]!.isNotEmpty) {
-        var costumerConsumer = _costumers[enterpriseCode]![0];
+  _clearcustomers(String enterpriseCode) async {
+    if (_customers[enterpriseCode] != null) {
+      if (_customers[enterpriseCode]!.isNotEmpty) {
+        var costumerConsumer = _customers[enterpriseCode]![0];
         costumerConsumer.selected =
             false; //Se salvar um pedido com o cliente consumidor informado, precisa "desselecionar" ele para não manter ele selecionado em um pedido novo
         //o cliente consumidor precisa sempre ficar disponível de forma fixa em primeiro na lista. Por isso salvei ele como "temp" antes de apagar todos clientes pra depois adicionar ele novamente no índice 0
-        _costumers[enterpriseCode]!.clear(); //remove todos clientes
-        _costumers[enterpriseCode]?.add(costumerConsumer);
+        _customers[enterpriseCode]!.clear(); //remove todos clientes
+        _customers[enterpriseCode]?.add(costumerConsumer);
         //adiciona o consumidor novamente
       }
     }
@@ -162,32 +172,6 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  double getPraticedPrice({
-    required SaleRequestProductsModel product,
-    required TextEditingController consultedProductController,
-    required String enterpriseCode,
-  }) {
-    double _quantityToAdd =
-        tryChangeControllerTextToDouble(consultedProductController);
-    if (_quantityToAdd == 0) {
-      _quantityToAdd++;
-    }
-
-    double _totalItensInCart = getTotalItensInCart(
-      ProductPackingCode: product.ProductPackingCode,
-      enterpriseCode: enterpriseCode,
-    );
-
-    if (product.MinimumWholeQuantity == 0 || product.WholePracticedPrice == 0) {
-      return product.RetailPracticedPrice;
-    } else if ((_quantityToAdd + _totalItensInCart) <
-        product.MinimumWholeQuantity) {
-      return product.RetailPracticedPrice;
-    } else {
-      return product.WholeSalePrice;
-    }
-  }
-
   double getTotalItemValue({
     required SaleRequestProductsModel product,
     required TextEditingController consultedProductController,
@@ -203,13 +187,7 @@ class SaleRequestProvider with ChangeNotifier {
       _quantityToAdd = 1;
     }
 
-    double _praticedPrice = getPraticedPrice(
-      product: product,
-      consultedProductController: consultedProductController,
-      enterpriseCode: enterpriseCode,
-    );
-
-    double _totalItemValue = _quantityToAdd * _praticedPrice;
+    double _totalItemValue = _quantityToAdd * product.RetailPracticedPrice;
 
     double? controllerInDouble = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
@@ -231,32 +209,11 @@ class SaleRequestProvider with ChangeNotifier {
     );
   }
 
-  _removeNotUsedKeysFromCart(List cartListCopyToRemoveKeys) {
-    cartListCopyToRemoveKeys.forEach((element) {
-      element.remove("ProductCode");
-      element.remove("Name");
-      element.remove("PLU");
-      element.remove("PackingQuantity");
-      element.remove("RetailPracticedPrice");
-      element.remove("RetailSalePrice");
-      element.remove("RetailOfferPrice");
-      element.remove("WholePracticedPrice");
-      element.remove("WholeSalePrice");
-      element.remove("WholeOfferPrice");
-      element.remove("ECommercePracticedPrice");
-      element.remove("ECommerceSalePrice");
-      element.remove("ECommerceOfferPrice");
-      element.remove("MinimumWholeQuantity");
-      element.remove("BalanceStockSale");
-      element.remove("StorageAreaAddress");
-      element.remove("StockByEnterpriseAssociateds");
-    });
-  }
-
   _updateCartInDatabase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("cart");
     await prefs.setString("cart", json.encode(_cartProducts));
+    _updatedCart = true;
   }
 
   restoreProducts(String enterpriseCode) async {
@@ -276,9 +233,7 @@ class SaleRequestProvider with ChangeNotifier {
       });
 
       _cartProducts[enterpriseCode] = cartProductsTemp;
-      // var cart = SaleRequestCartProductsModel.fromJson(cartProductsInDatabase);
 
-      // _cartProducts[enterpriseCode] = cartProductsInDatabase[enterpriseCode];
       notifyListeners();
     }
   }
@@ -288,11 +243,6 @@ class SaleRequestProvider with ChangeNotifier {
     required TextEditingController consultedProductController,
     required String enterpriseCode,
   }) async {
-    double praticedPrice = getPraticedPrice(
-      product: product,
-      consultedProductController: consultedProductController,
-      enterpriseCode: enterpriseCode,
-    );
     double quantity =
         tryChangeControllerTextToDouble(consultedProductController);
 
@@ -305,34 +255,29 @@ class SaleRequestProvider with ChangeNotifier {
       ProductPackingCode: product.ProductPackingCode,
       Name: product.Name,
       Quantity: quantity,
-      Value: praticedPrice,
+      Value: product.RetailPracticedPrice,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
       DiscountValue: 0.0,
       ExpectedDeliveryDate: "\"${DateTime.now().toString()}\"",
-      ProductCode: product.ProductCode, //remove
-      PLU: product.PLU, //remove
+      ProductCode: product.ProductCode,
+      PLU: product.PLU,
       PackingQuantity: product.PackingQuantity,
-      RetailPracticedPrice: product.RetailPracticedPrice, //remove
-      RetailSalePrice: product.RetailSalePrice, //remove
-      RetailOfferPrice: product.RetailOfferPrice, //remove
-      WholePracticedPrice: product.WholePracticedPrice, //remove
-      WholeSalePrice: product.WholeSalePrice, //remove
-      WholeOfferPrice: product.WholeOfferPrice, //remove
-      ECommercePracticedPrice: product.ECommercePracticedPrice, //remove
-      ECommerceSalePrice: product.ECommerceSalePrice, //remove
-      ECommerceOfferPrice: product.ECommerceOfferPrice, //remove
-      MinimumWholeQuantity: product.MinimumWholeQuantity, //remove
-      BalanceStockSale: product.BalanceStockSale, //remove
-      StorageAreaAddress: product.StorageAreaAddress, //remove
+      RetailPracticedPrice: product.RetailPracticedPrice,
+      RetailSalePrice: product.RetailSalePrice,
+      RetailOfferPrice: product.RetailOfferPrice,
+      WholePracticedPrice: product.WholePracticedPrice,
+      WholeSalePrice: product.WholeSalePrice,
+      WholeOfferPrice: product.WholeOfferPrice,
+      ECommercePracticedPrice: product.ECommercePracticedPrice,
+      ECommerceSalePrice: product.ECommerceSalePrice,
+      ECommerceOfferPrice: product.ECommerceOfferPrice,
+      MinimumWholeQuantity: product.MinimumWholeQuantity,
+      BalanceStockSale: product.BalanceStockSale,
+      StorageAreaAddress: product.StorageAreaAddress,
       StockByEnterpriseAssociateds: product.StockByEnterpriseAssociateds,
     );
-
-    //as chaves que estão com o comentário "remove" são removidas para enviar a
-    //requisição de salvar o pedido. Salvei todas informações do produto no
-    //carrinho porque precisa de várias para conseguir editar a quantidade do
-    //produto que já está no carrinho
 
     if (alreadyContainsProduct(
       ProductPackingCode: product.ProductPackingCode,
@@ -342,7 +287,8 @@ class SaleRequestProvider with ChangeNotifier {
           element.ProductPackingCode == product.ProductPackingCode);
 
       _cartProducts[enterpriseCode]![index].Quantity += quantity;
-      _cartProducts[enterpriseCode]![index].Value = praticedPrice;
+      _cartProducts[enterpriseCode]![index].Value =
+          product.RetailPracticedPrice;
     } else {
       if (_cartProducts[enterpriseCode.toString()] != null) {
         _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);
@@ -356,8 +302,6 @@ class SaleRequestProvider with ChangeNotifier {
 
     _changeCursorToLastIndex(consultedProductController);
 
-    jsonSaleRequest["Products"] = _cartProducts;
-
     await _updateCartInDatabase();
     notifyListeners();
   }
@@ -367,13 +311,11 @@ class SaleRequestProvider with ChangeNotifier {
     required double quantity,
     required double value,
     required String enterpriseCode,
+    required int index,
   }) async {
-    _cartProducts[enterpriseCode]!.forEach((element) {
-      if (element.ProductPackingCode == productPackingCode) {
-        element.Quantity = quantity;
-        element.Value = value;
-      }
-    });
+    _cartProducts[enterpriseCode]![index].Quantity = quantity;
+    _cartProducts[enterpriseCode]![index].Value = value;
+
     await _updateCartInDatabase();
     notifyListeners();
   }
@@ -384,14 +326,14 @@ class SaleRequestProvider with ChangeNotifier {
       return 0;
     } else {
       _cartProducts[enterpriseCode]!.forEach((element) {
-        total += element.Quantity * element.Value;
+        total += (element.Quantity * element.Value) - element.DiscountValue;
       });
 
       return total;
     }
   }
 
-  Map<String, dynamic> jsonSaleRequest = {
+  Map<String, dynamic> _jsonSaleRequest = {
     "crossId": UserIdentity.identity,
     "EnterpriseCode": 0,
     "RequestTypeCode": 0,
@@ -471,6 +413,20 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
+  String getDiscountDescription(
+    SaleRequestCartProductsModel saleRequestCartProductsModel,
+  ) {
+    String discountDescription = "";
+    _jsonSaleRequest["Products"].forEach((element) {
+      if (element.ProductPackingCode ==
+          saleRequestCartProductsModel.ProductPackingCode) {
+        discountDescription = element.DiscountDescription;
+      }
+    });
+
+    return discountDescription;
+  }
+
   double getTotalItensInCart({
     required int ProductPackingCode,
     required String enterpriseCode,
@@ -491,14 +447,13 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getRequestType({
+  Future<void> getRequests({
     required int enterpriseCode,
     required BuildContext context,
   }) async {
-    _isLoadingRequestType = true;
-    _errorMessageRequestType = "";
+    _isLoadingRequests = true;
+    _errorMessageRequests = "";
     _requests.clear();
-    // notifyListeners();
 
     try {
       var headers = {'Content-Type': 'application/json'};
@@ -513,34 +468,96 @@ class SaleRequestProvider with ChangeNotifier {
       http.StreamedResponse response = await request.send();
       String responseInString = await response.stream.bytesToString();
 
-      print('resposta para consulta do RequestType = $responseInString');
+      print('resposta para consulta do Requests = $responseInString');
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
-        _errorMessageRequestType = json.decode(responseInString)["Message"];
-        _isLoadingRequestType = false;
+        _errorMessageRequests = json.decode(responseInString)["Message"];
+        _isLoadingRequests = false;
+
+        notifyListeners();
+        return;
+      }
+
+      SaleRequestsModel.responseAsStringToSaleRequestsModel(
+        responseAsString: responseInString,
+        listToAdd: _requests,
+      );
+    } catch (e) {
+      print("Erro para obter os modelos de pedido: $e");
+      _errorMessageRequests = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    }
+
+    _isLoadingRequests = false;
+    notifyListeners();
+  }
+
+  Future<void> processCart({
+    required BuildContext context,
+    required int enterpriseCode,
+    required int requestTypeCode,
+    required int customerCode,
+  }) async {
+    _isLoadingProcessCart = true;
+    _errorMessageProcessCart = "";
+    notifyListeners();
+
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request(
+          'GET', Uri.parse('${BaseUrl.url}/SaleRequest/ProcessCart'));
+
+      List processCartItems =
+          SaleRequestProcessCartModel.cartProductsToProcessCart(
+        _cartProducts[enterpriseCode.toString()]!,
+      );
+
+      request.body = json.encode(
+        "{'crossId': '${UserIdentity.identity}',"
+        "'EnterpriseCode': $enterpriseCode,"
+        "'RequestTypeCode': $requestTypeCode,"
+        //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
+        "'CustomerCode': $customerCode,"
+        "'Products': $processCartItems}",
+      );
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      String responseInString = await response.stream.bytesToString();
+
+      print('resposta para carregar os preços do carrinho = $responseInString');
+
+      if (responseInString.contains("Message")) {
+        //significa que deu algum erro
+        _errorMessageProcessCart = json.decode(responseInString)["Message"];
+        _isLoadingProcessCart = false;
+
         ShowErrorMessage.showErrorMessage(
-          error: _errorMessageRequestType,
+          error: _errorMessageProcessCart,
           context: context,
         );
         notifyListeners();
         return;
       }
 
-      SaleRequestRequestTypeModel.responseAsStringToSaleRequestRequestTypeModel(
-        responseAsString: responseInString,
-        listToAdd: _requests,
+      SaleRequestProcessCartModel.updateCartWithProcessCartResponse(
+        jsonSaleRequest: _jsonSaleRequest,
+        apiItemsResponse: responseInString,
+        enterpriseCode: enterpriseCode.toString(),
+        cartProducts: _cartProducts[enterpriseCode.toString()]!,
       );
+
+      _updatedCart = false;
     } catch (e) {
-      print("Erro para obter os produtos: $e");
-      _errorMessageRequestType = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      print("Erro para obter os preços do carrinho: $e");
       ShowErrorMessage.showErrorMessage(
-        error: _errorMessageRequestType,
+        error: _errorMessageProcessCart,
         context: context,
       );
     }
 
-    _isLoadingRequestType = false;
+    _isLoadingProcessCart = false;
     notifyListeners();
   }
 
@@ -549,16 +566,17 @@ class SaleRequestProvider with ChangeNotifier {
     required bool value,
     required String enterpriseCode,
   }) async {
-    _costumers[enterpriseCode]?.forEach((element) {
+    _customers[enterpriseCode]?.forEach((element) {
       element.selected = false;
     });
-    _costumers[enterpriseCode]?[index].selected = value;
+    _customers[enterpriseCode]?[index].selected = value;
 
+    _updatedCart = true;
     await _updateCostumerInDatabase();
     notifyListeners();
   }
 
-  Future<void> getCostumers({
+  Future<void> getCustomers({
     required BuildContext context,
     required String controllerText,
     required String enterpriseCode,
@@ -568,23 +586,23 @@ class SaleRequestProvider with ChangeNotifier {
 // 3=ApproximateName
     int? codeValue = int.tryParse(controllerText);
     if (codeValue == null) {
-      await _getCostumers(
+      await _getCustomers(
         context: context,
         searchTypeInt: 3, //ApproximateName
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else {
-      await _getCostumers(
+      await _getCustomers(
         context: context,
         searchTypeInt: 2, //exactCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
 
-      if (costumersCount(enterpriseCode) > 1) return;
+      if (customersCount(enterpriseCode) > 1) return;
 
-      await _getCostumers(
+      await _getCustomers(
         context: context,
         searchTypeInt: 1, //exactCnpjCpfNumber
         controllerText: controllerText,
@@ -593,7 +611,7 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _getCostumers({
+  Future<void> _getCustomers({
     required BuildContext context,
     required int searchTypeInt,
     required String controllerText,
@@ -603,7 +621,7 @@ class SaleRequestProvider with ChangeNotifier {
 // 2=ExactCode
 // 3=ApproximateName
 
-    _clearCostumers(enterpriseCode);
+    _clearcustomers(enterpriseCode);
 
     _errorMessageCostumer = "";
     _isLoadingCostumer = true;
@@ -624,7 +642,7 @@ class SaleRequestProvider with ChangeNotifier {
       http.StreamedResponse response = await request.send();
       String responseInString = await response.stream.bytesToString();
 
-      print('resposta para consulta do Costumers = $responseInString');
+      print('resposta para consulta do customers = $responseInString');
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
@@ -635,13 +653,13 @@ class SaleRequestProvider with ChangeNotifier {
         return;
       }
 
-      if (_costumers[enterpriseCode] == null) {
-        _costumers[enterpriseCode] = [];
+      if (_customers[enterpriseCode] == null) {
+        _customers[enterpriseCode] = [];
       }
 
       SaleRequestCostumerModel.responseAsStringToSaleRequestCostumerModel(
         responseAsString: responseInString,
-        listToAdd: _costumers[enterpriseCode]!,
+        listToAdd: _customers[enterpriseCode]!,
       );
 
       await _updateCostumerInDatabase();
@@ -697,7 +715,7 @@ class SaleRequestProvider with ChangeNotifier {
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
         _errorMessageProducts = json.decode(responseInString)["Message"];
-        _isLoadingRequestType = false;
+        _isLoadingRequests = false;
 
         notifyListeners();
         return;
@@ -753,7 +771,7 @@ class SaleRequestProvider with ChangeNotifier {
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
         _errorMessageProducts = json.decode(responseInString)["Message"];
-        _isLoadingRequestType = false;
+        _isLoadingRequests = false;
 
         notifyListeners();
         return;
@@ -834,38 +852,13 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  saveSaleRequest({
+  Future<void> saveSaleRequest({
     required String enterpriseCode,
     required int requestTypeCode,
     required BuildContext context,
   }) async {
-    List cartListCopyToRemoveKeys = [];
-    _cartProducts[enterpriseCode]!.forEach((element) {
-      cartListCopyToRemoveKeys.add(json.decode(json.encode(
-          element))); //fazendo uma cópia da lista _cartProducts. Fazendo cópia por atribuição estava apontando pro mesmo local de memória
-    });
-
-    _removeNotUsedKeysFromCart(cartListCopyToRemoveKeys);
-
-    String cartString = cartListCopyToRemoveKeys
-        .toString()
-        .replaceAll(RegExp(r'ProductPackingCode'), '\"ProductPackingCode\"')
-        .replaceAll(RegExp(r', Quantity'), ',\"Quantity\"')
-        .replaceAll(RegExp(r', Value'), ',\"value\"')
-        .replaceAll(RegExp(r', IncrementPercentageOrValue'),
-            ',\"IncrementPercentageOrValue\"')
-        .replaceAll(RegExp(r', IncrementValue'), ',\"IncrementValue\"')
-        .replaceAll(RegExp(r', DiscountPercentageOrValue'),
-            ',\"DiscountPercentageOrValue\"')
-        .replaceAll(RegExp(r', DiscountValue'), ',\"DiscountValue\"')
-        .replaceAll(
-            RegExp(r', ExpectedDeliveryDate'), ',\"ExpectedDeliveryDate\"');
-
-    int costumerCode = getCostumerCode(enterpriseCode);
-
-    String saleRequestBodyString =
-        "{\"crossId\": \"${UserIdentity.identity}\",\"EnterpriseCode\": $enterpriseCode,\"RequestTypeCode\": $requestTypeCode,\"SellerCode\": 0,\"CustomerCode\": $costumerCode," +
-            "\"Products\": $cartString}";
+    _jsonSaleRequest["crossId"] = '${UserIdentity.identity}';
+    var encodeJsonSaleRequest = json.encode(_jsonSaleRequest);
 
     _errorMessageSaveSaleRequest = "";
     _isLoadingSaveSaleRequest = true;
@@ -875,7 +868,7 @@ class SaleRequestProvider with ChangeNotifier {
       var headers = {'Content-Type': 'application/json'};
       var request =
           http.Request('POST', Uri.parse('${BaseUrl.url}/SaleRequest/Insert'));
-      request.body = json.encode(saleRequestBodyString);
+      request.body = json.encode(encodeJsonSaleRequest);
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
@@ -886,7 +879,7 @@ class SaleRequestProvider with ChangeNotifier {
       if (responseInString.contains("sucesso")) {
         await clearCart(enterpriseCode);
 
-        await _clearCostumers(enterpriseCode);
+        await _clearcustomers(enterpriseCode);
 
         _lastSaleRequestSaved = json.decode(responseInString)["Message"];
         int index = _lastSaleRequestSaved.indexOf(RegExp(r'\('));
@@ -917,7 +910,7 @@ class SaleRequestProvider with ChangeNotifier {
         return;
       }
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      print("Erro para salvar o pedido: $e");
       _errorMessageSaveSaleRequest =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowErrorMessage.showErrorMessage(

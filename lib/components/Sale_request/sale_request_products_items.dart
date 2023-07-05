@@ -82,23 +82,6 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     );
   }
 
-  bool isWholePracticedPrice({
-    required int index,
-    required SaleRequestProductsModel product,
-    required double quantityToAdd,
-    required double totalItensInCart,
-  }) {
-    if (widget.consultedProductController.text.isEmpty) {
-      quantityToAdd++;
-    }
-    if (product.MinimumWholeQuantity > 0 &&
-        product.WholePracticedPrice > 0 &&
-        (quantityToAdd + totalItensInCart) >= product.MinimumWholeQuantity) {
-      return true;
-    } else
-      return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
@@ -233,30 +216,15 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                             value: ConvertString.convertToBRL(
                               product.RetailPracticedPrice,
                             ),
-                            subtitleColor: isWholePracticedPrice(
-                                      index: index,
-                                      product: product,
-                                      quantityToAdd: _quantityToAdd,
-                                      totalItensInCart: _totalItensInCart,
-                                    ) ||
-                                    selectedIndex != index
-                                ? Colors.black
-                                : Theme.of(context).colorScheme.primary,
+                            subtitleColor:
+                                Theme.of(context).colorScheme.primary,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Preço de atacado",
                             value: ConvertString.convertToBRL(
                               product.WholePracticedPrice,
                             ),
-                            subtitleColor: isWholePracticedPrice(
-                                      index: index,
-                                      product: product,
-                                      quantityToAdd: _quantityToAdd,
-                                      totalItensInCart: _totalItensInCart,
-                                    ) &&
-                                    selectedIndex == index
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.black,
+                            subtitleColor: Colors.black,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Qtd mínima p/ atacado",

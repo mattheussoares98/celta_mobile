@@ -4,7 +4,9 @@ import 'package:celta_inventario/Pages/Inicial_pages/enterprise_json_page.dart';
 import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
 import 'package:celta_inventario/Pages/receipt_conference_page.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_model_page.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/providers/enterprise_json_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
@@ -146,6 +148,9 @@ class MyApp extends StatelessWidget {
           APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
           APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
           APPROUTES.ENTERPRISE_JSON: (ctx) => const EnterpriseJsonPage(),
+          APPROUTES.SALE_REQUEST_MODEL: (ctx) => const SaleRequestModelPage(),
+          APPROUTES.SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL: (ctx) =>
+              const SaleRequestManualDefaultRequestModelPage(),
         },
       ),
     );

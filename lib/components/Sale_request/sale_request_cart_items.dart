@@ -1,5 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/insert_quantity_textformfield.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_cart_products_items.dart';
+import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
+import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
@@ -22,36 +24,6 @@ class SaleRequestCartItems extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
-  Widget titleAndSubtitle({
-    required String title,
-    required String subtitle,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 100, 97, 97),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          subtitle,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Colors.grey,
-          ),
-        ),
-        const SizedBox(height: 5),
-      ],
-    );
-  }
-
-  // TextEditingController _textEditingController = TextEditingController();
-
   int _selectedIndex = -1;
 
   FocusNode _focusNode = FocusNode();
@@ -89,46 +61,8 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
     }
   }
 
-  TextStyle hasMinimumWholeQuantity({
-    bool isSaleRetailPrice = false,
-    required double minimumWholeQuantity,
-  }) {
-    var green = TextStyle(
-      color: Theme.of(context).colorScheme.primary,
-      fontSize: 17,
-      fontWeight: FontWeight.bold,
-    );
-    var black = const TextStyle(
-      color: Colors.black,
-      fontSize: 17,
-      fontWeight: FontWeight.bold,
-    );
-    double? controllerInDouble = double.tryParse(
-        widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'));
-
-    if (isSaleRetailPrice) {
-      if (controllerInDouble == null || minimumWholeQuantity <= 0) {
-        return green;
-      } else if (controllerInDouble < minimumWholeQuantity) {
-        return green;
-      } else {
-        return black;
-      }
-    } else {
-      if (controllerInDouble == null || minimumWholeQuantity <= 0) {
-        return black;
-      } else if (controllerInDouble >= minimumWholeQuantity) {
-        return green;
-      } else {
-        return black;
-      }
-    }
-  }
-
   String getNewPrice({
-    required double minimumWholeQuantity,
-    required double retailPracticedPrice,
-    required double wholePracticedPrice,
+    required SaleRequestCartProductsModel product,
   }) {
     double? controllerInDouble = double.tryParse(
         widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'));
@@ -138,37 +72,14 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
     }
 
     return ConvertString.convertToBRL(
-      getPraticedPrice(
-            minimumWholeQuantity: minimumWholeQuantity,
-            retailPracticedPrice: retailPracticedPrice,
-            wholePracticedPrice: wholePracticedPrice,
-          ) *
-          controllerInDouble,
+      product.RetailPracticedPrice * controllerInDouble,
     );
-  }
-
-  double getPraticedPrice({
-    required double minimumWholeQuantity,
-    required double retailPracticedPrice,
-    required double wholePracticedPrice,
-  }) {
-    double? controllerInDouble = double.tryParse(
-      widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
-    );
-
-    if (controllerInDouble == null) {
-      return 0;
-    } else if (controllerInDouble >= minimumWholeQuantity &&
-        minimumWholeQuantity > 0) {
-      return wholePracticedPrice;
-    } else {
-      return retailPracticedPrice;
-    }
   }
 
   updateProductInCart({
     required SaleRequestProvider saleRequestProvider,
     required dynamic product,
+    required int index,
   }) {
     double? controllerInDouble = double.tryParse(
       widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
@@ -183,11 +94,8 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
         enterpriseCode: widget.enterpriseCode.toString(),
         productPackingCode: product.ProductPackingCode,
         quantity: controllerInDouble,
-        value: getPraticedPrice(
-          minimumWholeQuantity: product.MinimumWholeQuantity,
-          retailPracticedPrice: product.RetailPracticedPrice,
-          wholePracticedPrice: product.WholePracticedPrice,
-        ),
+        value: product.RetailPracticedPrice,
+        index: index,
       );
       widget.textEditingController.clear();
     }
@@ -216,7 +124,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
               child: ListView.builder(
                 itemCount: cartProductsCount,
                 itemBuilder: (context, index) {
-                  var product = cartProducts[index];
+                  SaleRequestCartProductsModel product = cartProducts[index];
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -258,7 +166,9 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                             flex: 55,
                                             child: InsertQuantityTextFormField(
                                               isLoading: saleRequestProvider
-                                                  .isLoadingSaveSaleRequest,
+                                                      .isLoadingSaveSaleRequest ||
+                                                  saleRequestProvider
+                                                      .isLoadingProcessCart,
                                               lengthLimitingTextInputFormatter:
                                                   8,
                                               focusNode: _focusNode,
@@ -276,6 +186,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                     saleRequestProvider:
                                                         saleRequestProvider,
                                                     product: product,
+                                                    index: index,
                                                   ),
                                                 );
                                               },
@@ -306,12 +217,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                 FittedBox(
                                                   child: Text(
                                                     getNewPrice(
-                                                      minimumWholeQuantity: product
-                                                          .MinimumWholeQuantity,
-                                                      retailPracticedPrice: product
-                                                          .RetailPracticedPrice,
-                                                      wholePracticedPrice: product
-                                                          .WholePracticedPrice,
+                                                      product: product,
                                                     ),
                                                     style: TextStyle(
                                                       fontSize: 20,
@@ -341,24 +247,29 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  "Preço venda: ${ConvertString.convertToBRL(product.RetailPracticedPrice)}",
-                                                  style: hasMinimumWholeQuantity(
-                                                      minimumWholeQuantity: product
-                                                          .MinimumWholeQuantity,
-                                                      isSaleRetailPrice: true),
+                                                TitleAndSubtitle
+                                                    .titleAndSubtitle(
+                                                  title: "Preço venda",
+                                                  value: ConvertString
+                                                      .convertToBRL(
+                                                    product
+                                                        .RetailPracticedPrice,
+                                                  ),
                                                 ),
-                                                Text(
-                                                  "Mín. atacado : ${product.MinimumWholeQuantity}",
-                                                  style: hasMinimumWholeQuantity(
-                                                      minimumWholeQuantity: product
-                                                          .MinimumWholeQuantity),
+                                                TitleAndSubtitle
+                                                    .titleAndSubtitle(
+                                                  title: "Mín. atacado",
+                                                  value: product
+                                                          .MinimumWholeQuantity
+                                                      .toString(),
                                                 ),
-                                                Text(
-                                                  "Preço atacado: ${ConvertString.convertToBRL(product.WholePracticedPrice)}",
-                                                  style: hasMinimumWholeQuantity(
-                                                      minimumWholeQuantity: product
-                                                          .MinimumWholeQuantity),
+                                                TitleAndSubtitle
+                                                    .titleAndSubtitle(
+                                                  title: "Preço atacado",
+                                                  value: ConvertString
+                                                      .convertToBRL(
+                                                    product.WholePracticedPrice,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -387,6 +298,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                                       saleRequestProvider,
                                                                   product:
                                                                       product,
+                                                                  index: index,
                                                                 );
 
                                                                 FocusScope.of(
@@ -410,7 +322,8 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                           cartProductsCount > 1)
                         TextButton(
                           onPressed:
-                              saleRequestProvider.isLoadingSaveSaleRequest
+                              saleRequestProvider.isLoadingSaveSaleRequest ||
+                                      saleRequestProvider.isLoadingProcessCart
                                   ? null
                                   : () {
                                       ShowAlertDialog().showAlertDialog(

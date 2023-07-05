@@ -25,24 +25,77 @@ class _SaleRequestCartDetailsPageState
     extends State<SaleRequestCartDetailsPage> {
   TextEditingController _textEditingController = TextEditingController();
 
+  String textButtonMessage(SaleRequestProvider saleRequestProvider) {
+    if (saleRequestProvider
+            .cartProductsCount(widget.enterpriseCode.toString()) ==
+        0) {
+      return "INSIRA PRODUTOS";
+    } else if (saleRequestProvider
+            .getSelectedCustomerCode(widget.enterpriseCode.toString()) ==
+        -1) {
+      return "INFORME O CLIENTE";
+    } else if (saleRequestProvider.updatedCart) {
+      return "CALCULAR PREÇOS";
+    } else {
+      return "SALVAR PEDIDO";
+    }
+  }
+
+  saveSaleRequestFunction(SaleRequestProvider saleRequestProvider) {
+    if (saleRequestProvider.isLoadingSaveSaleRequest ||
+        saleRequestProvider.isLoadingProcessCart) {
+      return null;
+    } else if (saleRequestProvider
+            .getSelectedCustomerCode(widget.enterpriseCode.toString()) ==
+        -1) {
+      return null;
+    } else if (saleRequestProvider
+            .cartProductsCount(widget.enterpriseCode.toString()) ==
+        0) {
+      return null;
+    } else if (saleRequestProvider.updatedCart) {
+      return () => {
+            ShowAlertDialog().showAlertDialog(
+              context: context,
+              title: "Calcular preços?",
+              confirmMessage: "CALCULAR",
+              cancelMessage: "CANCELAR",
+              subtitle:
+                  "Os preços dos produtos devem ser calculados pelo CeltaBS devido a grande variedade de configurações que podem afetar o preço dos produtos (negociação de vendas, preço de oferta, preço de atacado, promoção, etc)",
+              function: () async {
+                await saleRequestProvider.processCart(
+                  context: context,
+                  enterpriseCode: widget.enterpriseCode,
+                  requestTypeCode: widget.requestTypeCode,
+                  customerCode: saleRequestProvider.getSelectedCustomerCode(
+                    widget.enterpriseCode.toString(),
+                  ),
+                );
+              },
+            )
+          };
+    } else {
+      return () => {
+            ShowAlertDialog().showAlertDialog(
+              context: context,
+              title: "Salvar pedido",
+              subtitle: "Deseja salvar o pedido?",
+              function: () async {
+                await saleRequestProvider.saveSaleRequest(
+                  enterpriseCode: widget.enterpriseCode.toString(),
+                  requestTypeCode: widget.requestTypeCode,
+                  context: context,
+                );
+              },
+            )
+          };
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
-
-    String textButtonMessage(SaleRequestProvider saleRequestProvider) {
-      if (saleRequestProvider
-              .cartProductsCount(widget.enterpriseCode.toString()) ==
-          0) {
-        return "INSIRA PRODUTOS";
-      } else if (saleRequestProvider
-              .getCostumerCode(widget.enterpriseCode.toString()) ==
-          -1) {
-        return "INFORME O CLIENTE";
-      } else {
-        return "SALVAR PEDIDO";
-      }
-    }
 
     int cartProductsCount =
         saleRequestProvider.cartProductsCount(widget.enterpriseCode.toString());
@@ -152,14 +205,16 @@ class _SaleRequestCartDetailsPageState
                                 fontSize: 14,
                               ),
                             ),
-                            Text(
-                              ConvertString.convertToBRL(
-                                totalCartPrice,
-                              ),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                            FittedBox(
+                              child: Text(
+                                ConvertString.convertToBRL(
+                                  totalCartPrice,
+                                ),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ],
@@ -172,41 +227,19 @@ class _SaleRequestCartDetailsPageState
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ElevatedButton(
                             onPressed:
-                                saleRequestProvider.isLoadingSaveSaleRequest ||
-                                        saleRequestProvider.getCostumerCode(
-                                                widget.enterpriseCode
-                                                    .toString()) ==
-                                            -1 ||
-                                        saleRequestProvider.cartProductsCount(
-                                                widget.enterpriseCode
-                                                    .toString()) ==
-                                            0
-                                    ? null
-                                    : () async {
-                                        ShowAlertDialog().showAlertDialog(
-                                          context: context,
-                                          title: "Salvar pedido",
-                                          subtitle: "Deseja salvar o pedido?",
-                                          function: () async {
-                                            await saleRequestProvider
-                                                .saveSaleRequest(
-                                              enterpriseCode: widget
-                                                  .enterpriseCode
-                                                  .toString(),
-                                              requestTypeCode:
-                                                  widget.requestTypeCode,
-                                              context: context,
-                                            );
-                                          },
-                                        );
-                                      },
-                            child: saleRequestProvider.isLoadingSaveSaleRequest
+                                saveSaleRequestFunction(saleRequestProvider),
+                            child: saleRequestProvider
+                                        .isLoadingSaveSaleRequest ||
+                                    saleRequestProvider.isLoadingProcessCart
                                 ? FittedBox(
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        const Text("SALVANDO PEDIDO   "),
+                                        Text(saleRequestProvider
+                                                .isLoadingSaveSaleRequest
+                                            ? "SALVANDO PEDIDO   "
+                                            : "CALCULANDO PREÇOS   "),
                                         Container(
                                           height: 20,
                                           width: 20,

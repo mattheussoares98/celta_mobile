@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
+import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -10,31 +11,37 @@ class SaleRequestCartProductsItems {
   static Widget _titleAndSubtitle({
     required String title,
     required String subtitle,
+    required int flex,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 100, 97, 97),
+    return Expanded(
+      flex: flex,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 100, 97, 97),
+              ),
             ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 15,
-              color: Colors.grey,
+            const SizedBox(height: 5),
+            FittedBox(
+              child: Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 5),
-        ],
+            const SizedBox(height: 5),
+          ],
+        ),
       ),
     );
   }
@@ -49,7 +56,8 @@ class SaleRequestCartProductsItems {
     required int selectedIndex,
   }) {
     return InkWell(
-      onTap: saleRequestProvider.isLoadingSaveSaleRequest
+      onTap: saleRequestProvider.isLoadingSaveSaleRequest ||
+              saleRequestProvider.isLoadingProcessCart
           ? null
           : () async {
               await changeFocus();
@@ -108,7 +116,9 @@ class SaleRequestCartProductsItems {
                         ),
                       ),
                       IconButton(
-                        onPressed: saleRequestProvider.isLoadingSaveSaleRequest
+                        onPressed: saleRequestProvider
+                                    .isLoadingSaveSaleRequest ||
+                                saleRequestProvider.isLoadingProcessCart
                             ? null
                             : () {
                                 ShowAlertDialog().showAlertDialog(
@@ -139,7 +149,8 @@ class SaleRequestCartProductsItems {
                               },
                         icon: Icon(
                           Icons.delete,
-                          color: saleRequestProvider.isLoadingSaveSaleRequest
+                          color: saleRequestProvider.isLoadingSaveSaleRequest ||
+                                  saleRequestProvider.isLoadingProcessCart
                               ? Colors.grey
                               : Colors.red,
                         ),
@@ -147,57 +158,81 @@ class SaleRequestCartProductsItems {
                     ],
                   ),
                   Row(
-                    // mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             _titleAndSubtitle(
+                              flex: 20,
                               title: "Qtd",
                               subtitle: product.Quantity.toStringAsFixed(3)
                                   .replaceAll(RegExp(r'\.'), ','),
                             ),
                             _titleAndSubtitle(
+                              flex: 20,
                               title: "Preço",
                               subtitle: ConvertString.convertToBRL(
                                 product.Value.toString(),
                               ),
                             ),
+                            const SizedBox(width: 5),
                             _titleAndSubtitle(
+                              flex: 30,
                               title: "Total",
                               subtitle: ConvertString.convertToBRL(
-                                "${(product.Quantity * product.Value)} ",
+                                "${(product.Quantity * product.Value) - product.DiscountValue} ",
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30),
-                        child: IconButton(
-                          onPressed:
-                              saleRequestProvider.isLoadingSaveSaleRequest
-                                  ? null
-                                  : () {
-                                      changeFocus();
-                                    },
-                          icon: selectedIndex != -1
-                              ? Icon(
-                                  Icons.expand_less,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )
-                              : Icon(
-                                  Icons.edit,
-                                  color: saleRequestProvider
-                                          .isLoadingSaveSaleRequest
-                                      ? Colors.grey
-                                      : Theme.of(context).colorScheme.primary,
-                                ),
-                        ),
+                      IconButton(
+                        onPressed:
+                            saleRequestProvider.isLoadingSaveSaleRequest ||
+                                    saleRequestProvider.isLoadingProcessCart
+                                ? null
+                                : () {
+                                    changeFocus();
+                                  },
+                        icon: selectedIndex != -1
+                            ? Icon(
+                                Icons.expand_less,
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                            : Icon(
+                                Icons.edit,
+                                color: saleRequestProvider
+                                            .isLoadingSaveSaleRequest ||
+                                        saleRequestProvider.isLoadingProcessCart
+                                    ? Colors.grey
+                                    : Theme.of(context).colorScheme.primary,
+                              ),
                       ),
                     ],
                   ),
+                  if (product.DiscountValue > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Column(
+                        children: [
+                          TitleAndSubtitle.titleAndSubtitle(
+                            title: "Desconto",
+                            subtitleColor:
+                                Theme.of(context).colorScheme.primary,
+                            value: ConvertString.convertToBRL(
+                              product.DiscountValue,
+                            ),
+                          ),
+                          TitleAndSubtitle.titleAndSubtitle(
+                            subtitleColor:
+                                Theme.of(context).colorScheme.primary,
+                            value: saleRequestProvider
+                                .getDiscountDescription(product),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),

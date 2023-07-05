@@ -6,8 +6,12 @@ class ShowAlertDialog {
     required String title,
     required Function() function,
     String? subtitle,
-    double titleSize = 30,
-    double subtitleSize = 20,
+    double? titleSize = 30,
+    double? subtitleSize = 20,
+    String? confirmMessage = "SIM",
+    String? cancelMessage = "NÃO",
+    double? confirmMessageSize = 40,
+    double? cancelMessageSize = 40,
   }) {
     showDialog(
       context: context,
@@ -39,19 +43,22 @@ class ShowAlertDialog {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                     onPressed: () {
                       function();
                       Navigator.of(context).pop();
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.all(30),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 30,
+                        horizontal: 30,
+                      ),
                       child: Text(
-                        'SIM',
+                        confirmMessage!,
                         style: TextStyle(
-                          fontSize: 300,
+                          fontSize: confirmMessageSize,
                         ),
                       ),
                     ),
@@ -61,17 +68,20 @@ class ShowAlertDialog {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(20),
                         )),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.all(30),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 30,
+                        horizontal: 30,
+                      ),
                       child: Text(
-                        'NÃO',
+                        cancelMessage!,
                         style: TextStyle(
-                          fontSize: 300,
+                          fontSize: cancelMessageSize,
                         ),
                       ),
                     ),

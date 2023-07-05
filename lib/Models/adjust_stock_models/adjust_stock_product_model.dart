@@ -32,6 +32,7 @@ class AdjustStockProductModel {
   final int ProductPackingCode; /* ": 3, */
   String CurrentStock; /* ": "-19,000", */
   String SaldoEstoqueVenda; /* ": "-20,000", */
+  final List Stocks;
 
   AdjustStockProductModel({
     required this.ProductCode,
@@ -65,6 +66,7 @@ class AdjustStockProductModel {
     required this.SaldoEstoqueVenda,
     required this.EtiquetaPendente,
     required this.EtiquetaPendenteDescricao,
+    required this.Stocks,
   });
 
   static resultAsStringToAdjustStockProductModel({
@@ -110,6 +112,7 @@ class AdjustStockProductModel {
           SaldoEstoqueVenda: data["SaldoEstoqueVenda"],
           EtiquetaPendente: data["EtiquetaPendente"],
           EtiquetaPendenteDescricao: data["EtiquetaPendenteDescricao"],
+          Stocks: data["Stocks"] == null ? [] : data["Stocks"],
         ),
       );
     });

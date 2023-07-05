@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
               imagePath: 'lib/assets/Images/saleRequest.jpg',
               routine: 'Pedido de vendas',
               route: APPROUTES.ENTERPRISE_JSON,
-              nextRoute: APPROUTES.SALE_REQUEST,
+              nextRoute: APPROUTES.SALE_REQUEST_MODEL,
               context: context,
             ),
             const SizedBox(height: 5),

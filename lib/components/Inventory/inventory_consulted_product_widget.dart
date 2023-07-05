@@ -39,6 +39,8 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
     if (quantity >= 10000) {
       //se a quantidade digitada for maior que 10.000, vai abrir um alertDialog pra confirmar a quantidade
       ShowAlertDialog().showAlertDialog(
+        confirmMessageSize: 300,
+        cancelMessageSize: 300,
         context: context,
         title: 'Deseja confirmar a quantidade?',
         subtitle: isSubtract
@@ -80,6 +82,8 @@ class ConsultedProductWidgetState extends State<ConsultedProductWidget> {
     }
 
     ShowAlertDialog().showAlertDialog(
+      confirmMessageSize: 300,
+      cancelMessageSize: 300,
       context: context,
       title: "Deseja realmente anular a quantidade?",
       function: () async {

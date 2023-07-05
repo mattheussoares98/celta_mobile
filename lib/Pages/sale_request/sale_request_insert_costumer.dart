@@ -37,7 +37,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           isLoading: saleRequestProvider.isLoadingCostumer,
           autofocus: false,
           onPressSearch: () async {
-            await saleRequestProvider.getCostumers(
+            await saleRequestProvider.getCustomers(
               context: context,
               controllerText: searchCostumerController.text,
               enterpriseCode: widget.enterpriseCode.toString(),
@@ -49,19 +49,19 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           useCamera: false,
         ),
         if (saleRequestProvider
-                .costumersCount(widget.enterpriseCode.toString()) >
+                .customersCount(widget.enterpriseCode.toString()) >
             0)
           SaleRequestCostumersItems(enterpriseCode: widget.enterpriseCode),
         if (saleRequestProvider.errorMessageCostumer != "" &&
             saleRequestProvider
-                    .costumersCount(widget.enterpriseCode.toString()) ==
+                    .customersCount(widget.enterpriseCode.toString()) ==
                 0)
           Expanded(
             child: TryAgainWidget.tryAgain(
               errorMessage:
                   'Ocorreu um erro para consultar o cliente "consumidor"',
               request: () async {
-                await saleRequestProvider.getCostumers(
+                await saleRequestProvider.getCustomers(
                   context: context,
                   controllerText: "-1",
                   enterpriseCode: widget.enterpriseCode.toString(),
@@ -71,7 +71,7 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
           ),
         if (saleRequestProvider.errorMessageCostumer != "" &&
             saleRequestProvider
-                    .costumersCount(widget.enterpriseCode.toString()) >
+                    .customersCount(widget.enterpriseCode.toString()) >
                 0)
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageCostumer,

@@ -13,65 +13,86 @@ class SaleRequestManualDefaultRequestModelPage extends StatelessWidget {
       "Pesquise os modelos de pedido, insira o modelo de pedido de vendas que será utilizado como padrão no aplicativo e aperte F12 para salvar",
       "No Celta Mobile, consulte novamente a empresa no processo de pedido de vendas, pois é na consulta de empresas que carrega a informação do modelo de pedido padrão",
     ];
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          const Text(
-            "Para conseguir criar pedidos de vendas pelo Celta Mobile, precisa configurar um modelo de pedido de vendas padrão no Celta BS. Todos pedidos de venda criados através do aplicativo usarão esse modelo configurado como padrão. \n\nPara cadastrar, siga o passo a passo abaixo",
-            style: TextStyle(
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const FittedBox(
+          child: Text(
+            'CADASTRAR MODELO DE PEDIDOS PADRÃO',
           ),
-          const SizedBox(height: 40),
-          Expanded(
-            child: ListView.separated(
-              itemCount: _steps.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          child: FittedBox(
-                            child: Text(
-                              (index + 1).toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                    offset: Offset(0, 0),
-                                    blurRadius: 2.0,
-                                    color: Colors.grey,
-                                  ),
-                                ],
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_outlined,
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            const Text(
+              "Não há um modelo de pedido padrão cadastrado.\n\nO modelo de pedido padrão sempre poderá ser selecionado por qualquer usuário.\n\nPara cadastrar um modelo de pedido padrão, siga o passo a passo abaixo",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Divider(color: Colors.black),
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemCount: _steps.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 12,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            child: FittedBox(
+                              child: Text(
+                                (index + 1).toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      offset: Offset(0, 0),
+                                      blurRadius: 2.0,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(_steps[index]),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const Divider(
-                  color: Colors.grey,
-                );
-              },
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(_steps[index]),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider(
+                    color: Colors.grey,
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
