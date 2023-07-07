@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:flutter/material.dart';
 
 class ImageComponent {
@@ -15,48 +16,42 @@ class ImageComponent {
           arguments: nextRoute,
         );
       },
-      child: Card(
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-          side: BorderSide(
-            width: 3,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
+      child: PersonalizedCard.personalizedCard(
+        context: context,
         child: Stack(
-          fit: StackFit.passthrough,
+          alignment: Alignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset(
-                imagePath,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.contain,
-              ),
+            Image.asset(
+              imagePath,
+              width: double.infinity,
+              fit: BoxFit.contain,
             ),
             Positioned(
-              bottom: 10,
-              right: 10,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black45,
-                  border: Border.all(
-                    style: BorderStyle.none,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    routine,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'OpenSans',
-                      fontSize: 20,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 2.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black45,
+                      border: Border.all(
+                        style: BorderStyle.none,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 2.0),
+                      child: Text(
+                        routine,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'OpenSans',
+                          fontSize: 15,
+                        ),
+                      ),
                     ),
                   ),
                 ),
