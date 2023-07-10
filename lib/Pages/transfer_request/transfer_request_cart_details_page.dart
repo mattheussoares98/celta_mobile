@@ -1,0 +1,276 @@
+import 'package:celta_inventario/Components/Sale_request/sale_request_cart_items.dart';
+import 'package:celta_inventario/components/Transfer_request/transfer_request_cart_items.dart';
+import 'package:celta_inventario/providers/transfer_request_provider.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class TransferRequestCartDetailsPage extends StatefulWidget {
+  final String enterpriseOriginCode;
+  final String enterpriseDestinyCode;
+  final String requestTypeCode;
+  final bool keyboardIsOpen;
+  const TransferRequestCartDetailsPage({
+    required this.enterpriseOriginCode,
+    required this.enterpriseDestinyCode,
+    required this.requestTypeCode,
+    required this.keyboardIsOpen,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<TransferRequestCartDetailsPage> createState() =>
+      _TransferRequestCartDetailsPageState();
+}
+
+class _TransferRequestCartDetailsPageState
+    extends State<TransferRequestCartDetailsPage> {
+  TextEditingController _textEditingController = TextEditingController();
+
+  String textButtonMessage({
+    required TransferRequestProvider transferRequestProvider,
+    required String enterpriseOriginCode,
+    required String enterpriseDestinyCode,
+    required String requestTypeCode,
+  }) {
+    if (transferRequestProvider.cartProductsCount(
+          enterpriseOriginCode: enterpriseOriginCode,
+          enterpriseDestinyCode: enterpriseDestinyCode,
+          requestTypeCode: requestTypeCode,
+        ) ==
+        0) {
+      return "INSIRA PRODUTOS";
+    } else {
+      return "SALVAR TRANSFERÊNCIA";
+    }
+  }
+
+  saveTransferRequestFunction({
+    required TransferRequestProvider transferRequestProvider,
+  }) {
+    if (transferRequestProvider.isLoadingSaveTransferRequest) {
+      return null;
+    } else if (transferRequestProvider.cartProductsCount(
+          enterpriseOriginCode: widget.enterpriseOriginCode,
+          enterpriseDestinyCode: widget.enterpriseDestinyCode,
+          requestTypeCode: widget.requestTypeCode,
+        ) ==
+        0) {
+      return null;
+    } else {
+      return () => {
+            ShowAlertDialog().showAlertDialog(
+              context: context,
+              title: "Salvar pedido de transferência",
+              subtitle: "Deseja salvar o pedido de transferência?",
+              function: () async {
+                await transferRequestProvider.saveTransferRequest(
+                  enterpriseOriginCode: widget.enterpriseOriginCode,
+                  enterpriseDestinyCode: widget.enterpriseDestinyCode,
+                  requestTypeCode: widget.requestTypeCode,
+                  context: context,
+                );
+              },
+            )
+          };
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TransferRequestProvider transferRequestProvider =
+        Provider.of(context, listen: true);
+
+    int cartProductsCount = transferRequestProvider.cartProductsCount(
+      enterpriseOriginCode: widget.enterpriseOriginCode,
+      enterpriseDestinyCode: widget.enterpriseDestinyCode,
+      requestTypeCode: widget.requestTypeCode,
+    );
+
+    double totalCartPrice = transferRequestProvider.getTotalCartPrice(
+      enterpriseOriginCode: widget.enterpriseOriginCode,
+      enterpriseDestinyCode: widget.enterpriseDestinyCode,
+      requestTypeCode: widget.requestTypeCode,
+    );
+
+    return Column(
+      children: [
+        TransferRequestCartItems(
+          enterpriseOriginCode: widget.enterpriseOriginCode,
+          enterpriseDestinyCode: widget.enterpriseDestinyCode,
+          requestTypeCode: widget.requestTypeCode,
+          textEditingController: _textEditingController,
+        ),
+        if (transferRequestProvider.cartProductsCount(
+              enterpriseOriginCode: widget.enterpriseOriginCode,
+              enterpriseDestinyCode: widget.enterpriseDestinyCode,
+              requestTypeCode: widget.requestTypeCode,
+            ) ==
+            0)
+          Expanded(
+            child: Container(
+              color: Colors.grey[200],
+              width: double.infinity,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FittedBox(
+                    child: Text(
+                      "O carrinho está vazio",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 20,
+                        fontFamily: "OpenSans",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        if (transferRequestProvider.lastSavedTransferRequest != "")
+          Container(
+            color: Colors.grey[200],
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FittedBox(
+                child: Text(
+                  transferRequestProvider.lastSavedTransferRequest,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: "OpenSans",
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (widget.keyboardIsOpen)
+          Container(
+            color: Colors.grey[400],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex: 15,
+                        child: Column(
+                          children: [
+                            const FittedBox(
+                              child: Text(
+                                "ITENS",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            FittedBox(
+                              child: Text(
+                                cartProductsCount.toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 40,
+                        child: Column(
+                          children: [
+                            const Text(
+                              "TOTAL",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            FittedBox(
+                              child: Text(
+                                ConvertString.convertToBRL(
+                                  totalCartPrice,
+                                ),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 60,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: ElevatedButton(
+                            onPressed: saveTransferRequestFunction(
+                              transferRequestProvider: transferRequestProvider,
+                            ),
+                            child: transferRequestProvider
+                                    .isLoadingSaveTransferRequest
+                                ? FittedBox(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        const Text("SALVANDO TRANSFERÊNCIA   "),
+                                        Container(
+                                          height: 20,
+                                          width: 20,
+                                          child:
+                                              const CircularProgressIndicator(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : FittedBox(
+                                    child: Text(
+                                      textButtonMessage(
+                                        transferRequestProvider:
+                                            transferRequestProvider,
+                                        enterpriseOriginCode:
+                                            widget.enterpriseOriginCode,
+                                        enterpriseDestinyCode:
+                                            widget.enterpriseDestinyCode,
+                                        requestTypeCode: widget.requestTypeCode,
+                                      ),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}

@@ -1,8 +1,12 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_associated_stocks_alert_dialog.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
+import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/components/Transfer_request/transfer_request_all_stocks.dart';
+import 'package:celta_inventario/components/Transfer_request/transfer_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +14,21 @@ import 'package:provider/provider.dart';
 
 import '../Global_widgets/show_alert_dialog.dart';
 
-class SaleRequestProductsItems extends StatefulWidget {
+class TransferRequestProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
-  final int enterpriseCode;
 
-  const SaleRequestProductsItems({
+  const TransferRequestProductsItems({
     required this.consultedProductController,
-    required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SaleRequestProductsItems> createState() =>
-      _SaleRequestProductsItemsState();
+  State<TransferRequestProductsItems> createState() =>
+      _TransferRequestProductsItemsState();
 }
 
-class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
+class _TransferRequestProductsItemsState
+    extends State<TransferRequestProductsItems> {
   int selectedIndex = -1;
 
   GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
@@ -54,9 +57,12 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
   //abrindo direto o campo para digitação, mesmo quando já inseriu a quantidade.
 
   void removeProduct({
-    required SaleRequestProvider saleRequestProvider,
+    required TransferRequestProvider transferRequestProvider,
     required double totalItemValue,
     required dynamic product,
+    required String enterpriseDestinyCode,
+    required String enterpriseOriginCode,
+    required String requestTypeCode,
   }) {
     ShowAlertDialog().showAlertDialog(
       context: context,
@@ -64,18 +70,17 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
       subtitle: "Deseja excluir o produto do carrinho?",
       function: () {
         setState(() {
-          saleRequestProvider.removeProductFromCart(
+          transferRequestProvider.removeProductFromCart(
             ProductPackingCode: product.ProductPackingCode,
-            enterpriseCode: widget.enterpriseCode.toString(),
+            enterpriseDestinyCode: enterpriseDestinyCode,
+            enterpriseOriginCode: enterpriseOriginCode,
+            requestTypeCode: requestTypeCode,
           );
 
-          setState(() {
-            totalItemValue = saleRequestProvider.getTotalItemValue(
-              product: product,
-              consultedProductController: widget.consultedProductController,
-              enterpriseCode: widget.enterpriseCode.toString(),
-            );
-          });
+          totalItemValue = transferRequestProvider.getTotalItemValue(
+            product: product,
+            consultedProductController: widget.consultedProductController,
+          );
         });
       },
     );
@@ -83,67 +88,69 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
 
   @override
   Widget build(BuildContext context) {
-    SaleRequestProvider saleRequestProvider = Provider.of(
+    TransferRequestProvider transferRequestProvider = Provider.of(
       context,
       listen: true,
     );
 
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
     return Expanded(
       child: Column(
-        mainAxisAlignment: saleRequestProvider.productsCount > 1
+        mainAxisAlignment: transferRequestProvider.productsCount > 1
             ? MainAxisAlignment.center
             : MainAxisAlignment.start,
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: saleRequestProvider.productsCount,
+              itemCount: transferRequestProvider.productsCount,
               itemBuilder: (context, index) {
-                var product = saleRequestProvider.products[index];
+                TransferRequestProductsModel product =
+                    transferRequestProvider.products[index];
 
                 double _totalItensInCart =
-                    saleRequestProvider.getTotalItensInCart(
+                    transferRequestProvider.getTotalItensInCart(
                   ProductPackingCode: product.ProductPackingCode,
-                  enterpriseCode: widget.enterpriseCode.toString(),
+                  enterpriseOriginCode:
+                      arguments["enterpriseOriginCode"].toString(),
+                  enterpriseDestinyCode:
+                      arguments["enterpriseDestinyCode"].toString(),
+                  requestTypeCode: arguments["requestTypeCode"].toString(),
                 );
 
-                double _totalItemValue = saleRequestProvider.getTotalItemValue(
+                double _totalItemValue =
+                    transferRequestProvider.getTotalItemValue(
                   product: product,
                   consultedProductController: widget.consultedProductController,
-                  enterpriseCode: widget.enterpriseCode.toString(),
                 );
 
-                if (saleRequestProvider.canShowInsertProductQuantityForm(
+                if (transferRequestProvider.canShowInsertProductQuantityForm(
                     product: product,
                     selectedIndex: selectedIndex,
                     index: index)) {
                   selectedIndex = index;
                   Future.delayed(const Duration(milliseconds: 300), () {
                     FocusScope.of(context).requestFocus(
-                      saleRequestProvider.consultedProductFocusNode,
+                      transferRequestProvider.consultedProductFocusNode,
                     );
                   });
                 }
-
-                // double _totalItemValue = saleRequestProvider.getTotalItemValue(
-                //   product: product,
-                //   consultedProductController: widget.consultedProductController,
-                // );
 
                 return PersonalizedCard.personalizedCard(
                   context: context,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
-                      onTap: saleRequestProvider.isLoadingProducts
+                      onTap: transferRequestProvider.isLoadingProducts
                           ? null
                           : () {
-                              if (!saleRequestProvider
+                              if (!transferRequestProvider
                                       .consultedProductFocusNode.hasFocus &&
                                   selectedIndex == index) {
                                 Future.delayed(
                                     const Duration(milliseconds: 100), () {
                                   FocusScope.of(context).requestFocus(
-                                    saleRequestProvider
+                                    transferRequestProvider
                                         .consultedProductFocusNode,
                                   );
                                 });
@@ -165,16 +172,16 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 //mudar de produto selecionado
 
                                 FocusScope.of(context).unfocus();
+                                setState(() {
+                                  selectedIndex = index;
+                                });
 
                                 Future.delayed(
                                     const Duration(milliseconds: 100), () {
                                   FocusScope.of(context).requestFocus(
-                                    saleRequestProvider
+                                    transferRequestProvider
                                         .consultedProductFocusNode,
                                   );
-                                });
-                                setState(() {
-                                  selectedIndex = index;
                                 });
                               } else {
                                 FocusScope.of(context).unfocus();
@@ -190,14 +197,11 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "PLU",
                             value: product.PLU.toString(),
-                            otherWidget: SaleRequestAssociatedStocksWidget
-                                .saleRequestAssociatedStocksWidget(
+                            otherWidget: TransferRequestAllStocks
+                                .transferRequestAllStocks(
                               context: context,
+                              hasStocks: product.Stocks.length > 0,
                               product: product,
-                              hasAssociatedsStock: product.StorageAreaAddress !=
-                                      "" ||
-                                  product.StockByEnterpriseAssociateds.length >
-                                      0,
                             ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
@@ -206,26 +210,26 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 " (${product.PackingQuantity})",
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
-                            title: "Preço de venda",
+                            title: "Preço",
                             value: ConvertString.convertToBRL(
                               product.RetailPracticedPrice,
                             ),
                             subtitleColor:
                                 Theme.of(context).colorScheme.primary,
                           ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Preço de atacado",
-                            value: ConvertString.convertToBRL(
-                              product.WholePracticedPrice,
-                            ),
-                            subtitleColor: Colors.black,
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Qtd mínima p/ atacado",
-                            value: ConvertString.convertToBrazilianNumber(
-                              product.MinimumWholeQuantity.toString(),
-                            ),
-                          ),
+                          // TitleAndSubtitle.titleAndSubtitle(
+                          //   title: "Preço de atacado",
+                          //   value: ConvertString.convertToBRL(
+                          //     product.WholePracticedPrice,
+                          //   ),
+                          //   subtitleColor: Colors.black,
+                          // ),
+                          // TitleAndSubtitle.titleAndSubtitle(
+                          //   title: "Qtd mínima p/ atacado",
+                          //   value: ConvertString.convertToBrazilianNumber(
+                          //     product.MinimumWholeQuantity.toString(),
+                          //   ),
+                          // ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Estoque de venda",
                             value: ConvertString.convertToBrazilianNumber(
@@ -239,9 +243,14 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               size: 30,
                             ),
                           ),
-                          if (saleRequestProvider.alreadyContainsProduct(
+                          if (transferRequestProvider.alreadyContainsProduct(
                             ProductPackingCode: product.ProductPackingCode,
-                            enterpriseCode: widget.enterpriseCode.toString(),
+                            enterpriseOriginCode:
+                                arguments["enterpriseOriginCode"].toString(),
+                            enterpriseDestinyCode:
+                                arguments["enterpriseDestinyCode"].toString(),
+                            requestTypeCode:
+                                arguments["requestTypeCode"].toString(),
                           ))
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -249,13 +258,19 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 FittedBox(
                                   child: Text(
                                     "Qtd no carrinho: " +
-                                        saleRequestProvider
+                                        transferRequestProvider
                                             .getTotalItensInCart(
                                               ProductPackingCode:
                                                   product.ProductPackingCode,
-                                              enterpriseCode: widget
-                                                  .enterpriseCode
+                                              enterpriseOriginCode: arguments[
+                                                      "enterpriseOriginCode"]
                                                   .toString(),
+                                              enterpriseDestinyCode: arguments[
+                                                      "enterpriseDestinyCode"]
+                                                  .toString(),
+                                              requestTypeCode:
+                                                  arguments["requestTypeCode"]
+                                                      .toString(),
                                             )
                                             .toStringAsFixed(3)
                                             .replaceAll(RegExp(r'\.'), ','),
@@ -278,10 +293,19 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     ),
                                     onPressed: _totalItensInCart > 0
                                         ? () => removeProduct(
-                                              saleRequestProvider:
-                                                  saleRequestProvider,
+                                              transferRequestProvider:
+                                                  transferRequestProvider,
                                               totalItemValue: _totalItemValue,
                                               product: product,
+                                              enterpriseOriginCode: arguments[
+                                                      "enterpriseOriginCode"]
+                                                  .toString(),
+                                              enterpriseDestinyCode: arguments[
+                                                      "enterpriseDestinyCode"]
+                                                  .toString(),
+                                              requestTypeCode:
+                                                  arguments["requestTypeCode"]
+                                                      .toString(),
                                             )
                                         : null,
                                     child: const Row(
@@ -301,8 +325,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               ],
                             ),
                           if (selectedIndex == index)
-                            SaleRequestInsertProductQuantityForm(
-                              enterpriseCode: widget.enterpriseCode,
+                            TransferRequestInsertProductQuantityForm(
                               consultedProductController:
                                   widget.consultedProductController,
                               consultedProductFormKey: _consultedProductFormKey,
@@ -315,12 +338,18 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     context: context,
                                   );
                                 }
-                                saleRequestProvider.addProductInCart(
+                                transferRequestProvider.addProductInCart(
                                   consultedProductController:
                                       widget.consultedProductController,
                                   product: product,
-                                  enterpriseCode:
-                                      widget.enterpriseCode.toString(),
+                                  enterpriseOriginCode:
+                                      arguments["enterpriseOriginCode"]
+                                          .toString(),
+                                  enterpriseDestinyCode:
+                                      arguments["enterpriseDestinyCode"]
+                                          .toString(),
+                                  requestTypeCode:
+                                      arguments["requestTypeCode"].toString(),
                                 );
                                 setState(() {
                                   selectedIndex = -1;
@@ -330,12 +359,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               updateTotalItemValue: () {
                                 setState(() {
                                   _totalItemValue =
-                                      saleRequestProvider.getTotalItemValue(
+                                      transferRequestProvider.getTotalItemValue(
                                     product: product,
                                     consultedProductController:
                                         widget.consultedProductController,
-                                    enterpriseCode:
-                                        widget.enterpriseCode.toString(),
                                   );
                                 });
                               },

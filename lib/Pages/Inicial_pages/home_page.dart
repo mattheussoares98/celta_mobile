@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: GridView.count(
         crossAxisCount: 2, // define o número de colunas
-        childAspectRatio: 1.0, // define a proporção de largura/altura dos itens
+        childAspectRatio: 0.9, // define a proporção de largura/altura dos itens
         padding: const EdgeInsets.only(top: 8),
         mainAxisSpacing: 3,
         crossAxisSpacing: 3,
@@ -99,6 +99,13 @@ class _HomePageState extends State<HomePage> {
             routine: 'Pedido de vendas',
             route: APPROUTES.ENTERPRISE_JSON,
             nextRoute: APPROUTES.SALE_REQUEST_MODEL,
+            context: context,
+          ),
+          ImageComponent.image(
+            imagePath: 'lib/assets/Images/transfer.jpg',
+            routine: 'Pedido de transferência',
+            route: APPROUTES.TRANSFER_REQUEST_MODEL,
+            nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
             context: context,
           ),
         ],

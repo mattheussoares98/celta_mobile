@@ -7,6 +7,9 @@ import 'package:celta_inventario/Pages/receipt_conference_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_model_page.dart';
+import 'package:celta_inventario/Pages/transfer_request/transfer_destiny_enterprise_page.dart';
+import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterprise_page.dart';
+import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_page.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/providers/enterprise_json_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
@@ -16,12 +19,14 @@ import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
 import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'Pages/transfer_request/transfer_page.dart';
 import 'pages/Inicial_pages/home_page.dart';
 import 'pages/Inicial_pages/login_or_home_page.dart';
 import 'pages/Inicial_pages/login_page.dart';
@@ -56,6 +61,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AdjustStockProvider()),
         ChangeNotifierProvider(create: (_) => SaleRequestProvider()),
         ChangeNotifierProvider(create: (_) => EnterpriseJsonProvider()),
+        ChangeNotifierProvider(create: (_) => TransferRequestProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -151,6 +157,13 @@ class MyApp extends StatelessWidget {
           APPROUTES.SALE_REQUEST_MODEL: (ctx) => const SaleRequestModelPage(),
           APPROUTES.SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL: (ctx) =>
               const SaleRequestManualDefaultRequestModelPage(),
+          APPROUTES.TRANSFER_REQUEST_MODEL: (ctx) =>
+              const TransferRequestModelPage(),
+          APPROUTES.TRANSFER_ORIGIN_ENTERPRISE: (ctx) =>
+              const TransferOriginEnterprisePage(),
+          APPROUTES.TRANSFER_DESTINY_ENTERPRISE: (ctx) =>
+              const TransferDestinyEnterprisePage(),
+          APPROUTES.TRANSFER: (ctx) => const TransferPage(),
         },
       ),
     );
