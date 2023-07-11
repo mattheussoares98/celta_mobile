@@ -1,11 +1,8 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Components/Sale_request/sale_request_associated_stocks_alert_dialog.dart';
-import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_all_stocks.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_insert_product_quantity_form.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';

@@ -1,6 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterprise_model.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';

@@ -1,4 +1,3 @@
-import 'package:celta_inventario/Components/Sale_request/sale_request_products_items.dart';
 import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';

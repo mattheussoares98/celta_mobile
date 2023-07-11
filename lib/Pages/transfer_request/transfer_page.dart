@@ -1,9 +1,5 @@
-import 'package:celta_inventario/Pages/sale_request/sale_request_insert_costumer.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_cart_details_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_insert_products_page.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +24,7 @@ class _TransferPageState extends State<TransferPage> {
     required int index,
     required TransferRequestProvider transferRequestProvider,
   }) {
-    if (false) return;
-    //se estiver loading
+    if (transferRequestProvider.isLoadingSaveTransferRequest) return;
 
     setState(() {
       _selectedIndex = index;

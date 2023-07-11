@@ -1,6 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/insert_quantity_textformfield.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

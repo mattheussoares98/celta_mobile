@@ -6,7 +6,6 @@ import 'package:celta_inventario/Models/transfer_request/transfer_destiny_enterp
 import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterprise_model.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

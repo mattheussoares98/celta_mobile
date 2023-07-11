@@ -1,4 +1,3 @@
-import 'package:celta_inventario/Components/Sale_request/sale_request_cart_items.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_cart_items.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
