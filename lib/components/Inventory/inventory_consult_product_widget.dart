@@ -4,15 +4,19 @@ import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'inventory_insert_individual_product_switch.dart';
+
 class ConsultProductWidget extends StatefulWidget {
   final bool isIndividual;
   final TextEditingController consultProductController;
   final TextEditingController consultedProductController;
+  final Function changeIsIndividual;
   const ConsultProductWidget({
     Key? key,
     required this.isIndividual,
     required this.consultedProductController,
     required this.consultProductController,
+    required this.changeIsIndividual,
   }) : super(key: key);
 
   @override
@@ -45,6 +49,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
       context: context,
       isIndividual: widget.isIndividual,
       consultedProductController: widget.consultProductController,
+      indexOfProduct: 0, //não da pra obter por aqui o index do produto
     );
 
     if (inventoryProvider.products.isNotEmpty && widget.isIndividual) {
@@ -77,7 +82,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
           legacyIsSelected: _isLegacyCodeSearch,
           hasLegacyCodeSearch: true,
           consultProductController: widget.consultProductController,
-          isLoading: inventoryProvider.isLoading ||
+          isLoading: inventoryProvider.isLoadingProducts ||
               inventoryProvider.isLoadingQuantity,
           onPressSearch: () async {
             await _searchProduct(
@@ -87,16 +92,16 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
           },
           focusNodeConsultProduct: inventoryProvider.consultProductFocusNode,
         ),
-        const SizedBox(height: 8),
+        // const SizedBox(height: 8),
         Row(
           children: [
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 70),
-                  maximumSize: const Size(double.infinity, 70),
+                  minimumSize: const Size(double.infinity, 50),
+                  maximumSize: const Size(double.infinity, 50),
                 ),
-                child: inventoryProvider.isLoading ||
+                child: inventoryProvider.isLoadingProducts ||
                         inventoryProvider.isLoadingQuantity
                     ? FittedBox(
                         child: Row(
@@ -154,7 +159,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                           ],
                         ),
                       ),
-                onPressed: inventoryProvider.isLoading ||
+                onPressed: inventoryProvider.isLoadingProducts ||
                         inventoryProvider.isLoadingQuantity
                     ? null
                     : () async {
@@ -166,6 +171,21 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
               ),
             ),
           ],
+        ),
+        InventoryInsertIndividualProductSwitch(
+          isIndividual: widget.isIndividual,
+          isLoading: inventoryProvider.isLoadingProducts ||
+              inventoryProvider.isLoadingQuantity,
+          changeFocus: () {
+            inventoryProvider.alterFocusToConsultProduct(
+              context: context,
+            );
+          },
+          changeValue: () {
+            setState(() {
+              widget.changeIsIndividual();
+            });
+          },
         ),
       ],
     );

@@ -2,12 +2,12 @@ import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class InsertIndividualProductWidget extends StatefulWidget {
+class InventoryInsertIndividualProductSwitch extends StatefulWidget {
   final bool isIndividual;
   final bool isLoading;
   final Function changeFocus;
   final Function changeValue;
-  const InsertIndividualProductWidget({
+  const InventoryInsertIndividualProductSwitch({
     required this.isIndividual,
     required this.isLoading,
     required this.changeFocus,
@@ -16,12 +16,12 @@ class InsertIndividualProductWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<InsertIndividualProductWidget> createState() =>
-      _InsertIndividualProductWidgetState();
+  State<InventoryInsertIndividualProductSwitch> createState() =>
+      _InventoryInsertIndividualProductSwitchState();
 }
 
-class _InsertIndividualProductWidgetState
-    extends State<InsertIndividualProductWidget> {
+class _InventoryInsertIndividualProductSwitchState
+    extends State<InventoryInsertIndividualProductSwitch> {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context);
@@ -34,7 +34,7 @@ class _InsertIndividualProductWidgetState
               style: TextButton.styleFrom(
                 foregroundColor: Colors.blue,
               ),
-              onPressed: inventoryProvider.isLoading ||
+              onPressed: inventoryProvider.isLoadingProducts ||
                       inventoryProvider.isLoadingQuantity
                   ? null
                   : () {
@@ -57,7 +57,7 @@ class _InsertIndividualProductWidgetState
               fit: BoxFit.fill,
               child: Switch(
                 activeColor: Colors.blue,
-                inactiveThumbColor: Colors.blue,
+                inactiveThumbColor: Colors.grey,
                 value: widget.isIndividual,
                 onChanged: widget.isLoading
                     ? null

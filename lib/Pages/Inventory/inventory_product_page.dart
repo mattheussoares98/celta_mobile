@@ -1,10 +1,9 @@
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/components/Inventory/inventory_products_items.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Components/Global_widgets/insert_individual_product_widget.dart';
 import '../../Components/Inventory/inventory_consult_product_widget.dart';
-import '../../Components/Inventory/inventory_consulted_product_widget.dart';
 
 class InventoryProductsPage extends StatefulWidget {
   const InventoryProductsPage({Key? key}) : super(key: key);
@@ -25,8 +24,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
   @override
   void dispose() {
     super.dispose();
-    _consultProductController.dispose();
-    _consultedProductController.dispose();
   }
 
   @override
@@ -42,7 +39,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Produtos',
+            'PRODUTOS',
           ),
           leading: IconButton(
             onPressed: () {
@@ -54,65 +51,46 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             ),
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      ConsultProductWidget(
-                        isIndividual: _isIndividual,
-                        consultProductController: _consultProductController,
-                        consultedProductController: _consultedProductController,
-                      ),
-                      InsertIndividualProductWidget(
-                        isIndividual: _isIndividual,
-                        isLoading: inventoryProvider.isLoading ||
-                            inventoryProvider.isLoadingQuantity,
-                        changeFocus: () {
-                          inventoryProvider.alterFocusToConsultProduct(
-                            context: context,
-                          );
-                        },
-                        changeValue: () {
-                          setState(() {
-                            _isIndividual = !_isIndividual;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  if (inventoryProvider.productsCount == 0 &&
-                      inventoryProvider.errorMessageGetProducts != "")
-                    Container(
-                      height: 300,
-                      child: Column(
-                        children: [
-                          ErrorMessage(
-                            errorMessage:
-                                inventoryProvider.errorMessageGetProducts,
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (inventoryProvider.products.isNotEmpty)
-                    ConsultedProductWidget(
-                      isIndividual: _isIndividual,
-                      countingCode: arguments["InventoryCountingsModel"]
-                          .codigoInternoInvCont,
-                      productPackingCode: arguments["InventoryCountingsModel"]
-                          .numeroContagemInvCont,
-                      consultedProductController: _consultedProductController,
-                    ),
-                  Container()
-                ],
-              ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                ConsultProductWidget(
+                    isIndividual: _isIndividual,
+                    consultProductController: _consultProductController,
+                    consultedProductController: _consultedProductController,
+                    changeIsIndividual: () {
+                      setState(() {
+                        _isIndividual = !_isIndividual;
+                      });
+                    }),
+              ],
             ),
-          ),
+            if (inventoryProvider.productsCount == 0 &&
+                inventoryProvider.errorMessageGetProducts != "")
+              Container(
+                height: 300,
+                child: Column(
+                  children: [
+                    ErrorMessage(
+                      errorMessage: inventoryProvider.errorMessageGetProducts,
+                    ),
+                  ],
+                ),
+              ),
+            if (inventoryProvider.products.isNotEmpty)
+              InventoryProductsItems(
+                isIndividual: _isIndividual,
+                countingCode:
+                    arguments["InventoryCountingsModel"].codigoInternoInvCont,
+                productPackingCode:
+                    arguments["InventoryCountingsModel"].numeroContagemInvCont,
+                consultedProductController: _consultedProductController,
+              ),
+            Container()
+          ],
         ),
       ),
     );

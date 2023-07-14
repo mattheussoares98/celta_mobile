@@ -54,13 +54,16 @@ class InventoryProvider with ChangeNotifier {
 
   List<InventoryProductModel> _products = [];
   List<InventoryProductModel> get products => _products;
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool _isLoadingProducts = false;
+  bool get isLoadingProducts => _isLoadingProducts;
   int get productsCount => _products.length;
   String _errorMessageGetProducts = '';
   String get errorMessageGetProducts => _errorMessageGetProducts;
   FocusNode consultedProductFocusNode = FocusNode();
   FocusNode consultProductFocusNode = FocusNode();
+
+  int _indexOfLastAddedQuantity = -1;
+  int get indexOfLastAddedQuantity => _indexOfLastAddedQuantity;
 
   Future<void> getInventory({
     required int enterpriseCode,
@@ -171,7 +174,7 @@ class InventoryProvider with ChangeNotifier {
   }) async {
     _products.clear();
     _errorMessageGetProducts = '';
-    _isLoading = true;
+    _isLoadingProducts = true;
     _lastQuantityAdded = "";
     controllerText =
         ConvertString.convertToRemoveSpecialCaracters(controllerText);
@@ -208,7 +211,7 @@ class InventoryProvider with ChangeNotifier {
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
         _errorMessageGetProducts = json.decode(responseInString)["Message"];
-        _isLoading = false;
+        _isLoadingProducts = false;
         notifyListeners();
         return;
       }
@@ -226,12 +229,12 @@ class InventoryProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      _isLoading = false;
+      _isLoadingProducts = false;
       notifyListeners();
     }
 
     if (products.isNotEmpty) {
-      _isLoading = false;
+      _isLoadingProducts = false;
     }
     notifyListeners();
   }
@@ -246,7 +249,7 @@ class InventoryProvider with ChangeNotifier {
   }) async {
     _products.clear();
     _errorMessageGetProducts = '';
-    _isLoading = true;
+    _isLoadingProducts = true;
     _lastQuantityAdded = "";
     controllerText =
         ConvertString.convertToRemoveSpecialCaracters(controllerText);
@@ -283,7 +286,7 @@ class InventoryProvider with ChangeNotifier {
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
         _errorMessageGetProducts = json.decode(responseInString)["Message"];
-        _isLoading = false;
+        _isLoadingProducts = false;
         notifyListeners();
         return;
       }
@@ -301,12 +304,12 @@ class InventoryProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      _isLoading = false;
+      _isLoadingProducts = false;
       notifyListeners();
     }
 
     if (products.isNotEmpty) {
-      _isLoading = false;
+      _isLoadingProducts = false;
     }
     notifyListeners();
   }
@@ -320,6 +323,7 @@ class InventoryProvider with ChangeNotifier {
     required bool isIndividual,
     required TextEditingController consultedProductController,
     required bool isLegacyCodeSearch,
+    required int indexOfProduct,
   }) async {
     await _getProducts(
       controllerText: controllerText,
@@ -360,10 +364,13 @@ class InventoryProvider with ChangeNotifier {
       });
     }
 
-    if (_errorMessageGetProducts == '' && isIndividual) {
-      //se estiver habilitado pra inserir individualmente, assim que efetuar a consulta do produto já vai tentar adicionar uma unidade
+    if (_errorMessageGetProducts == '' && isIndividual && productsCount == 1) {
+      //se estiver habilitado pra inserir individualmente e retornar somente um
+      //produto, assim que efetuar a consulta do produto já vai tentar adicionar
+      //uma unidade.
 
       await addQuantity(
+        indexOfProduct: indexOfProduct,
         isIndividual: isIndividual,
         context: context,
         codigoInternoInvCont: codigoInternoInvCont,
@@ -397,10 +404,12 @@ class InventoryProvider with ChangeNotifier {
     required String quantity,
     required bool isSubtract,
     required BuildContext context,
+    required int indexOfProduct,
   }) async {
     quantity = quantity.replaceAll(RegExp(r','), '.');
     if (isSubtract &&
-        double.tryParse(quantity)! > _products[0].quantidadeInvContProEmb) {
+        double.tryParse(quantity)! >
+            _products[indexOfProduct].quantidadeInvContProEmb) {
       _errorMessageQuantity = "A quantidade não pode ficar negativa!";
       ShowErrorMessage.showErrorMessage(
         error: _errorMessageQuantity,
@@ -411,6 +420,7 @@ class InventoryProvider with ChangeNotifier {
     _isLoadingQuantity = true;
     _errorMessageQuantity = '';
     _canChangeTheFocus = false;
+    _indexOfLastAddedQuantity = -1;
     notifyListeners();
 
     try {
@@ -449,6 +459,8 @@ class InventoryProvider with ChangeNotifier {
       } else {
         _lastQuantityAdded = quantity;
       }
+
+      _indexOfLastAddedQuantity = indexOfProduct;
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -466,10 +478,12 @@ class InventoryProvider with ChangeNotifier {
     required int countingCode,
     required int productPackingCode,
     required BuildContext context,
+    required int indexOfProduct,
   }) async {
     _errorMessageQuantity = '';
     _isLoadingQuantity = true;
     _lastQuantityAdded = '';
+    _indexOfLastAddedQuantity = -1;
     notifyListeners();
 
     try {
@@ -503,11 +517,7 @@ class InventoryProvider with ChangeNotifier {
         return;
       }
 
-      _products[0].quantidadeInvContProEmb = -1;
-
-      alterFocusToConsultProduct(
-        context: context,
-      );
+      _products[indexOfProduct].quantidadeInvContProEmb = -1;
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -527,26 +537,29 @@ class InventoryProvider with ChangeNotifier {
     required bool isSubtract,
     required double quantity,
     required bool isIndividual,
+    required int indexOfProduct,
   }) {
-    if (!isIndividual && _products[0].quantidadeInvContProEmb == -1) {
+    if (!isIndividual &&
+        _products[indexOfProduct].quantidadeInvContProEmb == -1) {
       //quando fica nulo, deixei pra ficar com o valor de -1 para corrigir um bug
-      _products[0].quantidadeInvContProEmb =
+      _products[indexOfProduct].quantidadeInvContProEmb =
           double.tryParse(quantity.toString().replaceAll(RegExp(r','), '.'))!;
-    } else if (isIndividual && _products[0].quantidadeInvContProEmb == -1) {
+    } else if (isIndividual &&
+        _products[indexOfProduct].quantidadeInvContProEmb == -1) {
       //quando fica nulo, deixei pra ficar com o valor de -1 para corrigir um bug
-      _products[0].quantidadeInvContProEmb = 1;
+      _products[indexOfProduct].quantidadeInvContProEmb = 1;
     } else if (isIndividual && isSubtract) {
-      _products[0].quantidadeInvContProEmb--;
+      _products[indexOfProduct].quantidadeInvContProEmb--;
     } else if (isIndividual && !isSubtract) {
-      _products[0].quantidadeInvContProEmb++;
+      _products[indexOfProduct].quantidadeInvContProEmb++;
     } else if (!isIndividual &&
         isSubtract &&
-        (_products[0].quantidadeInvContProEmb - quantity) >= 0) {
-      _products[0].quantidadeInvContProEmb -= quantity;
+        (_products[indexOfProduct].quantidadeInvContProEmb - quantity) >= 0) {
+      _products[indexOfProduct].quantidadeInvContProEmb -= quantity;
     } else {
       //se não for individual nem subtração, vai cair aqui
       //precisei sobrescrever a vírgula por ponto senão ocorria erro para somar/subtrair fracionado
-      _products[0].quantidadeInvContProEmb +=
+      _products[indexOfProduct].quantidadeInvContProEmb +=
           double.tryParse(quantity.toString().replaceAll(RegExp(r','), '.'))!;
     }
   }
@@ -557,6 +570,7 @@ class InventoryProvider with ChangeNotifier {
     required int codigoInternoInvCont,
     required bool isSubtract,
     required TextEditingController consultedProductController,
+    required int indexOfProduct,
   }) async {
     double quantity = 0;
     if (consultedProductController.text.isNotEmpty && !isIndividual) {
@@ -566,8 +580,9 @@ class InventoryProvider with ChangeNotifier {
 
     try {
       await _entryQuantity(
+        indexOfProduct: indexOfProduct,
         countingCode: codigoInternoInvCont,
-        productPackingCode: _products[0].codigoInternoProEmb,
+        productPackingCode: _products[indexOfProduct].codigoInternoProEmb,
         quantity: isIndividual ? '1' : quantity.toString(),
         isSubtract: isSubtract,
         context: context,
@@ -582,6 +597,7 @@ class InventoryProvider with ChangeNotifier {
         isSubtract: isSubtract,
         quantity: quantity,
         isIndividual: isIndividual,
+        indexOfProduct: indexOfProduct,
       );
 
       if (!isIndividual) {
