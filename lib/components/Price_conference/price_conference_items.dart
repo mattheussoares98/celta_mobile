@@ -4,7 +4,9 @@ import 'package:celta_inventario/components/Global_widgets/personalized_card.dar
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 
+import '../../Models/consult_price_model.dart';
 import '../../providers/price_conference_provider.dart';
+import '../Global_widgets/show_all_stocks.dart';
 
 class PriceConferenceItems extends StatefulWidget {
   final PriceConferenceProvider priceConferenceProvider;
@@ -33,7 +35,8 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
               child: ListView.builder(
                 itemCount: widget.priceConferenceProvider.productsCount,
                 itemBuilder: (context, index) {
-                  var product = widget.priceConferenceProvider.products[index];
+                  ConsultPriceProductsModel product =
+                      widget.priceConferenceProvider.products[index];
                   return GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
@@ -62,6 +65,24 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "PLU",
                               value: product.PriceLookUp,
+                              // otherWidget: ShowAllStocks.showAllStocks(
+                              //   productModel: product,
+                              //   hasAssociatedsStock:
+                              //       product.StorageAreaAddress != "" ||
+                              //           product.StockByEnterpriseAssociateds
+                              //                   .length >
+                              //               0 ||
+                              //           product.StockByEnterpriseAssociateds !=
+                              //               null,
+                              //   hasStocks: product.Stocks.length > 0,
+                              //   context: context,
+                              //   stockByEnterpriseAssociatedsLength:
+                              //       product.StockByEnterpriseAssociateds == null
+                              //           ? 0
+                              //           : product.StockByEnterpriseAssociateds
+                              //               .length,
+                              //   stocksLength: product.Stocks.length,
+                              // ),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Embalagem",
