@@ -30,8 +30,6 @@ class _ReceiptConferenceProductsItemsState
     extends State<ReceiptConferenceProductsItems> {
   int selectedIndex = -1;
 
-  final GlobalKey<FormState> consultedProductFormKey = GlobalKey();
-
   updateQuantity({
     required bool isSubtract,
     required int index,
@@ -292,8 +290,6 @@ class _ReceiptConferenceProductsItemsState
                                             "SUBTRAIR E\nCONFIRMAR\nVALIDADE",
                                         consultedProductController:
                                             widget.consultedProductController,
-                                        consultedProductFormKey:
-                                            consultedProductFormKey,
                                         consultedProductFocusNode:
                                             receiptConferenceProvider
                                                 .consultedProductFocusNode,
