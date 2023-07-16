@@ -117,6 +117,8 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                               context: context,
                               hasStocks: product.Stocks.length > 0,
                               product: product,
+                              isLoading:
+                                  adjustStockProvider.isLoadingAdjustStock,
                             ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
