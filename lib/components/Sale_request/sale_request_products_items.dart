@@ -1,7 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Components/Sale_request/sale_request_associated_stocks_alert_dialog.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/components/Global_widgets/show_all_stocks.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
@@ -190,14 +190,17 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "PLU",
                             value: product.PLU.toString(),
-                            otherWidget: SaleRequestAssociatedStocksWidget
-                                .saleRequestAssociatedStocksWidget(
-                              context: context,
-                              product: product,
+                            otherWidget: ShowAllStocks.showAllStocks(
+                              productModel: product,
                               hasAssociatedsStock: product.StorageAreaAddress !=
                                       "" ||
                                   product.StockByEnterpriseAssociateds.length >
                                       0,
+                              hasStocks: product.Stocks.length > 0,
+                              context: context,
+                              stockByEnterpriseAssociatedsLength:
+                                  product.StockByEnterpriseAssociateds.length,
+                              stocksLength: product.Stocks.length,
                             ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(

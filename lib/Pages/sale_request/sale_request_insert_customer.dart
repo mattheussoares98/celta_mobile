@@ -1,29 +1,28 @@
-import 'package:celta_inventario/Components/Sale_request/sale_request_costumer_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../Components/Global_widgets/search_widget.dart';
 import '../../Components/Global_widgets/try_again.dart';
+import '../../components/Sale_request/sale_request_customer_items.dart';
 import '../../providers/sale_request_provider.dart';
 import '../../Components/Global_widgets/consulting_widget.dart';
 import '../../Components/Global_widgets/error_message.dart';
 
-class SaleRequestInsertCostumer extends StatefulWidget {
+class SaleRequestInsertCustomer extends StatefulWidget {
   final int enterpriseCode;
-  const SaleRequestInsertCostumer({
+  const SaleRequestInsertCustomer({
     required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SaleRequestInsertCostumer> createState() =>
-      _SaleRequestInsertCostumerState();
+  State<SaleRequestInsertCustomer> createState() =>
+      _SaleRequestInsertCustomerState();
 }
 
-class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
-  final TextEditingController searchCostumerController =
+class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
+  final TextEditingController searchCustomerController =
       TextEditingController();
-  final FocusNode searchCostumerFocusNode = FocusNode();
+  final FocusNode searchCustomerFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +32,17 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
     return Column(
       children: [
         SearchWidget(
-          consultProductController: searchCostumerController,
-          isLoading: saleRequestProvider.isLoadingCostumer,
+          consultProductController: searchCustomerController,
+          isLoading: saleRequestProvider.isLoadingCustomer,
           autofocus: false,
           onPressSearch: () async {
             await saleRequestProvider.getCustomers(
               context: context,
-              controllerText: searchCostumerController.text,
+              controllerText: searchCustomerController.text,
               enterpriseCode: widget.enterpriseCode.toString(),
             );
           },
-          focusNodeConsultProduct: searchCostumerFocusNode,
+          focusNodeConsultProduct: searchCustomerFocusNode,
           hintText: "Código, nome, CPF ou CNPJ",
           labelText: "Consultar cliente",
           useCamera: false,
@@ -51,8 +50,8 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
         if (saleRequestProvider
                 .customersCount(widget.enterpriseCode.toString()) >
             0)
-          SaleRequestCostumersItems(enterpriseCode: widget.enterpriseCode),
-        if (saleRequestProvider.errorMessageCostumer != "" &&
+          SaleRequestCustomersItems(enterpriseCode: widget.enterpriseCode),
+        if (saleRequestProvider.errorMessageCustomer != "" &&
             saleRequestProvider
                     .customersCount(widget.enterpriseCode.toString()) ==
                 0)
@@ -69,14 +68,14 @@ class _SaleRequestInsertCostumerState extends State<SaleRequestInsertCostumer> {
               },
             ),
           ),
-        if (saleRequestProvider.errorMessageCostumer != "" &&
+        if (saleRequestProvider.errorMessageCustomer != "" &&
             saleRequestProvider
                     .customersCount(widget.enterpriseCode.toString()) >
                 0)
           ErrorMessage(
-            errorMessage: saleRequestProvider.errorMessageCostumer,
+            errorMessage: saleRequestProvider.errorMessageCustomer,
           ),
-        if (saleRequestProvider.isLoadingCostumer)
+        if (saleRequestProvider.isLoadingCustomer)
           Expanded(
             child: ConsultingWidget.consultingWidget(
                 title: "Consultando clientes"),

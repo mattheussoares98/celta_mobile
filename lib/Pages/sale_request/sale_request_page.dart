@@ -1,4 +1,4 @@
-import 'package:celta_inventario/Pages/sale_request/sale_request_insert_costumer.dart';
+import 'package:celta_inventario/Pages/sale_request/sale_request_insert_customer.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
@@ -51,9 +51,9 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       await saleRequestProvider.restoreProducts(arguments["Code"].toString());
       await saleRequestProvider.restorecustomers(arguments["Code"].toString());
 
-      int costumersCount =
+      int customersCount =
           saleRequestProvider.customersCount(arguments["Code"].toString());
-      if (costumersCount == 0) {
+      if (customersCount == 0) {
         //logo que entra na tela de pedido de vendas, o app recupera os clientes
         //que foram pesquisados e marcados. Caso consulte os clientes, vai
         //apagar esses dados, por isso só pode pesquisar automaticamente quando
@@ -81,7 +81,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       SaleRequestInsertProductsPage(
         enterpriseCode: arguments["Code"],
       ),
-      SaleRequestInsertCostumer(enterpriseCode: arguments["Code"]),
+      SaleRequestInsertCustomer(enterpriseCode: arguments["Code"]),
       SaleRequestCartDetailsPage(
         enterpriseCode: arguments["Code"],
         requestTypeCode: arguments["SaleRequestTypeCode"],

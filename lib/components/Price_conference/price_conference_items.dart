@@ -3,10 +3,8 @@ import 'package:celta_inventario/Components/Price_conference/price_conference_se
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
-
 import '../../Models/consult_price_model.dart';
 import '../../providers/price_conference_provider.dart';
-import '../Global_widgets/show_all_stocks.dart';
 
 class PriceConferenceItems extends StatefulWidget {
   final PriceConferenceProvider priceConferenceProvider;

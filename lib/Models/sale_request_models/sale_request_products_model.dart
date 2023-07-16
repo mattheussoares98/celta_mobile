@@ -19,6 +19,7 @@ class SaleRequestProductsModel {
   final double BalanceStockSale;
   final String StorageAreaAddress;
   final List<dynamic> StockByEnterpriseAssociateds;
+  final List<dynamic> Stocks;
 
   SaleRequestProductsModel({
     required this.ProductCode,
@@ -39,6 +40,7 @@ class SaleRequestProductsModel {
     required this.BalanceStockSale,
     required this.StorageAreaAddress,
     required this.StockByEnterpriseAssociateds,
+    required this.Stocks,
   });
 
   static responseAsStringToSaleRequestProductsModel({
@@ -82,6 +84,7 @@ class SaleRequestProductsModel {
           StorageAreaAddress: data["StorageAreaAddress"],
           StockByEnterpriseAssociateds:
               data["StockByEnterpriseAssociateds"] ?? [],
+          Stocks: data["Stocks"] ?? [],
         ),
       );
     });

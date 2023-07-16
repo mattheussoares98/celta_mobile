@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../utils/convert_string.dart';
 import '../Global_widgets/title_and_value.dart';
 
-class SaleRequestAssociatedStocksWidget {
-  static saleRequestAssociatedStocksWidget({
+class ShowAllStocks {
+  static showAllStocks({
     required dynamic productModel,
     required bool hasAssociatedsStock,
     required bool hasStocks,

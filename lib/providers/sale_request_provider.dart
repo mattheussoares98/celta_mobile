@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_costumer_model.dart';
+import 'package:celta_inventario/Models/sale_request_models/sale_request_customer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_process_cart_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
@@ -29,11 +29,12 @@ class SaleRequestProvider with ChangeNotifier {
     _updatedCart = true;
   }
 
-  bool _isLoadingCostumer = false;
-  bool get isLoadingCostumer => _isLoadingCostumer;
-  String _errorMessageCostumer = "";
-  String get errorMessageCostumer => _errorMessageCostumer;
-  Map<String, List<SaleRequestCostumerModel>> _customers = {};
+  bool _isLoadingCustomer = false;
+  bool get isLoadingCustomer => _isLoadingCustomer;
+  String _errorMessageCustomer = "";
+  String get errorMessageCustomer => _errorMessageCustomer;
+  Map<String, List<SaleRequestCustomerModel>> _customers = {};
+  Map<String, List<SaleRequestCustomerModel>> get customers => _customers;
   int customersCount(String enterpriseCode) {
     if (_customers[enterpriseCode] == null) {
       return 0;
@@ -54,10 +55,6 @@ class SaleRequestProvider with ChangeNotifier {
     else {
       return false;
     }
-  }
-
-  customers(String enterpriseCode) {
-    return _customers[enterpriseCode];
   }
 
   getSelectedCustomerCode(String enterpriseCode) {
@@ -117,7 +114,7 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _updateCostumerInDatabase() async {
+  _updateCustomerInDatabase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("customers");
     await prefs.setString("customers", json.encode(_customers));
@@ -130,11 +127,11 @@ class SaleRequestProvider with ChangeNotifier {
       var _key = await prefs.getString("customers")!;
       Map customersInDatabase = jsonDecode(_key);
 
-      List<SaleRequestCostumerModel> customersTemp = [];
+      List<SaleRequestCustomerModel> customersTemp = [];
       customersInDatabase.forEach((key, value) {
         if (key == enterpriseCode) {
           value.forEach((element) {
-            customersTemp.add(SaleRequestCostumerModel.fromJson(element));
+            customersTemp.add(SaleRequestCustomerModel.fromJson(element));
           });
         }
       });
@@ -144,19 +141,23 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  _clearcustomers(String enterpriseCode) async {
+  _clearcustomers(
+    String enterpriseCode, {
+    bool updateInDatabase = true,
+  }) async {
     if (_customers[enterpriseCode] != null) {
       if (_customers[enterpriseCode]!.isNotEmpty) {
-        var costumerConsumer = _customers[enterpriseCode]![0];
-        costumerConsumer.selected =
+        var customerConsumer = _customers[enterpriseCode]![0];
+        customerConsumer.selected =
             false; //Se salvar um pedido com o cliente consumidor informado, precisa "desselecionar" ele para não manter ele selecionado em um pedido novo
         //o cliente consumidor precisa sempre ficar disponível de forma fixa em primeiro na lista. Por isso salvei ele como "temp" antes de apagar todos clientes pra depois adicionar ele novamente no índice 0
         _customers[enterpriseCode]!.clear(); //remove todos clientes
-        _customers[enterpriseCode]?.add(costumerConsumer);
+        _customers[enterpriseCode]?.add(customerConsumer);
         //adiciona o consumidor novamente
       }
     }
-    await _updateCostumerInDatabase();
+
+    if (updateInDatabase) await _updateCustomerInDatabase();
     notifyListeners();
   }
 
@@ -561,7 +562,7 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedCostumer({
+  void updateSelectedCustomer({
     required int index,
     required bool value,
     required String enterpriseCode,
@@ -572,7 +573,22 @@ class SaleRequestProvider with ChangeNotifier {
     _customers[enterpriseCode]?[index].selected = value;
 
     _updatedCart = true;
-    await _updateCostumerInDatabase();
+    await _updateCustomerInDatabase();
+    notifyListeners();
+  }
+
+  void updateSelectedConvenant({
+    required String enterpriseCode,
+    required int indexOfCustomer,
+    required int indexOfConvenants,
+    required bool isSelected,
+  }) {
+    _customers[enterpriseCode]?[indexOfCustomer]
+        .Convenants[indexOfConvenants]
+        .selected = isSelected;
+
+    _updateCustomerInDatabase();
+
     notifyListeners();
   }
 
@@ -621,10 +637,10 @@ class SaleRequestProvider with ChangeNotifier {
 // 2=ExactCode
 // 3=ApproximateName
 
-    _clearcustomers(enterpriseCode);
+    _clearcustomers(enterpriseCode, updateInDatabase: false);
 
-    _errorMessageCostumer = "";
-    _isLoadingCostumer = true;
+    _errorMessageCustomer = "";
+    _isLoadingCustomer = true;
     notifyListeners();
 
     try {
@@ -646,8 +662,8 @@ class SaleRequestProvider with ChangeNotifier {
 
       if (responseInString.contains("Message")) {
         //significa que deu algum erro
-        _errorMessageCostumer = json.decode(responseInString)["Message"];
-        _isLoadingCostumer = false;
+        _errorMessageCustomer = json.decode(responseInString)["Message"];
+        _isLoadingCustomer = false;
 
         notifyListeners();
         return;
@@ -657,17 +673,17 @@ class SaleRequestProvider with ChangeNotifier {
         _customers[enterpriseCode] = [];
       }
 
-      SaleRequestCostumerModel.responseAsStringToSaleRequestCostumerModel(
+      SaleRequestCustomerModel.responseAsStringToSaleRequestCustomerModel(
         responseAsString: responseInString,
         listToAdd: _customers[enterpriseCode]!,
       );
 
-      await _updateCostumerInDatabase();
+      await _updateCustomerInDatabase();
     } catch (e) {
       print("Erro para obter os clientes: $e");
-      _errorMessageCostumer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageCustomer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
-      _isLoadingCostumer = false;
+      _isLoadingCustomer = false;
       notifyListeners();
     }
   }
