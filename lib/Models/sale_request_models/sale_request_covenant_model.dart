@@ -1,18 +1,18 @@
-class SaleRequestConvenantsModel {
+class SaleRequestCovenantsModel {
   int code;
   String personalizedCode;
   String name;
   bool selected;
 
-  SaleRequestConvenantsModel({
+  SaleRequestCovenantsModel({
     required this.code,
     required this.personalizedCode,
     required this.name,
     this.selected = false,
   });
 
-  factory SaleRequestConvenantsModel.fromJson(Map<String, dynamic> json) {
-    return SaleRequestConvenantsModel(
+  factory SaleRequestCovenantsModel.fromJson(Map<String, dynamic> json) {
+    return SaleRequestCovenantsModel(
       code: json['Code'],
       personalizedCode: json['PersonalizedCode'],
       name: json['Name'],

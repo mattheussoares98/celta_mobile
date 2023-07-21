@@ -8,6 +8,7 @@ import 'package:celta_inventario/Components/Global_widgets/show_error_message.da
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/sale_request_models/sale_request_products_model.dart';
 import '../Global_widgets/show_alert_dialog.dart';
 
 class SaleRequestProductsItems extends StatefulWidget {
@@ -98,7 +99,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
             child: ListView.builder(
               itemCount: saleRequestProvider.productsCount,
               itemBuilder: (context, index) {
-                var product = saleRequestProvider.products[index];
+                SaleRequestProductsModel product =
+                    saleRequestProvider.products[index];
 
                 double _totalItensInCart =
                     saleRequestProvider.getTotalItensInCart(
@@ -111,23 +113,6 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                   consultedProductController: widget.consultedProductController,
                   enterpriseCode: widget.enterpriseCode.toString(),
                 );
-
-                if (saleRequestProvider.canShowInsertProductQuantityForm(
-                    product: product,
-                    selectedIndex: selectedIndex,
-                    index: index)) {
-                  selectedIndex = index;
-                  Future.delayed(const Duration(milliseconds: 300), () {
-                    FocusScope.of(context).requestFocus(
-                      saleRequestProvider.consultedProductFocusNode,
-                    );
-                  });
-                }
-
-                // double _totalItemValue = saleRequestProvider.getTotalItemValue(
-                //   product: product,
-                //   consultedProductController: widget.consultedProductController,
-                // );
 
                 return PersonalizedCard.personalizedCard(
                   context: context,
@@ -155,10 +140,12 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                     product.WholePracticedPrice == 0) {
                                   ShowErrorMessage.showErrorMessage(
                                     error:
-                                        "O preço de venda e atacado estão zerados, por isso não é possível inserir a quantidade",
+                                        "O preço de venda e atacado estão zerados! Utilize esse produto somente caso esteja utilizando modelo de pedido de vendas que utiliza o custo como preço!",
                                     context: context,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
+                                    secondsDuration: 7,
                                   );
-                                  return;
                                 }
                                 widget.consultedProductController.clear();
                                 //necessário apagar o campo da quantidade quando

@@ -70,6 +70,8 @@ class _SaleRequestCartDetailsPageState
                   customerCode: saleRequestProvider.getSelectedCustomerCode(
                     widget.enterpriseCode.toString(),
                   ),
+                  covenantCode: saleRequestProvider.getSelectedCovenantCode(
+                      widget.enterpriseCode.toString()),
                 );
               },
             )

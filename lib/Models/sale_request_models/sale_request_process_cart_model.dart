@@ -6,15 +6,21 @@ class SaleRequestProcessCartModel {
   int ProductPackingCode;
   double Quantity;
   double Value;
-  double IncrementPercentageOrValue;
+  String IncrementPercentageOrValue; //"R$"" ou "%"
+  String DiscountPercentageOrValue; //"R$"" ou "%"
   double IncrementValue;
-  double DiscountPercentageOrValue;
+  String AutomaticDiscountPercentageOrValue; //"R$"" ou "%"
+  double AutomaticDiscountValue;
+  double TotalLiquid;
   double DiscountValue;
   String DiscountDescription;
   // String ExpectedDeliveryDate;
 
   SaleRequestProcessCartModel({
     required this.ProductPackingCode,
+    required this.AutomaticDiscountPercentageOrValue,
+    required this.AutomaticDiscountValue,
+    required this.TotalLiquid,
     required this.Quantity,
     required this.Value,
     required this.IncrementPercentageOrValue,
@@ -35,13 +41,10 @@ class SaleRequestProcessCartModel {
         "ProductPackingCode": element.ProductPackingCode,
         "Quantity": element.Quantity,
         "value": element.Value,
-        "IncrementPercentageOrValue":
-            double.tryParse(element.IncrementPercentageOrValue) ?? 0,
+        // "IncrementPercentageOrValue": element.IncrementPercentageOrValue,
         "IncrementValue": element.IncrementValue,
-        "DiscountPercentageOrValue":
-            double.tryParse(element.DiscountPercentageOrValue) ?? 0,
+        // "DiscountPercentageOrValue": element.DiscountPercentageOrValue,
         "DiscountValue": element.DiscountValue,
-        // "ExpectedDeliveryDate": DateTime.now().toString(),
       });
     });
 
@@ -53,10 +56,13 @@ class SaleRequestProcessCartModel {
       'ProductPackingCode': ProductPackingCode,
       'Quantity': Quantity,
       'value': Value,
-      'IncrementPercentageOrValue': IncrementPercentageOrValue,
+      // 'IncrementPercentageOrValue': IncrementPercentageOrValue,
       'IncrementValue': IncrementValue,
-      'DiscountPercentageOrValue': DiscountPercentageOrValue,
+      // // 'DiscountPercentageOrValue': DiscountPercentageOrValue,
       'DiscountValue': DiscountValue,
+      // "AutomaticDiscountPercentageOrValue": AutomaticDiscountPercentageOrValue,
+      "AutomaticDiscountValue": AutomaticDiscountValue,
+      "TotalLiquid": TotalLiquid,
       // 'ExpectedDeliveryDate': ExpectedDeliveryDate,
     };
   }
@@ -66,13 +72,18 @@ class SaleRequestProcessCartModel {
       ProductPackingCode: json['ProductPackingCode'],
       Quantity: json['Quantity'],
       Value: json['Value'],
-      IncrementPercentageOrValue:
-          double.tryParse(json['IncrementPercentageOrValue'] ?? "0") ?? 0,
       IncrementValue: json['IncrementValue'],
-      DiscountPercentageOrValue:
-          double.tryParse(json['DiscountPercentageOrValue'] ?? "0") ?? 0,
       DiscountValue: json['DiscountValue'],
       DiscountDescription: json["DiscountDescription"] ?? "",
+      AutomaticDiscountValue: json["AutomaticDiscountValue"] ?? 0,
+      TotalLiquid: json["TotalLiquid"],
+
+      IncrementPercentageOrValue:
+          '', //na api retorna "R$" de padrão e esse caracter especial está dando problema depois pra calcular o preço dos produtos de novo. Como não está usando essa questão, por enquanto vou deixar dessa forma
+      DiscountPercentageOrValue:
+          '', //na api retorna "R$" de padrão e esse caracter especial está dando problema depois pra calcular o preço dos produtos de novo. Como não está usando essa questão, por enquanto vou deixar dessa forma
+      AutomaticDiscountPercentageOrValue:
+          '', //na api retorna "R$" de padrão e esse caracter especial está dando problema depois pra calcular o preço dos produtos de novo. Como não está usando essa questão, por enquanto vou deixar dessa forma
       // ExpectedDeliveryDate: json['ExpectedDeliveryDate'],
     );
   }
@@ -90,6 +101,7 @@ class SaleRequestProcessCartModel {
     jsonSaleRequest["RequestTypeCode"] = jsonData["RequestTypeCode"];
     jsonSaleRequest["SellerCode"] = jsonData["SellerCode"];
     jsonSaleRequest["CustomerCode"] = jsonData["CustomerCode"];
+    jsonSaleRequest["CovenantCode"] = jsonData["CovenantCode"];
 
     jsonData["Products"].forEach((x) {
       jsonSaleRequest["Products"].add(
@@ -101,12 +113,21 @@ class SaleRequestProcessCartModel {
           element.ProductPackingCode = x["ProductPackingCode"];
           element.Quantity = x["Quantity"];
           element.Value = x["Value"];
-          element.IncrementPercentageOrValue = x["IncrementPercentageOrValue"];
+          element.IncrementPercentageOrValue =
+              x["IncrementPercentageOrValue"] ?? "";
           element.IncrementValue = x["IncrementValue"];
           element.DiscountPercentageOrValue =
               x["DiscountPercentageOrValue"].toString();
           element.DiscountValue = x["DiscountValue"];
           element.ExpectedDeliveryDate = x["ExpectedDeliveryDate"];
+          element.AutomaticDiscountPercentageOrValue =
+              x["AutomaticDiscountPercentageOrValue"] ?? "";
+          element.AutomaticDiscountValue = x["AutomaticDiscountValue"];
+          element.TotalLiquid = x["TotalLiquid"];
+          element.AutomaticDiscountPercentageOrValue =
+              x["AutomaticDiscountPercentageOrValue"] ?? "";
+          element.AutomaticDiscountValue = x["AutomaticDiscountValue"];
+          element.TotalLiquid = x["TotalLiquid"];
         }
       });
     });

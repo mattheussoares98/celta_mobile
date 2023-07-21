@@ -9,6 +9,7 @@ class ShowErrorMessage {
     String labelSnackBarAction = "",
     Function? functionSnackBarAction,
     Color backgroundColor = Colors.red,
+    int? secondsDuration = 5,
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -37,7 +38,7 @@ class ShowErrorMessage {
           ],
         ),
         backgroundColor: backgroundColor,
-        duration: const Duration(seconds: 5),
+        duration: Duration(seconds: secondsDuration!),
       ),
     );
   }

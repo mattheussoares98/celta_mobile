@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/Models/sale_request_models/sale_request_convenant_model.dart';
+import 'package:celta_inventario/Models/sale_request_models/sale_request_covenant_model.dart';
 
 class SaleRequestCustomerModel {
   int Code;
@@ -11,7 +11,7 @@ class SaleRequestCustomerModel {
   String RegistrationNumber;
   String SexType;
   bool selected;
-  List<SaleRequestConvenantsModel> Convenants;
+  List<SaleRequestCovenantsModel> Covenants;
 
   SaleRequestCustomerModel({
     required this.Code,
@@ -22,7 +22,7 @@ class SaleRequestCustomerModel {
     required this.RegistrationNumber,
     required this.SexType,
     this.selected = false,
-    required this.Convenants,
+    required this.Covenants,
   });
 
   static responseAsStringToSaleRequestCustomerModel({
@@ -53,9 +53,9 @@ class SaleRequestCustomerModel {
   }
 
   factory SaleRequestCustomerModel.fromJson(Map<String, dynamic> json) {
-    List<SaleRequestConvenantsModel> ConvenantsList = json['Covenants'] != null
-        ? List<SaleRequestConvenantsModel>.from(json['Covenants']
-            .map((x) => SaleRequestConvenantsModel.fromJson(x)))
+    List<SaleRequestCovenantsModel> CovenantsList = json['Covenants'] != null
+        ? List<SaleRequestCovenantsModel>.from(
+            json['Covenants'].map((x) => SaleRequestCovenantsModel.fromJson(x)))
         : [];
 
     return SaleRequestCustomerModel(
@@ -66,7 +66,7 @@ class SaleRequestCustomerModel {
       CpfCnpjNumber: json['CpfCnpjNumber'],
       RegistrationNumber: json['RegistrationNumber'],
       SexType: json['SexType'],
-      Convenants: ConvenantsList,
+      Covenants: CovenantsList,
       selected: json['selected'] ?? false,
     );
   }
@@ -80,8 +80,8 @@ class SaleRequestCustomerModel {
       'CpfCnpjNumber': CpfCnpjNumber,
       'RegistrationNumber': RegistrationNumber,
       'SexType': SexType,
-      'Covenants': Convenants.isNotEmpty
-          ? List<dynamic>.from(Convenants.map((x) => x.toJson()))
+      'Covenants': Covenants.isNotEmpty
+          ? List<dynamic>.from(Covenants.map((x) => x.toJson()))
           : null,
       "selected": selected,
     };

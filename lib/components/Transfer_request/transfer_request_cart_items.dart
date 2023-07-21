@@ -177,6 +177,48 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            flex: 45,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                fixedSize: const Size(300, 60),
+                                              ),
+                                              onPressed: controllerInDouble ==
+                                                          null ||
+                                                      controllerInDouble == 0
+                                                  ? null
+                                                  : () {
+                                                      ShowAlertDialog()
+                                                          .showAlertDialog(
+                                                              context: context,
+                                                              title:
+                                                                  "Atualizar o preço",
+                                                              subtitle:
+                                                                  "Deseja realmente atualizar a quantidade e o preço?",
+                                                              function: () {
+                                                                updateProductInCart(
+                                                                  transferRequestProvider:
+                                                                      transferRequestProvider,
+                                                                  product:
+                                                                      product,
+                                                                  index: index,
+                                                                );
+
+                                                                FocusScope.of(
+                                                                        context)
+                                                                    .unfocus();
+                                                              });
+                                                    },
+                                              child: const Text("ATUALIZAR"),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
                                         children: [
                                           Expanded(
                                             flex: 55,
@@ -246,48 +288,6 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                                                   ),
                                                 ),
                                               ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            flex: 45,
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                fixedSize: const Size(300, 60),
-                                              ),
-                                              onPressed: controllerInDouble ==
-                                                          null ||
-                                                      controllerInDouble == 0
-                                                  ? null
-                                                  : () {
-                                                      ShowAlertDialog()
-                                                          .showAlertDialog(
-                                                              context: context,
-                                                              title:
-                                                                  "Atualizar o preço",
-                                                              subtitle:
-                                                                  "Deseja realmente atualizar a quantidade e o preço?",
-                                                              function: () {
-                                                                updateProductInCart(
-                                                                  transferRequestProvider:
-                                                                      transferRequestProvider,
-                                                                  product:
-                                                                      product,
-                                                                  index: index,
-                                                                );
-
-                                                                FocusScope.of(
-                                                                        context)
-                                                                    .unfocus();
-                                                              });
-                                                    },
-                                              child: const Text("ATUALIZAR"),
                                             ),
                                           ),
                                         ],

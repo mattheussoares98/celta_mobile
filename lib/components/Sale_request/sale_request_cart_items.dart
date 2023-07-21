@@ -78,7 +78,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
 
   updateProductInCart({
     required SaleRequestProvider saleRequestProvider,
-    required dynamic product,
+    required SaleRequestCartProductsModel product,
     required int index,
   }) {
     double? controllerInDouble = double.tryParse(
@@ -98,6 +98,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
         index: index,
       );
       widget.textEditingController.clear();
+      _selectedIndex = -1;
     }
   }
 
@@ -160,6 +161,81 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            flex: 55,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TitleAndSubtitle
+                                                    .titleAndSubtitle(
+                                                  title: "Preço venda",
+                                                  value: ConvertString
+                                                      .convertToBRL(
+                                                    product
+                                                        .RetailPracticedPrice,
+                                                  ),
+                                                ),
+                                                TitleAndSubtitle
+                                                    .titleAndSubtitle(
+                                                  title: "Mín. atacado",
+                                                  value: product
+                                                          .MinimumWholeQuantity
+                                                      .toString(),
+                                                ),
+                                                TitleAndSubtitle
+                                                    .titleAndSubtitle(
+                                                  title: "Preço atacado",
+                                                  value: ConvertString
+                                                      .convertToBRL(
+                                                    product.WholePracticedPrice,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 45,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                fixedSize: const Size(300, 60),
+                                              ),
+                                              onPressed: controllerInDouble ==
+                                                          null ||
+                                                      controllerInDouble == 0
+                                                  ? null
+                                                  : () {
+                                                      ShowAlertDialog()
+                                                          .showAlertDialog(
+                                                              context: context,
+                                                              title:
+                                                                  "Atualizar o preço",
+                                                              subtitle:
+                                                                  "Deseja realmente atualizar a quantidade e o preço?",
+                                                              function: () {
+                                                                updateProductInCart(
+                                                                  saleRequestProvider:
+                                                                      saleRequestProvider,
+                                                                  product:
+                                                                      product,
+                                                                  index: index,
+                                                                );
+
+                                                                FocusScope.of(
+                                                                        context)
+                                                                    .unfocus();
+                                                              });
+                                                    },
+                                              child: const Text("ATUALIZAR"),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
                                       Row(
                                         children: [
                                           Expanded(
@@ -232,81 +308,6 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                   ),
                                                 ),
                                               ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            flex: 55,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                TitleAndSubtitle
-                                                    .titleAndSubtitle(
-                                                  title: "Preço venda",
-                                                  value: ConvertString
-                                                      .convertToBRL(
-                                                    product
-                                                        .RetailPracticedPrice,
-                                                  ),
-                                                ),
-                                                TitleAndSubtitle
-                                                    .titleAndSubtitle(
-                                                  title: "Mín. atacado",
-                                                  value: product
-                                                          .MinimumWholeQuantity
-                                                      .toString(),
-                                                ),
-                                                TitleAndSubtitle
-                                                    .titleAndSubtitle(
-                                                  title: "Preço atacado",
-                                                  value: ConvertString
-                                                      .convertToBRL(
-                                                    product.WholePracticedPrice,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 45,
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                fixedSize: const Size(300, 60),
-                                              ),
-                                              onPressed: controllerInDouble ==
-                                                          null ||
-                                                      controllerInDouble == 0
-                                                  ? null
-                                                  : () {
-                                                      ShowAlertDialog()
-                                                          .showAlertDialog(
-                                                              context: context,
-                                                              title:
-                                                                  "Atualizar o preço",
-                                                              subtitle:
-                                                                  "Deseja realmente atualizar a quantidade e o preço?",
-                                                              function: () {
-                                                                updateProductInCart(
-                                                                  saleRequestProvider:
-                                                                      saleRequestProvider,
-                                                                  product:
-                                                                      product,
-                                                                  index: index,
-                                                                );
-
-                                                                FocusScope.of(
-                                                                        context)
-                                                                    .unfocus();
-                                                              });
-                                                    },
-                                              child: const Text("ATUALIZAR"),
                                             ),
                                           ),
                                         ],

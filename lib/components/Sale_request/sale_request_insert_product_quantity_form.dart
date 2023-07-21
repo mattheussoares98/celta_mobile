@@ -155,13 +155,9 @@ class _SaleRequestInsertProductQuantityFormState
                 height: 60,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.totalItemValue == 0
-                        ? Colors.grey
-                        : Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: widget.totalItemValue == 0
-                      ? () {}
-                      : () => addItemInCart(),
+                  onPressed: () => addItemInCart(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

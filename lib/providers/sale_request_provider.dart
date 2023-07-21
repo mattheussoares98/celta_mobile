@@ -43,18 +43,29 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  bool canShowInsertProductQuantityForm({
-    required SaleRequestProductsModel product,
-    required int selectedIndex,
-    required int index,
-  }) {
-    if (selectedIndex != index &&
-        productsCount == 1 &&
-        product.WholePracticedPrice > 0)
-      return true;
-    else {
-      return false;
+  int _indexOfSelectedCovenant = -1;
+  int get indexOfSelectedCovenant {
+    _customers.forEach((key, value) {
+      value.forEach((element) {
+        _indexOfSelectedCovenant =
+            element.Covenants.indexWhere((element) => element.selected);
+      });
+    });
+    return _indexOfSelectedCovenant;
+  }
+
+  getSelectedCovenantCode(String enterpriseCode) {
+    int covenantCode = 0;
+    if (_customers[enterpriseCode] != null) {
+      _customers[enterpriseCode]!.forEach((customer) {
+        customer.Covenants.forEach((covenant) {
+          if (covenant.selected) {
+            covenantCode = covenant.code;
+          }
+        });
+      });
     }
+    return covenantCode;
   }
 
   getSelectedCustomerCode(String enterpriseCode) {
@@ -314,6 +325,7 @@ class SaleRequestProvider with ChangeNotifier {
     required String enterpriseCode,
     required int index,
   }) async {
+    _cartProducts[enterpriseCode]![index].TotalLiquid = quantity * value;
     _cartProducts[enterpriseCode]![index].Quantity = quantity;
     _cartProducts[enterpriseCode]![index].Value = value;
 
@@ -321,16 +333,34 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  getTotalItemPrice(SaleRequestCartProductsModel product) {
+    if (product.TotalLiquid == 0) {
+      return (product.RetailSalePrice * product.Quantity) -
+          product.AutomaticDiscountValue;
+    } else {
+      return product.TotalLiquid;
+    }
+  }
+
   double getTotalCartPrice(String enterpriseCode) {
-    double total = 0;
+    double totalLiquid = 0;
     if (_cartProducts[enterpriseCode] == null) {
       return 0;
     } else {
       _cartProducts[enterpriseCode]!.forEach((element) {
-        total += (element.Quantity * element.Value) - element.DiscountValue;
+        if (element.TotalLiquid == 0) {
+          //só terá o valor do TotalLiquid no produto quando processar o
+          //carrinho. Se fechar o app e abrir novamente, esse valor estará
+          //zerado e por isso precisa calcular conforme o que já tiver no banco
+          //de dados
+          totalLiquid += (element.Value * element.Quantity) -
+              element.AutomaticDiscountValue;
+        } else {
+          totalLiquid += element.TotalLiquid;
+        }
       });
 
-      return total;
+      return totalLiquid;
     }
   }
 
@@ -339,6 +369,7 @@ class SaleRequestProvider with ChangeNotifier {
     "EnterpriseCode": 0,
     "RequestTypeCode": 0,
     "SellerCode": 0,
+    "CovenantCode": 0,
     "CustomerCode": 0,
     "Products": [],
   };
@@ -498,6 +529,7 @@ class SaleRequestProvider with ChangeNotifier {
     required int enterpriseCode,
     required int requestTypeCode,
     required int customerCode,
+    required int covenantCode,
   }) async {
     _isLoadingProcessCart = true;
     _errorMessageProcessCart = "";
@@ -517,6 +549,7 @@ class SaleRequestProvider with ChangeNotifier {
         "{'crossId': '${UserIdentity.identity}',"
         "'EnterpriseCode': $enterpriseCode,"
         "'RequestTypeCode': $requestTypeCode,"
+        "'CovenantCode': $covenantCode,"
         //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
         "'CustomerCode': $customerCode,"
         "'Products': $processCartItems}",
@@ -573,23 +606,34 @@ class SaleRequestProvider with ChangeNotifier {
     _customers[enterpriseCode]?[index].selected = value;
 
     _updatedCart = true;
+
+    _customers[enterpriseCode]?.forEach((element) {
+      element.Covenants.forEach((element) {
+        element.selected =
+            false; //tira a seleção de todos convênios se alterar o cleinte selecionado
+      });
+    });
     await _updateCustomerInDatabase();
     notifyListeners();
   }
 
-  void updateSelectedConvenant({
+  void updateSelectedCovenant({
     required String enterpriseCode,
     required int indexOfCustomer,
-    required int indexOfConvenants,
+    required int indexOfCovenants,
     required bool isSelected,
   }) {
+    _customers[enterpriseCode]?[indexOfCustomer].Covenants.forEach((element) {
+      element.selected = false;
+    });
+
     _customers[enterpriseCode]?[indexOfCustomer]
-        .Convenants[indexOfConvenants]
+        .Covenants[indexOfCovenants]
         .selected = isSelected;
 
     _updateCustomerInDatabase();
 
-    notifyListeners();
+    _updatedCart = true;
   }
 
   Future<void> getCustomers({

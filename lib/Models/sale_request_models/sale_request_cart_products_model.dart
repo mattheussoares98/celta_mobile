@@ -24,6 +24,12 @@ class SaleRequestCartProductsModel {
   double BalanceStockSale;
   String StorageAreaAddress;
   List<dynamic> StockByEnterpriseAssociateds;
+  String
+      AutomaticDiscountPercentageOrValue; //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho ou quando atualiza o carrinho
+  double
+      AutomaticDiscountValue; //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho ou quando atualiza o carrinho
+  double
+      TotalLiquid; //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho ou quando atualiza o carrinho
 
   SaleRequestCartProductsModel({
     required this.ProductPackingCode,
@@ -51,6 +57,13 @@ class SaleRequestCartProductsModel {
     required this.BalanceStockSale,
     required this.StorageAreaAddress,
     required this.StockByEnterpriseAssociateds,
+    this.AutomaticDiscountPercentageOrValue =
+        "", //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho ou quando atualiza o carrinho
+
+    this.AutomaticDiscountValue =
+        0, //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho ou quando atualiza o carrinho
+    this.TotalLiquid =
+        0, //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho ou quando atualiza o carrinho
   });
 
   SaleRequestCartProductsModel.fromJson(Map json)
@@ -58,9 +71,9 @@ class SaleRequestCartProductsModel {
         Name = json["Name"],
         Quantity = json["Quantity"],
         Value = json["Value"],
-        IncrementPercentageOrValue = json["IncrementPercentageOrValue"],
+        IncrementPercentageOrValue = json["IncrementPercentageOrValue"] ?? "",
         IncrementValue = json["IncrementValue"],
-        DiscountPercentageOrValue = json["DiscountPercentageOrValue"],
+        DiscountPercentageOrValue = json["DiscountPercentageOrValue"] ?? "",
         DiscountValue = json["DiscountValue"],
         ExpectedDeliveryDate = json["ExpectedDeliveryDate"],
         ProductCode = json["ProductCode"],
@@ -78,7 +91,15 @@ class SaleRequestCartProductsModel {
         MinimumWholeQuantity = json["MinimumWholeQuantity"],
         BalanceStockSale = json["BalanceStockSale"],
         StorageAreaAddress = json["StorageAreaAddress"],
-        StockByEnterpriseAssociateds = json["StockByEnterpriseAssociateds"];
+        StockByEnterpriseAssociateds = json["StockByEnterpriseAssociateds"],
+        AutomaticDiscountPercentageOrValue =
+            json["AutomaticDiscountPercentageOrValue"] ?? "",
+        //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho
+        AutomaticDiscountValue = json["AutomaticDiscountValue"] ??
+            0, //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho
+        TotalLiquid = json["TotalLiquid"] ??
+            0 //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho
+  ;
 
   Map<String, dynamic> toJson() => {
         "ProductPackingCode": ProductPackingCode,
@@ -106,5 +127,9 @@ class SaleRequestCartProductsModel {
         "BalanceStockSale": BalanceStockSale,
         "StorageAreaAddress": StorageAreaAddress,
         "StockByEnterpriseAssociateds": StockByEnterpriseAssociateds,
+        "AutomaticDiscountPercentageOrValue":
+            AutomaticDiscountPercentageOrValue,
+        "AutomaticDiscountValue": AutomaticDiscountValue,
+        "TotalLiquid": TotalLiquid,
       };
 }

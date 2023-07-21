@@ -181,7 +181,7 @@ class SaleRequestCartProductsItems {
                               flex: 30,
                               title: "Total",
                               subtitle: ConvertString.convertToBRL(
-                                "${(product.Quantity * product.Value) - product.DiscountValue} ",
+                                saleRequestProvider.getTotalItemPrice(product),
                               ),
                             ),
                           ],
@@ -211,7 +211,7 @@ class SaleRequestCartProductsItems {
                       ),
                     ],
                   ),
-                  if (product.DiscountValue > 0)
+                  if (product.AutomaticDiscountValue > 0)
                     Padding(
                       padding: const EdgeInsets.only(top: 5, bottom: 5),
                       child: Column(
@@ -221,7 +221,7 @@ class SaleRequestCartProductsItems {
                             subtitleColor:
                                 Theme.of(context).colorScheme.primary,
                             value: ConvertString.convertToBRL(
-                              product.DiscountValue,
+                              product.AutomaticDiscountValue,
                             ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
