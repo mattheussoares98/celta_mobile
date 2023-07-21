@@ -545,7 +545,7 @@ class TransferRequestProvider with ChangeNotifier {
 
   Future<void> getDestinyEnterprises({
     required int requestTypeCode,
-    required String enterpriseOriginCode,
+    required int enterpriseOriginCode,
   }) async {
     _errorMessageDestinyEnterprise = '';
     _isLoadingDestinyEnterprise = true;

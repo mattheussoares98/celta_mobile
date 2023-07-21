@@ -25,7 +25,7 @@ class _TransferDestinyEnterprisePageState
         Provider.of(context, listen: true);
     if (!isLoaded) {
       await transferRequestProvider.getDestinyEnterprises(
-        enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
+        enterpriseOriginCode: arguments["enterpriseOriginCode"],
         requestTypeCode: arguments["requestTypeCode"],
       );
     }
