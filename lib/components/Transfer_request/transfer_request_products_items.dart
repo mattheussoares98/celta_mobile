@@ -102,6 +102,9 @@ class _TransferRequestProductsItemsState
             child: ListView.builder(
               itemCount: transferRequestProvider.productsCount,
               itemBuilder: (context, index) {
+                if (transferRequestProvider.products.isEmpty)
+                  return Container();
+
                 TransferRequestProductsModel product =
                     transferRequestProvider.products[index];
 
@@ -120,18 +123,6 @@ class _TransferRequestProductsItemsState
                   product: product,
                   consultedProductController: widget.consultedProductController,
                 );
-
-                if (transferRequestProvider.canShowInsertProductQuantityForm(
-                    product: product,
-                    selectedIndex: selectedIndex,
-                    index: index)) {
-                  selectedIndex = index;
-                  Future.delayed(const Duration(milliseconds: 300), () {
-                    FocusScope.of(context).requestFocus(
-                      transferRequestProvider.consultedProductFocusNode,
-                    );
-                  });
-                }
 
                 return PersonalizedCard.personalizedCard(
                   context: context,

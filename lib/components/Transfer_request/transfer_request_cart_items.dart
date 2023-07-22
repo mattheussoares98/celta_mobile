@@ -103,6 +103,8 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
         index: index,
       );
       widget.textEditingController.clear();
+      FocusScope.of(context).unfocus();
+      _selectedIndex = -1;
     }
   }
 
@@ -206,10 +208,6 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                                                                       product,
                                                                   index: index,
                                                                 );
-
-                                                                FocusScope.of(
-                                                                        context)
-                                                                    .unfocus();
                                                               });
                                                     },
                                               child: const Text("ATUALIZAR"),
@@ -238,7 +236,8 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                                                   title: "Atualizar o preço",
                                                   subtitle:
                                                       "Deseja realmente atualizar a quantidade e o preço?",
-                                                  function: updateProductInCart(
+                                                  function: () =>
+                                                      updateProductInCart(
                                                     transferRequestProvider:
                                                         transferRequestProvider,
                                                     product: product,

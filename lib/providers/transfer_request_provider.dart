@@ -365,10 +365,25 @@ class TransferRequestProvider with ChangeNotifier {
 
       List<TransferRequestCartProductsModel> cartProductsTemp = [];
 
+      if (cartProductsInDatabase.isEmpty) {
+        return;
+      } else if (cartProductsInDatabase[requestTypeCode] == null) {
+        return;
+      } else if (cartProductsInDatabase[requestTypeCode]
+              [enterpriseOriginCode] ==
+          null) {
+        return;
+      } else if (cartProductsInDatabase[requestTypeCode][enterpriseOriginCode]
+              [enterpriseDestinyCode] ==
+          null) return;
+
       _cartProducts[requestTypeCode] = {};
       _cartProducts[requestTypeCode]![enterpriseOriginCode] = {};
       _cartProducts[requestTypeCode]![enterpriseOriginCode]![
           enterpriseDestinyCode] = [];
+      _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+          ?[enterpriseDestinyCode] = [];
+
       //se não fizer essas atribuições, não funciona adicionar os produtos do cartProductsTemp no _cartProducts
 
       cartProductsInDatabase[requestTypeCode][enterpriseOriginCode]
@@ -376,8 +391,8 @@ class TransferRequestProvider with ChangeNotifier {
           .forEach((element) {
         cartProductsTemp
             .add(TransferRequestCartProductsModel.fromJson(element));
-        _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-            enterpriseDestinyCode] = cartProductsTemp;
+        _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+            ?[enterpriseDestinyCode] = cartProductsTemp;
       });
 
       notifyListeners();
