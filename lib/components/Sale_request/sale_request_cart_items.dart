@@ -258,7 +258,8 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                   title: "Atualizar o preço",
                                                   subtitle:
                                                       "Deseja realmente atualizar a quantidade e o preço?",
-                                                  function: updateProductInCart(
+                                                  function: () =>
+                                                      updateProductInCart(
                                                     saleRequestProvider:
                                                         saleRequestProvider,
                                                     product: product,
