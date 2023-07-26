@@ -75,7 +75,7 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
     }
 
     return ConvertString.convertToBRL(
-      product.RetailPracticedPrice * controllerInDouble,
+      product.Value * controllerInDouble,
     );
   }
 
@@ -156,6 +156,11 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                             children: [
                               TransferRequestCartProductsItems
                                   .transferRequestCartProductsItems(
+                                updateSelectedIndex: () {
+                                  setState(() {
+                                    _selectedIndex = -1;
+                                  });
+                                },
                                 enterpriseOriginCode:
                                     widget.enterpriseOriginCode,
                                 enterpriseDestinyCode:

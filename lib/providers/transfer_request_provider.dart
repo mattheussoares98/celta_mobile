@@ -255,7 +255,7 @@ class TransferRequestProvider with ChangeNotifier {
       ProductPackingCode: product.ProductPackingCode,
       Name: product.Name,
       Quantity: quantity,
-      Value: product.RetailPracticedPrice,
+      Value: product.Value,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
@@ -294,7 +294,7 @@ class TransferRequestProvider with ChangeNotifier {
           .Quantity += quantity;
       _cartProducts[requestTypeCode]![enterpriseOriginCode]![
               enterpriseDestinyCode]![index]
-          .Value = product.RetailPracticedPrice;
+          .Value = product.Value;
     } else {
       if (_cartProducts[requestTypeCode] == null) {
         _cartProducts[requestTypeCode] = {};
@@ -336,7 +336,7 @@ class TransferRequestProvider with ChangeNotifier {
       _quantityToAdd = 1;
     }
 
-    double _totalItemValue = _quantityToAdd * product.RetailPracticedPrice;
+    double _totalItemValue = _quantityToAdd * product.Value;
 
     double? controllerInDouble = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
@@ -609,19 +609,33 @@ class TransferRequestProvider with ChangeNotifier {
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String value,
+    required bool isLegacyCodeSearch,
   }) async {
     _errorMessageProducts = '';
     _isLoadingProducts = true;
     _products.clear();
+    notifyListeners();
 
-    try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
+    http.Request? request;
+    var headers = {'Content-Type': 'application/json'};
+
+    if (isLegacyCodeSearch) {
+      request = http.Request(
+        'GET',
+        Uri.parse(
+          '${BaseUrl.url}/TransferRequest/ProductByLegacyCode?enterpriseCode=$enterpriseOriginCode&enterpriseDestinyCode=$enterpriseDestinyCode&requestTypeCode=$requestTypeCode&searchValue=$value',
+        ),
+      );
+    } else {
+      request = http.Request(
         'GET',
         Uri.parse(
           '${BaseUrl.url}/TransferRequest/Product?enterpriseCode=$enterpriseOriginCode&enterpriseDestinyCode=$enterpriseDestinyCode&requestTypeCode=$requestTypeCode&searchValue=$value',
         ),
       );
+    }
+
+    try {
       request.body = json.encode(UserIdentity.identity);
       request.headers.addAll(headers);
 

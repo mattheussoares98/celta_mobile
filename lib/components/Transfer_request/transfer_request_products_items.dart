@@ -200,7 +200,7 @@ class _TransferRequestProductsItemsState
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Preço",
                             value: ConvertString.convertToBRL(
-                              product.RetailPracticedPrice,
+                              product.Value,
                             ),
                             subtitleColor:
                                 Theme.of(context).colorScheme.primary,

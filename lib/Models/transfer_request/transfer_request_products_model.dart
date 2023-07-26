@@ -18,6 +18,7 @@ class TransferRequestProductsModel {
   final double MinimumWholeQuantity;
   final double BalanceStockSale;
   final String StorageAreaAddress;
+  final double Value;
   final List<dynamic> StockByEnterpriseAssociateds;
   final List<dynamic> Stocks;
 
@@ -41,6 +42,7 @@ class TransferRequestProductsModel {
     required this.StorageAreaAddress,
     required this.StockByEnterpriseAssociateds,
     required this.Stocks,
+    required this.Value,
   });
 
   static responseAsStringToTransferRequestProductsModel({
@@ -81,6 +83,7 @@ class TransferRequestProductsModel {
           ECommerceOfferPrice: data["ECommerceOfferPrice"],
           MinimumWholeQuantity: data["MinimumWholeQuantity"],
           BalanceStockSale: data["BalanceStockSale"],
+          Value: data["Value"],
           StorageAreaAddress: data["StorageAreaAddress"] ?? "",
           StockByEnterpriseAssociateds:
               data["StockByEnterpriseAssociateds"] ?? [],

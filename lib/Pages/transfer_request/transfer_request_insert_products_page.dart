@@ -28,7 +28,7 @@ class _TransferRequestInsertProductsPageState
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
 
-  // bool _legacyIsSelected = false;
+  bool _legacyIsSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +47,13 @@ class _TransferRequestInsertProductsPageState
             consultProductController: _searchProductTextEditingController,
             isLoading: transferRequestProvider.isLoadingProducts,
             autofocus: false,
-            // hasLegacyCodeSearch: true,
-            // legacyIsSelected: _legacyIsSelected,
-            // changeLegacyIsSelectedFunction: () {
-            //   setState(() {
-            //     _legacyIsSelected = !_legacyIsSelected;
-            //   });
-            // },
+            hasLegacyCodeSearch: true,
+            legacyIsSelected: _legacyIsSelected,
+            changeLegacyIsSelectedFunction: () {
+              setState(() {
+                _legacyIsSelected = !_legacyIsSelected;
+              });
+            },
             onPressSearch: () async {
               _consultedProductController.clear();
 
@@ -62,6 +62,7 @@ class _TransferRequestInsertProductsPageState
                 enterpriseOriginCode: widget.enterpriseOriginCode,
                 enterpriseDestinyCode: widget.enterpriseDestinyCode,
                 value: _searchProductTextEditingController.text,
+                isLegacyCodeSearch: _legacyIsSelected,
               );
 
               if (transferRequestProvider.productsCount > 0) {

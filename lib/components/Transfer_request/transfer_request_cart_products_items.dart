@@ -54,6 +54,7 @@ class TransferRequestCartProductsItems {
     required String enterpriseDestinyCode,
     required String requestTypeCode,
     required int selectedIndex,
+    required Function updateSelectedIndex,
   }) {
     return InkWell(
       onTap: transferRequestProvider.isLoadingSaveTransferRequest
@@ -135,7 +136,7 @@ class TransferRequestCartProductsItems {
                                           enterpriseDestinyCode,
                                       requestTypeCode: requestTypeCode,
                                     );
-                                    selectedIndex = -1;
+                                    updateSelectedIndex();
 
                                     ShowErrorMessage.showErrorMessage(
                                       error: "Produto removido",
