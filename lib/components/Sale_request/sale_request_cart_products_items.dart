@@ -54,6 +54,7 @@ class SaleRequestCartProductsItems {
     required SaleRequestCartProductsModel product,
     required int enterpriseCode,
     required int selectedIndex,
+    required Function updateSelectedIndex,
   }) {
     return InkWell(
       onTap: saleRequestProvider.isLoadingSaveSaleRequest ||
@@ -132,7 +133,9 @@ class SaleRequestCartProductsItems {
                                           product.ProductPackingCode,
                                       enterpriseCode: enterpriseCode.toString(),
                                     );
-                                    selectedIndex = -1;
+                                    if (selectedIndex == index) {
+                                      updateSelectedIndex();
+                                    }
 
                                     ShowErrorMessage.showErrorMessage(
                                       error: "Produto removido",

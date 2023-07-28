@@ -143,6 +143,11 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                             children: [
                               SaleRequestCartProductsItems
                                   .saleRequestCartProductsItems(
+                                updateSelectedIndex: () {
+                                  setState(() {
+                                    _selectedIndex = -1;
+                                  });
+                                },
                                 saleRequestProvider: saleRequestProvider,
                                 changeFocus: () => changeFocus(
                                   saleRequestProvider: saleRequestProvider,
