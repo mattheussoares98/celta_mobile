@@ -187,7 +187,7 @@ class InventoryProvider with ChangeNotifier {
       request = http.Request(
         'POST',
         Uri.parse(
-            '${BaseUrl.url}/Inventory/ProductByLegacyCode?searchValue=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
+            '${BaseUrl.url}/Inventory/GetProductByLegacyCode?searchValue=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
       );
     } else {
       request = http.Request(
