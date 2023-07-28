@@ -115,6 +115,8 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
     required InventoryProvider inventoryProvider,
     required int index,
   }) {
+    widget.consultedProductController.text = "";
+
     if (inventoryProvider.productsCount == 1 ||
         inventoryProvider.isLoadingProducts ||
         inventoryProvider.isLoadingQuantity) {
