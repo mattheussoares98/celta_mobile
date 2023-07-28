@@ -70,15 +70,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             ),
             if (inventoryProvider.productsCount == 0 &&
                 inventoryProvider.errorMessageGetProducts != "")
-              Container(
-                height: 300,
-                child: Column(
-                  children: [
-                    ErrorMessage(
-                      errorMessage: inventoryProvider.errorMessageGetProducts,
-                    ),
-                  ],
-                ),
+              ErrorMessage(
+                errorMessage: inventoryProvider.errorMessageGetProducts,
               ),
             if (inventoryProvider.products.isNotEmpty)
               InventoryProductsItems(
