@@ -146,11 +146,10 @@ class _TransferRequestProductsItemsState
                               }
 
                               if (selectedIndex != index) {
-                                if (product.RetailPracticedPrice == 0 &&
-                                    product.WholePracticedPrice == 0) {
+                                if (product.Value == 0) {
                                   ShowErrorMessage.showErrorMessage(
                                     error:
-                                        "O preço de venda e atacado estão zerados, por isso não é possível inserir a quantidade",
+                                        "O preço está zerado. Por isso não é possível inserir a quantidade!",
                                     context: context,
                                   );
                                   return;

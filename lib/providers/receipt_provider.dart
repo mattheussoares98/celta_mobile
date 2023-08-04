@@ -1,7 +1,7 @@
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -88,28 +88,33 @@ class ReceiptProvider with ChangeNotifier {
         context: context,
       );
     } finally {
-      _treatStatusMessage();
+      _treatStatusMessageAndColor();
       _isLoadingReceipt = false;
       notifyListeners();
     }
   }
 
-  _treatStatusMessage() {
+  _treatStatusMessageAndColor() {
     _receipts.forEach((element) {
       if (element.Status == "1") {
         element.Status = "Utilizado por uma entrada(Finalizado)";
+        element.StatusColor = Colors.red;
       } else if (element.Status == "2") {
         element.Status = "Cancelado (Finalizado)";
+        element.StatusColor = Colors.red;
       } else if (element.Status == "3") {
         element.Status = "Liberado para entrada (Aguardando entrada)";
+        element.StatusColor = Colors.green;
       } else if (element.Status == "4" || element.Status == "7") {
         element.Status = "Em processo de autorização";
+        element.StatusColor = Colors.blue;
       } else if (element.Status == "5" || element.Status == "6") {
         element.Status = "Aguardando manutenção de produtos)";
       } else if (element.Status == "8") {
         element.Status = "Aguardando liberação para entrada";
       } else {
         element.Status = "Status desconhecido. Avise o suporte";
+        element.StatusColor = Colors.red;
       }
     });
     notifyListeners();
@@ -123,8 +128,10 @@ class ReceiptProvider with ChangeNotifier {
       CodigoInterno_Empresa: _receipts[index].CodigoInterno_Empresa,
       Numero_ProcRecebDoc: _receipts[index].Numero_ProcRecebDoc,
       EmitterName: _receipts[index].EmitterName,
+      Grupo: _receipts[index].Grupo,
       Status:
           "Em processo de autorização", //sempre que da certo a liberação, fica com esse status
+      StatusColor: Colors.blue,
     );
 
     _receipts[index] = receiptWithNewStatus;

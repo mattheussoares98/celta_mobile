@@ -1,4 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
+import 'package:celta_inventario/Models/receipt_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_liberate_check_buttons.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
@@ -37,6 +38,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
           child: ListView.builder(
             itemCount: widget.receiptProvider.receiptCount,
             itemBuilder: (context, index) {
+              ReceiptModel receipt = widget.receiptProvider.receipts[index];
               return GestureDetector(
                 onTap: () {
                   if (widget.receiptProvider.isLoadingLiberateCheck) {
@@ -65,18 +67,24 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                       children: [
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Número do recebimento",
-                          value: widget.receiptProvider.receipts[index]
-                              .Numero_ProcRecebDoc,
+                          value: receipt.Numero_ProcRecebDoc,
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Emitente",
-                          value: widget
-                              .receiptProvider.receipts[index].EmitterName,
+                          value: receipt.EmitterName == ""
+                              ? "Não há"
+                              : receipt.EmitterName,
                         ),
+                        if (receipt.Grupo != "-1")
+                          TitleAndSubtitle.titleAndSubtitle(
+                            title: "Grupo",
+                            value: receipt.Grupo,
+                            subtitleColor: Colors.amber,
+                          ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",
-                          value: widget.receiptProvider.receipts[index].Status
-                              .toString(),
+                          value: receipt.Status.toString(),
+                          subtitleColor: receipt.StatusColor,
                           otherWidget: Icon(
                             selectedIndex != index
                                 ? Icons.arrow_drop_down_sharp
@@ -87,12 +95,9 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                         ),
                         if (selectedIndex == index)
                           LiberateCheckButtons(
-                            grDocCode: widget.receiptProvider.receipts[index]
-                                .CodigoInterno_ProcRecebDoc,
-                            emitterName: widget
-                                .receiptProvider.receipts[index].EmitterName,
-                            numeroProcRecebDoc: widget.receiptProvider
-                                .receipts[index].Numero_ProcRecebDoc,
+                            grDocCode: receipt.CodigoInterno_ProcRecebDoc,
+                            emitterName: receipt.EmitterName,
+                            numeroProcRecebDoc: receipt.Numero_ProcRecebDoc,
                             receiptProvider: widget.receiptProvider,
                             index: index,
                             enterpriseCode: widget.enterpriseCode,
