@@ -138,9 +138,11 @@ class _ReceiptConferenceProductsItemsState
     }
   }
 
+  bool isChangedIndex = false;
   @override
   Widget build(BuildContext context) {
     ReceiptConferenceProvider receiptConferenceProvider = Provider.of(context);
+
     return Expanded(
       child: receiptConferenceProvider.productsCount <= 0
           ? Container()
@@ -148,6 +150,22 @@ class _ReceiptConferenceProductsItemsState
               itemCount: receiptConferenceProvider.productsCount,
               itemBuilder: (context, index) {
                 var product = receiptConferenceProvider.products[index];
+
+                if (!isChangedIndex &&
+                    receiptConferenceProvider.productsCount == 1) {
+                  selectedIndex = index;
+                  print("sabia");
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    //se não colocar em um future pra mudar o foco,
+                    //não funciona corretamente
+                    FocusScope.of(context).requestFocus(
+                      receiptConferenceProvider.consultedProductFocusNode,
+                    );
+                  });
+
+                  isChangedIndex = true;
+                }
+
                 return GestureDetector(
                   onTap: receiptConferenceProvider.isUpdatingQuantity ||
                           receiptConferenceProvider.consultingProducts

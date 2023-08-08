@@ -46,10 +46,13 @@ class ReceiptProvider with ChangeNotifier {
   Future<void> getReceipt({
     required int enterpriseCode,
     required BuildContext context,
+    bool isSearchingAgain = false,
   }) async {
     _receipts.clear();
     _isLoadingReceipt = true;
     _errorMessage = '';
+    if (isSearchingAgain) notifyListeners();
+    //Quando libera o documento, consulta os recebimentos novamente para atualizar os status corretamente de acordo com o que está no BS. Já quando consulta ao entrar na página de recebimentos, não pode usar o notifyListeners senão da erro no debug console
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
 
@@ -76,6 +79,7 @@ class ReceiptProvider with ChangeNotifier {
         return;
       }
 
+      print(responseAsString);
       ReceiptModel.responseAsStringToReceiptModel(
         responseAsString: responseAsString,
         listToAdd: _receipts,
@@ -120,28 +124,11 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void _updateAtualStatus({
-    required int index,
-  }) {
-    ReceiptModel receiptWithNewStatus = ReceiptModel(
-      CodigoInterno_ProcRecebDoc: _receipts[index].CodigoInterno_ProcRecebDoc,
-      CodigoInterno_Empresa: _receipts[index].CodigoInterno_Empresa,
-      Numero_ProcRecebDoc: _receipts[index].Numero_ProcRecebDoc,
-      EmitterName: _receipts[index].EmitterName,
-      Grupo: _receipts[index].Grupo,
-      Status:
-          "Em processo de autorização", //sempre que da certo a liberação, fica com esse status
-      StatusColor: Colors.blue,
-    );
-
-    _receipts[index] = receiptWithNewStatus;
-    notifyListeners();
-  }
-
   liberate({
     required int grDocCode,
     required int index,
     required BuildContext context,
+    required int enterpriseCode,
   }) async {
     _isLoadingLiberateCheck = true;
     _liberateError = "";
@@ -178,7 +165,11 @@ class ReceiptProvider with ChangeNotifier {
         notifyListeners();
         return;
       } else {
-        _updateAtualStatus(index: index);
+        await getReceipt(
+          enterpriseCode: enterpriseCode,
+          context: context,
+          isSearchingAgain: true,
+        );
       }
     } catch (e) {
       print("Erro para efetuar a requisição: $e");

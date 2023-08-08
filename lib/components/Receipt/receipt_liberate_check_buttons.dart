@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -33,10 +34,19 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
           onPressed: widget.receiptProvider.isLoadingLiberateCheck
               ? null
               : () async {
-                  await widget.receiptProvider.liberate(
-                    grDocCode: widget.grDocCode,
-                    index: widget.index,
+                  ShowAlertDialog().showAlertDialog(
                     context: context,
+                    title: "Liberar recebimento?",
+                    subtitle:
+                        "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
+                    function: () async {
+                      await widget.receiptProvider.liberate(
+                        grDocCode: widget.grDocCode,
+                        index: widget.index,
+                        context: context,
+                        enterpriseCode: widget.enterpriseCode,
+                      );
+                    },
                   );
                 },
           child: widget.receiptProvider.isLoadingLiberateCheck
