@@ -25,6 +25,8 @@ class ImageComponent {
               imagePath,
               width: double.infinity,
               fit: BoxFit.contain,
+              alignment: Alignment.topCenter,
+              height: double.infinity,
             ),
             Positioned(
               bottom: 0,
@@ -36,7 +38,7 @@ class ImageComponent {
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black45,
+                      color: Colors.black38,
                       border: Border.all(
                         style: BorderStyle.none,
                       ),

@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: GridView.count(
         crossAxisCount: 2, // define o número de colunas
-        childAspectRatio: 0.9, // define a proporção de largura/altura dos itens
+        childAspectRatio: 1.2, // define a proporção de largura/altura dos itens
         padding: const EdgeInsets.only(top: 8),
         mainAxisSpacing: 3,
         crossAxisSpacing: 3,
@@ -92,6 +92,13 @@ class _HomePageState extends State<HomePage> {
             routine: 'Ajuste de estoque',
             route: APPROUTES.ENTERPRISE,
             nextRoute: APPROUTES.ADJUST_STOCK,
+            context: context,
+          ),
+          ImageComponent.image(
+            imagePath: 'lib/assets/Images/adjustStock.jpg',
+            routine: 'Transferência entre estoques',
+            route: APPROUTES.ENTERPRISE,
+            nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
             context: context,
           ),
           ImageComponent.image(

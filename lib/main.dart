@@ -10,6 +10,7 @@ import 'package:celta_inventario/Pages/sale_request/sale_request_model_page.dart
 import 'package:celta_inventario/Pages/transfer_request/transfer_destiny_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_page.dart';
+import 'package:celta_inventario/Pages/transfer_between_stocks_page.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/providers/enterprise_json_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
@@ -19,6 +20,7 @@ import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SaleRequestProvider()),
         ChangeNotifierProvider(create: (_) => EnterpriseJsonProvider()),
         ChangeNotifierProvider(create: (_) => TransferRequestProvider()),
+        ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -164,6 +167,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.TRANSFER_DESTINY_ENTERPRISE: (ctx) =>
               const TransferDestinyEnterprisePage(),
           APPROUTES.TRANSFER: (ctx) => const TransferPage(),
+          APPROUTES.TRANSFER_BETWEEN_STOCK: (ctx) =>
+              const TransferBetweenStockPage(),
         },
       ),
     );
