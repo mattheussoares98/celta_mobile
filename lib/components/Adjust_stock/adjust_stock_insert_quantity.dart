@@ -25,6 +25,40 @@ class AdjustStockInsertQuantity extends StatefulWidget {
 }
 
 class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
+  confirmAdjustStock({
+    required AdjustStockProvider adjustStockProvider,
+  }) async {
+    widget.dropDownFormKey.currentState!.validate();
+    widget.insertQuantityFormKey.currentState!.validate();
+
+    if (widget.dropDownFormKey.currentState!.validate() &&
+        widget.insertQuantityFormKey.currentState!.validate()) {
+      print("formulários corretos. Pode salvar");
+
+      if (widget.consultedProductController.text.contains("\,")) {
+        widget.consultedProductController.text = widget
+            .consultedProductController.text
+            .replaceAll(RegExp(r'\,'), '.');
+      }
+      adjustStockProvider.jsonAdjustStock["Quantity"] =
+          widget.consultedProductController.text;
+
+      adjustStockProvider.jsonAdjustStock["EnterpriseCode"] =
+          widget.internalEnterpriseCode.toString();
+
+      await adjustStockProvider.confirmAdjustStock(
+        context: context,
+        indexOfProduct: widget.index,
+        consultedProductControllerText: widget.consultedProductController.text,
+      );
+
+      if (adjustStockProvider.errorMessageAdjustStock == "") {
+        widget.consultedProductController.clear();
+      }
+    }
+    ;
+  }
+
   @override
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider = Provider.of(context);
@@ -148,41 +182,9 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                     onPressed: adjustStockProvider.isLoadingAdjustStock
                         ? null
                         : () async {
-                            widget.dropDownFormKey.currentState!.validate();
-                            widget.insertQuantityFormKey.currentState!
-                                .validate();
-
-                            if (widget.dropDownFormKey.currentState!
-                                    .validate() &&
-                                widget.insertQuantityFormKey.currentState!
-                                    .validate()) {
-                              print("formulários corretos. Pode salvar");
-
-                              if (widget.consultedProductController.text
-                                  .contains("\,")) {
-                                widget.consultedProductController.text = widget
-                                    .consultedProductController.text
-                                    .replaceAll(RegExp(r'\,'), '.');
-                              }
-                              adjustStockProvider.jsonAdjustStock["Quantity"] =
-                                  widget.consultedProductController.text;
-
-                              adjustStockProvider
-                                      .jsonAdjustStock["EnterpriseCode"] =
-                                  widget.internalEnterpriseCode.toString();
-
-                              await adjustStockProvider.confirmAdjustStock(
-                                context: context,
-                                indexOfProduct: widget.index,
-                                consultedProductControllerText:
-                                    widget.consultedProductController.text,
-                              );
-
-                              if (adjustStockProvider.errorMessageAdjustStock ==
-                                  "") {
-                                widget.consultedProductController.clear();
-                              }
-                            }
+                            await confirmAdjustStock(
+                              adjustStockProvider: adjustStockProvider,
+                            );
                           },
                     child: adjustStockProvider.isLoadingAdjustStock
                         ? FittedBox(
