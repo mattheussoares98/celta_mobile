@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml2json/xml2json.dart';
-
 import '../utils/base_url.dart';
 import '../utils/default_error_message_to_find_server.dart';
 import '../Components/Global_widgets/show_error_message.dart';
@@ -94,44 +93,39 @@ class LoginProvider with ChangeNotifier {
     password = ConvertString.convertToRemoveSpecialCaracters(password);
 
     try {
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/Security/UserCanLoginPlain?user=$user&password=$password'));
-
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do login: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessage = json.decode(resultAsString)["Message"];
-
+      await SoapHelper.soapPost(
+        parameters: {
+          "user": user,
+          "password": password,
+        },
+        typeOfResponse: "UserCanLoginJsonResponse",
+        SOAPAction: "UserCanLoginJson",
+        serviceASMX: "CeltaSecurityService.asmx",
+        typeOfResult: "UserCanLoginJsonResult",
+      );
+      _errorMessage = SoapHelperResponseParameters.errorMessage;
+      if (SoapHelperResponseParameters.errorMessage != "") {
         ShowErrorMessage.showErrorMessage(
           error: _errorMessage,
           context: context,
         );
-        _isLoading = false;
+      } else {
+        Map resultAsMap =
+            json.decode(SoapHelperResponseParameters.responseAsString);
+        // Map resultAsMap = resultAsList.asMap();
 
-        notifyListeners();
-        return;
+        final myTransformer = Xml2Json();
+        myTransformer
+            .parse(resultAsMap["Usuarios"][0]['CrossIdentity_Usuario']);
+        String toParker = myTransformer.toParker();
+        Map toParker2 = json.decode(toParker);
+        UserIdentity.identity = toParker2['string'];
+
+        _loginController?.add(true);
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userIdentity', UserIdentity.identity);
       }
-      List resultAsList = json.decode(resultAsString);
-      Map resultAsMap = resultAsList.asMap();
-
-      final myTransformer = Xml2Json();
-      myTransformer.parse(resultAsMap[0]['CrossIdentity_Usuario']);
-      String toParker = myTransformer.toParker();
-      Map toParker2 = json.decode(toParker);
-      UserIdentity.identity = toParker2['string'];
-      //transformando o XML em String pra pegar a identidade do usuário
-
-      _loginController?.add(
-          true); //como deu certo o login, adiciona o valor "true" pra na tela AuthOrHome identificar que está como true e ir para a homePage
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userIdentity', UserIdentity.identity);
     } catch (e) {
       // _updateErrorMessage(e.toString());
       print('deu erro no login: $e');

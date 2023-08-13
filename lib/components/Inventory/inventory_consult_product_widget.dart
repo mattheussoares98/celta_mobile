@@ -42,14 +42,15 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
       isLegacyCodeSearch: _isLegacyCodeSearch,
       controllerText: widget.consultProductController.text,
       enterpriseCode: arguments["codigoInternoEmpresa"],
-      inventoryProcessCode:
-          arguments["InventoryCountingsModel"].codigoInternoInventario,
-      codigoInternoInvCont:
-          arguments["InventoryCountingsModel"].codigoInternoInvCont,
       context: context,
       isIndividual: widget.isIndividual,
       consultedProductController: widget.consultProductController,
       indexOfProduct: 0, //não da pra obter por aqui o index do produto
+      inventoryProcessCode:
+          arguments["InventoryCountingsModel"].codigoInternoInventario,
+
+      inventoryCountingCode:
+          arguments["InventoryCountingsModel"].codigoInternoInvCont,
     );
 
     if (inventoryProvider.products.isNotEmpty && widget.isIndividual) {

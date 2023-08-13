@@ -1,32 +1,31 @@
-import 'dart:convert';
-
 class EnterpriseModel {
   final int codigoInternoEmpresa;
   final String codigoEmpresa;
   final String nomeEmpresa;
   final String cnpj;
+  final String CodigoInternoVendaMobile_ModeloPedido;
 
   EnterpriseModel({
     required this.codigoInternoEmpresa,
     required this.codigoEmpresa,
     required this.nomeEmpresa,
     required this.cnpj,
+    required this.CodigoInternoVendaMobile_ModeloPedido,
   });
 
   static resultAsStringToEnterpriseModel({
-    required String resultAsString,
+    required List data,
     required List listToAdd,
   }) {
-    List resultAsList = json.decode(resultAsString);
-    Map resultAsMap = resultAsList.asMap();
-
-    resultAsMap.forEach((id, data) {
+    data.forEach((element) {
       listToAdd.add(
         EnterpriseModel(
-          codigoInternoEmpresa: data['CodigoInterno_Empresa'],
-          codigoEmpresa: data['Codigo_Empresa'],
-          nomeEmpresa: data['Nome_Empresa'],
-          cnpj: data['Cnpj_Empresa'],
+          codigoInternoEmpresa: int.parse(element['CodigoInterno_Empresa']),
+          codigoEmpresa: element['Codigo_Empresa'],
+          nomeEmpresa: element['Nome_Empresa'],
+          cnpj: element['Cnpj_Empresa'],
+          CodigoInternoVendaMobile_ModeloPedido:
+              element["CodigoInternoVendaMobile_ModeloPedido"] ?? "-1",
         ),
       );
     });

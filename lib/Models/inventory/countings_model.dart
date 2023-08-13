@@ -16,22 +16,31 @@ class InventoryCountingsModel {
   });
 
   static responseInStringToInventoryCountingsModel({
-    required String responseInString,
+    required dynamic data,
     required List listToAdd,
   }) {
-    final List responseInList = json.decode(responseInString);
-    final Map responseInMap = responseInList.asMap();
+    if (data == null) {
+      return;
+    }
+    List dataList = [];
+    if (data is Map) {
+      dataList.add(data);
+    } else {
+      dataList = data;
+    }
 
-    responseInMap.forEach((id, data) {
+    dataList.forEach((element) {
       listToAdd.add(
         InventoryCountingsModel(
-          codigoInternoInvCont: data['CodigoInterno_InvCont'],
-          flagTipoContagemInvCont: data['FlagTipoContagem_InvCont'],
-          codigoInternoInventario: data['CodigoInterno_Inventario'],
-          numeroContagemInvCont: data['NumeroContagem_InvCont'],
-          obsInvCont: data['Obs_InvCont'] == null
+          codigoInternoInvCont: int.parse(element['CodigoInterno_InvCont']),
+          flagTipoContagemInvCont:
+              int.parse(element['FlagTipoContagem_InvCont']),
+          codigoInternoInventario:
+              int.parse(element['CodigoInterno_Inventario']),
+          numeroContagemInvCont: int.parse(element['NumeroContagem_InvCont']),
+          obsInvCont: element['Obs_InvCont'] == null
               ? 'Não há observações'
-              : data['Obs_InvCont'],
+              : element['Obs_InvCont'],
           //as vezes a observação vem nula e se não faz isso, gera erro no app
         ),
       );

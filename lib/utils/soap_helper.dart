@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:celta_inventario/utils/base_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
@@ -14,12 +15,12 @@ class SoapHelperResponseParameters {
 
   static String responseAsString = '';
   static String errorMessage = '';
+  static Map responseAsMap = {};
 }
 
 class SoapHelper {
   static soapPost({
-    required Map<String, String> parameters,
-    required String ccsUrl,
+    required Map<String, dynamic> parameters,
     required String typeOfResponse,
     String? typeOfResult,
     required String SOAPAction,
@@ -49,7 +50,7 @@ class SoapHelper {
       </soap12:Envelope>''';
 
     final response = await http.post(
-      Uri.parse('$ccsUrl/$serviceASMX'),
+      Uri.parse('${BaseUrl.ccsUrl}/$serviceASMX'),
       headers: soapHeaders,
       body: envelope,
     );
@@ -68,7 +69,12 @@ class SoapHelper {
         if (typeOfResult != null) {
           SoapHelperResponseParameters.responseAsString =
               parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                  [typeOfResult];
+                      [typeOfResult]
+                  .toString();
+
+          SoapHelperResponseParameters.responseAsMap =
+              parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                  [typeOfResult]["diffgr:diffgram"]["NewDataSet"];
         }
       } else {
         SoapHelperResponseParameters.errorMessage =

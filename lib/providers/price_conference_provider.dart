@@ -1,42 +1,21 @@
-import 'dart:convert';
-import 'package:celta_inventario/Models/consult_price_model.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
+import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import '../utils/base_url.dart';
+import '../Models/price_conference_product_model.dart';
 import '../utils/convert_string.dart';
 
-enum SearchTypes {
-  GetProductByName,
-  GetProductByEAN,
-  GetProductByPLU,
-  GetProductByLegacyCode,
-}
-
 class PriceConferenceProvider with ChangeNotifier {
-  List<ConsultPriceProductsModel> _products = [];
+  List<PriceConferenceProductsModel> _products = [];
 
-  get products {
-    return _products;
-  }
-
-  get productsCount {
-    return _products.length;
-  }
-
+  get products => _products;
+  get productsCount => _products.length;
   bool _isLoading = false;
 
-  get isLoading {
-    return _isLoading;
-  }
-
+  get isLoading => _isLoading;
   String _errorMessage = "";
 
-  get errorMessage {
-    return _errorMessage;
-  }
-
+  get errorMessage => _errorMessage;
   convertSalePracticedRetailToDouble() {
     _products.forEach((element) {
       element.SalePracticedRetail =
@@ -65,123 +44,6 @@ class PriceConferenceProvider with ChangeNotifier {
     FocusScope.of(context).requestFocus(consultProductFocusNode);
   }
 
-  Future<void> _getProductsOld({
-    required int enterpriseCode,
-    required String controllerText, //em string pq vem de um texfFormField
-    required SearchTypes searchTypes,
-    required BuildContext context,
-  }) async {
-    _products.clear();
-    _errorMessage = "";
-    _isLoading = true;
-    String searchType =
-        searchTypes.toString().replaceAll(RegExp(r'SearchTypes.'), '');
-    notifyListeners();
-    dynamic value = int.tryParse(controllerText);
-    //o valor pode ser em inteiro ou em texto
-    if (value == null) {
-      //retorna nulo quando não consegue converter para inteiro. Se não
-      //conseguir converter precisa consultar por nome, por isso pode usar o
-      //próprio texto do "controllerText"
-      value = controllerText;
-    }
-
-    var headers = {'Content-Type': 'application/json'};
-    // print(searchType);
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/PriceConference/$searchType?enterpriseCode=$enterpriseCode&searchValue=$value'));
-    request.body = json.encode(UserIdentity.identity);
-    request.headers.addAll(headers);
-
-    try {
-      http.StreamedResponse response = await request.send();
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do $searchType: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessage = json.decode(resultAsString)["Message"];
-        _isLoading = false;
-
-        notifyListeners();
-        return;
-      }
-
-      ConsultPriceProductsModel.resultAsStringToConsultPriceModel(
-        resultAsString: resultAsString,
-        listToAdd: _products,
-      );
-    } catch (e) {
-      print("Erro para efetuar a requisição $searchType: $e");
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-    }
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<void> getProductByPluEanOrName({
-    required int enterpriseCode,
-    required String controllerText,
-    required BuildContext context,
-    required bool isLegacyCodeSearch,
-  }) async {
-    if (isLegacyCodeSearch) {
-      await _getProductsOld(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypes: SearchTypes.GetProductByLegacyCode,
-        context: context,
-      );
-    } else {
-      int? isInt = int.tryParse(controllerText);
-      if (isInt != null) {
-        //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
-        await _getProductsOld(
-          enterpriseCode: enterpriseCode,
-          controllerText: controllerText,
-          searchTypes: SearchTypes.GetProductByPLU,
-          context: context,
-        );
-        if (_products.isNotEmpty) return;
-
-        await _getProductsOld(
-          enterpriseCode: enterpriseCode,
-          controllerText: controllerText,
-          searchTypes: SearchTypes.GetProductByEAN,
-          context: context,
-        );
-        if (_products.isNotEmpty) return;
-      } else {
-        //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
-        await _getProductsOld(
-          // consultProductFocusNode: consultProductFocusNode,
-          enterpriseCode: enterpriseCode,
-          controllerText: controllerText,
-          searchTypes: SearchTypes.GetProductByName,
-          context: context,
-        );
-      }
-    }
-
-    if (_errorMessage != "") {
-      //quando da erro para consultar os produtos, muda o foco novamente para o
-      //campo de pesquisa dos produtos
-      Future.delayed(const Duration(milliseconds: 100), () {
-        //se não colocar em um future pra mudar o foco, não funciona corretamente
-        FocusScope.of(context).requestFocus(consultProductFocusNode);
-        //altera o foco para o campo de pesquisa novamente
-      });
-      // ShowErrorMessage.showErrorMessage(
-      //   error: _errorMessage,
-      //   context: context,
-      // );
-    }
-
-    notifyListeners();
-  }
-
   Future<void> _getProducts({
     required int enterpriseCode,
     required String controllerText, //em string pq vem de um texfFormField
@@ -203,45 +65,27 @@ class PriceConferenceProvider with ChangeNotifier {
       value = controllerText;
     }
 
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/PriceConference/GetProduct?enterpriseCode=$enterpriseCode&searchValue=${value}'));
-    if (isLegacyCodeSearch) {
-      request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/PriceConference/GetProductByLegacyCode?enterpriseCode=$enterpriseCode&searchValue=$value'));
-    }
-
-    request.body = json.encode(UserIdentity.identity);
-    request.headers.addAll(headers);
-
     try {
-      http.StreamedResponse response = await request.send();
-      String resultAsString = await response.stream.bytesToString();
-
-      if (isLegacyCodeSearch) {
-        print("resultAsString consultando por código legado $resultAsString");
-      } else {
-        print(
-            "resultAsString consultando SEM SER por código legado $resultAsString");
-      }
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessage = json.decode(resultAsString)["Message"];
-        _isLoading = false;
-
-        notifyListeners();
-        return;
-      }
-
-      ConsultPriceProductsModel.resultAsStringToConsultPriceModel(
-        resultAsString: resultAsString,
-        listToAdd: _products,
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "enterpriseCode": enterpriseCode,
+          "searchValue": controllerText,
+          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+        },
+        typeOfResponse: "GetProductCmxJsonResponse",
+        SOAPAction: "GetProductCmxJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductCmxJsonResult",
       );
+
+      _errorMessage = SoapHelperResponseParameters.errorMessage;
+      if (_errorMessage == "") {
+        PriceConferenceProductsModel.resultAsStringToConsultPriceModel(
+          data: SoapHelperResponseParameters.responseAsMap["Produtos"],
+          listToAdd: _products,
+        );
+      }
     } catch (e) {
       print("Erro para efetuar a requisição : $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -264,14 +108,6 @@ class PriceConferenceProvider with ChangeNotifier {
       context: context,
       isLegacyCodeSearch: isLegacyCodeSearch,
     );
-    if (_products.isEmpty && _errorMessage != "") {
-      await getProductByPluEanOrName(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        context: context,
-        isLegacyCodeSearch: isLegacyCodeSearch,
-      );
-    }
 
     if (_errorMessage != "") {
       //quando da erro para consultar os produtos, muda o foco novamente para o
@@ -305,31 +141,23 @@ class PriceConferenceProvider with ChangeNotifier {
     notifyListeners();
     bool newValue = !_products[index].EtiquetaPendente;
 
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/PriceConference/SendToPrint?enterpriseCode=$enterpriseCode' +
-                '&productPackingCode=$productPackingCode&send=$newValue'));
-    request.body = json.encode(UserIdentity.identity);
-    request.headers.addAll(headers);
-
     try {
-      http.StreamedResponse response = await request.send();
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "enterpriseCode": enterpriseCode,
+          "productPackingCode": productPackingCode,
+          "send": newValue,
+        },
+        typeOfResponse: "SendToPrintResponse",
+        SOAPAction: "SendToPrint",
+        serviceASMX: "CeltaPriceConferenceService.asmx",
+      );
+      _errorSendToPrint = SoapHelperResponseParameters.errorMessage;
 
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString marcar para impressão: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorSendToPrint = json.decode(resultAsString)["Message"];
-        _isLoading = false;
-
-        notifyListeners();
-        return;
+      if (_errorSendToPrint == "") {
+        _products[index].EtiquetaPendente = !_products[index].EtiquetaPendente;
       }
-
-      _products[index].EtiquetaPendente = !_products[index].EtiquetaPendente;
       //como deu certo a marcação/desmarcação, precisa atualizar na lista local se está marcado ou não
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
@@ -358,13 +186,13 @@ class PriceConferenceProvider with ChangeNotifier {
   }
 
   orderByUpName() {
-    _products.sort((a, b) => a.ProductName.compareTo(b.ProductName));
+    _products.sort((a, b) => a.Name.compareTo(b.Name));
 
     notifyListeners();
   }
 
   orderByDownName() {
-    _products.sort((a, b) => b.ProductName.compareTo(a.ProductName));
+    _products.sort((a, b) => b.Name.compareTo(a.Name));
     notifyListeners();
   }
 }

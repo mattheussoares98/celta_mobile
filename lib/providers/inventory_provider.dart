@@ -2,6 +2,7 @@ import 'package:celta_inventario/Models/inventory/inventory_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
+import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -10,11 +11,6 @@ import '../Components/Global_widgets/show_error_message.dart';
 import '../Models/inventory/countings_model.dart';
 import '../Models/inventory/inventory_product_model.dart';
 import '../utils/user_identity.dart';
-
-enum SearchTypes {
-  GetProductByEAN,
-  GetProductByPLU,
-}
 
 class InventoryProvider with ChangeNotifier {
   final List<InventoryModel> _inventorys = [];
@@ -72,88 +68,41 @@ class InventoryProvider with ChangeNotifier {
     _isLoadingInventorys = true;
     _inventorys.clear();
     _errorMessageInventorys = '';
+    _countings.clear();
     // notifyListeners();
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/Inventory/GetFroozenProcesses?enterpriseCode=$enterpriseCode'),
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "enterpriseCode": enterpriseCode,
+        },
+        typeOfResponse: "GetFrozenProcessesResponse",
+        SOAPAction: "GetFrozenProcesses",
+        serviceASMX: "CeltaInventoryService.asmx",
+        typeOfResult: "GetFrozenProcessesResult",
       );
-      request.body = json.encode(userIdentity);
-      request.headers.addAll(headers);
+      _errorMessageInventorys = SoapHelperResponseParameters.errorMessage;
 
-      http.StreamedResponse response = await request.send();
-      String responseAsString = await response.stream.bytesToString();
+      if (_errorMessageInventorys == "") {
+        InventoryModel.responseAsStringToInventoryModel(
+          data: SoapHelperResponseParameters.responseAsMap["Inventarios"],
+          listToAdd: _inventorys,
+        );
 
-      //esse if serve para quando não houver um inventário congelado para a empresa, não continunar o processo senão dará erro na aplicação
-      if (responseAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageInventorys = json.decode(responseAsString)["Message"];
-        _isLoadingInventorys = false;
-
-        notifyListeners();
-        return;
+        InventoryCountingsModel.responseInStringToInventoryCountingsModel(
+          data: SoapHelperResponseParameters
+              .responseAsMap["InventariosContagens"],
+          listToAdd: _countings,
+        );
       }
-
-      InventoryModel.responseAsStringToInventoryModel(
-        responseAsString: responseAsString,
-        listToAdd: _inventorys,
-      );
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageInventorys = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingInventorys = false;
-    }
-
-    notifyListeners();
-  }
-
-  getCountings({
-    required int inventoryProcessCode,
-    required BuildContext context,
-  }) async {
-    _countings.clear();
-    _errorMessageCountings = '';
-    _isLoadingCountings = true;
-    // notifyListeners();
-    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
-    //porque está sendo chamado dentro de um setState
-
-    try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/Inventory/GetCountings?inventoryProcessCode=$inventoryProcessCode'));
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-      final responseInString = await response.stream.bytesToString();
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageCountings = json.decode(responseInString)["Message"];
-        _isLoadingCountings = false;
-
-        notifyListeners();
-        return;
-      }
-
-      InventoryCountingsModel.responseInStringToInventoryCountingsModel(
-        responseInString: responseInString,
-        listToAdd: _countings,
-      );
-    } catch (e) {
-      print("Erro para efetuar a requisição: $e");
-      _errorMessageCountings = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-    } finally {
-      _isLoadingCountings = false;
     }
 
     notifyListeners();
@@ -165,152 +114,63 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> _getProducts({
-    required String controllerText,
     required int enterpriseCode,
-    required int inventoryProcessCode,
     required int inventoryCountingCode,
+    required int inventoryProcessCode,
+    required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
     required bool isLegacyCodeSearch,
   }) async {
     _products.clear();
-    _errorMessageGetProducts = '';
+    _errorMessageGetProducts = "";
     _isLoadingProducts = true;
-    _lastQuantityAdded = "";
+    _indexOfLastAddedQuantity = -1;
     controllerText =
         ConvertString.convertToRemoveSpecialCaracters(controllerText);
-
     notifyListeners();
-
-    http.Request? request;
-
-    if (isLegacyCodeSearch) {
-      request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/Inventory/GetProductByLegacyCode?searchValue=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
-      );
-    } else {
-      request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/Inventory/GetProduct?searchValue=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
-      );
+    dynamic value = int.tryParse(controllerText);
+    //o valor pode ser em inteiro ou em texto
+    if (value == null) {
+      //retorna nulo quando não consegue converter para inteiro. Se não
+      //conseguir converter precisa consultar por nome, por isso pode usar o
+      //próprio texto do "controllerText"
+      value = controllerText;
     }
 
     try {
-      var headers = {'Content-Type': 'application/json'};
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "enterpriseCode": enterpriseCode,
+          "searchValue": controllerText,
+          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          "inventoryProcessCode": inventoryProcessCode,
+          "inventoryCountingCode": inventoryCountingCode,
+        },
+        typeOfResponse: "GetProductResponse",
+        SOAPAction: "GetProduct",
+        serviceASMX: "CeltaInventoryService.asmx",
+        typeOfResult: "GetProductResult",
+      );
 
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
+      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+      if (_errorMessageGetProducts == "") {
+        InventoryProductModel.responseInStringToInventoryProductModel(
+          data: SoapHelperResponseParameters.responseAsMap["Produtos"],
+          listToAdd: _products,
+        );
 
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
-
-      print('resposta para NOVA consulta de produtos = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageGetProducts = json.decode(responseInString)["Message"];
-        _isLoadingProducts = false;
-        notifyListeners();
-        return;
+        Future.delayed(const Duration(milliseconds: 100), () {
+          //se não colocar em um future pra mudar o foco, não funciona corretamente
+          FocusScope.of(context).requestFocus(consultedProductFocusNode);
+          //altera o foco para o campo de pesquisa novamente
+        });
       }
-
-      InventoryProductModel.responseInStringToInventoryProductModel(
-        responseInString: responseInString,
-        listToAdd: _products,
-      );
-
-      Future.delayed(const Duration(milliseconds: 100), () {
-        //se não colocar em um future pra mudar o foco, não funciona corretamente
-        FocusScope.of(context).requestFocus(consultedProductFocusNode);
-        //altera o foco para o campo de pesquisa novamente
-      });
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      print("Erro para efetuar a requisição : $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      _isLoadingProducts = false;
-      notifyListeners();
     }
-
-    if (products.isNotEmpty) {
-      _isLoadingProducts = false;
-    }
-    notifyListeners();
-  }
-
-  Future<void> _getProductsOld({
-    required String controllerText,
-    required int enterpriseCode,
-    required int inventoryProcessCode,
-    required int inventoryCountingCode,
-    required BuildContext context,
-    required SearchTypes searchTypes,
-  }) async {
-    _products.clear();
-    _errorMessageGetProducts = '';
-    _isLoadingProducts = true;
-    _lastQuantityAdded = "";
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
-
-    notifyListeners();
-
-    http.Request request;
-
-    if (searchTypes == SearchTypes.GetProductByEAN) {
-      request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/Inventory/GetProductByEan?ean=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
-      );
-    } else {
-      request = http.Request(
-        'POST',
-        Uri.parse(
-            '${BaseUrl.url}/Inventory/GetProductByPlu?plu=$controllerText&enterpriseCode=$enterpriseCode&inventoryProcessCode=$inventoryProcessCode&inventoryCountingCode=$inventoryCountingCode'),
-      );
-    }
-
-    try {
-      var headers = {'Content-Type': 'application/json'};
-
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
-
-      print('resposta para consulta do $searchTypes = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageGetProducts = json.decode(responseInString)["Message"];
-        _isLoadingProducts = false;
-        notifyListeners();
-        return;
-      }
-
-      InventoryProductModel.responseInStringToInventoryProductModel(
-        responseInString: responseInString,
-        listToAdd: _products,
-      );
-
-      Future.delayed(const Duration(milliseconds: 100), () {
-        //se não colocar em um future pra mudar o foco, não funciona corretamente
-        FocusScope.of(context).requestFocus(consultedProductFocusNode);
-        //altera o foco para o campo de pesquisa novamente
-      });
-    } catch (e) {
-      print("Erro para efetuar a requisição: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      _isLoadingProducts = false;
-      notifyListeners();
-    }
-
-    if (products.isNotEmpty) {
-      _isLoadingProducts = false;
-    }
+    _isLoadingProducts = false;
     notifyListeners();
   }
 
@@ -318,43 +178,21 @@ class InventoryProvider with ChangeNotifier {
     required String controllerText,
     required int enterpriseCode,
     required int inventoryProcessCode,
-    required int codigoInternoInvCont,
     required BuildContext context,
     required bool isIndividual,
     required TextEditingController consultedProductController,
     required bool isLegacyCodeSearch,
     required int indexOfProduct,
+    required int inventoryCountingCode,
   }) async {
     await _getProducts(
       controllerText: controllerText,
       enterpriseCode: enterpriseCode,
-      inventoryProcessCode: inventoryProcessCode,
-      inventoryCountingCode: codigoInternoInvCont,
       context: context,
       isLegacyCodeSearch: isLegacyCodeSearch,
+      inventoryCountingCode: inventoryCountingCode,
+      inventoryProcessCode: inventoryProcessCode,
     );
-
-    if (_products.isEmpty && _errorMessageGetProducts != "") {
-      await _getProductsOld(
-        controllerText: controllerText,
-        enterpriseCode: enterpriseCode,
-        inventoryProcessCode: inventoryProcessCode,
-        inventoryCountingCode: codigoInternoInvCont,
-        context: context,
-        searchTypes: SearchTypes.GetProductByPLU,
-      );
-
-      if (_products.isEmpty) {
-        await _getProductsOld(
-          controllerText: controllerText,
-          enterpriseCode: enterpriseCode,
-          inventoryProcessCode: inventoryProcessCode,
-          inventoryCountingCode: codigoInternoInvCont,
-          context: context,
-          searchTypes: SearchTypes.GetProductByEAN,
-        );
-      }
-    }
 
     if (_errorMessageGetProducts != '') {
       Future.delayed(const Duration(milliseconds: 100), () {
@@ -373,8 +211,8 @@ class InventoryProvider with ChangeNotifier {
         indexOfProduct: indexOfProduct,
         isIndividual: isIndividual,
         context: context,
-        codigoInternoInvCont: codigoInternoInvCont,
         isSubtract: false,
+        inventoryProcessCode: inventoryProcessCode,
         consultedProductController: consultedProductController,
       );
     }
@@ -407,9 +245,10 @@ class InventoryProvider with ChangeNotifier {
     required int indexOfProduct,
   }) async {
     quantity = quantity.replaceAll(RegExp(r','), '.');
+    double newQuantity = double.parse(quantity);
+
     if (isSubtract &&
-        double.tryParse(quantity)! >
-            _products[indexOfProduct].quantidadeInvContProEmb) {
+        newQuantity > _products[indexOfProduct].quantidadeInvContProEmb) {
       _errorMessageQuantity = "A quantidade não pode ficar negativa!";
       ShowErrorMessage.showErrorMessage(
         error: _errorMessageQuantity,
@@ -417,6 +256,10 @@ class InventoryProvider with ChangeNotifier {
       );
       return;
     }
+    if (isSubtract) {
+      newQuantity = newQuantity - (newQuantity * 2);
+    }
+
     _isLoadingQuantity = true;
     _errorMessageQuantity = '';
     _canChangeTheFocus = false;
@@ -424,43 +267,29 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-        'POST',
-        Uri.parse(
-          isSubtract
-              ? '${BaseUrl.url}/Inventory/EntryQuantity?countingCode=$countingCode&productPackingCode=$productPackingCode&quantity=-$quantity'
-              : '${BaseUrl.url}/Inventory/EntryQuantity?countingCode=$countingCode&productPackingCode=$productPackingCode&quantity=$quantity',
-        ),
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "countingCode": countingCode,
+          "productPackingCode": productPackingCode,
+          "quantity": newQuantity,
+        },
+        typeOfResponse: "EntryQuantityResponse",
+        SOAPAction: "EntryQuantity",
+        serviceASMX: "CeltaInventoryService.asmx",
       );
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
 
-      http.StreamedResponse response = await request.send();
-      String resultAsString = await response.stream.bytesToString();
+      _errorMessageQuantity = SoapHelperResponseParameters.errorMessage;
 
-      print('response do entryQuantity: $resultAsString');
+      if (_errorMessageQuantity == "") {
+        if (isSubtract) {
+          _lastQuantityAdded = "-$quantity";
+        } else {
+          _lastQuantityAdded = quantity;
+        }
 
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageQuantity = json.decode(resultAsString)["Message"];
-        _isLoadingQuantity = false;
-
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageQuantity,
-          context: context,
-        );
-        notifyListeners();
-        return;
+        _indexOfLastAddedQuantity = indexOfProduct;
       }
-
-      if (isSubtract) {
-        _lastQuantityAdded = "-$quantity";
-      } else {
-        _lastQuantityAdded = quantity;
-      }
-
-      _indexOfLastAddedQuantity = indexOfProduct;
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -475,7 +304,7 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> anullQuantity({
-    required int countingCode,
+    required int inventoryProcessCode,
     required int productPackingCode,
     required BuildContext context,
     required int indexOfProduct,
@@ -491,7 +320,7 @@ class InventoryProvider with ChangeNotifier {
       var request = http.Request(
         'POST',
         Uri.parse(
-          '${BaseUrl.url}/Inventory/AnnulQuantity?countingCode=$countingCode&productPackingCode=$productPackingCode',
+          '${BaseUrl.url}/Inventory/AnnulQuantity?countingCode=$inventoryProcessCode&productPackingCode=$productPackingCode',
         ),
       );
       request.body = json.encode(UserIdentity.identity);
@@ -567,7 +396,7 @@ class InventoryProvider with ChangeNotifier {
   addQuantity({
     required bool isIndividual,
     required BuildContext context,
-    required int codigoInternoInvCont,
+    required int inventoryProcessCode,
     required bool isSubtract,
     required TextEditingController consultedProductController,
     required int indexOfProduct,
@@ -581,7 +410,7 @@ class InventoryProvider with ChangeNotifier {
     try {
       await _entryQuantity(
         indexOfProduct: indexOfProduct,
-        countingCode: codigoInternoInvCont,
+        countingCode: inventoryProcessCode,
         productPackingCode: _products[indexOfProduct].codigoInternoProEmb,
         quantity: isIndividual ? '1' : quantity.toString(),
         isSubtract: isSubtract,
@@ -589,7 +418,10 @@ class InventoryProvider with ChangeNotifier {
       );
 
       if (_errorMessageQuantity != "") {
-        //Se der erro não pode alterar a última quantidade adicionada
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageQuantity,
+          context: context,
+        );
         return;
       }
 

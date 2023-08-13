@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 
 class InsertOneQuantity extends StatefulWidget {
   final bool isIndividual;
-  final int codigoInternoInvCont;
+  final int inventoryProcessCode;
   final int indexOfProduct;
   final TextEditingController consultedProductController;
   const InsertOneQuantity({
     Key? key,
     required this.isIndividual,
     required this.indexOfProduct,
-    required this.codigoInternoInvCont,
+    required this.inventoryProcessCode,
     required this.consultedProductController,
   }) : super(key: key);
 
@@ -54,7 +54,7 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
                         indexOfProduct: widget.indexOfProduct,
                         isIndividual: widget.isIndividual,
                         context: context,
-                        codigoInternoInvCont: widget.codigoInternoInvCont,
+                        inventoryProcessCode: widget.inventoryProcessCode,
                         consultedProductController:
                             widget.consultedProductController,
                         isSubtract: true,
@@ -88,7 +88,7 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
                         indexOfProduct: widget.indexOfProduct,
                         isIndividual: widget.isIndividual,
                         context: context,
-                        codigoInternoInvCont: widget.codigoInternoInvCont,
+                        inventoryProcessCode: widget.inventoryProcessCode,
                         isSubtract: false,
                         consultedProductController:
                             widget.consultedProductController,

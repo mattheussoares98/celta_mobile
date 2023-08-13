@@ -24,36 +24,36 @@ class InventoryModel {
   });
 
   static void responseAsStringToInventoryModel({
-    required String responseAsString,
+    required dynamic data,
     required List listToAdd,
   }) {
-    List responseAsList = json.decode(responseAsString.toString());
-    Map responseAsMap = responseAsList.asMap();
+    if (data == null) {
+      return;
+    }
+    List dataList = [];
+    if (data is Map) {
+      dataList.add(data);
+    } else {
+      dataList = data;
+    }
 
-    responseAsMap.forEach((id, data) {
+    dataList.forEach((element) {
       listToAdd.add(
         InventoryModel(
-          codigoInternoInventario: data['CodigoInterno_Inventario'],
-          dataCriacaoInventario: DateTime.parse(data['DataCriacao_Inventario']),
+          codigoInternoInventario:
+              int.parse(element['CodigoInterno_Inventario']),
+          dataCriacaoInventario:
+              DateTime.parse(element['DataCriacao_Inventario']),
           dataCongelamentoInventario:
-              DateTime.parse(data['DataCongelamento_Inventario']),
-          nomeTipoEstoque: data['Nome_TipoEstoque'],
-          obsInventario: data['Obs_Inventario'] ?? '',
-          nomefuncionario: data['Nome_Funcionario'],
-          nomeempresa: data['Nome_Empresa'],
-          codigoInternoEmpresa: data['CodigoInterno_Empresa1'],
-          codigoEmpresa: data['Codigo_Empresa'],
+              DateTime.parse(element['DataCongelamento_Inventario']),
+          nomeTipoEstoque: element['Nome_TipoEstoque'],
+          obsInventario: element['Obs_Inventario'] ?? '',
+          nomefuncionario: element['Nome_Funcionario'],
+          nomeempresa: element['Nome_Empresa'],
+          codigoInternoEmpresa: int.parse(element['CodigoInterno_Empresa1']),
+          codigoEmpresa: element['Codigo_Empresa'],
         ),
       );
     });
   }
 }
-
-//  "CodigoInterno_Inventario": 3,
-//   "DataCriacao_Inventario": "2021-12-06T10:50:48",
-//   "DataCongelamento_Inventario": "2021-12-06T10:54:00",
-//    codigo interno empresa
-//    "Nome_TipoEstoque": "Estoque Atual",
-//      "Obs_Inventario": null,
-//      "Nome_Funcionario": "Willians Junior",
-//      "Nome_Empresa": "Deposito de Meias São José",

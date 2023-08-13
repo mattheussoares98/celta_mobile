@@ -1,9 +1,9 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Components/Price_conference/price_conference_send_print_button.dart';
+import 'package:celta_inventario/Models/price_conference_product_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
-import '../../Models/consult_price_model.dart';
 import '../../providers/price_conference_provider.dart';
 
 class PriceConferenceItems extends StatefulWidget {
@@ -33,7 +33,7 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
               child: ListView.builder(
                 itemCount: widget.priceConferenceProvider.productsCount,
                 itemBuilder: (context, index) {
-                  ConsultPriceProductsModel product =
+                  PriceConferenceProductsModel product =
                       widget.priceConferenceProvider.products[index];
                   return GestureDetector(
                     onTap: () {

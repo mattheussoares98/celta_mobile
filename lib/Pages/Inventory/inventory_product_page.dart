@@ -76,7 +76,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             if (inventoryProvider.products.isNotEmpty)
               InventoryProductsItems(
                 isIndividual: _isIndividual,
-                countingCode:
+                inventoryProcessCode:
                     arguments["InventoryCountingsModel"].codigoInternoInvCont,
                 productPackingCode:
                     arguments["InventoryCountingsModel"].numeroContagemInvCont,

@@ -10,13 +10,13 @@ import '../Global_widgets/show_alert_dialog.dart';
 import 'inventory_insert_one_quantity.dart';
 
 class InventoryProductsItems extends StatefulWidget {
-  final int countingCode;
+  final int inventoryProcessCode;
   final int productPackingCode;
   final bool isIndividual;
   final TextEditingController consultedProductController;
   InventoryProductsItems({
     Key? key,
-    required this.countingCode,
+    required this.inventoryProcessCode,
     required this.consultedProductController,
     required this.productPackingCode,
     required this.isIndividual,
@@ -51,7 +51,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
             consultedProductController: widget.consultedProductController,
             isIndividual: widget.isIndividual,
             context: context,
-            codigoInternoInvCont: widget.countingCode,
+            inventoryProcessCode: widget.inventoryProcessCode,
             isSubtract: isSubtract,
           );
         },
@@ -63,7 +63,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
         consultedProductController: widget.consultedProductController,
         isIndividual: widget.isIndividual,
         context: context,
-        codigoInternoInvCont: widget.countingCode,
+        inventoryProcessCode: widget.inventoryProcessCode,
         isSubtract: isSubtract,
       );
     }
@@ -90,7 +90,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
       function: () async {
         await inventoryProvider.anullQuantity(
           indexOfProduct: index,
-          countingCode: widget.countingCode,
+          inventoryProcessCode: widget.inventoryProcessCode,
           productPackingCode:
               inventoryProvider.products[index].codigoInternoProEmb,
           context: context,
@@ -291,7 +291,8 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                             if (widget.isIndividual && _selectedIndex == index)
                               InsertOneQuantity(
                                 isIndividual: widget.isIndividual,
-                                codigoInternoInvCont: widget.countingCode,
+                                inventoryProcessCode:
+                                    widget.inventoryProcessCode,
                                 consultedProductController:
                                     widget.consultedProductController,
                                 indexOfProduct: index,

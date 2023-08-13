@@ -16,22 +16,30 @@ class InventoryProductModel {
   });
 
   static responseInStringToInventoryProductModel({
-    required String responseInString,
+    required dynamic data,
     required List listToAdd,
   }) {
-    List responseInList = json.decode(responseInString);
-    Map responseInMap = responseInList.asMap();
+    if (data == null) {
+      return;
+    }
+    List dataList = [];
+    if (data is Map) {
+      dataList.add(data);
+    } else {
+      dataList = data;
+    }
 
-    responseInMap.forEach((key, value) {
+    dataList.forEach((element) {
       listToAdd.add(
         InventoryProductModel(
-          productName: value['Nome_Produto'],
-          codigoInternoProEmb: value['CodigoInterno_ProEmb'],
-          plu: value['CodigoPlu_ProEmb'],
-          codigoProEmb: value['Codigo_ProEmb'],
-          quantidadeInvContProEmb: value['Quantidade_InvContProEmb'] == null
+          productName: element['Nome_Produto'],
+          codigoInternoProEmb: int.parse(element['CodigoInterno_ProEmb']),
+          plu: element['CodigoPlu_ProEmb'],
+          codigoProEmb: element['Codigo_ProEmb'] ?? "",
+          quantidadeInvContProEmb: element['Quantidade_InvContProEmb'] == null
               ? -1
-              : value['Quantidade_InvContProEmb'],
+              : double.parse(element['Quantidade_InvContProEmb']),
+
           //quando o valor está igual a "null", deixo igual a -1 e trato dessa forma pra não ocorrer erro na soma/subtração
         ),
       );

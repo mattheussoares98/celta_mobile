@@ -1,6 +1,5 @@
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
 import 'package:celta_inventario/Pages/adjust_stock_page.dart';
-import 'package:celta_inventario/Pages/Inicial_pages/enterprise_json_page.dart';
 import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
 import 'package:celta_inventario/Pages/receipt_conference_page.dart';
@@ -12,7 +11,6 @@ import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterpri
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_page.dart';
 import 'package:celta_inventario/Pages/transfer_between_stocks_page.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
-import 'package:celta_inventario/providers/enterprise_json_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
@@ -62,8 +60,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PriceConferenceProvider()),
         ChangeNotifierProvider(create: (_) => AdjustStockProvider()),
         ChangeNotifierProvider(create: (_) => SaleRequestProvider()),
-        ChangeNotifierProvider(create: (_) => EnterpriseJsonProvider()),
         ChangeNotifierProvider(create: (_) => TransferRequestProvider()),
+        ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
       ],
       child: MaterialApp(
@@ -156,7 +154,6 @@ class MyApp extends StatelessWidget {
           APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
           APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
           APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
-          APPROUTES.ENTERPRISE_JSON: (ctx) => const EnterpriseJsonPage(),
           APPROUTES.SALE_REQUEST_MODEL: (ctx) => const SaleRequestModelPage(),
           APPROUTES.SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL: (ctx) =>
               const SaleRequestManualDefaultRequestModelPage(),

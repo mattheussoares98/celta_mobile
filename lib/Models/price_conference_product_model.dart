@@ -1,17 +1,14 @@
-import 'dart:convert';
-
-class ConsultPriceProductsModel {
+class PriceConferenceProductsModel {
   final String PriceLookUp;
   final String ProductName;
   final String Packing;
   final String PackingQuantity;
   final String Name;
   final String ReducedName;
-  final String PersonalizedCode;
   final int ProductPackingCode;
-  final int AllowTransfer;
-  final int AllowSale;
-  final int AllowBuy;
+  final bool AllowTransfer;
+  final bool AllowSale;
+  final bool AllowBuy;
   final double MinimumWholeQuantity;
   final String SalePracticedWholeSale;
   final String OperationalCost;
@@ -30,10 +27,8 @@ class ConsultPriceProductsModel {
       CurrentStock; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
   bool
       EtiquetaPendente; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
-  String
-      EtiquetaPendenteDescricao; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
 
-  ConsultPriceProductsModel({
+  PriceConferenceProductsModel({
     required this.PriceLookUp,
     required this.ProductName,
     required this.Packing,
@@ -41,7 +36,6 @@ class ConsultPriceProductsModel {
     required this.Name,
     required this.ReducedName,
     required this.ProductPackingCode,
-    required this.PersonalizedCode,
     required this.AllowTransfer,
     required this.AllowSale,
     required this.AllowBuy,
@@ -60,46 +54,51 @@ class ConsultPriceProductsModel {
     required this.CurrentStock,
     required this.SaldoEstoqueVenda,
     required this.EtiquetaPendente,
-    required this.EtiquetaPendenteDescricao,
   });
 
   static resultAsStringToConsultPriceModel({
-    required resultAsString,
-    required listToAdd,
+    required dynamic data,
+    required List listToAdd,
   }) {
-    List resultAsList = json.decode(resultAsString);
-    Map resultAsMap = resultAsList.asMap();
+    if (data == null) {
+      return;
+    }
+    List dataList = [];
+    if (data is Map) {
+      dataList.add(data);
+    } else {
+      dataList = data;
+    }
 
-    resultAsMap.forEach((id, data) {
+    dataList.forEach((element) {
       listToAdd.add(
-        ConsultPriceProductsModel(
-          PriceLookUp: data["PriceLookUp"],
-          ProductName: data["ProductName"],
-          Packing: data["Packing"],
-          PackingQuantity: data["PackingQuantity"],
-          Name: data["Name"],
-          ReducedName: data["ReducedName"],
-          ProductPackingCode: data["ProductPackingCode"],
-          PersonalizedCode: data["PersonalizedCode"],
-          AllowTransfer: data["AllowTransfer"],
-          AllowSale: data["AllowSale"],
-          AllowBuy: data["AllowBuy"],
-          MinimumWholeQuantity: data["MinimumWholeQuantity"],
-          SalePracticedRetail: data["SalePracticedRetail"],
-          SalePracticedWholeSale: data["SalePracticedWholeSale"],
-          OperationalCost: data["OperationalCost"],
-          ReplacementCost: data["ReplacementCost"],
-          ReplacementCostMidle: data["ReplacementCostMidle"],
-          LiquidCost: data["LiquidCost"],
-          LiquidCostMidle: data["LiquidCostMidle"],
-          RealCost: data["RealCost"],
-          RealLiquidCost: data["RealLiquidCost"],
-          FiscalCost: data["FiscalCost"],
-          FiscalLiquidCost: data["FiscalLiquidCost"],
-          CurrentStock: data["CurrentStock"],
-          SaldoEstoqueVenda: data["SaldoEstoqueVenda"],
-          EtiquetaPendente: data["EtiquetaPendente"],
-          EtiquetaPendenteDescricao: data["EtiquetaPendenteDescricao"],
+        PriceConferenceProductsModel(
+          PriceLookUp: element["PriceLookUp"],
+          ProductName: element["ProductName"],
+          Packing: element["Packing"],
+          PackingQuantity: element["PackingQuantity"],
+          Name: element["Name"],
+          ReducedName: element["ReducedName"],
+          ProductPackingCode: int.parse(element["ProductPackingCode"]),
+          AllowTransfer: element["AllowTransfer"] == "1" ? true : false,
+          AllowSale: element["AllowSale"] == "1" ? true : false,
+          AllowBuy: element["AllowBuy"] == "1" ? true : false,
+          MinimumWholeQuantity: double.parse(element["MinimumWholeQuantity"]),
+          SalePracticedRetail: element["SalePracticedRetail"],
+          SalePracticedWholeSale: element["SalePracticedWholeSale"],
+          OperationalCost: element["OperationalCost"],
+          ReplacementCost: element["ReplacementCost"],
+          ReplacementCostMidle: element["ReplacementCostMidle"],
+          LiquidCost: element["LiquidCost"],
+          LiquidCostMidle: element["LiquidCostMidle"],
+          RealCost: element["RealCost"],
+          RealLiquidCost: element["RealLiquidCost"],
+          FiscalCost: element["FiscalCost"],
+          FiscalLiquidCost: element["FiscalLiquidCost"],
+          CurrentStock: element["CurrentStock"],
+          SaldoEstoqueVenda: element["SaldoEstoqueVenda"],
+          EtiquetaPendente:
+              element["EtiquetaPendente"] == "true" ? true : false,
         ),
       );
     });
