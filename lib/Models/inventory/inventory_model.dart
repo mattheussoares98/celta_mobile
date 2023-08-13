@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class InventoryModel {
   final int codigoInternoInventario;
   final DateTime dataCriacaoInventario;

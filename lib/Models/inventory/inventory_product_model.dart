@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class InventoryProductModel {
   final String productName;
   final int codigoInternoProEmb;

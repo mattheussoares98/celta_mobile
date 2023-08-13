@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class InventoryCountingsModel {
   final int codigoInternoInvCont;
   final int numeroContagemInvCont;

@@ -1,12 +1,8 @@
 import 'package:celta_inventario/Models/inventory/inventory_model.dart';
-import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import '../Components/Global_widgets/show_error_message.dart';
 import '../Models/inventory/countings_model.dart';
 import '../Models/inventory/inventory_product_model.dart';
@@ -316,37 +312,22 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-        'POST',
-        Uri.parse(
-          '${BaseUrl.url}/Inventory/AnnulQuantity?countingCode=$inventoryProcessCode&productPackingCode=$productPackingCode',
-        ),
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "countingCode": inventoryProcessCode,
+          "productPackingCode": productPackingCode,
+        },
+        typeOfResponse: "AnnulQuantityResponse",
+        SOAPAction: "AnnulQuantity",
+        serviceASMX: "CeltaInventoryService.asmx",
       );
-      request.body = json.encode(UserIdentity.identity);
 
-      request.headers.addAll(headers);
+      _errorMessageQuantity = SoapHelperResponseParameters.errorMessage;
 
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-
-      print('response do anullQuantity: $resultAsString');
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageQuantity = json.decode(resultAsString)["Message"];
-        _isLoadingQuantity = false;
-
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageQuantity,
-          context: context,
-        );
-        notifyListeners();
-        return;
+      if (_errorMessageQuantity == "") {
+        _products[indexOfProduct].quantidadeInvContProEmb = -1;
       }
-
-      _products[indexOfProduct].quantidadeInvContProEmb = -1;
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
