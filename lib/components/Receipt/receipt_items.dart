@@ -1,9 +1,10 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/receipt_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_liberate_check_buttons.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:flutter/material.dart';
+
+import '../../Models/receipt_models/receipt_model.dart';
 
 class ReceiptItems extends StatefulWidget {
   final ReceiptProvider receiptProvider;
@@ -75,12 +76,12 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                               ? "Não há"
                               : receipt.EmitterName,
                         ),
-                        if (receipt.Grupo != "-1")
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Grupo",
-                            value: receipt.Grupo,
-                            subtitleColor: Colors.amber,
-                          ),
+                        // if (receipt.Grupo != "-1")
+                        //   TitleAndSubtitle.titleAndSubtitle(
+                        //     title: "Grupo",
+                        //     value: receipt.Grupo,
+                        //     subtitleColor: Colors.amber,
+                        //   ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",
                           value: receipt.Status.toString(),

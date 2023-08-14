@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/receipt_conference_provider.dart';
+import '../../providers/receipt_provider.dart';
 
 class ConferenceConsultProductWithoutEanButton extends StatefulWidget {
   final int docCode;
@@ -18,7 +18,7 @@ class _ConferenceConsultProductWithoutEanButtonState
     extends State<ConferenceConsultProductWithoutEanButton> {
   @override
   Widget build(BuildContext context) {
-    ReceiptConferenceProvider receiptConferenceProvider = Provider.of(context);
+    ReceiptProvider receiptProvider = Provider.of(context);
     return Container(
       width: double.infinity,
       color: Theme.of(context).colorScheme.primary,
@@ -26,18 +26,21 @@ class _ConferenceConsultProductWithoutEanButtonState
         style: TextButton.styleFrom(
           foregroundColor: Colors.white,
         ),
-        onPressed: receiptConferenceProvider.consultingProducts ||
-                receiptConferenceProvider.isUpdatingQuantity
+        onPressed: receiptProvider.consultingProducts ||
+                receiptProvider.isUpdatingQuantity
             ? null
             : () async {
-                await receiptConferenceProvider.getAllProductsWithoutEan(
+                await receiptProvider.getProducts(
                   docCode: widget.docCode,
                   context: context,
+                  controllerText: "",
+                  isLegacyCodeSearch: false,
+                  isSearchAllCountedProducts: true,
                 );
               },
         child: Text(
-          receiptConferenceProvider.consultingProducts ||
-                  receiptConferenceProvider.isUpdatingQuantity
+          receiptProvider.consultingProducts ||
+                  receiptProvider.isUpdatingQuantity
               ? "Aguarde o término da consulta/alteração"
               : "Consultar todos produtos do recebimento",
         ),

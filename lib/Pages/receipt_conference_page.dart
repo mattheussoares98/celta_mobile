@@ -1,8 +1,8 @@
 import 'package:celta_inventario/Components/Receipt/receipt_conference_consult_product_without_ean_button.dart';
 import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_conference_products_items.dart';
-import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Components/Global_widgets/consulting_widget.dart';
@@ -28,14 +28,13 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
 
   @override
   Widget build(BuildContext context) {
-    ReceiptConferenceProvider receiptConferenceProvider =
-        Provider.of(context, listen: true);
+    ReceiptProvider receiptProvider = Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
       onWillPop: () async {
         Future.delayed(const Duration(milliseconds: 300), () {
-          receiptConferenceProvider.clearProducts();
+          receiptProvider.clearProducts();
         });
         return true;
       },
@@ -51,7 +50,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
           ),
           leading: IconButton(
             onPressed: () {
-              receiptConferenceProvider.clearProducts();
+              receiptProvider.clearProducts();
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.arrow_back_outlined),
@@ -69,23 +68,23 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   _legacyIsSelected = !_legacyIsSelected;
                 });
               },
-              focusNodeConsultProduct:
-                  receiptConferenceProvider.consultProductFocusNode,
-              isLoading: receiptConferenceProvider.consultingProducts ||
-                  receiptConferenceProvider.isUpdatingQuantity,
+              focusNodeConsultProduct: receiptProvider.consultProductFocusNode,
+              isLoading: receiptProvider.consultingProducts ||
+                  receiptProvider.isUpdatingQuantity,
               onPressSearch: () async {
-                await receiptConferenceProvider.getProduct(
+                await receiptProvider.getProducts(
                   isLegacyCodeSearch: _legacyIsSelected,
                   docCode: arguments["grDocCode"],
                   controllerText: _consultProductController.text,
                   context: context,
+                  isSearchAllCountedProducts: false,
                 );
 
                 //não estava funcionando passar o productsCount como parâmetro
                 //para o "SearchProductWithEanPluOrNameWidget" para apagar o
                 //textEditingController após a consulta dos produtos se encontrar
                 //algum produto
-                if (receiptConferenceProvider.productsCount > 0) {
+                if (receiptProvider.productsCount > 0) {
                   //se for maior que 0 significa que deu certo a consulta e
                   //por isso pode apagar o que foi escrito no campo de
                   //consulta
@@ -94,23 +93,23 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               },
               consultProductController: _consultProductController,
             ),
-            if (receiptConferenceProvider.errorMessageGetProducts != "")
+            if (receiptProvider.errorMessageGetProducts != "")
               ErrorMessage(
-                errorMessage: receiptConferenceProvider.errorMessageGetProducts,
+                errorMessage: receiptProvider.errorMessageGetProducts,
               ),
-            if (receiptConferenceProvider.consultingProducts)
+            if (receiptProvider.consultingProducts)
               Expanded(
                 child: ConsultingWidget.consultingWidget(
                     title: 'Consultando produtos'),
               ),
-            if (!receiptConferenceProvider.consultingProducts)
+            if (!receiptProvider.consultingProducts)
               ReceiptConferenceProductsItems(
                 docCode: arguments["grDocCode"],
                 consultedProductController: _consultedProductController,
                 consultProductController: _consultProductController,
               ),
             if (MediaQuery.of(context).viewInsets.bottom == 0 ||
-                receiptConferenceProvider.productsCount == 0)
+                receiptProvider.productsCount == 0)
               ConferenceConsultProductWithoutEanButton(
                 docCode: arguments["grDocCode"],
               ),

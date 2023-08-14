@@ -67,14 +67,25 @@ class SoapHelper {
       if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]["status"] ==
           "OK") {
         if (typeOfResult != null) {
-          SoapHelperResponseParameters.responseAsString =
-              parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                      [typeOfResult]
-                  .toString();
+          if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                  [typeOfResult] !=
+              null) {
+            SoapHelperResponseParameters.responseAsString =
+                parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                        [typeOfResult]
+                    .toString();
+          }
 
-          SoapHelperResponseParameters.responseAsMap =
-              parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                  [typeOfResult]["diffgr:diffgram"]["NewDataSet"];
+          if (_validateResultHasPattern(
+            parsedJson: parsedJson,
+            typeOfResponse: typeOfResponse,
+            typeOfResult: typeOfResult,
+          )) {
+            //no login não retorna nesse padrão de tags, por isso estava ocorrendo erro e por isso precisei criar esse tratamento
+            SoapHelperResponseParameters.responseAsMap =
+                parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                    [typeOfResult]["diffgr:diffgram"]["NewDataSet"];
+          }
         }
       } else {
         SoapHelperResponseParameters.errorMessage =
@@ -84,4 +95,28 @@ class SoapHelper {
       throw Exception('Failed to load data');
     }
   }
+}
+
+bool _validateResultHasPattern({
+  required Map parsedJson,
+  required String typeOfResponse,
+  required String typeOfResult,
+}) {
+  return parsedJson.containsKey("soap:Envelope") &&
+      parsedJson["soap:Envelope"] is Map &&
+      parsedJson["soap:Envelope"].containsKey("soap:Body") &&
+      parsedJson["soap:Envelope"]["soap:Body"] is Map &&
+      parsedJson["soap:Envelope"]["soap:Body"].containsKey(typeOfResponse) &&
+      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse] is Map &&
+      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+          .containsKey(typeOfResult) &&
+      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
+          is Map &&
+      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
+          .containsKey("diffgr:diffgram") &&
+      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
+          ["diffgr:diffgram"] is Map &&
+      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
+              ["diffgr:diffgram"]
+          .containsKey("NewDataSet");
 }

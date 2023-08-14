@@ -14,7 +14,6 @@ import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
-import 'package:celta_inventario/providers/receipt_conference_provider.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
@@ -56,7 +55,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => InventoryProvider()),
         ChangeNotifierProvider(create: (_) => EnterpriseProvider()),
         ChangeNotifierProvider(create: (_) => ReceiptProvider()),
-        ChangeNotifierProvider(create: (_) => ReceiptConferenceProvider()),
         ChangeNotifierProvider(create: (_) => PriceConferenceProvider()),
         ChangeNotifierProvider(create: (_) => AdjustStockProvider()),
         ChangeNotifierProvider(create: (_) => SaleRequestProvider()),
