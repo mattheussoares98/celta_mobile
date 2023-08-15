@@ -36,8 +36,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context, listen: true);
-    int codigoInternoEmpresa =
-        ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
       onWillPop: () async {
@@ -84,7 +83,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       transferBetweenStocksProvider.isLoadingAdjustStock,
                   onPressSearch: () async {
                     await transferBetweenStocksProvider.getProducts(
-                      enterpriseCode: codigoInternoEmpresa,
+                      enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
                       isLegacyCodeSearch: _isLegacyCodeSearch,
@@ -121,7 +120,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
               ),
             if (!transferBetweenStocksProvider.isLoadingProducts)
               TransferBetweenStocksProductsItems(
-                internalEnterpriseCode: codigoInternoEmpresa,
+                internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
                 consultedProductController: _consultedProductController,
                 dropDownFormKey: _dropDownFormKey,
                 insertQuantityFormKey: _insertQuantityFormKey,

@@ -17,10 +17,10 @@ class _ReceiptPageState extends State<ReceiptPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    int enterpriseCode = ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
     if (!isLoaded) {
       Provider.of<ReceiptProvider>(context, listen: true).getReceipt(
-        enterpriseCode: enterpriseCode,
+        enterpriseCode: arguments["CodigoInterno_Empresa"],
         context: context,
       );
     }
@@ -30,7 +30,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context, listen: true);
-    int enterpriseCode = ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Scaffold(
       appBar: AppBar(
@@ -54,7 +54,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                   request: () async {
                     setState(() {});
                     await receiptProvider.getReceipt(
-                      enterpriseCode: enterpriseCode,
+                      enterpriseCode: arguments["CodigoInterno_Empresa"],
                       context: context,
                     );
                   }),
@@ -63,7 +63,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
               receiptProvider.errorMessage == '')
             Expanded(
               child: ReceiptItems(
-                enterpriseCode: enterpriseCode,
+                enterpriseCode: arguments["CodigoInterno_Empresa"],
                 receiptProvider: receiptProvider,
               ),
             ),

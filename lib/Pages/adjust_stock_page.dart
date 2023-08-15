@@ -35,8 +35,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider =
         Provider.of(context, listen: true);
-    int codigoInternoEmpresa =
-        ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
       onWillPop: () async {
@@ -81,7 +80,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       adjustStockProvider.isLoadingAdjustStock,
                   onPressSearch: () async {
                     await adjustStockProvider.getProducts(
-                      enterpriseCode: codigoInternoEmpresa,
+                      enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
                       isLegacyCodeSearch: _isLegacyCodeSearch,
@@ -117,7 +116,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
               ),
             if (!adjustStockProvider.isLoadingProducts)
               AdjustStockProductsItems(
-                internalEnterpriseCode: codigoInternoEmpresa,
+                internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
                 consultedProductController: _consultedProductController,
                 dropDownFormKey: _dropDownFormKey,
                 insertQuantityFormKey: _insertQuantityFormKey,

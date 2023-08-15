@@ -29,7 +29,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
     );
 
     if (!_isLoaded) {
-      if (arguments["SaleRequestTypeCode"] == 0) {
+      if (arguments["CodigoInternoVendaMobile_ModeloPedido"] == 0) {
         //significa que não possui um modelo de pedido de vendas padrão cadastrado no BS
         _hasDefaultRequestModel = false;
       } else {
@@ -37,7 +37,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
       }
 
       await saleRequestProvider.getRequests(
-        enterpriseCode: arguments["Code"],
+        enterpriseCode: arguments["CodigoInterno_Empresa"],
         context: context,
       );
       _isLoaded = true;
@@ -90,8 +90,9 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
             if (!saleRequestProvider.isLoadingRequests)
               SaleRequestModelsItems(
                 hasDefaultRequestModel: _hasDefaultRequestModel,
-                enterpriseCode: arguments["Code"],
-                saleRequestTypeCode: arguments["SaleRequestTypeCode"],
+                enterpriseCode: arguments["CodigoInterno_Empresa"],
+                saleRequestTypeCode:
+                    arguments["CodigoInternoVendaMobile_ModeloPedido"],
               ),
             if (saleRequestProvider.errorMessageRequests != "" &&
                 saleRequestProvider.productsCount == 0)
@@ -101,7 +102,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
                   request: () async {
                     setState(() {});
                     await saleRequestProvider.getRequests(
-                      enterpriseCode: arguments["Code"],
+                      enterpriseCode: arguments["CodigoInterno_Empresa"],
                       context: context,
                     );
                   },

@@ -30,8 +30,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
   Widget build(BuildContext context) {
     PriceConferenceProvider priceConferenceProvider =
         Provider.of(context, listen: true);
-    int codigoInternoEmpresa =
-        ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
       onWillPop: () async {
@@ -72,7 +71,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
               onPressSearch: () async {
                 await priceConferenceProvider.getProduct(
                   isLegacyCodeSearch: _legacyIsSelected,
-                  enterpriseCode: codigoInternoEmpresa,
+                  enterpriseCode: arguments["CodigoInterno_Empresa"],
                   controllerText: _consultProductController.text,
                   context: context,
                 );
@@ -104,7 +103,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
             if (!priceConferenceProvider.isLoading)
               PriceConferenceItems(
                 priceConferenceProvider: priceConferenceProvider,
-                internalEnterpriseCode: codigoInternoEmpresa,
+                internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
               ),
             if (MediaQuery.of(context).viewInsets.bottom == 0 &&
                 priceConferenceProvider.productsCount > 1)

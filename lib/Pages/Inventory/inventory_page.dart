@@ -19,11 +19,11 @@ class _InventoryPageState extends State<InventoryPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    int enterpriseCode = ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     if (!_isLoaded) {
       Provider.of<InventoryProvider>(context, listen: false).getInventory(
-        enterpriseCode: enterpriseCode,
+        enterpriseCode: arguments["CodigoInterno_Empresa"],
         userIdentity: UserIdentity.identity,
       );
       _isLoaded = true;
@@ -33,7 +33,7 @@ class _InventoryPageState extends State<InventoryPage> {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
-    int enterpriseCode = ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +53,7 @@ class _InventoryPageState extends State<InventoryPage> {
                 errorMessage: inventoryProvider.errorMessage,
                 request: () async => setState(() {
                   inventoryProvider.getInventory(
-                    enterpriseCode: enterpriseCode,
+                    enterpriseCode: arguments["CodigoInterno_Empresa"],
                     userIdentity: UserIdentity.identity,
                   );
                 }),

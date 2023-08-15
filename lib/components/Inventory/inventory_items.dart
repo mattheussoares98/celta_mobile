@@ -13,8 +13,7 @@ class InventoryItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context);
-    final codigoInternoEmpresa =
-        ModalRoute.of(context)!.settings.arguments as int;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Column(
       children: [
@@ -36,8 +35,8 @@ class InventoryItems extends StatelessWidget {
                     arguments: {
                       "codigoInternoInventario": inventoryProvider
                           .inventorys[index].codigoInternoInventario,
-                      "codigoInternoEmpresa":
-                          codigoInternoEmpresa, //passando o código da empresa também porque vai precisar na tela de consulta de produtos
+                      "codigoInternoEmpresa": arguments[
+                          "CodigoInterno_Empresa"], //passando o código da empresa também porque vai precisar na tela de consulta de produtos
                     },
                   );
                 },
