@@ -1,4 +1,5 @@
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
+import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,8 @@ class AdjustStockJustificationsStockDropwdownWidget extends StatefulWidget {
 class _AdjustStockJustificationsStockDropwdownWidgetState
     extends State<AdjustStockJustificationsStockDropwdownWidget> {
   final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
-  final GlobalKey<FormFieldState> _keyStockType = GlobalKey();
+  final GlobalKey<FormFieldState> _keyOriginStockType = GlobalKey();
+  final GlobalKey<FormFieldState> _keyDestinyStockType = GlobalKey();
 
   //se a justificativa possuir um código de estoque atrelado, significa que
   //somente esse estoque pode ser alterado quando selecionar essa justificativa.
@@ -33,7 +35,8 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
 
     if (adjustStockProvider.isLoadingTypeStockAndJustifications) {
       _keyJustifications.currentState?.reset();
-      _keyStockType.currentState?.reset();
+      _keyOriginStockType.currentState?.reset();
+      _keyDestinyStockType.currentState?.reset();
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -90,7 +93,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           adjustStockProvider.products.isEmpty
                       ? null
                       : (value) {
-                          // print(value);
+                          print(value);
                         },
               items: adjustStockProvider.justifications
                   .map(
@@ -99,51 +102,33 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                       onTap: () {
                         adjustStockProvider
                                 .jsonAdjustStock["JustificationCode"] =
-                            value.Code.toString();
+                            value.CodigoInterno_JustMov;
 
-                        if (value.StockType["Code"] != null) {
-                          //se no tipo de justificativa houver um código
-                          //atrelado, somente esse estoque pode ser
-                          //alterado. Por isso a aplicação desativa o
-                          //outro tropdown e atribui o código ao json que
-                          //precisa ser enviado na requisição do tipo de
-                          //estoque
-
+                        if (value.CodigoInterno_TipoEstoque
+                                .CodigoInterno_JustMov !=
+                            -1) {
                           adjustStockProvider.justificationHasStockType = true;
 
-                          adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
-                              value.StockType["Code"];
-                        } else {
-                          adjustStockProvider.justificationHasStockType = false;
-                        }
-                        adjustStockProvider.typeOperator = value
-                            .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
-
-                        if (value.StockType["Name"] ==
-                            adjustStockProvider.justificationStockTypeName) {
-                          //se a variável já estiver com o mesmo nome do
-                          //tipo de estoque não precisa alterar
-                          return;
-                        } else if (value.StockType["Name"] != null) {
                           setState(() {
                             adjustStockProvider
                                 .updateJustificationStockTypeName(
-                              value.StockType["Name"],
+                              value.CodigoInterno_TipoEstoque.Nome_TipoEstoque,
                             );
-
-                            adjustStockProvider.stockTypeName =
-                                value.StockType["Name"];
-                            //quando for o estoque atual, se der certo a alteração, vai alterar a quantidade do estoque atual do produto
                           });
+                        } else {
+                          adjustStockProvider.justificationHasStockType = false;
                         }
+
+                        adjustStockProvider.typeOperator = value
+                            .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
                       },
-                      value: value.Description,
+                      value: value.Descricao_JustMov,
                       child: FittedBox(
                         child: Column(
                           children: [
                             Center(
                               child: Text(
-                                value.Description,
+                                value.Descricao_JustMov,
                               ),
                             ),
                             const Divider(
@@ -160,7 +145,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
             const SizedBox(height: 10),
             DropdownButtonFormField<dynamic>(
               // isDense: false,
-              key: _keyStockType,
+              key: _keyOriginStockType,
               disabledHint:
                   adjustStockProvider.isLoadingTypeStockAndJustifications
                       ? Row(
@@ -187,13 +172,13 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           child: Text(
                             adjustStockProvider.justificationHasStockType
                                 ? adjustStockProvider.justificationStockTypeName
-                                : "Tipos de estoque",
+                                : "Estoque de origem",
                           ),
                         ),
               isExpanded: true,
               hint: Center(
                 child: Text(
-                  'Tipos de estoque',
+                  'Estoque de origem',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -222,10 +207,9 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                       alignment: Alignment.center,
                       onTap: () {
                         adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
-                            value.Code.toString();
-                        adjustStockProvider.stockTypeName = value.Name;
+                            value.CodigoInterno_JustMov;
                       },
-                      value: value.Name,
+                      value: value.Nome_TipoEstoque,
                       child: FittedBox(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -235,7 +219,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                                 adjustStockProvider.justificationHasStockType
                                     ? adjustStockProvider
                                         .justificationStockTypeName
-                                    : value.Name,
+                                    : value.Nome_TipoEstoque,
                                 style: const TextStyle(
                                   fontSize: 15,
                                 ),

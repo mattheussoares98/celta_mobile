@@ -1,43 +1,61 @@
 import 'dart:convert';
+import 'adjust_stock_type_model.dart';
 
 class AdjustStockJustificationModel {
-  final int Code; /*  37, */
-  final String Description; /*  "SUBTRAIR", */
-  final String Type; /*  "Saída", */
-  final String TypeOperator; /*  "(-)", */
-  final String StockTypeString; /*  "", */
-  final dynamic StockType;
-  //  {
-  //       {"Code": null},
-  //       {"Name": null},
-  //       {"IsInternal": null},
-  //                  }
+  final int CodigoInterno_JustMov;
+  final String Descricao_JustMov;
+  final String FlagTipo_JustMov;
+  final String TypeOperator;
+  final String Nome_TipoEstoque;
+  final AdjustStockTypeModel CodigoInterno_TipoEstoque;
 
   AdjustStockJustificationModel({
-    required this.Code,
-    required this.Description,
-    required this.Type,
+    required this.CodigoInterno_JustMov,
+    required this.Descricao_JustMov,
+    required this.FlagTipo_JustMov,
     required this.TypeOperator,
-    required this.StockTypeString,
-    required this.StockType,
+    required this.Nome_TipoEstoque,
+    required this.CodigoInterno_TipoEstoque,
   });
 
   static resultAsStringToAdjustStockJustificationModel({
-    required resultAsString,
-    required listToAdd,
+    required String resultAsString,
+    required List listToAdd,
   }) {
     List resultAsList = json.decode(resultAsString);
-    Map resultAsMap = resultAsList.asMap();
 
-    resultAsMap.forEach((id, data) {
+// Code = o["CodigoInterno_JustMov"],
+// Description = o["Descricao_JustMov"],
+// Type = Convert.ToInt32(o["FlagTipo_JustMov"]) == 1 ? "Entrada" : "Saída",
+// TypeOperator = Convert.ToInt32(o["FlagTipo_JustMov"]) == 1 ? "(+)" : "(-)",
+// StockTypeString = !Convert.IsDBNull(o["Nome_TipoEstoque"]) ? Convert.ToString(o["Nome_TipoEstoque"]) : "",
+// StockType = new
+// {
+//     Code = o["CodigoInterno_TipoEstoque"],
+//     Name = o["Nome_TipoEstoque"],
+//     IsInternal = o["FlagInterno_TipoEstoque"]
+// }
+    resultAsList.forEach((element) {
       listToAdd.add(
         AdjustStockJustificationModel(
-          Code: data["Code"],
-          Description: data["Description"],
-          Type: data["Type"],
-          TypeOperator: data["TypeOperator"],
-          StockTypeString: data["StockTypeString"],
-          StockType: data["StockType"],
+          CodigoInterno_JustMov: element["CodigoInterno_JustMov"],
+          Descricao_JustMov: element["Descricao_JustMov"],
+          FlagTipo_JustMov:
+              element["FlagTipo_JustMov"] == 1 ? "Entrada" : "Saída",
+          TypeOperator: element["FlagTipo_JustMov"] == 1 ? "(+)" : "(-)",
+          Nome_TipoEstoque: element["Nome_TipoEstoque"] ?? "",
+          CodigoInterno_TipoEstoque:
+              element["CodigoInterno_TipoEstoque"] == null
+                  ? AdjustStockTypeModel(
+                      CodigoInterno_JustMov: -1,
+                      Nome_TipoEstoque: "",
+                      IsInternal: false,
+                    )
+                  : AdjustStockTypeModel(
+                      CodigoInterno_JustMov: element["CodigoInterno_JustMov"],
+                      Nome_TipoEstoque: element["Nome_TipoEstoque"],
+                      IsInternal: element["FlagInterno_TipoEstoque"],
+                    ),
         ),
       );
     });

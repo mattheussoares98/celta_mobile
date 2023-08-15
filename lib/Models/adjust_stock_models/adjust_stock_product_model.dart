@@ -1,44 +1,42 @@
-import 'dart:convert';
+import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_all_stocks_model.dart';
+import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_type_model.dart';
 
 class AdjustStockProductModel {
-  final String PriceLookUp; /* ": "00002-4", */
-  final String ProductName; /* ": "Isento", */
-  final String CodigoPlu_ProEmb; /* ": "00002-4", */
-  final String Nome_Produto; /* ": "Isento", */
-  final String Packing; /* ": "UN", */
-  final String PackingQuantity; /* ": "UN 1", */
-  final String Name; /* ": "Isento (UN 1.000)", */
-  final String ReducedName; /* ": "Isento (UN 1.000)", */
-  final String PersonalizedCode; /* ": "00002-4", */
-  final String SalePracticedRetail; /* ": "0,99", */
-  final String SalePracticedWholeSale; /* ": "0,88", */
-  final String OperationalCost; /* ": "110,1900", */
-  final String ReplacementCost; /* ": "100,0000", */
-  final String ReplacementCostMidle; /* ": "100,0000", */
-  final String LiquidCost; /* ": "100,0000", */
-  final String LiquidCostMidle; /* ": "100,0000", */
-  final String RealCost; /* ": "100,0000", */
-  final String RealLiquidCost; /* ": "100,0000", */
-  final String FiscalCost; /* ": "100,0000", */
-  final String FiscalLiquidCost; /* ": "100,0000", */
-  final String CurrentStockString; /* ": "Estoque atual: -19,000", */
-  final String EtiquetaPendenteDescricao; /* ": "Sim" */
-  final bool EtiquetaPendente; /* ": true, */
-  final int AllowTransfer; /* ": 1, */
-  final int AllowSale; /* ": 1, */
-  final int AllowBuy; /* ": 1, */
-  final double MinimumWholeQuantity; /* ": 3.000, */
-  final int ProductCode; /* ": 4, */
-  final int ProductPackingCode; /* ": 3, */
-  String CurrentStock; /* ": "-19,000", */
-  String SaldoEstoqueVenda; /* ": "-20,000", */
-  final List Stocks;
+  final String PriceLookUp;
+  final String CodigoPlu_ProEmb;
+  final String Nome_Produto;
+  final String Packing;
+  final String PackingQuantity;
+  final String Name;
+  final String ReducedName;
+  final String PersonalizedCode;
+  final String SalePracticedRetail;
+  final String SalePracticedWholeSale;
+  final String OperationalCost;
+  final String ReplacementCost;
+  final String ReplacementCostMidle;
+  final String LiquidCost;
+  final String LiquidCostMidle;
+  final String RealCost;
+  final String RealLiquidCost;
+  final String FiscalCost;
+  final String FiscalLiquidCost;
+  final String CurrentStockString;
+  final bool EtiquetaPendente;
+  final bool AllowTransfer;
+  final bool AllowSale;
+  final bool AllowBuy;
+  final double MinimumWholeQuantity;
+  final int ProductCode;
+  final int ProductPackingCode;
+  String CurrentStock;
+  String SaldoEstoqueVenda;
+  final List<AdjustStockAllStocksModel> Stocks;
 
   AdjustStockProductModel({
     required this.ProductCode,
     required this.ProductPackingCode,
     required this.PriceLookUp,
-    required this.ProductName,
     required this.CodigoPlu_ProEmb,
     required this.Nome_Produto,
     required this.Packing,
@@ -65,54 +63,95 @@ class AdjustStockProductModel {
     required this.CurrentStockString,
     required this.SaldoEstoqueVenda,
     required this.EtiquetaPendente,
-    required this.EtiquetaPendenteDescricao,
     required this.Stocks,
   });
 
-  static resultAsStringToAdjustStockProductModel({
-    required resultAsString,
-    required listToAdd,
+  static dataToAdjustStockProductModel({
+    required Map data,
+    required List listToAdd,
   }) {
-    List resultAsList = json.decode(resultAsString);
-    Map resultAsMap = resultAsList.asMap();
+    List dataList = [];
+    dataList.add(data);
 
-    resultAsMap.forEach((id, data) {
+    dataList.forEach((element) {
+      //percorrer os produtos aqui para fazer isso abaixo
+      _treatStocks(element);
+      _treatProducts(element: element, listToAdd: listToAdd);
+    });
+  }
+
+  static Map<String, List<AdjustStockAllStocksModel>> _stocks = {};
+  static _treatStocks(dynamic element) {
+    _stocks = {};
+    element["Stocks"].forEach((stockElement) {
+      String stockKey = stockElement["CodigoInterno_ProEmpEmb"];
+      if (_stocks.containsKey(stockKey)) {
+        _stocks[stockKey]!.add(
+          AdjustStockAllStocksModel(
+            CodigoInterno_ProEmpEmb: int.parse(stockKey),
+            StockName: stockElement["StockName"],
+            StockQuantity: double.parse(stockElement["StockQuantity"]),
+          ),
+        );
+      } else {
+        _stocks[stockKey] = [
+          AdjustStockAllStocksModel(
+            CodigoInterno_ProEmpEmb:
+                int.parse(stockElement["CodigoInterno_ProEmpEmb"]),
+            StockName: stockElement["StockName"],
+            StockQuantity: double.parse(stockElement["StockQuantity"]),
+          ),
+        ];
+      }
+    });
+  }
+
+  static _treatProducts({
+    required dynamic element,
+    required List listToAdd,
+  }) {
+    List products = [];
+    if (element["Produtos"] is Map) {
+      products.add(element["Produtos"]);
+    } else {
+      products = element["Produtos"];
+    }
+    products.forEach((productElement) {
       listToAdd.add(
         AdjustStockProductModel(
-          ProductCode: data["ProductCode"],
-          ProductPackingCode: data["ProductPackingCode"],
-          PriceLookUp: data["PriceLookUp"],
-          ProductName: data["ProductName"],
-          CodigoPlu_ProEmb: data["CodigoPlu_ProEmb"],
-          Nome_Produto: data["Nome_Produto"],
-          Packing: data["Packing"],
-          PackingQuantity: data["PackingQuantity"],
-          Name: data["Name"],
-          ReducedName: data["ReducedName"],
-          PersonalizedCode: data["PersonalizedCode"],
-          AllowTransfer: data["AllowTransfer"],
-          AllowSale: data["AllowSale"],
-          AllowBuy: data["AllowBuy"],
-          MinimumWholeQuantity: data["MinimumWholeQuantity"],
-          SalePracticedRetail: data["SalePracticedRetail"],
-          SalePracticedWholeSale: data["SalePracticedWholeSale"],
-          OperationalCost: data["OperationalCost"],
-          ReplacementCost: data["ReplacementCost"],
-          ReplacementCostMidle: data["ReplacementCostMidle"],
-          LiquidCost: data["LiquidCost"],
-          LiquidCostMidle: data["LiquidCostMidle"],
-          RealCost: data["RealCost"],
-          RealLiquidCost: data["RealLiquidCost"],
-          FiscalCost: data["FiscalCost"],
-          FiscalLiquidCost: data["FiscalLiquidCost"],
-          CurrentStock: data["CurrentStock"],
-          CurrentStockString: data["CurrentStockString"] == null
+          ProductCode: int.parse(productElement["ProductCode"]),
+          ProductPackingCode: int.parse(productElement["ProductPackingCode"]),
+          PriceLookUp: productElement["PriceLookUp"],
+          CodigoPlu_ProEmb: productElement["CodigoPlu_ProEmb"] ?? "",
+          Nome_Produto: productElement["Name"],
+          Packing: productElement["Packing"],
+          PackingQuantity: productElement["PackingQuantity"],
+          Name: productElement["Name"],
+          ReducedName: productElement["ReducedName"],
+          PersonalizedCode: productElement["PersonalizedCode"] ?? "",
+          AllowTransfer: productElement["AllowTransfer"] == "1",
+          AllowSale: productElement["AllowSale"] == "1",
+          AllowBuy: productElement["AllowBuy"] == "1",
+          MinimumWholeQuantity:
+              double.parse(productElement["MinimumWholeQuantity"]),
+          SalePracticedRetail: productElement["SalePracticedRetail"],
+          SalePracticedWholeSale: productElement["SalePracticedWholeSale"],
+          OperationalCost: productElement["OperationalCost"],
+          ReplacementCost: productElement["ReplacementCost"],
+          ReplacementCostMidle: productElement["ReplacementCostMidle"],
+          LiquidCost: productElement["LiquidCost"],
+          LiquidCostMidle: productElement["LiquidCostMidle"],
+          RealCost: productElement["RealCost"],
+          RealLiquidCost: productElement["RealLiquidCost"],
+          FiscalCost: productElement["FiscalCost"],
+          FiscalLiquidCost: productElement["FiscalLiquidCost"],
+          CurrentStock: productElement["CurrentStock"],
+          CurrentStockString: productElement["CurrentStockString"] == null
               ? "null"
-              : data["CurrentStockString"],
-          SaldoEstoqueVenda: data["SaldoEstoqueVenda"],
-          EtiquetaPendente: data["EtiquetaPendente"],
-          EtiquetaPendenteDescricao: data["EtiquetaPendenteDescricao"],
-          Stocks: data["Stocks"] == null ? [] : data["Stocks"],
+              : productElement["CurrentStockString"],
+          SaldoEstoqueVenda: productElement["SaldoEstoqueVenda"],
+          EtiquetaPendente: productElement["EtiquetaPendente"] == "true",
+          Stocks: _stocks[productElement["CodigoInterno_ProEmpEmb"]]!,
         ),
       );
     });

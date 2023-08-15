@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
 import 'package:celta_inventario/components/Adjust_stock/adjust_stock_all_stocks.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
@@ -41,7 +42,8 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
             child: ListView.builder(
               itemCount: adjustStockProvider.productsCount,
               itemBuilder: (context, index) {
-                var product = adjustStockProvider.products[index];
+                AdjustStockProductModel product =
+                    adjustStockProvider.products[index];
                 return GestureDetector(
                   onTap: adjustStockProvider.isLoadingTypeStockAndJustifications
                       ? null

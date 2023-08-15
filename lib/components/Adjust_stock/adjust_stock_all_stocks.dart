@@ -71,11 +71,10 @@ class AdjustStockAllStocks {
                                       height: 10,
                                     ),
                                     TitleAndSubtitle.titleAndSubtitle(
-                                        title: product.Stocks[index]
-                                            ["StockName"],
+                                        title: product.Stocks[index].StockName,
                                         value: ConvertString
                                             .convertToBrazilianNumber(
-                                          product.Stocks[index]["StockQuantity"]
+                                          product.Stocks[index].StockQuantity
                                               .toStringAsFixed(3)
                                               .replaceAll(RegExp(r'\.'), ','),
                                         )),
