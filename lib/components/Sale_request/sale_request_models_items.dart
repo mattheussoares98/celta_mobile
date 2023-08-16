@@ -3,6 +3,7 @@ import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/sale_request_models/sale_requests_model.dart';
 import '../../utils/app_routes.dart';
 import '../Global_widgets/personalized_card.dart';
 
@@ -70,6 +71,9 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
                     ),
                   );
                 } else {
+                  SaleRequestsModel request =
+                      saleRequestProvider.requests[index - 1];
+
                   return PersonalizedCard.personalizedCard(
                     context: context,
                     child: GestureDetector(
@@ -80,11 +84,11 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
                           arguments: {
                             "Code": widget.enterpriseCode,
                             "SaleRequestTypeCode":
-                                saleRequestProvider.requests[index - 1].Code,
-                            "UseWholePrice": saleRequestProvider
-                                .requests[index - 1].UseWholePrice,
-                            "UnitValueType": saleRequestProvider
-                                .requests[index - 1].UnitValueType,
+                                request.CodigoInterno_ModeloPedido,
+                            "UseWholePrice":
+                                request.FlagTipoUsoPrecoAtacado_ModeloPedido ==
+                                    1,
+                            "UnitValueType": request.FlagTipoValor_ModeloPedido,
                           },
                         );
                       },
@@ -94,19 +98,15 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
                           children: [
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Código do pedido",
-                              value: saleRequestProvider
-                                  .requests[index - 1].Code
-                                  .toString(),
+                              value: request.Codigo_ModeloPedido,
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Nome do pedido",
-                              value:
-                                  saleRequestProvider.requests[index - 1].Name,
+                              value: request.Nome_ModeloPedido,
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Preço utilizado",
-                              value: saleRequestProvider
-                                  .requests[index - 1].UnitValueTypeString,
+                              value: request.FlagTipoValor_ModeloPedidoString,
                             ),
                           ],
                         ),

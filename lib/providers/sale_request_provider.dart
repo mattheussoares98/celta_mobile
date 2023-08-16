@@ -4,14 +4,11 @@ import 'package:celta_inventario/Models/sale_request_models/sale_request_custome
 import 'package:celta_inventario/Models/sale_request_models/sale_request_process_cart_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Models/sale_request_models/sale_requests_model.dart';
-import '../utils/base_url.dart';
-import '../utils/convert_string.dart';
 import '../utils/default_error_message_to_find_server.dart';
 
 class SaleRequestProvider with ChangeNotifier {
@@ -43,12 +40,14 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  int _indexOfSelectedCovenant = -1;
   int get indexOfSelectedCovenant {
+    int _indexOfSelectedCovenant = -1;
     _customers.forEach((key, value) {
-      value.forEach((element) {
-        _indexOfSelectedCovenant =
-            element.Covenants.indexWhere((element) => element.selected);
+      value.forEach((customer) {
+        if (customer.selected) {
+          _indexOfSelectedCovenant =
+              customer.Covenants.indexWhere((customer) => customer.selected);
+        }
       });
     });
     return _indexOfSelectedCovenant;
@@ -488,33 +487,28 @@ class SaleRequestProvider with ChangeNotifier {
     _requests.clear();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'GET',
-          Uri.parse(
-              '${BaseUrl.url}/SaleRequest/RequestType?enterpriseCode=$enterpriseCode&searchValue=%'));
-
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
-
-      print('resposta para consulta do Requests = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageRequests = json.decode(responseInString)["Message"];
-        _isLoadingRequests = false;
-
-        notifyListeners();
-        return;
-      }
-
-      SaleRequestsModel.responseAsStringToSaleRequestsModel(
-        responseAsString: responseInString,
-        listToAdd: _requests,
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "simpleSearchValue": "",
+          "inclusiveTransfer": false,
+          "inclusiveBuy": false,
+          "inclusiveSale": true,
+        },
+        typeOfResponse: "GetRequestTypesResponse",
+        SOAPAction: "GetRequestTypes",
+        serviceASMX: "CeltaRequestTypeService.asmx",
+        typeOfResult: "GetRequestTypesResult",
       );
+
+      _errorMessageRequests = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageRequests == "") {
+        SaleRequestsModel.dataToSaleRequestsModel(
+          data: SoapHelperResponseParameters.responseAsMap["ModelosPedidos"],
+          listToAdd: _requests,
+        );
+      }
     } catch (e) {
       print("Erro para obter os modelos de pedido: $e");
       _errorMessageRequests = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -536,53 +530,50 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'GET', Uri.parse('${BaseUrl.url}/SaleRequest/ProcessCart'));
-
       List processCartItems =
           SaleRequestProcessCartModel.cartProductsToProcessCart(
         _cartProducts[enterpriseCode.toString()]!,
       );
 
-      request.body = json.encode(
-        "{'crossId': '${UserIdentity.identity}',"
-        "'EnterpriseCode': $enterpriseCode,"
-        "'RequestTypeCode': $requestTypeCode,"
-        "'CovenantCode': $covenantCode,"
-        //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
-        "'CustomerCode': $customerCode,"
-        "'Products': $processCartItems}",
+      var jsonBody = json.encode({
+        "crossId": UserIdentity.identity,
+        "EnterpriseCode": enterpriseCode,
+        "RequestTypeCode": requestTypeCode,
+        "CovenantCode": covenantCode,
+        "CustomerCode": customerCode,
+        "Products": processCartItems,
+      }
+          //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
+          );
+
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "json": jsonBody,
+        },
+        typeOfResponse: "ProcessCartResponse",
+        SOAPAction: "ProcessCart",
+        serviceASMX: "CeltaSaleRequestService.asmx",
+        typeOfResult: "ProcessCartResult",
       );
 
-      request.headers.addAll(headers);
+      _errorMessageProcessCart = SoapHelperResponseParameters.errorMessage;
 
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
+      if (_errorMessageProcessCart == "") {
+        SaleRequestProcessCartModel.updateCartWithProcessCartResponse(
+          jsonSaleRequest: _jsonSaleRequest,
+          apiItemsResponse: SoapHelperResponseParameters.responseAsString,
+          enterpriseCode: enterpriseCode.toString(),
+          cartProducts: _cartProducts[enterpriseCode.toString()]!,
+        );
 
-      print('resposta para carregar os preços do carrinho = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageProcessCart = json.decode(responseInString)["Message"];
-        _isLoadingProcessCart = false;
-
+        _updatedCart = false;
+      } else {
         ShowErrorMessage.showErrorMessage(
           error: _errorMessageProcessCart,
           context: context,
         );
-        notifyListeners();
-        return;
       }
-
-      SaleRequestProcessCartModel.updateCartWithProcessCartResponse(
-        jsonSaleRequest: _jsonSaleRequest,
-        apiItemsResponse: responseInString,
-        enterpriseCode: enterpriseCode.toString(),
-        cartProducts: _cartProducts[enterpriseCode.toString()]!,
-      );
-
-      _updatedCart = false;
     } catch (e) {
       print("Erro para obter os preços do carrinho: $e");
       ShowErrorMessage.showErrorMessage(
@@ -688,39 +679,30 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-        'GET',
-        Uri.parse(
-          '${BaseUrl.url}/Customer/Customer?searchTypeInt=$searchTypeInt&searchValue=$controllerText',
-        ),
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "customerData": controllerText,
+          "customerDataType": searchTypeInt,
+        },
+        typeOfResponse: "GetCustomerJsonResponse",
+        SOAPAction: "GetCustomerJson",
+        serviceASMX: "CeltaCustomerService.asmx",
+        typeOfResult: "GetCustomerJsonResult",
       );
 
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
+      _errorMessageCustomer = SoapHelperResponseParameters.errorMessage;
 
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
+      if (_errorMessageCustomer == "") {
+        if (_customers[enterpriseCode] == null) {
+          _customers[enterpriseCode] = [];
+        }
 
-      print('resposta para consulta do customers = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageCustomer = json.decode(responseInString)["Message"];
-        _isLoadingCustomer = false;
-
-        notifyListeners();
-        return;
+        SaleRequestCustomerModel.responseAsStringToSaleRequestCustomerModel(
+          responseAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _customers[enterpriseCode]!,
+        );
       }
-
-      if (_customers[enterpriseCode] == null) {
-        _customers[enterpriseCode] = [];
-      }
-
-      SaleRequestCustomerModel.responseAsStringToSaleRequestCustomerModel(
-        responseAsString: responseInString,
-        listToAdd: _customers[enterpriseCode]!,
-      );
 
       await _updateCustomerInDatabase();
     } catch (e) {
@@ -732,183 +714,45 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _getProducts({
-    required int enterpriseCode,
-    required String controllerText,
-    required BuildContext context,
-    required bool isLegacyCodeSearch,
-  }) async {
-    _products.clear();
-    _errorMessageProducts = "";
-    _isLoadingProducts = true;
-    notifyListeners();
-
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
-    var headers = {'Content-Type': 'application/json'};
-    http.Request? request;
-
-    if (isLegacyCodeSearch) {
-      request = http.Request(
-        'GET',
-        Uri.parse(
-          '${BaseUrl.url}/SaleRequest/ProductByLegacyCode?enterpriseCode=$enterpriseCode&searchValue=$controllerText',
-        ),
-      );
-    } else {
-      request = http.Request(
-        'GET',
-        Uri.parse(
-          '${BaseUrl.url}/SaleRequest/Product?enterpriseCode=$enterpriseCode&searchValue=$controllerText',
-        ),
-      );
-    }
-    try {
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
-
-      print('resposta para NOVA consulta dos produtos = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageProducts = json.decode(responseInString)["Message"];
-        _isLoadingRequests = false;
-
-        notifyListeners();
-        return;
-      }
-
-      SaleRequestProductsModel.responseAsStringToSaleRequestProductsModel(
-        responseAsString: responseInString,
-        listToAdd: _products,
-      );
-    } catch (e) {
-      print("Erro para obter os produtos: $e");
-      _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-    } finally {
-      _isLoadingProducts = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> _getProductsOld({
-    required int enterpriseCode,
-    required String controllerText,
-    required int searchTypeInt,
-    required BuildContext context,
-  }) async {
-// 2=ExactPriceLookUp
-// 4=ExactEan
-// 6=ApproximateName
-// 11=ApproximateLegacyCode
-
-    _products.clear();
-    _errorMessageProducts = "";
-    _isLoadingProducts = true;
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
-    notifyListeners();
-
-    try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-        'GET',
-        Uri.parse(
-          '${BaseUrl.url}/SaleRequest/Product?enterpriseCode=$enterpriseCode&searchTypeInt=$searchTypeInt&searchValue=$controllerText',
-        ),
-      );
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
-
-      print('resposta para consulta dos produtos = $responseInString');
-
-      if (responseInString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageProducts = json.decode(responseInString)["Message"];
-        _isLoadingRequests = false;
-
-        notifyListeners();
-        return;
-      }
-
-      SaleRequestProductsModel.responseAsStringToSaleRequestProductsModel(
-        responseAsString: responseInString,
-        listToAdd: _products,
-      );
-    } catch (e) {
-      print("Erro para obter os produtos: $e");
-      _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-    } finally {
-      _isLoadingProducts = false;
-      notifyListeners();
-    }
-  }
-
   Future<void> getProducts({
-    required BuildContext context,
     required int enterpriseCode,
     required String controllerText,
+    required BuildContext context,
     required bool isLegacyCodeSearch,
   }) async {
-    await _getProducts(
-      enterpriseCode: enterpriseCode,
-      controllerText: controllerText,
-      context: context,
-      isLegacyCodeSearch: isLegacyCodeSearch,
-    );
+    _products.clear();
+    _errorMessageProducts = "";
+    _isLoadingProducts = true;
+    notifyListeners();
 
-    if (_products.isNotEmpty && _errorMessageProducts == "") return;
-
-// 2=ExactPriceLookUp
-// 4=ExactEan
-// 6=ApproximateName
-// 11=ApproximateLegacyCode
-
-    if (isLegacyCodeSearch) {
-      //quando seleciona a opção de código legado precisa pesquisar somente pelo
-      //código legado, por isso o sistema já retorna encontrando ou não algum
-      //produto
-      await _getProductsOld(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypeInt: 11, //ApproximateLegacyCode
-        context: context,
-      );
-      return;
-    }
-
-    int? searchTypeInt = int.tryParse(controllerText);
-
-    if (searchTypeInt == null) {
-      //como não conseguiu converter para inteiro, significa que precisa consultar por nome
-      await _getProductsOld(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypeInt: 6, //approximateName
-        context: context,
-      );
-    } else {
-      await _getProductsOld(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypeInt: 4, //ExactEan
-        context: context,
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "enterpriseCode": enterpriseCode,
+          "searchValue": controllerText,
+          "searchTypeInt": 0,
+          "routineTypeInt": 1,
+        },
+        typeOfResponse: "GetProductJsonResponse",
+        SOAPAction: "GetProductJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductJsonResult",
       );
 
-      if (_products.isNotEmpty) return;
-
-      await _getProductsOld(
-        enterpriseCode: enterpriseCode,
-        controllerText: controllerText,
-        searchTypeInt: 2, //ExactPriceLookup == PLU
-        context: context,
-      );
+      _errorMessageProducts = SoapHelperResponseParameters.errorMessage;
+      if (_errorMessageProducts == "") {
+        SaleRequestProductsModel.responseAsStringToSaleRequestProductsModel(
+          responseAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _products,
+        );
+      }
+    } catch (e) {
+      print("Erro para obter os produtos: $e");
+      _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoadingProducts = false;
+      notifyListeners();
     }
   }
 
@@ -917,57 +761,55 @@ class SaleRequestProvider with ChangeNotifier {
     required int requestTypeCode,
     required BuildContext context,
   }) async {
-    _jsonSaleRequest["crossId"] = '${UserIdentity.identity}';
-    var encodeJsonSaleRequest = json.encode(_jsonSaleRequest);
-
     _errorMessageSaveSaleRequest = "";
     _isLoadingSaveSaleRequest = true;
     notifyListeners();
 
+    _jsonSaleRequest["crossId"] = "${UserIdentity.identity}";
+    var jsonSaleRequestEncoded = json.encode(_jsonSaleRequest);
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request =
-          http.Request('POST', Uri.parse('${BaseUrl.url}/SaleRequest/Insert'));
-      request.body = json.encode(encodeJsonSaleRequest);
-      request.headers.addAll(headers);
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "json": jsonSaleRequestEncoded,
+          "printerName": "",
+        },
+        typeOfResponse: "InsertResponse",
+        SOAPAction: "Insert",
+        serviceASMX: "CeltaSaleRequestService.asmx",
+      );
 
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
+      _errorMessageSaveSaleRequest = SoapHelperResponseParameters.errorMessage;
 
-      print('resposta para salvar o pedido = $responseInString');
-
-      if (responseInString.contains("sucesso")) {
+      if (_errorMessageSaveSaleRequest == "") {
         await clearCart(enterpriseCode);
 
         await _clearcustomers(enterpriseCode);
 
-        _lastSaleRequestSaved = json.decode(responseInString)["Message"];
-        int index = _lastSaleRequestSaved.indexOf(RegExp(r'\('));
-        _lastSaleRequestSaved = "Último pedido salvo: " +
-            _lastSaleRequestSaved.replaceRange(0, index + 1, "");
-        _lastSaleRequestSaved = _lastSaleRequestSaved
-            .replaceAll(RegExp(r'\)'), '')
-            .trim()
-            .replaceAll(RegExp(r'\n'), '');
-
-        notifyListeners();
         ShowErrorMessage.showErrorMessage(
           error: "O pedido foi salvo com sucesso!",
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
+
+        RegExp regex = RegExp(
+            r'\((.*?)\)'); // Expressão regular para capturar o conteúdo entre parênteses
+
+        Match? match = regex.firstMatch(SoapHelperResponseParameters
+            .responseAsString); // Encontrar o primeiro match na string
+
+        if (match != null) {
+          _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
+        } else {
+          print("Nenhum conteúdo entre parênteses encontrado.");
+        }
       } else {
-        //significa que deu algum erro
-        _errorMessageSaveSaleRequest = json.decode(responseInString)["Message"];
         _isLoadingSaveSaleRequest = false;
 
         ShowErrorMessage.showErrorMessage(
           error: _errorMessageSaveSaleRequest,
           context: context,
         );
-
-        notifyListeners();
-        return;
       }
     } catch (e) {
       print("Erro para salvar o pedido: $e");

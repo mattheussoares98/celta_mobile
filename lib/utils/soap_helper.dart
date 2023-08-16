@@ -76,7 +76,7 @@ class SoapHelper {
                     .toString();
           }
 
-          if (_validateResultHasPattern(
+          if (_validateResultHasPatternNewDataSet(
             parsedJson: parsedJson,
             typeOfResponse: typeOfResponse,
             typeOfResult: typeOfResult,
@@ -88,8 +88,17 @@ class SoapHelper {
           }
         }
       } else {
-        SoapHelperResponseParameters.errorMessage =
-            parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]["status"];
+        if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+            .toString()
+            .contains("sucesso")) {
+          SoapHelperResponseParameters.responseAsString =
+              parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                  ["status"];
+        } else {
+          SoapHelperResponseParameters.errorMessage =
+              parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                  ["status"];
+        }
       }
     } else {
       throw Exception('Failed to load data');
@@ -97,7 +106,7 @@ class SoapHelper {
   }
 }
 
-bool _validateResultHasPattern({
+bool _validateResultHasPatternNewDataSet({
   required Map parsedJson,
   required String typeOfResponse,
   required String typeOfResult,

@@ -47,22 +47,10 @@ class SaleRequestProductsModel {
     required String responseAsString,
     required List listToAdd,
   }) {
-    if (responseAsString.contains("\\")) {
-      //foi corrigido para não ficar mandando "\", "\n" e sinal de " a mais nos retornos. Somente quando estiver desatualido o CMX que vai enviar dessa forma
-      responseAsString = responseAsString
-          .replaceAll(RegExp(r'\\'), '')
-          .replaceAll(RegExp(r'\n'), '')
-          .replaceFirst(RegExp(r'"'), '');
+    List resultAsList = json.decode(responseAsString);
+    Map resultAsMap = resultAsList.asMap();
 
-      int lastIndex = responseAsString.lastIndexOf('"');
-      responseAsString =
-          responseAsString.replaceRange(lastIndex, lastIndex + 1, "");
-    }
-
-    List responseAsList = json.decode(responseAsString.toString());
-    Map responseAsMap = responseAsList.asMap();
-
-    responseAsMap.forEach((id, data) {
+    resultAsMap.forEach((id, data) {
       listToAdd.add(
         SaleRequestProductsModel(
           ProductCode: data["ProductCode"],
