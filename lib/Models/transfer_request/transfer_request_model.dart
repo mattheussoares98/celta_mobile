@@ -23,9 +23,9 @@ class TransferRequestModel {
     required this.UnitValueTypeString,
   });
 
-  static resultAsStringToConsultPriceModel({
-    required resultAsString,
-    required listToAdd,
+  static resultAsStringToTransferRequestModel({
+    required String resultAsString,
+    required List listToAdd,
   }) {
     List resultAsList = json.decode(resultAsString);
     Map resultAsMap = resultAsList.asMap();

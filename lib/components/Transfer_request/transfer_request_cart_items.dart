@@ -81,7 +81,7 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
 
   updateProductInCart({
     required TransferRequestProvider transferRequestProvider,
-    required dynamic product,
+    required TransferRequestCartProductsModel product,
     required int index,
   }) {
     double? controllerInDouble = double.tryParse(

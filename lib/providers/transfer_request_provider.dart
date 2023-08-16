@@ -5,12 +5,11 @@ import 'package:celta_inventario/Models/transfer_request/transfer_request_produc
 import 'package:celta_inventario/Models/transfer_request/transfer_destiny_enterprise_model.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterprise_model.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
+import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Components/Global_widgets/show_error_message.dart';
-import '../utils/base_url.dart';
 import '../utils/default_error_message_to_find_server.dart';
 
 class TransferRequestProvider with ChangeNotifier {
@@ -411,9 +410,6 @@ class TransferRequestProvider with ChangeNotifier {
     _cartProducts[requestTypeCode]![enterpriseOriginCode]![
             enterpriseDestinyCode]![index]
         .Quantity = quantity;
-    _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-            enterpriseDestinyCode]![index]
-        .Value = value;
 
     await _updateCartInDatabase();
     notifyListeners();
@@ -442,30 +438,29 @@ class TransferRequestProvider with ChangeNotifier {
     _destinyEnterprises.clear();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request('GET',
-          Uri.parse('${BaseUrl.url}/TransferRequest/RequestType?searchValue='));
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta dos pedidos: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageRequestModel = json.decode(resultAsString)["Message"];
-
-        _isLoadingRequestModel = false;
-
-        notifyListeners();
-        return;
-      }
-      TransferRequestModel.resultAsStringToConsultPriceModel(
-        resultAsString: resultAsString,
-        listToAdd: _requestModels,
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "simpleSearchValue": "",
+          // "enterpriseCode": "int",
+          "inclusiveTransfer": true,
+          "inclusiveBuy": false,
+          "inclusiveSale": false,
+        },
+        typeOfResponse: "GetRequestTypesJsonResponse",
+        SOAPAction: "GetRequestTypesJson",
+        serviceASMX: "CeltaRequestTypeService.asmx",
+        typeOfResult: "GetRequestTypesJsonResult",
       );
+
+      _errorMessageRequestModel = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageRequestModel == "") {
+        TransferRequestModel.resultAsStringToTransferRequestModel(
+          resultAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _requestModels,
+        );
+      }
     } catch (e) {
       print('deu erro para consultar os pedidos: $e');
       _errorMessageRequestModel = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -482,32 +477,26 @@ class TransferRequestProvider with ChangeNotifier {
     _originEnterprises.clear();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'GET',
-          Uri.parse(
-              '${BaseUrl.url}/TransferRequest/EnterpriseOrigin?requestTypeCode=$requestTypeCode&searchValue=%'));
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta das empresas de origem: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageOriginEnterprise = json.decode(resultAsString)["Message"];
-
-        _isLoadingOriginEnterprise = false;
-
-        notifyListeners();
-        return;
-      }
-      TransferOriginEnterpriseModel.resultAsStringToOriginEnterpriseModel(
-        resultAsString: resultAsString,
-        listToAdd: _originEnterprises,
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          // "simpleSearchValue": "string",
+          "requestTypeCode": requestTypeCode,
+        },
+        typeOfResponse: "GetEnterprisesJsonResponse",
+        SOAPAction: "GetEnterprisesJson",
+        serviceASMX: "CeltaEnterpriseService.asmx",
+        typeOfResult: "GetEnterprisesJsonResult",
       );
+
+      _errorMessageOriginEnterprise = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageOriginEnterprise == "") {
+        TransferOriginEnterpriseModel.resultAsStringToOriginEnterpriseModel(
+          resultAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _originEnterprises,
+        );
+      }
     } catch (e) {
       print('deu erro para consultar as empresas de origem: $e');
       _errorMessageOriginEnterprise =
@@ -567,34 +556,28 @@ class TransferRequestProvider with ChangeNotifier {
     _destinyEnterprises.clear();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-        'GET',
-        Uri.parse(
-          '${BaseUrl.url}/TransferRequest/EnterpriseDestiny?requestTypeCode=$requestTypeCode&enterpriseOriginCode=$enterpriseOriginCode&searchValue=%',
-        ),
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          // "simpleSearchValue": "string",
+          "requestTypeCode": requestTypeCode,
+          "enterpriseOriginCode": enterpriseOriginCode,
+        },
+        typeOfResponse: "GetEnterprisesDestinyJsonResponse",
+        SOAPAction: "GetEnterprisesDestinyJson",
+        serviceASMX: "CeltaEnterpriseService.asmx",
+        typeOfResult: "GetEnterprisesDestinyJsonResult",
       );
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
 
-      http.StreamedResponse response = await request.send();
+      _errorMessageDestinyEnterprise =
+          SoapHelperResponseParameters.errorMessage;
 
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta das empresas de destino: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageDestinyEnterprise = json.decode(resultAsString)["Message"];
-
-        _isLoadingDestinyEnterprise = false;
-
-        notifyListeners();
-        return;
+      if (_errorMessageDestinyEnterprise == "") {
+        TransferDestinyEnterpriseModel.resultAsStringToDestinyEnterpriseModel(
+          resultAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _destinyEnterprises,
+        );
       }
-      TransferDestinyEnterpriseModel.resultAsStringToDestinyEnterpriseModel(
-        resultAsString: resultAsString,
-        listToAdd: _destinyEnterprises,
-      );
     } catch (e) {
       print('deu erro para consultar as empresas de destino: $e');
       _errorMessageDestinyEnterprise =
@@ -616,48 +599,32 @@ class TransferRequestProvider with ChangeNotifier {
     _products.clear();
     notifyListeners();
 
-    http.Request? request;
-    var headers = {'Content-Type': 'application/json'};
-
-    if (isLegacyCodeSearch) {
-      request = http.Request(
-        'GET',
-        Uri.parse(
-          '${BaseUrl.url}/TransferRequest/ProductByLegacyCode?enterpriseCode=$enterpriseOriginCode&enterpriseDestinyCode=$enterpriseDestinyCode&requestTypeCode=$requestTypeCode&searchValue=$value',
-        ),
-      );
-    } else {
-      request = http.Request(
-        'GET',
-        Uri.parse(
-          '${BaseUrl.url}/TransferRequest/Product?enterpriseCode=$enterpriseOriginCode&enterpriseDestinyCode=$enterpriseDestinyCode&requestTypeCode=$requestTypeCode&searchValue=$value',
-        ),
-      );
-    }
-
     try {
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta dos produtos: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageProducts = json.decode(resultAsString)["Message"];
-
-        _isLoadingProducts = false;
-
-        notifyListeners();
-        return;
-      }
-      TransferRequestProductsModel
-          .responseAsStringToTransferRequestProductsModel(
-        responseAsString: resultAsString,
-        listToAdd: _products,
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "enterpriseCode": enterpriseOriginCode,
+          "enterpriseDestinyCode": enterpriseDestinyCode,
+          "requestTypeCode": requestTypeCode,
+          "searchValue": value,
+          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          // "routineTypeInt": "int",
+        },
+        typeOfResponse: "GetProductJsonByRequestTypeResponse",
+        SOAPAction: "GetProductJsonByRequestType",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductJsonByRequestTypeResult",
       );
+
+      _errorMessageProducts = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageProducts == "") {
+        TransferRequestProductsModel
+            .responseAsStringToTransferRequestProductsModel(
+          responseAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _products,
+        );
+      }
     } catch (e) {
       print('deu erro para consultar os produtos: $e');
       _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -683,60 +650,55 @@ class TransferRequestProvider with ChangeNotifier {
       requestTypeCode: int.parse(requestTypeCode),
     );
 
-    var encodeJsonSaleRequest = json.encode(_jsonSaleRequest);
-    _jsonSaleRequest.toString();
-
     _errorMessageSaveTransferRequest = "";
     _isLoadingSaveTransferRequest = true;
     notifyListeners();
 
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST', Uri.parse('${BaseUrl.url}/TransferRequest/Insert'));
-      request.body = json.encode(encodeJsonSaleRequest);
-      request.headers.addAll(headers);
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "json": json.encode(_jsonSaleRequest),
+        },
+        typeOfResponse: "InsertResponse",
+        SOAPAction: "Insert",
+        serviceASMX: "CeltaTransferRequestService.asmx",
+      );
 
-      http.StreamedResponse response = await request.send();
-      String responseInString = await response.stream.bytesToString();
+      _errorMessageSaveTransferRequest =
+          SoapHelperResponseParameters.errorMessage;
 
-      print('resposta para salvar a transferência = $responseInString');
-
-      if (responseInString.contains("sucesso")) {
+      if (_errorMessageSaveTransferRequest == "") {
         await clearCart(
           requestTypeCode: requestTypeCode,
           enterpriseOriginCode: enterpriseOriginCode,
           enterpriseDestinyCode: enterpriseDestinyCode,
         );
 
-        _lastSavedTransferRequest = json.decode(responseInString)["Message"];
-        int index = _lastSavedTransferRequest.indexOf(RegExp(r'\('));
-        _lastSavedTransferRequest = "Último pedido salvo: " +
-            _lastSavedTransferRequest.replaceRange(0, index + 1, "");
-        _lastSavedTransferRequest = _lastSavedTransferRequest
-            .replaceAll(RegExp(r'\)'), '')
-            .trim()
-            .replaceAll(RegExp(r'\n'), '');
-
-        notifyListeners();
         ShowErrorMessage.showErrorMessage(
           error: "O pedido foi salvo com sucesso!",
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
+
+        RegExp regex = RegExp(
+            r'\((.*?)\)'); // Expressão regular para capturar o conteúdo entre parênteses
+
+        Match? match = regex.firstMatch(SoapHelperResponseParameters
+            .responseAsString); // Encontrar o primeiro match na string
+
+        if (match != null) {
+          _lastSavedTransferRequest = "Último pedido salvo: " + match.group(1)!;
+        } else {
+          print("Nenhum conteúdo entre parênteses encontrado.");
+        }
       } else {
-        //significa que deu algum erro
-        _errorMessageSaveTransferRequest =
-            json.decode(responseInString)["Message"];
         _isLoadingSaveTransferRequest = false;
 
         ShowErrorMessage.showErrorMessage(
           error: _errorMessageSaveTransferRequest,
           context: context,
         );
-
-        notifyListeners();
-        return;
       }
     } catch (e) {
       print("Erro para salvar a transferência: $e");
