@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "137101492083",
+    "project_id": "celtamobile-ac5b1",
+    "storage_bucket": "celtamobile-ac5b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137101492083:android:f0e50c59299aeff7458f06",
+        "android_client_info": {
+          "package_name": "br.com.celtaware.inventario"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137101492083-2ek4ailr97o3347cms1nbqo5ja2rflnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRv_c-QbjFtQb4D92Ij6IXle0i58A0-Bc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137101492083-2ek4ailr97o3347cms1nbqo5ja2rflnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

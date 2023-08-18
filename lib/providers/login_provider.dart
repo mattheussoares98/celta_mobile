@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/Models/firebase_client_model.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml2json/xml2json.dart';
@@ -11,6 +12,9 @@ import '../utils/default_error_message_to_find_server.dart';
 import '../Components/Global_widgets/show_error_message.dart';
 
 class LoginProvider with ChangeNotifier {
+  static FirebaseFirestore _db = FirebaseFirestore.instance;
+  CollectionReference clientsCollection = _db.collection("clients");
+
   String _errorMessage = '';
 
   String get errorMessage {
@@ -34,19 +38,21 @@ class LoginProvider with ChangeNotifier {
     return _isAuthStream;
   }
 
-  _saveUrlAndUser({
-    required String url,
+  _saveUserAndEnterpriseNameOrCCSUrlInLocalDatabase({
+    required String enterpriseNameOrCCSUrl,
     required String user,
   }) async {
-    BaseUrl.url = url.toLowerCase();
-
-    if (!BaseUrl.url.endsWith("/api")) {
-      BaseUrl.url = BaseUrl.url += "/api";
-    }
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('url', BaseUrl.url);
+
     await prefs.setString('user', user);
+
+    if (_isUrl(enterpriseNameOrCCSUrl)) {
+      BaseUrl.ccsUrl = enterpriseNameOrCCSUrl;
+      await prefs.setString('enterpriseName', "");
+      await prefs.setString('ccsUrl', BaseUrl.ccsUrl);
+    } else {
+      await prefs.setString('enterpriseName', enterpriseNameOrCCSUrl);
+    }
   }
 
   Future<String> getUserName() async {
@@ -63,34 +69,61 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
-  restoreUserAndUrl({
-    required TextEditingController urlController,
+  restoreUserAndEnterpriseNameOrCCSUrl({
+    required TextEditingController enterpriseNameOrCCSUrlController,
     required TextEditingController userController,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    //logo que instala o app, logicamente ainda não tem nada salvo nas URLs se
-    //não fizer essa verificação, vai dar erro no debug console
-    if (prefs.getString('url') == null || prefs.getString('user') == null) {
-      return;
+    if (prefs.getString('user') != null) {
+      userController.text = prefs.getString('user')!;
     }
-    BaseUrl.url = prefs.getString('url')!;
-    urlController.text = prefs.getString('url')!;
-    userController.text = prefs.getString('user')!;
+
+    if (prefs.getString('enterpriseName') != null &&
+        prefs.getString('enterpriseName') != "") {
+      enterpriseNameOrCCSUrlController.text =
+          prefs.getString('enterpriseName')!;
+    } else if (prefs.getString('ccsUrl') != null &&
+        prefs.getString('ccsUrl') != "") {
+      enterpriseNameOrCCSUrlController.text = prefs.getString('ccsUrl')!;
+    }
   }
 
   login({
     required String user,
     required String password,
-    required String url,
+    required TextEditingController enterpriseNameOrCCSUrlController,
     required BuildContext context,
   }) async {
-    await _saveUrlAndUser(url: url, user: user);
-
     _errorMessage = '';
     _isLoading = true;
     notifyListeners();
-    password = ConvertString.convertToRemoveSpecialCaracters(password);
+
+    await _saveUserAndEnterpriseNameOrCCSUrlInLocalDatabase(
+      enterpriseNameOrCCSUrl: enterpriseNameOrCCSUrlController.text,
+      user: user,
+    );
+
+    bool? canTryLogin;
+    if (_isUrl(enterpriseNameOrCCSUrlController.text)) {
+      canTryLogin = await _hasUrlCcsInFirebase(
+        enterpriseNameOrCCSUrlController: enterpriseNameOrCCSUrlController,
+      );
+    } else {
+      canTryLogin = await _hasEnterpriseInFirebase(
+        enterpriseNameOrCCSUrlController: enterpriseNameOrCCSUrlController,
+      );
+    }
+
+    if (!canTryLogin) {
+      ShowErrorMessage.showErrorMessage(
+        error: _errorMessage,
+        context: context,
+      );
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
 
     try {
       await SoapHelper.soapPost(
@@ -125,6 +158,12 @@ class LoginProvider with ChangeNotifier {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('userIdentity', UserIdentity.identity);
+
+        await _addClientInFirebase(
+          firebaseClientModel: FirebaseClientModel(
+            urlCCS: BaseUrl.ccsUrl,
+          ),
+        );
       }
     } catch (e) {
       // _updateErrorMessage(e.toString());
@@ -134,7 +173,6 @@ class LoginProvider with ChangeNotifier {
         error: _errorMessage,
         context: context,
       );
-      // notifyListeners();
     }
     _isLoading = false;
     notifyListeners();
@@ -144,5 +182,131 @@ class LoginProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('userIdentity', "");
     _loginController?.add(false);
+  }
+
+  _addClientInFirebase({
+    required FirebaseClientModel firebaseClientModel,
+  }) async {
+    QuerySnapshot querySnapshot;
+
+    if (_isUrl(firebaseClientModel.urlCCS)) {
+      querySnapshot = await clientsCollection
+          .where(
+            'urlCCS',
+            isEqualTo: firebaseClientModel.urlCCS,
+          )
+          .get();
+      if (querySnapshot.size > 0) {
+        print("já existe documento com essa URL, não precisa adicionar");
+      } else {
+        clientsCollection
+            .add(firebaseClientModel.toJson())
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
+      }
+    }
+  }
+
+  bool _isUrl(String text) {
+    return text.toLowerCase().contains('http') &&
+        text.toLowerCase().contains('//') &&
+        text.toLowerCase().contains(':') &&
+        text.toLowerCase().contains('ccs');
+  }
+
+  Future<bool> _hasEnterpriseInFirebase({
+    required TextEditingController enterpriseNameOrCCSUrlController,
+  }) async {
+    bool canTryLogin = false;
+    QuerySnapshot? querySnapshot;
+    querySnapshot = await clientsCollection
+        .where('enterpriseName',
+            isEqualTo: enterpriseNameOrCCSUrlController.text.toLowerCase())
+        .get();
+
+    if (querySnapshot.size > 0) {
+      canTryLogin = true;
+
+      DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+      String documentId = documentSnapshot.id;
+      await _getUrlCCSFromDocumentId(
+        documentId: documentId,
+        enterpriseNameOrCCSUrlController: enterpriseNameOrCCSUrlController,
+      );
+      print("já existe documento com esse nome de empresa");
+    } else {
+      _errorMessage =
+          "A empresa não foi encontrada no banco de dados. Entre em contato com o suporte e solicite a URL do CCS para fazer o login";
+    }
+
+    return canTryLogin;
+  }
+
+  Future<bool> _hasUrlCcsInFirebase({
+    required TextEditingController enterpriseNameOrCCSUrlController,
+  }) async {
+    bool canTryLogin = false;
+    QuerySnapshot? querySnapshot;
+    if (_isUrl(enterpriseNameOrCCSUrlController.text
+        .trimRight()
+        .trimLeft()
+        .toLowerCase())) {
+      canTryLogin = true;
+    }
+    querySnapshot = await clientsCollection
+        .where(
+          'urlCCS',
+          isEqualTo: enterpriseNameOrCCSUrlController.text
+              .trimRight()
+              .trimLeft()
+              .toLowerCase(),
+        )
+        .get();
+
+    if (querySnapshot.size > 0) {
+      canTryLogin = true;
+
+      DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+      String documentId = documentSnapshot.id;
+      await _getUrlCCSFromDocumentId(
+        documentId: documentId,
+        enterpriseNameOrCCSUrlController: enterpriseNameOrCCSUrlController,
+      );
+    } else {
+      _errorMessage =
+          "A empresa não foi encontrada no banco de dados. Entre em contato com o suporte e solicite a URL do CCS para fazer o login";
+    }
+    return canTryLogin;
+  }
+
+  Future<void> _getUrlCCSFromDocumentId({
+    required String documentId,
+    required TextEditingController enterpriseNameOrCCSUrlController,
+  }) async {
+    DocumentReference documentRef = clientsCollection.doc(documentId);
+    DocumentSnapshot documentSnapshot = await documentRef.get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      if (data.containsKey('urlCCS')) {
+        BaseUrl.ccsUrl = data['urlCCS'];
+        print(BaseUrl.ccsUrl);
+      }
+
+      if (data.containsKey('enterpriseName')) {
+        if (data['enterpriseName'] != "undefined") {
+          //se for "undefined" é porque ainda não adicionou o nome do cliente no banco de banco
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          enterpriseNameOrCCSUrlController.text = data['enterpriseName'];
+          await prefs.setString('enterpriseName', data['enterpriseName']);
+        }
+      } else {
+        enterpriseNameOrCCSUrlController.text = data['urlCCS'];
+      }
+    } else {
+      print('Documento não encontrado.');
+    }
   }
 }

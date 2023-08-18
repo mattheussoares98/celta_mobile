@@ -12,7 +12,8 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-TextEditingController _urlController = TextEditingController();
+TextEditingController _enterpriseNameOrCCSUrlController =
+    TextEditingController();
 TextEditingController _userController = TextEditingController();
 TextEditingController _passwordController = TextEditingController();
 
@@ -37,7 +38,7 @@ class _AuthFormState extends State<AuthForm>
       user: _userController.text,
       password: _passwordController.text,
       context: context,
-      url: _urlController.text,
+      enterpriseNameOrCCSUrlController: _enterpriseNameOrCCSUrlController,
     );
 
     if (loginProvider.errorMessage == '') {
@@ -75,10 +76,11 @@ class _AuthFormState extends State<AuthForm>
     if (!isLoaded) {
       await loginProvider.verifyIsLogged();
 
-      await loginProvider.restoreUserAndUrl(
-        urlController: _urlController,
+      await loginProvider.restoreUserAndEnterpriseNameOrCCSUrl(
+        enterpriseNameOrCCSUrlController: _enterpriseNameOrCCSUrlController,
         userController: _userController,
       );
+      isLoaded = true;
     }
   }
 
@@ -222,7 +224,7 @@ class _AuthFormState extends State<AuthForm>
                     width: _animationWidth!.value,
                     child: TextFormField(
                       enabled: _loginProvider.isLoading ? false : true,
-                      controller: _urlController,
+                      controller: _enterpriseNameOrCCSUrlController,
                       onFieldSubmitted: (_) =>
                           _submit(loginProvider: _loginProvider),
                       focusNode: _urlFocusNode,
@@ -234,14 +236,20 @@ class _AuthFormState extends State<AuthForm>
                         fontSize: 20,
                       ),
                       validator: (_url) {
-                        _url = _urlController.text;
-                        if (_urlController.text.trim().isEmpty) {
-                          return 'Preencha a url';
-                        } else if (!_urlController.text.contains('http') ||
-                            !_urlController.text.contains('//') ||
-                            !_urlController.text.contains(':')) {
-                          return 'URL inválida';
+                        _url = _enterpriseNameOrCCSUrlController.text;
+                        if (_enterpriseNameOrCCSUrlController.text
+                            .toLowerCase()
+                            .trim()
+                            .isEmpty) {
+                          return 'Digite o nome da empresa ou URL do CCS';
                         }
+                        // else if (!_enterpriseNameOrCCSUrlController.text
+                        //         .contains('http') ||
+                        //     !_enterpriseNameOrCCSUrlController.text.contains('//') ||
+                        //     !_enterpriseNameOrCCSUrlController.text.contains(':') ||
+                        //     !_enterpriseNameOrCCSUrlController.text.contains('ccs')) {
+                        //   return 'URL inválida';
+                        // }
                         return null;
                       },
                       decoration: InputDecoration(
@@ -251,7 +259,8 @@ class _AuthFormState extends State<AuthForm>
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        labelText: 'URL',
+                        hintText: 'Exp: "Celtaware"',
+                        labelText: 'Nome da empresa ou CCS',
                         labelStyle: const TextStyle(
                           color: Colors.grey,
                         ),
@@ -263,7 +272,8 @@ class _AuthFormState extends State<AuthForm>
                     animation: _animationController!,
                     builder: (context, widget) => ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size(_animationWidth!.value, 60), backgroundColor: _loginProvider.isLoading
+                        minimumSize: Size(_animationWidth!.value, 60),
+                        backgroundColor: _loginProvider.isLoading
                             ? Colors.grey
                             : Theme.of(context).colorScheme.primary,
                         maximumSize: Size(_animationWidth!.value, 60),
