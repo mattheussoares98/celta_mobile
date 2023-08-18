@@ -14,10 +14,20 @@ class EnterpriseModel {
   });
 
   static resultAsStringToEnterpriseModel({
-    required List data,
+    required dynamic data,
     required List listToAdd,
   }) {
-    data.forEach((element) {
+    if (data == null) {
+      return;
+    }
+    List dataList = [];
+    if (data is Map) {
+      dataList.add(data);
+    } else {
+      dataList = data;
+    }
+
+    dataList.forEach((element) {
       listToAdd.add(
         EnterpriseModel(
           codigoInternoEmpresa: int.parse(element['CodigoInterno_Empresa']),
