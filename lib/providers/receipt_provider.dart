@@ -244,8 +244,6 @@ class ReceiptProvider with ChangeNotifier {
     _products.clear();
     _errorMessageGetProducts = "";
     _consultingProducts = true;
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     notifyListeners();
 
     int searchTypeInt = 0;

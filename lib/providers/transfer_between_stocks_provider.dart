@@ -166,8 +166,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
     notifyListeners();
 
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     http.Request? request;
     var headers = {'Content-Type': 'application/json'};
 
@@ -219,8 +217,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required BuildContext context,
     // required FocusNode consultProductFocusNode,
   }) async {
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
     String searchType =

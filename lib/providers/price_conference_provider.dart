@@ -53,8 +53,6 @@ class PriceConferenceProvider with ChangeNotifier {
     _products.clear();
     _errorMessage = "";
     _isLoading = true;
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     notifyListeners();
     dynamic value = int.tryParse(controllerText);
     //o valor pode ser em inteiro ou em texto

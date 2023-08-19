@@ -121,8 +121,6 @@ class InventoryProvider with ChangeNotifier {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
     _indexOfLastAddedQuantity = -1;
-    controllerText =
-        ConvertString.convertToRemoveSpecialCaracters(controllerText);
     notifyListeners();
     dynamic value = int.tryParse(controllerText);
     //o valor pode ser em inteiro ou em texto
