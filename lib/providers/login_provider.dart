@@ -227,8 +227,12 @@ class LoginProvider with ChangeNotifier {
     bool canTryLogin = false;
     QuerySnapshot? querySnapshot;
     querySnapshot = await clientsCollection
-        .where('enterpriseName',
-            isEqualTo: enterpriseNameOrCCSUrlController.text.toLowerCase())
+        .where(
+          'enterpriseName',
+          isEqualTo: enterpriseNameOrCCSUrlController.text
+              .toLowerCase()
+              .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
+        )
         .get();
 
     if (querySnapshot.size > 0) {
