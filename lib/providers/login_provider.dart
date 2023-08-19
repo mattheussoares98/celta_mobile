@@ -69,6 +69,13 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
+  Future<void> restoreBaseUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('ccsUrl') != null && prefs.getString('ccsUrl') != "") {
+      BaseUrl.ccsUrl = prefs.getString('ccsUrl')!;
+    }
+  }
+
   restoreUserAndEnterpriseNameOrCCSUrl({
     required TextEditingController enterpriseNameOrCCSUrlController,
     required TextEditingController userController,

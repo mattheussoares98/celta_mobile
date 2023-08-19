@@ -23,8 +23,11 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
 
     if (!isLoaded) {
+      await loginProvider.restoreBaseUrl();
       userName = await loginProvider.getUserName();
       setState(() {});
+
+      isLoaded = true;
     }
   }
 
