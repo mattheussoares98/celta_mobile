@@ -1,27 +1,27 @@
 import 'dart:convert';
 
 class AdjustStockTypeModel {
-  final int CodigoInterno_JustMov; /* : 1, */
+  final int CodigoInterno_TipoEstoque; /* : 1, */
   final String Nome_TipoEstoque; /* : "Estoque Atual", */
-  final bool IsInternal; /* : true */
+  final bool FlagInterno_TipoEstoque; /* : true */
 
   AdjustStockTypeModel({
-    required this.CodigoInterno_JustMov,
+    required this.CodigoInterno_TipoEstoque,
     required this.Nome_TipoEstoque,
-    required this.IsInternal,
+    required this.FlagInterno_TipoEstoque,
   });
 
-  static dataToAdjustStockTypeModel({
-    required String data,
+  static resultAsStringToAdjustStockTypeModel({
+    required String resultAsString,
     required List listToAdd,
   }) {
-    List resultAsList = json.decode(data);
+    List resultAsList = json.decode(resultAsString);
     resultAsList.forEach((element) {
       listToAdd.add(
         AdjustStockTypeModel(
-          CodigoInterno_JustMov: element["Code"],
-          Nome_TipoEstoque: element["Name"],
-          IsInternal: element["IsInternal"],
+          CodigoInterno_TipoEstoque: element["CodigoInterno_TipoEstoque"] ?? -1,
+          Nome_TipoEstoque: element["Nome_TipoEstoque"],
+          FlagInterno_TipoEstoque: element["FlagInterno_TipoEstoque"],
         ),
       );
     });

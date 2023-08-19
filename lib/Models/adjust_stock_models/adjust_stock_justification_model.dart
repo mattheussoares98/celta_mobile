@@ -44,18 +44,19 @@ class AdjustStockJustificationModel {
               element["FlagTipo_JustMov"] == 1 ? "Entrada" : "Saída",
           TypeOperator: element["FlagTipo_JustMov"] == 1 ? "(+)" : "(-)",
           Nome_TipoEstoque: element["Nome_TipoEstoque"] ?? "",
-          CodigoInterno_TipoEstoque:
-              element["CodigoInterno_TipoEstoque"] == null
-                  ? AdjustStockTypeModel(
-                      CodigoInterno_JustMov: -1,
-                      Nome_TipoEstoque: "",
-                      IsInternal: false,
-                    )
-                  : AdjustStockTypeModel(
-                      CodigoInterno_JustMov: element["CodigoInterno_JustMov"],
-                      Nome_TipoEstoque: element["Nome_TipoEstoque"],
-                      IsInternal: element["FlagInterno_TipoEstoque"],
-                    ),
+          CodigoInterno_TipoEstoque: element["CodigoInterno_TipoEstoque"] ==
+                  null
+              ? AdjustStockTypeModel(
+                  CodigoInterno_TipoEstoque: -1,
+                  Nome_TipoEstoque: "",
+                  FlagInterno_TipoEstoque: false,
+                )
+              : AdjustStockTypeModel(
+                  CodigoInterno_TipoEstoque:
+                      element["CodigoInterno_TipoEstoque"],
+                  Nome_TipoEstoque: element["Nome_TipoEstoque"],
+                  FlagInterno_TipoEstoque: element["FlagInterno_TipoEstoque"],
+                ),
         ),
       );
     });

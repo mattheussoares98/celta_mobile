@@ -45,7 +45,9 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                 AdjustStockProductModel product =
                     adjustStockProvider.products[index];
                 return GestureDetector(
-                  onTap: adjustStockProvider.isLoadingTypeStockAndJustifications
+                  onTap: adjustStockProvider
+                              .isLoadingTypeStockAndJustifications ||
+                          adjustStockProvider.isLoadingAdjustStock
                       ? null
                       : () {
                           adjustStockProvider

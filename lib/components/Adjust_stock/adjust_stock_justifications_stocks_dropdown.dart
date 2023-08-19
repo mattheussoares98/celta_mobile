@@ -104,7 +104,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                             value.CodigoInterno_JustMov;
 
                         if (value.CodigoInterno_TipoEstoque
-                                .CodigoInterno_JustMov !=
+                                .CodigoInterno_TipoEstoque !=
                             -1) {
                           adjustStockProvider.justificationHasStockType = true;
 
@@ -206,7 +206,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                       alignment: Alignment.center,
                       onTap: () {
                         adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
-                            value.CodigoInterno_JustMov;
+                            value.CodigoInterno_TipoEstoque;
                       },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(

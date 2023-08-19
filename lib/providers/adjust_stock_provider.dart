@@ -1,15 +1,12 @@
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_justification_model.dart';
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_type_model.dart';
-import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 
 class AdjustStockProvider with ChangeNotifier {
   List<AdjustStockProductModel> _products = [];
@@ -86,40 +83,40 @@ class AdjustStockProvider with ChangeNotifier {
         "" //quando clica em "alterar", valida se a quantidade é válida e se os dropdowns do estoque e justificativa estão selecionados. Caso esteja tudo certo, altera a quantidade do json de acordo com o que o usuário digitou
   };
 
-  _updateCurrentStock({
-    required int index,
-    required String consultedProductControllerText,
-  }) {
-    _products[index].CurrentStock =
-        _products[index].CurrentStock.replaceAll(RegExp(r'\,'), '');
-    _products[index].SaldoEstoqueVenda =
-        _products[index].SaldoEstoqueVenda.replaceAll(RegExp(r'\,'), '');
+  // _updateCurrentStock({
+  //   required int index,
+  //   required String consultedProductControllerText,
+  // }) {
+  //   _products[index].CurrentStock =
+  //       _products[index].CurrentStock.replaceAll(RegExp(r'\,'), '');
+  //   _products[index].SaldoEstoqueVenda =
+  //       _products[index].SaldoEstoqueVenda.replaceAll(RegExp(r'\,'), '');
 
-    double currentStockInDouble =
-        double.tryParse(_products[index].CurrentStock)!;
-    double saldoEstoqueVendaInDouble =
-        double.tryParse(_products[index].SaldoEstoqueVenda)!;
-    double consultedProductControllerInDouble =
-        double.tryParse(consultedProductControllerText)!;
+  //   double currentStockInDouble =
+  //       double.tryParse(_products[index].CurrentStock)!;
+  //   double saldoEstoqueVendaInDouble =
+  //       double.tryParse(_products[index].SaldoEstoqueVenda)!;
+  //   double consultedProductControllerInDouble =
+  //       double.tryParse(consultedProductControllerText)!;
 
-    if (typeOperator.contains("+")) {
-      _products[index].CurrentStock =
-          (currentStockInDouble + consultedProductControllerInDouble)
-              .toString();
+  //   if (typeOperator.contains("+")) {
+  //     _products[index].CurrentStock =
+  //         (currentStockInDouble + consultedProductControllerInDouble)
+  //             .toString();
 
-      _products[index].SaldoEstoqueVenda =
-          (saldoEstoqueVendaInDouble + consultedProductControllerInDouble)
-              .toString();
-    } else {
-      _products[index].CurrentStock =
-          (currentStockInDouble - consultedProductControllerInDouble)
-              .toString();
+  //     _products[index].SaldoEstoqueVenda =
+  //         (saldoEstoqueVendaInDouble + consultedProductControllerInDouble)
+  //             .toString();
+  //   } else {
+  //     _products[index].CurrentStock =
+  //         (currentStockInDouble - consultedProductControllerInDouble)
+  //             .toString();
 
-      _products[index].SaldoEstoqueVenda =
-          (currentStockInDouble - consultedProductControllerInDouble)
-              .toString();
-    }
-  }
+  //     _products[index].SaldoEstoqueVenda =
+  //         (currentStockInDouble - consultedProductControllerInDouble)
+  //             .toString();
+  //   }
+  // }
 
   clearProductsJustificationsStockTypesAndJsonAdjustStock() {
     _justifications.clear();
@@ -220,33 +217,26 @@ class AdjustStockProvider with ChangeNotifier {
     _stockTypes.clear();
     notifyListeners();
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/AdjustStock/GetStockTypes?simpleSearchValue=undefined'));
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do stockType: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageTypeStockAndJustifications =
-            json.decode(resultAsString)["Message"];
-        _isLoadingTypeStockAndJustifications = false;
-
-        notifyListeners();
-        return;
-      }
-
-      AdjustStockTypeModel.dataToAdjustStockTypeModel(
-        data: resultAsString,
-        listToAdd: _stockTypes,
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "simpleSearchValue": "undefined",
+        },
+        typeOfResponse: "GetStockTypesResponse",
+        SOAPAction: "GetStockTypes",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetStockTypesResult",
       );
+
+      _errorMessageTypeStockAndJustifications =
+          SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageTypeStockAndJustifications == "") {
+        AdjustStockTypeModel.resultAsStringToAdjustStockTypeModel(
+          resultAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _stockTypes,
+        );
+      }
     } catch (e) {
       print("Erro para efetuar a requisição stockTypes: $e");
       _errorMessageTypeStockAndJustifications =
@@ -333,11 +323,6 @@ class AdjustStockProvider with ChangeNotifier {
       _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;
 
       if (_errorMessageAdjustStock == "") {
-        _updateCurrentStock(
-          index: indexOfProduct,
-          consultedProductControllerText: consultedProductControllerText,
-        );
-
         typeOperator = typeOperator
             .replaceAll(RegExp(r'\('), '')
             .replaceAll(RegExp(r'\)'), '');

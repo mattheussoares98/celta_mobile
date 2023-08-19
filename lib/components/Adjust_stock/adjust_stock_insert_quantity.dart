@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,38 +26,36 @@ class AdjustStockInsertQuantity extends StatefulWidget {
 }
 
 class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
-  confirmAdjustStock({
-    required AdjustStockProvider adjustStockProvider,
-  }) async {
+  bool _isValid() {
     widget.dropDownFormKey.currentState!.validate();
     widget.insertQuantityFormKey.currentState!.validate();
 
-    if (widget.dropDownFormKey.currentState!.validate() &&
-        widget.insertQuantityFormKey.currentState!.validate()) {
-      print("formulários corretos. Pode salvar");
+    return widget.dropDownFormKey.currentState!.validate() &&
+        widget.insertQuantityFormKey.currentState!.validate();
+  }
 
-      if (widget.consultedProductController.text.contains("\,")) {
-        widget.consultedProductController.text = widget
-            .consultedProductController.text
-            .replaceAll(RegExp(r'\,'), '.');
-      }
-      adjustStockProvider.jsonAdjustStock["Quantity"] =
-          widget.consultedProductController.text;
-
-      adjustStockProvider.jsonAdjustStock["EnterpriseCode"] =
-          widget.internalEnterpriseCode.toString();
-
-      await adjustStockProvider.confirmAdjustStock(
-        context: context,
-        indexOfProduct: widget.index,
-        consultedProductControllerText: widget.consultedProductController.text,
-      );
-
-      if (adjustStockProvider.errorMessageAdjustStock == "") {
-        widget.consultedProductController.clear();
-      }
+  confirmAdjustStock({
+    required AdjustStockProvider adjustStockProvider,
+  }) async {
+    if (widget.consultedProductController.text.contains("\,")) {
+      widget.consultedProductController.text =
+          widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.');
     }
-    ;
+    adjustStockProvider.jsonAdjustStock["Quantity"] =
+        widget.consultedProductController.text;
+
+    adjustStockProvider.jsonAdjustStock["EnterpriseCode"] =
+        widget.internalEnterpriseCode.toString();
+
+    await adjustStockProvider.confirmAdjustStock(
+      context: context,
+      indexOfProduct: widget.index,
+      consultedProductControllerText: widget.consultedProductController.text,
+    );
+
+    if (adjustStockProvider.errorMessageAdjustStock == "") {
+      widget.consultedProductController.clear();
+    }
   }
 
   @override
@@ -182,9 +181,18 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                     onPressed: adjustStockProvider.isLoadingAdjustStock
                         ? null
                         : () async {
-                            await confirmAdjustStock(
-                              adjustStockProvider: adjustStockProvider,
-                            );
+                            if (_isValid()) {
+                              print("formulários corretos. Pode salvar");
+                              ShowAlertDialog().showAlertDialog(
+                                context: context,
+                                title: "Confirmar ajuste",
+                                function: () async {
+                                  await confirmAdjustStock(
+                                    adjustStockProvider: adjustStockProvider,
+                                  );
+                                },
+                              );
+                            }
                           },
                     child: adjustStockProvider.isLoadingAdjustStock
                         ? FittedBox(
