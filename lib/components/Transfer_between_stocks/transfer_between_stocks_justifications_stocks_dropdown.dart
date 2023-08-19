@@ -107,7 +107,7 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
                             value.CodigoInterno_JustMov;
 
                         if (value.CodigoInterno_TipoEstoque
-                                .CodigoInterno_JustMov !=
+                                .CodigoInterno_TipoEstoque !=
                             -1) {
                           transferBetweenStocksProvider
                               .justificationHasStockType = true;
@@ -213,7 +213,7 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
                       onTap: () {
                         transferBetweenStocksProvider
                                 .jsonAdjustStock["StockTypeCode"] =
-                            value.CodigoInterno_JustMov;
+                            value.CodigoInterno_TipoEstoque;
                       },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(
@@ -310,7 +310,7 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
                       onTap: () {
                         transferBetweenStocksProvider
                                 .jsonAdjustStock["StockTypeRecipientCode"] =
-                            value.CodigoInterno_JustMov;
+                            value.CodigoInterno_TipoEstoque;
                       },
                       value: value.Nome_TipoEstoque,
                       child: FittedBox(

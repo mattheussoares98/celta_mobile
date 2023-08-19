@@ -1,7 +1,5 @@
-import 'package:celta_inventario/Models/transfer_between_stocks_models%20copy/transfer_between_stock_justification_model.dart';
-import 'package:celta_inventario/Models/transfer_between_stocks_models%20copy/transfer_between_stock_type_model.dart';
-import 'package:celta_inventario/utils/base_url.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_justification_model.dart';
+import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_type_model.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
@@ -9,15 +7,7 @@ import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-
-import '../Models/transfer_between_stocks_models copy/transfer_between_stock_product_model.dart';
-
-enum SearchTypes {
-  GetProductByName,
-  GetProductByEAN,
-  GetProductByPLU,
-}
+import '../Models/transfer_between_stocks_models/transfer_between_stock_product_model.dart';
 
 class TransferBetweenStocksProvider with ChangeNotifier {
   List<TransferBetweenStocksProductModel> _products = [];
@@ -107,6 +97,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   //   required int index,
   //   required String consultedProductControllerText,
   // }) {
+  //   _products[index].Stocks[]
   //   _products[index].CurrentStock =
   //       _products[index].CurrentStock.replaceAll(RegExp(r'\,'), '');
   //   _products[index].SaldoEstoqueVenda =
@@ -166,101 +157,30 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
     notifyListeners();
 
-    http.Request? request;
-    var headers = {'Content-Type': 'application/json'};
-
-    if (isLegacyCodeSearch) {
-      request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/AdjustStock/GetProductByLegacyCode?enterpriseCode=$enterpriseCode&searchValue=$controllerText'));
-    } else {
-      request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/AdjustStock/GetProduct?enterpriseCode=$enterpriseCode&searchValue=$controllerText'));
-    }
     try {
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-      http.StreamedResponse response = await request.send();
-      String resultAsString = await response.stream.bytesToString();
-      print(
-          "resultAsString consulta da nova forma de consulta: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageGetProducts = json.decode(resultAsString)["Message"];
-        _isLoadingProducts = false;
-
-        notifyListeners();
-        return;
-      }
-
-      TransferBetweenStocksProductModel
-          .resultAsStringToTransferBetweenStocksProductModel(
-        resultAsString: resultAsString,
-        listToAdd: _products,
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "enterpriseCode": enterpriseCode,
+          "searchValue": controllerText,
+          "searchTypeInt": 0,
+        },
+        typeOfResponse: "GetProductCmxJsonResponse",
+        SOAPAction: "GetProductCmxJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductCmxJsonResult",
       );
+
+      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+      if (_errorMessageGetProducts == "") {
+        TransferBetweenStocksProductModel
+            .dataToTransferBetweenStocksProductModel(
+          data: SoapHelperResponseParameters.responseAsMap,
+          listToAdd: _products,
+        );
+      }
     } catch (e) {
       print("Erro para efetuar a requisição na nova forma de consulta: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-    }
-    _isLoadingProducts = false;
-    notifyListeners();
-  }
-
-  Future<void> _getProductsOld({
-    required int enterpriseCode,
-    required String controllerText, //em string pq vem de um texfFormField
-    required SearchTypes searchTypes,
-    required BuildContext context,
-    // required FocusNode consultProductFocusNode,
-  }) async {
-    _errorMessageGetProducts = "";
-    _isLoadingProducts = true;
-    String searchType =
-        searchTypes.toString().replaceAll(RegExp(r'SearchTypes.'), '');
-    notifyListeners();
-    dynamic value = int.tryParse(controllerText);
-    //o valor pode ser em inteiro ou em texto
-    if (value == null) {
-      //retorna nulo quando não consegue converter para inteiro. Se não
-      //conseguir converter precisa consultar por nome, por isso pode usar o
-      //próprio texto do "controllerText"
-      value = controllerText;
-    }
-
-    try {
-      var headers = {'Content-Type': 'application/json'};
-      // print(searchType);
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/AdjustStock/$searchType?enterpriseCode=$enterpriseCode&searchValue=$value'));
-
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
-      http.StreamedResponse response = await request.send();
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do $searchType: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageGetProducts = json.decode(resultAsString)["Message"];
-        _isLoadingProducts = false;
-
-        notifyListeners();
-        return;
-      }
-
-      TransferBetweenStocksProductModel
-          .resultAsStringToTransferBetweenStocksProductModel(
-        resultAsString: resultAsString,
-        listToAdd: _products,
-      );
-    } catch (e) {
-      print("Erro para efetuar a requisição $searchType: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoadingProducts = false;
@@ -290,50 +210,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       return;
     }
 
-    if (_products.isEmpty && _errorMessageGetProducts != "") {
-      int? isInt = int.tryParse(controllerText);
-      if (isInt != null) {
-        //só faz a consulta por ean ou plu se conseguir converter o texto para inteiro
-        await _getProductsOld(
-          enterpriseCode: enterpriseCode,
-          controllerText: controllerText,
-          searchTypes: SearchTypes.GetProductByPLU,
-          context: context,
-        );
-
-        if (_products.isNotEmpty) {
-          await _getStockTypeAndJustifications(context);
-          return;
-        }
-
-        await _getProductsOld(
-          enterpriseCode: enterpriseCode,
-          controllerText: controllerText,
-          searchTypes: SearchTypes.GetProductByEAN,
-          context: context,
-        );
-
-        if (_products.isNotEmpty) {
-          await _getStockTypeAndJustifications(context);
-          return;
-        }
-      } else {
-        //só consulta por nome se não conseguir converter o valor para inteiro, pois se for inteiro só pode ser ean ou plu
-        await _getProductsOld(
-          // consultProductFocusNode: consultProductFocusNode,
-          enterpriseCode: enterpriseCode,
-          controllerText: controllerText,
-          searchTypes: SearchTypes.GetProductByName,
-          context: context,
-        );
-
-        if (_products.isNotEmpty) {
-          await _getStockTypeAndJustifications(context);
-          return;
-        }
-      }
-    }
-
     if (_errorMessageGetProducts != "") {
       //quando da erro para consultar os produtos, muda o foco novamente para o
       //campo de pesquisa dos produtos
@@ -355,39 +231,32 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _destinyStockTypes.clear();
     notifyListeners();
     try {
-      var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST',
-          Uri.parse(
-              '${BaseUrl.url}/AdjustStock/GetStockTypes?simpleSearchValue=undefined'));
-      request.body = json.encode(UserIdentity.identity);
-      request.headers.addAll(headers);
+      await SoapHelper.soapPost(
+        parameters: {
+          "crossIdentity": UserIdentity.identity,
+          "simpleSearchValue": "undefined",
+        },
+        typeOfResponse: "GetStockTypesResponse",
+        SOAPAction: "GetStockTypes",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetStockTypesResult",
+      );
 
-      http.StreamedResponse response = await request.send();
+      _errorMessageTypeStockAndJustifications =
+          SoapHelperResponseParameters.errorMessage;
 
-      String resultAsString = await response.stream.bytesToString();
-      print("resultAsString consulta do stockType: $resultAsString");
-
-      if (resultAsString.contains("Message")) {
-        //significa que deu algum erro
-        _errorMessageTypeStockAndJustifications =
-            json.decode(resultAsString)["Message"];
-        _isLoadingTypeStockAndJustifications = false;
-
-        notifyListeners();
-        return;
+      if (_errorMessageTypeStockAndJustifications == "") {
+        TransferBetweenStockTypeModel
+            .resultAsStringToTransferBetweenStockTypeModel(
+          resultAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _destinyStockTypes,
+        );
+        TransferBetweenStockTypeModel
+            .resultAsStringToTransferBetweenStockTypeModel(
+          resultAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _originStockTypes,
+        );
       }
-
-      TransferBetweenStockTypeModel
-          .resultAsStringToTransferBetweenStockTypeModel(
-        resultAsString: resultAsString,
-        listToAdd: _destinyStockTypes,
-      );
-      TransferBetweenStockTypeModel
-          .resultAsStringToTransferBetweenStockTypeModel(
-        resultAsString: resultAsString,
-        listToAdd: _originStockTypes,
-      );
     } catch (e) {
       print("Erro para efetuar a requisição stockTypes: $e");
     }
@@ -469,11 +338,15 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         typeOfResponse: "ConfirmAdjustStockResponse",
       );
 
-      // typeOperator = typeOperator
-      //     .replaceAll(RegExp(r'\('), '')
-      //     .replaceAll(RegExp(r'\)'), '');
-      // _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
-      // _indexOfLastProductChangedStockQuantity = indexOfProduct;
+      _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageAdjustStock == "") {
+        typeOperator = typeOperator
+            .replaceAll(RegExp(r'\('), '')
+            .replaceAll(RegExp(r'\)'), '');
+        _lastUpdatedQuantity = jsonAdjustStock["Quantity"]!.toString();
+        _indexOfLastProductChangedStockQuantity = indexOfProduct;
+      }
       _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;
       if (SoapHelperResponseParameters.errorMessage != "") {
         ShowErrorMessage.showErrorMessage(

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/Models/transfer_between_stocks_models%20copy/transfer_between_stock_type_model.dart';
+import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_type_model.dart';
 
 class TransferBetweenStocksJustificationsModel {
   final int CodigoInterno_JustMov; /*  37, */
@@ -45,18 +45,19 @@ class TransferBetweenStocksJustificationsModel {
               element["FlagTipo_JustMov"] == 1 ? "Entrada" : "Saída",
           TypeOperator: element["FlagTipo_JustMov"] == 1 ? "(+)" : "(-)",
           Nome_TipoEstoque: element["Nome_TipoEstoque"] ?? "",
-          CodigoInterno_TipoEstoque:
-              element["CodigoInterno_TipoEstoque"] == null
-                  ? TransferBetweenStockTypeModel(
-                      CodigoInterno_JustMov: -1,
-                      Nome_TipoEstoque: "",
-                      IsInternal: false,
-                    )
-                  : TransferBetweenStockTypeModel(
-                      CodigoInterno_JustMov: element["CodigoInterno_JustMov"],
-                      Nome_TipoEstoque: element["Nome_TipoEstoque"],
-                      IsInternal: element["FlagInterno_TipoEstoque"],
-                    ),
+          CodigoInterno_TipoEstoque: element["CodigoInterno_TipoEstoque"] ==
+                  null
+              ? TransferBetweenStockTypeModel(
+                  CodigoInterno_TipoEstoque: -1,
+                  Nome_TipoEstoque: "",
+                  FlagInterno_TipoEstoque: false,
+                )
+              : TransferBetweenStockTypeModel(
+                  CodigoInterno_TipoEstoque:
+                      element["CodigoInterno_TipoEstoque"],
+                  Nome_TipoEstoque: element["Nome_TipoEstoque"],
+                  FlagInterno_TipoEstoque: element["FlagInterno_TipoEstoque"],
+                ),
         ),
       );
     });

@@ -1,6 +1,6 @@
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/transfer_between_stocks_models%20copy/transfer_between_stock_product_model.dart';
+import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_product_model.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 
@@ -71,11 +71,10 @@ class TransferBetweenStocksAllStocks {
                                       height: 10,
                                     ),
                                     TitleAndSubtitle.titleAndSubtitle(
-                                        title: product.Stocks[index]
-                                            ["StockName"],
+                                        title: product.Stocks[index].StockName,
                                         value: ConvertString
                                             .convertToBrazilianNumber(
-                                          product.Stocks[index]["StockQuantity"]
+                                          product.Stocks[index].StockQuantity
                                               .toStringAsFixed(3)
                                               .replaceAll(RegExp(r'\.'), ','),
                                         )),

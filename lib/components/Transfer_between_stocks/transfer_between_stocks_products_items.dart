@@ -1,4 +1,4 @@
-import 'package:celta_inventario/Models/transfer_between_stocks_models%20copy/transfer_between_stock_product_model.dart';
+import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_product_model.dart';
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_all_stocks.dart';
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_insert_quantity.dart';
 import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
@@ -48,7 +48,8 @@ class _TransferBetweenStocksProductsItemsState
                     transferBetweenStocksProvider.products[index];
                 return GestureDetector(
                   onTap: transferBetweenStocksProvider
-                          .isLoadingTypeStockAndJustifications
+                              .isLoadingTypeStockAndJustifications ||
+                          transferBetweenStocksProvider.isLoadingAdjustStock
                       ? null
                       : () {
                           transferBetweenStocksProvider

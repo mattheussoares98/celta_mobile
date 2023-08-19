@@ -150,6 +150,8 @@ class SoapHelper {
       throw Exception('Failed to load data');
     }
   }
+
+  var x = "y";
 }
 
 bool _validateResultHasPatternNewDataSet({

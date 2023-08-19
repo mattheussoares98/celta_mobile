@@ -3,7 +3,6 @@ import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
 import '../Models/price_conference_product_model.dart';
-import '../utils/convert_string.dart';
 
 class PriceConferenceProvider with ChangeNotifier {
   List<PriceConferenceProductsModel> _products = [];

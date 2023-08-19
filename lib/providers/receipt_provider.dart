@@ -4,7 +4,6 @@ import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:flutter/material.dart';
 import '../Models/receipt_models/receipt_model.dart';
 import '../Models/receipt_models/receipt_products_model.dart';
-import '../utils/convert_string.dart';
 import '../utils/user_identity.dart';
 
 class ReceiptProvider with ChangeNotifier {
