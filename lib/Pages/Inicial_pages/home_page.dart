@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
             context: context,
           ),
           ImageComponent.image(
-            imagePath: 'lib/assets/Images/adjustStock.jpg',
+            imagePath: 'lib/assets/Images/transferBetweenStocks.jpg',
             routine: 'Transferência entre estoques',
             route: APPROUTES.ENTERPRISE,
             nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
