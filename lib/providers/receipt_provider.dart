@@ -179,7 +179,6 @@ class ReceiptProvider with ChangeNotifier {
     required int index,
     required BuildContext context,
   }) async {
-    print("anulando");
     if (_products[index].Quantidade_ProcRecebDocProEmb == 0 ||
         _products[index].Quantidade_ProcRecebDocProEmb == -1) {
       //se a quantidade for igual à atual, não precisa fazer a requisição
@@ -216,6 +215,11 @@ class ReceiptProvider with ChangeNotifier {
           quantity: 0,
           isAnnulQuantity: true,
           isSubtract: false,
+          context: context,
+        );
+      } else {
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageUpdateQuantity,
           context: context,
         );
       }

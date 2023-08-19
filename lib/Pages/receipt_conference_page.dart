@@ -104,6 +104,26 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               ),
             if (!receiptProvider.consultingProducts)
               ReceiptConferenceProductsItems(
+                onFieldSubmitted: () async {
+                  await receiptProvider.getProducts(
+                    isLegacyCodeSearch: _legacyIsSelected,
+                    docCode: arguments["grDocCode"],
+                    controllerText: _consultProductController.text,
+                    context: context,
+                    isSearchAllCountedProducts: false,
+                  );
+
+                  //não estava funcionando passar o productsCount como parâmetro
+                  //para o "SearchProductWithEanPluOrNameWidget" para apagar o
+                  //textEditingController após a consulta dos produtos se encontrar
+                  //algum produto
+                  if (receiptProvider.productsCount > 0) {
+                    //se for maior que 0 significa que deu certo a consulta e
+                    //por isso pode apagar o que foi escrito no campo de
+                    //consulta
+                    _consultProductController.clear();
+                  }
+                },
                 docCode: arguments["grDocCode"],
                 consultedProductController: _consultedProductController,
                 consultProductController: _consultProductController,

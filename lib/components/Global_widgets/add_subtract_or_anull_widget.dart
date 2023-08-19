@@ -10,10 +10,12 @@ class AddSubtractOrAnullWidget extends StatefulWidget {
   final Function anullFunction;
   final Function addQuantityFunction;
   final Function subtractQuantityFunction;
+  final Function onFieldSubmitted;
   final String subtractButtonText;
   final String addButtonText;
   const AddSubtractOrAnullWidget({
     required this.isUpdatingQuantity,
+    required this.onFieldSubmitted,
     required this.addQuantityFunction,
     required this.subtractQuantityFunction,
     required this.anullFunction,
@@ -89,6 +91,11 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                   child: Container(
                     child: TextFormField(
                       // autofocus: true,
+                      onFieldSubmitted: widget.isLoading
+                          ? null
+                          : (value) async {
+                              await widget.onFieldSubmitted();
+                            },
                       enabled: widget.isLoading ? false : true,
                       controller: widget.consultedProductController,
                       focusNode: widget.consultedProductFocusNode,

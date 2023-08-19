@@ -14,8 +14,10 @@ class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;
   final TextEditingController consultedProductController;
   final TextEditingController consultProductController;
+  final Function onFieldSubmitted;
   const ReceiptConferenceProductsItems({
     required this.consultedProductController,
+    required this.onFieldSubmitted,
     required this.consultProductController,
     required this.docCode,
     Key? key,
@@ -284,6 +286,9 @@ class _ReceiptConferenceProductsItemsState
                               children: [
                                 const SizedBox(height: 10),
                                 AddSubtractOrAnullWidget(
+                                  onFieldSubmitted: () async {
+                                    await widget.onFieldSubmitted();
+                                  },
                                   addButtonText: "SOMAR E CONFIRMAR VALIDADE",
                                   subtractButtonText:
                                       "SUBTRAIR E\nCONFIRMAR\nVALIDADE",

@@ -324,6 +324,11 @@ class InventoryProvider with ChangeNotifier {
 
       if (_errorMessageQuantity == "") {
         _products[indexOfProduct].quantidadeInvContProEmb = -1;
+      } else {
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageQuantity,
+          context: context,
+        );
       }
     } catch (e) {
       print("Erro para efetuar a requisição: $e");

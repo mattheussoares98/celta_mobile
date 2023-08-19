@@ -228,8 +228,10 @@ class AdjustStockProvider with ChangeNotifier {
         typeOfResult: "GetStockTypesResult",
       );
 
-      _errorMessageTypeStockAndJustifications =
-          SoapHelperResponseParameters.errorMessage;
+      if (SoapHelperResponseParameters.errorMessage != "") {
+        _errorMessageTypeStockAndJustifications =
+            SoapHelperResponseParameters.errorMessage;
+      }
 
       if (_errorMessageTypeStockAndJustifications == "") {
         AdjustStockTypeModel.resultAsStringToAdjustStockTypeModel(
@@ -261,8 +263,10 @@ class AdjustStockProvider with ChangeNotifier {
         typeOfResult: "GetJustificationsResult",
       );
 
-      _errorMessageTypeStockAndJustifications =
-          SoapHelperResponseParameters.errorMessage;
+      if (SoapHelperResponseParameters.errorMessage != "") {
+        _errorMessageTypeStockAndJustifications =
+            SoapHelperResponseParameters.errorMessage;
+      }
 
       if (_errorMessageTypeStockAndJustifications == "") {
         AdjustStockJustificationModel
@@ -328,6 +332,11 @@ class AdjustStockProvider with ChangeNotifier {
             .replaceAll(RegExp(r'\)'), '');
         _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
+      } else {
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageAdjustStock,
+          context: context,
+        );
       }
     } catch (e) {
       print("Erro para efetuar a requisição justifications: $e");

@@ -14,9 +14,11 @@ class InventoryProductsItems extends StatefulWidget {
   final int productPackingCode;
   final bool isIndividual;
   final TextEditingController consultedProductController;
+  final Function onFieldSubmitted;
   InventoryProductsItems({
     Key? key,
     required this.inventoryProcessCode,
+    required this.onFieldSubmitted,
     required this.consultedProductController,
     required this.productPackingCode,
     required this.isIndividual,
@@ -256,6 +258,9 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                             const SizedBox(height: 8),
                             if (!widget.isIndividual && _selectedIndex == index)
                               AddSubtractOrAnullWidget(
+                                onFieldSubmitted: () async {
+                                  await widget.onFieldSubmitted();
+                                },
                                 addButtonText: "SOMAR",
                                 subtractButtonText: "SUBTRAIR",
                                 isUpdatingQuantity:

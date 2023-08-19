@@ -8,12 +8,18 @@ import 'inventory_insert_individual_product_switch.dart';
 
 class ConsultProductWidget extends StatefulWidget {
   final bool isIndividual;
+  final bool isLegacyCodeSearch;
   final TextEditingController consultProductController;
   final TextEditingController consultedProductController;
   final Function changeIsIndividual;
+  final Function changeIsLegacyCode;
+  final Function searchProduct;
   const ConsultProductWidget({
     Key? key,
     required this.isIndividual,
+    required this.searchProduct,
+    required this.isLegacyCodeSearch,
+    required this.changeIsLegacyCode,
     required this.consultedProductController,
     required this.consultProductController,
     required this.changeIsIndividual,
@@ -24,72 +30,23 @@ class ConsultProductWidget extends StatefulWidget {
 }
 
 class _ConsultProductWidgetState extends State<ConsultProductWidget> {
-  Future<void> _searchProduct({
-    required InventoryProvider inventoryProvider,
-    required dynamic arguments,
-  }) async {
-    widget.consultedProductController.clear();
-
-    if (widget.consultProductController.text.isEmpty) {
-      //se não digitar o ean ou plu, vai abrir a câmera
-      widget.consultProductController.text = await ScanBarCode.scanBarcode();
-    }
-
-    if (widget.consultProductController.text.isEmpty) return;
-
-    //se ler algum código, vai consultar o produto
-    await inventoryProvider.getProductsAndAddIfIsIndividual(
-      isLegacyCodeSearch: _isLegacyCodeSearch,
-      controllerText: widget.consultProductController.text,
-      enterpriseCode: arguments["codigoInternoEmpresa"],
-      context: context,
-      isIndividual: widget.isIndividual,
-      consultedProductController: widget.consultProductController,
-      indexOfProduct: 0, //não da pra obter por aqui o index do produto
-      inventoryProcessCode:
-          arguments["InventoryCountingsModel"].codigoInternoInventario,
-
-      inventoryCountingCode:
-          arguments["InventoryCountingsModel"].codigoInternoInvCont,
-    );
-
-    if (inventoryProvider.products.isNotEmpty && widget.isIndividual) {
-      inventoryProvider.alterFocusToConsultProduct(
-        context: context,
-      );
-    }
-
-    if (widget.consultProductController.text.isEmpty) {
-      widget.consultProductController.clear();
-    }
-  }
-
-  bool _isLegacyCodeSearch = false;
-
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
 
     return Column(
       children: [
         SearchWidget(
           changeLegacyIsSelectedFunction: () {
-            setState(() {
-              _isLegacyCodeSearch = !_isLegacyCodeSearch;
-            });
+            widget.changeIsLegacyCode();
           },
-          legacyIsSelected: _isLegacyCodeSearch,
+          legacyIsSelected: widget.isLegacyCodeSearch,
           hasLegacyCodeSearch: true,
           consultProductController: widget.consultProductController,
           isLoading: inventoryProvider.isLoadingProducts ||
               inventoryProvider.isLoadingQuantity,
           onPressSearch: () async {
-            await _searchProduct(
-              inventoryProvider: inventoryProvider,
-              arguments: arguments,
-            );
+            await widget.searchProduct();
           },
           focusNodeConsultProduct: inventoryProvider.consultProductFocusNode,
         ),
@@ -164,10 +121,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
                         inventoryProvider.isLoadingQuantity
                     ? null
                     : () async {
-                        await _searchProduct(
-                          inventoryProvider: inventoryProvider,
-                          arguments: arguments,
-                        );
+                        await widget.searchProduct();
                       },
               ),
             ),

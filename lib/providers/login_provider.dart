@@ -144,7 +144,7 @@ class LoginProvider with ChangeNotifier {
         typeOfResult: "UserCanLoginJsonResult",
       );
       _errorMessage = SoapHelperResponseParameters.errorMessage;
-      if (SoapHelperResponseParameters.errorMessage != "") {
+      if (_errorMessage != "") {
         ShowErrorMessage.showErrorMessage(
           error: _errorMessage,
           context: context,

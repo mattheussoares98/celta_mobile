@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/components/Inventory/inventory_products_items.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
+import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Inventory/inventory_consult_product_widget.dart';
@@ -21,9 +22,51 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
   final TextEditingController _consultedProductController =
       TextEditingController();
 
+  bool _isLegacyCodeSearch = false;
+
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> _searchProduct({
+    required InventoryProvider inventoryProvider,
+    required dynamic arguments,
+  }) async {
+    _consultedProductController.clear();
+
+    if (_consultProductController.text.isEmpty) {
+      //se não digitar o ean ou plu, vai abrir a câmera
+      _consultProductController.text = await ScanBarCode.scanBarcode();
+    }
+
+    if (_consultProductController.text.isEmpty) return;
+
+    //se ler algum código, vai consultar o produto
+    await inventoryProvider.getProductsAndAddIfIsIndividual(
+      isLegacyCodeSearch: _isLegacyCodeSearch,
+      controllerText: _consultProductController.text,
+      enterpriseCode: arguments["codigoInternoEmpresa"],
+      context: context,
+      isIndividual: _isIndividual,
+      consultedProductController: _consultProductController,
+      indexOfProduct: 0, //não da pra obter por aqui o index do produto
+      inventoryProcessCode:
+          arguments["InventoryCountingsModel"].codigoInternoInventario,
+
+      inventoryCountingCode:
+          arguments["InventoryCountingsModel"].codigoInternoInvCont,
+    );
+
+    if (inventoryProvider.products.isNotEmpty && _isIndividual) {
+      inventoryProvider.alterFocusToConsultProduct(
+        context: context,
+      );
+    }
+
+    if (_consultProductController.text.isEmpty) {
+      _consultProductController.clear();
+    }
   }
 
   @override
@@ -58,6 +101,18 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             Column(
               children: [
                 ConsultProductWidget(
+                    changeIsLegacyCode: () {
+                      setState(() {
+                        _isLegacyCodeSearch = !_isLegacyCodeSearch;
+                      });
+                    },
+                    isLegacyCodeSearch: _isLegacyCodeSearch,
+                    searchProduct: () async {
+                      await _searchProduct(
+                        inventoryProvider: inventoryProvider,
+                        arguments: arguments,
+                      );
+                    },
                     isIndividual: _isIndividual,
                     consultProductController: _consultProductController,
                     consultedProductController: _consultedProductController,
@@ -75,6 +130,12 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
               ),
             if (inventoryProvider.products.isNotEmpty)
               InventoryProductsItems(
+                onFieldSubmitted: () async {
+                  await _searchProduct(
+                    inventoryProvider: inventoryProvider,
+                    arguments: arguments,
+                  );
+                },
                 isIndividual: _isIndividual,
                 inventoryProcessCode:
                     arguments["InventoryCountingsModel"].codigoInternoInvCont,

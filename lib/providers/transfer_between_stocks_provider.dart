@@ -226,7 +226,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _getStockType() async {
+  _getStockType(BuildContext context) async {
     _originStockTypes.clear();
     _destinyStockTypes.clear();
     notifyListeners();
@@ -242,8 +242,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         typeOfResult: "GetStockTypesResult",
       );
 
-      _errorMessageTypeStockAndJustifications =
-          SoapHelperResponseParameters.errorMessage;
+      if (SoapHelperResponseParameters.errorMessage != "") {
+        _errorMessageTypeStockAndJustifications =
+            SoapHelperResponseParameters.errorMessage;
+      }
 
       if (_errorMessageTypeStockAndJustifications == "") {
         TransferBetweenStockTypeModel
@@ -256,6 +258,11 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           resultAsString: SoapHelperResponseParameters.responseAsString,
           listToAdd: _originStockTypes,
         );
+      } else {
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageTypeStockAndJustifications,
+          context: context,
+        );
       }
     } catch (e) {
       print("Erro para efetuar a requisição stockTypes: $e");
@@ -263,15 +270,15 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _getJustificationsType() async {
+  _getJustificationsType(BuildContext context) async {
     _justifications.clear();
     notifyListeners();
     try {
       await SoapHelper.soapPost(
         parameters: {
-          'simpleSearchValue': 'undefined',
-          "justificationTransferType": "1",
           "crossIdentity": UserIdentity.identity,
+          'simpleSearchValue': 'undefined',
+          "justificationTransferType": 1,
         },
         typeOfResponse: "GetJustificationsResponse",
         typeOfResult: "GetJustificationsResult",
@@ -279,11 +286,20 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         serviceASMX: "CeltaProductService.asmx",
       );
 
-      if (SoapHelperResponseParameters.responseAsString != "") {
+      if (SoapHelperResponseParameters.errorMessage != "") {
+        _errorMessageTypeStockAndJustifications =
+            SoapHelperResponseParameters.errorMessage;
+      }
+      if (_errorMessageTypeStockAndJustifications == "") {
         TransferBetweenStocksJustificationsModel
             .resultAsStringToTransferBetweenStocksJustificationsModel(
           resultAsString: SoapHelperResponseParameters.responseAsString,
           listToAdd: _justifications,
+        );
+      } else {
+        ShowErrorMessage.showErrorMessage(
+          error: _errorMessageTypeStockAndJustifications,
+          context: context,
         );
       }
 
@@ -303,9 +319,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _justificationHasStockType = false;
     notifyListeners();
 
-    await _getStockType();
+    await _getStockType(context);
 
-    await _getJustificationsType();
+    await _getJustificationsType(context);
 
     if (_errorMessageTypeStockAndJustifications != "") {
       ShowErrorMessage.showErrorMessage(
