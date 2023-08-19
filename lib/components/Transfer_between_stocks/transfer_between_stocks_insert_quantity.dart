@@ -27,38 +27,36 @@ class TransferBetweenStocksInsertQuantity extends StatefulWidget {
 
 class _TransferBetweenStocksInsertQuantityState
     extends State<TransferBetweenStocksInsertQuantity> {
-  confirmAdjustStock({
-    required TransferBetweenStocksProvider transferBetweenStocksProvider,
-  }) async {
+  bool _isValid() {
     widget.dropDownFormKey.currentState!.validate();
     widget.insertQuantityFormKey.currentState!.validate();
 
-    if (widget.dropDownFormKey.currentState!.validate() &&
-        widget.insertQuantityFormKey.currentState!.validate()) {
-      print("formulários corretos. Pode salvar");
+    return widget.dropDownFormKey.currentState!.validate() &&
+        widget.insertQuantityFormKey.currentState!.validate();
+  }
 
-      if (widget.consultedProductController.text.contains("\,")) {
-        widget.consultedProductController.text = widget
-            .consultedProductController.text
-            .replaceAll(RegExp(r'\,'), '.');
-      }
-      transferBetweenStocksProvider.jsonAdjustStock["Quantity"] =
-          double.parse(widget.consultedProductController.text);
-
-      transferBetweenStocksProvider.jsonAdjustStock["EnterpriseCode"] =
-          widget.internalEnterpriseCode;
-
-      await transferBetweenStocksProvider.confirmAdjustStock(
-        context: context,
-        indexOfProduct: widget.index,
-        consultedProductControllerText: widget.consultedProductController.text,
-      );
-
-      if (transferBetweenStocksProvider.errorMessageAdjustStock == "") {
-        widget.consultedProductController.clear();
-      }
+  confirmAdjustStock({
+    required TransferBetweenStocksProvider transferBetweenStocksProvider,
+  }) async {
+    if (widget.consultedProductController.text.contains("\,")) {
+      widget.consultedProductController.text =
+          widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.');
     }
-    ;
+    transferBetweenStocksProvider.jsonAdjustStock["Quantity"] =
+        double.parse(widget.consultedProductController.text);
+
+    transferBetweenStocksProvider.jsonAdjustStock["EnterpriseCode"] =
+        widget.internalEnterpriseCode;
+
+    await transferBetweenStocksProvider.confirmAdjustStock(
+      context: context,
+      indexOfProduct: widget.index,
+      consultedProductControllerText: widget.consultedProductController.text,
+    );
+
+    if (transferBetweenStocksProvider.errorMessageAdjustStock == "") {
+      widget.consultedProductController.clear();
+    }
   }
 
   @override
@@ -187,21 +185,23 @@ class _TransferBetweenStocksInsertQuantityState
                       minimumSize: const Size(double.infinity, 60),
                       maximumSize: const Size(double.infinity, 60),
                     ),
-                    onPressed: transferBetweenStocksProvider
-                            .isLoadingAdjustStock
-                        ? null
-                        : () async {
-                            ShowAlertDialog().showAlertDialog(
-                              context: context,
-                              title: "Confirmar transferência entre estoques",
-                              function: () async {
-                                await confirmAdjustStock(
-                                  transferBetweenStocksProvider:
-                                      transferBetweenStocksProvider,
-                                );
+                    onPressed:
+                        transferBetweenStocksProvider.isLoadingAdjustStock
+                            ? null
+                            : () async {
+                                if (_isValid()) {
+                                  ShowAlertDialog().showAlertDialog(
+                                    context: context,
+                                    title: "Confirmar transferência",
+                                    function: () async {
+                                      await confirmAdjustStock(
+                                        transferBetweenStocksProvider:
+                                            transferBetweenStocksProvider,
+                                      );
+                                    },
+                                  );
+                                }
                               },
-                            );
-                          },
                     child: transferBetweenStocksProvider.isLoadingAdjustStock
                         ? FittedBox(
                             child: Row(

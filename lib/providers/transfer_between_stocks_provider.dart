@@ -163,7 +163,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           "crossIdentity": UserIdentity.identity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
-          "searchTypeInt": 0,
+          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
         },
         typeOfResponse: "GetProductCmxJsonResponse",
         SOAPAction: "GetProductCmxJson",
