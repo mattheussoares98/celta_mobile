@@ -12,6 +12,7 @@ enum FirebaseCallEnum {
   receiptLiberate,
   saleRequestSave,
   transferBetweenStocksConfirmAdjust,
+  transferBetweenPackageConfirmAdjust,
   transferRequestSave,
 }
 

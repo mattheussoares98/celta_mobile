@@ -6,6 +6,7 @@ import 'package:celta_inventario/Pages/receipt_conference_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_model_page.dart';
+import 'package:celta_inventario/Pages/transfer_between_package/transfer_between_package_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_destiny_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_page.dart';
@@ -17,6 +18,7 @@ import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
 import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
@@ -63,6 +65,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransferRequestProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
+        ChangeNotifierProvider(create: (_) => TransferBetweenPackageProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -166,6 +169,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.TRANSFER: (ctx) => const TransferPage(),
           APPROUTES.TRANSFER_BETWEEN_STOCK: (ctx) =>
               const TransferBetweenStockPage(),
+          APPROUTES.TRANSFER_BETWEEN_PACKAGE: (ctx) =>
+              const TransferBetweenPackagePage(),
         },
       ),
     );
