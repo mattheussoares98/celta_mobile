@@ -54,7 +54,7 @@ class LoginProvider with ChangeNotifier {
     if (_isUrl(enterpriseNameOrCCSUrl)) {
       BaseUrl.ccsUrl = enterpriseNameOrCCSUrl;
       await prefs.setString('enterpriseName', "");
-      await prefs.setString('ccsUrl', BaseUrl.ccsUrl);
+      await prefs.setString('ccsUrl', enterpriseNameOrCCSUrl);
     } else {
       await prefs.setString('enterpriseName', enterpriseNameOrCCSUrl);
     }
@@ -62,7 +62,12 @@ class LoginProvider with ChangeNotifier {
 
   Future<String> getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return await prefs.getString('user')!;
+    if (await prefs.getString('user') != "" ||
+        await prefs.getString('user') != null) {
+      return await prefs.getString('user')!;
+    } else {
+      return "";
+    }
   }
 
   Future<void> logoutIfIsNecessary() async {
@@ -70,8 +75,8 @@ class LoginProvider with ChangeNotifier {
     //fazer o login novamente. Então, se já estiver logado após atualizar o
     //aplicativo, precisa deslogar pra obrigar que ele logue novamente
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('needLogout') == "" ||
-        prefs.getString('needLogout') == null) {
+    if (await prefs.getString('needLogout') == "" ||
+        await prefs.getString('needLogout') == null) {
       await prefs.setString('needLogout', "false");
       await prefs.setString('userIdentity', "");
       await prefs.remove("url"); //não utiliza mais
@@ -82,10 +87,10 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> verifyIsLogged() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('userIdentity') != "" &&
-        prefs.getString('userIdentity') != null &&
-        (prefs.getString('needLogout') == "" ||
-            prefs.getString('needLogout') == null)) {
+    if (await prefs.getString('userIdentity') != "" &&
+        await prefs.getString('userIdentity') != null &&
+        (await prefs.getString('needLogout') == "" ||
+            await prefs.getString('needLogout') == null)) {
       UserIdentity.identity = await prefs.getString('userIdentity')!;
       _loginController!.add(true);
     }
@@ -93,8 +98,9 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> restoreBaseUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('ccsUrl') != null && prefs.getString('ccsUrl') != "") {
-      BaseUrl.ccsUrl = prefs.getString('ccsUrl')!;
+    if (await prefs.getString('ccsUrl') != null &&
+        await prefs.getString('ccsUrl') != "") {
+      BaseUrl.ccsUrl = await prefs.getString('ccsUrl')!;
     }
   }
 
@@ -104,17 +110,17 @@ class LoginProvider with ChangeNotifier {
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (prefs.getString('user') != null) {
-      userController.text = prefs.getString('user')!;
+    if (await prefs.getString('user') != null) {
+      userController.text = await prefs.getString('user')!;
     }
 
-    if (prefs.getString('enterpriseName') != null &&
-        prefs.getString('enterpriseName') != "") {
+    if (await prefs.getString('enterpriseName') != null &&
+        await prefs.getString('enterpriseName') != "") {
       enterpriseNameOrCCSUrlController.text =
-          prefs.getString('enterpriseName')!;
-    } else if (prefs.getString('ccsUrl') != null &&
-        prefs.getString('ccsUrl') != "") {
-      enterpriseNameOrCCSUrlController.text = prefs.getString('ccsUrl')!;
+          await prefs.getString('enterpriseName')!;
+    } else if (await prefs.getString('ccsUrl') != null &&
+        await prefs.getString('ccsUrl') != "") {
+      enterpriseNameOrCCSUrlController.text = await prefs.getString('ccsUrl')!;
     }
   }
 
@@ -127,11 +133,6 @@ class LoginProvider with ChangeNotifier {
     _errorMessage = '';
     _isLoading = true;
     notifyListeners();
-
-    await _saveUserAndEnterpriseNameOrCCSUrlInLocalDatabase(
-      enterpriseNameOrCCSUrl: enterpriseNameOrCCSUrlController.text,
-      user: user,
-    );
 
     bool? canTryLogin;
     if (_isUrl(enterpriseNameOrCCSUrlController.text)) {
@@ -187,6 +188,11 @@ class LoginProvider with ChangeNotifier {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('userIdentity', UserIdentity.identity);
+
+        await _saveUserAndEnterpriseNameOrCCSUrlInLocalDatabase(
+          enterpriseNameOrCCSUrl: enterpriseNameOrCCSUrlController.text,
+          user: user,
+        );
 
         await _addClientInFirebase(
           firebaseClientModel: FirebaseClientModel(
@@ -323,20 +329,19 @@ class LoginProvider with ChangeNotifier {
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
 
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       if (data.containsKey('urlCCS')) {
+        enterpriseNameOrCCSUrlController.text = data['urlCCS'];
         BaseUrl.ccsUrl = data['urlCCS'];
+        await prefs.setString('urlCCS', data['urlCCS']);
+
         print(BaseUrl.ccsUrl);
       }
 
-      if (data.containsKey('enterpriseName')) {
-        if (data['enterpriseName'] != "undefined") {
-          //se for "undefined" é porque ainda não adicionou o nome do cliente no banco de banco
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          enterpriseNameOrCCSUrlController.text = data['enterpriseName'];
-          await prefs.setString('enterpriseName', data['enterpriseName']);
-        }
-      } else {
-        enterpriseNameOrCCSUrlController.text = data['urlCCS'];
+      if (data.containsKey('enterpriseName') &&
+          data['enterpriseName'] != "undefined") {
+        enterpriseNameOrCCSUrlController.text = data['enterpriseName'];
+        await prefs.setString('enterpriseName', data['enterpriseName']);
       }
     } else {
       print('Documento não encontrado.');

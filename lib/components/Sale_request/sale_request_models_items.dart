@@ -83,12 +83,9 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
                           APPROUTES.SALE_REQUEST,
                           arguments: {
                             "Code": widget.enterpriseCode,
-                            "SaleRequestTypeCode":
-                                request.CodigoInterno_ModeloPedido,
-                            "UseWholePrice":
-                                request.FlagTipoUsoPrecoAtacado_ModeloPedido ==
-                                    1,
-                            "UnitValueType": request.FlagTipoValor_ModeloPedido,
+                            "SaleRequestTypeCode": request.Code,
+                            "UseWholePrice": request.UseWholePrice == 1,
+                            "UnitValueType": request.UnitValueType,
                           },
                         );
                       },
@@ -98,15 +95,15 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
                           children: [
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Código do pedido",
-                              value: request.Codigo_ModeloPedido,
+                              value: request.PersonalizedCode.toString(),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Nome do pedido",
-                              value: request.Nome_ModeloPedido,
+                              value: request.Name,
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Preço utilizado",
-                              value: request.FlagTipoValor_ModeloPedidoString,
+                              value: request.UnitValueTypeString,
                             ),
                           ],
                         ),

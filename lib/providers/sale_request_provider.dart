@@ -492,21 +492,22 @@ class SaleRequestProvider with ChangeNotifier {
         parameters: {
           "crossIdentity": UserIdentity.identity,
           "simpleSearchValue": "",
+          "enterpriseCode": enterpriseCode,
           "inclusiveTransfer": false,
           "inclusiveBuy": false,
           "inclusiveSale": true,
         },
-        typeOfResponse: "GetRequestTypesResponse",
-        SOAPAction: "GetRequestTypes",
+        typeOfResponse: "GetRequestTypesJsonResponse",
+        SOAPAction: "GetRequestTypesJson",
         serviceASMX: "CeltaRequestTypeService.asmx",
-        typeOfResult: "GetRequestTypesResult",
+        typeOfResult: "GetRequestTypesJsonResult",
       );
 
       _errorMessageRequests = SoapHelperResponseParameters.errorMessage;
 
       if (_errorMessageRequests == "") {
-        SaleRequestsModel.dataToSaleRequestsModel(
-          data: SoapHelperResponseParameters.responseAsMap["ModelosPedidos"],
+        SaleRequestsModel.responseAsStringToSaleRequestsModel(
+          responseAsString: SoapHelperResponseParameters.responseAsString,
           listToAdd: _requests,
         );
       }
