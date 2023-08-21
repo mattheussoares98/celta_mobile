@@ -1,5 +1,4 @@
 import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
-import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

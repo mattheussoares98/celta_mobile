@@ -1,11 +1,7 @@
 import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_product_model.dart';
-import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_product_model.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_all_stocks.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_insert_quantity.dart';
-import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_all_stocks.dart';
-import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_insert_quantity.dart';
 import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
-import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';

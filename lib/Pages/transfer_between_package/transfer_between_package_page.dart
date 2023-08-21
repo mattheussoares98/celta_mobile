@@ -2,7 +2,6 @@ import 'package:celta_inventario/components/Global_widgets/consulting_widget.dar
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_products_items.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_stocks_justifications_stocks_dropdown.dart';
-import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
 import 'package:flutter/material.dart';
