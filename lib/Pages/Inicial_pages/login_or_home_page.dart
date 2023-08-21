@@ -14,6 +14,15 @@ class AuthOrHoMePage extends StatefulWidget {
 
 class _AuthOrHoMePageState extends State<AuthOrHoMePage> {
   @override
+  void didChangeDependencies() async {
+    LoginProvider loginProvider = Provider.of(context, listen: true);
+    super.didChangeDependencies();
+
+    await loginProvider.restoreBaseUrl();
+    await loginProvider.logoutIfIsNecessary();
+  }
+
+  @override
   Widget build(BuildContext context) {
     LoginProvider loginProvider = Provider.of(context, listen: true);
 

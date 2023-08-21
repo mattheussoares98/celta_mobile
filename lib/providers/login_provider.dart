@@ -15,6 +15,11 @@ class LoginProvider with ChangeNotifier {
   static FirebaseFirestore _db = FirebaseFirestore.instance;
   CollectionReference clientsCollection = _db.collection("clients");
 
+  TextEditingController enterpriseNameOrCCSUrlController =
+      TextEditingController();
+  TextEditingController userController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   String _errorMessage = '';
 
   String get errorMessage {
@@ -60,10 +65,27 @@ class LoginProvider with ChangeNotifier {
     return await prefs.getString('user')!;
   }
 
+  Future<void> logoutIfIsNecessary() async {
+    //como está mudando as URLs para utilizar via CCS, TODOS usuários precisam
+    //fazer o login novamente. Então, se já estiver logado após atualizar o
+    //aplicativo, precisa deslogar pra obrigar que ele logue novamente
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('needLogout') == "" ||
+        prefs.getString('needLogout') == null) {
+      await prefs.setString('needLogout', "false");
+      await prefs.setString('userIdentity', "");
+      await prefs.remove("url"); //não utiliza mais
+      _loginController!.add(false);
+      enterpriseNameOrCCSUrlController.clear();
+    }
+  }
+
   Future<void> verifyIsLogged() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('userIdentity') != "" &&
-        prefs.getString('userIdentity') != null) {
+        prefs.getString('userIdentity') != null &&
+        (prefs.getString('needLogout') == "" ||
+            prefs.getString('needLogout') == null)) {
       UserIdentity.identity = await prefs.getString('userIdentity')!;
       _loginController!.add(true);
     }

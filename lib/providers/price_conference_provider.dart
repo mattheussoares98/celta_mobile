@@ -1,4 +1,5 @@
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
+import 'package:celta_inventario/utils/firebase_helper.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,6 +54,11 @@ class PriceConferenceProvider with ChangeNotifier {
     _errorMessage = "";
     _isLoading = true;
     notifyListeners();
+
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.priceConferenceGetProduct,
+    );
+
     dynamic value = int.tryParse(controllerText);
     //o valor pode ser em inteiro ou em texto
     if (value == null) {
@@ -136,6 +142,11 @@ class PriceConferenceProvider with ChangeNotifier {
     _isSendingToPrint = true;
     _errorSendToPrint = "";
     notifyListeners();
+
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.priceConferenceSendToPrint,
+    );
+
     bool newValue = !_products[index].EtiquetaPendente;
 
     try {

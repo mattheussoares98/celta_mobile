@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Models/inventory/inventory_model.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
+import 'package:celta_inventario/utils/firebase_helper.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:flutter/cupertino.dart';
 import '../Components/Global_widgets/show_error_message.dart';
@@ -259,6 +260,10 @@ class InventoryProvider with ChangeNotifier {
     _indexOfLastAddedQuantity = -1;
     notifyListeners();
 
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.inventoryEntryQuantity,
+    );
+
     try {
       await SoapHelper.soapPost(
         parameters: {
@@ -307,6 +312,10 @@ class InventoryProvider with ChangeNotifier {
     _lastQuantityAdded = '';
     _indexOfLastAddedQuantity = -1;
     notifyListeners();
+
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.inventoryAnullQuantity,
+    );
 
     try {
       await SoapHelper.soapPost(

@@ -5,6 +5,7 @@ import 'package:celta_inventario/Models/transfer_request/transfer_request_produc
 import 'package:celta_inventario/Models/transfer_request/transfer_destiny_enterprise_model.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterprise_model.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
+import 'package:celta_inventario/utils/firebase_helper.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -653,6 +654,10 @@ class TransferRequestProvider with ChangeNotifier {
     _errorMessageSaveTransferRequest = "";
     _isLoadingSaveTransferRequest = true;
     notifyListeners();
+
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.transferRequestSave,
+    );
 
     try {
       await SoapHelper.soapPost(

@@ -12,11 +12,6 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-TextEditingController _enterpriseNameOrCCSUrlController =
-    TextEditingController();
-TextEditingController _userController = TextEditingController();
-TextEditingController _passwordController = TextEditingController();
-
 class _AuthFormState extends State<AuthForm>
     with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
@@ -35,14 +30,15 @@ class _AuthFormState extends State<AuthForm>
     }
 
     await loginProvider.login(
-      user: _userController.text,
-      password: _passwordController.text,
+      user: loginProvider.userController.text,
+      password: loginProvider.passwordController.text,
       context: context,
-      enterpriseNameOrCCSUrlController: _enterpriseNameOrCCSUrlController,
+      enterpriseNameOrCCSUrlController:
+          loginProvider.enterpriseNameOrCCSUrlController,
     );
 
     if (loginProvider.errorMessage == '') {
-      _passwordController.clear();
+      loginProvider.passwordController.clear();
     }
   }
 
@@ -77,8 +73,9 @@ class _AuthFormState extends State<AuthForm>
       await loginProvider.verifyIsLogged();
 
       await loginProvider.restoreUserAndEnterpriseNameOrCCSUrl(
-        enterpriseNameOrCCSUrlController: _enterpriseNameOrCCSUrlController,
-        userController: _userController,
+        enterpriseNameOrCCSUrlController:
+            loginProvider.enterpriseNameOrCCSUrlController,
+        userController: loginProvider.userController,
       );
       isLoaded = true;
     }
@@ -94,7 +91,7 @@ class _AuthFormState extends State<AuthForm>
 
   @override
   Widget build(BuildContext context) {
-    LoginProvider _loginProvider = Provider.of(context, listen: true);
+    LoginProvider loginProvider = Provider.of(context, listen: true);
 
     _animationWidth = Tween<double>(
       begin: 0,
@@ -129,18 +126,19 @@ class _AuthFormState extends State<AuthForm>
                   SizedBox(
                     width: _animationWidth!.value,
                     child: TextFormField(
-                      enabled: _loginProvider.isLoading ? false : true,
-                      controller: _userController,
+                      enabled: loginProvider.isLoading ? false : true,
+                      controller: loginProvider.userController,
                       focusNode: _userFocusNode,
                       onFieldSubmitted: (_) => FocusScope.of(context)
                           .requestFocus(_passwordFocusNode),
                       validator: (_name) {
-                        _name = _userController.text;
-                        if (_userController.text.trim().isEmpty) {
+                        _name = loginProvider.userController.text;
+                        if (loginProvider.userController.text.trim().isEmpty) {
                           return 'Preencha o nome';
                         }
 
-                        _userController.text = _userController.text.trimRight();
+                        loginProvider.userController.text =
+                            loginProvider.userController.text.trimRight();
                         //fiz isso porque quando termina com espaço, a API retorna que a senha está
                         //inválida ao invés do usuário inválido e ninguém cadastra usuário com
                         //espaço no final do nome
@@ -175,8 +173,8 @@ class _AuthFormState extends State<AuthForm>
                   SizedBox(
                     width: _animationWidth!.value,
                     child: TextFormField(
-                      controller: _passwordController,
-                      enabled: _loginProvider.isLoading ? false : true,
+                      controller: loginProvider.passwordController,
+                      enabled: loginProvider.isLoading ? false : true,
                       focusNode: _passwordFocusNode,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).requestFocus(_urlFocusNode),
@@ -188,8 +186,10 @@ class _AuthFormState extends State<AuthForm>
                         fontSize: 20,
                       ),
                       validator: (_name) {
-                        _name = _passwordController.text;
-                        if (_passwordController.text.trim().isEmpty) {
+                        _name = loginProvider.passwordController.text;
+                        if (loginProvider.passwordController.text
+                            .trim()
+                            .isEmpty) {
                           return 'Preencha a senha';
                         }
                         return null;
@@ -223,10 +223,11 @@ class _AuthFormState extends State<AuthForm>
                   SizedBox(
                     width: _animationWidth!.value,
                     child: TextFormField(
-                      enabled: _loginProvider.isLoading ? false : true,
-                      controller: _enterpriseNameOrCCSUrlController,
+                      enabled: loginProvider.isLoading ? false : true,
+                      controller:
+                          loginProvider.enterpriseNameOrCCSUrlController,
                       onFieldSubmitted: (_) =>
-                          _submit(loginProvider: _loginProvider),
+                          _submit(loginProvider: loginProvider),
                       focusNode: _urlFocusNode,
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
@@ -236,18 +237,19 @@ class _AuthFormState extends State<AuthForm>
                         fontSize: 20,
                       ),
                       validator: (_url) {
-                        _url = _enterpriseNameOrCCSUrlController.text;
-                        if (_enterpriseNameOrCCSUrlController.text
+                        _url =
+                            loginProvider.enterpriseNameOrCCSUrlController.text;
+                        if (loginProvider.enterpriseNameOrCCSUrlController.text
                             .toLowerCase()
                             .trim()
                             .isEmpty) {
                           return 'Digite o nome da empresa ou URL do CCS';
                         }
-                        // else if (!_enterpriseNameOrCCSUrlController.text
+                        // else if (!loginProvider.enterpriseNameOrCCSUrlController.text
                         //         .contains('http') ||
-                        //     !_enterpriseNameOrCCSUrlController.text.contains('//') ||
-                        //     !_enterpriseNameOrCCSUrlController.text.contains(':') ||
-                        //     !_enterpriseNameOrCCSUrlController.text.contains('ccs')) {
+                        //     !loginProvider.enterpriseNameOrCCSUrlController.text.contains('//') ||
+                        //     !loginProvider.enterpriseNameOrCCSUrlController.text.contains(':') ||
+                        //     !loginProvider.enterpriseNameOrCCSUrlController.text.contains('ccs')) {
                         //   return 'URL inválida';
                         // }
                         return null;
@@ -273,7 +275,7 @@ class _AuthFormState extends State<AuthForm>
                     builder: (context, widget) => ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(_animationWidth!.value, 60),
-                        backgroundColor: _loginProvider.isLoading
+                        backgroundColor: loginProvider.isLoading
                             ? Colors.grey
                             : Theme.of(context).colorScheme.primary,
                         maximumSize: Size(_animationWidth!.value, 60),
@@ -282,12 +284,12 @@ class _AuthFormState extends State<AuthForm>
                               BorderRadius.circular(_animationBorder!.value),
                         ),
                       ),
-                      onPressed: _loginProvider.isLoading
+                      onPressed: loginProvider.isLoading
                           ? null
                           : () => _submit(
-                                loginProvider: _loginProvider,
+                                loginProvider: loginProvider,
                               ),
-                      child: _loginProvider.isLoading
+                      child: loginProvider.isLoading
                           ? const CircularProgressIndicator(
                               strokeWidth: 4,
                               color: Colors.grey,

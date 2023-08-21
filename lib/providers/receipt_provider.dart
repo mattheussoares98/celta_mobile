@@ -1,5 +1,6 @@
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/utils/firebase_helper.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:flutter/material.dart';
 import '../Models/receipt_models/receipt_model.dart';
@@ -118,6 +119,10 @@ class ReceiptProvider with ChangeNotifier {
 
     notifyListeners();
 
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.receiptEntryQuantity,
+    );
+
     try {
       Map<String, dynamic> parameters = {
         "crossIdentity": UserIdentity.identity,
@@ -193,6 +198,10 @@ class ReceiptProvider with ChangeNotifier {
     _errorMessageUpdateQuantity = "";
     _isUpdatingQuantity = true;
     notifyListeners();
+
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.receiptAnullQuantity,
+    );
 
     try {
       await SoapHelper.soapPost(
@@ -373,6 +382,10 @@ class ReceiptProvider with ChangeNotifier {
     _isLoadingLiberateCheck = true;
     _errorMessageLiberate = "";
     notifyListeners();
+
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.receiptLiberate,
+    );
 
     try {
       await SoapHelper.soapPost(

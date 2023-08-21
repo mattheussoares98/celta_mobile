@@ -4,6 +4,7 @@ import 'package:celta_inventario/Models/sale_request_models/sale_request_custome
 import 'package:celta_inventario/Models/sale_request_models/sale_request_process_cart_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/utils/firebase_helper.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
@@ -764,6 +765,10 @@ class SaleRequestProvider with ChangeNotifier {
     _errorMessageSaveSaleRequest = "";
     _isLoadingSaveSaleRequest = true;
     notifyListeners();
+
+    FirebaseHelper.addSoapCallInFirebase(
+      firebaseCallEnum: FirebaseCallEnum.saleRequestSave,
+    );
 
     _jsonSaleRequest["crossId"] = "${UserIdentity.identity}";
     var jsonSaleRequestEncoded = json.encode(_jsonSaleRequest);

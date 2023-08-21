@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:celta_inventario/utils/base_url.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
@@ -20,49 +19,6 @@ class SoapHelperResponseParameters {
 }
 
 class SoapHelper {
-  static FirebaseFirestore _db = FirebaseFirestore.instance;
-  static CollectionReference _clientsCollection = _db.collection("clients");
-  static _addCounterInFirebase({
-    required String serviceASMX,
-  }) async {
-    serviceASMX = serviceASMX.replaceAll(RegExp(r'\.'), '-');
-    QuerySnapshot? querySnapshot;
-
-    querySnapshot = await _clientsCollection
-        .where(
-          'urlCCS',
-          isEqualTo: BaseUrl.ccsUrl.trimRight().trimLeft().toLowerCase(),
-        )
-        .get();
-
-    if (querySnapshot.size > 0) {
-      DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
-
-      Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
-
-      DocumentReference documentReference =
-          _clientsCollection.doc(documentSnapshot.id);
-
-      if (!data.containsKey(serviceASMX)) {
-        await documentReference
-            .update({
-              serviceASMX: 1,
-            })
-            .then((value) => null)
-            .catchError((error) => null);
-      } else {
-        await _clientsCollection
-            .doc(documentSnapshot.id)
-            .set({
-              serviceASMX: FieldValue.increment(1),
-            }, SetOptions(merge: true))
-            .then((value) => null)
-            .catchError((error) => null);
-      }
-    }
-  }
-
   static soapPost({
     required Map<String, dynamic> parameters,
     required String typeOfResponse,
@@ -100,8 +56,6 @@ class SoapHelper {
     );
 
     if (response.statusCode == 200) {
-      _addCounterInFirebase(serviceASMX: serviceASMX);
-
       String result = response.body;
 
       final Xml2Json xml2json = Xml2Json();
