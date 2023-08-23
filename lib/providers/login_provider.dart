@@ -166,6 +166,7 @@ class LoginProvider with ChangeNotifier {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('userIdentity', UserIdentity.identity);
+        await prefs.setString('user', user);
 
         await FirebaseHelper.addCcsClientInFirebase();
       }
