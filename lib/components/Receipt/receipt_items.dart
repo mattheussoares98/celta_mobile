@@ -76,12 +76,12 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                               ? "Não há"
                               : receipt.EmitterName,
                         ),
-                        // if (receipt.Grupo != "-1")
-                        //   TitleAndSubtitle.titleAndSubtitle(
-                        //     title: "Grupo",
-                        //     value: receipt.Grupo,
-                        //     subtitleColor: Colors.amber,
-                        //   ),
+                        if (receipt.Grupo != "-1")
+                          TitleAndSubtitle.titleAndSubtitle(
+                            title: "Grupo",
+                            value: receipt.Grupo,
+                            subtitleColor: Colors.amber,
+                          ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",
                           value: receipt.Status.toString(),

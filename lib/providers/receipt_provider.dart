@@ -308,9 +308,11 @@ class ReceiptProvider with ChangeNotifier {
     _isLoadingReceipt = true;
     _errorMessage = '';
     if (isSearchingAgain) notifyListeners();
-    //Quando libera o documento, consulta os recebimentos novamente para atualizar os status corretamente de acordo com o que está no BS. Já quando consulta ao entrar na página de recebimentos, não pode usar o notifyListeners senão da erro no debug console
-    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
-    //porque está sendo chamado dentro de um setState
+    //Quando libera o documento, consulta os recebimentos novamente para
+    //atualizar os status corretamente de acordo com o que está no BS. Já quando
+    //consulta ao entrar na página de recebimentos, não pode usar o
+    //notifyListeners senão da erro no debug console. Só está atualizando o
+    //código acima porque está sendo chamado dentro de um setState
 
     try {
       await SoapHelper.soapPost(
