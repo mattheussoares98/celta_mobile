@@ -8,8 +8,9 @@ class FirebaseClientModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'enterpriseName': enterpriseName,
-      'urlCCS': urlCCS.trim().toLowerCase(),
+      'enterpriseName':
+          enterpriseName.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+      'urlCCS': urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
     };
   }
 }
