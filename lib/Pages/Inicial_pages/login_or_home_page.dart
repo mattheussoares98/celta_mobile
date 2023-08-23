@@ -18,7 +18,6 @@ class _AuthOrHoMePageState extends State<AuthOrHoMePage> {
     LoginProvider loginProvider = Provider.of(context, listen: true);
     super.didChangeDependencies();
 
-    await loginProvider.restoreBaseUrl();
     await loginProvider.logoutIfIsNecessary();
   }
 
