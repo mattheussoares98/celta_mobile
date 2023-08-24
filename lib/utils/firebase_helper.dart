@@ -1,6 +1,8 @@
 import 'package:celta_inventario/Models/firebase_client_model.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum FirebaseCallEnum {
@@ -27,8 +29,10 @@ class FirebaseHelper {
 
   FirebaseHelper._internal();
 
-  static FirebaseFirestore _db = FirebaseFirestore.instance;
-  static CollectionReference _clientsCollection = _db.collection("clients");
+  static FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  static CollectionReference _clientsCollection =
+      _firebaseFirestore.collection("clients");
+  static final _firebaseMessaging = FirebaseMessaging.instance;
 
   static int _codeOfSoapAction(FirebaseCallEnum firebaseCallEnum) {
     int index = -1;
@@ -225,5 +229,35 @@ class FirebaseHelper {
           .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));
     }
+  }
+
+  static Future<void> handleBackgroundMessage(RemoteMessage message) async {
+    // print("title: ${message.notification?.title}");
+    // print("body: ${message.notification?.body}");
+    // print("data: ${message.data}");
+  }
+
+  static Future<void> initNotifications(BuildContext context) async {
+    await _firebaseMessaging.requestPermission();
+    // final fcmToken = await _firebaseMessaging.getToken();
+    // print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
+    // mensagens pelo site do firebase
+
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+    //sempre que chegar uma mensagem e o aplicativo estiver EM SEGUNDO PLANO,
+    //vai aparecer a notificação pro cliente. Quando o aplicativo estiver em
+    //primeiro plano, vai executar a função abaixo
+
+    //abaixo recebe a notificação em primeiro plano
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   print('Got a message whilst in the foreground!');
+    //   print('Message data: ${message.data}');
+
+    //   if (message.notification != null) {
+    //     print(
+    //         'Título da notificação: ${message.notification!.title.toString()}');
+    //     print('Texto da notificação: ${message.notification!.body}');
+    //   }
+    // });
   }
 }

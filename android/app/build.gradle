@@ -102,7 +102,8 @@ dependencies {
     implementation 'com.google.android.material:material:<version>'
     implementation 'com.android.support:multidex:2.0.1'
     implementation platform('com.google.firebase:firebase-bom:32.2.2')
-    implementation ('com.google.firebase:firebase-firestore-ktx:24.7.0')
-    implementation ('com.google.firebase:firebase-storage-ktx:20.2.1')
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.7.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 }
