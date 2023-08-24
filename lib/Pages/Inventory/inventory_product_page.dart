@@ -112,6 +112,11 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                         inventoryProvider: inventoryProvider,
                         arguments: arguments,
                       );
+                      if (inventoryProvider.productsCount > 0) {
+                        setState(() {
+                          _consultProductController.text = "";
+                        });
+                      }
                     },
                     isIndividual: _isIndividual,
                     consultProductController: _consultProductController,
