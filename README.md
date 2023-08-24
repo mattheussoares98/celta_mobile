@@ -1,7 +1,7 @@
 # <span style=color:green> Celta Mobile: Aplicativo para facilitar processos do sistema de ERP </span>
 
 ## <span style=color:blue>Introdução </span>
-O **Celta Mobile** é o primeiro aplicativo móvel da empresa Celtaware. Este aplicativo abrange uma série de funcionalidades essenciais para a administração de processos de forma ágil
+O **Celta Mobile** é o primeiro aplicativo móvel da empresa Celtaware. Este aplicativo é integrado com o sistema de ERP via API e abrange uma série de funcionalidades essenciais para a administração de processos de forma ágil
 
 ## <span style=color:blue>Funcionalidades principais </span>
 O **Celta Mobile** oferece 7 módulos
