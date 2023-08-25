@@ -1,6 +1,6 @@
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
-import 'package:celta_inventario/components/Inventory/inventory_consult_product_widget.dart';
+import 'package:celta_inventario/components/Inventory/inventory_search_product_button.dart';
 import 'package:celta_inventario/components/Inventory/inventory_insert_individual_product_switch.dart';
 import 'package:celta_inventario/components/Inventory/inventory_products_items.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
