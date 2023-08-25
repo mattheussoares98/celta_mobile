@@ -1,10 +1,12 @@
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
+import 'package:celta_inventario/components/Inventory/inventory_consult_product_widget.dart';
+import 'package:celta_inventario/components/Inventory/inventory_insert_individual_product_switch.dart';
 import 'package:celta_inventario/components/Inventory/inventory_products_items.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Components/Inventory/inventory_consult_product_widget.dart';
 
 class InventoryProductsPage extends StatefulWidget {
   const InventoryProductsPage({Key? key}) : super(key: key);
@@ -100,32 +102,55 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
           children: [
             Column(
               children: [
-                ConsultProductWidget(
-                    changeIsLegacyCode: () {
+                SearchWidget(
+                  changeLegacyIsSelectedFunction: () {
+                    setState(() {
+                      _isLegacyCodeSearch = !_isLegacyCodeSearch;
+                    });
+                  },
+                  useLegacyCode: _isLegacyCodeSearch,
+                  hasLegacyCodeSearch: true,
+                  consultProductController: _consultProductController,
+                  isLoading: inventoryProvider.isLoadingProducts ||
+                      inventoryProvider.isLoadingQuantity,
+                  onPressSearch: () async {
+                    await _searchProduct(
+                      inventoryProvider: inventoryProvider,
+                      arguments: arguments,
+                    );
+                    if (inventoryProvider.productsCount > 0) {
                       setState(() {
-                        _isLegacyCodeSearch = !_isLegacyCodeSearch;
+                        _consultProductController.text = "";
                       });
-                    },
-                    isLegacyCodeSearch: _isLegacyCodeSearch,
-                    searchProduct: () async {
-                      await _searchProduct(
-                        inventoryProvider: inventoryProvider,
-                        arguments: arguments,
-                      );
-                      if (inventoryProvider.productsCount > 0) {
-                        setState(() {
-                          _consultProductController.text = "";
-                        });
-                      }
-                    },
-                    isIndividual: _isIndividual,
-                    consultProductController: _consultProductController,
-                    consultedProductController: _consultedProductController,
-                    changeIsIndividual: () {
+                    }
+                  },
+                  focusNodeConsultProduct:
+                      inventoryProvider.consultProductFocusNode,
+                ),
+                SearchProductButton(
+                  isIndividual: _isIndividual,
+                  searchProduct: () async {
+                    await _searchProduct(
+                      inventoryProvider: inventoryProvider,
+                      arguments: arguments,
+                    );
+                    if (inventoryProvider.productsCount > 0) {
                       setState(() {
-                        _isIndividual = !_isIndividual;
+                        _consultProductController.text = "";
                       });
-                    }),
+                    }
+                  },
+                ),
+                InventoryInsertIndividualProductSwitch(
+                  isIndividual: _isIndividual,
+                  isLoading: inventoryProvider.isLoadingProducts ||
+                      inventoryProvider.isLoadingQuantity,
+                  changeValue: () {
+                    setState(() {
+                      _isIndividual = !_isIndividual;
+                    });
+                  },
+                ),
               ],
             ),
             if (inventoryProvider.productsCount == 0 &&

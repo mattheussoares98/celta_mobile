@@ -5,12 +5,10 @@ import 'package:provider/provider.dart';
 class InventoryInsertIndividualProductSwitch extends StatefulWidget {
   final bool isIndividual;
   final bool isLoading;
-  final Function changeFocus;
   final Function changeValue;
   const InventoryInsertIndividualProductSwitch({
     required this.isIndividual,
     required this.isLoading,
-    required this.changeFocus,
     required this.changeValue,
     Key? key,
   }) : super(key: key);
@@ -66,7 +64,9 @@ class _InventoryInsertIndividualProductSwitchState
                           widget.changeValue();
                         });
                         if (widget.isIndividual) {
-                          widget.changeFocus();
+                          inventoryProvider.alterFocusToConsultProduct(
+                            context: context,
+                          );
                         }
                       },
               ),
