@@ -3,6 +3,7 @@ import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_conference_products_items.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
+import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Components/Global_widgets/consulting_widget.dart';
@@ -24,7 +25,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
   }
 
   TextEditingController _consultedProductController = TextEditingController();
-  bool _legacyIsSelected = false;
+  bool _useAutoScan = false;
+  bool _useLegacyCode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +63,22 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SearchWidget(
-              legacyIsSelected: _legacyIsSelected,
+              useAutoScan: _useAutoScan,
+              useLegacyCode: _useLegacyCode,
+              changeAutoScanValue: () {
+                setState(() {
+                  _useAutoScan = !_useAutoScan;
+                });
+              },
+              changeLegacyCodeValue: () {
+                setState(() {
+                  _useLegacyCode = !_useLegacyCode;
+                });
+              },
               hasLegacyCodeSearch: true,
               changeLegacyIsSelectedFunction: () {
                 setState(() {
-                  _legacyIsSelected = !_legacyIsSelected;
+                  _useLegacyCode = !_useLegacyCode;
                 });
               },
               focusNodeConsultProduct: receiptProvider.consultProductFocusNode,
@@ -73,7 +86,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   receiptProvider.isUpdatingQuantity,
               onPressSearch: () async {
                 await receiptProvider.getProducts(
-                  isLegacyCodeSearch: _legacyIsSelected,
+                  isLegacyCodeSearch: _useLegacyCode,
                   docCode: arguments["grDocCode"],
                   controllerText: _consultProductController.text,
                   context: context,
@@ -104,23 +117,38 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               ),
             if (!receiptProvider.consultingProducts)
               ReceiptConferenceProductsItems(
+                useAutoScan: _useAutoScan,
+                getProductsWithCamera: () async {
+                  FocusScope.of(context).unfocus();
+                  _consultProductController.clear();
+
+                  _consultProductController.text =
+                      await ScanBarCode.scanBarcode();
+
+                  if (_consultProductController.text != "") {
+                    await receiptProvider.getProducts(
+                      isLegacyCodeSearch: _useLegacyCode,
+                      docCode: arguments["grDocCode"],
+                      controllerText: _consultProductController.text,
+                      context: context,
+                      isSearchAllCountedProducts: false,
+                    );
+                  }
+
+                  if (receiptProvider.productsCount > 0) {
+                    _consultProductController.clear();
+                  }
+                },
                 onFieldSubmitted: () async {
                   await receiptProvider.getProducts(
-                    isLegacyCodeSearch: _legacyIsSelected,
+                    isLegacyCodeSearch: _useLegacyCode,
                     docCode: arguments["grDocCode"],
                     controllerText: _consultProductController.text,
                     context: context,
                     isSearchAllCountedProducts: false,
                   );
 
-                  //não estava funcionando passar o productsCount como parâmetro
-                  //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                  //textEditingController após a consulta dos produtos se encontrar
-                  //algum produto
                   if (receiptProvider.productsCount > 0) {
-                    //se for maior que 0 significa que deu certo a consulta e
-                    //por isso pode apagar o que foi escrito no campo de
-                    //consulta
                     _consultProductController.clear();
                   }
                 },

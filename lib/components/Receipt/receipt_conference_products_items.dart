@@ -15,7 +15,12 @@ class ReceiptConferenceProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final TextEditingController consultProductController;
   final Function onFieldSubmitted;
+  final Function getProductsWithCamera;
+  final bool useAutoScan;
+
   const ReceiptConferenceProductsItems({
+    required this.useAutoScan,
+    required this.getProductsWithCamera,
     required this.consultedProductController,
     required this.onFieldSubmitted,
     required this.consultProductController,
@@ -57,6 +62,10 @@ class _ReceiptConferenceProductsItemsState
         selectedIndex = -1;
       });
 
+      if (widget.useAutoScan) {
+        await widget.getProductsWithCamera();
+      }
+
       Future.delayed(const Duration(milliseconds: 100), () {
         //se não colocar em um future pra mudar o foco,
         //não funciona corretamente
@@ -95,7 +104,14 @@ class _ReceiptConferenceProductsItemsState
         );
 
         if (receiptProvider.errorMessageUpdateQuantity == "") {
+          setState(() {
+            selectedIndex = -1;
+          });
           widget.consultedProductController.clear();
+
+          if (widget.useAutoScan) {
+            await widget.getProductsWithCamera();
+          }
         }
       },
     );

@@ -9,11 +9,19 @@ class SearchWidget extends StatefulWidget {
   final FocusNode focusNodeConsultProduct;
   final String hintText;
   final String labelText;
-  final bool useCamera;
   final bool autofocus;
   final bool hasLegacyCodeSearch;
-  final bool legacyIsSelected;
+  final bool? useAutoScan;
+  final bool? useLegacyCode;
+  final Function? changeAutoScanValue;
+  final Function? changeLegacyCodeValue;
+  final bool useCamera;
   const SearchWidget({
+    this.useAutoScan = false,
+    this.useLegacyCode = false,
+    this.useCamera = true,
+    this.changeAutoScanValue,
+    this.changeLegacyCodeValue,
     required this.consultProductController,
     required this.isLoading,
     required this.onPressSearch,
@@ -21,10 +29,8 @@ class SearchWidget extends StatefulWidget {
     this.changeLegacyIsSelectedFunction = null,
     this.hintText = "PLU-EAN-NOME-%",
     this.labelText = "Consultar produto",
-    this.useCamera = true,
     this.autofocus = true,
     this.hasLegacyCodeSearch = false,
-    this.legacyIsSelected = false,
     Key? key,
   }) : super(key: key);
 
@@ -47,7 +53,7 @@ class _SearchWidgetState extends State<SearchWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+          padding: const EdgeInsets.only(left: 8, right: 0, top: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -146,7 +152,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                           ],
                         ),
                       ),
-                      hintText: widget.legacyIsSelected
+                      hintText: widget.useLegacyCode!
                           ? "Código legado"
                           : widget.hintText,
                       labelText: widget.labelText,
@@ -197,29 +203,39 @@ class _SearchWidgetState extends State<SearchWidget> {
                   ),
                 ),
               ),
-              if (widget.hasLegacyCodeSearch)
-                Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: GestureDetector(
-                    onTap: widget.isLoading
-                        ? null
-                        : () {
-                            widget.changeLegacyIsSelectedFunction();
-                          },
-                    child: Column(
-                      children: [
-                        const Text("código\nlegado"),
-                        Icon(
-                          widget.legacyIsSelected
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
-                          color: widget.isLoading
-                              ? Colors.grey
-                              : Theme.of(context).colorScheme.primary,
-                        ),
-                      ],
-                    ),
-                  ),
+              // if (widget.hasLegacyCodeSearch)
+              //   Padding(
+              //     padding: const EdgeInsets.only(left: 5),
+              //     child: GestureDetector(
+              //       onTap: widget.isLoading
+              //           ? null
+              //           : () {
+              //               widget.changeLegacyIsSelectedFunction();
+              //             },
+              //       child: Column(
+              //         children: [
+              //           const Text("código\nlegado"),
+              //           Icon(
+              //             widget.legacyIsSelected
+              //                 ? Icons.check_box
+              //                 : Icons.check_box_outline_blank,
+              //             color: widget.isLoading
+              //                 ? Colors.grey
+              //                 : Theme.of(context).colorScheme.primary,
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              if ((widget.useAutoScan != null &&
+                      widget.changeAutoScanValue != null) ||
+                  (widget.useLegacyCode != null &&
+                      widget.changeLegacyIsSelectedFunction != null))
+                _enableConfigurationsDialog(
+                  useAutoScan: widget.useAutoScan!,
+                  useLegacyCode: widget.useLegacyCode!,
+                  changeAutoScanValue: () => widget.changeAutoScanValue!(),
+                  changeLegacyCodeValue: () => widget.changeLegacyCodeValue!(),
                 ),
             ],
           ),
@@ -232,6 +248,107 @@ class _SearchWidgetState extends State<SearchWidget> {
           ),
         )
       ],
+    );
+  }
+
+  _enableConfigurationsDialog({
+    bool? useAutoScan,
+    bool? useLegacyCode,
+    Function? changeAutoScanValue,
+    Function? changeLegacyCodeValue,
+  }) {
+    return IconButton(
+      icon: Icon(
+        Icons.settings,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            bool? internUseAutoScan = useAutoScan;
+            bool? internUseLegacyCode = useLegacyCode;
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return AlertDialog(
+                  title: const Center(child: Text('Habilitar')),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (internUseAutoScan != null &&
+                            changeAutoScanValue != null)
+                          _personalizedCheckboxListTile(
+                            internValue: internUseAutoScan!,
+                            changeValue: () {
+                              setState(
+                                () => {
+                                  internUseAutoScan = !internUseAutoScan!,
+                                  changeAutoScanValue(),
+                                },
+                              );
+                            },
+                            configurationName: "Auto Scan",
+                          ),
+                        if (internUseLegacyCode != null &&
+                            changeLegacyCodeValue != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: _personalizedCheckboxListTile(
+                              internValue: internUseLegacyCode!,
+                              changeValue: () => setState(() => {
+                                    internUseLegacyCode = !internUseLegacyCode!,
+                                    changeLegacyCodeValue(),
+                                  }),
+                              configurationName: "Código legado",
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Fechar', textAlign: TextAlign.center),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  _personalizedCheckboxListTile({
+    required bool internValue,
+    required Function changeValue,
+    required String configurationName,
+  }) {
+    return CheckboxListTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(
+          color: Colors.grey,
+          width: 1,
+        ),
+      ),
+      activeColor: internValue ? Colors.green : null,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(configurationName),
+        ],
+      ),
+      value: internValue,
+      onChanged: (value) {
+        setState(() {
+          changeValue();
+        });
+      },
     );
   }
 }

@@ -44,7 +44,7 @@ class _SaleRequestInsertProductsPageState
             isLoading: saleRequestProvider.isLoadingProducts,
             autofocus: false,
             hasLegacyCodeSearch: true,
-            legacyIsSelected: _legacyIsSelected,
+            useLegacyCode: _legacyIsSelected,
             changeLegacyIsSelectedFunction: () {
               setState(() {
                 _legacyIsSelected = !_legacyIsSelected;

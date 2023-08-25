@@ -112,6 +112,11 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
                           transferBetweenStocksProvider
                               .justificationHasStockType = true;
 
+                          transferBetweenStocksProvider
+                                  .jsonAdjustStock["StockTypeCode"] =
+                              value.CodigoInterno_TipoEstoque
+                                  .CodigoInterno_TipoEstoque;
+
                           setState(() {
                             transferBetweenStocksProvider
                                 .updateJustificationStockTypeName(

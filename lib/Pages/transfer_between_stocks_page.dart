@@ -76,7 +76,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       _isLegacyCodeSearch = !_isLegacyCodeSearch;
                     });
                   },
-                  legacyIsSelected: _isLegacyCodeSearch,
+                  useLegacyCode: _isLegacyCodeSearch,
                   focusNodeConsultProduct:
                       transferBetweenStocksProvider.consultProductFocusNode,
                   isLoading: transferBetweenStocksProvider.isLoadingProducts ||

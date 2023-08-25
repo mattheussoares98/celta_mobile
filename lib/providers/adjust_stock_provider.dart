@@ -317,6 +317,7 @@ class AdjustStockProvider with ChangeNotifier {
     FirebaseHelper.addSoapCallInFirebase(
       firebaseCallEnum: FirebaseCallEnum.adjustStockConfirmQuantity,
     );
+    print(jsonAdjustStock.toString());
 
     try {
       await SoapHelper.soapPost(

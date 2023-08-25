@@ -73,7 +73,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       _isLegacyCodeSearch = !_isLegacyCodeSearch;
                     });
                   },
-                  legacyIsSelected: _isLegacyCodeSearch,
+                  useLegacyCode: _isLegacyCodeSearch,
                   focusNodeConsultProduct:
                       adjustStockProvider.consultProductFocusNode,
                   isLoading: adjustStockProvider.isLoadingProducts ||

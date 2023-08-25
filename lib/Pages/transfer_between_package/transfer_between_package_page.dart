@@ -32,6 +32,8 @@ class _TransferBetweenPackagePageState
   }
 
   bool _isLegacyCodeSearch = false;
+  bool _useLegacyCode = false;
+  bool _useAutoScan = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +73,24 @@ class _TransferBetweenPackagePageState
             Column(
               children: [
                 SearchWidget(
+                  useLegacyCode: _useLegacyCode,
+                  useAutoScan: _useAutoScan,
+                  changeLegacyCodeValue: () {
+                    setState(() {
+                      _useLegacyCode = !_useLegacyCode;
+                    });
+                  },
+                  changeAutoScanValue: () {
+                    setState(() {
+                      _useAutoScan = !_useAutoScan;
+                    });
+                  },
                   hasLegacyCodeSearch: true,
                   changeLegacyIsSelectedFunction: () {
                     setState(() {
                       _isLegacyCodeSearch = !_isLegacyCodeSearch;
                     });
                   },
-                  legacyIsSelected: _isLegacyCodeSearch,
                   focusNodeConsultProduct:
                       transferBetweenPackageProvider.consultProductFocusNode,
                   isLoading: transferBetweenPackageProvider.isLoadingProducts ||

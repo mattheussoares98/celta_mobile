@@ -106,6 +106,9 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                         if (value.CodigoInterno_TipoEstoque
                                 .CodigoInterno_TipoEstoque !=
                             -1) {
+                          adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
+                              value.CodigoInterno_TipoEstoque
+                                  .CodigoInterno_TipoEstoque;
                           adjustStockProvider.justificationHasStockType = true;
 
                           setState(() {

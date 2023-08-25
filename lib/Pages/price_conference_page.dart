@@ -63,7 +63,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                   _legacyIsSelected = !_legacyIsSelected;
                 });
               },
-              legacyIsSelected: _legacyIsSelected,
+              useLegacyCode: _legacyIsSelected,
               focusNodeConsultProduct:
                   priceConferenceProvider.consultProductFocusNode,
               isLoading: priceConferenceProvider.isLoading ||

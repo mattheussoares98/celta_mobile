@@ -39,7 +39,7 @@ class _ConsultProductWidgetState extends State<ConsultProductWidget> {
           changeLegacyIsSelectedFunction: () {
             widget.changeIsLegacyCode();
           },
-          legacyIsSelected: widget.isLegacyCodeSearch,
+          useLegacyCode: widget.isLegacyCodeSearch,
           hasLegacyCodeSearch: true,
           consultProductController: widget.consultProductController,
           isLoading: inventoryProvider.isLoadingProducts ||
