@@ -70,12 +70,6 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
             Column(
               children: [
                 SearchWidget(
-                  hasLegacyCodeSearch: true,
-                  changeLegacyIsSelectedFunction: () {
-                    setState(() {
-                      _isLegacyCodeSearch = !_isLegacyCodeSearch;
-                    });
-                  },
                   useLegacyCode: _isLegacyCodeSearch,
                   focusNodeConsultProduct:
                       transferBetweenStocksProvider.consultProductFocusNode,

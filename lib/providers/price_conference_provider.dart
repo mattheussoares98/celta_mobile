@@ -16,6 +16,19 @@ class PriceConferenceProvider with ChangeNotifier {
   String _errorMessage = "";
 
   get errorMessage => _errorMessage;
+
+  bool _useLegacyCode = false;
+  bool get useLegacyCode => _useLegacyCode;
+
+  void changeUseLegacyCode({bool? newValue}) {
+    if (newValue != null) {
+      _useLegacyCode = newValue;
+    } else {
+      _useLegacyCode = !_useLegacyCode;
+    }
+    notifyListeners();
+  }
+
   convertSalePracticedRetailToDouble() {
     _products.forEach((element) {
       element.SalePracticedRetail =

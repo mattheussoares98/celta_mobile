@@ -13,9 +13,11 @@ class SearchWidget extends StatefulWidget {
   final Function? changeAutoScanValue;
   final Function? changeLegacyCodeValue;
   final bool useCamera;
+  final bool autofocus;
   const SearchWidget({
     this.useAutoScan = false,
     this.useLegacyCode = false,
+    this.autofocus = false,
     this.useCamera = true,
     this.changeAutoScanValue,
     this.changeLegacyCodeValue,
@@ -66,7 +68,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   child: TextFormField(
                     focusNode: focusNode,
                     enabled: widget.isLoading ? false : true,
-                    autofocus: true,
+                    autofocus: widget.autofocus,
                     controller: widget.consultProductController,
                     // focusNode: _consultedProductFocusNode,
                     // inputFormatters: [LengthLimitingTextInputFormatter(10)],

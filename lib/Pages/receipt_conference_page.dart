@@ -75,12 +75,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   _useLegacyCode = !_useLegacyCode;
                 });
               },
-              hasLegacyCodeSearch: true,
-              changeLegacyIsSelectedFunction: () {
-                setState(() {
-                  _useLegacyCode = !_useLegacyCode;
-                });
-              },
               focusNodeConsultProduct: receiptProvider.consultProductFocusNode,
               isLoading: receiptProvider.consultingProducts ||
                   receiptProvider.isUpdatingQuantity,

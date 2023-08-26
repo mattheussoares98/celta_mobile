@@ -67,12 +67,6 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
             Column(
               children: [
                 SearchWidget(
-                  hasLegacyCodeSearch: true,
-                  changeLegacyIsSelectedFunction: () {
-                    setState(() {
-                      _isLegacyCodeSearch = !_isLegacyCodeSearch;
-                    });
-                  },
                   useLegacyCode: _isLegacyCodeSearch,
                   focusNodeConsultProduct:
                       adjustStockProvider.consultProductFocusNode,
