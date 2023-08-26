@@ -2,6 +2,7 @@ import 'package:celta_inventario/components/Transfer_between_stocks/transfer_bet
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_products_items.dart';
 import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
+import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Components/Global_widgets/search_widget.dart';
@@ -29,8 +30,6 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
     super.dispose();
     _consultProductController.dispose();
   }
-
-  bool _isLegacyCodeSearch = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,12 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
             Column(
               children: [
                 SearchWidget(
-                  useLegacyCode: _isLegacyCodeSearch,
+                  useLegacyCode: transferBetweenStocksProvider.useLegacyCode,
+                  changeLegacyCodeValue:
+                      transferBetweenStocksProvider.changeLegacyCodeValue,
+                  useAutoScan: transferBetweenStocksProvider.useAutoScan,
+                  changeAutoScanValue:
+                      transferBetweenStocksProvider.changeAutoScanValue,
                   focusNodeConsultProduct:
                       transferBetweenStocksProvider.consultProductFocusNode,
                   isLoading: transferBetweenStocksProvider.isLoadingProducts ||
@@ -80,17 +84,11 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
-                      isLegacyCodeSearch: _isLegacyCodeSearch,
+                      isLegacyCodeSearch:
+                          transferBetweenStocksProvider.useLegacyCode,
                     );
 
-                    //não estava funcionando passar o productsCount como parâmetro
-                    //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                    //textEditingController após a consulta dos produtos se encontrar
-                    //algum produto
                     if (transferBetweenStocksProvider.productsCount > 0) {
-                      //se for maior que 0 significa que deu certo a consulta e
-                      //por isso pode apagar o que foi escrito no campo de
-                      //consulta
                       _consultProductController.clear();
                     }
                   },
@@ -118,6 +116,29 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                 consultedProductController: _consultedProductController,
                 dropDownFormKey: _dropDownFormKey,
                 insertQuantityFormKey: _insertQuantityFormKey,
+                getProductsWithCamera: () async {
+                  FocusScope.of(context).unfocus();
+                  _consultProductController.clear();
+
+                  _consultProductController.text =
+                      await ScanBarCode.scanBarcode();
+
+                  if (_consultProductController.text == "") {
+                    return;
+                  }
+
+                  await transferBetweenStocksProvider.getProducts(
+                    enterpriseCode: arguments["CodigoInterno_Empresa"],
+                    controllerText: _consultProductController.text,
+                    context: context,
+                    isLegacyCodeSearch:
+                        transferBetweenStocksProvider.useLegacyCode,
+                  );
+
+                  if (transferBetweenStocksProvider.productsCount > 0) {
+                    _consultProductController.clear();
+                  }
+                },
               ),
           ],
         ),

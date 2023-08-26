@@ -81,6 +81,21 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _useLegacyCode = false;
+  bool get useLegacyCode => _useLegacyCode;
+  bool _useAutoScan = false;
+  bool get useAutoScan => _useAutoScan;
+
+  void changeAutoScanValue() {
+    _useAutoScan = !_useAutoScan;
+    notifyListeners();
+  }
+
+  void changeLegacyCodeValue() {
+    _useLegacyCode = !_useLegacyCode;
+    notifyListeners();
+  }
+
   Map<String, dynamic> jsonAdjustStock = {
     "EnterpriseCode": -1, //esse parâmetro vem da tela de empresas
     "ProductCode": -1, //quando clica no produto, altera o código

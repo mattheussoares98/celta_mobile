@@ -13,7 +13,9 @@ class TransferBetweenStocksProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
+  final Function getProductsWithCamera;
   const TransferBetweenStocksProductsItems({
+    required this.getProductsWithCamera,
     required this.internalEnterpriseCode,
     required this.consultedProductController,
     required this.dropDownFormKey,
@@ -163,6 +165,8 @@ class _TransferBetweenStocksProductsItemsState
                               internalEnterpriseCode:
                                   widget.internalEnterpriseCode,
                               index: index,
+                              getProductsWithCamera:
+                                  widget.getProductsWithCamera,
                             ),
                         ],
                       ),

@@ -10,9 +10,11 @@ class TransferBetweenStocksInsertQuantity extends StatefulWidget {
   final GlobalKey<FormState> insertQuantityFormKey;
   final int internalEnterpriseCode;
   final int index;
+  final Function getProductsWithCamera;
 
   const TransferBetweenStocksInsertQuantity({
     required this.internalEnterpriseCode,
+    required this.getProductsWithCamera,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
     required this.consultedProductController,
@@ -56,6 +58,10 @@ class _TransferBetweenStocksInsertQuantityState
 
     if (transferBetweenStocksProvider.errorMessageAdjustStock == "") {
       widget.consultedProductController.clear();
+    }
+
+    if (transferBetweenStocksProvider.useAutoScan) {
+      await widget.getProductsWithCamera();
     }
   }
 
