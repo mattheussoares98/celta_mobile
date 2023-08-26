@@ -3,6 +3,7 @@ import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dar
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_products_items.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
+import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,8 +29,6 @@ class _TransferRequestInsertProductsPageState
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
 
-  bool _legacyIsSelected = false;
-
   @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider =
@@ -44,10 +43,14 @@ class _TransferRequestInsertProductsPageState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SearchWidget(
+            useLegacyCode: transferRequestProvider.useLegacyCode,
+            changeLegacyCodeValue:
+                transferRequestProvider.changeLegacyCodeValue,
+            useAutoScan: transferRequestProvider.useAutoScan,
+            changeAutoScanValue: transferRequestProvider.changeAutoScanValue,
             consultProductController: _searchProductTextEditingController,
             isLoading: transferRequestProvider.isLoadingProducts,
             autofocus: false,
-            useLegacyCode: _legacyIsSelected,
             onPressSearch: () async {
               _consultedProductController.clear();
 
@@ -56,7 +59,7 @@ class _TransferRequestInsertProductsPageState
                 enterpriseOriginCode: widget.enterpriseOriginCode,
                 enterpriseDestinyCode: widget.enterpriseDestinyCode,
                 value: _searchProductTextEditingController.text,
-                isLegacyCodeSearch: _legacyIsSelected,
+                isLegacyCodeSearch: transferRequestProvider.useLegacyCode,
               );
 
               if (transferRequestProvider.productsCount > 0) {
@@ -78,6 +81,29 @@ class _TransferRequestInsertProductsPageState
           if (transferRequestProvider.productsCount > 0)
             TransferRequestProductsItems(
               consultedProductController: _consultedProductController,
+              getProductsWithCamera: () async {
+                FocusScope.of(context).unfocus();
+                _searchProductTextEditingController.clear();
+
+                _searchProductTextEditingController.text =
+                    await ScanBarCode.scanBarcode();
+
+                if (_searchProductTextEditingController.text == "") {
+                  return;
+                }
+
+                await transferRequestProvider.getProducts(
+                  requestTypeCode: widget.requestTypeCode.toString(),
+                  enterpriseOriginCode: widget.enterpriseOriginCode,
+                  enterpriseDestinyCode: widget.enterpriseDestinyCode,
+                  value: _searchProductTextEditingController.text,
+                  isLegacyCodeSearch: transferRequestProvider.useLegacyCode,
+                );
+
+                if (transferRequestProvider.productsCount > 0) {
+                  _searchProductTextEditingController.clear();
+                }
+              },
             ),
         ],
       ),

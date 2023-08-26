@@ -81,6 +81,21 @@ class TransferRequestProvider with ChangeNotifier {
   Map<String, Map<String, Map<String, List<TransferRequestCartProductsModel>>>>
       _cartProducts = {};
 
+  bool _useLegacyCode = false;
+  bool get useLegacyCode => _useLegacyCode;
+  bool _useAutoScan = false;
+  bool get useAutoScan => _useAutoScan;
+
+  void changeAutoScanValue() {
+    _useAutoScan = !_useAutoScan;
+    notifyListeners();
+  }
+
+  void changeLegacyCodeValue() {
+    _useLegacyCode = !_useLegacyCode;
+    notifyListeners();
+  }
+
   getCartProducts({
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,

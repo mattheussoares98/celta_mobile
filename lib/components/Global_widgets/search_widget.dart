@@ -145,7 +145,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                                           }
                                         },
                                   child: Icon(
-                                    Icons.photo_camera,
+                                    widget.useAutoScan == true
+                                        ? Icons.camera_alt
+                                        : Icons.camera_alt_outlined,
                                     size: 40,
                                     color: widget.isLoading
                                         ? Colors.grey
