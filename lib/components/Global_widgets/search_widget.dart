@@ -15,9 +15,9 @@ class SearchWidget extends StatefulWidget {
   final bool useCamera;
   final bool autofocus;
   const SearchWidget({
-    this.useAutoScan = false,
-    this.useLegacyCode = false,
-    this.autofocus = false,
+    this.useAutoScan,
+    this.useLegacyCode,
+    this.autofocus = true,
     this.useCamera = true,
     this.changeAutoScanValue,
     this.changeLegacyCodeValue,
@@ -213,6 +213,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   (widget.useLegacyCode != null &&
                       widget.changeLegacyCodeValue != null))
                 _enableConfigurationsDialog(
+                  isLoading: widget.isLoading,
                   useAutoScan:
                       widget.useAutoScan != null ? widget.useAutoScan! : null,
                   useLegacyCode: widget.useLegacyCode != null
@@ -244,69 +245,77 @@ class _SearchWidgetState extends State<SearchWidget> {
     bool? useLegacyCode,
     Function? changeAutoScanValue,
     Function? changeLegacyCodeValue,
+    required bool isLoading,
   }) {
     return IconButton(
       icon: Icon(
         Icons.settings,
-        color: Theme.of(context).colorScheme.primary,
+        color: widget.isLoading
+            ? Colors.grey
+            : Theme.of(context).colorScheme.primary,
       ),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            bool? internUseAutoScan = useAutoScan;
-            bool? internUseLegacyCode = useLegacyCode;
-            return StatefulBuilder(
-              builder: (context, setState) {
-                return AlertDialog(
-                  title: const Center(child: Text('Habilitar')),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (useAutoScan != null && changeAutoScanValue != null)
-                          _personalizedCheckboxListTile(
-                            internValue: internUseAutoScan!,
-                            changeValue: () {
-                              setState(
-                                () => {
-                                  internUseAutoScan = !internUseAutoScan!,
-                                  changeAutoScanValue(),
-                                },
-                              );
+      onPressed: isLoading
+          ? null
+          : () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  bool? internUseAutoScan = useAutoScan;
+                  bool? internUseLegacyCode = useLegacyCode;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return AlertDialog(
+                        title: const Center(child: Text('Habilitar')),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (useAutoScan != null &&
+                                  changeAutoScanValue != null)
+                                _personalizedCheckboxListTile(
+                                  internValue: internUseAutoScan!,
+                                  changeValue: () {
+                                    setState(
+                                      () => {
+                                        internUseAutoScan = !internUseAutoScan!,
+                                        changeAutoScanValue(),
+                                      },
+                                    );
+                                  },
+                                  configurationName: "Auto Scan",
+                                ),
+                              if (useLegacyCode != null &&
+                                  changeLegacyCodeValue != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: _personalizedCheckboxListTile(
+                                    internValue: internUseLegacyCode!,
+                                    changeValue: () => setState(() => {
+                                          internUseLegacyCode =
+                                              !internUseLegacyCode!,
+                                          changeLegacyCodeValue(),
+                                        }),
+                                    configurationName: "Código legado",
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
                             },
-                            configurationName: "Auto Scan",
+                            child: const Text('Fechar',
+                                textAlign: TextAlign.center),
                           ),
-                        if (useLegacyCode != null &&
-                            changeLegacyCodeValue != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: _personalizedCheckboxListTile(
-                              internValue: internUseLegacyCode!,
-                              changeValue: () => setState(() => {
-                                    internUseLegacyCode = !internUseLegacyCode!,
-                                    changeLegacyCodeValue(),
-                                  }),
-                              configurationName: "Código legado",
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Fechar', textAlign: TextAlign.center),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        );
-      },
+                        ],
+                      );
+                    },
+                  );
+                },
+              );
+            },
     );
   }
 
