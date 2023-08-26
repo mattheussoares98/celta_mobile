@@ -24,8 +24,6 @@ class _SaleRequestInsertProductsPageState
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
 
-  bool _legacyIsSelected = false;
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
@@ -40,15 +38,16 @@ class _SaleRequestInsertProductsPageState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SearchWidget(
+            useLegacyCode: saleRequestProvider.useLegacyCode,
+            changeLegacyCodeValue: saleRequestProvider.changeLegacyCodeValue,
             consultProductController: _searchProductTextEditingController,
             isLoading: saleRequestProvider.isLoadingProducts,
             autofocus: false,
-            useLegacyCode: _legacyIsSelected,
             onPressSearch: () async {
               _consultedProductController.clear();
 
               await saleRequestProvider.getProducts(
-                isLegacyCodeSearch: _legacyIsSelected,
+                isLegacyCodeSearch: saleRequestProvider.useLegacyCode,
                 context: context,
                 enterpriseCode: widget.enterpriseCode,
                 controllerText: _searchProductTextEditingController.text,

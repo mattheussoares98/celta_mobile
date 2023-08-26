@@ -120,6 +120,14 @@ class SaleRequestProvider with ChangeNotifier {
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
 
+  bool _useLegacyCode = false;
+  bool get useLegacyCode => _useLegacyCode;
+
+  void changeLegacyCodeValue() {
+    _useLegacyCode = !_useLegacyCode;
+    notifyListeners();
+  }
+
   void clearRequests() {
     _requests.clear();
     notifyListeners();
