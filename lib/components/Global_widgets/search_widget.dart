@@ -53,7 +53,15 @@ class _SearchWidgetState extends State<SearchWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8, right: 0, top: 8),
+          padding: EdgeInsets.only(
+              left: 8,
+              right: (widget.useAutoScan == null ||
+                          widget.changeAutoScanValue == null) ||
+                      (widget.useLegacyCode == null ||
+                          widget.changeLegacyCodeValue == null)
+                  ? 8
+                  : 0,
+              top: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -152,7 +160,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                           ],
                         ),
                       ),
-                      hintText: widget.useLegacyCode!
+                      hintText: widget.useLegacyCode != null &&
+                              widget.useLegacyCode == true
                           ? "Código legado"
                           : widget.hintText,
                       labelText: widget.labelText,
@@ -203,39 +212,22 @@ class _SearchWidgetState extends State<SearchWidget> {
                   ),
                 ),
               ),
-              // if (widget.hasLegacyCodeSearch)
-              //   Padding(
-              //     padding: const EdgeInsets.only(left: 5),
-              //     child: GestureDetector(
-              //       onTap: widget.isLoading
-              //           ? null
-              //           : () {
-              //               widget.changeLegacyIsSelectedFunction();
-              //             },
-              //       child: Column(
-              //         children: [
-              //           const Text("código\nlegado"),
-              //           Icon(
-              //             widget.legacyIsSelected
-              //                 ? Icons.check_box
-              //                 : Icons.check_box_outline_blank,
-              //             color: widget.isLoading
-              //                 ? Colors.grey
-              //                 : Theme.of(context).colorScheme.primary,
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
               if ((widget.useAutoScan != null &&
                       widget.changeAutoScanValue != null) ||
                   (widget.useLegacyCode != null &&
                       widget.changeLegacyIsSelectedFunction != null))
                 _enableConfigurationsDialog(
-                  useAutoScan: widget.useAutoScan!,
-                  useLegacyCode: widget.useLegacyCode!,
-                  changeAutoScanValue: () => widget.changeAutoScanValue!(),
-                  changeLegacyCodeValue: () => widget.changeLegacyCodeValue!(),
+                  useAutoScan:
+                      widget.useAutoScan != null ? widget.useAutoScan! : null,
+                  useLegacyCode: widget.useLegacyCode != null
+                      ? widget.useLegacyCode!
+                      : null,
+                  changeAutoScanValue: widget.changeAutoScanValue != null
+                      ? widget.changeAutoScanValue
+                      : null,
+                  changeLegacyCodeValue: widget.changeLegacyCodeValue != null
+                      ? widget.changeLegacyCodeValue!
+                      : null,
                 ),
             ],
           ),
@@ -276,8 +268,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (internUseAutoScan != null &&
-                            changeAutoScanValue != null)
+                        if (useAutoScan != null && changeAutoScanValue != null)
                           _personalizedCheckboxListTile(
                             internValue: internUseAutoScan!,
                             changeValue: () {
@@ -290,7 +281,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                             },
                             configurationName: "Auto Scan",
                           ),
-                        if (internUseLegacyCode != null &&
+                        if (useLegacyCode != null &&
                             changeLegacyCodeValue != null)
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),

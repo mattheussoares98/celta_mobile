@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Models/inventory/inventory_model.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/firebase_helper.dart';
+import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:celta_inventario/utils/soap_helper.dart';
 import 'package:flutter/cupertino.dart';
 import '../Components/Global_widgets/show_error_message.dart';
@@ -56,6 +57,13 @@ class InventoryProvider with ChangeNotifier {
 
   int _indexOfLastAddedQuantity = -1;
   int get indexOfLastAddedQuantity => _indexOfLastAddedQuantity;
+
+  bool _useAutoScan = false;
+  bool _useLegacyCode = false;
+  bool get useAutoScan => _useAutoScan;
+  bool get useLegacyCode => _useLegacyCode;
+  set useAutoScan(bool newValue) => _useAutoScan = newValue;
+  set useLegacyCode(bool newValue) => _useLegacyCode = newValue;
 
   Future<void> getInventory({
     required int enterpriseCode,
@@ -169,18 +177,25 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> getProductsAndAddIfIsIndividual({
-    required String controllerText,
     required int enterpriseCode,
     required int inventoryProcessCode,
     required BuildContext context,
     required bool isIndividual,
     required TextEditingController consultedProductController,
+    required TextEditingController consultProductController,
     required bool isLegacyCodeSearch,
     required int indexOfProduct,
     required int inventoryCountingCode,
   }) async {
+    if (consultProductController.text.isEmpty) {
+      //se não digitar o ean ou plu, vai abrir a câmera
+      consultProductController.text = await ScanBarCode.scanBarcode();
+    }
+
+    if (consultProductController.text.isEmpty) return;
+
     await _getProducts(
-      controllerText: controllerText,
+      controllerText: consultProductController.text,
       enterpriseCode: enterpriseCode,
       context: context,
       isLegacyCodeSearch: isLegacyCodeSearch,

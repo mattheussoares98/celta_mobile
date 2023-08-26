@@ -46,8 +46,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
 
     //se ler algum código, vai consultar o produto
     await inventoryProvider.getProductsAndAddIfIsIndividual(
-      isLegacyCodeSearch: _isLegacyCodeSearch,
-      controllerText: _consultProductController.text,
+      consultProductController: _consultProductController,
+      isLegacyCodeSearch: inventoryProvider.useLegacyCode,
       enterpriseCode: arguments["codigoInternoEmpresa"],
       context: context,
       isIndividual: _isIndividual,
@@ -103,12 +103,25 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             Column(
               children: [
                 SearchWidget(
+                  useAutoScan: inventoryProvider.useAutoScan,
+                  useLegacyCode: inventoryProvider.useLegacyCode,
+                  changeAutoScanValue: () {
+                    setState(() {
+                      inventoryProvider.useAutoScan =
+                          !inventoryProvider.useAutoScan;
+                    });
+                  },
+                  changeLegacyCodeValue: () {
+                    setState(() {
+                      inventoryProvider.useLegacyCode =
+                          !inventoryProvider.useLegacyCode;
+                    });
+                  },
                   changeLegacyIsSelectedFunction: () {
                     setState(() {
                       _isLegacyCodeSearch = !_isLegacyCodeSearch;
                     });
                   },
-                  useLegacyCode: _isLegacyCodeSearch,
                   hasLegacyCodeSearch: true,
                   consultProductController: _consultProductController,
                   isLoading: inventoryProvider.isLoadingProducts ||
@@ -160,7 +173,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
               ),
             if (inventoryProvider.products.isNotEmpty)
               InventoryProductsItems(
-                onFieldSubmitted: () async {
+                getProducts: () async {
                   await _searchProduct(
                     inventoryProvider: inventoryProvider,
                     arguments: arguments,

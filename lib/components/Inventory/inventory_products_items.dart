@@ -14,11 +14,11 @@ class InventoryProductsItems extends StatefulWidget {
   final int productPackingCode;
   final bool isIndividual;
   final TextEditingController consultedProductController;
-  final Function onFieldSubmitted;
+  final Function getProducts;
   InventoryProductsItems({
     Key? key,
     required this.inventoryProcessCode,
-    required this.onFieldSubmitted,
+    required this.getProducts,
     required this.consultedProductController,
     required this.productPackingCode,
     required this.isIndividual,
@@ -68,6 +68,11 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
         inventoryProcessCode: widget.inventoryProcessCode,
         isSubtract: isSubtract,
       );
+    }
+
+    if (inventoryProvider.errorMessageQuantity == "" &&
+        inventoryProvider.useAutoScan) {
+      await widget.getProducts();
     }
   }
 
@@ -259,7 +264,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                             if (!widget.isIndividual && _selectedIndex == index)
                               AddSubtractOrAnullWidget(
                                 onFieldSubmitted: () async {
-                                  await widget.onFieldSubmitted();
+                                  await widget.getProducts();
                                 },
                                 addButtonText: "SOMAR",
                                 subtractButtonText: "SUBTRAIR",
