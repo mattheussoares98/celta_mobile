@@ -122,6 +122,13 @@ class SaleRequestProvider with ChangeNotifier {
 
   bool _useLegacyCode = false;
   bool get useLegacyCode => _useLegacyCode;
+  bool _useAutoScan = false;
+  bool get useAutoScan => _useAutoScan;
+
+  void changeAutoScanValue() {
+    _useAutoScan = !_useAutoScan;
+    notifyListeners();
+  }
 
   void changeLegacyCodeValue() {
     _useLegacyCode = !_useLegacyCode;
@@ -741,7 +748,7 @@ class SaleRequestProvider with ChangeNotifier {
           "crossIdentity": UserIdentity.identity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
-          "searchTypeInt": 0,
+          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
           "routineTypeInt": 1,
         },
         typeOfResponse: "GetProductJsonResponse",

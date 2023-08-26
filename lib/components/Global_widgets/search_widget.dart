@@ -161,6 +161,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                           ? "Código legado"
                           : widget.hintText,
                       labelText: widget.labelText,
+                      hintStyle: const TextStyle(
+                        fontSize: 15,
+                      ),
                       labelStyle: TextStyle(
                         color: widget.isLoading
                             ? Colors.grey

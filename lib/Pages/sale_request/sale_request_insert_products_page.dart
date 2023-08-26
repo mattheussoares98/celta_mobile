@@ -3,6 +3,7 @@ import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +41,8 @@ class _SaleRequestInsertProductsPageState
           SearchWidget(
             useLegacyCode: saleRequestProvider.useLegacyCode,
             changeLegacyCodeValue: saleRequestProvider.changeLegacyCodeValue,
+            useAutoScan: saleRequestProvider.useAutoScan,
+            changeAutoScanValue: saleRequestProvider.changeAutoScanValue,
             consultProductController: _searchProductTextEditingController,
             isLoading: saleRequestProvider.isLoadingProducts,
             autofocus: false,
@@ -70,9 +73,30 @@ class _SaleRequestInsertProductsPageState
             ),
           if (saleRequestProvider.productsCount > 0)
             SaleRequestProductsItems(
-              consultedProductController: _consultedProductController,
-              enterpriseCode: widget.enterpriseCode,
-            ),
+                consultedProductController: _consultedProductController,
+                enterpriseCode: widget.enterpriseCode,
+                getProductsWithCamera: () async {
+                  FocusScope.of(context).unfocus();
+                  _searchProductTextEditingController.clear();
+
+                  _searchProductTextEditingController.text =
+                      await ScanBarCode.scanBarcode();
+
+                  if (_searchProductTextEditingController.text == "") {
+                    return;
+                  }
+
+                  await saleRequestProvider.getProducts(
+                    isLegacyCodeSearch: saleRequestProvider.useLegacyCode,
+                    context: context,
+                    enterpriseCode: widget.enterpriseCode,
+                    controllerText: _searchProductTextEditingController.text,
+                  );
+
+                  if (saleRequestProvider.productsCount > 0) {
+                    _searchProductTextEditingController.clear();
+                  }
+                }),
         ],
       ),
     );

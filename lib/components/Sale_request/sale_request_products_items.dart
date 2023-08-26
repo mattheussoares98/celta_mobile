@@ -14,8 +14,10 @@ import '../Global_widgets/show_alert_dialog.dart';
 class SaleRequestProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final int enterpriseCode;
+  final Function getProductsWithCamera;
 
   const SaleRequestProductsItems({
+    required this.getProductsWithCamera,
     required this.consultedProductController,
     required this.enterpriseCode,
     Key? key,
@@ -298,7 +300,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               consultedProductFormKey: _consultedProductFormKey,
                               totalItemValue: _totalItemValue,
                               product: product,
-                              addProductInCart: () {
+                              addProductInCart: () async {
                                 if (_totalItemValue == 0) {
                                   ShowErrorMessage.showErrorMessage(
                                     error: "O total dos itens está zerado!",
@@ -315,6 +317,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                 setState(() {
                                   selectedIndex = -1;
                                 });
+
+                                if (saleRequestProvider.useAutoScan) {
+                                  await widget.getProductsWithCamera();
+                                }
                               },
                               totalItensInCart: _totalItensInCart,
                               updateTotalItemValue: () {
