@@ -85,12 +85,6 @@ class _TransferBetweenPackagePageState
                       _useAutoScan = !_useAutoScan;
                     });
                   },
-                  hasLegacyCodeSearch: true,
-                  changeLegacyIsSelectedFunction: () {
-                    setState(() {
-                      _isLegacyCodeSearch = !_isLegacyCodeSearch;
-                    });
-                  },
                   focusNodeConsultProduct:
                       transferBetweenPackageProvider.consultProductFocusNode,
                   isLoading: transferBetweenPackageProvider.isLoadingProducts ||

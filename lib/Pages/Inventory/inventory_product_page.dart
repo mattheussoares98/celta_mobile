@@ -24,8 +24,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
   final TextEditingController _consultedProductController =
       TextEditingController();
 
-  bool _isLegacyCodeSearch = false;
-
   @override
   void dispose() {
     super.dispose();
@@ -117,12 +115,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                           !inventoryProvider.useLegacyCode;
                     });
                   },
-                  changeLegacyIsSelectedFunction: () {
-                    setState(() {
-                      _isLegacyCodeSearch = !_isLegacyCodeSearch;
-                    });
-                  },
-                  hasLegacyCodeSearch: true,
                   consultProductController: _consultProductController,
                   isLoading: inventoryProvider.isLoadingProducts ||
                       inventoryProvider.isLoadingQuantity,

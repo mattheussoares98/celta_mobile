@@ -4,13 +4,10 @@ import 'package:flutter/material.dart';
 class SearchWidget extends StatefulWidget {
   final bool isLoading;
   final Function onPressSearch;
-  final dynamic changeLegacyIsSelectedFunction;
   final TextEditingController consultProductController;
   final FocusNode focusNodeConsultProduct;
   final String hintText;
   final String labelText;
-  final bool autofocus;
-  final bool hasLegacyCodeSearch;
   final bool? useAutoScan;
   final bool? useLegacyCode;
   final Function? changeAutoScanValue;
@@ -26,11 +23,8 @@ class SearchWidget extends StatefulWidget {
     required this.isLoading,
     required this.onPressSearch,
     required this.focusNodeConsultProduct,
-    this.changeLegacyIsSelectedFunction = null,
     this.hintText = "PLU-EAN-NOME-%",
     this.labelText = "Consultar produto",
-    this.autofocus = true,
-    this.hasLegacyCodeSearch = false,
     Key? key,
   }) : super(key: key);
 
@@ -72,7 +66,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   child: TextFormField(
                     focusNode: focusNode,
                     enabled: widget.isLoading ? false : true,
-                    autofocus: widget.autofocus,
+                    autofocus: true,
                     controller: widget.consultProductController,
                     // focusNode: _consultedProductFocusNode,
                     // inputFormatters: [LengthLimitingTextInputFormatter(10)],
@@ -215,7 +209,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               if ((widget.useAutoScan != null &&
                       widget.changeAutoScanValue != null) ||
                   (widget.useLegacyCode != null &&
-                      widget.changeLegacyIsSelectedFunction != null))
+                      widget.changeLegacyCodeValue != null))
                 _enableConfigurationsDialog(
                   useAutoScan:
                       widget.useAutoScan != null ? widget.useAutoScan! : null,
