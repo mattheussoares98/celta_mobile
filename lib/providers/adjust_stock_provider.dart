@@ -41,6 +41,21 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _useLegacyCode = false;
+  bool get useLegacyCode => _useLegacyCode;
+  bool _useAutoScan = false;
+  bool get useAutoScan => _useAutoScan;
+
+  void changeAutoScanValue() {
+    _useAutoScan = !_useAutoScan;
+    notifyListeners();
+  }
+
+  void changeLegacyCodeValue() {
+    _useLegacyCode = !_useLegacyCode;
+    notifyListeners();
+  }
+
   String _lastUpdatedQuantity = "";
   int _indexOfLastProductChangedStockQuantity =
       -1; //index do último produto alterado. Serve para só exibir a mensagem da última quantidade alterada no produto correto

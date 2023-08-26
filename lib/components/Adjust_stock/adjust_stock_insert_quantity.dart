@@ -10,9 +10,11 @@ class AdjustStockInsertQuantity extends StatefulWidget {
   final GlobalKey<FormState> insertQuantityFormKey;
   final int internalEnterpriseCode;
   final int index;
+  final Function getProductWithCamera;
 
   const AdjustStockInsertQuantity({
     required this.internalEnterpriseCode,
+    required this.getProductWithCamera,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
     required this.consultedProductController,
@@ -55,6 +57,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
 
     if (adjustStockProvider.errorMessageAdjustStock == "") {
       widget.consultedProductController.clear();
+      await widget.getProductWithCamera();
     }
   }
 

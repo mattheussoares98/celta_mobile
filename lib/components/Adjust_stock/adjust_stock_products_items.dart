@@ -13,8 +13,10 @@ class AdjustStockProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
+  final Function getProductWithCamera;
   const AdjustStockProductsItems({
     required this.internalEnterpriseCode,
+    required this.getProductWithCamera,
     required this.consultedProductController,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
@@ -158,6 +160,7 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                               internalEnterpriseCode:
                                   widget.internalEnterpriseCode,
                               index: index,
+                              getProductWithCamera: widget.getProductWithCamera,
                             ),
                         ],
                       ),

@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Adjust_stock/adjust_stock_products_i
 import 'package:celta_inventario/components/Adjust_stock/adjust_stock_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Components/Global_widgets/search_widget.dart';
@@ -28,8 +29,6 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
     super.dispose();
     _consultProductController.dispose();
   }
-
-  bool _isLegacyCodeSearch = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +66,12 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
             Column(
               children: [
                 SearchWidget(
-                  useLegacyCode: _isLegacyCodeSearch,
+                  useLegacyCode: adjustStockProvider.useLegacyCode,
+                  changeLegacyCodeValue: () =>
+                      adjustStockProvider.changeLegacyCodeValue(),
+                  useAutoScan: adjustStockProvider.useAutoScan,
+                  changeAutoScanValue: () =>
+                      adjustStockProvider.changeAutoScanValue(),
                   focusNodeConsultProduct:
                       adjustStockProvider.consultProductFocusNode,
                   isLoading: adjustStockProvider.isLoadingProducts ||
@@ -77,17 +81,10 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
-                      isLegacyCodeSearch: _isLegacyCodeSearch,
+                      isLegacyCodeSearch: adjustStockProvider.useLegacyCode,
                     );
 
-                    //não estava funcionando passar o productsCount como parâmetro
-                    //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                    //textEditingController após a consulta dos produtos se encontrar
-                    //algum produto
                     if (adjustStockProvider.productsCount > 0) {
-                      //se for maior que 0 significa que deu certo a consulta e
-                      //por isso pode apagar o que foi escrito no campo de
-                      //consulta
                       _consultProductController.clear();
                     }
                   },
@@ -110,11 +107,32 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
               ),
             if (!adjustStockProvider.isLoadingProducts)
               AdjustStockProductsItems(
-                internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
-                consultedProductController: _consultedProductController,
-                dropDownFormKey: _dropDownFormKey,
-                insertQuantityFormKey: _insertQuantityFormKey,
-              ),
+                  internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
+                  consultedProductController: _consultedProductController,
+                  dropDownFormKey: _dropDownFormKey,
+                  insertQuantityFormKey: _insertQuantityFormKey,
+                  getProductWithCamera: () async {
+                    FocusScope.of(context).unfocus();
+                    _consultProductController.clear();
+
+                    _consultProductController.text =
+                        await ScanBarCode.scanBarcode();
+
+                    if (_consultProductController.text == "") {
+                      return;
+                    }
+
+                    await adjustStockProvider.getProducts(
+                      enterpriseCode: arguments["CodigoInterno_Empresa"],
+                      controllerText: _consultProductController.text,
+                      context: context,
+                      isLegacyCodeSearch: adjustStockProvider.useLegacyCode,
+                    );
+
+                    if (adjustStockProvider.productsCount > 0) {
+                      _consultProductController.clear();
+                    }
+                  }),
           ],
         ),
       ),
