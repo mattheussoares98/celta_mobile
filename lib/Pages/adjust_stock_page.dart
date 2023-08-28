@@ -67,11 +67,10 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
               children: [
                 SearchWidget(
                   useLegacyCode: adjustStockProvider.useLegacyCode,
-                  changeLegacyCodeValue: () =>
-                      adjustStockProvider.changeLegacyCodeValue(),
+                  changeLegacyCodeValue:
+                      adjustStockProvider.changeLegacyCodeValue,
                   useAutoScan: adjustStockProvider.useAutoScan,
-                  changeAutoScanValue: () =>
-                      adjustStockProvider.changeAutoScanValue(),
+                  changeAutoScanValue: adjustStockProvider.changeAutoScanValue,
                   focusNodeConsultProduct:
                       adjustStockProvider.consultProductFocusNode,
                   isLoading: adjustStockProvider.isLoadingProducts ||

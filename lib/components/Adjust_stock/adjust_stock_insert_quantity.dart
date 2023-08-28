@@ -57,7 +57,10 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
 
     if (adjustStockProvider.errorMessageAdjustStock == "") {
       widget.consultedProductController.clear();
-      await widget.getProductWithCamera();
+
+      if (adjustStockProvider.useAutoScan) {
+        await widget.getProductWithCamera();
+      }
     }
   }
 
