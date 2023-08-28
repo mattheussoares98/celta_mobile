@@ -33,8 +33,8 @@ class _AuthFormState extends State<AuthForm>
       user: loginProvider.userController.text,
       password: loginProvider.passwordController.text,
       context: context,
-      enterpriseNameOrCCSUrlController:
-          loginProvider.enterpriseNameOrCCSUrlController,
+      enterpriseNameOrUrlCCSController:
+          loginProvider.enterpriseNameOrUrlCCSController,
     );
 
     if (loginProvider.errorMessage == '') {
@@ -72,9 +72,9 @@ class _AuthFormState extends State<AuthForm>
     if (!isLoaded) {
       await loginProvider.verifyIsLogged();
 
-      await loginProvider.restoreUserAndEnterpriseNameOrCCSUrl(
-        enterpriseNameOrCCSUrlController:
-            loginProvider.enterpriseNameOrCCSUrlController,
+      await loginProvider.restoreUserAndEnterpriseNameOrUrlCCS(
+        enterpriseNameOrUrlCCSController:
+            loginProvider.enterpriseNameOrUrlCCSController,
         userController: loginProvider.userController,
       );
       isLoaded = true;
@@ -225,7 +225,7 @@ class _AuthFormState extends State<AuthForm>
                     child: TextFormField(
                       enabled: loginProvider.isLoading ? false : true,
                       controller:
-                          loginProvider.enterpriseNameOrCCSUrlController,
+                          loginProvider.enterpriseNameOrUrlCCSController,
                       onFieldSubmitted: (_) =>
                           _submit(loginProvider: loginProvider),
                       focusNode: _urlFocusNode,
@@ -238,18 +238,18 @@ class _AuthFormState extends State<AuthForm>
                       ),
                       validator: (_url) {
                         _url =
-                            loginProvider.enterpriseNameOrCCSUrlController.text;
-                        if (loginProvider.enterpriseNameOrCCSUrlController.text
+                            loginProvider.enterpriseNameOrUrlCCSController.text;
+                        if (loginProvider.enterpriseNameOrUrlCCSController.text
                             .toLowerCase()
                             .trim()
                             .isEmpty) {
                           return 'Digite o nome da empresa ou URL do CCS';
                         }
-                        // else if (!loginProvider.enterpriseNameOrCCSUrlController.text
+                        // else if (!loginProvider.enterpriseNameOrUrlCCSController.text
                         //         .contains('http') ||
-                        //     !loginProvider.enterpriseNameOrCCSUrlController.text.contains('//') ||
-                        //     !loginProvider.enterpriseNameOrCCSUrlController.text.contains(':') ||
-                        //     !loginProvider.enterpriseNameOrCCSUrlController.text.contains('ccs')) {
+                        //     !loginProvider.enterpriseNameOrUrlCCSController.text.contains('//') ||
+                        //     !loginProvider.enterpriseNameOrUrlCCSController.text.contains(':') ||
+                        //     !loginProvider.enterpriseNameOrUrlCCSController.text.contains('ccs')) {
                         //   return 'URL inválida';
                         // }
                         return null;

@@ -11,7 +11,7 @@ import '../utils/default_error_message_to_find_server.dart';
 import '../Components/Global_widgets/show_error_message.dart';
 
 class LoginProvider with ChangeNotifier {
-  TextEditingController enterpriseNameOrCCSUrlController =
+  TextEditingController enterpriseNameOrUrlCCSController =
       TextEditingController();
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -60,7 +60,7 @@ class LoginProvider with ChangeNotifier {
       await prefs.setString('userIdentity', "");
       await prefs.remove("url"); //não utiliza mais
       _loginController!.add(false);
-      enterpriseNameOrCCSUrlController.clear();
+      enterpriseNameOrUrlCCSController.clear();
     }
   }
 
@@ -77,14 +77,14 @@ class LoginProvider with ChangeNotifier {
 
   // Future<void> restoreBaseUrl() async {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   if (await prefs.getString('ccsUrl') != null &&
-  //       await prefs.getString('ccsUrl') != "") {
-  //     BaseUrl.ccsUrl = await prefs.getString('ccsUrl')!;
+  //   if (await prefs.getString('urlCCS') != null &&
+  //       await prefs.getString('urlCCS') != "") {
+  //     BaseUrl.urlCCS = await prefs.getString('urlCCS')!;
   //   }
   // }
 
-  restoreUserAndEnterpriseNameOrCCSUrl({
-    required TextEditingController enterpriseNameOrCCSUrlController,
+  restoreUserAndEnterpriseNameOrUrlCCS({
+    required TextEditingController enterpriseNameOrUrlCCSController,
     required TextEditingController userController,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -95,19 +95,19 @@ class LoginProvider with ChangeNotifier {
 
     if (await prefs.getString('enterpriseName') != null &&
         await prefs.getString('enterpriseName') != "") {
-      enterpriseNameOrCCSUrlController.text =
+      enterpriseNameOrUrlCCSController.text =
           await prefs.getString('enterpriseName')!;
-    } else if (await prefs.getString('ccsUrl') != null &&
-        await prefs.getString('ccsUrl') != "") {
-      BaseUrl.ccsUrl = await prefs.getString('ccsUrl')!;
-      enterpriseNameOrCCSUrlController.text = await prefs.getString('ccsUrl')!;
+    } else if (await prefs.getString('urlCCS') != null &&
+        await prefs.getString('urlCCS') != "") {
+      BaseUrl.urlCCS = await prefs.getString('urlCCS')!;
+      enterpriseNameOrUrlCCSController.text = await prefs.getString('urlCCS')!;
     }
   }
 
   login({
     required String user,
     required String password,
-    required TextEditingController enterpriseNameOrCCSUrlController,
+    required TextEditingController enterpriseNameOrUrlCCSController,
     required BuildContext context,
   }) async {
     _errorMessage = '';
@@ -116,12 +116,12 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
 
     _errorMessage = await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
-      enterpriseNameOrCCSUrlController.text,
+      enterpriseNameOrUrlCCSController.text,
     );
 
     if (_errorMessage != "" &&
         !_isUrl(
-          enterpriseNameOrCCSUrlController.text,
+          enterpriseNameOrUrlCCSController.text,
         )) {
       ShowErrorMessage.showErrorMessage(
         error:

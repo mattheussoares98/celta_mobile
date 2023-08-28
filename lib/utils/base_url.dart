@@ -1,3 +1,3 @@
 class BaseUrl {
-  static String ccsUrl = "";
+  static String urlCCS = "";
 }

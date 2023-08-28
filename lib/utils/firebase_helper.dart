@@ -48,7 +48,7 @@ class FirebaseHelper {
 
   static Future<void> _updateCcsAndEnterpriseNameByDocumentId({
     required String documentId,
-    required String enterpriseNameOrCCSUrlControllerText,
+    required String enterpriseNameOrurlCCSControllerText,
   }) async {
     DocumentReference documentRef = _clientsCollection.doc(documentId);
     DocumentSnapshot documentSnapshot = await documentRef.get();
@@ -59,14 +59,14 @@ class FirebaseHelper {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (data.containsKey('urlCCS')) {
-        enterpriseNameOrCCSUrlControllerText = data['urlCCS'];
-        BaseUrl.ccsUrl = data['urlCCS'];
+        enterpriseNameOrurlCCSControllerText = data['urlCCS'];
+        BaseUrl.urlCCS = data['urlCCS'];
         await prefs.setString('urlCCS', data['urlCCS']);
       }
 
       if (data.containsKey('enterpriseName') &&
           data['enterpriseName'] != "undefined") {
-        enterpriseNameOrCCSUrlControllerText = data['enterpriseName'];
+        enterpriseNameOrurlCCSControllerText = data['enterpriseName'];
         await prefs.setString('enterpriseName', data['enterpriseName']);
       } else {
         //como não tem o nome da empresa no firebase, precisa zerar no banco local
@@ -78,21 +78,21 @@ class FirebaseHelper {
   }
 
   static Future<String> getUrlFromFirebaseAndReturnErrorIfHas(
-    String enterpriseNameOrCCSUrlControllerText,
+    String enterpriseNameOrurlCCSControllerText,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String errorMessage = "";
-    if (_isUrl(enterpriseNameOrCCSUrlControllerText)) {
+    if (_isUrl(enterpriseNameOrurlCCSControllerText)) {
       await prefs.setString('enterpriseName', "");
       //como está informando uma URL, precisa excluir o nome da empresa do banco
       //de dados pra não carregar o nome da empresa errado depois
-      BaseUrl.ccsUrl = enterpriseNameOrCCSUrlControllerText;
+      BaseUrl.urlCCS = enterpriseNameOrurlCCSControllerText;
 
       QuerySnapshot? querySnapshot;
       querySnapshot = await _clientsCollection
           .where(
             'urlCCS',
-            isEqualTo: enterpriseNameOrCCSUrlControllerText
+            isEqualTo: enterpriseNameOrurlCCSControllerText
                 .toLowerCase()
                 .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
           )
@@ -105,8 +105,8 @@ class FirebaseHelper {
         String documentId = documentSnapshot.id;
         await _updateCcsAndEnterpriseNameByDocumentId(
           documentId: documentId,
-          enterpriseNameOrCCSUrlControllerText:
-              enterpriseNameOrCCSUrlControllerText,
+          enterpriseNameOrurlCCSControllerText:
+              enterpriseNameOrurlCCSControllerText,
         );
       }
     } else {
@@ -114,7 +114,7 @@ class FirebaseHelper {
       querySnapshot = await _clientsCollection
           .where(
             'enterpriseName',
-            isEqualTo: enterpriseNameOrCCSUrlControllerText
+            isEqualTo: enterpriseNameOrurlCCSControllerText
                 .toLowerCase()
                 .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
           )
@@ -127,8 +127,8 @@ class FirebaseHelper {
         String documentId = documentSnapshot.id;
         await _updateCcsAndEnterpriseNameByDocumentId(
           documentId: documentId,
-          enterpriseNameOrCCSUrlControllerText:
-              enterpriseNameOrCCSUrlControllerText,
+          enterpriseNameOrurlCCSControllerText:
+              enterpriseNameOrurlCCSControllerText,
         );
       } else {
         errorMessage =
@@ -148,7 +148,7 @@ class FirebaseHelper {
     // querySnapshot = await _clientsCollection
     //     .where(
     //       'urlCCS',
-    //       isEqualTo: BaseUrl.ccsUrl.trimRight().trimLeft().toLowerCase(),
+    //       isEqualTo: BaseUrl.urlCCS.trimRight().trimLeft().toLowerCase(),
     //     )
     //     .get();
 
@@ -208,14 +208,14 @@ class FirebaseHelper {
     // QuerySnapshot querySnapshot;
 
     FirebaseClientModel firebaseClientModel = FirebaseClientModel(
-      urlCCS: BaseUrl.ccsUrl,
+      urlCCS: BaseUrl.urlCCS,
     );
 
     QuerySnapshot? querySnapshot;
     querySnapshot = await _clientsCollection
         .where(
           'urlCCS',
-          isEqualTo: BaseUrl.ccsUrl
+          isEqualTo: BaseUrl.urlCCS
               .toLowerCase()
               .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
         )

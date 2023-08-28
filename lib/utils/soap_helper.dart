@@ -50,7 +50,7 @@ class SoapHelper {
       </soap12:Envelope>''';
 
     final response = await http.post(
-      Uri.parse('${BaseUrl.ccsUrl}/$serviceASMX'),
+      Uri.parse('${BaseUrl.urlCCS}/$serviceASMX'),
       headers: soapHeaders,
       body: envelope,
     );
