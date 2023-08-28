@@ -16,17 +16,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String userName = "";
-  bool isLoaded = false;
   @override
   void didChangeDependencies() async {
     LoginProvider loginProvider = Provider.of(context, listen: true);
     super.didChangeDependencies();
 
-    if (!isLoaded) {
-      userName = await loginProvider.getUserName();
-      setState(() {});
-      isLoaded = true;
-    }
+    userName = await loginProvider.getUserName();
+    setState(() {});
   }
 
   @override
