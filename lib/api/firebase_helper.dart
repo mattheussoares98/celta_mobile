@@ -3,7 +3,8 @@ import 'package:celta_inventario/utils/base_url.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:celta_inventario/api/shared_preferences_instance.dart'
+    as prefsInstance;
 
 enum FirebaseCallEnum {
   adjustStockConfirmQuantity,
@@ -57,20 +58,20 @@ class FirebaseHelper {
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       if (data.containsKey('urlCCS')) {
         enterpriseNameOrurlCCSControllerText = data['urlCCS'];
         BaseUrl.urlCCS = data['urlCCS'];
-        await prefs.setString('urlCCS', data['urlCCS']);
+
+        await prefsInstance.setUrlCcs(data['urlCCS']);
       }
 
       if (data.containsKey('enterpriseName') &&
           data['enterpriseName'] != "undefined") {
         enterpriseNameOrurlCCSControllerText = data['enterpriseName'];
-        await prefs.setString('enterpriseName', data['enterpriseName']);
+        await prefsInstance.setEnterpriseName(data['enterpriseName']);
       } else {
         //como não tem o nome da empresa no firebase, precisa zerar no banco local
-        await prefs.setString('enterpriseName', "");
+        await prefsInstance.setEnterpriseName("");
       }
     } else {
       print('Documento não encontrado.');
@@ -80,21 +81,24 @@ class FirebaseHelper {
   static Future<String> getUrlFromFirebaseAndReturnErrorIfHas(
     String enterpriseNameOrurlCCSControllerText,
   ) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     String errorMessage = "";
+    enterpriseNameOrurlCCSControllerText = enterpriseNameOrurlCCSControllerText
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), ''); //remove espaços em branco
+
     if (_isUrl(enterpriseNameOrurlCCSControllerText)) {
-      await prefs.setString('enterpriseName', "");
+      await prefsInstance.setEnterpriseName("");
+
       //como está informando uma URL, precisa excluir o nome da empresa do banco
       //de dados pra não carregar o nome da empresa errado depois
       BaseUrl.urlCCS = enterpriseNameOrurlCCSControllerText;
+      await prefsInstance.setUrlCcs(enterpriseNameOrurlCCSControllerText);
 
       QuerySnapshot? querySnapshot;
       querySnapshot = await _clientsCollection
           .where(
             'urlCCS',
-            isEqualTo: enterpriseNameOrurlCCSControllerText
-                .toLowerCase()
-                .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
+            isEqualTo: enterpriseNameOrurlCCSControllerText,
           )
           .get();
 
@@ -114,9 +118,7 @@ class FirebaseHelper {
       querySnapshot = await _clientsCollection
           .where(
             'enterpriseName',
-            isEqualTo: enterpriseNameOrurlCCSControllerText
-                .toLowerCase()
-                .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
+            isEqualTo: enterpriseNameOrurlCCSControllerText,
           )
           .get();
 

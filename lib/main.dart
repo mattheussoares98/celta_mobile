@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
 import 'package:celta_inventario/Pages/adjust_stock_page.dart';
+import 'package:celta_inventario/Pages/customer_register/customer_register_page.dart';
 import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
 import 'package:celta_inventario/Pages/receipt_conference_page.dart';
@@ -171,6 +172,7 @@ class MyApp extends StatelessWidget {
               const TransferBetweenStockPage(),
           APPROUTES.TRANSFER_BETWEEN_PACKAGE: (ctx) =>
               const TransferBetweenPackagePage(),
+          APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
         },
       ),
     );

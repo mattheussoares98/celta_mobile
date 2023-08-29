@@ -5,8 +5,8 @@ import 'package:celta_inventario/Models/transfer_request/transfer_request_produc
 import 'package:celta_inventario/Models/transfer_request/transfer_destiny_enterprise_model.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterprise_model.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
-import 'package:celta_inventario/utils/firebase_helper.dart';
-import 'package:celta_inventario/utils/soap_helper.dart';
+import 'package:celta_inventario/api/firebase_helper.dart';
+import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

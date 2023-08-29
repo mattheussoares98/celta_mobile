@@ -69,6 +69,7 @@ class _AuthFormState extends State<AuthForm>
   void didChangeDependencies() async {
     super.didChangeDependencies();
     LoginProvider loginProvider = Provider.of(context, listen: true);
+
     if (!isLoaded) {
       await loginProvider.verifyIsLogged();
 
@@ -77,6 +78,7 @@ class _AuthFormState extends State<AuthForm>
             loginProvider.enterpriseNameOrUrlCCSController,
         userController: loginProvider.userController,
       );
+
       isLoaded = true;
     }
   }

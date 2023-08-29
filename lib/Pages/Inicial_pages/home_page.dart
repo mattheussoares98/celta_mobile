@@ -119,6 +119,13 @@ class _HomePageState extends State<HomePage> {
             nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
             context: context,
           ),
+          // ImageComponent.image(
+          //   imagePath: 'lib/assets/Images/transfer.jpg',
+          //   routine: 'Cadastro de clientes',
+          //   route: APPROUTES.CUSTOMER_REGISTER,
+          //   nextRoute: "não vai para outra página",
+          //   context: context,
+          // ),
         ],
       ),
     );

@@ -4,13 +4,14 @@ import 'package:celta_inventario/Models/sale_request_models/sale_request_custome
 import 'package:celta_inventario/Models/sale_request_models/sale_request_process_cart_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
-import 'package:celta_inventario/utils/firebase_helper.dart';
-import 'package:celta_inventario/utils/soap_helper.dart';
+import 'package:celta_inventario/api/firebase_helper.dart';
+import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/sale_request_models/sale_requests_model.dart';
 import '../utils/default_error_message_to_find_server.dart';
+import 'package:celta_inventario/api/shared_preferences_instance.dart'
+    as prefsInstance;
 
 class SaleRequestProvider with ChangeNotifier {
   bool _isLoadingRequests = false;
@@ -141,16 +142,12 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _updateCustomerInDatabase() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("customers");
-    await prefs.setString("customers", json.encode(_customers));
+    await prefsInstance.setCustomerSaleRequest(json.encode(_customers));
   }
 
   restorecustomers(String enterpriseCode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('customers') != "" &&
-        prefs.getString('customers') != null) {
-      var _key = await prefs.getString("customers")!;
+    if (await prefsInstance.hasCustomerSaleRequest()) {
+      var _key = await prefsInstance.getCustomerSaleRequest();
       Map customersInDatabase = jsonDecode(_key);
 
       List<SaleRequestCustomerModel> customersTemp = [];
@@ -237,16 +234,13 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _updateCartInDatabase() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("cart");
-    await prefs.setString("cart", json.encode(_cartProducts));
+    await prefsInstance.setCartSaleRequest(json.encode(_cartProducts));
     _updatedCart = true;
   }
 
   restoreProducts(String enterpriseCode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('cart') != "" && prefs.getString('cart') != null) {
-      var _key = prefs.getString("cart")!;
+    if (await prefsInstance.hasCartSaleRequest()) {
+      var _key = await prefsInstance.getCartSaleRequest();
       Map cartProductsInDatabase = jsonDecode(_key);
 
       List<SaleRequestCartProductsModel> cartProductsTemp = [];

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:celta_inventario/api/shared_preferences_instance.dart'
+    as prefsInstance;
 import 'package:celta_inventario/utils/base_url.dart';
-import 'package:celta_inventario/utils/firebase_helper.dart';
-import 'package:celta_inventario/utils/soap_helper.dart';
+import 'package:celta_inventario/api/firebase_helper.dart';
+import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,28 +51,11 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
-  Future<void> logoutIfIsNecessary() async {
-    //como está mudando as URLs para utilizar via CCS, TODOS usuários precisam
-    //fazer o login novamente. Então, se já estiver logado após atualizar o
-    //aplicativo, precisa deslogar pra obrigar que ele logue novamente
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (await prefs.getString('needLogout') == "" ||
-        await prefs.getString('needLogout') == null) {
-      await prefs.setString('needLogout', "false");
-      await prefs.setString('userIdentity', "");
-      await prefs.remove("url"); //não utiliza mais
-      _loginController!.add(false);
-      enterpriseNameOrUrlCCSController.clear();
-    }
-  }
-
   Future<void> verifyIsLogged() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (await prefs.getString('userIdentity') != "" &&
-        await prefs.getString('userIdentity') != null &&
-        (await prefs.getString('needLogout') == "" ||
-            await prefs.getString('needLogout') == null)) {
-      UserIdentity.identity = await prefs.getString('userIdentity')!;
+    bool isLogged = await prefsInstance.isLogged();
+
+    if (isLogged) {
+      UserIdentity.identity = await prefsInstance.getUserIdentity();
       _loginController!.add(true);
     }
   }
@@ -87,20 +72,17 @@ class LoginProvider with ChangeNotifier {
     required TextEditingController enterpriseNameOrUrlCCSController,
     required TextEditingController userController,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userController.text = await prefsInstance.getUserName();
 
-    if (await prefs.getString('user') != null) {
-      userController.text = await prefs.getString('user')!;
+    if (await prefsInstance.hasUrlCcs()) {
+      BaseUrl.urlCCS = await prefsInstance.getUrlCcs();
     }
 
-    if (await prefs.getString('enterpriseName') != null &&
-        await prefs.getString('enterpriseName') != "") {
+    if (await prefsInstance.hasEnterpriseName()) {
       enterpriseNameOrUrlCCSController.text =
-          await prefs.getString('enterpriseName')!;
-    } else if (await prefs.getString('urlCCS') != null &&
-        await prefs.getString('urlCCS') != "") {
-      BaseUrl.urlCCS = await prefs.getString('urlCCS')!;
-      enterpriseNameOrUrlCCSController.text = await prefs.getString('urlCCS')!;
+          await prefsInstance.getEnterpriseName();
+    } else if (await prefsInstance.hasUrlCcs()) {
+      enterpriseNameOrUrlCCSController.text = await prefsInstance.getUrlCcs();
     }
   }
 
@@ -164,9 +146,8 @@ class LoginProvider with ChangeNotifier {
 
         _loginController?.add(true);
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('userIdentity', UserIdentity.identity);
-        await prefs.setString('user', user);
+        await prefsInstance.setUserIdentity(UserIdentity.identity);
+        await prefsInstance.setUserName(user);
 
         await FirebaseHelper.addCcsClientInFirebase();
       }
@@ -191,8 +172,8 @@ class LoginProvider with ChangeNotifier {
   }
 
   logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userIdentity', "");
+    await prefsInstance.setUserIdentity("");
+
     _loginController?.add(false);
   }
 }
