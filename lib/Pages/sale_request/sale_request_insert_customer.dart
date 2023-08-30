@@ -41,6 +41,12 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
               controllerText: searchCustomerController.text,
               enterpriseCode: widget.enterpriseCode.toString(),
             );
+
+            if (saleRequestProvider
+                    .customersCount(widget.enterpriseCode.toString()) >
+                0) {
+              searchCustomerController.clear();
+            }
           },
           focusNodeConsultProduct: searchCustomerFocusNode,
           hintText: "Código, nome, CPF ou CNPJ",

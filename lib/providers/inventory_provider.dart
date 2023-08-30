@@ -19,8 +19,22 @@ class InventoryProvider with ChangeNotifier {
   String get errorMessage => _errorMessageInventorys;
 
   List<InventoryCountingsModel> _countings = [];
-  List<InventoryCountingsModel> get countings => [..._countings];
-  int get countingsQuantity => countings.length;
+
+  List<InventoryCountingsModel> getCountings(int CodigoInterno_Inventario) {
+    return _countings
+        .where((counting) =>
+            counting.codigoInternoInventario == CodigoInterno_Inventario)
+        .toList();
+  }
+
+  int getCountingsQuantity(int CodigoInterno_Inventario) {
+    return _countings
+        .where((counting) =>
+            counting.codigoInternoInventario == CodigoInterno_Inventario)
+        .toList()
+        .length;
+  }
+
   static bool _isLoadingCountings = false;
   bool get isLoadingCountings => _isLoadingCountings;
   String _errorMessageCountings = "";
@@ -58,12 +72,20 @@ class InventoryProvider with ChangeNotifier {
   int _indexOfLastAddedQuantity = -1;
   int get indexOfLastAddedQuantity => _indexOfLastAddedQuantity;
 
-  bool _useAutoScan = false;
   bool _useLegacyCode = false;
-  bool get useAutoScan => _useAutoScan;
   bool get useLegacyCode => _useLegacyCode;
-  set useAutoScan(bool newValue) => _useAutoScan = newValue;
-  set useLegacyCode(bool newValue) => _useLegacyCode = newValue;
+  bool _useAutoScan = false;
+  bool get useAutoScan => _useAutoScan;
+
+  void changeAutoScanValue() {
+    _useAutoScan = !_useAutoScan;
+    notifyListeners();
+  }
+
+  void changeLegacyCodeValue() {
+    _useLegacyCode = !_useLegacyCode;
+    notifyListeners();
+  }
 
   Future<void> getInventory({
     required int enterpriseCode,
@@ -176,7 +198,7 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getProductsAndAddIfIsIndividual({
+  Future<void> getProducts({
     required int enterpriseCode,
     required int inventoryProcessCode,
     required BuildContext context,
@@ -209,21 +231,6 @@ class InventoryProvider with ChangeNotifier {
         FocusScope.of(context).requestFocus(consultProductFocusNode);
         //altera o foco para o campo de pesquisa novamente
       });
-    }
-
-    if (_errorMessageGetProducts == '' && isIndividual && productsCount == 1) {
-      //se estiver habilitado pra inserir individualmente e retornar somente um
-      //produto, assim que efetuar a consulta do produto já vai tentar adicionar
-      //uma unidade.
-
-      await addQuantity(
-        indexOfProduct: indexOfProduct,
-        isIndividual: isIndividual,
-        context: context,
-        isSubtract: false,
-        inventoryProcessCode: inventoryProcessCode,
-        consultedProductController: consultedProductController,
-      );
     }
   }
 
@@ -302,6 +309,17 @@ class InventoryProvider with ChangeNotifier {
         }
 
         _indexOfLastAddedQuantity = indexOfProduct;
+
+        _updateLastQuantity(
+          quantity: newQuantity,
+          indexOfProduct: indexOfProduct,
+        );
+
+        if (!_useAutoScan) {
+          alterFocusToConsultedProduct(
+            context: context,
+          );
+        }
       }
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
@@ -370,45 +388,29 @@ class InventoryProvider with ChangeNotifier {
   }
 
   _updateLastQuantity({
-    required bool isSubtract,
     required double quantity,
-    required bool isIndividual,
     required int indexOfProduct,
   }) {
-    if (!isIndividual &&
-        _products[indexOfProduct].quantidadeInvContProEmb == -1) {
-      //quando fica nulo, deixei pra ficar com o valor de -1 para corrigir um bug
-      _products[indexOfProduct].quantidadeInvContProEmb =
-          double.tryParse(quantity.toString().replaceAll(RegExp(r','), '.'))!;
-    } else if (isIndividual &&
-        _products[indexOfProduct].quantidadeInvContProEmb == -1) {
-      //quando fica nulo, deixei pra ficar com o valor de -1 para corrigir um bug
-      _products[indexOfProduct].quantidadeInvContProEmb = 1;
-    } else if (isIndividual && isSubtract) {
-      _products[indexOfProduct].quantidadeInvContProEmb--;
-    } else if (isIndividual && !isSubtract) {
-      _products[indexOfProduct].quantidadeInvContProEmb++;
-    } else if (!isIndividual &&
-        isSubtract &&
-        (_products[indexOfProduct].quantidadeInvContProEmb - quantity) >= 0) {
-      _products[indexOfProduct].quantidadeInvContProEmb -= quantity;
-    } else {
-      //se não for individual nem subtração, vai cair aqui
-      //precisei sobrescrever a vírgula por ponto senão ocorria erro para somar/subtrair fracionado
-      _products[indexOfProduct].quantidadeInvContProEmb +=
-          double.tryParse(quantity.toString().replaceAll(RegExp(r','), '.'))!;
+    if (_products[indexOfProduct].quantidadeInvContProEmb == -1) {
+      _products[indexOfProduct].quantidadeInvContProEmb = 0;
     }
+    _products[indexOfProduct].quantidadeInvContProEmb += quantity;
+
+    notifyListeners();
   }
 
   addQuantity({
     required bool isIndividual,
     required BuildContext context,
-    required int inventoryProcessCode,
+    required int countingCode,
     required bool isSubtract,
     required TextEditingController consultedProductController,
     required int indexOfProduct,
   }) async {
-    double quantity = 0;
+    _isLoadingQuantity = true;
+    notifyListeners();
+
+    double quantity = 1;
     if (consultedProductController.text.isNotEmpty && !isIndividual) {
       quantity = double.tryParse(
           consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
@@ -417,7 +419,7 @@ class InventoryProvider with ChangeNotifier {
     try {
       await _entryQuantity(
         indexOfProduct: indexOfProduct,
-        countingCode: inventoryProcessCode,
+        countingCode: countingCode,
         productPackingCode: _products[indexOfProduct].codigoInternoProEmb,
         quantity: isIndividual ? '1' : quantity.toString(),
         isSubtract: isSubtract,
@@ -432,20 +434,7 @@ class InventoryProvider with ChangeNotifier {
         return;
       }
 
-      _updateLastQuantity(
-        isSubtract: isSubtract,
-        quantity: quantity,
-        isIndividual: isIndividual,
-        indexOfProduct: indexOfProduct,
-      );
-
-      if (!isIndividual) {
-        alterFocusToConsultedProduct(
-          context: context,
-        );
-      }
-
-      consultedProductController.clear();
+      consultedProductController.text = "";
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -453,6 +442,9 @@ class InventoryProvider with ChangeNotifier {
         error: _errorMessageQuantity,
         context: context,
       );
+    } finally {
+      _isLoadingQuantity = false;
+      notifyListeners();
     }
   }
 }

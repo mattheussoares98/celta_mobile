@@ -43,7 +43,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     if (_consultProductController.text.isEmpty) return;
 
     //se ler algum código, vai consultar o produto
-    await inventoryProvider.getProductsAndAddIfIsIndividual(
+    await inventoryProvider.getProducts(
       consultProductController: _consultProductController,
       isLegacyCodeSearch: inventoryProvider.useLegacyCode,
       enterpriseCode: arguments["codigoInternoEmpresa"],
@@ -58,14 +58,47 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
           arguments["InventoryCountingsModel"].codigoInternoInvCont,
     );
 
-    if (inventoryProvider.products.isNotEmpty && _isIndividual) {
+    if (inventoryProvider.products.isNotEmpty &&
+        _isIndividual &&
+        !inventoryProvider.useAutoScan) {
       inventoryProvider.alterFocusToConsultProduct(
         context: context,
       );
     }
 
-    if (_consultProductController.text.isEmpty) {
+    if (inventoryProvider.productsCount > 0) {
       _consultProductController.clear();
+    }
+
+    if (inventoryProvider.errorMessageGetProducts == "" &&
+        _isIndividual &&
+        inventoryProvider.productsCount == 1) {
+      await addQuantity(
+        inventoryProvider: inventoryProvider,
+        arguments: arguments,
+        indexOfProduct: 0,
+      );
+    }
+  }
+
+  addQuantity({
+    required InventoryProvider inventoryProvider,
+    required dynamic arguments,
+    required int indexOfProduct,
+  }) async {
+    await inventoryProvider.addQuantity(
+      indexOfProduct: indexOfProduct,
+      isIndividual: _isIndividual,
+      context: context,
+      isSubtract: false,
+      countingCode: arguments["InventoryCountingsModel"].codigoInternoInvCont,
+      consultedProductController: _consultedProductController,
+    );
+
+    if (inventoryProvider.errorMessageGetProducts == '' &&
+        inventoryProvider.useAutoScan) {
+      await _searchProduct(
+          inventoryProvider: inventoryProvider, arguments: arguments);
     }
   }
 
@@ -103,18 +136,9 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                 SearchWidget(
                   useAutoScan: inventoryProvider.useAutoScan,
                   useLegacyCode: inventoryProvider.useLegacyCode,
-                  changeAutoScanValue: () {
-                    setState(() {
-                      inventoryProvider.useAutoScan =
-                          !inventoryProvider.useAutoScan;
-                    });
-                  },
-                  changeLegacyCodeValue: () {
-                    setState(() {
-                      inventoryProvider.useLegacyCode =
-                          !inventoryProvider.useLegacyCode;
-                    });
-                  },
+                  changeAutoScanValue: inventoryProvider.changeAutoScanValue,
+                  changeLegacyCodeValue:
+                      inventoryProvider.changeLegacyCodeValue,
                   consultProductController: _consultProductController,
                   isLoading: inventoryProvider.isLoadingProducts ||
                       inventoryProvider.isLoadingQuantity,
@@ -172,7 +196,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                   );
                 },
                 isIndividual: _isIndividual,
-                inventoryProcessCode:
+                inventoryCountingCode:
                     arguments["InventoryCountingsModel"].codigoInternoInvCont,
                 productPackingCode:
                     arguments["InventoryCountingsModel"].numeroContagemInvCont,

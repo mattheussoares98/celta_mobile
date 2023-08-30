@@ -5,13 +5,12 @@ import 'package:celta_inventario/Models/sale_request_models/sale_request_process
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
+import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_identity.dart';
 import 'package:flutter/material.dart';
 import '../Models/sale_request_models/sale_requests_model.dart';
 import '../utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/shared_preferences_instance.dart'
-    as prefsInstance;
 
 class SaleRequestProvider with ChangeNotifier {
   bool _isLoadingRequests = false;
@@ -142,12 +141,12 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _updateCustomerInDatabase() async {
-    await prefsInstance.setCustomerSaleRequest(json.encode(_customers));
+    await PrefsInstance.setCustomerSaleRequest(json.encode(_customers));
   }
 
   restorecustomers(String enterpriseCode) async {
-    if (await prefsInstance.hasCustomerSaleRequest()) {
-      var _key = await prefsInstance.getCustomerSaleRequest();
+    if (await PrefsInstance.hasCustomerSaleRequest()) {
+      var _key = await PrefsInstance.getCustomerSaleRequest();
       Map customersInDatabase = jsonDecode(_key);
 
       List<SaleRequestCustomerModel> customersTemp = [];
@@ -164,23 +163,14 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  _clearcustomers(
-    String enterpriseCode, {
-    bool updateInDatabase = true,
-  }) async {
+  _clearcustomers(String enterpriseCode) async {
     if (_customers[enterpriseCode] != null) {
       if (_customers[enterpriseCode]!.isNotEmpty) {
-        var customerConsumer = _customers[enterpriseCode]![0];
-        customerConsumer.selected =
-            false; //Se salvar um pedido com o cliente consumidor informado, precisa "desselecionar" ele para não manter ele selecionado em um pedido novo
-        //o cliente consumidor precisa sempre ficar disponível de forma fixa em primeiro na lista. Por isso salvei ele como "temp" antes de apagar todos clientes pra depois adicionar ele novamente no índice 0
-        _customers[enterpriseCode]!.clear(); //remove todos clientes
-        _customers[enterpriseCode]?.add(customerConsumer);
-        //adiciona o consumidor novamente
+        _customers[enterpriseCode]!.clear();
       }
     }
 
-    if (updateInDatabase) await _updateCustomerInDatabase();
+    await _updateCustomerInDatabase();
     notifyListeners();
   }
 
@@ -234,13 +224,13 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _updateCartInDatabase() async {
-    await prefsInstance.setCartSaleRequest(json.encode(_cartProducts));
+    await PrefsInstance.setCartSaleRequest(json.encode(_cartProducts));
     _updatedCart = true;
   }
 
   restoreProducts(String enterpriseCode) async {
-    if (await prefsInstance.hasCartSaleRequest()) {
-      var _key = await prefsInstance.getCartSaleRequest();
+    if (await PrefsInstance.hasCartSaleRequest()) {
+      var _key = await PrefsInstance.getCartSaleRequest();
       Map cartProductsInDatabase = jsonDecode(_key);
 
       List<SaleRequestCartProductsModel> cartProductsTemp = [];
@@ -402,7 +392,9 @@ class SaleRequestProvider with ChangeNotifier {
       _cartProducts[enterpriseCode]!.clear();
     }
 
-    await _updateCartInDatabase();
+    await PrefsInstance.clearCartSaleRequest();
+    _updatedCart = true;
+
     notifyListeners();
   }
 
@@ -646,17 +638,24 @@ class SaleRequestProvider with ChangeNotifier {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
+
+    await _clearcustomers(enterpriseCode);
+
+    await _getCustomers(
+      searchTypeInt: 2, //exactCode
+      controllerText: "-1", //consumidor
+      enterpriseCode: enterpriseCode,
+    );
+
     int? codeValue = int.tryParse(controllerText);
     if (codeValue == null) {
       await _getCustomers(
-        context: context,
         searchTypeInt: 3, //ApproximateName
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else {
       await _getCustomers(
-        context: context,
         searchTypeInt: 2, //exactCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
@@ -665,7 +664,6 @@ class SaleRequestProvider with ChangeNotifier {
       if (customersCount(enterpriseCode) > 1) return;
 
       await _getCustomers(
-        context: context,
         searchTypeInt: 1, //exactCnpjCpfNumber
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
@@ -674,7 +672,6 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   Future<void> _getCustomers({
-    required BuildContext context,
     required int searchTypeInt,
     required String controllerText,
     required String enterpriseCode,
@@ -682,8 +679,6 @@ class SaleRequestProvider with ChangeNotifier {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
-
-    _clearcustomers(enterpriseCode, updateInDatabase: false);
 
     _errorMessageCustomer = "";
     _isLoadingCustomer = true;
@@ -800,6 +795,11 @@ class SaleRequestProvider with ChangeNotifier {
         await clearCart(enterpriseCode);
 
         await _clearcustomers(enterpriseCode);
+        await _getCustomers(
+          searchTypeInt: 2, //exactCode
+          controllerText: "-1", //consumidor
+          enterpriseCode: enterpriseCode,
+        );
 
         ShowErrorMessage.showErrorMessage(
           error: "O pedido foi salvo com sucesso!",

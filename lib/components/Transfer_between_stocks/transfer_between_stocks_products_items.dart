@@ -48,6 +48,10 @@ class _TransferBetweenStocksProductsItemsState
               itemBuilder: (context, index) {
                 TransferBetweenStocksProductModel product =
                     transferBetweenStocksProvider.products[index];
+
+                if (transferBetweenStocksProvider.productsCount == 1) {
+                  selectedIndex = index;
+                }
                 return GestureDetector(
                   onTap: transferBetweenStocksProvider
                               .isLoadingTypeStockAndJustifications ||

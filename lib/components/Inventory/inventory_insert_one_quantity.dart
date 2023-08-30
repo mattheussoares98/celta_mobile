@@ -4,14 +4,18 @@ import 'package:provider/provider.dart';
 
 class InsertOneQuantity extends StatefulWidget {
   final bool isIndividual;
-  final int inventoryProcessCode;
+  final int inventoryCountingCode;
   final int indexOfProduct;
   final TextEditingController consultedProductController;
+  final Function addQuantity;
+  final Function subtractQuantity;
   const InsertOneQuantity({
     Key? key,
+    required this.subtractQuantity,
+    required this.addQuantity,
     required this.isIndividual,
     required this.indexOfProduct,
-    required this.inventoryProcessCode,
+    required this.inventoryCountingCode,
     required this.consultedProductController,
   }) : super(key: key);
 
@@ -49,16 +53,8 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
               ),
               onPressed: inventoryProvider.isLoadingQuantity
                   ? null
-                  : () {
-                      inventoryProvider.addQuantity(
-                        indexOfProduct: widget.indexOfProduct,
-                        isIndividual: widget.isIndividual,
-                        context: context,
-                        inventoryProcessCode: widget.inventoryProcessCode,
-                        consultedProductController:
-                            widget.consultedProductController,
-                        isSubtract: true,
-                      );
+                  : () async {
+                      await widget.subtractQuantity();
                     },
             ),
           ),
@@ -84,15 +80,7 @@ class _InsertOneQuantityState extends State<InsertOneQuantity> {
               onPressed: inventoryProvider.isLoadingQuantity
                   ? null
                   : () async {
-                      await inventoryProvider.addQuantity(
-                        indexOfProduct: widget.indexOfProduct,
-                        isIndividual: widget.isIndividual,
-                        context: context,
-                        inventoryProcessCode: widget.inventoryProcessCode,
-                        isSubtract: false,
-                        consultedProductController:
-                            widget.consultedProductController,
-                      );
+                      await widget.addQuantity();
                     },
             ),
           ),

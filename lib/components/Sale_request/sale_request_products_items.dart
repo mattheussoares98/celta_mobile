@@ -104,6 +104,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                 SaleRequestProductsModel product =
                     saleRequestProvider.products[index];
 
+                if (saleRequestProvider.productsCount == 1) {
+                  selectedIndex = index;
+                }
+
                 double _totalItensInCart =
                     saleRequestProvider.getTotalItensInCart(
                   ProductPackingCode: product.ProductPackingCode,

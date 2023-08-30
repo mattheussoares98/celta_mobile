@@ -10,14 +10,14 @@ import '../Global_widgets/show_alert_dialog.dart';
 import 'inventory_insert_one_quantity.dart';
 
 class InventoryProductsItems extends StatefulWidget {
-  final int inventoryProcessCode;
+  final int inventoryCountingCode;
   final int productPackingCode;
   final bool isIndividual;
   final TextEditingController consultedProductController;
   final Function getProducts;
   InventoryProductsItems({
     Key? key,
-    required this.inventoryProcessCode,
+    required this.inventoryCountingCode,
     required this.getProducts,
     required this.consultedProductController,
     required this.productPackingCode,
@@ -30,34 +30,38 @@ class InventoryProductsItems extends StatefulWidget {
 
 class InventoryProductsItemsState extends State<InventoryProductsItems> {
   addQuantity({
-    required bool isSubtract,
+    bool? isSubtract = false,
     required InventoryProvider inventoryProvider,
     required int indexOfProduct,
   }) async {
-    double quantity = double.tryParse(
-        widget.consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
+    double? quantity = double.tryParse(
+        widget.consultedProductController.text.replaceAll(RegExp(r','), '.'));
 
-    if (quantity >= 10000) {
+    if (quantity != null && quantity >= 10000) {
       //se a quantidade digitada for maior que 10.000, vai abrir um alertDialog pra confirmar a quantidade
       ShowAlertDialog().showAlertDialog(
-        confirmMessageSize: 300,
-        cancelMessageSize: 300,
-        context: context,
-        title: 'Deseja confirmar a quantidade?',
-        subtitle: isSubtract
-            ? 'Quantidade digitada: -${quantity.toStringAsFixed(3)}'
-            : 'Quantidade digitada: ${quantity.toStringAsFixed(3)}',
-        function: () async {
-          await inventoryProvider.addQuantity(
-            indexOfProduct: indexOfProduct,
-            consultedProductController: widget.consultedProductController,
-            isIndividual: widget.isIndividual,
-            context: context,
-            inventoryProcessCode: widget.inventoryProcessCode,
-            isSubtract: isSubtract,
-          );
-        },
-      );
+          confirmMessageSize: 300,
+          cancelMessageSize: 300,
+          context: context,
+          title: 'Deseja confirmar a quantidade?',
+          subtitle: isSubtract!
+              ? 'Quantidade digitada: -${quantity.toStringAsFixed(3)}'
+              : 'Quantidade digitada: ${quantity.toStringAsFixed(3)}',
+          function: () async {
+            await inventoryProvider.addQuantity(
+              indexOfProduct: indexOfProduct,
+              consultedProductController: widget.consultedProductController,
+              isIndividual: widget.isIndividual,
+              context: context,
+              countingCode: widget.inventoryCountingCode,
+              isSubtract: isSubtract,
+            );
+
+            if (inventoryProvider.errorMessageQuantity == "" &&
+                inventoryProvider.useAutoScan) {
+              await widget.getProducts();
+            }
+          });
     } else {
       //se a quantidade digitada for menor do que 10.000, vai adicionar direto a quantidade, sem o alertDialog pra confirmar
       await inventoryProvider.addQuantity(
@@ -65,14 +69,14 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
         consultedProductController: widget.consultedProductController,
         isIndividual: widget.isIndividual,
         context: context,
-        inventoryProcessCode: widget.inventoryProcessCode,
-        isSubtract: isSubtract,
+        countingCode: widget.inventoryCountingCode,
+        isSubtract: isSubtract!,
       );
-    }
 
-    if (inventoryProvider.errorMessageQuantity == "" &&
-        inventoryProvider.useAutoScan) {
-      await widget.getProducts();
+      if (inventoryProvider.errorMessageQuantity == "" &&
+          inventoryProvider.useAutoScan) {
+        await widget.getProducts();
+      }
     }
   }
 
@@ -97,11 +101,16 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
       function: () async {
         await inventoryProvider.anullQuantity(
           indexOfProduct: index,
-          inventoryProcessCode: widget.inventoryProcessCode,
+          inventoryProcessCode: widget.inventoryCountingCode,
           productPackingCode:
               inventoryProvider.products[index].codigoInternoProEmb,
           context: context,
         );
+
+        if (inventoryProvider.errorMessageQuantity == "" &&
+            inventoryProvider.useAutoScan) {
+          await widget.getProducts();
+        }
       },
     );
   }
@@ -273,7 +282,6 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                                 addQuantityFunction: () async {
                                   await addQuantity(
                                     indexOfProduct: index,
-                                    isSubtract: false,
                                     inventoryProvider: inventoryProvider,
                                   );
                                 },
@@ -301,11 +309,24 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                             if (widget.isIndividual && _selectedIndex == index)
                               InsertOneQuantity(
                                 isIndividual: widget.isIndividual,
-                                inventoryProcessCode:
-                                    widget.inventoryProcessCode,
+                                inventoryCountingCode:
+                                    widget.inventoryCountingCode,
                                 consultedProductController:
                                     widget.consultedProductController,
                                 indexOfProduct: index,
+                                addQuantity: () async {
+                                  addQuantity(
+                                    inventoryProvider: inventoryProvider,
+                                    indexOfProduct: index,
+                                  );
+                                },
+                                subtractQuantity: () async {
+                                  addQuantity(
+                                    isSubtract: true,
+                                    inventoryProvider: inventoryProvider,
+                                    indexOfProduct: index,
+                                  );
+                                },
                               ),
                           ],
                         ),

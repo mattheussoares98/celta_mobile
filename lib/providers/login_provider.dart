@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:celta_inventario/api/shared_preferences_instance.dart'
-    as prefsInstance;
+import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
@@ -41,21 +40,11 @@ class LoginProvider with ChangeNotifier {
     return _isAuthStream;
   }
 
-  Future<String> getUserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (await prefs.getString('user') != "" ||
-        await prefs.getString('user') != null) {
-      return await prefs.getString('user')!;
-    } else {
-      return "";
-    }
-  }
-
   Future<void> verifyIsLogged() async {
-    bool isLogged = await prefsInstance.isLogged();
+    bool isLogged = await PrefsInstance.isLogged();
 
     if (isLogged) {
-      UserIdentity.identity = await prefsInstance.getUserIdentity();
+      UserIdentity.identity = await PrefsInstance.getUserIdentity();
       _loginController!.add(true);
     }
   }
@@ -72,17 +61,17 @@ class LoginProvider with ChangeNotifier {
     required TextEditingController enterpriseNameOrUrlCCSController,
     required TextEditingController userController,
   }) async {
-    userController.text = await prefsInstance.getUserName();
+    userController.text = await PrefsInstance.getUserName();
 
-    if (await prefsInstance.hasUrlCcs()) {
-      BaseUrl.urlCCS = await prefsInstance.getUrlCcs();
+    if (await PrefsInstance.hasUrlCcs()) {
+      BaseUrl.urlCCS = await PrefsInstance.getUrlCcs();
     }
 
-    if (await prefsInstance.hasEnterpriseName()) {
+    if (await PrefsInstance.hasEnterpriseName()) {
       enterpriseNameOrUrlCCSController.text =
-          await prefsInstance.getEnterpriseName();
-    } else if (await prefsInstance.hasUrlCcs()) {
-      enterpriseNameOrUrlCCSController.text = await prefsInstance.getUrlCcs();
+          await PrefsInstance.getEnterpriseName();
+    } else if (await PrefsInstance.hasUrlCcs()) {
+      enterpriseNameOrUrlCCSController.text = await PrefsInstance.getUrlCcs();
     }
   }
 
@@ -146,8 +135,8 @@ class LoginProvider with ChangeNotifier {
 
         _loginController?.add(true);
 
-        await prefsInstance.setUserIdentity(UserIdentity.identity);
-        await prefsInstance.setUserName(user);
+        await PrefsInstance.setUserIdentity(UserIdentity.identity);
+        await PrefsInstance.setUserName(user);
 
         await FirebaseHelper.addCcsClientInFirebase();
       }
@@ -172,8 +161,9 @@ class LoginProvider with ChangeNotifier {
   }
 
   logout() async {
-    await prefsInstance.setUserIdentity("");
+    await PrefsInstance.setUserIdentity("");
 
+    UserIdentity.identity = "";
     _loginController?.add(false);
   }
 }

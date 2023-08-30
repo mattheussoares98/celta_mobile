@@ -15,6 +15,7 @@ class InventoryCountingItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return Column(
       children: [
@@ -27,15 +28,16 @@ class InventoryCountingItems extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: inventoryProvider.countingsQuantity,
+            itemCount: inventoryProvider
+                .getCountingsQuantity(arguments["codigoInternoInventario"]),
             itemBuilder: (ctx, index) {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.INVENTORY_PRODUCTS,
                     arguments: {
-                      "InventoryCountingsModel":
-                          inventoryProvider.countings[index],
+                      "InventoryCountingsModel": inventoryProvider.getCountings(
+                          arguments["codigoInternoInventario"])[index],
                       "codigoInternoEmpresa": codigoInternoEmpresa,
                     },
                   );
@@ -51,12 +53,17 @@ class InventoryCountingItems extends StatelessWidget {
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Número da contagem",
                           value: inventoryProvider
-                              .countings[index].numeroContagemInvCont
+                              .getCountings(
+                                  arguments["codigoInternoInventario"])[index]
+                              .numeroContagemInvCont
                               .toString(),
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Observações",
-                          value: inventoryProvider.countings[index].obsInvCont,
+                          value: inventoryProvider
+                              .getCountings(
+                                  arguments["codigoInternoInventario"])[index]
+                              .obsInvCont,
                         ),
                       ],
                     ),

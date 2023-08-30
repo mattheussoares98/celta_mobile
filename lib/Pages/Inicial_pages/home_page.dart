@@ -1,3 +1,4 @@
+import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,12 @@ class _HomePageState extends State<HomePage> {
   String userName = "";
   @override
   void didChangeDependencies() async {
-    LoginProvider loginProvider = Provider.of(context, listen: true);
     super.didChangeDependencies();
 
-    userName = await loginProvider.getUserName();
+    if (await PrefsInstance.hasUserName()) {
+      userName = await PrefsInstance.getUserName();
+    }
+
     setState(() {});
   }
 
