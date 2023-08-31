@@ -45,15 +45,11 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     //se ler algum código, vai consultar o produto
     await inventoryProvider.getProducts(
       consultProductController: _consultProductController,
-      isLegacyCodeSearch: inventoryProvider.useLegacyCode,
       enterpriseCode: arguments["codigoInternoEmpresa"],
       context: context,
       isIndividual: _isIndividual,
-      consultedProductController: _consultProductController,
-      indexOfProduct: 0, //não da pra obter por aqui o index do produto
       inventoryProcessCode:
           arguments["InventoryCountingsModel"].codigoInternoInventario,
-
       inventoryCountingCode:
           arguments["InventoryCountingsModel"].codigoInternoInvCont,
     );

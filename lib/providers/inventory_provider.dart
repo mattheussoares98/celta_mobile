@@ -145,7 +145,6 @@ class InventoryProvider with ChangeNotifier {
     required int inventoryProcessCode,
     required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
-    required bool isLegacyCodeSearch,
   }) async {
     _products.clear();
     _errorMessageGetProducts = "";
@@ -167,7 +166,7 @@ class InventoryProvider with ChangeNotifier {
           "crossIdentity": UserIdentity.identity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          "searchTypeInt": _useLegacyCode ? 11 : 0,
           "inventoryProcessCode": inventoryProcessCode,
           "inventoryCountingCode": inventoryCountingCode,
         },
@@ -203,10 +202,7 @@ class InventoryProvider with ChangeNotifier {
     required int inventoryProcessCode,
     required BuildContext context,
     required bool isIndividual,
-    required TextEditingController consultedProductController,
     required TextEditingController consultProductController,
-    required bool isLegacyCodeSearch,
-    required int indexOfProduct,
     required int inventoryCountingCode,
   }) async {
     if (consultProductController.text.isEmpty) {
@@ -220,7 +216,6 @@ class InventoryProvider with ChangeNotifier {
       controllerText: consultProductController.text,
       enterpriseCode: enterpriseCode,
       context: context,
-      isLegacyCodeSearch: isLegacyCodeSearch,
       inventoryCountingCode: inventoryCountingCode,
       inventoryProcessCode: inventoryProcessCode,
     );
