@@ -2,10 +2,10 @@ import 'package:celta_inventario/utils/default_error_message_to_find_server.dart
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import '../Models/receipt_models/receipt_model.dart';
 import '../Models/receipt_models/receipt_products_model.dart';
-import '../utils/user_identity.dart';
 
 class ReceiptProvider with ChangeNotifier {
   final List<ReceiptModel> _receipts = [];
@@ -125,7 +125,7 @@ class ReceiptProvider with ChangeNotifier {
 
     try {
       Map<String, dynamic> parameters = {
-        "crossIdentity": UserIdentity.identity,
+        "crossIdentity": UserData.crossIdentity,
         "grDocCode": docCode,
         "productgCode": productgCode,
         "productPackingCode": productPackingCode,
@@ -206,7 +206,7 @@ class ReceiptProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "grDocCode": docCode,
           "productgCode": productgCode,
           "productPackingCode": productPackingCode,
@@ -265,7 +265,7 @@ class ReceiptProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "searchTypeInt": searchTypeInt,
           "searchValue": controllerText,
           "grDocCode": docCode,
@@ -317,7 +317,7 @@ class ReceiptProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
         },
         typeOfResponse: "GetActiveGRDocsStatusResponse",
@@ -392,7 +392,7 @@ class ReceiptProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "grDocCode": grDocCode,
         },
         typeOfResponse: "LiberateGRDocResponse",

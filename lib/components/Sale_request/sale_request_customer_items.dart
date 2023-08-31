@@ -48,15 +48,18 @@ class _SaleRequestCustomersItemsState extends State<SaleRequestCustomersItems> {
                         activeColor: Theme.of(context).colorScheme.primary,
                         title: const Text("Cliente consumidor"),
                         value: customer.selected,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            saleRequestProvider.updateSelectedCustomer(
-                              index: index,
-                              value: value!,
-                              enterpriseCode: widget.enterpriseCode.toString(),
-                            );
-                          });
-                        }),
+                        onChanged: saleRequestProvider.isLoadingCustomer
+                            ? null
+                            : (bool? value) {
+                                setState(() {
+                                  saleRequestProvider.updateSelectedCustomer(
+                                    index: index,
+                                    value: value!,
+                                    enterpriseCode:
+                                        widget.enterpriseCode.toString(),
+                                  );
+                                });
+                              }),
                   );
                 }
 
@@ -67,15 +70,18 @@ class _SaleRequestCustomersItemsState extends State<SaleRequestCustomersItems> {
                       CheckboxListTile(
                         value: customer.selected,
                         activeColor: Theme.of(context).colorScheme.primary,
-                        onChanged: (value) {
-                          setState(() {
-                            saleRequestProvider.updateSelectedCustomer(
-                              index: index,
-                              value: value!,
-                              enterpriseCode: widget.enterpriseCode.toString(),
-                            );
-                          });
-                        },
+                        onChanged: saleRequestProvider.isLoadingCustomer
+                            ? null
+                            : (value) {
+                                setState(() {
+                                  saleRequestProvider.updateSelectedCustomer(
+                                    index: index,
+                                    value: value!,
+                                    enterpriseCode:
+                                        widget.enterpriseCode.toString(),
+                                  );
+                                });
+                              },
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [

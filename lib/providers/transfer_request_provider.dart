@@ -7,7 +7,7 @@ import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterpr
 import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Components/Global_widgets/show_error_message.dart';
@@ -62,7 +62,7 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   Map<String, dynamic> _jsonSaleRequest = {
-    "crossId": UserIdentity.identity,
+    "crossId": UserData.crossIdentity,
     "EnterpriseOriginCode": 0,
     "EnterpriseDestinyCode": 0,
     "RequestTypeCode": 0,
@@ -456,7 +456,7 @@ class TransferRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
           // "enterpriseCode": "int",
           "inclusiveTransfer": true,
@@ -495,7 +495,7 @@ class TransferRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           // "simpleSearchValue": "string",
           "requestTypeCode": requestTypeCode,
         },
@@ -574,7 +574,7 @@ class TransferRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           // "simpleSearchValue": "string",
           "requestTypeCode": requestTypeCode,
           "enterpriseOriginCode": enterpriseOriginCode,
@@ -618,7 +618,7 @@ class TransferRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseOriginCode,
           "enterpriseDestinyCode": enterpriseDestinyCode,
           "requestTypeCode": requestTypeCode,
@@ -655,7 +655,7 @@ class TransferRequestProvider with ChangeNotifier {
     required String requestTypeCode,
     required BuildContext context,
   }) async {
-    _jsonSaleRequest["crossId"] = '${UserIdentity.identity}';
+    _jsonSaleRequest["crossId"] = '${UserData.crossIdentity}';
 
     TransferRequestCartProductsModel.updateJsonSaleRequest(
       products: _cartProducts[requestTypeCode]![enterpriseOriginCode]![
@@ -677,7 +677,7 @@ class TransferRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "json": json.encode(_jsonSaleRequest),
         },
         typeOfResponse: "InsertResponse",

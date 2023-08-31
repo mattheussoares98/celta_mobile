@@ -3,11 +3,11 @@ import 'package:celta_inventario/utils/default_error_message_to_find_server.dart
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import '../Components/Global_widgets/show_error_message.dart';
 import '../Models/inventory/countings_model.dart';
 import '../Models/inventory/inventory_product_model.dart';
-import '../utils/user_identity.dart';
 
 class InventoryProvider with ChangeNotifier {
   final List<InventoryModel> _inventorys = [];
@@ -102,7 +102,7 @@ class InventoryProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
         },
         typeOfResponse: "GetFrozenProcessesResponse",
@@ -163,7 +163,7 @@ class InventoryProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
           "searchTypeInt": _useLegacyCode ? 11 : 0,
@@ -284,7 +284,7 @@ class InventoryProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "countingCode": countingCode,
           "productPackingCode": productPackingCode,
           "quantity": newQuantity,
@@ -348,7 +348,7 @@ class InventoryProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "countingCode": inventoryProcessCode,
           "productPackingCode": productPackingCode,
         },

@@ -5,7 +5,7 @@ import 'package:celta_inventario/utils/default_error_message_to_find_server.dart
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -163,7 +163,7 @@ class AdjustStockProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
           "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
@@ -235,7 +235,7 @@ class AdjustStockProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "undefined",
         },
         typeOfResponse: "GetStockTypesResponse",
@@ -269,7 +269,7 @@ class AdjustStockProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
           "justificationTransferType": 3,
         },
@@ -337,7 +337,7 @@ class AdjustStockProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "jsonAdjustStock": jsonAdjustStock,
         },
         typeOfResponse: "ConfirmAdjustStockResponse",

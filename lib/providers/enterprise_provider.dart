@@ -1,6 +1,6 @@
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../Models/enterprise_models/enterprise_model.dart';
@@ -32,7 +32,7 @@ class EnterpriseProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
           "requestTypeCode": 0,
         },

@@ -6,7 +6,7 @@ import 'package:celta_inventario/Models/transfer_between_package_models/transfer
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 
 class TransferBetweenPackageProvider with ChangeNotifier {
@@ -126,7 +126,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
           "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
@@ -198,7 +198,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           'simpleSearchValue': 'undefined',
           "justificationTransferType": 4,
         },
@@ -251,7 +251,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           'jsonAdjustStock': jsonEncode(jsonAdjustStock),
         },
         SOAPAction: "ConfirmAdjustStock",
@@ -316,7 +316,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "undefined",
         },
         typeOfResponse: "GetStockTypesResponse",

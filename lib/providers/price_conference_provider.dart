@@ -1,7 +1,7 @@
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import '../Models/price_conference_product_model.dart';
 
@@ -84,7 +84,7 @@ class PriceConferenceProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
           "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
@@ -165,7 +165,7 @@ class PriceConferenceProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "productPackingCode": productPackingCode,
           "send": newValue,

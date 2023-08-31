@@ -7,7 +7,7 @@ import 'package:celta_inventario/Components/Global_widgets/show_error_message.da
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import '../Models/sale_request_models/sale_requests_model.dart';
 import '../utils/default_error_message_to_find_server.dart';
@@ -364,7 +364,7 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   Map<String, dynamic> _jsonSaleRequest = {
-    "crossId": UserIdentity.identity,
+    "crossId": UserData.crossIdentity,
     "EnterpriseCode": 0,
     "RequestTypeCode": 0,
     "SellerCode": 0,
@@ -491,7 +491,7 @@ class SaleRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
           "enterpriseCode": enterpriseCode,
           "inclusiveTransfer": false,
@@ -539,7 +539,7 @@ class SaleRequestProvider with ChangeNotifier {
       );
 
       var jsonBody = json.encode({
-        "crossId": UserIdentity.identity,
+        "crossId": UserData.crossIdentity,
         "EnterpriseCode": enterpriseCode,
         "RequestTypeCode": requestTypeCode,
         "CovenantCode": covenantCode,
@@ -551,7 +551,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "json": jsonBody,
         },
         typeOfResponse: "ProcessCartResponse",
@@ -687,7 +687,7 @@ class SaleRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "customerData": controllerText,
           "customerDataType": searchTypeInt,
         },
@@ -734,7 +734,7 @@ class SaleRequestProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
           "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
@@ -775,12 +775,12 @@ class SaleRequestProvider with ChangeNotifier {
       firebaseCallEnum: FirebaseCallEnum.saleRequestSave,
     );
 
-    _jsonSaleRequest["crossId"] = "${UserIdentity.identity}";
+    _jsonSaleRequest["crossId"] = "${UserData.crossIdentity}";
     var jsonSaleRequestEncoded = json.encode(_jsonSaleRequest);
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserIdentity.identity,
+          "crossIdentity": UserData.crossIdentity,
           "json": jsonSaleRequestEncoded,
           "printerName": "",
         },

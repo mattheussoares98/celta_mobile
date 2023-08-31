@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
@@ -50,7 +50,7 @@ class SoapHelper {
       </soap12:Envelope>''';
 
     final response = await http.post(
-      Uri.parse('${BaseUrl.urlCCS}/$serviceASMX'),
+      Uri.parse('${UserData.urlCCS}/$serviceASMX'),
       headers: soapHeaders,
       body: envelope,
     );

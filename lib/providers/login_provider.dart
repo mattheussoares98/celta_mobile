@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:celta_inventario/api/prefs_instance.dart';
-import 'package:celta_inventario/utils/base_url.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xml2json/xml2json.dart';
 import '../utils/default_error_message_to_find_server.dart';
 import '../Components/Global_widgets/show_error_message.dart';
@@ -44,7 +42,7 @@ class LoginProvider with ChangeNotifier {
     bool isLogged = await PrefsInstance.isLogged();
 
     if (isLogged) {
-      UserIdentity.identity = await PrefsInstance.getUserIdentity();
+      UserData.crossIdentity = await PrefsInstance.getUserIdentity();
       _loginController!.add(true);
     }
   }
@@ -62,9 +60,10 @@ class LoginProvider with ChangeNotifier {
     required TextEditingController userController,
   }) async {
     userController.text = await PrefsInstance.getUserName();
+    UserData.userName = userController.text;
 
     if (await PrefsInstance.hasUrlCcs()) {
-      BaseUrl.urlCCS = await PrefsInstance.getUrlCcs();
+      UserData.urlCCS = await PrefsInstance.getUrlCcs();
     }
 
     if (await PrefsInstance.hasEnterpriseName()) {
@@ -131,11 +130,11 @@ class LoginProvider with ChangeNotifier {
             .parse(resultAsMap["Usuarios"][0]['CrossIdentity_Usuario']);
         String toParker = myTransformer.toParker();
         Map toParker2 = json.decode(toParker);
-        UserIdentity.identity = toParker2['string'];
+        UserData.crossIdentity = toParker2['string'];
 
         _loginController?.add(true);
 
-        await PrefsInstance.setUserIdentity(UserIdentity.identity);
+        await PrefsInstance.setUserIdentity(UserData.crossIdentity);
         await PrefsInstance.setUserName(user);
 
         await FirebaseHelper.addCcsClientInFirebase();
@@ -163,7 +162,7 @@ class LoginProvider with ChangeNotifier {
   logout() async {
     await PrefsInstance.setUserIdentity("");
 
-    UserIdentity.identity = "";
+    UserData.crossIdentity = "";
     _loginController?.add(false);
   }
 }

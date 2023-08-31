@@ -1,6 +1,6 @@
 import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/try_again.dart';
-import 'package:celta_inventario/utils/user_identity.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Inventory/inventory_items.dart';
@@ -24,7 +24,7 @@ class _InventoryPageState extends State<InventoryPage> {
     if (!_isLoaded) {
       Provider.of<InventoryProvider>(context, listen: false).getInventory(
         enterpriseCode: arguments["CodigoInterno_Empresa"],
-        userIdentity: UserIdentity.identity,
+        userIdentity: UserData.crossIdentity,
       );
       _isLoaded = true;
     }
@@ -54,7 +54,7 @@ class _InventoryPageState extends State<InventoryPage> {
                 request: () async => setState(() {
                   inventoryProvider.getInventory(
                     enterpriseCode: arguments["CodigoInterno_Empresa"],
-                    userIdentity: UserIdentity.identity,
+                    userIdentity: UserData.crossIdentity,
                   );
                 }),
               ),

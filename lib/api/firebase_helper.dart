@@ -1,9 +1,10 @@
 import 'package:celta_inventario/Models/firebase_client_model.dart';
-import 'package:celta_inventario/utils/base_url.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
+import 'package:intl/intl.dart';
 
 enum FirebaseCallEnum {
   adjustStockConfirmQuantity,
@@ -59,7 +60,7 @@ class FirebaseHelper {
 
       if (data.containsKey('urlCCS')) {
         enterpriseNameOrurlCCSControllerText = data['urlCCS'];
-        BaseUrl.urlCCS = data['urlCCS'];
+        UserData.urlCCS = data['urlCCS'];
 
         await PrefsInstance.setUrlCcs(data['urlCCS']);
       }
@@ -90,7 +91,7 @@ class FirebaseHelper {
 
       //como está informando uma URL, precisa excluir o nome da empresa do banco
       //de dados pra não carregar o nome da empresa errado depois
-      BaseUrl.urlCCS = enterpriseNameOrurlCCSControllerText;
+      UserData.urlCCS = enterpriseNameOrurlCCSControllerText;
       await PrefsInstance.setUrlCcs(enterpriseNameOrurlCCSControllerText);
 
       QuerySnapshot? querySnapshot;
@@ -142,60 +143,36 @@ class FirebaseHelper {
   static Future<void> addSoapCallInFirebase({
     required FirebaseCallEnum firebaseCallEnum,
   }) async {
-    return;
-    // _codeOfSoapAction(firebaseCallEnum);
-    // QuerySnapshot? querySnapshot;
+    _codeOfSoapAction(firebaseCallEnum);
+    QuerySnapshot? querySnapshot;
 
-    // querySnapshot = await _clientsCollection
-    //     .where(
-    //       'urlCCS',
-    //       isEqualTo: BaseUrl.urlCCS.trimRight().trimLeft().toLowerCase(),
-    //     )
-    //     .get();
+    querySnapshot = await _clientsCollection
+        .where(
+          'urlCCS',
+          isEqualTo:
+              UserData.urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+        )
+        .get();
 
-    // if (querySnapshot.size > 0) {
-    //   DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+    if (querySnapshot.size > 0) {
+      DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
 
-    //   DocumentReference documentReference =
-    //       _clientsCollection.doc(documentSnapshot.id);
+      DocumentReference documentReference =
+          _clientsCollection.doc(documentSnapshot.id);
 
-    //   QuerySnapshot querySnapshotSoapActions =
-    //       await documentReference.collection("soapActions").get();
+      Map<String, dynamic> newSoapAction = {
+        "date": DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()),
+        "typeOfSearch": firebaseCallEnum.index,
+        "userName": UserData.userName,
+      };
 
-    //   Map<String, dynamic> soapCallsDetails = {
-    //     "date": DateTime.now().toIso8601String(),
-    //     "typeOfSearch": firebaseCallEnum.index,
-    //   };
-
-    //   await documentReference
-    //       .collection("soapActions")
-    //       .add(soapCallsDetails)
-    //       .then((value) => print("adicionou contador"))
-    //       .catchError((error) => print("erro pra adicionar o contador $error"));
-
-    // if (querySnapshotSoapActions.size > 0) {
-    //   DocumentSnapshot documentSnapshotSoapActions =
-    //       querySnapshotSoapActions.docs[0];
-
-    //   Map<String, dynamic> dataSoapActions =
-    //       documentSnapshotSoapActions.data() as Map<String, dynamic>;
-
-    //   if (dataSoapActions.containsKey("soapActions")) {
-    //     await documentReference
-    //         .collection("soapActions")
-    //         .add(soapCallsDetails)
-    //         .then((value) => print("adicionou contador"))
-    //         .catchError(
-    //             (error) => print("erro pra adicionar o contador $error"));
-    //   } else {
-    //     await documentReference
-    //         .collection("soapActions")
-    //         .add(soapCallsDetails)
-    //         .then((value) => print("adicionou coleção"))
-    //         .catchError((error) => print("erro pra adicionar a coleção"));
-    //   }
-    // }
-    // }
+      await documentReference
+          .update({
+            'soapActions': FieldValue.arrayUnion([newSoapAction])
+          })
+          .then((value) => print("somou soapAction"))
+          .catchError((error) => print("erro pra somar o soapAction $error"));
+    }
   }
 
   static bool _isUrl(String text) {
@@ -209,14 +186,14 @@ class FirebaseHelper {
     // QuerySnapshot querySnapshot;
 
     FirebaseClientModel firebaseClientModel = FirebaseClientModel(
-      urlCCS: BaseUrl.urlCCS,
+      urlCCS: UserData.urlCCS,
     );
 
     QuerySnapshot? querySnapshot;
     querySnapshot = await _clientsCollection
         .where(
           'urlCCS',
-          isEqualTo: BaseUrl.urlCCS
+          isEqualTo: UserData.urlCCS
               .toLowerCase()
               .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
         )
