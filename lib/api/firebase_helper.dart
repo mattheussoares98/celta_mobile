@@ -33,19 +33,11 @@ class FirebaseHelper {
   static FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   static CollectionReference _clientsCollection =
       _firebaseFirestore.collection("clients");
-  static final _firebaseMessaging = FirebaseMessaging.instance;
 
-  static int _codeOfSoapAction(FirebaseCallEnum firebaseCallEnum) {
-    int index = -1;
-    for (var value in FirebaseCallEnum.values) {
-      if (value.index == firebaseCallEnum.index) {
-        print(value);
-        print(value.index);
-        index = value.index;
-      }
-    }
-    return index;
-  }
+  static CollectionReference _soapActionsCollection =
+      _firebaseFirestore.collection("soapActions");
+
+  static final _firebaseMessaging = FirebaseMessaging.instance;
 
   static Future<void> _updateCcsAndEnterpriseNameByDocumentId({
     required String documentId,
@@ -69,6 +61,7 @@ class FirebaseHelper {
           data['enterpriseName'] != "undefined") {
         enterpriseNameOrurlCCSControllerText = data['enterpriseName'];
         await PrefsInstance.setEnterpriseName(data['enterpriseName']);
+        UserData.enterpriseName = data['enterpriseName'];
       } else {
         //como não tem o nome da empresa no firebase, precisa zerar no banco local
         await PrefsInstance.setEnterpriseName("");
@@ -143,35 +136,35 @@ class FirebaseHelper {
   static Future<void> addSoapCallInFirebase({
     required FirebaseCallEnum firebaseCallEnum,
   }) async {
-    _codeOfSoapAction(firebaseCallEnum);
-    QuerySnapshot? querySnapshot;
+    Map<String, dynamic> newSoapAction = {
+      "date": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+      "typeOfSearch": firebaseCallEnum.index,
+      "userName": UserData.userName,
+    };
+    List mySoaps = await PrefsInstance.getSoaps();
+    mySoaps.add(newSoapAction);
 
-    querySnapshot = await _clientsCollection
-        .where(
-          'urlCCS',
-          isEqualTo:
-              UserData.urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
-        )
-        .get();
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    if (querySnapshot.size > 0) {
-      DocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+    if (mySoaps.length < 2) {
+      await PrefsInstance.setSoaps(mySoaps);
+    } else {
+      WriteBatch batch = firestore.batch();
 
-      DocumentReference documentReference =
-          _clientsCollection.doc(documentSnapshot.id);
+      mySoaps.forEach((soapAction) {
+        DocumentReference docRef = _soapActionsCollection
+            .doc(DateFormat('yyyy-MM').format(DateTime.now()))
+            .collection(UserData.enterpriseName)
+            .doc();
+        batch.set(docRef, soapAction);
+      });
 
-      Map<String, dynamic> newSoapAction = {
-        "date": DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()),
-        "typeOfSearch": firebaseCallEnum.index,
-        "userName": UserData.userName,
-      };
-
-      await documentReference
-          .update({
-            'soapActions': FieldValue.arrayUnion([newSoapAction])
-          })
-          .then((value) => print("somou soapAction"))
-          .catchError((error) => print("erro pra somar o soapAction $error"));
+      batch
+          .commit()
+          .then((value) async => {
+                await PrefsInstance.clearSoaps(),
+              })
+          .catchError((error) => error);
     }
   }
 

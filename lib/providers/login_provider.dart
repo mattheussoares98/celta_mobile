@@ -69,6 +69,8 @@ class LoginProvider with ChangeNotifier {
     if (await PrefsInstance.hasEnterpriseName()) {
       enterpriseNameOrUrlCCSController.text =
           await PrefsInstance.getEnterpriseName();
+
+      UserData.enterpriseName = enterpriseNameOrUrlCCSController.text;
     } else if (await PrefsInstance.hasUrlCcs()) {
       enterpriseNameOrUrlCCSController.text = await PrefsInstance.getUrlCcs();
     }

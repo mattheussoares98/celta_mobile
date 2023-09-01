@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefsInstance {
@@ -138,5 +140,29 @@ class PrefsInstance {
   static Future<void> clearCartSaleRequest() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("cart", "");
+  }
+
+  static Future<void> setSoaps(List<dynamic> mySoaps) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> encodedMySoaps =
+        mySoaps.map((item) => json.encode(item)).toList();
+    await prefs.setStringList('mySoaps', encodedMySoaps);
+  }
+
+  static Future<void> clearSoaps() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove("mySoaps");
+  }
+
+  static Future<List<dynamic>> getSoaps() async {
+    List<dynamic> mySoaps = [];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('mySoaps') != null) {
+      List<String> encodedMySoaps = await prefs.getStringList('mySoaps')!;
+
+      mySoaps = encodedMySoaps.map((item) => json.decode(item)).toList();
+    }
+
+    return mySoaps;
   }
 }
