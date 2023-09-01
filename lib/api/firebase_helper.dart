@@ -137,9 +137,7 @@ class FirebaseHelper {
     required FirebaseCallEnum firebaseCallEnum,
   }) async {
     Map<String, dynamic> newSoapAction = {
-      "date": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
-      "typeOfSearch": firebaseCallEnum.index,
-      "userName": UserData.userName,
+      "typeOfSearch": firebaseCallEnum.name,
     };
     List mySoaps = await PrefsInstance.getSoaps();
     mySoaps.add(newSoapAction);
@@ -155,8 +153,18 @@ class FirebaseHelper {
         DocumentReference docRef = _soapActionsCollection
             .doc(DateFormat('yyyy-MM').format(DateTime.now()))
             .collection(UserData.enterpriseName)
-            .doc();
-        batch.set(docRef, soapAction);
+            .doc(soapAction["typeOfSearch"]);
+
+        batch.set(
+          docRef,
+          {
+            'timesUsed': FieldValue.increment(1),
+            'users': FieldValue.arrayUnion([UserData.userName]),
+            'datesUsed': FieldValue.arrayUnion(
+                [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
+          },
+          SetOptions(merge: true),
+        );
       });
 
       batch

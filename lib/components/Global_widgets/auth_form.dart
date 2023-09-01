@@ -225,6 +225,9 @@ class _AuthFormState extends State<AuthForm>
                   SizedBox(
                     width: _animationWidth!.value,
                     child: TextFormField(
+                      onChanged: (value) {
+                        loginProvider.changedEnterpriseNameOrUrlCcs = true;
+                      },
                       enabled: loginProvider.isLoading ? false : true,
                       controller:
                           loginProvider.enterpriseNameOrUrlCCSController,

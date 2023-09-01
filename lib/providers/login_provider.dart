@@ -16,15 +16,15 @@ class LoginProvider with ChangeNotifier {
   TextEditingController passwordController = TextEditingController();
 
   String _errorMessage = '';
-
-  String get errorMessage {
-    return _errorMessage;
-  }
+  String get errorMessage => _errorMessage;
 
   bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
-  bool get isLoading {
-    return _isLoading;
+  bool _changedEnterpriseNameOrUrlCcs = false;
+  bool get changedEnterpriseNameOrUrlCcs => _changedEnterpriseNameOrUrlCcs;
+  set changedEnterpriseNameOrUrlCcs(bool? newValue) {
+    _changedEnterpriseNameOrUrlCcs = true;
   }
 
   static MultiStreamController<bool>? _loginController;
@@ -33,10 +33,7 @@ class LoginProvider with ChangeNotifier {
   static final _isAuthStream = Stream<bool>.multi((controller) {
     _loginController = controller;
   });
-
-  Stream<bool> get authStream {
-    return _isAuthStream;
-  }
+  Stream<bool> get authStream => _isAuthStream;
 
   Future<void> verifyIsLogged() async {
     bool isLogged = await PrefsInstance.isLogged();
@@ -71,8 +68,6 @@ class LoginProvider with ChangeNotifier {
           await PrefsInstance.getEnterpriseName();
 
       UserData.enterpriseName = enterpriseNameOrUrlCCSController.text;
-    } else if (await PrefsInstance.hasUrlCcs()) {
-      enterpriseNameOrUrlCCSController.text = await PrefsInstance.getUrlCcs();
     }
   }
 
@@ -87,9 +82,12 @@ class LoginProvider with ChangeNotifier {
 
     notifyListeners();
 
-    _errorMessage = await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
-      enterpriseNameOrUrlCCSController.text,
-    );
+    if (_changedEnterpriseNameOrUrlCcs) {
+      _errorMessage =
+          await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
+        enterpriseNameOrUrlCCSController.text,
+      );
+    }
 
     if (_errorMessage != "" &&
         !_isUrl(
