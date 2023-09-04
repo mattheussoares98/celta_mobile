@@ -14,6 +14,7 @@ import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_p
 import 'package:celta_inventario/Pages/transfer_between_stocks_page.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
+import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
 import 'package:celta_inventario/Pages/receipt_page.dart';
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenPackageProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
