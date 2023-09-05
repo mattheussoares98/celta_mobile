@@ -215,7 +215,7 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.receiptAnullQuantity,
+      firebaseCallEnum: FirebaseCallEnum.receiptEntryQuantity,
     );
 
     try {

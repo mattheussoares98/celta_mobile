@@ -69,7 +69,7 @@ class PriceConferenceProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.priceConferenceGetProduct,
+      firebaseCallEnum: FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
     );
 
     dynamic value = int.tryParse(controllerText);
@@ -157,7 +157,7 @@ class PriceConferenceProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.priceConferenceSendToPrint,
+      firebaseCallEnum: FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
     );
 
     bool newValue = !_products[index].EtiquetaPendente;

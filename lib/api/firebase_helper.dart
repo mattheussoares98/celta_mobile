@@ -8,12 +8,9 @@ import 'package:intl/intl.dart';
 
 enum FirebaseCallEnum {
   adjustStockConfirmQuantity,
-  priceConferenceGetProduct,
-  priceConferenceSendToPrint,
+  priceConferenceGetProductOrSendToPrint,
   inventoryEntryQuantity,
-  inventoryAnullQuantity,
   receiptEntryQuantity,
-  receiptAnullQuantity,
   receiptLiberate,
   saleRequestSave,
   transferBetweenStocksConfirmAdjust,
@@ -144,7 +141,7 @@ class FirebaseHelper {
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    if (mySoaps.length < 2) {
+    if (mySoaps.length < 5) {
       await PrefsInstance.setSoaps(mySoaps);
     } else {
       WriteBatch batch = firestore.batch();
