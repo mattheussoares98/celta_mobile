@@ -25,8 +25,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
   }
 
   TextEditingController _consultedProductController = TextEditingController();
-  bool _useAutoScan = false;
-  bool _useLegacyCode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,24 +61,15 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SearchWidget(
-              useAutoScan: _useAutoScan,
-              useLegacyCode: _useLegacyCode,
-              changeAutoScanValue: () {
-                setState(() {
-                  _useAutoScan = !_useAutoScan;
-                });
-              },
-              changeLegacyCodeValue: () {
-                setState(() {
-                  _useLegacyCode = !_useLegacyCode;
-                });
-              },
+              useLegacyCode: receiptProvider.useLegacyCode,
+              changeLegacyCodeValue: receiptProvider.changeLegacyCodeValue,
+              useAutoScan: receiptProvider.useAutoScan,
+              changeAutoScanValue: receiptProvider.changeAutoScanValue,
               focusNodeConsultProduct: receiptProvider.consultProductFocusNode,
               isLoading: receiptProvider.consultingProducts ||
                   receiptProvider.isUpdatingQuantity,
               onPressSearch: () async {
                 await receiptProvider.getProducts(
-                  isLegacyCodeSearch: _useLegacyCode,
                   docCode: arguments["grDocCode"],
                   controllerText: _consultProductController.text,
                   context: context,
@@ -111,7 +100,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               ),
             if (!receiptProvider.consultingProducts)
               ReceiptConferenceProductsItems(
-                useAutoScan: _useAutoScan,
                 getProductsWithCamera: () async {
                   FocusScope.of(context).unfocus();
                   _consultProductController.clear();
@@ -121,7 +109,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
 
                   if (_consultProductController.text != "") {
                     await receiptProvider.getProducts(
-                      isLegacyCodeSearch: _useLegacyCode,
                       docCode: arguments["grDocCode"],
                       controllerText: _consultProductController.text,
                       context: context,
@@ -135,7 +122,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 },
                 onFieldSubmitted: () async {
                   await receiptProvider.getProducts(
-                    isLegacyCodeSearch: _useLegacyCode,
                     docCode: arguments["grDocCode"],
                     controllerText: _consultProductController.text,
                     context: context,

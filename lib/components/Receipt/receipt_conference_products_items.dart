@@ -16,10 +16,8 @@ class ReceiptConferenceProductsItems extends StatefulWidget {
   final TextEditingController consultProductController;
   final Function onFieldSubmitted;
   final Function getProductsWithCamera;
-  final bool useAutoScan;
 
   const ReceiptConferenceProductsItems({
-    required this.useAutoScan,
     required this.getProductsWithCamera,
     required this.consultedProductController,
     required this.onFieldSubmitted,
@@ -62,7 +60,7 @@ class _ReceiptConferenceProductsItemsState
         selectedIndex = -1;
       });
 
-      if (widget.useAutoScan) {
+      if (receiptProvider.useAutoScan) {
         await widget.getProductsWithCamera();
       }
 
@@ -109,7 +107,7 @@ class _ReceiptConferenceProductsItemsState
           });
           widget.consultedProductController.clear();
 
-          if (widget.useAutoScan) {
+          if (receiptProvider.useAutoScan) {
             await widget.getProductsWithCamera();
           }
         }

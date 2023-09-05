@@ -60,7 +60,8 @@ class _TransferBetweenStocksInsertQuantityState
       widget.consultedProductController.clear();
     }
 
-    if (transferBetweenStocksProvider.useAutoScan) {
+    if (transferBetweenStocksProvider.useAutoScan &&
+        transferBetweenStocksProvider.errorMessageAdjustStock == "") {
       await widget.getProductsWithCamera();
     }
   }

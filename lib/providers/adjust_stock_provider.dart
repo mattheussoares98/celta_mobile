@@ -320,6 +320,12 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  _updateProductCodeAndProductPackingCode(int indexOfProduct) {
+    jsonAdjustStock["ProductPackingCode"] =
+        _products[indexOfProduct].ProductPackingCode;
+    jsonAdjustStock["ProductCode"] = _products[indexOfProduct].ProductCode;
+  }
+
   confirmAdjustStock({
     required BuildContext context,
     required int indexOfProduct,
@@ -333,6 +339,8 @@ class AdjustStockProvider with ChangeNotifier {
       firebaseCallEnum: FirebaseCallEnum.adjustStockConfirmQuantity,
     );
     print(jsonAdjustStock.toString());
+
+    _updateProductCodeAndProductPackingCode(indexOfProduct);
 
     try {
       await SoapHelper.soapPost(

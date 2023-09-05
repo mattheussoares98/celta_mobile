@@ -27,6 +27,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _telephonesController = TextEditingController();
 
   String dateOfBirth = "";
 
@@ -41,6 +42,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   final FocusNode _numberFocusNode = FocusNode();
   final FocusNode _dateOfBirthFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _telephonesFocusNode = FocusNode();
   final FocusNode _sexTypeFocusNode = FocusNode();
   final FocusNode _complementFocusNode = FocusNode();
   final FocusNode _referenceFocusNode = FocusNode();
@@ -61,6 +63,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     _stateController.dispose();
     _numberController.dispose();
     _referenceController.dispose();
+    _telephonesController.dispose();
   }
 
   @override
@@ -230,8 +233,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                         ),
                                       ),
                                       const Divider(
-                                        height: 4,
                                         color: Colors.black,
+                                        height: 4,
                                       ),
                                     ],
                                   ),
@@ -322,22 +325,475 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     ),
                   ],
                 ),
+                const Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 20,
+                  ),
+                ),
+                Text(
+                  "EMAILS",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                PersonalizedCard.personalizedCard(
+                  context: context,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0, top: 5),
+                    child: Column(
+                      children: [
+                        CustomerRegisterFormField(
+                          enabled: true,
+                          focusNode: _emailFocusNode,
+                          onFieldSubmitted: (String? value) {
+                            //executar o validate do email
+                            if (_emailController.text.isEmpty) {
+                              return;
+                            }
+                            customerRegisterProvider.addEmail(
+                              emailController: _emailController,
+                              context: context,
+                            );
+                            FocusScope.of(context).unfocus();
+                          },
+                          labelText: "E-mais",
+                          textEditingController: _emailController,
+                          limitOfCaracters: 40,
+                          validator: (String? value) {
+                            // if (value == null || value.isEmpty) {
+                            //   return null;
+                            // } else if (value.length < 8) {
+                            //   return "Quantidade de números inválido!";
+                            // }
+                            return null;
+                          },
+                          suffixWidget: FittedBox(
+                            child: TextButton(
+                              onPressed: () {
+                                customerRegisterProvider.addEmail(
+                                  emailController: _emailController,
+                                  context: context,
+                                );
+                                FocusScope.of(context).unfocus();
+                              },
+                              child: const Column(
+                                children: [
+                                  Text("Adicionar"),
+                                  FittedBox(child: Icon(Icons.add)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (customerRegisterProvider.emailsCount > 0)
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            height: double.parse(
+                                "${customerRegisterProvider.emailsCount * 35}"),
+                            child: ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              separatorBuilder: (context, index) =>
+                                  const Divider(), // ou outro separador, se necessário
+
+                              itemCount: customerRegisterProvider.emailsCount,
+                              itemBuilder: (context, index) {
+                                String email =
+                                    customerRegisterProvider.emails[index];
+                                return Text(
+                                  email,
+                                  textAlign: TextAlign.center,
+                                );
+                              },
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 20,
+                  ),
+                ),
+                Text(
+                  "ENDEREÇO",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                PersonalizedCard.personalizedCard(
+                  context: context,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0, top: 5),
+                    child: Column(
+                      children: [
+                        CustomerRegisterFormField(
+                          keyboardType: TextInputType.number,
+                          enabled: customerRegisterProvider.isLoadingCep
+                              ? false
+                              : true,
+                          focusNode: _cepFocusNode,
+                          onFieldSubmitted: customerRegisterProvider
+                                  .isLoadingCep
+                              ? null
+                              : (String? value) async {
+                                  await customerRegisterProvider
+                                      .getAddressByCep(
+                                    context: context,
+                                    cepControllerText: _cepController.text,
+                                    adressController: _adressController,
+                                    cityController: _cityController,
+                                    complementController: _complementController,
+                                    districtController: _districtController,
+                                    stateController: _stateController,
+                                  );
+                                  setState(() {});
+                                },
+                          labelText: "CEP",
+                          textEditingController: _cepController,
+                          limitOfCaracters: 8,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return null;
+                            } else if (value.length < 8) {
+                              return "Quantidade de números inválido!";
+                            }
+                            return null;
+                          },
+                          suffixWidget: TextButton(
+                            onPressed: customerRegisterProvider.isLoadingCep
+                                ? null
+                                : () async {
+                                    await customerRegisterProvider
+                                        .getAddressByCep(
+                                      context: context,
+                                      cepControllerText: _cepController.text,
+                                      adressController: _adressController,
+                                      cityController: _cityController,
+                                      complementController:
+                                          _complementController,
+                                      districtController: _districtController,
+                                      stateController: _stateController,
+                                    );
+                                    setState(() {});
+
+                                    if (customerRegisterProvider
+                                            .errorMessageGetAdressByCep ==
+                                        "") {
+                                      Future.delayed(
+                                          const Duration(milliseconds: 100),
+                                          () {
+                                        FocusScope.of(context)
+                                            .requestFocus(_numberFocusNode);
+                                      });
+                                    }
+                                  },
+                            child: const Text("Pesquisar CEP"),
+                          ),
+                        ),
+                        if (customerRegisterProvider.triedGetCep)
+                          Column(
+                            children: [
+                              CustomerRegisterFormField(
+                                enabled: customerRegisterProvider.isLoadingCep
+                                    ? false
+                                    : true,
+                                focusNode: _adressFocusNode,
+                                // onFieldSubmitted: customerRegisterProvider.isLoadingCep
+                                //     ? null
+                                //     : (String? value) async {
+                                //         await customerRegisterProvider.getAddressByCep(
+                                //           context: context,
+                                //           cepControllerText: _cepController.text,
+                                //         );
+                                //       },
+                                labelText: "Logradouro",
+                                textEditingController: _adressController,
+                                limitOfCaracters: 40,
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return null;
+                                  }
+                                  // else if (value.length < 8) {
+                                  //   return "Quantidade de números inválido!";
+                                  // }
+                                  return null;
+                                },
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: CustomerRegisterFormField(
+                                      enabled:
+                                          customerRegisterProvider.isLoadingCep
+                                              ? false
+                                              : true,
+                                      focusNode: _districtFocusNode,
+                                      onFieldSubmitted: customerRegisterProvider
+                                              .isLoadingCep
+                                          ? null
+                                          : (String? value) {
+                                              FocusScope.of(context)
+                                                  .requestFocus(_cityFocusNode);
+                                            },
+                                      labelText: "Bairro",
+                                      textEditingController:
+                                          _districtController,
+                                      limitOfCaracters: 8,
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return null;
+                                        } else if (value.length < 8) {
+                                          return "Quantidade de números inválido!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: CustomerRegisterFormField(
+                                      enabled:
+                                          customerRegisterProvider.isLoadingCep
+                                              ? false
+                                              : true,
+                                      focusNode: _cityFocusNode,
+                                      // onFieldSubmitted: customerRegisterProvider.isLoadingCep
+                                      //     ? null
+                                      //     : (String? value) async {
+                                      //         await customerRegisterProvider.getAddressByCep(
+                                      //           context: context,
+                                      //           cepControllerText: _cepController.text,
+                                      //         );
+                                      //       },
+                                      labelText: "Cidade",
+                                      textEditingController: _cityController,
+                                      limitOfCaracters: 8,
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return null;
+                                        } else if (value.length < 8) {
+                                          return "Quantidade de números inválido!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: DropdownButtonFormField<dynamic>(
+                                      focusNode: _stateFocusNode,
+                                      // disabledHint: transferBetweenPackageProvider
+                                      //         .isLoadingTypeStockAndJustifications
+                                      //     ? Row(
+                                      //         mainAxisAlignment: MainAxisAlignment.center,
+                                      //         children: [
+                                      //           const FittedBox(
+                                      //             child: Text(
+                                      //               "Consultando",
+                                      //               textAlign: TextAlign.center,
+                                      //               style: const TextStyle(
+                                      //                 fontSize: 60,
+                                      //               ),
+                                      //             ),
+                                      //           ),
+                                      //           const SizedBox(width: 15),
+                                      //           Container(
+                                      //             height: 15,
+                                      //             width: 15,
+                                      //             child: const CircularProgressIndicator(),
+                                      //           ),
+                                      //         ],
+                                      //       )
+                                      //     : const Center(child: Text("Justificativas")),
+                                      isExpanded: true,
+                                      hint: Center(
+                                        child: Text(
+                                          'Estado',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        // if (value == null) {
+                                        //   return 'Selecione uma justificativa!';
+                                        // }
+                                        return null;
+                                      },
+                                      onChanged:
+                                          // transferBetweenPackageProvider
+                                          //             .isLoadingTypeStockAndJustifications ||
+                                          //         transferBetweenPackageProvider.isLoadingAdjustStock ||
+                                          //         transferBetweenPackageProvider.isLoadingProducts ||
+                                          //         transferBetweenPackageProvider.products.isEmpty
+                                          //     ? null
+                                          //     :
+                                          (value) {
+                                        print(value);
+                                      },
+                                      items: customerRegisterProvider.states
+                                          .map(
+                                            (value) => DropdownMenuItem(
+                                              alignment: Alignment.center,
+                                              onTap: () {},
+                                              value: value,
+                                              child: FittedBox(
+                                                child: Column(
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        value,
+                                                      ),
+                                                    ),
+                                                    const Divider(
+                                                      color: Colors.black,
+                                                      height: 4,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: CustomerRegisterFormField(
+                                      keyboardType: TextInputType.number,
+                                      enabled:
+                                          customerRegisterProvider.isLoadingCep
+                                              ? false
+                                              : true,
+                                      focusNode: _numberFocusNode,
+                                      onFieldSubmitted:
+                                          customerRegisterProvider.isLoadingCep
+                                              ? null
+                                              : (String? value) async {
+                                                  FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _complementFocusNode);
+                                                },
+                                      labelText: "Número",
+                                      textEditingController: _numberController,
+                                      limitOfCaracters: 8,
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return null;
+                                        } else if (value.length < 8) {
+                                          return "Quantidade de números inválido!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: CustomerRegisterFormField(
+                                      enabled:
+                                          customerRegisterProvider.isLoadingCep
+                                              ? false
+                                              : true,
+                                      focusNode: _complementFocusNode,
+                                      onFieldSubmitted:
+                                          customerRegisterProvider.isLoadingCep
+                                              ? null
+                                              : (String? value) {
+                                                  FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _referenceFocusNode);
+                                                },
+                                      labelText: "Complemento",
+                                      textEditingController:
+                                          _complementController,
+                                      limitOfCaracters: 8,
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return null;
+                                        } else if (value.length < 8) {
+                                          return "Quantidade de números inválido!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: CustomerRegisterFormField(
+                                      enabled:
+                                          customerRegisterProvider.isLoadingCep
+                                              ? false
+                                              : true,
+                                      focusNode: _referenceFocusNode,
+                                      // onFieldSubmitted: customerRegisterProvider.isLoadingCep
+                                      //     ? null
+                                      //     : (String? value) async {
+                                      //         await customerRegisterProvider.getAddressByCep(
+                                      //           context: context,
+                                      //           cepControllerText: _cepController.text,
+                                      //         );
+                                      //       },
+                                      labelText: "Referência",
+                                      textEditingController:
+                                          _referenceController,
+                                      limitOfCaracters: 8,
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return null;
+                                        } else if (value.length < 8) {
+                                          return "Quantidade de números inválido!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 20,
+                  ),
+                ),
                 CustomerRegisterFormField(
+                  keyboardType: TextInputType.number,
                   enabled: true,
-                  focusNode: _emailFocusNode,
+                  focusNode: _telephonesFocusNode,
                   onFieldSubmitted: (String? value) {
                     //executar o validate do email
                     if (_emailController.text.isEmpty) {
                       return;
                     }
-                    customerRegisterProvider.addEmail(
-                      emailController: _emailController,
-                      context: context,
-                    );
+                    // customerRegisterProvider.addEmail(
+                    //   emailController: _emailController,
+                    //   context: context,
+                    // );
                   },
-                  labelText: "E-mais",
-                  textEditingController: _emailController,
-                  limitOfCaracters: 40,
+                  labelText: "Telefones",
+                  textEditingController: _telephonesController,
+                  limitOfCaracters: 10,
                   validator: (String? value) {
                     // if (value == null || value.isEmpty) {
                     //   return null;
@@ -349,10 +805,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                   suffixWidget: FittedBox(
                     child: TextButton(
                       onPressed: () {
-                        customerRegisterProvider.addEmail(
-                          emailController: _emailController,
-                          context: context,
-                        );
+                        // customerRegisterProvider.addEmail(
+                        //   emailController: _emailController,
+                        //   context: context,
+                        // );
                       },
                       child: const Column(
                         children: [
@@ -361,6 +817,13 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                         ],
                       ),
                     ),
+                  ),
+                ),
+                const Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 20,
                   ),
                 ),
                 if (customerRegisterProvider.emailsCount > 0)
@@ -373,6 +836,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                         physics: const NeverScrollableScrollPhysics(),
                         separatorBuilder: (context, index) =>
                             const Divider(), // ou outro separador, se necessário
+
                         itemCount: customerRegisterProvider.emailsCount,
                         itemBuilder: (context, index) {
                           String email = customerRegisterProvider.emails[index];
@@ -383,270 +847,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                         },
                       ),
                     ),
-                  ),
-                CustomerRegisterFormField(
-                  keyboardType: TextInputType.number,
-                  enabled: customerRegisterProvider.isLoadingCep ? false : true,
-                  focusNode: _cepFocusNode,
-                  onFieldSubmitted: customerRegisterProvider.isLoadingCep
-                      ? null
-                      : (String? value) async {
-                          await customerRegisterProvider.getAddressByCep(
-                            context: context,
-                            cepControllerText: _cepController.text,
-                            adressController: _adressController,
-                            cityController: _cityController,
-                            complementController: _complementController,
-                            districtController: _districtController,
-                            stateController: _stateController,
-                          );
-                          setState(() {});
-                        },
-                  labelText: "CEP",
-                  textEditingController: _cepController,
-                  limitOfCaracters: 8,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return null;
-                    } else if (value.length < 8) {
-                      return "Quantidade de números inválido!";
-                    }
-                    return null;
-                  },
-                  suffixWidget: TextButton(
-                    onPressed: customerRegisterProvider.isLoadingCep
-                        ? null
-                        : () async {
-                            await customerRegisterProvider.getAddressByCep(
-                              context: context,
-                              cepControllerText: _cepController.text,
-                              adressController: _adressController,
-                              cityController: _cityController,
-                              complementController: _complementController,
-                              districtController: _districtController,
-                              stateController: _stateController,
-                            );
-                            setState(() {});
-
-                            if (customerRegisterProvider
-                                .successToGetAdressByCep) {
-                              Future.delayed(const Duration(milliseconds: 100),
-                                  () {
-                                FocusScope.of(context)
-                                    .requestFocus(_numberFocusNode);
-                              });
-                            }
-                          },
-                    child: const Text("Pesquisar CEP"),
-                  ),
-                ),
-                if (customerRegisterProvider.triedGetCep)
-                  Column(
-                    children: [
-                      CustomerRegisterFormField(
-                        enabled: customerRegisterProvider.isLoadingCep ||
-                                customerRegisterProvider.successToGetAdressByCep
-                            ? false
-                            : true,
-                        focusNode: _adressFocusNode,
-                        // onFieldSubmitted: customerRegisterProvider.isLoadingCep
-                        //     ? null
-                        //     : (String? value) async {
-                        //         await customerRegisterProvider.getAddressByCep(
-                        //           context: context,
-                        //           cepControllerText: _cepController.text,
-                        //         );
-                        //       },
-                        labelText: "Logradouro",
-                        textEditingController: _adressController,
-                        limitOfCaracters: 8,
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return null;
-                          } else if (value.length < 8) {
-                            return "Quantidade de números inválido!";
-                          }
-                          return null;
-                        },
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomerRegisterFormField(
-                              enabled: customerRegisterProvider.isLoadingCep ||
-                                      customerRegisterProvider
-                                          .successToGetAdressByCep
-                                  ? false
-                                  : true,
-                              focusNode: _districtFocusNode,
-                              onFieldSubmitted:
-                                  customerRegisterProvider.isLoadingCep
-                                      ? null
-                                      : (String? value) {
-                                          FocusScope.of(context)
-                                              .requestFocus(_cityFocusNode);
-                                        },
-                              labelText: "Bairro",
-                              textEditingController: _districtController,
-                              limitOfCaracters: 8,
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return null;
-                                } else if (value.length < 8) {
-                                  return "Quantidade de números inválido!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: CustomerRegisterFormField(
-                              enabled: customerRegisterProvider.isLoadingCep ||
-                                      customerRegisterProvider
-                                          .successToGetAdressByCep
-                                  ? false
-                                  : true,
-                              focusNode: _cityFocusNode,
-                              // onFieldSubmitted: customerRegisterProvider.isLoadingCep
-                              //     ? null
-                              //     : (String? value) async {
-                              //         await customerRegisterProvider.getAddressByCep(
-                              //           context: context,
-                              //           cepControllerText: _cepController.text,
-                              //         );
-                              //       },
-                              labelText: "Cidade",
-                              textEditingController: _cityController,
-                              limitOfCaracters: 8,
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return null;
-                                } else if (value.length < 8) {
-                                  return "Quantidade de números inválido!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomerRegisterFormField(
-                              keyboardType: TextInputType.number,
-                              enabled: customerRegisterProvider.isLoadingCep ||
-                                      customerRegisterProvider
-                                          .successToGetAdressByCep
-                                  ? false
-                                  : true,
-                              focusNode: _stateFocusNode,
-                              onFieldSubmitted:
-                                  customerRegisterProvider.isLoadingCep
-                                      ? null
-                                      : (String? value) {
-                                          FocusScope.of(context)
-                                              .requestFocus(_numberFocusNode);
-                                        },
-                              labelText: "Estado",
-                              textEditingController: _stateController,
-                              limitOfCaracters: 8,
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return null;
-                                } else if (value.length < 8) {
-                                  return "Quantidade de números inválido!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: CustomerRegisterFormField(
-                              enabled: customerRegisterProvider.isLoadingCep
-                                  ? false
-                                  : true,
-                              focusNode: _numberFocusNode,
-                              onFieldSubmitted: customerRegisterProvider
-                                      .isLoadingCep
-                                  ? null
-                                  : (String? value) async {
-                                      FocusScope.of(context)
-                                          .requestFocus(_complementFocusNode);
-                                    },
-                              labelText: "Número",
-                              textEditingController: _numberController,
-                              limitOfCaracters: 8,
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return null;
-                                } else if (value.length < 8) {
-                                  return "Quantidade de números inválido!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomerRegisterFormField(
-                              enabled: customerRegisterProvider.isLoadingCep
-                                  ? false
-                                  : true,
-                              focusNode: _complementFocusNode,
-                              onFieldSubmitted: customerRegisterProvider
-                                      .isLoadingCep
-                                  ? null
-                                  : (String? value) {
-                                      FocusScope.of(context)
-                                          .requestFocus(_referenceFocusNode);
-                                    },
-                              labelText: "Complemento",
-                              textEditingController: _complementController,
-                              limitOfCaracters: 8,
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return null;
-                                } else if (value.length < 8) {
-                                  return "Quantidade de números inválido!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: CustomerRegisterFormField(
-                              enabled: customerRegisterProvider.isLoadingCep
-                                  ? false
-                                  : true,
-                              focusNode: _referenceFocusNode,
-                              // onFieldSubmitted: customerRegisterProvider.isLoadingCep
-                              //     ? null
-                              //     : (String? value) async {
-                              //         await customerRegisterProvider.getAddressByCep(
-                              //           context: context,
-                              //           cepControllerText: _cepController.text,
-                              //         );
-                              //       },
-                              labelText: "Referência",
-                              textEditingController: _referenceController,
-                              limitOfCaracters: 8,
-                              validator: (String? value) {
-                                if (value == null || value.isEmpty) {
-                                  return null;
-                                } else if (value.length < 8) {
-                                  return "Quantidade de números inválido!";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                 ElevatedButton(
                   onPressed: () async {

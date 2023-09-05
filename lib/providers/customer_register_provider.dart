@@ -10,14 +10,46 @@ class CustomerRegisterProvider with ChangeNotifier {
   List<String> get emails => [..._emails];
   int get emailsCount => _emails.length;
 
+  static const List<String> _states = [
+    "Acre",
+    "Alagoas",
+    "Amapá",
+    "Amazonas",
+    "Bahia",
+    "Ceará",
+    "Distrito Federal",
+    "Espírito Santo",
+    "Goiás",
+    "Maranhão",
+    "Mato Grosso",
+    "Mato Grosso do Sul",
+    "Minas Gerais",
+    "Pará",
+    "Paraíba",
+    "Paraná",
+    "Pernambuco",
+    "Piauí",
+    "Rio de Janeiro",
+    "Rio Grande do Norte",
+    "Rio Grande do Sul",
+    "Rondônia",
+    "Roraima",
+    "Santa Catarina",
+    "São Paulo",
+    "Sergipe",
+    "Tocantins"
+  ];
+
+  List<String> get states => [..._states];
+
   bool _isLoadingCep = false;
   bool get isLoadingCep => _isLoadingCep;
 
-  bool _successToGetAdressByCep = false;
-  bool get successToGetAdressByCep => _successToGetAdressByCep;
-
   bool _triedGetCep = false;
   bool get triedGetCep => _triedGetCep;
+
+  String _errorMessageGetAdressByCep = "";
+  String get errorMessageGetAdressByCep => _errorMessageGetAdressByCep;
 
   CustomerRegisterCepModel _customerRegisterCepModel =
       CustomerRegisterCepModel();
@@ -54,8 +86,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     required TextEditingController cityController,
     required TextEditingController stateController,
   }) async {
+    _errorMessageGetAdressByCep = "";
     _isLoadingCep = true;
-    _successToGetAdressByCep = false;
     _triedGetCep = true;
     notifyListeners();
     Map response = await RequestsHttp.get(
@@ -63,6 +95,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     );
 
     if (response["error"] != "") {
+      _errorMessageGetAdressByCep = response["error"];
+
       ShowErrorMessage.showErrorMessage(
         error:
             "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
@@ -79,7 +113,6 @@ class CustomerRegisterProvider with ChangeNotifier {
         stateController: stateController,
       );
 
-      _successToGetAdressByCep = true;
       cepControllerText = _customerRegisterCepModel.Address ?? "";
     }
 

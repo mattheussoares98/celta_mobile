@@ -34,7 +34,6 @@ class _ConferenceConsultProductWithoutEanButtonState
                   docCode: widget.docCode,
                   context: context,
                   controllerText: "",
-                  isLegacyCodeSearch: false,
                   isSearchAllCountedProducts: true,
                 );
               },

@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_justification_model.dart';
 import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_type_model.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
@@ -350,6 +351,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  _updateProductCodeAndProductPackingCode(int indexOfProduct) {
+    jsonAdjustStock["ProductPackingCode"] =
+        _products[indexOfProduct].ProductPackingCode;
+    jsonAdjustStock["ProductCode"] = _products[indexOfProduct].ProductCode;
+  }
+
   confirmAdjustStock({
     required BuildContext context,
     required int indexOfProduct,
@@ -362,6 +369,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     FirebaseHelper.addSoapCallInFirebase(
       firebaseCallEnum: FirebaseCallEnum.transferBetweenStocksConfirmAdjust,
     );
+
+    _updateProductCodeAndProductPackingCode(indexOfProduct);
 
     try {
       await SoapHelper.soapPost(
@@ -380,7 +389,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         typeOperator = typeOperator
             .replaceAll(RegExp(r'\('), '')
             .replaceAll(RegExp(r'\)'), '');
-        _lastUpdatedQuantity = jsonAdjustStock["Quantity"]!.toString();
+        _lastUpdatedQuantity = ConvertString.convertToBrazilianNumber(
+            jsonAdjustStock["Quantity"]!.toString());
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
       }
       _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;

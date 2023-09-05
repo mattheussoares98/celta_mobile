@@ -41,6 +41,21 @@ class ReceiptProvider with ChangeNotifier {
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
+  bool _useLegacyCode = false;
+  bool get useLegacyCode => _useLegacyCode;
+  bool _useAutoScan = false;
+  bool get useAutoScan => _useAutoScan;
+
+  void changeAutoScanValue() {
+    _useAutoScan = !_useAutoScan;
+    notifyListeners();
+  }
+
+  void changeLegacyCodeValue() {
+    _useLegacyCode = !_useLegacyCode;
+    notifyListeners();
+  }
+
   clearProducts() {
     _products = [];
     notifyListeners();
@@ -250,7 +265,6 @@ class ReceiptProvider with ChangeNotifier {
     required int docCode,
     required String controllerText,
     required BuildContext context,
-    required bool isLegacyCodeSearch,
     required bool isSearchAllCountedProducts,
   }) async {
     _products.clear();
@@ -259,7 +273,7 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
 
     int searchTypeInt = 0;
-    if (isLegacyCodeSearch) searchTypeInt = 11;
+    if (_useLegacyCode) searchTypeInt = 11;
     if (isSearchAllCountedProducts) searchTypeInt = 19;
 
     try {

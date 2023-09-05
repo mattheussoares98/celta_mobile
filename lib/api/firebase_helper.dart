@@ -159,7 +159,7 @@ class FirebaseHelper {
           docRef,
           {
             'timesUsed': FieldValue.increment(1),
-            'users': FieldValue.arrayUnion([UserData.userName]),
+            'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
             'datesUsed': FieldValue.arrayUnion(
                 [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
           },
