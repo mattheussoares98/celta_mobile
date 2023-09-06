@@ -107,6 +107,10 @@ class _TransferRequestProductsItemsState
                 if (transferRequestProvider.products.isEmpty)
                   return Container();
 
+                if (transferRequestProvider.productsCount == 1) {
+                  selectedIndex = 0;
+                }
+
                 TransferRequestProductsModel product =
                     transferRequestProvider.products[index];
 
