@@ -47,8 +47,8 @@ class CustomerRegisterFormField extends StatelessWidget {
                   ],
         focusNode: focusNode ?? null,
         onFieldSubmitted: onFieldSubmitted,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: validator ?? null,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         style: const TextStyle(
           fontWeight: FontWeight.w500,
           fontFamily: 'OpenSans',

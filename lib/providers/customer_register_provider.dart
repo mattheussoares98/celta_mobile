@@ -6,9 +6,30 @@ import 'package:celta_inventario/api/requests_http.dart';
 import 'package:flutter/material.dart';
 
 class CustomerRegisterProvider with ChangeNotifier {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController cpfCnpjController = TextEditingController();
+  final TextEditingController reducedNameController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController cepController = TextEditingController();
+  final TextEditingController adressController = TextEditingController();
+  final TextEditingController districtController = TextEditingController();
+  final TextEditingController complementController = TextEditingController();
+  final TextEditingController referenceController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+
   List<String> _emails = [];
   List<String> get emails => [..._emails];
   int get emailsCount => _emails.length;
+
+  List<String> _adressess = [];
+  List<String> get adressess => [..._adressess];
+  int get adressessCount => _adressess.length;
+
+  List<String> _telephone = [];
+  List<String> get telephone => [..._telephone];
+  int get telephoneCount => _telephone.length;
 
   static const List<String> _states = [
     "Acre",

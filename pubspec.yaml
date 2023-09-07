@@ -45,6 +45,7 @@ dependencies:
   cloud_firestore: ^4.8.5
   firebase_core: ^2.15.1
   firebase_messaging: ^14.6.7
+  cpf_cnpj_validator: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -79,16 +80,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/Images/inventory.jpg
-    - lib/assets/Images/stock.jpg
-    - lib/assets/Images/pedidoDeVendas.jpg
-    - lib/assets/Images/receipt.jpg
-    - lib/assets/Images/consultPrice.jpg
-    - lib/assets/Images/adjustStock.jpg
-    - lib/assets/Images/saleRequest.jpg
-    - lib/assets/Images/LogoCeltaTransparente.png
-    - lib/assets/Images/transfer.jpg
-    - lib/assets/Images/transferBetweenStocks.jpg
+    - lib/assets/Images/
     
   #   - images/a_dot_ham.jpeg
 
