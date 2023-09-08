@@ -36,7 +36,8 @@ class CustomerRegisterCepModel {
     required TextEditingController districtController,
     required TextEditingController complementController,
     required TextEditingController cityController,
-    required TextEditingController stateController,
+    required ValueNotifier<String?> selectedStateDropDown,
+    required Map<String, String> states,
   }) {
     customerRegisterCepModel.zip = data["cep"];
 
@@ -53,7 +54,7 @@ class CustomerRegisterCepModel {
     cityController.text = data["localidade"];
 
     customerRegisterCepModel.State = data["uf"];
-    stateController.text = data["uf"];
+    selectedStateDropDown.value = states[data["uf"]];
 
     customerRegisterCepModel.ibge = data["ibge"];
     customerRegisterCepModel.gia = data["gia"];

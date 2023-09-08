@@ -31,6 +31,18 @@ class _CustomerRegisterPersonPageState
   final FocusNode dateOfBirthFocusNode = FocusNode();
   final FocusNode emailFocusNode = FocusNode();
 
+  ValueNotifier<String?> _selectedSexDropDown = ValueNotifier<String?>("");
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    CustomerRegisterProvider customerRegisterProvider =
+        Provider.of(context, listen: true);
+    _selectedSexDropDown.value =
+        customerRegisterProvider.selectedSexDropDown.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -111,6 +123,8 @@ class _CustomerRegisterPersonPageState
                 } else if (cpfCnpj.length > 11 && cpfCnpj.length < 14) {
                   return "Quantidade de caracteres inválido";
                 }
+
+                return "CPF/CNPJ inválido!";
               },
               textEditingController: customerRegisterProvider.cpfCnpjController,
               limitOfCaracters: 14,
@@ -215,6 +229,7 @@ class _CustomerRegisterPersonPageState
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: DropdownButtonFormField<dynamic>(
+                value: _selectedSexDropDown.value,
                 focusNode: sexTypeFocusNode,
                 // disabledHint: transferBetweenPackageProvider
                 //         .isLoadingTypeStockAndJustifications
@@ -255,16 +270,9 @@ class _CustomerRegisterPersonPageState
                   // }
                   return null;
                 },
-                onChanged:
-                    // transferBetweenPackageProvider
-                    //             .isLoadingTypeStockAndJustifications ||
-                    //         transferBetweenPackageProvider.isLoadingAdjustStock ||
-                    //         transferBetweenPackageProvider.isLoadingProducts ||
-                    //         transferBetweenPackageProvider.products.isEmpty
-                    //     ? null
-                    //     :
-                    (value) {
-                  print(value);
+                onChanged: (value) {
+                  customerRegisterProvider.selectedSexDropDown =
+                      ValueNotifier(value);
                 },
                 decoration: const InputDecoration(
                   labelText: '',

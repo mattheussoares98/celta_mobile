@@ -1,4 +1,4 @@
-import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
+import 'package:celta_inventario/Pages/customer_register/customer_register_add_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_adresses_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_person_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_email_page.dart';
@@ -76,6 +76,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     if (_selectedIndex == 3) {
       _telephoneFormKeyIsValid = _telephoneFormKey.currentState!.validate();
       return _telephoneFormKeyIsValid;
+    }
+    if (_selectedIndex == 4) {
+      return true;
     } else {
       return false;
     }
@@ -85,13 +88,35 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     required int index,
     // required SaleRequestProvider saleRequestProvider,
   }) {
-    if (_formKeyIsValid()) {
+    CustomerRegisterProvider customerRegisterProvider =
+        Provider.of(context, listen: false);
+
+    bool hasAdressInformed =
+        customerRegisterProvider.adressController.text.isNotEmpty ||
+            customerRegisterProvider.cityController.text.isNotEmpty ||
+            customerRegisterProvider.complementController.text.isNotEmpty ||
+            customerRegisterProvider.districtController.text.isNotEmpty ||
+            customerRegisterProvider.selectedStateDropDown.value != null ||
+            customerRegisterProvider.numberController.text.isNotEmpty ||
+            customerRegisterProvider.referenceController.text.isNotEmpty ||
+            customerRegisterProvider.cepController.text.isNotEmpty;
+
+    String errorMessage =
+        "Corrija os erros e salve o endereço para mudar de tela!";
+    if (hasAdressInformed && _adressFormKeyIsValid) {
+      errorMessage =
+          "Adicione o endereço ou apague os dados para mudar de tela!";
+    } else if (hasAdressInformed && !_adressFormKeyIsValid) {
+      errorMessage = "Corrija os dados e salve o endereço para mudar de tela!";
+    }
+
+    if (_formKeyIsValid() && !hasAdressInformed) {
       setState(() {
         _selectedIndex = index;
       });
     } else {
       ShowErrorMessage.showErrorMessage(
-        error: "Corrija as informações para mudar de tela!",
+        error: errorMessage,
         context: context,
       );
     }
@@ -108,8 +133,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         validateAdressFormKey: _formKeyIsValid,
         adressFormKey: _adressFormKey,
       ),
-      CustomerRegisterEmailPage(emailFormKey: _emailFormKey),
+      CustomerRegisterEmailPage(
+        emailFormKey: _emailFormKey,
+        validateAdressFormKey: _formKeyIsValid,
+      ),
       CustomerRegisterTelephonesPage(telephoneFormKey: _telephoneFormKey),
+      const CustomerRegisterAddPage(),
     ];
 
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -167,6 +196,16 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     customerRegisterProvider.telephoneCount > 0,
               ),
               label: 'Telefone',
+            ),
+            BottomNavigationBarItem(
+              icon: iconAccordingFormIsValid(
+                icon: Icons.check,
+                hasDataAndIsValid: _personFormKeyIsValid ||
+                    _adressFormKeyIsValid ||
+                    _emailFormKeyIsValid ||
+                    _telephoneFormKeyIsValid,
+              ),
+              label: 'Cadastrar',
             ),
           ],
           currentIndex: _selectedIndex,

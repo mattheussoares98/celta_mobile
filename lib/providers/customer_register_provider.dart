@@ -17,51 +17,67 @@ class CustomerRegisterProvider with ChangeNotifier {
   final TextEditingController referenceController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
-  final TextEditingController stateController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final ValueNotifier<String?> _selectedSexDropDown =
+      ValueNotifier<String?>(null);
+  final ValueNotifier<String?> _selectedStateDropDown =
+      ValueNotifier<String?>(null);
+
+  ValueNotifier<String?> get selectedSexDropDown => _selectedSexDropDown;
+  set selectedSexDropDown(ValueNotifier<String?> newValue) {
+    _selectedSexDropDown.value = newValue.value;
+  }
+
+  ValueNotifier<String?> get selectedStateDropDown => _selectedStateDropDown;
+  set selectedStateDropDown(ValueNotifier<String?> newValue) {
+    _selectedStateDropDown.value = newValue.value;
+  }
 
   List<String> _emails = [];
   List<String> get emails => [..._emails];
   int get emailsCount => _emails.length;
 
-  List<String> _adressess = [];
-  List<String> get adressess => [..._adressess];
+  List<CustomerRegisterCepModel> _adressess = [];
+  List<CustomerRegisterCepModel> get adressess => [..._adressess];
   int get adressessCount => _adressess.length;
 
   List<String> _telephone = [];
   List<String> get telephone => [..._telephone];
   int get telephoneCount => _telephone.length;
 
-  static const List<String> _states = [
-    "Acre",
-    "Alagoas",
-    "Amapá",
-    "Amazonas",
-    "Bahia",
-    "Ceará",
-    "Distrito Federal",
-    "Espírito Santo",
-    "Goiás",
-    "Maranhão",
-    "Mato Grosso",
-    "Mato Grosso do Sul",
-    "Minas Gerais",
-    "Pará",
-    "Paraíba",
-    "Paraná",
-    "Pernambuco",
-    "Piauí",
-    "Rio de Janeiro",
-    "Rio Grande do Norte",
-    "Rio Grande do Sul",
-    "Rondônia",
-    "Roraima",
-    "Santa Catarina",
-    "São Paulo",
-    "Sergipe",
-    "Tocantins"
-  ];
+  static const Map<String, String> _states = {
+    "AC": "Acre",
+    "AL": "Alagoas",
+    "AP": "Amapá",
+    "AM": "Amazonas",
+    "BA": "Bahia",
+    "CE": "Ceará",
+    "DF": "Distrito Federal",
+    "ES": "Espírito Santo",
+    "GO": "Goiás",
+    "MA": "Maranhão",
+    "MT": "Mato Grosso",
+    "MS": "Mato Grosso do Sul",
+    "MG": "Minas Gerais",
+    "PA": "Pará",
+    "PB": "Paraíba",
+    "PR": "Paraná",
+    "PE": "Pernambuco",
+    "PI": "Piauí",
+    "RJ": "Rio de Janeiro",
+    "RN": "Rio Grande do Norte",
+    "RS": "Rio Grande do Sul",
+    "RO": "Rondônia",
+    "RR": "Roraima",
+    "SC": "Santa Catarina",
+    "SP": "São Paulo",
+    "SE": "Sergipe",
+    "TO": "Tocantins",
+  };
 
-  List<String> get states => [..._states];
+  List<String> get states {
+    return [..._states.values];
+  }
 
   bool _isLoadingCep = false;
   bool get isLoadingCep => _isLoadingCep;
@@ -75,6 +91,44 @@ class CustomerRegisterProvider with ChangeNotifier {
   CustomerRegisterCepModel _customerRegisterCepModel =
       CustomerRegisterCepModel();
   get customerRegisterCepModel => _customerRegisterCepModel;
+
+  void addAdress() {
+    _adressess.add(CustomerRegisterCepModel(
+      Address: adressController.text,
+      City: cityController.text,
+      Complement: complementController.text,
+      District: districtController.text,
+      number: int.parse(numberController.text),
+      reference: referenceController.text,
+      zip: cepController.text,
+    ));
+    adressController.text = "";
+    cityController.text = "";
+    complementController.text = "";
+    districtController.text = "";
+    numberController.text = "";
+    referenceController.text = "";
+    cepController.text = "";
+    _selectedStateDropDown.value = null;
+    notifyListeners();
+  }
+
+  void removeAdress(int index) {
+    _adressess.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearAdressControllers() {
+    adressController.text = "";
+    cityController.text = "";
+    complementController.text = "";
+    districtController.text = "";
+    numberController.text = "";
+    referenceController.text = "";
+    cepController.text = "";
+    _selectedStateDropDown.value = null;
+    notifyListeners();
+  }
 
   void addEmail({
     required BuildContext context,
@@ -98,21 +152,20 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearEmailController() {
+    emailController.text = "";
+    notifyListeners();
+  }
+
   Future<void> getAddressByCep({
     required BuildContext context,
-    required String cepControllerText,
-    required TextEditingController adressController,
-    required TextEditingController districtController,
-    required TextEditingController complementController,
-    required TextEditingController cityController,
-    required TextEditingController stateController,
   }) async {
     _errorMessageGetAdressByCep = "";
     _isLoadingCep = true;
     _triedGetCep = true;
     notifyListeners();
     Map response = await RequestsHttp.get(
-      url: "https://viacep.com.br/ws/$cepControllerText/json/",
+      url: "https://viacep.com.br/ws/${cepController.text}/json/",
     );
 
     if (response["error"] != "") {
@@ -131,10 +184,9 @@ class CustomerRegisterProvider with ChangeNotifier {
         districtController: districtController,
         complementController: complementController,
         cityController: cityController,
-        stateController: stateController,
+        selectedStateDropDown: _selectedStateDropDown,
+        states: _states,
       );
-
-      cepControllerText = _customerRegisterCepModel.Address ?? "";
     }
 
     _isLoadingCep = false;

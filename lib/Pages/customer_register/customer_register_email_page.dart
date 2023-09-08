@@ -1,11 +1,15 @@
 import 'package:celta_inventario/components/Customer_register/customer_register_form_field.dart';
+import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomerRegisterEmailPage extends StatefulWidget {
   final GlobalKey<FormState> emailFormKey;
+  final Function validateAdressFormKey;
   const CustomerRegisterEmailPage({
+    required this.validateAdressFormKey,
     required this.emailFormKey,
     Key? key,
   }) : super(key: key);
@@ -17,99 +21,114 @@ class CustomerRegisterEmailPage extends StatefulWidget {
 
 class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
   final FocusNode emailFocusNode = FocusNode();
-  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
-    return Form(
-      key: widget.emailFormKey,
-      child: Column(
-        children: [
-          CustomerRegisterFormField(
-            enabled: true,
-            focusNode: emailFocusNode,
-            onFieldSubmitted: (String? value) {
-              //executar o validate do email
-              if (emailController.text.isEmpty) {
-                return;
-              }
-              customerRegisterProvider.addEmail(
-                emailController: emailController,
-                context: context,
-              );
-              FocusScope.of(context).unfocus();
-            },
-            labelText: "E-mail",
-            textEditingController: emailController,
-            limitOfCaracters: 40,
-            validator: (String? value) {
-              // if (value == null || value.isEmpty) {
-              //   return null;
-              // } else if (value.length < 8) {
-              //   return "Quantidade de números inválido!";
-              // }
-              return null;
-            },
-            suffixWidget: FittedBox(
-              child: TextButton(
-                onPressed: () {
+    return SingleChildScrollView(
+      child: Form(
+        key: widget.emailFormKey,
+        child: Column(
+          children: [
+            CustomerRegisterFormField(
+              enabled: true,
+              focusNode: emailFocusNode,
+              onFieldSubmitted: (String? value) {
+                //executar o validate do email
+                if (customerRegisterProvider.emailController.text.isEmpty) {
+                  return;
+                }
+                customerRegisterProvider.addEmail(
+                  emailController: customerRegisterProvider.emailController,
+                  context: context,
+                );
+                FocusScope.of(context).unfocus();
+              },
+              suffixWidget: IconButton(
+                  onPressed: () {
+                    customerRegisterProvider.clearEmailController();
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  )),
+              labelText: "E-mail",
+              textEditingController: customerRegisterProvider.emailController,
+              limitOfCaracters: 40,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return null;
+                } else if (!value.contains("@")) {
+                  return 'O e-mail está inválido';
+                } else if (!value.contains("\.")) {
+                  return 'O e-mail está inválido';
+                } else if (value.endsWith("\.")) {
+                  return 'O e-mail está inválido';
+                }
+                return null;
+              },
+            ),
+            ElevatedButton(
+              onPressed: () {
+                bool isValid = widget.validateAdressFormKey();
+
+                if (isValid &&
+                    customerRegisterProvider.emailController.text.isNotEmpty) {
                   customerRegisterProvider.addEmail(
-                    emailController: emailController,
+                    emailController: customerRegisterProvider.emailController,
                     context: context,
                   );
                   FocusScope.of(context).unfocus();
-                },
-                child: const Column(
-                  children: [
-                    Text("Adicionar"),
-                    FittedBox(child: Icon(Icons.add)),
-                  ],
+                } else {
+                  ShowErrorMessage.showErrorMessage(
+                    error: "Digite um e-mail válido!",
+                    context: context,
+                  );
+                }
+              },
+              child: const Text(
+                "Adicionar e-mail",
+              ),
+            ),
+            if (customerRegisterProvider.emailsCount > 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: customerRegisterProvider.emailsCount,
+                  itemBuilder: (context, index) {
+                    String email = customerRegisterProvider.emails[index];
+                    return PersonalizedCard.personalizedCard(
+                      context: context,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              email,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              customerRegisterProvider.removeEmail(index);
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              size: 30,
+                              color: Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
-          ),
-          if (customerRegisterProvider.emailsCount > 0)
-            Container(
-              margin: const EdgeInsets.only(top: 5),
-              height:
-                  double.parse("${customerRegisterProvider.emailsCount * 50}"),
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: customerRegisterProvider.emailsCount,
-                itemBuilder: (context, index) {
-                  String email = customerRegisterProvider.emails[index];
-                  return Container(
-                    height: 50,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    color: index.isEven ? Colors.grey[300] : Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            email,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            customerRegisterProvider.removeEmail(index);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            size: 30,
-                            color: Colors.red,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
+import 'package:celta_inventario/components/Customer_register/customer_register_adresses_inserteds.dart';
 import 'package:celta_inventario/components/Customer_register/customer_register_form_field.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
@@ -44,20 +46,25 @@ class _CustomerRegisterAdressesPageState
 
     await customerRegisterProvider.getAddressByCep(
       context: context,
-      cepControllerText: customerRegisterProvider.cepController.text,
-      adressController: customerRegisterProvider.adressController,
-      cityController: customerRegisterProvider.cityController,
-      complementController: customerRegisterProvider.complementController,
-      districtController: customerRegisterProvider.districtController,
-      stateController: customerRegisterProvider.stateController,
     );
-    setState(() {});
 
     if (customerRegisterProvider.errorMessageGetAdressByCep == "") {
       Future.delayed(const Duration(milliseconds: 100), () {
         FocusScope.of(context).requestFocus(_numberFocusNode);
       });
     }
+  }
+
+  ValueNotifier<String?> _selectedStateDropDown = ValueNotifier<String?>("");
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    CustomerRegisterProvider customerRegisterProvider =
+        Provider.of(context, listen: true);
+    _selectedStateDropDown.value =
+        customerRegisterProvider.selectedStateDropDown.value;
   }
 
   @override
@@ -87,11 +94,37 @@ class _CustomerRegisterAdressesPageState
                   return null;
                 } else if (value.length < 8) {
                   return "Quantidade de números inválido!";
+                } else if (value.contains("\.") ||
+                    value.contains("\,") ||
+                    value.contains("\-") ||
+                    value.contains(" ")) {
+                  return "Digite somente números";
                 }
                 return null;
               },
               suffixWidget: TextButton(
-                child: const Text("Pesquisar CEP"),
+                child: customerRegisterProvider.isLoadingCep
+                    ? const FittedBox(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                "Pesquisando CEP",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                              width: 15,
+                              child: CircularProgressIndicator(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Text("Pesquisar CEP"),
                 onPressed: customerRegisterProvider.isLoadingCep
                     ? null
                     : () async {
@@ -121,7 +154,11 @@ class _CustomerRegisterAdressesPageState
                         customerRegisterProvider.adressController,
                     limitOfCaracters: 40,
                     validator: (String? value) {
-                      if (value == null || value.isEmpty || value.length < 5) {
+                      if ((value == null ||
+                              value.isEmpty ||
+                              value.length < 5) &&
+                          customerRegisterProvider.cepController.text.length ==
+                              8) {
                         return "Logradouro muito curto";
                       }
                       return null;
@@ -147,9 +184,12 @@ class _CustomerRegisterAdressesPageState
                               customerRegisterProvider.districtController,
                           limitOfCaracters: 30,
                           validator: (String? value) {
-                            if (value == null ||
-                                value.isEmpty ||
-                                value.length < 2) {
+                            if ((value == null ||
+                                    value.isEmpty ||
+                                    value.length < 2) &&
+                                customerRegisterProvider
+                                        .cepController.text.length ==
+                                    8) {
                               return "Bairro muito curto";
                             }
                             return null;
@@ -175,9 +215,12 @@ class _CustomerRegisterAdressesPageState
                               customerRegisterProvider.cityController,
                           limitOfCaracters: 30,
                           validator: (String? value) {
-                            if (value == null ||
-                                value.isEmpty ||
-                                value.length < 2) {
+                            if ((value == null ||
+                                    value.isEmpty ||
+                                    value.length < 2) &&
+                                customerRegisterProvider
+                                        .cepController.text.length ==
+                                    8) {
                               return "Cidade muito curta";
                             }
                             return null;
@@ -192,7 +235,7 @@ class _CustomerRegisterAdressesPageState
                         flex: 5,
                         child: DropdownButtonFormField<dynamic>(
                           focusNode: _stateFocusNode,
-                          value: customerRegisterProvider.states[0],
+                          value: _selectedStateDropDown.value,
                           // disabledHint: transferBetweenPackageProvider
                           //         .isLoadingTypeStockAndJustifications
                           //     ? Row(
@@ -227,13 +270,17 @@ class _CustomerRegisterAdressesPageState
                             ),
                           ),
                           validator: (value) {
-                            if (value == null) {
+                            if (value == null &&
+                                customerRegisterProvider
+                                        .cepController.text.length ==
+                                    8) {
                               return 'Selecione um estado!';
                             }
                             return null;
                           },
                           onChanged: (value) {
-                            print(value);
+                            customerRegisterProvider
+                                .selectedStateDropDown.value = value;
                           },
                           items: customerRegisterProvider.states
                               .map(
@@ -281,10 +328,18 @@ class _CustomerRegisterAdressesPageState
                               customerRegisterProvider.numberController,
                           limitOfCaracters: 6,
                           validator: (String? value) {
-                            if (value == null ||
-                                value.isEmpty ||
-                                value.length < 1) {
+                            if ((value == null ||
+                                    value.isEmpty ||
+                                    value.length < 1) &&
+                                customerRegisterProvider
+                                        .cepController.text.length ==
+                                    8) {
                               return "Digite o número!";
+                            } else if (value!.contains("\.") ||
+                                value.contains("\,") ||
+                                value.contains("\-") ||
+                                value.contains(" ")) {
+                              return "Digite somente números";
                             }
                             return null;
                           },
@@ -342,17 +397,70 @@ class _CustomerRegisterAdressesPageState
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: ElevatedButton(
-                      onPressed: customerRegisterProvider.isLoadingCep
-                          ? null
-                          : () {
-                              widget.validateAdressFormKey();
-                            },
-                      child: const Text("Adicionar endereço"),
+                    padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          style:
+                              TextButton.styleFrom(backgroundColor: Colors.red),
+                          onPressed: () {
+                            ShowAlertDialog().showAlertDialog(
+                              context: context,
+                              title: "Apagar dados digitados",
+                              subtitle:
+                                  "Deseja apagar todos os dados preenchidos?",
+                              function: () {
+                                customerRegisterProvider
+                                    .clearAdressControllers();
+                              },
+                            );
+                          },
+                          child: const Text(
+                            "Apagar dados",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                          onPressed: customerRegisterProvider.isLoadingCep
+                              ? null
+                              : () {
+                                  bool isValid = widget.validateAdressFormKey();
+
+                                  if (isValid &&
+                                      customerRegisterProvider
+                                          .cepController.text.isNotEmpty) {
+                                    customerRegisterProvider.addAdress();
+                                    FocusScope.of(context).unfocus();
+                                  } else {
+                                    ShowErrorMessage.showErrorMessage(
+                                      error:
+                                          "Insira os dados corretamente para salvar o endereço",
+                                      context: context,
+                                    );
+                                  }
+                                },
+                          child: const Text(
+                            "Adicionar endereço",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
+              ),
+            if (customerRegisterProvider.adressessCount > 0)
+              CustomerRegisterAdressesInserteds(
+                customerRegisterProvider: customerRegisterProvider,
               ),
           ],
         ),
