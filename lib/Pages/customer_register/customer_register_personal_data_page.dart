@@ -6,22 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class CustomerRegisterPersonPage extends StatefulWidget {
+class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final GlobalKey<FormState> personFormKey;
   final Function validatePersonFormKey;
-  const CustomerRegisterPersonPage({
+  const CustomerRegisterPersonalDataPage({
     required this.personFormKey,
     required this.validatePersonFormKey,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CustomerRegisterPersonPage> createState() =>
-      _CustomerRegisterPersonPageState();
+  State<CustomerRegisterPersonalDataPage> createState() =>
+      _CustomerRegisterPersonalDataPageState();
 }
 
-class _CustomerRegisterPersonPageState
-    extends State<CustomerRegisterPersonPage> {
+class _CustomerRegisterPersonalDataPageState
+    extends State<CustomerRegisterPersonalDataPage> {
   String dateOfBirth = "";
 
   final FocusNode nameFocusNode = FocusNode();

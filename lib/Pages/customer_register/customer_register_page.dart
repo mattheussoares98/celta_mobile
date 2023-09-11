@@ -1,6 +1,6 @@
 import 'package:celta_inventario/Pages/customer_register/customer_register_add_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_adresses_page.dart';
-import 'package:celta_inventario/Pages/customer_register/customer_register_person_page.dart';
+import 'package:celta_inventario/Pages/customer_register/customer_register_personal_data_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_email_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_telephones_page.dart';
 import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
@@ -22,6 +22,14 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   GlobalKey<FormState> _adressFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _telephoneFormKey = GlobalKey<FormState>();
+
+  static const List appBarTitles = [
+    "Dados pessoais",
+    "Endereços",
+    "E-mails",
+    "Telefones",
+    "Confirmação de dados",
+  ];
 
   Stack iconAccordingFormIsValid({
     required IconData icon,
@@ -101,8 +109,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
             customerRegisterProvider.referenceController.text.isNotEmpty ||
             customerRegisterProvider.cepController.text.isNotEmpty;
 
-    String errorMessage =
-        "Corrija os erros e salve o endereço para mudar de tela!";
+    String errorMessage = "Informe os dados necessários!";
     if (hasAdressInformed && _adressFormKeyIsValid) {
       errorMessage =
           "Adicione o endereço ou apague os dados para mudar de tela!";
@@ -125,7 +132,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
-      CustomerRegisterPersonPage(
+      CustomerRegisterPersonalDataPage(
         validatePersonFormKey: _formKeyIsValid,
         personFormKey: _personFormKey,
       ),
@@ -137,7 +144,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         emailFormKey: _emailFormKey,
         validateAdressFormKey: _formKeyIsValid,
       ),
-      CustomerRegisterTelephonesPage(telephoneFormKey: _telephoneFormKey),
+      CustomerRegisterTelephonePage(
+        telephoneFormKey: _telephoneFormKey,
+        validateTelephoneFormKey: _formKeyIsValid,
+      ),
       const CustomerRegisterAddPage(),
     ];
 
@@ -150,8 +160,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "cadastro de clientes",
+          title: Text(
+            appBarTitles[_selectedIndex],
           ),
           leading: IconButton(
             onPressed: () {
@@ -171,14 +181,14 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                 icon: Icons.person,
                 hasDataAndIsValid: _personFormKeyIsValid,
               ),
-              label: 'Básico',
+              label: 'Dados',
             ),
             BottomNavigationBarItem(
               label: 'Endereço',
               icon: iconAccordingFormIsValid(
                 icon: Icons.room_outlined,
                 hasDataAndIsValid: _adressFormKeyIsValid &&
-                    customerRegisterProvider.adressessCount > 0,
+                    customerRegisterProvider.adressesCount > 0,
               ),
             ),
             BottomNavigationBarItem(
@@ -193,19 +203,18 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               icon: iconAccordingFormIsValid(
                 icon: Icons.phone,
                 hasDataAndIsValid: _telephoneFormKeyIsValid &&
-                    customerRegisterProvider.telephoneCount > 0,
+                    customerRegisterProvider.telephonesCount > 0,
               ),
               label: 'Telefone',
             ),
             BottomNavigationBarItem(
               icon: iconAccordingFormIsValid(
                 icon: Icons.check,
-                hasDataAndIsValid: _personFormKeyIsValid ||
-                    _adressFormKeyIsValid ||
-                    _emailFormKeyIsValid ||
-                    _telephoneFormKeyIsValid,
+                hasDataAndIsValid: _personFormKeyIsValid &&
+                    (_adressFormKeyIsValid &&
+                        customerRegisterProvider.adressesCount > 0),
               ),
-              label: 'Cadastrar',
+              label: 'Salvar',
             ),
           ],
           currentIndex: _selectedIndex,
@@ -219,6 +228,84 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           },
         ),
         body: _pages.elementAt(_selectedIndex),
+        floatingActionButton: _selectedIndex == 4
+            ? InkWell(
+                onTap: customerRegisterProvider.isLoadingInsertCustomer
+                    ? null
+                    : () async {
+                        if (customerRegisterProvider.adressesCount == 0) {
+                          setState(() {
+                            _selectedIndex = 1;
+                          });
+                        } else {
+                          await customerRegisterProvider.insertCustomer();
+                        }
+                      },
+                child: CircleAvatar(
+                  minRadius: 35,
+                  maxRadius: 35,
+                  backgroundColor:
+                      customerRegisterProvider.adressesCount == 0 ||
+                              customerRegisterProvider.isLoadingInsertCustomer
+                          ? Colors.grey[300]
+                          : Theme.of(context).colorScheme.primary,
+                  child: customerRegisterProvider.isLoadingInsertCustomer
+                      ? FittedBox(
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "SALVANDO",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Container(
+                                    height: 8,
+                                    width: 100,
+                                    child: LinearProgressIndicator(
+                                      minHeight: 2,
+                                      backgroundColor: Colors.grey[300],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FittedBox(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  customerRegisterProvider.adressesCount > 0
+                                      ? "SALVAR"
+                                      : "Adicione\num\nendereço",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                if (customerRegisterProvider.adressesCount > 0)
+                                  const Icon(
+                                    Icons.person_add,
+                                    color: Colors.white,
+                                    size: 50,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ),
+              )
+            : null,
       ),
     );
   }

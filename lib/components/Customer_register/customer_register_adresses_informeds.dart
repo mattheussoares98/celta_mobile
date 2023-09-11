@@ -4,23 +4,40 @@ import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dar
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CustomerRegisterAdressesInserteds extends StatelessWidget {
-  final CustomerRegisterProvider customerRegisterProvider;
-  const CustomerRegisterAdressesInserteds({
-    required this.customerRegisterProvider,
+class CustomerRegisterAdressesInformeds extends StatefulWidget {
+  const CustomerRegisterAdressesInformeds({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<CustomerRegisterAdressesInformeds> createState() =>
+      _CustomerRegisterAdressesInformedsState();
+}
+
+class _CustomerRegisterAdressesInformedsState
+    extends State<CustomerRegisterAdressesInformeds> {
+  String _getState({
+    required CustomerRegisterProvider customerRegisterProvider,
+    required CustomerRegisterCepModel customerRegisterCepModel,
+  }) {
+    int? index =
+        customerRegisterProvider.adresses.indexOf(customerRegisterCepModel);
+
+    return customerRegisterProvider.adresses[index].State!;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
     return Column(
       children: [
         const Divider(
           height: 20,
         ),
         const Text(
-          "Endereços inseridos",
+          "Endereços informados",
           style: TextStyle(
             fontFamily: "BebasNeue",
             fontSize: 30,
@@ -31,10 +48,10 @@ class CustomerRegisterAdressesInserteds extends StatelessWidget {
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: customerRegisterProvider.adressessCount,
+          itemCount: customerRegisterProvider.adressesCount,
           itemBuilder: ((context, index) {
             CustomerRegisterCepModel customerRegisterCepModel =
-                customerRegisterProvider.adressess[index];
+                customerRegisterProvider.adresses[index];
 
             return PersonalizedCard.personalizedCard(
               context: context,
@@ -44,7 +61,7 @@ class CustomerRegisterAdressesInserteds extends StatelessWidget {
                   children: [
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "CEP",
-                      value: customerRegisterCepModel.zip,
+                      value: customerRegisterCepModel.Zip,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Logradouro",
@@ -60,21 +77,24 @@ class CustomerRegisterAdressesInserteds extends StatelessWidget {
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Estado",
-                      value: customerRegisterCepModel.State,
+                      value: _getState(
+                        customerRegisterProvider: customerRegisterProvider,
+                        customerRegisterCepModel: customerRegisterCepModel,
+                      ),
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Número",
-                      value: customerRegisterCepModel.number.toString(),
+                      value: customerRegisterCepModel.Number.toString(),
                     ),
                     if (customerRegisterCepModel.Complement != "")
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Complemento",
                         value: customerRegisterCepModel.Complement,
                       ),
-                    if (customerRegisterCepModel.reference != "")
+                    if (customerRegisterCepModel.Reference != "")
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Referência",
-                        value: customerRegisterCepModel.reference,
+                        value: customerRegisterCepModel.Reference,
                       ),
                     ElevatedButton(
                       style: const ButtonStyle(

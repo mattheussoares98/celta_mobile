@@ -1,5 +1,5 @@
+import 'package:celta_inventario/components/Customer_register/customer_register_emails_informeds.dart';
 import 'package:celta_inventario/components/Customer_register/customer_register_form_field.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,24 @@ class CustomerRegisterEmailPage extends StatefulWidget {
 class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
   final FocusNode emailFocusNode = FocusNode();
 
+  void addEmail({
+    required CustomerRegisterProvider customerRegisterProvider,
+  }) {
+    bool isValid = widget.validateAdressFormKey();
+
+    if (isValid && customerRegisterProvider.emailController.text.isNotEmpty) {
+      customerRegisterProvider.addEmail(
+        context: context,
+      );
+      FocusScope.of(context).unfocus();
+    } else {
+      ShowErrorMessage.showErrorMessage(
+        error: "Digite um e-mail válido!",
+        context: context,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -35,15 +53,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
               enabled: true,
               focusNode: emailFocusNode,
               onFieldSubmitted: (String? value) {
-                //executar o validate do email
-                if (customerRegisterProvider.emailController.text.isEmpty) {
-                  return;
-                }
-                customerRegisterProvider.addEmail(
-                  emailController: customerRegisterProvider.emailController,
-                  context: context,
-                );
-                FocusScope.of(context).unfocus();
+                addEmail(customerRegisterProvider: customerRegisterProvider);
               },
               suffixWidget: IconButton(
                   onPressed: () {
@@ -59,74 +69,26 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return null;
-                } else if (!value.contains("@")) {
-                  return 'O e-mail está inválido';
-                } else if (!value.contains("\.")) {
-                  return 'O e-mail está inválido';
-                } else if (value.endsWith("\.")) {
-                  return 'O e-mail está inválido';
+                } else if (!RegExp(
+                        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+                    .hasMatch(value)) {
+                  return 'E-mail inválido';
+                } else if (RegExp(r"[^a-zA-Z0-9._%+-@]").hasMatch(value)) {
+                  return 'Caracteres especiais não são permitidos';
                 }
                 return null;
               },
             ),
             ElevatedButton(
               onPressed: () {
-                bool isValid = widget.validateAdressFormKey();
-
-                if (isValid &&
-                    customerRegisterProvider.emailController.text.isNotEmpty) {
-                  customerRegisterProvider.addEmail(
-                    emailController: customerRegisterProvider.emailController,
-                    context: context,
-                  );
-                  FocusScope.of(context).unfocus();
-                } else {
-                  ShowErrorMessage.showErrorMessage(
-                    error: "Digite um e-mail válido!",
-                    context: context,
-                  );
-                }
+                addEmail(customerRegisterProvider: customerRegisterProvider);
               },
               child: const Text(
                 "Adicionar e-mail",
               ),
             ),
             if (customerRegisterProvider.emailsCount > 0)
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: customerRegisterProvider.emailsCount,
-                  itemBuilder: (context, index) {
-                    String email = customerRegisterProvider.emails[index];
-                    return PersonalizedCard.personalizedCard(
-                      context: context,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              email,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              customerRegisterProvider.removeEmail(index);
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              size: 30,
-                              color: Colors.red,
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
+              const CustomerRegisterEmailsInformeds(),
           ],
         ),
       ),

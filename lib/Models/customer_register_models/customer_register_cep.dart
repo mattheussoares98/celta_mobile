@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
 
 class CustomerRegisterCepModel {
-  String? zip; /*  "01001-000", */
+  String? Zip; /*  "01001-000", */
   String? Address; /*  "Praça da Sé", */
   String? Complement; /*  "lado ímpar", */
   String? District; /*  "Sé", */
   String? City; /*  "São Paulo", */
   String? State; /*  "SP", */
-  String? ibge; /*  "3550308", */
-  String? gia; /*  "1004", */
-  String? ddd; /*  "11", */
-  String? siafi; /*  "7107" */
-  String? reference;
-  int? number;
+  String? Reference;
+  String? Number;
 
   CustomerRegisterCepModel({
-    this.zip,
+    this.Zip,
     this.Address,
     this.Complement,
     this.District,
     this.City,
     this.State,
-    this.ibge,
-    this.gia,
-    this.ddd,
-    this.siafi,
-    this.number,
-    this.reference,
+    this.Number,
+    this.Reference,
   });
 
   static resultAsStringToCustomerRegisterCepModel({
@@ -39,7 +31,7 @@ class CustomerRegisterCepModel {
     required ValueNotifier<String?> selectedStateDropDown,
     required Map<String, String> states,
   }) {
-    customerRegisterCepModel.zip = data["cep"];
+    customerRegisterCepModel.Zip = data["cep"];
 
     customerRegisterCepModel.Address = data["logradouro"];
     adressController.text = data["logradouro"];
@@ -55,10 +47,18 @@ class CustomerRegisterCepModel {
 
     customerRegisterCepModel.State = data["uf"];
     selectedStateDropDown.value = states[data["uf"]];
+  }
 
-    customerRegisterCepModel.ibge = data["ibge"];
-    customerRegisterCepModel.gia = data["gia"];
-    customerRegisterCepModel.ddd = data["ddd"];
-    customerRegisterCepModel.siafi = data["siafi"];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['Zip'] = this.Zip;
+    data['Address'] = this.Address;
+    data['Complement'] = this.Complement;
+    data['District'] = this.District;
+    data['City'] = this.City;
+    data['State'] = this.State;
+    data['Reference'] = this.Reference;
+    data['Number'] = this.Number;
+    return data;
   }
 }

@@ -6,6 +6,7 @@ class CustomerRegisterFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   final void Function(String)? onFieldSubmitted;
   final Widget? suffixWidget;
   final bool? isDate;
@@ -13,6 +14,7 @@ class CustomerRegisterFormField extends StatelessWidget {
   final TextEditingController textEditingController;
   final bool enabled;
   const CustomerRegisterFormField({
+    this.onChanged,
     this.keyboardType,
     this.isDate,
     this.suffixWidget,
@@ -35,6 +37,7 @@ class CustomerRegisterFormField extends StatelessWidget {
         controller: textEditingController,
         keyboardType: keyboardType ?? TextInputType.name,
         maxLines: null,
+        onChanged: onChanged,
         inputFormatters: limitOfCaracters == null
             ? null
             : isDate != null
@@ -64,12 +67,16 @@ class CustomerRegisterFormField extends StatelessWidget {
             ),
           ),
           suffixIcon: suffixWidget != null ? suffixWidget : null,
-          labelStyle: const TextStyle(
-            color: Colors.grey,
+          labelStyle: TextStyle(
+            color: Theme.of(context)
+                .colorScheme
+                .primary, // Use a cor primária do tema
           ),
           labelText: labelText,
-          counterStyle: const TextStyle(
-            color: Colors.black,
+          counterStyle: TextStyle(
+            color: Theme.of(context)
+                .colorScheme
+                .primary, // Use a cor primária do tema
           ),
         ),
       ),

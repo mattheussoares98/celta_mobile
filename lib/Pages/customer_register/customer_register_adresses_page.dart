@@ -1,4 +1,4 @@
-import 'package:celta_inventario/components/Customer_register/customer_register_adresses_inserteds.dart';
+import 'package:celta_inventario/components/Customer_register/customer_register_adresses_informeds.dart';
 import 'package:celta_inventario/components/Customer_register/customer_register_form_field.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
@@ -458,10 +458,8 @@ class _CustomerRegisterAdressesPageState
                   ),
                 ],
               ),
-            if (customerRegisterProvider.adressessCount > 0)
-              CustomerRegisterAdressesInserteds(
-                customerRegisterProvider: customerRegisterProvider,
-              ),
+            if (customerRegisterProvider.adressesCount > 0)
+              const CustomerRegisterAdressesInformeds(),
           ],
         ),
       ),
