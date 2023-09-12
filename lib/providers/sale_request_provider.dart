@@ -792,15 +792,6 @@ class SaleRequestProvider with ChangeNotifier {
       _errorMessageSaveSaleRequest = SoapHelperResponseParameters.errorMessage;
 
       if (_errorMessageSaveSaleRequest == "") {
-        await clearCart(enterpriseCode);
-
-        await _clearcustomers(enterpriseCode);
-        await _getCustomers(
-          searchTypeInt: 2, //exactCode
-          controllerText: "-1", //consumidor
-          enterpriseCode: enterpriseCode,
-        );
-
         ShowErrorMessage.showErrorMessage(
           error: "O pedido foi salvo com sucesso!",
           context: context,
@@ -812,12 +803,22 @@ class SaleRequestProvider with ChangeNotifier {
 
         Match? match = regex.firstMatch(SoapHelperResponseParameters
             .responseAsString); // Encontrar o primeiro match na string
-
+        SoapHelperResponseParameters.responseAsMap;
+        SoapHelperResponseParameters.responseAsString;
         if (match != null) {
           _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
         } else {
           print("Nenhum conteúdo entre parênteses encontrado.");
         }
+
+        await clearCart(enterpriseCode);
+
+        await _clearcustomers(enterpriseCode);
+        await _getCustomers(
+          searchTypeInt: 2, //exactCode
+          controllerText: "-1", //consumidor
+          enterpriseCode: enterpriseCode,
+        );
       } else {
         _isLoadingSaveSaleRequest = false;
 
