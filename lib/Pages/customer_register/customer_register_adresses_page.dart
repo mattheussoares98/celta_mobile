@@ -278,10 +278,12 @@ class _CustomerRegisterAdressesPageState
                             }
                             return null;
                           },
-                          onChanged: (value) {
-                            customerRegisterProvider
-                                .selectedStateDropDown.value = value;
-                          },
+                          onChanged: customerRegisterProvider.isLoadingCep
+                              ? null
+                              : (value) {
+                                  customerRegisterProvider
+                                      .selectedStateDropDown.value = value;
+                                },
                           items: customerRegisterProvider.states
                               .map(
                                 (value) => DropdownMenuItem(

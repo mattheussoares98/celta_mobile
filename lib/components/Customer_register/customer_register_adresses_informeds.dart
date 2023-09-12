@@ -97,22 +97,31 @@ class _CustomerRegisterAdressesInformedsState
                         value: customerRegisterCepModel.Reference,
                       ),
                     ElevatedButton(
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.red),
-                        minimumSize: MaterialStatePropertyAll(Size(100, 30)),
-                        maximumSize:
-                            MaterialStatePropertyAll(Size(double.infinity, 30)),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                          customerRegisterProvider.isLoadingInsertCustomer
+                              ? Colors.grey
+                              : Colors.red,
+                        ),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(100, 30)),
+                        maximumSize: const MaterialStatePropertyAll(
+                            Size(double.infinity, 30)),
                       ),
-                      onPressed: () {
-                        ShowAlertDialog().showAlertDialog(
-                          context: context,
-                          title: "Remover endereço",
-                          subtitle: "Deseja realmente remover o endereço?",
-                          function: () {
-                            customerRegisterProvider.removeAdress(index);
-                          },
-                        );
-                      },
+                      onPressed: customerRegisterProvider
+                              .isLoadingInsertCustomer
+                          ? null
+                          : () {
+                              ShowAlertDialog().showAlertDialog(
+                                context: context,
+                                title: "Remover endereço",
+                                subtitle:
+                                    "Deseja realmente remover o endereço?",
+                                function: () {
+                                  customerRegisterProvider.removeAdress(index);
+                                },
+                              );
+                            },
                       child: const Text("Remover endereço"),
                     ),
                   ],

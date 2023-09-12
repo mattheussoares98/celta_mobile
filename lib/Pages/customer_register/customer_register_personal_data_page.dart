@@ -1,4 +1,5 @@
 import 'package:celta_inventario/components/Customer_register/customer_register_form_field.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
@@ -22,8 +23,6 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
 
 class _CustomerRegisterPersonalDataPageState
     extends State<CustomerRegisterPersonalDataPage> {
-  String dateOfBirth = "";
-
   final FocusNode nameFocusNode = FocusNode();
   final FocusNode reducedNameFocusNode = FocusNode();
   final FocusNode cpfCnpjFocusNode = FocusNode();
@@ -43,6 +42,7 @@ class _CustomerRegisterPersonalDataPageState
         customerRegisterProvider.selectedSexDropDown.value;
   }
 
+  bool cpfCnpjEnabled = true;
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -53,31 +53,38 @@ class _CustomerRegisterPersonalDataPageState
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CustomerRegisterFormField(
-              suffixWidget: const Text(
-                "obrigatório  ",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 11,
-                ),
-              ),
               enabled: true,
               focusNode: nameFocusNode,
               onFieldSubmitted: (String? value) {
-                bool isValid = widget.validatePersonFormKey();
-                if (isValid) {
-                  FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(nameFocusNode);
-                }
+                FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
               },
+              suffixWidget: IconButton(
+                onPressed: () {
+                  customerRegisterProvider.nameController.text = "";
+                  FocusScope.of(context).requestFocus(nameFocusNode);
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+              ),
               labelText: "Nome",
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
-                  return 'Nome é obrigatório!';
-                } else if (value.length < 3) {
-                  return "O nome deve conter pelo menos 3 letras";
+                  return 'O nome é obrigatório';
+                } else {
+                  List<String> nameParts = value.split(' ');
+
+                  if (nameParts.length < 2) {
+                    return 'Informe o nome e o sobrenome';
+                  }
+
+                  if (nameParts[0].length < 3 || nameParts[1].length < 3) {
+                    return 'O nome e o sobrenome devem ter pelo menos 3 letras';
+                  }
+
+                  return null;
                 }
-                return null;
               },
               textEditingController: customerRegisterProvider.nameController,
               limitOfCaracters: 50,
@@ -86,6 +93,28 @@ class _CustomerRegisterPersonalDataPageState
               focusNode: cpfCnpjFocusNode,
               keyboardType: TextInputType.number,
               enabled: true,
+              onChanged: (value) {
+                if (customerRegisterProvider.cpfCnpjController.text.length >
+                    11) {
+                  setState(() {
+                    cpfCnpjEnabled = false;
+                  });
+                } else {
+                  setState(() {
+                    cpfCnpjEnabled = true;
+                  });
+                }
+              },
+              suffixWidget: IconButton(
+                onPressed: () {
+                  customerRegisterProvider.cpfCnpjController.text = "";
+                  FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+              ),
               onFieldSubmitted: (String? value) {
                 bool isValid = widget.validatePersonFormKey();
                 if (isValid) {
@@ -97,7 +126,7 @@ class _CustomerRegisterPersonalDataPageState
               labelText: "CPF/CNPJ",
               validator: (String? cpfCnpj) {
                 if (cpfCnpj == null || cpfCnpj.isEmpty) {
-                  return null;
+                  return "Informe o CPF ou CNPJ";
                 } else if (cpfCnpj.contains(" ") ||
                     cpfCnpj.contains("\.") ||
                     cpfCnpj.contains(",") ||
@@ -132,6 +161,15 @@ class _CustomerRegisterPersonalDataPageState
             CustomerRegisterFormField(
               enabled: true,
               focusNode: reducedNameFocusNode,
+              suffixWidget: IconButton(
+                onPressed: () {
+                  customerRegisterProvider.reducedNameController.text = "";
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+              ),
               onFieldSubmitted: (String? value) {
                 bool isValid = widget.validatePersonFormKey();
                 if (isValid) {
@@ -162,30 +200,46 @@ class _CustomerRegisterPersonalDataPageState
               textEditingController:
                   customerRegisterProvider.dateOfBirthController,
               limitOfCaracters: 10,
-              suffixWidget: IconButton(
-                  icon: Icon(
-                    Icons.calendar_month,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  onPressed: () async {
-                    DateTime? validityDate = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime.now().subtract(
-                        const Duration(days: 36500),
-                      ),
-                      initialDate:
-                          DateTime.now().subtract(const Duration(days: 1825)),
-                      lastDate:
-                          DateTime.now().subtract(const Duration(days: 1825)),
-                    );
+              suffixWidget: FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        icon: Icon(
+                          Icons.calendar_month,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        onPressed: () async {
+                          DateTime? validityDate = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime.now().subtract(
+                              const Duration(days: 36500),
+                            ),
+                            initialDate: DateTime.now()
+                                .subtract(const Duration(days: 1825)),
+                            lastDate: DateTime.now()
+                                .subtract(const Duration(days: 1825)),
+                          );
 
-                    if (validityDate != null) {
-                      setState(() {
-                        dateOfBirth =
-                            DateFormat('dd/MM/yyyy').format(validityDate);
-                      });
-                    }
-                  }),
+                          if (validityDate != null) {
+                            customerRegisterProvider
+                                    .dateOfBirthController.text =
+                                DateFormat('dd/MM/yyyy').format(validityDate);
+                          }
+                        }),
+                    IconButton(
+                      onPressed: () {
+                        customerRegisterProvider.dateOfBirthController.text =
+                            "";
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return null;
@@ -226,89 +280,88 @@ class _CustomerRegisterPersonalDataPageState
                 return null; // A data é válida
               },
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: DropdownButtonFormField<dynamic>(
-                value: _selectedSexDropDown.value,
-                focusNode: sexTypeFocusNode,
-                // disabledHint: transferBetweenPackageProvider
-                //         .isLoadingTypeStockAndJustifications
-                //     ? Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         children: [
-                //           const FittedBox(
-                //             child: Text(
-                //               "Consultando",
-                //               textAlign: TextAlign.center,
-                //               style: const TextStyle(
-                //                 fontSize: 60,
-                //               ),
-                //             ),
-                //           ),
-                //           const SizedBox(width: 15),
-                //           Container(
-                //             height: 15,
-                //             width: 15,
-                //             child: const CircularProgressIndicator(),
-                //           ),
-                //         ],
-                //       )
-                //     : const Center(child: Text("Justificativas")),
-                isExpanded: true,
-                hint: Center(
-                  child: Text(
-                    'Sexo',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                validator: (value) {
-                  // if (value == null) {
-                  //   return 'Selecione uma justificativa!';
-                  // }
-                  return null;
-                },
-                onChanged: (value) {
-                  customerRegisterProvider.selectedSexDropDown =
-                      ValueNotifier(value);
-                },
-                decoration: const InputDecoration(
-                  labelText: '',
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.blue,
-                      width: 1.0,
+            if (cpfCnpjEnabled)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: DropdownButtonFormField<dynamic>(
+                  value: _selectedSexDropDown.value,
+                  focusNode: sexTypeFocusNode,
+                  disabledHint: const Center(child: Text("Sexo")),
+                  isExpanded: true,
+                  hint: Center(
+                    child: Text(
+                      'Sexo',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-                items: ["Masculino", "Feminino"]
-                    .map(
-                      (value) => DropdownMenuItem(
-                        alignment: Alignment.center,
-                        onTap: () {},
-                        value: value,
-                        child: FittedBox(
-                          child: Column(
-                            children: [
-                              Center(
-                                child: Text(
-                                  value,
+                  validator: (value) {
+                    if (value == null && cpfCnpjEnabled) {
+                      return 'Selecione uma opção!';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    customerRegisterProvider.selectedSexDropDown =
+                        ValueNotifier(value);
+                  },
+                  decoration: const InputDecoration(
+                    labelText: '',
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  items: ["Masculino", "Feminino"]
+                      .map(
+                        (value) => DropdownMenuItem(
+                          alignment: Alignment.center,
+                          onTap: () {},
+                          value: value,
+                          child: FittedBox(
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    value,
+                                  ),
                                 ),
-                              ),
-                              const Divider(
-                                color: Colors.black,
-                                height: 4,
-                              ),
-                            ],
+                                const Divider(
+                                  color: Colors.black,
+                                  height: 4,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                    .toList(),
+                      )
+                      .toList(),
+                ),
               ),
-            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                onPressed: () {
+                  ShowAlertDialog().showAlertDialog(
+                    context: context,
+                    title: "Limpar dados",
+                    subtitle:
+                        "Deseja realmente limpar todos dados pessoais digitados?",
+                    function: () {
+                      customerRegisterProvider.clearPersonalDataControllers();
+                    },
+                  );
+                },
+                child: const Text("Limpar dados"),
+              ),
+            )
           ],
         ),
       ),

@@ -152,7 +152,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     ];
 
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-
+    // customerRegisterProvider.changeIsLoadingInsertCustomer();
     return WillPopScope(
       onWillPop: () async {
         //fazer algo que quiser quando o usuário clicar no botão de voltar
@@ -220,12 +220,14 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           currentIndex: _selectedIndex,
           selectedItemColor: Theme.of(context).colorScheme.primary,
           unselectedItemColor: Colors.grey,
-          onTap: (index) {
-            _onItemTapped(
-              index: index,
-              // saleRequestProvider: saleRequestProvider,
-            );
-          },
+          onTap: customerRegisterProvider.isLoadingInsertCustomer
+              ? null
+              : (index) {
+                  _onItemTapped(
+                    index: index,
+                    // saleRequestProvider: saleRequestProvider,
+                  );
+                },
         ),
         body: _pages.elementAt(_selectedIndex),
         floatingActionButton: _selectedIndex == 4
@@ -239,6 +241,31 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                           });
                         } else {
                           await customerRegisterProvider.insertCustomer();
+
+                          if (customerRegisterProvider
+                                  .errorMessageInsertCustomer ==
+                              "") {
+                            setState(() {
+                              _personFormKeyIsValid = false;
+                              _adressFormKeyIsValid = false;
+                              _emailFormKeyIsValid = false;
+                              _telephoneFormKeyIsValid = false;
+                              _selectedIndex = 0;
+                            });
+
+                            ShowErrorMessage.showErrorMessage(
+                              error: "Cliente inserido/atualizado com sucesso",
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              context: context,
+                            );
+                          } else {
+                            ShowErrorMessage.showErrorMessage(
+                              error: customerRegisterProvider
+                                  .errorMessageInsertCustomer,
+                              context: context,
+                            );
+                          }
                         }
                       },
                 child: CircleAvatar(

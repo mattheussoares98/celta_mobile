@@ -28,10 +28,16 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
     bool isValid = widget.validateAdressFormKey();
 
     if (isValid && customerRegisterProvider.emailController.text.isNotEmpty) {
-      customerRegisterProvider.addEmail(
-        context: context,
-      );
-      FocusScope.of(context).unfocus();
+      customerRegisterProvider.addEmail();
+
+      if (customerRegisterProvider.errorMessageAddEmail == "") {
+        FocusScope.of(context).unfocus();
+      } else {
+        ShowErrorMessage.showErrorMessage(
+          error: customerRegisterProvider.errorMessageAddEmail,
+          context: context,
+        );
+      }
     } else {
       ShowErrorMessage.showErrorMessage(
         error: "Digite um e-mail válido!",
@@ -57,7 +63,8 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
               },
               suffixWidget: IconButton(
                   onPressed: () {
-                    customerRegisterProvider.clearEmailController();
+                    customerRegisterProvider.clearEmailControllers();
+                    FocusScope.of(context).requestFocus(emailFocusNode);
                   },
                   icon: const Icon(
                     Icons.delete,

@@ -7,6 +7,7 @@ import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CustomerRegisterProvider with ChangeNotifier {
   final TextEditingController nameController = TextEditingController();
@@ -91,6 +92,12 @@ class CustomerRegisterProvider with ChangeNotifier {
   String _errorMessageGetAdressByCep = "";
   String get errorMessageGetAdressByCep => _errorMessageGetAdressByCep;
 
+  String _errorMessageAddEmail = "";
+  String get errorMessageAddEmail => _errorMessageAddEmail;
+
+  String _errorMessageAddTelephone = "";
+  String get errorMessageAddTelephone => _errorMessageAddTelephone;
+
   CustomerRegisterCepModel _customerRegisterCepModel =
       CustomerRegisterCepModel();
   get customerRegisterCepModel => _customerRegisterCepModel;
@@ -141,51 +148,64 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearAdressControllers() {
+  void clearAdressControllers({bool? clearCep = true}) {
+    if (clearCep == true) {
+      cepController.text = "";
+    }
     adressController.text = "";
     cityController.text = "";
     complementController.text = "";
     districtController.text = "";
     numberController.text = "";
     referenceController.text = "";
-    cepController.text = "";
     _selectedStateDropDown.value = null;
     _triedGetCep = false; //para deixar somente o campo de CEP aberto
     notifyListeners();
   }
 
-  void addEmail({
-    required BuildContext context,
-  }) {
+  void clearEmailControllers() {
+    emailController.text = "";
+  }
+
+  void clearTelephoneControllers() {
+    telephoneController.text = "";
+    dddController.text = "";
+  }
+
+  void addEmail() {
+    _errorMessageAddEmail = "";
     if (!_emails.contains(emailController.text)) {
       _emails.add(emailController.text);
 
       emailController.text = "";
+      notifyListeners();
     } else {
-      ShowErrorMessage.showErrorMessage(
-        error: "Esse e-mail já está na lista de e-mails",
-        context: context,
-      );
+      _errorMessageAddEmail = "Esse e-mail já existe na lista de e-mails!";
     }
     notifyListeners();
   }
 
-  void addTelephone({
-    required BuildContext context,
-  }) {
+  void addTelephone() {
+    _errorMessageAddTelephone = "";
     Map<String, String> newTelephone = {
       "AreaCode": dddController.text,
       "PhoneNumber": telephoneController.text,
     };
-    if (!_telephones.contains(newTelephone)) {
+
+    bool hasEqualTelephone = false;
+    _telephones.forEach((element) {
+      if (element["AreaCode"] == newTelephone["AreaCode"] &&
+          element["PhoneNumber"] == newTelephone["PhoneNumber"]) {
+        hasEqualTelephone = true;
+      }
+    });
+
+    if (!hasEqualTelephone) {
       _telephones.add(newTelephone);
-      telephoneController.text = "";
-      dddController.text = "";
+      clearTelephoneControllers();
     } else {
-      ShowErrorMessage.showErrorMessage(
-        error: "Esse telefone já existe na lista de telefones!",
-        context: context,
-      );
+      _errorMessageAddTelephone =
+          "Esse telefone já existe na lista de telefones!";
     }
     notifyListeners();
   }
@@ -195,31 +215,37 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearEmailController() {
-    emailController.text = "";
-    notifyListeners();
-  }
-
-  void clearTelephoneController() {
-    telephoneController.text = "";
-    notifyListeners();
-  }
-
   void removeTelephone(int index) {
     _telephones.removeAt(index);
+    notifyListeners();
+  }
+
+  void _clearAllDataInformed() {
+    clearPersonalDataControllers();
+    clearAdressControllers(clearCep: true);
+    clearEmailControllers();
+    clearTelephoneControllers();
+
+    _adresses.clear();
+    _emails.clear();
+    _telephones.clear();
+
     notifyListeners();
   }
 
   Future<void> getAddressByCep({
     required BuildContext context,
   }) async {
+    clearAdressControllers(clearCep: false);
     _errorMessageGetAdressByCep = "";
     _isLoadingCep = true;
-    _triedGetCep = true;
     notifyListeners();
     Map response = await RequestsHttp.get(
       url: "https://viacep.com.br/ws/${cepController.text}/json/",
     );
+
+    _triedGetCep = true;
+    notifyListeners();
 
     if (response["error"] != "") {
       _errorMessageGetAdressByCep = response["error"];
@@ -246,53 +272,55 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String _formatDate() {
+    DateFormat inputFormat = DateFormat("dd/MM/yyyy");
+    DateFormat outputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.");
+
+    DateTime date = inputFormat.parse(dateOfBirthController.text);
+    String formatedDate = outputFormat.format(date);
+    return formatedDate;
+  }
+
+  // void clearSelectedSexDropDown() {
+  //   selectedSexDropDown.value = null;
+  // }
+
+  void clearPersonalDataControllers() {
+    nameController.text = "";
+    reducedNameController.text = "";
+    cpfCnpjController.text = "";
+    dateOfBirthController.text = "";
+    selectedSexDropDown.value = null;
+    notifyListeners();
+  }
+
   void _updateJsonInsertCustomer() {
-    _jsonInsertCustomer.remove("crossId");
-    // _jsonInsertCustomer["Code"] = 0;
-    // _jsonInsertCustomer["PersonalizedCode"] = "0";
+    _jsonInsertCustomer.clear();
     _jsonInsertCustomer["Name"] = nameController.text;
     _jsonInsertCustomer["ReducedName"] = reducedNameController.text;
     _jsonInsertCustomer["CpfCnpjNumber"] = cpfCnpjController.text;
     _jsonInsertCustomer["PersonType"] =
         cpfCnpjController.text.length == 11 ? "F" : "J";
     _jsonInsertCustomer["RegistrationNumber"] = "";
-    _jsonInsertCustomer["DateOfBirth"] = dateOfBirthController.text;
-    _jsonInsertCustomer["SexType"] =
-        selectedSexDropDown.value!.substring(0, 1).toUpperCase();
+    if (dateOfBirthController.text != "") {
+      String formatedDate = _formatDate();
+
+      _jsonInsertCustomer["DateOfBirth"] = formatedDate;
+    }
+
+    if (selectedSexDropDown.value != null) {
+      _jsonInsertCustomer["SexType"] =
+          selectedSexDropDown.value!.substring(0, 1).toUpperCase();
+    }
     _jsonInsertCustomer["Emails"] = _emails;
     _jsonInsertCustomer["Telephones"] = _telephones;
     _jsonInsertCustomer["Addresses"] =
         _adresses.map((address) => address.toJson()).toList();
     _jsonInsertCustomer["Covenants"] = null;
+  }
 
-    // _jsonInsertCustomer = {
-    //   "Code": 0,
-    //   "PersonalizedCode": "000",
-    //   "Name": "Name",
-    //   "ReducedName": "ReducedName",
-    //   "CpfCnpjNumber": "CpfCnpjNumber",
-    //   "RegistrationNumber": "RegistrationNumber",
-    //   "DateOfBirth": "2023-09-11T16:13:17.1306453-03:00",
-    //   "SexType": "M",
-    //   "PersonType": "F",
-    //   "Emails": ["email@celtaware.com.br"],
-    //   "Telephones": [
-    //     {"AreaCode": "11", "PhoneNumber": "40028922"}
-    //   ],
-    //   "Addresses": [
-    //     {
-    //       "Zip": "01047020",
-    //       "Address": "Rua Doutor Bráulio Gomes",
-    //       "Number": "141",
-    //       "District": "Centro",
-    //       "City": "São Paulo",
-    //       "State": "SP",
-    //       "Complement": "1º Andar",
-    //       "Reference": "Ao lado da galeria Mario de Andrade"
-    //     }
-    //   ],
-    //   "Covenants": null
-    // };
+  changeIsLoadingInsertCustomer() {
+    _isLoadingInsertCustomer = false;
   }
 
   Future<void> insertCustomer() async {
@@ -300,14 +328,13 @@ class CustomerRegisterProvider with ChangeNotifier {
     _errorMessageInsertCustomer = "";
     notifyListeners();
 
-    _updateJsonInsertCustomer();
-
     try {
-      var x = json.encode(_jsonInsertCustomer);
+      _updateJsonInsertCustomer();
+      String jsonInsertCustomerEncoded = json.encode(_jsonInsertCustomer);
       await SoapHelper.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "json": x,
+          "json": jsonInsertCustomerEncoded,
         },
         typeOfResponse: "InsertUpdateCustomerResponse",
         SOAPAction: "InsertUpdateCustomer",
@@ -318,15 +345,14 @@ class CustomerRegisterProvider with ChangeNotifier {
       _errorMessageInsertCustomer = SoapHelperResponseParameters.errorMessage;
 
       if (_errorMessageInsertCustomer == "") {
-        print("Deu certo!");
+        _clearAllDataInformed();
       }
     } catch (e) {
       print('Erro para cadastrar o cliente: $e');
       _errorMessageInsertCustomer =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-    } finally {
-      _isLoadingInsertCustomer = false;
-      notifyListeners();
-    }
+    } finally {}
+    _isLoadingInsertCustomer = false;
+    notifyListeners();
   }
 }

@@ -31,10 +31,15 @@ class _CustomerRegisterTelephonePageState
 
     if (isValid &&
         customerRegisterProvider.telephoneController.text.isNotEmpty) {
-      customerRegisterProvider.addTelephone(
-        context: context,
-      );
-      FocusScope.of(context).unfocus();
+      customerRegisterProvider.addTelephone();
+      if (customerRegisterProvider.errorMessageAddTelephone == "") {
+        FocusScope.of(context).unfocus();
+      } else {
+        ShowErrorMessage.showErrorMessage(
+          error: customerRegisterProvider.errorMessageAddTelephone,
+          context: context,
+        );
+      }
     } else {
       ShowErrorMessage.showErrorMessage(
         error: "Digite um telefone válido! Informe o número com o DDD",
@@ -111,14 +116,15 @@ class _CustomerRegisterTelephonePageState
                             TextSelection.collapsed(offset: value.length),
                       );
                     },
-                    // onFieldSubmitted: (String? value) {
-                    //   _addTelephone(
-                    //     customerRegisterProvider: customerRegisterProvider,
-                    //   );
-                    // },
+                    onFieldSubmitted: (String? value) {
+                      _addTelephone(
+                        customerRegisterProvider: customerRegisterProvider,
+                      );
+                    },
                     suffixWidget: IconButton(
                         onPressed: () {
-                          customerRegisterProvider.clearTelephoneController();
+                          customerRegisterProvider.clearTelephoneControllers();
+                          FocusScope.of(context).requestFocus(dddFocusNode);
                         },
                         icon: const Icon(
                           Icons.delete,

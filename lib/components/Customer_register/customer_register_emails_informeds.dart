@@ -4,13 +4,20 @@ import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CustomerRegisterEmailsInformeds extends StatelessWidget {
+class CustomerRegisterEmailsInformeds extends StatefulWidget {
   const CustomerRegisterEmailsInformeds({Key? key}) : super(key: key);
 
   @override
+  State<CustomerRegisterEmailsInformeds> createState() =>
+      _CustomerRegisterEmailsInformedsState();
+}
+
+class _CustomerRegisterEmailsInformedsState
+    extends State<CustomerRegisterEmailsInformeds> {
+  @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider =
-        Provider.of(context, listen: false);
+        Provider.of(context, listen: true);
     ;
     return Column(
       children: [
