@@ -1,11 +1,11 @@
 import 'package:celta_inventario/Models/inventory/inventory_model.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/cupertino.dart';
-import '../Components/Global_widgets/show_error_message.dart';
 import '../Models/inventory/countings_model.dart';
 import '../Models/inventory/inventory_product_model.dart';
 
@@ -261,8 +261,8 @@ class InventoryProvider with ChangeNotifier {
     if (isSubtract &&
         newQuantity > _products[indexOfProduct].quantidadeInvContProEmb) {
       _errorMessageQuantity = "A quantidade não pode ficar negativa!";
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageQuantity,
         context: context,
       );
       return;
@@ -319,8 +319,8 @@ class InventoryProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageQuantity,
         context: context,
       );
     }
@@ -362,16 +362,16 @@ class InventoryProvider with ChangeNotifier {
       if (_errorMessageQuantity == "") {
         _products[indexOfProduct].quantidadeInvContProEmb = -1;
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageQuantity,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageQuantity,
           context: context,
         );
       }
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageQuantity,
         context: context,
       );
       _lastQuantityAdded = '';
@@ -422,8 +422,8 @@ class InventoryProvider with ChangeNotifier {
       );
 
       if (_errorMessageQuantity != "") {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageQuantity,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageQuantity,
           context: context,
         );
         return;
@@ -433,8 +433,8 @@ class InventoryProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageQuantity,
         context: context,
       );
     } finally {

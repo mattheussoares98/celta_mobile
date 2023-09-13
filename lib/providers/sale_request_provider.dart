@@ -3,10 +3,10 @@ import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_pr
 import 'package:celta_inventario/Models/sale_request_models/sale_request_customer_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_process_cart_model.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import '../Models/sale_request_models/sale_requests_model.dart';
@@ -572,15 +572,15 @@ class SaleRequestProvider with ChangeNotifier {
 
         _updatedCart = false;
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageProcessCart,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageProcessCart,
           context: context,
         );
       }
     } catch (e) {
       print("Erro para obter os preços do carrinho: $e");
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageProcessCart,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageProcessCart,
         context: context,
       );
     }
@@ -792,8 +792,8 @@ class SaleRequestProvider with ChangeNotifier {
       _errorMessageSaveSaleRequest = SoapHelperResponseParameters.errorMessage;
 
       if (_errorMessageSaveSaleRequest == "") {
-        ShowErrorMessage.showErrorMessage(
-          error: "O pedido foi salvo com sucesso!",
+        ShowSnackbarMessage.showMessage(
+          message: "O pedido foi salvo com sucesso!",
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
@@ -822,8 +822,8 @@ class SaleRequestProvider with ChangeNotifier {
       } else {
         _isLoadingSaveSaleRequest = false;
 
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageSaveSaleRequest,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageSaveSaleRequest,
           context: context,
         );
       }
@@ -831,8 +831,8 @@ class SaleRequestProvider with ChangeNotifier {
       print("Erro para salvar o pedido: $e");
       _errorMessageSaveSaleRequest =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageSaveSaleRequest,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageSaveSaleRequest,
         context: context,
       );
     } finally {

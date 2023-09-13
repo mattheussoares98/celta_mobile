@@ -4,7 +4,7 @@ import 'package:celta_inventario/Pages/customer_register/customer_register_perso
 import 'package:celta_inventario/Pages/customer_register/customer_register_email_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_telephones_page.dart';
 import 'package:celta_inventario/components/Customer_register/customer_register_floating_action_button.dart';
-import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -123,8 +123,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         _selectedIndex = index;
       });
     } else {
-      ShowErrorMessage.showErrorMessage(
-        error: errorMessage,
+      ShowSnackbarMessage.showMessage(
+        message: errorMessage,
         context: context,
       );
     }

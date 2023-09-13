@@ -7,6 +7,7 @@ import 'package:celta_inventario/Pages/receipt_conference_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_model_page.dart';
+import 'package:celta_inventario/Pages/technical_support_page.dart';
 import 'package:celta_inventario/Pages/transfer_between_package/transfer_between_package_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_destiny_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterprise_page.dart';
@@ -175,6 +176,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.TRANSFER_BETWEEN_PACKAGE: (ctx) =>
               const TransferBetweenPackagePage(),
           APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
+          APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
         },
       ),
     );

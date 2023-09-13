@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ShowErrorMessage {
-  static showErrorMessage({
-    required String error,
+class ShowSnackbarMessage {
+  static showMessage({
+    required String message,
     required BuildContext context,
     //sempre que cai no catch das requisições http é porque não encontrou o
     //servidor. Nesse caso pode exibir uma mensagem padrão
@@ -19,7 +19,7 @@ class ShowErrorMessage {
           children: [
             Expanded(
               child: Text(
-                error,
+                message,
                 textAlign: TextAlign.center,
               ),
             ),

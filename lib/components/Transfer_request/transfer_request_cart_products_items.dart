@@ -1,6 +1,6 @@
 import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_cart_products_model.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
 import '../../utils/convert_string.dart';
@@ -138,8 +138,8 @@ class TransferRequestCartProductsItems {
                                     );
                                     updateSelectedIndex();
 
-                                    ShowErrorMessage.showErrorMessage(
-                                      error: "Produto removido",
+                                    ShowSnackbarMessage.showMessage(
+                                      message: "Produto removido",
                                       context: context,
                                       functionSnackBarAction: () {
                                         transferRequestProvider

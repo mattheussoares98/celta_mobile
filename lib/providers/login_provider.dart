@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:xml2json/xml2json.dart';
 import '../utils/default_error_message_to_find_server.dart';
-import '../Components/Global_widgets/show_error_message.dart';
 
 class LoginProvider with ChangeNotifier {
   TextEditingController enterpriseNameOrUrlCCSController =
@@ -93,8 +93,8 @@ class LoginProvider with ChangeNotifier {
         !_isUrl(
           enterpriseNameOrUrlCCSController.text,
         )) {
-      ShowErrorMessage.showErrorMessage(
-        error:
+      ShowSnackbarMessage.showMessage(
+        message:
             "A empresa não foi encontrada no banco de dados. Entre em contato com o suporte e solicite a URL do CCS para fazer o login",
         context: context,
       );
@@ -116,8 +116,8 @@ class LoginProvider with ChangeNotifier {
       );
       _errorMessage = SoapHelperResponseParameters.errorMessage;
       if (_errorMessage != "") {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessage,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessage,
           context: context,
         );
       } else {
@@ -143,8 +143,8 @@ class LoginProvider with ChangeNotifier {
       // _updateErrorMessage(e.toString());
       print('deu erro no login: $e');
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessage,
         context: context,
       );
     }

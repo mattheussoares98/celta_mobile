@@ -1,11 +1,11 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_all_stocks.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -153,8 +153,8 @@ class _TransferRequestProductsItemsState
 
                               if (selectedIndex != index) {
                                 if (product.Value == 0) {
-                                  ShowErrorMessage.showErrorMessage(
-                                    error:
+                                  ShowSnackbarMessage.showMessage(
+                                    message:
                                         "O preço está zerado. Por isso não é possível inserir a quantidade!",
                                     context: context,
                                   );
@@ -326,8 +326,8 @@ class _TransferRequestProductsItemsState
                               product: product,
                               addProductInCart: () async {
                                 if (_totalItemValue == 0) {
-                                  ShowErrorMessage.showErrorMessage(
-                                    error: "O total dos itens está zerado!",
+                                  ShowSnackbarMessage.showMessage(
+                                    message: "O total dos itens está zerado!",
                                     context: context,
                                   );
                                 }

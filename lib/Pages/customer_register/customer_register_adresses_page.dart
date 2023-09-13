@@ -1,7 +1,7 @@
 import 'package:celta_inventario/components/Customer_register/customer_register_adresses_informeds.dart';
 import 'package:celta_inventario/components/Customer_register/customer_register_form_field.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +36,8 @@ class _CustomerRegisterAdressesPageState
     required CustomerRegisterProvider customerRegisterProvider,
   }) async {
     if (customerRegisterProvider.cepController.text.length < 8) {
-      ShowErrorMessage.showErrorMessage(
-        error: "O CEP deve conter 8 dígitos!",
+      ShowSnackbarMessage.showMessage(
+        message: "O CEP deve conter 8 dígitos!",
         context: context,
       );
       FocusScope.of(context).requestFocus(_cepFocusNode);
@@ -441,8 +441,8 @@ class _CustomerRegisterAdressesPageState
                                     customerRegisterProvider.addAdress();
                                     FocusScope.of(context).unfocus();
                                   } else {
-                                    ShowErrorMessage.showErrorMessage(
-                                      error:
+                                    ShowSnackbarMessage.showMessage(
+                                      message:
                                           "Insira os dados corretamente para salvar o endereço",
                                       context: context,
                                     );

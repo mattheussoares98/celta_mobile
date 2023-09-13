@@ -1,6 +1,6 @@
 import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -137,8 +137,8 @@ class SaleRequestCartProductsItems {
                                       updateSelectedIndex();
                                     }
 
-                                    ShowErrorMessage.showErrorMessage(
-                                      error: "Produto removido",
+                                    ShowSnackbarMessage.showMessage(
+                                      message: "Produto removido",
                                       context: context,
                                       functionSnackBarAction: () {
                                         saleRequestProvider

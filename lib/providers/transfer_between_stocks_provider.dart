@@ -1,8 +1,8 @@
 import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_justification_model.dart';
 import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_type_model.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_data.dart';
@@ -276,8 +276,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           listToAdd: _originStockTypes,
         );
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageTypeStockAndJustifications,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageTypeStockAndJustifications,
           context: context,
         );
       }
@@ -314,8 +314,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           listToAdd: _justifications,
         );
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageTypeStockAndJustifications,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageTypeStockAndJustifications,
           context: context,
         );
       }
@@ -341,8 +341,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     await _getJustificationsType(context);
 
     if (_errorMessageTypeStockAndJustifications != "") {
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageTypeStockAndJustifications,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageTypeStockAndJustifications,
         context: context,
       );
     }
@@ -395,16 +395,16 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       }
       _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;
       if (SoapHelperResponseParameters.errorMessage != "") {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageAdjustStock,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageAdjustStock,
           context: context,
         );
       }
     } catch (e) {
       print("Erro para confirmar o ajuste: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageAdjustStock,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageAdjustStock,
         context: context,
       );
     }

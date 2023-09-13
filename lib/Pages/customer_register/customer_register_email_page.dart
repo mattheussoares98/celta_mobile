@@ -1,6 +1,6 @@
 import 'package:celta_inventario/components/Customer_register/customer_register_emails_informeds.dart';
 import 'package:celta_inventario/components/Customer_register/customer_register_form_field.dart';
-import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,14 +33,14 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
       if (customerRegisterProvider.errorMessageAddEmail == "") {
         FocusScope.of(context).unfocus();
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: customerRegisterProvider.errorMessageAddEmail,
+        ShowSnackbarMessage.showMessage(
+          message: customerRegisterProvider.errorMessageAddEmail,
           context: context,
         );
       }
     } else {
-      ShowErrorMessage.showErrorMessage(
-        error: "Digite um e-mail válido!",
+      ShowSnackbarMessage.showMessage(
+        message: "Digite um e-mail válido!",
         context: context,
       );
     }

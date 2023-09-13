@@ -1,8 +1,7 @@
 import 'dart:math';
+import 'package:celta_inventario/components/Inicial_pages/auth_form.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
 import 'package:flutter/material.dart';
-
-import '../../Components/Global_widgets/auth_form.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

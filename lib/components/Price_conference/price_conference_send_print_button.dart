@@ -2,7 +2,7 @@ import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Global_widgets/show_error_message.dart';
+import '../Global_widgets/show_snackbar_message.dart';
 
 class PriceConferenceSendPrintButton extends StatefulWidget {
   final bool etiquetaPendente;
@@ -47,8 +47,8 @@ class _PriceConferenceSendPrintButtonState
                   );
 
                   if (priceConferenceProvider.errorSendToPrint != "") {
-                    ShowErrorMessage.showErrorMessage(
-                      error: priceConferenceProvider.errorSendToPrint,
+                    ShowSnackbarMessage.showMessage(
+                      message: priceConferenceProvider.errorSendToPrint,
                       context: context,
                     );
                   }

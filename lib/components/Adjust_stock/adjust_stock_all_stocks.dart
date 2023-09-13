@@ -1,6 +1,6 @@
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 
@@ -36,8 +36,8 @@ class AdjustStockAllStocks {
           ? null
           : () {
               if (!hasStocks) {
-                ShowErrorMessage.showErrorMessage(
-                  error:
+                ShowSnackbarMessage.showMessage(
+                  message:
                       "Entre em contato com o suporte técnico e solicite a atualização do sistema para conseguir visualizar todos estoques",
                   context: context,
                 );

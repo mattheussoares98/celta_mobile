@@ -2,9 +2,9 @@ import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart'
 import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_all_stocks.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -144,8 +144,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               if (selectedIndex != index) {
                                 if (product.RetailPracticedPrice == 0 &&
                                     product.WholePracticedPrice == 0) {
-                                  ShowErrorMessage.showErrorMessage(
-                                    error:
+                                  ShowSnackbarMessage.showMessage(
+                                    message:
                                         "O preço de venda e atacado estão zerados! Utilize esse produto somente caso esteja utilizando modelo de pedido de vendas que utiliza o custo como preço!",
                                     context: context,
                                     backgroundColor:
@@ -306,8 +306,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                               product: product,
                               addProductInCart: () async {
                                 if (_totalItemValue == 0) {
-                                  ShowErrorMessage.showErrorMessage(
-                                    error: "O total dos itens está zerado!",
+                                  ShowSnackbarMessage.showMessage(
+                                    message: "O total dos itens está zerado!",
                                     context: context,
                                   );
                                 }

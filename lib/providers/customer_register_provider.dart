@@ -1,9 +1,8 @@
 import 'dart:convert';
-
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/Models/customer_register_models/customer_register_cep.dart';
 import 'package:celta_inventario/api/requests_http.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
@@ -250,8 +249,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     if (response["error"] != "") {
       _errorMessageGetAdressByCep = response["error"];
 
-      ShowErrorMessage.showErrorMessage(
-        error:
+      ShowSnackbarMessage.showMessage(
+        message:
             "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
         context: context,
       );

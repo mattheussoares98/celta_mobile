@@ -1,12 +1,8 @@
 import 'package:celta_inventario/api/prefs_instance.dart';
+import 'package:celta_inventario/components/Inicial_pages/my_drawer.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
-import 'package:celta_inventario/utils/colors_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../Components/Global_widgets/image_component.dart';
-import '../../Components/Global_widgets/show_alert_dialog.dart';
-import '../../providers/login_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,35 +26,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    LoginProvider loginProvider = Provider.of(context, listen: true);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.logout,
-              color: ColorsTheme.text,
-            ),
-            onPressed: () async {
-              ShowAlertDialog().showAlertDialog(
-                context: context,
-                title: 'Deseja fazer o logout?',
-                function: () async {
-                  await loginProvider.logout();
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      APPROUTES.LOGIN_OR_HOME_PAGE, (route) => false);
-                },
-              );
-            },
-          ),
-        ],
         title: Center(
           child: Text(
             userName,
           ),
         ),
       ),
+      drawer: const MyDrawer(),
       body: GridView.count(
         crossAxisCount: 2, // define o número de colunas
         childAspectRatio: 1.2, // define a proporção de largura/altura dos itens

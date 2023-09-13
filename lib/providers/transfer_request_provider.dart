@@ -7,10 +7,10 @@ import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterpr
 import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Components/Global_widgets/show_error_message.dart';
 import '../utils/default_error_message_to_find_server.dart';
 
 class TransferRequestProvider with ChangeNotifier {
@@ -695,8 +695,8 @@ class TransferRequestProvider with ChangeNotifier {
           enterpriseDestinyCode: enterpriseDestinyCode,
         );
 
-        ShowErrorMessage.showErrorMessage(
-          error: "O pedido foi salvo com sucesso!",
+        ShowSnackbarMessage.showMessage(
+          message: "O pedido foi salvo com sucesso!",
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
@@ -715,8 +715,8 @@ class TransferRequestProvider with ChangeNotifier {
       } else {
         _isLoadingSaveTransferRequest = false;
 
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageSaveTransferRequest,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageSaveTransferRequest,
           context: context,
         );
       }
@@ -724,8 +724,8 @@ class TransferRequestProvider with ChangeNotifier {
       print("Erro para salvar a transferência: $e");
       _errorMessageSaveTransferRequest =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageSaveTransferRequest,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageSaveTransferRequest,
         context: context,
       );
     } finally {

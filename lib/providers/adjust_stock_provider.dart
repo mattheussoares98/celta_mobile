@@ -1,8 +1,8 @@
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_justification_model.dart';
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_type_model.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_data.dart';
@@ -310,8 +310,8 @@ class AdjustStockProvider with ChangeNotifier {
     await _getJustificationsType();
 
     if (_errorMessageTypeStockAndJustifications != "") {
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageTypeStockAndJustifications,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageTypeStockAndJustifications,
         context: context,
       );
     }
@@ -362,8 +362,8 @@ class AdjustStockProvider with ChangeNotifier {
         _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageAdjustStock,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageAdjustStock,
           context: context,
         );
       }
@@ -371,8 +371,8 @@ class AdjustStockProvider with ChangeNotifier {
       print("Erro para efetuar a requisição justifications: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
 
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageAdjustStock,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageAdjustStock,
         context: context,
       );
     }

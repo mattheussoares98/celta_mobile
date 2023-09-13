@@ -1,4 +1,4 @@
-import 'package:celta_inventario/components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,14 +41,15 @@ class _CustomerRegisterFloatingActionButtonState
                     widget.changeFormKeysToInvalid();
                   });
 
-                  ShowErrorMessage.showErrorMessage(
-                    error: "Cliente inserido/atualizado com sucesso",
+                  ShowSnackbarMessage.showMessage(
+                    message: "Cliente inserido/atualizado com sucesso",
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     context: context,
                   );
                 } else {
-                  ShowErrorMessage.showErrorMessage(
-                    error: customerRegisterProvider.errorMessageInsertCustomer,
+                  ShowSnackbarMessage.showMessage(
+                    message:
+                        customerRegisterProvider.errorMessageInsertCustomer,
                     context: context,
                   );
                 }

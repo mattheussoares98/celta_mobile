@@ -2,7 +2,7 @@ import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/receipt_models/receipt_products_model.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -81,8 +81,8 @@ class _ReceiptConferenceProductsItemsState
     FocusScope.of(context).unfocus();
 
     if (receiptProvider.products[index].Quantidade_ProcRecebDocProEmb == null) {
-      ShowErrorMessage.showErrorMessage(
-        error: "A quantidade já está nula!",
+      ShowSnackbarMessage.showMessage(
+        message: "A quantidade já está nula!",
         context: context,
       );
       return;

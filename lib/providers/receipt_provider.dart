@@ -1,5 +1,5 @@
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_error_message.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/utils/user_data.dart';
@@ -106,8 +106,8 @@ class ReceiptProvider with ChangeNotifier {
     if (isSubtract && _products[index].Quantidade_ProcRecebDocProEmb == -1) {
       _isUpdatingQuantity = false;
       _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageUpdateQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageUpdateQuantity,
         context: context,
       );
       notifyListeners();
@@ -117,8 +117,8 @@ class ReceiptProvider with ChangeNotifier {
         _products[index].Quantidade_ProcRecebDocProEmb != -1) {
       _isUpdatingQuantity = false;
       _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageUpdateQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageUpdateQuantity,
         context: context,
       );
       notifyListeners();
@@ -166,8 +166,8 @@ class ReceiptProvider with ChangeNotifier {
           isSubtract: isSubtract,
         );
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageUpdateQuantity,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageUpdateQuantity,
           context: context,
         );
       }
@@ -181,8 +181,8 @@ class ReceiptProvider with ChangeNotifier {
       print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageUpdateQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageUpdateQuantity,
         context: context,
       );
     } finally {
@@ -203,8 +203,8 @@ class ReceiptProvider with ChangeNotifier {
         _products[index].Quantidade_ProcRecebDocProEmb == -1) {
       //se a quantidade for igual à atual, não precisa fazer a requisição
       _errorMessageUpdateQuantity = "A quantidade já está nula";
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageUpdateQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageUpdateQuantity,
         context: context,
       );
       notifyListeners();
@@ -242,8 +242,8 @@ class ReceiptProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageUpdateQuantity,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageUpdateQuantity,
           context: context,
         );
       }
@@ -251,8 +251,8 @@ class ReceiptProvider with ChangeNotifier {
       print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageUpdateQuantity,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageUpdateQuantity,
         context: context,
       );
     }
@@ -352,8 +352,8 @@ class ReceiptProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessage,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessage,
         context: context,
       );
     } finally {
@@ -425,16 +425,16 @@ class ReceiptProvider with ChangeNotifier {
           isSearchingAgain: true,
         );
       } else {
-        ShowErrorMessage.showErrorMessage(
-          error: _errorMessageLiberate,
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageLiberate,
           context: context,
         );
       }
     } catch (e) {
       print("Erro para efetuar a requisição: $e");
       _errorMessageLiberate = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowErrorMessage.showErrorMessage(
-        error: _errorMessageLiberate,
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageLiberate,
         context: context,
       );
     }
