@@ -60,20 +60,24 @@ class _CustomerRegisterTelephonesInformedsState
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
-                      ShowAlertDialog().showAlertDialog(
-                        context: context,
-                        title: "Excluir telefone",
-                        subtitle: "Deseja realmente excluir o telefone?",
-                        function: () {
-                          customerRegisterProvider.removeTelephone(index);
-                        },
-                      );
-                    },
-                    icon: const Icon(
+                    onPressed: customerRegisterProvider.isLoadingInsertCustomer
+                        ? null
+                        : () {
+                            ShowAlertDialog().showAlertDialog(
+                              context: context,
+                              title: "Excluir telefone",
+                              subtitle: "Deseja realmente excluir o telefone?",
+                              function: () {
+                                customerRegisterProvider.removeTelephone(index);
+                              },
+                            );
+                          },
+                    icon: Icon(
                       Icons.delete,
                       size: 30,
-                      color: Colors.red,
+                      color: customerRegisterProvider.isLoadingInsertCustomer
+                          ? Colors.grey
+                          : Colors.red,
                     ),
                   )
                 ],

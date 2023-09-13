@@ -51,20 +51,24 @@ class _CustomerRegisterEmailsInformedsState
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
-                      ShowAlertDialog().showAlertDialog(
-                        context: context,
-                        title: "Excluir e-mail",
-                        subtitle: "Deseja realmente excluir o e-mail?",
-                        function: () {
-                          customerRegisterProvider.removeEmail(index);
-                        },
-                      );
-                    },
-                    icon: const Icon(
+                    onPressed: customerRegisterProvider.isLoadingInsertCustomer
+                        ? null
+                        : () {
+                            ShowAlertDialog().showAlertDialog(
+                              context: context,
+                              title: "Excluir e-mail",
+                              subtitle: "Deseja realmente excluir o e-mail?",
+                              function: () {
+                                customerRegisterProvider.removeEmail(index);
+                              },
+                            );
+                          },
+                    icon: Icon(
                       Icons.delete,
                       size: 30,
-                      color: Colors.red,
+                      color: customerRegisterProvider.isLoadingInsertCustomer
+                          ? Colors.grey
+                          : Colors.red,
                     ),
                   )
                 ],
