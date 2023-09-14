@@ -1,3 +1,4 @@
+import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/url_launcher.dart';
 import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
@@ -71,8 +72,15 @@ class MyDrawer extends StatelessWidget {
             ),
             drawerItem(
               context: context,
-              onTap: () async => await UrlLauncher.searchAndLaunchUrl(
-                  context: context, url: 'https://www.celtaware.com.br'),
+              onTap: () async {
+                await UrlLauncher.searchAndLaunchUrl(
+                  context: context,
+                  url: 'https://www.celtaware.com.br',
+                );
+                FirebaseHelper.addClickedInLink(
+                  firebaseCallEnum: FirebaseCallEnum.aboutUs,
+                );
+              },
               text: "Sobre nós",
               leading: Image.asset(
                 "lib/assets/Images/iconeCeltaware.jpg",
@@ -81,9 +89,15 @@ class MyDrawer extends StatelessWidget {
             ),
             drawerItem(
               context: context,
-              onTap: () async => await UrlLauncher.searchAndLaunchUrl(
+              onTap: () async {
+                await UrlLauncher.searchAndLaunchUrl(
                   context: context,
-                  url: 'https://www.instagram.com/celtaware_erp'),
+                  url: 'https://www.instagram.com/celtaware_erp',
+                );
+                FirebaseHelper.addClickedInLink(
+                  firebaseCallEnum: FirebaseCallEnum.instagram,
+                );
+              },
               text: "Instagram",
               leading: Image.asset(
                 "lib/assets/Images/instagram.jpg",
@@ -92,9 +106,15 @@ class MyDrawer extends StatelessWidget {
             ),
             drawerItem(
               context: context,
-              onTap: () async => await UrlLauncher.searchAndLaunchUrl(
+              onTap: () async {
+                await UrlLauncher.searchAndLaunchUrl(
                   context: context,
-                  url: 'https://www.linkedin.com/company/celtaware'),
+                  url: 'https://www.linkedin.com/company/celtaware',
+                );
+                FirebaseHelper.addClickedInLink(
+                  firebaseCallEnum: FirebaseCallEnum.linkedin,
+                );
+              },
               text: "Linkedin",
               leading: Image.asset(
                 "lib/assets/Images/linkedin.jpg",
@@ -103,8 +123,15 @@ class MyDrawer extends StatelessWidget {
             ),
             drawerItem(
               context: context,
-              onTap: () async => await UrlLauncher.searchAndLaunchUrl(
-                  context: context, url: 'https://m.facebook.com/Celtaware'),
+              onTap: () async {
+                await UrlLauncher.searchAndLaunchUrl(
+                  context: context,
+                  url: 'https://m.facebook.com/Celtaware',
+                );
+                FirebaseHelper.addClickedInLink(
+                  firebaseCallEnum: FirebaseCallEnum.facebook,
+                );
+              },
               text: "Facebook",
               leading: Image.asset(
                 "lib/assets/Images/facebook.jpg",
@@ -114,6 +141,7 @@ class MyDrawer extends StatelessWidget {
             drawerItem(
               context: context,
               onTap: () async {
+                Navigator.of(context).pop();
                 ShowAlertDialog().showAlertDialog(
                   context: context,
                   title: 'Deseja fazer o logout?',

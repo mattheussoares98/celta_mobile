@@ -16,6 +16,15 @@ enum FirebaseCallEnum {
   transferBetweenStocksConfirmAdjust,
   transferBetweenPackageConfirmAdjust,
   transferRequestSave,
+  aboutUs,
+  instagram,
+  linkedin,
+  facebook,
+  callToCeltaNumber,
+  pdvWhats,
+  bsWhats,
+  infrastructureWhats,
+  administrativeWhats,
 }
 
 class FirebaseHelper {
@@ -33,6 +42,9 @@ class FirebaseHelper {
 
   static CollectionReference _soapActionsCollection =
       _firebaseFirestore.collection("soapActions");
+
+  static CollectionReference _cleckedLinkCollection =
+      _firebaseFirestore.collection("clickedLink");
 
   static final _firebaseMessaging = FirebaseMessaging.instance;
 
@@ -235,5 +247,29 @@ class FirebaseHelper {
     //     print('Texto da notificação: ${message.notification!.body}');
     //   }
     // });
+  }
+
+  static Future<void> addClickedInLink({
+    required FirebaseCallEnum firebaseCallEnum,
+  }) async {
+    DocumentReference docRef = _cleckedLinkCollection
+        .doc("cliclekLinks")
+        .collection(UserData.enterpriseName)
+        .doc("linkInformations");
+
+    await docRef
+        .set(
+          {
+            firebaseCallEnum.name: {
+              "timesClicked": FieldValue.increment(1),
+              'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
+              'datesClicked': FieldValue.arrayUnion(
+                  [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
+            },
+          },
+          SetOptions(merge: true),
+        )
+        .then((value) => print("Clicked link added"))
+        .catchError((error) => print("Failed to add clicked link: $error"));
   }
 }

@@ -12,6 +12,8 @@ class ShowAlertDialog {
     String? cancelMessage = "NÃO",
     double? confirmMessageSize = 40,
     double? cancelMessageSize = 40,
+    bool? showConfirmAndCancelMessage = true,
+    bool? showCloseAlertDialogButton = false,
   }) {
     showDialog(
       context: context,
@@ -35,60 +37,68 @@ class ShowAlertDialog {
                 ),
           actionsPadding: const EdgeInsets.all(10),
           actions: [
-            FittedBox(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onPressed: () {
-                      function();
-                      Navigator.of(context).pop();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 30,
-                        horizontal: 30,
-                      ),
-                      child: Text(
-                        confirmMessage!,
-                        style: TextStyle(
-                          fontSize: confirmMessageSize,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 50),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+            if (showConfirmAndCancelMessage == true)
+              FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
-                        )),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 30,
-                        horizontal: 30,
+                        ),
                       ),
-                      child: Text(
-                        cancelMessage!,
-                        style: TextStyle(
-                          fontSize: cancelMessageSize,
+                      onPressed: () {
+                        function();
+                        Navigator.of(context).pop();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 30,
+                          horizontal: 30,
+                        ),
+                        child: Text(
+                          confirmMessage!,
+                          style: TextStyle(
+                            fontSize: confirmMessageSize,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 50),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 30,
+                          horizontal: 30,
+                        ),
+                        child: Text(
+                          cancelMessage!,
+                          style: TextStyle(
+                            fontSize: cancelMessageSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            if (showCloseAlertDialogButton == true)
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Fechar"),
+              ),
           ],
         );
       },

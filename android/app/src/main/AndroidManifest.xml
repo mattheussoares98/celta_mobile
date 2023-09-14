@@ -1,5 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.celtaware.inventario">
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="sms" />
+    </intent>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="tel" />
+    </intent>
+  </queries>
    <application
         android:label="Celta mobile"
         android:icon="@mipmap/ic_launcher">
@@ -47,17 +57,4 @@
     <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
     <uses-sdk android:minSdkVersion="21"
           android:targetSdkVersion="33"/>
-          <!-- Provide required visibility configuration for API level 30 and above -->
-    <queries>
-      <!-- If your app checks for SMS support -->
-      <intent>
-        <action android:name="android.intent.action.VIEW" />
-        <data android:scheme="sms" />
-      </intent>
-      <!-- If your app checks for call support -->
-      <intent>
-        <action android:name="android.intent.action.VIEW" />
-        <data android:scheme="tel" />
-      </intent>
-    </queries>
 </manifest>
