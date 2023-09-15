@@ -164,6 +164,7 @@ class _CustomerRegisterPersonalDataPageState
               suffixWidget: IconButton(
                 onPressed: () {
                   customerRegisterProvider.reducedNameController.text = "";
+                  FocusScope.of(context).requestFocus(reducedNameFocusNode);
                 },
                 icon: const Icon(
                   Icons.delete,
@@ -231,6 +232,8 @@ class _CustomerRegisterPersonalDataPageState
                       onPressed: () {
                         customerRegisterProvider.dateOfBirthController.text =
                             "";
+                        FocusScope.of(context)
+                            .requestFocus(dateOfBirthFocusNode);
                       },
                       icon: const Icon(
                         Icons.delete,

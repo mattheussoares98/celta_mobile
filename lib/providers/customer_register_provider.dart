@@ -50,6 +50,30 @@ class CustomerRegisterProvider with ChangeNotifier {
   List<Map<String, String>> get telephones => [..._telephones];
   int get telephonesCount => _telephones.length;
 
+  bool _personFormKeyIsValid = false;
+  bool get personFormKeyIsValid => _personFormKeyIsValid;
+  set personFormKeyIsValid(bool newValue) {
+    _personFormKeyIsValid = newValue;
+  }
+
+  bool _adressFormKeyIsValid = false;
+  bool get adressFormKeyIsValid => _adressFormKeyIsValid;
+  set adressFormKeyIsValid(bool newValue) {
+    _adressFormKeyIsValid = newValue;
+  }
+
+  bool _emailFormKeyIsValid = false;
+  bool get emailFormKeyIsValid => _emailFormKeyIsValid;
+  set emailFormKeyIsValid(bool newValue) {
+    _emailFormKeyIsValid = newValue;
+  }
+
+  bool _telephoneFormKeyIsValid = false;
+  bool get telephoneFormKeyIsValid => _telephoneFormKeyIsValid;
+  set telephoneFormKeyIsValid(bool newValue) {
+    _telephoneFormKeyIsValid = newValue;
+  }
+
   static const Map<String, String> _states = {
     "AC": "Acre",
     "AL": "Alagoas",
@@ -94,6 +118,9 @@ class CustomerRegisterProvider with ChangeNotifier {
   String _errorMessageAddEmail = "";
   String get errorMessageAddEmail => _errorMessageAddEmail;
 
+  String _errorMessageAddAddres = "";
+  String get errorMessageAddAddres => _errorMessageAddAddres;
+
   String _errorMessageAddTelephone = "";
   String get errorMessageAddTelephone => _errorMessageAddTelephone;
 
@@ -119,26 +146,36 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void addAdress() {
-    _adresses.add(CustomerRegisterCepModel(
-      Address: adressController.text,
-      City: cityController.text,
-      Complement: complementController.text,
-      District: districtController.text,
-      Number: numberController.text,
-      Reference: referenceController.text,
-      Zip: cepController.text,
-      State: _getKeyByValue(selectedStateDropDown.value!),
-    ));
+    _errorMessageAddAddres = "";
+    _adresses.forEach((element) {
+      if (element.Zip == cepController.text &&
+          element.Number == numberController.text) {
+        _errorMessageAddAddres = "Já existe um endereço com esse CEP e número!";
+      }
+    });
 
-    adressController.text = "";
-    cityController.text = "";
-    complementController.text = "";
-    districtController.text = "";
-    numberController.text = "";
-    referenceController.text = "";
-    cepController.text = "";
-    _selectedStateDropDown.value = null;
-    _triedGetCep = false; //para deixar somente o campo de CEP aberto
+    if (_errorMessageAddAddres == "") {
+      _adresses.add(CustomerRegisterCepModel(
+        Address: adressController.text,
+        City: cityController.text,
+        Complement: complementController.text,
+        District: districtController.text,
+        Number: numberController.text,
+        Reference: referenceController.text,
+        Zip: cepController.text,
+        State: _getKeyByValue(selectedStateDropDown.value!),
+      ));
+
+      adressController.text = "";
+      cityController.text = "";
+      complementController.text = "";
+      districtController.text = "";
+      numberController.text = "";
+      referenceController.text = "";
+      cepController.text = "";
+      _selectedStateDropDown.value = null;
+      _triedGetCep = false; //para deixar somente o campo de CEP aberto
+    }
     notifyListeners();
   }
 
@@ -239,32 +276,39 @@ class CustomerRegisterProvider with ChangeNotifier {
     _errorMessageGetAdressByCep = "";
     _isLoadingCep = true;
     notifyListeners();
-    Map response = await RequestsHttp.get(
-      url: "https://viacep.com.br/ws/${cepController.text}/json/",
-    );
 
-    _triedGetCep = true;
-    notifyListeners();
-
-    if (response["error"] != "") {
-      _errorMessageGetAdressByCep = response["error"];
-
-      ShowSnackbarMessage.showMessage(
-        message:
-            "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
-        context: context,
+    try {
+      Map response = await RequestsHttp.get(
+        url: "https://viacep.com.br/ws/${cepController.text}/json/",
       );
-    } else {
-      CustomerRegisterCepModel.resultAsStringToCustomerRegisterCepModel(
-        data: json.decode(response["success"]),
-        customerRegisterCepModel: _customerRegisterCepModel,
-        adressController: adressController,
-        districtController: districtController,
-        complementController: complementController,
-        cityController: cityController,
-        selectedStateDropDown: _selectedStateDropDown,
-        states: _states,
-      );
+
+      _triedGetCep = true;
+      notifyListeners();
+
+      if (response["error"] != "") {
+        _errorMessageGetAdressByCep = response["error"];
+
+        ShowSnackbarMessage.showMessage(
+          message:
+              "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
+          context: context,
+        );
+      } else {
+        CustomerRegisterCepModel.resultAsStringToCustomerRegisterCepModel(
+          data: json.decode(response["success"]),
+          customerRegisterCepModel: _customerRegisterCepModel,
+          adressController: adressController,
+          districtController: districtController,
+          complementController: complementController,
+          cityController: cityController,
+          selectedStateDropDown: _selectedStateDropDown,
+          states: _states,
+        );
+      }
+    } catch (e) {
+      print("Erro para consultar o CEP: $e");
+      _errorMessageGetAdressByCep =
+          "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente";
     }
 
     _isLoadingCep = false;

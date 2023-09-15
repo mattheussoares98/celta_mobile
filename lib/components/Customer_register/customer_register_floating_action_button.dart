@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
@@ -31,35 +32,42 @@ class _CustomerRegisterFloatingActionButtonState
           : () async {
               if (customerRegisterProvider.adressesCount == 0) {
                 setState(() {
-                  widget.changeSelectedIndexToAddAddres;
+                  widget.changeSelectedIndexToAddAddres();
                 });
               } else {
-                await customerRegisterProvider.insertCustomer();
+                ShowAlertDialog().showAlertDialog(
+                  context: context,
+                  title: "Cadastrar cliente",
+                  subtitle: "Deseja confirmar o cadastro do cliente?",
+                  function: () async {
+                    await customerRegisterProvider.insertCustomer();
 
-                if (customerRegisterProvider.errorMessageInsertCustomer == "") {
-                  setState(() {
-                    widget.changeFormKeysToInvalid();
-                  });
+                    if (customerRegisterProvider.errorMessageInsertCustomer ==
+                        "") {
+                      setState(() {
+                        widget.changeFormKeysToInvalid();
+                      });
 
-                  ShowSnackbarMessage.showMessage(
-                    message: "Cliente inserido/atualizado com sucesso",
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    context: context,
-                  );
-                } else {
-                  ShowSnackbarMessage.showMessage(
-                    message:
-                        customerRegisterProvider.errorMessageInsertCustomer,
-                    context: context,
-                  );
-                }
+                      ShowSnackbarMessage.showMessage(
+                        message: "Cliente inserido/atualizado com sucesso",
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        context: context,
+                      );
+                    } else {
+                      ShowSnackbarMessage.showMessage(
+                        message:
+                            customerRegisterProvider.errorMessageInsertCustomer,
+                        context: context,
+                      );
+                    }
+                  },
+                );
               }
             },
       child: CircleAvatar(
         minRadius: 35,
         maxRadius: 35,
-        backgroundColor: customerRegisterProvider.adressesCount == 0 ||
-                customerRegisterProvider.isLoadingInsertCustomer
+        backgroundColor: customerRegisterProvider.isLoadingInsertCustomer
             ? Colors.grey[300]
             : Theme.of(context).colorScheme.primary,
         child: customerRegisterProvider.isLoadingInsertCustomer

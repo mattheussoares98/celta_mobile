@@ -63,34 +63,48 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     );
   }
 
-  bool _personFormKeyIsValid = false;
-  bool _adressFormKeyIsValid = false;
-  bool _emailFormKeyIsValid = false;
-  bool _telephoneFormKeyIsValid = false;
-
   bool _formKeyIsValid() {
+    CustomerRegisterProvider customerRegisterProvider =
+        Provider.of(context, listen: false);
     if (_selectedIndex == 0) {
-      _personFormKeyIsValid = _personFormKey.currentState!.validate();
-      return _personFormKeyIsValid;
+      customerRegisterProvider.personFormKeyIsValid =
+          _personFormKey.currentState!.validate();
+      return customerRegisterProvider.personFormKeyIsValid;
     }
     if (_selectedIndex == 1) {
-      _adressFormKeyIsValid = _adressFormKey.currentState!.validate();
+      customerRegisterProvider.adressFormKeyIsValid =
+          _adressFormKey.currentState!.validate();
 
-      return _adressFormKeyIsValid;
+      return customerRegisterProvider.adressFormKeyIsValid;
     }
     if (_selectedIndex == 2) {
-      _emailFormKeyIsValid = _emailFormKey.currentState!.validate();
-      return _emailFormKeyIsValid;
+      customerRegisterProvider.emailFormKeyIsValid =
+          _emailFormKey.currentState!.validate();
+      return customerRegisterProvider.emailFormKeyIsValid;
     }
     if (_selectedIndex == 3) {
-      _telephoneFormKeyIsValid = _telephoneFormKey.currentState!.validate();
-      return _telephoneFormKeyIsValid;
+      customerRegisterProvider.telephoneFormKeyIsValid =
+          _telephoneFormKey.currentState!.validate();
+      return customerRegisterProvider.telephoneFormKeyIsValid;
     }
     if (_selectedIndex == 4) {
       return true;
     } else {
       return false;
     }
+  }
+
+  bool _hasAdressInformed({
+    required CustomerRegisterProvider customerRegisterProvider,
+  }) {
+    return customerRegisterProvider.adressController.text.isNotEmpty ||
+        customerRegisterProvider.cityController.text.isNotEmpty ||
+        customerRegisterProvider.complementController.text.isNotEmpty ||
+        customerRegisterProvider.districtController.text.isNotEmpty ||
+        customerRegisterProvider.selectedStateDropDown.value != null ||
+        customerRegisterProvider.numberController.text.isNotEmpty ||
+        customerRegisterProvider.referenceController.text.isNotEmpty ||
+        customerRegisterProvider.cepController.text.isNotEmpty;
   }
 
   void _onItemTapped({
@@ -101,20 +115,14 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         Provider.of(context, listen: false);
 
     bool hasAdressInformed =
-        customerRegisterProvider.adressController.text.isNotEmpty ||
-            customerRegisterProvider.cityController.text.isNotEmpty ||
-            customerRegisterProvider.complementController.text.isNotEmpty ||
-            customerRegisterProvider.districtController.text.isNotEmpty ||
-            customerRegisterProvider.selectedStateDropDown.value != null ||
-            customerRegisterProvider.numberController.text.isNotEmpty ||
-            customerRegisterProvider.referenceController.text.isNotEmpty ||
-            customerRegisterProvider.cepController.text.isNotEmpty;
+        _hasAdressInformed(customerRegisterProvider: customerRegisterProvider);
 
     String errorMessage = "Informe os dados necessários!";
-    if (hasAdressInformed && _adressFormKeyIsValid) {
+    if (hasAdressInformed && customerRegisterProvider.adressFormKeyIsValid) {
       errorMessage =
           "Adicione o endereço ou apague os dados para mudar de tela!";
-    } else if (hasAdressInformed && !_adressFormKeyIsValid) {
+    } else if (hasAdressInformed &&
+        !customerRegisterProvider.adressFormKeyIsValid) {
       errorMessage = "Corrija os dados e salve o endereço para mudar de tela!";
     }
 
@@ -127,6 +135,25 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         message: errorMessage,
         context: context,
       );
+    }
+  }
+
+  bool canExitPage(CustomerRegisterProvider customerRegisterProvider) {
+    if (_selectedIndex == 1 &&
+        _hasAdressInformed(
+          customerRegisterProvider: customerRegisterProvider,
+        )) {
+      ShowSnackbarMessage.showMessage(
+        message:
+            "Termine de adicionar o endereço ou apague os dados para sair da página",
+        context: context,
+      );
+      return false;
+    } else if (customerRegisterProvider.isLoadingInsertCustomer) {
+      return false;
+    } else {
+      Navigator.of(context).pop();
+      return true;
     }
   }
 
@@ -156,8 +183,11 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     // customerRegisterProvider.changeIsLoadingInsertCustomer();
     return WillPopScope(
       onWillPop: () async {
-        //fazer algo que quiser quando o usuário clicar no botão de voltar
-        return true;
+        if (canExitPage(customerRegisterProvider)) {
+          return true;
+        } else {
+          return false;
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -167,7 +197,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           leading: IconButton(
             onPressed: () {
               //fazer algo que quiser quando o usuário clicar no botão de voltar
-              Navigator.of(context).pop();
+              if (canExitPage(customerRegisterProvider)) {
+                Navigator.of(context).pop();
+              }
             },
             icon: const Icon(
               Icons.arrow_back_outlined,
@@ -180,7 +212,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
             BottomNavigationBarItem(
               icon: iconAccordingFormIsValid(
                 icon: Icons.person,
-                hasDataAndIsValid: _personFormKeyIsValid,
+                hasDataAndIsValid:
+                    customerRegisterProvider.personFormKeyIsValid,
               ),
               label: 'Dados',
             ),
@@ -188,32 +221,36 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               label: 'Endereço',
               icon: iconAccordingFormIsValid(
                 icon: Icons.room_outlined,
-                hasDataAndIsValid: _adressFormKeyIsValid &&
-                    customerRegisterProvider.adressesCount > 0,
+                hasDataAndIsValid:
+                    customerRegisterProvider.adressFormKeyIsValid &&
+                        customerRegisterProvider.adressesCount > 0,
               ),
             ),
             BottomNavigationBarItem(
               icon: iconAccordingFormIsValid(
                 icon: Icons.email_rounded,
-                hasDataAndIsValid: _emailFormKeyIsValid &&
-                    customerRegisterProvider.emailsCount > 0,
+                hasDataAndIsValid:
+                    customerRegisterProvider.emailFormKeyIsValid &&
+                        customerRegisterProvider.emailsCount > 0,
               ),
               label: 'E-mail',
             ),
             BottomNavigationBarItem(
               icon: iconAccordingFormIsValid(
                 icon: Icons.phone,
-                hasDataAndIsValid: _telephoneFormKeyIsValid &&
-                    customerRegisterProvider.telephonesCount > 0,
+                hasDataAndIsValid:
+                    customerRegisterProvider.telephoneFormKeyIsValid &&
+                        customerRegisterProvider.telephonesCount > 0,
               ),
               label: 'Telefone',
             ),
             BottomNavigationBarItem(
               icon: iconAccordingFormIsValid(
                 icon: Icons.check,
-                hasDataAndIsValid: _personFormKeyIsValid &&
-                    (_adressFormKeyIsValid &&
-                        customerRegisterProvider.adressesCount > 0),
+                hasDataAndIsValid:
+                    customerRegisterProvider.personFormKeyIsValid &&
+                        (customerRegisterProvider.adressFormKeyIsValid &&
+                            customerRegisterProvider.adressesCount > 0),
               ),
               label: 'Salvar',
             ),
@@ -241,10 +278,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                 },
                 changeFormKeysToInvalid: () {
                   setState(() {
-                    _personFormKeyIsValid = false;
-                    _adressFormKeyIsValid = false;
-                    _emailFormKeyIsValid = false;
-                    _telephoneFormKeyIsValid = false;
+                    customerRegisterProvider.personFormKeyIsValid = false;
+                    customerRegisterProvider.adressFormKeyIsValid = false;
+                    customerRegisterProvider.emailFormKeyIsValid = false;
+                    customerRegisterProvider.telephoneFormKeyIsValid = false;
                     _selectedIndex = 0;
                   });
                 },

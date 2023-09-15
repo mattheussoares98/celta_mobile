@@ -52,6 +52,11 @@ class _CustomerRegisterAdressesPageState
       Future.delayed(const Duration(milliseconds: 100), () {
         FocusScope.of(context).requestFocus(_numberFocusNode);
       });
+    } else {
+      ShowSnackbarMessage.showMessage(
+        message: customerRegisterProvider.errorMessageGetAdressByCep,
+        context: context,
+      );
     }
   }
 
@@ -65,6 +70,19 @@ class _CustomerRegisterAdressesPageState
         Provider.of(context, listen: true);
     _selectedStateDropDown.value =
         customerRegisterProvider.selectedStateDropDown.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _cepFocusNode.dispose();
+    _adressFocusNode.dispose();
+    _districtFocusNode.dispose();
+    _stateFocusNode.dispose();
+    _cityFocusNode.dispose();
+    _numberFocusNode.dispose();
+    _complementFocusNode.dispose();
+    _referenceFocusNode.dispose();
   }
 
   @override
@@ -141,14 +159,6 @@ class _CustomerRegisterAdressesPageState
                     enabled:
                         customerRegisterProvider.isLoadingCep ? false : true,
                     focusNode: _adressFocusNode,
-                    // onFieldSubmitted: customerRegisterProvider.isLoadingCep
-                    //     ? null
-                    //     : (String? value) async {
-                    //         await customerRegisterProvider.getAddressByCep(
-                    //           context: context,
-                    //           cepControllerText: widget.cepController.text,
-                    //         );
-                    //       },
                     labelText: "Logradouro",
                     textEditingController:
                         customerRegisterProvider.adressController,
@@ -202,14 +212,6 @@ class _CustomerRegisterAdressesPageState
                               ? false
                               : true,
                           focusNode: _cityFocusNode,
-                          // onFieldSubmitted: customerRegisterProvider.isLoadingCep
-                          //     ? null
-                          //     : (String? value) async {
-                          //         await customerRegisterProvider.getAddressByCep(
-                          //           context: context,
-                          //           cepControllerText: widget.cepController.text,
-                          //         );
-                          //       },
                           labelText: "Cidade",
                           textEditingController:
                               customerRegisterProvider.cityController,
@@ -379,14 +381,6 @@ class _CustomerRegisterAdressesPageState
                               ? false
                               : true,
                           focusNode: _referenceFocusNode,
-                          // onFieldSubmitted: customerRegisterProvider.isLoadingCep
-                          //     ? null
-                          //     : (String? value) async {
-                          //         await customerRegisterProvider.getAddressByCep(
-                          //           context: context,
-                          //           cepControllerText: widget.cepController.text,
-                          //         );
-                          //       },
                           labelText: "Referência",
                           textEditingController:
                               customerRegisterProvider.referenceController,
@@ -439,6 +433,15 @@ class _CustomerRegisterAdressesPageState
                                       customerRegisterProvider
                                           .cepController.text.isNotEmpty) {
                                     customerRegisterProvider.addAdress();
+                                    if (customerRegisterProvider
+                                            .errorMessageAddAddres !=
+                                        "") {
+                                      ShowSnackbarMessage.showMessage(
+                                        message: customerRegisterProvider
+                                            .errorMessageAddAddres,
+                                        context: context,
+                                      );
+                                    }
                                     FocusScope.of(context).unfocus();
                                   } else {
                                     ShowSnackbarMessage.showMessage(

@@ -31,6 +31,7 @@ class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
             const CustomerRegisterEmailsInformeds(),
           if (customerRegisterProvider.telephonesCount > 0)
             const CustomerRegisterTelephonesInformeds(),
+          const SizedBox(height: 100),
         ],
       ),
     );
