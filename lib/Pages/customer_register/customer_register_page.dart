@@ -152,7 +152,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     } else if (customerRegisterProvider.isLoadingInsertCustomer) {
       return false;
     } else {
-      Navigator.of(context).pop();
       return true;
     }
   }
@@ -161,7 +160,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       CustomerRegisterPersonalDataPage(
-        validatePersonFormKey: _formKeyIsValid,
         personFormKey: _personFormKey,
       ),
       CustomerRegisterAdressesPage(

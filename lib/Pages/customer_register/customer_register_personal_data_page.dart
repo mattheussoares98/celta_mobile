@@ -9,10 +9,8 @@ import 'package:provider/provider.dart';
 
 class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final GlobalKey<FormState> personFormKey;
-  final Function validatePersonFormKey;
   const CustomerRegisterPersonalDataPage({
     required this.personFormKey,
-    required this.validatePersonFormKey,
     Key? key,
   }) : super(key: key);
 
@@ -28,7 +26,6 @@ class _CustomerRegisterPersonalDataPageState
   final FocusNode cpfCnpjFocusNode = FocusNode();
   final FocusNode sexTypeFocusNode = FocusNode();
   final FocusNode dateOfBirthFocusNode = FocusNode();
-  final FocusNode emailFocusNode = FocusNode();
 
   ValueNotifier<String?> _selectedSexDropDown = ValueNotifier<String?>("");
 
@@ -40,6 +37,16 @@ class _CustomerRegisterPersonalDataPageState
         Provider.of(context, listen: true);
     _selectedSexDropDown.value =
         customerRegisterProvider.selectedSexDropDown.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameFocusNode.dispose();
+    reducedNameFocusNode.dispose();
+    cpfCnpjFocusNode.dispose();
+    sexTypeFocusNode.dispose();
+    dateOfBirthFocusNode.dispose();
   }
 
   bool cpfCnpjEnabled = true;
@@ -116,12 +123,7 @@ class _CustomerRegisterPersonalDataPageState
                 ),
               ),
               onFieldSubmitted: (String? value) {
-                bool isValid = widget.validatePersonFormKey();
-                if (isValid) {
-                  FocusScope.of(context).requestFocus(reducedNameFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
-                }
+                FocusScope.of(context).requestFocus(reducedNameFocusNode);
               },
               labelText: "CPF/CNPJ",
               validator: (String? cpfCnpj) {
@@ -172,12 +174,7 @@ class _CustomerRegisterPersonalDataPageState
                 ),
               ),
               onFieldSubmitted: (String? value) {
-                bool isValid = widget.validatePersonFormKey();
-                if (isValid) {
-                  FocusScope.of(context).requestFocus(dateOfBirthFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(reducedNameFocusNode);
-                }
+                FocusScope.of(context).requestFocus(dateOfBirthFocusNode);
               },
               labelText: "Nome reduzido",
               textEditingController:
@@ -189,12 +186,7 @@ class _CustomerRegisterPersonalDataPageState
               enabled: true,
               focusNode: dateOfBirthFocusNode,
               onFieldSubmitted: (String? value) {
-                bool isValid = widget.validatePersonFormKey();
-                if (isValid) {
-                  FocusScope.of(context).requestFocus(emailFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(dateOfBirthFocusNode);
-                }
+                FocusScope.of(context).requestFocus(sexTypeFocusNode);
               },
               labelText: "Nascimento",
               isDate: true,

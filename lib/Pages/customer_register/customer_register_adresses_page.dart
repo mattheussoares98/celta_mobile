@@ -163,6 +163,9 @@ class _CustomerRegisterAdressesPageState
                     textEditingController:
                         customerRegisterProvider.adressController,
                     limitOfCaracters: 40,
+                    onFieldSubmitted: (value) {
+                      FocusScope.of(context).requestFocus(_districtFocusNode);
+                    },
                     validator: (String? value) {
                       if ((value == null ||
                               value.isEmpty ||
@@ -216,6 +219,10 @@ class _CustomerRegisterAdressesPageState
                           textEditingController:
                               customerRegisterProvider.cityController,
                           limitOfCaracters: 30,
+                          onFieldSubmitted: (value) {
+                            FocusScope.of(context)
+                                .requestFocus(_stateFocusNode);
+                          },
                           validator: (String? value) {
                             if ((value == null ||
                                     value.isEmpty ||

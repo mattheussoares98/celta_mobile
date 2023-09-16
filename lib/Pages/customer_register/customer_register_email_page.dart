@@ -47,6 +47,12 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    emailFocusNode.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 

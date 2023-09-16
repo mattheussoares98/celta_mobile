@@ -49,6 +49,13 @@ class _CustomerRegisterTelephonePageState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    telephoneFocusNode.dispose();
+    dddFocusNode.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider =
         Provider.of(context, listen: true);
