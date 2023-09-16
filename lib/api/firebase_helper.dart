@@ -162,26 +162,29 @@ class FirebaseHelper {
         DocumentReference docRef = _soapActionsCollection
             .doc(DateFormat('yyyy-MM').format(DateTime.now()))
             .collection(UserData.enterpriseName)
-            .doc(soapAction["typeOfSearch"]);
+            .doc("soapInformations");
 
         batch.set(
           docRef,
           {
-            'timesUsed': FieldValue.increment(1),
-            'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
-            'datesUsed': FieldValue.arrayUnion(
-                [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
+            firebaseCallEnum.name: {
+              "timesUsed": FieldValue.increment(1),
+              'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
+              'datesUsed': FieldValue.arrayUnion(
+                  [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
+            },
           },
           SetOptions(merge: true),
         );
       });
 
-      batch
-          .commit()
-          .then((value) async => {
-                await PrefsInstance.clearSoaps(),
-              })
-          .catchError((error) => error);
+      batch.commit().then(
+        (value) async {
+          await PrefsInstance.clearSoaps();
+          print("soapInformation adicionada");
+        },
+      ).catchError(
+          (error) => print("Erro para adicionar a soapInformation: $error"));
     }
   }
 
