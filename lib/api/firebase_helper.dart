@@ -161,8 +161,8 @@ class FirebaseHelper {
       mySoaps.forEach((soapAction) {
         DocumentReference docRef = _soapActionsCollection
             .doc(DateFormat('yyyy-MM').format(DateTime.now()))
-            .collection(UserData.enterpriseName)
-            .doc("soapInformations");
+            .collection("soapInformations")
+            .doc(UserData.enterpriseName);
 
         batch.set(
           docRef,
@@ -183,8 +183,9 @@ class FirebaseHelper {
           await PrefsInstance.clearSoaps();
           print("soapInformation adicionada");
         },
-      ).catchError(
-          (error) => print("Erro para adicionar a soapInformation: $error"));
+      ).catchError((error) {
+        print("Erro para adicionar a soapInformation: $error");
+      });
     }
   }
 

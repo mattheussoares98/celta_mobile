@@ -24,6 +24,15 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  int returnSize() {
+    if (MediaQuery.of(context).size.width > 900) {
+      return 4;
+    } else if (MediaQuery.of(context).size.width > 600) {
+      return 3;
+    } else
+      return 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,8 +46,10 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: const MyDrawer(),
       body: GridView.count(
-        crossAxisCount: 2, // define o número de colunas
-        childAspectRatio: 1.2, // define a proporção de largura/altura dos itens
+        crossAxisCount: returnSize(), // define o número de colunas
+        childAspectRatio: MediaQuery.of(context).size.width > 900
+            ? 1.4
+            : 1.2, // define a proporção de largura/altura dos itens
         padding: const EdgeInsets.only(top: 8),
         mainAxisSpacing: 3,
         crossAxisSpacing: 3,

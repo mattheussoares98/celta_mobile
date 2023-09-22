@@ -12,9 +12,18 @@ class SoapHelperResponseParameters {
   }
 
   SoapHelperResponseParameters._internal();
+  static String get responseAsString => _responseAsString;
+  static set responseAsString(String value) {
+    _responseAsString = value;
+  }
 
-  static String responseAsString = '';
-  static String errorMessage = '';
+  static String get errorMessage => _errorMessage;
+  static set errorMessage(String value) {
+    _errorMessage = value;
+  }
+
+  static String _responseAsString = '';
+  static String _errorMessage = '';
   static Map responseAsMap = {};
 }
 
@@ -26,21 +35,24 @@ class SoapHelper {
     required String SOAPAction,
     required String serviceASMX,
   }) async {
-    SoapHelperResponseParameters.errorMessage = "";
-    SoapHelperResponseParameters.responseAsString = "";
-    final soapHeaders = {
-      'Content-Type': 'text/xml; charset=utf-8',
-      'SOAPAction': 'http://celtaware.com.br/$SOAPAction',
-      'Accept-Language': 'en-US',
-    };
+    try {
+      SoapHelperResponseParameters.errorMessage = "";
+      SoapHelperResponseParameters.responseAsString = "";
+      final soapHeaders = {
+        'Content-Type': 'text/xml; charset=utf-8',
+        'SOAPAction': 'http://celtaware.com.br/$SOAPAction',
+        'Accept-Language': 'en-US',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE, HEAD',
+      };
 
-    String parameterTags = '';
+      String parameterTags = '';
 
-    parameters.forEach((tag, value) {
-      parameterTags += '<$tag>$value</$tag>\n';
-    });
+      parameters.forEach((tag, value) {
+        parameterTags += '<$tag>$value</$tag>\n';
+      });
 
-    final envelope = '''<?xml version="1.0" encoding="utf-8"?>
+      final envelope = '''<?xml version="1.0" encoding="utf-8"?>
       <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
         <soap12:Body>
           <$SOAPAction xmlns="http://celtaware.com.br/">
@@ -49,59 +61,64 @@ class SoapHelper {
         </soap12:Body>
       </soap12:Envelope>''';
 
-    final response = await http.post(
-      Uri.parse('${UserData.urlCCS}/$serviceASMX'),
-      headers: soapHeaders,
-      body: envelope,
-    );
+      final response = await http.post(
+        Uri.parse('${UserData.urlCCS}/$serviceASMX'),
+        headers: soapHeaders,
+        body: envelope,
+      );
 
-    if (response.statusCode == 200) {
-      String result = response.body;
+      if (response.statusCode == 200) {
+        String result = response.body;
+        print("Resposta da chamada SOAP: $result");
 
-      final Xml2Json xml2json = Xml2Json();
-      xml2json.parse(result);
-      final getJustificationsResult = xml2json.toParker();
-      Map parsedJson = json.decode(getJustificationsResult.toString());
-      print("parsedJson: $parsedJson");
+        final Xml2Json xml2json = Xml2Json();
+        xml2json.parse(result);
+        final getJustificationsResult = xml2json.toParker();
+        Map parsedJson = json.decode(getJustificationsResult.toString());
+        print("parsedJson: $parsedJson");
 
-      if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]["status"] ==
-          "OK") {
-        if (typeOfResult != null) {
+        if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                ["status"] ==
+            "OK") {
+          if (typeOfResult != null) {
+            if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                    [typeOfResult] !=
+                null) {
+              SoapHelperResponseParameters.responseAsString =
+                  parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                          [typeOfResult]
+                      .toString();
+            }
+
+            if (_validateResultHasPatternNewDataSet(
+              parsedJson: parsedJson,
+              typeOfResponse: typeOfResponse,
+              typeOfResult: typeOfResult,
+            )) {
+              //no login não retorna nesse padrão de tags, por isso estava ocorrendo erro e por isso precisei criar esse tratamento
+              SoapHelperResponseParameters.responseAsMap =
+                  parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+                      [typeOfResult]["diffgr:diffgram"]["NewDataSet"];
+            }
+          }
+        } else {
           if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                  [typeOfResult] !=
-              null) {
+              .toString()
+              .contains("sucesso")) {
             SoapHelperResponseParameters.responseAsString =
                 parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                        [typeOfResult]
-                    .toString();
-          }
-
-          if (_validateResultHasPatternNewDataSet(
-            parsedJson: parsedJson,
-            typeOfResponse: typeOfResponse,
-            typeOfResult: typeOfResult,
-          )) {
-            //no login não retorna nesse padrão de tags, por isso estava ocorrendo erro e por isso precisei criar esse tratamento
-            SoapHelperResponseParameters.responseAsMap =
+                    ["status"];
+          } else {
+            SoapHelperResponseParameters.errorMessage =
                 parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                    [typeOfResult]["diffgr:diffgram"]["NewDataSet"];
+                    ["status"];
           }
         }
       } else {
-        if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-            .toString()
-            .contains("sucesso")) {
-          SoapHelperResponseParameters.responseAsString =
-              parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                  ["status"];
-        } else {
-          SoapHelperResponseParameters.errorMessage =
-              parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                  ["status"];
-        }
+        throw Exception('Failed to load data');
       }
-    } else {
-      throw Exception('Failed to load data');
+    } catch (e) {
+      print(e);
     }
   }
 
