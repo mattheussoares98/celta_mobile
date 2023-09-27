@@ -82,7 +82,7 @@ class LoginProvider with ChangeNotifier {
 
     notifyListeners();
 
-    if (_changedEnterpriseNameOrUrlCcs) {
+    if (_changedEnterpriseNameOrUrlCcs || UserData.urlCCS == "") {
       _errorMessage =
           await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
         enterpriseNameOrUrlCCSController.text,
@@ -161,8 +161,10 @@ class LoginProvider with ChangeNotifier {
 
   logout() async {
     await PrefsInstance.setUserIdentity("");
+    await PrefsInstance.setUrlCcs("");
 
     UserData.crossIdentity = "";
+    UserData.urlCCS = "";
     _loginController?.add(false);
   }
 }

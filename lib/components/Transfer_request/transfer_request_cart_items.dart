@@ -198,7 +198,7 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                                                       controllerInDouble == 0
                                                   ? null
                                                   : () {
-                                                      ShowAlertDialog()
+                                                      ShowAlertDialog
                                                           .showAlertDialog(
                                                               context: context,
                                                               title:
@@ -235,8 +235,7 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                                                   widget.textEditingController,
                                               formKey: _formKey,
                                               onFieldSubmitted: () {
-                                                ShowAlertDialog()
-                                                    .showAlertDialog(
+                                                ShowAlertDialog.showAlertDialog(
                                                   context: context,
                                                   title: "Atualizar o preço",
                                                   subtitle:
@@ -310,7 +309,7 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
                                   .isLoadingSaveTransferRequest
                               ? null
                               : () {
-                                  ShowAlertDialog().showAlertDialog(
+                                  ShowAlertDialog.showAlertDialog(
                                     context: context,
                                     title: "Limpar carrinho",
                                     subtitle:

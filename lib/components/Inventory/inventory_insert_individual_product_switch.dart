@@ -56,6 +56,7 @@ class _InventoryInsertIndividualProductSwitchState
               child: Switch(
                 activeColor: Colors.blue,
                 inactiveThumbColor: Colors.grey,
+                inactiveTrackColor: Colors.grey[300],
                 value: widget.isIndividual,
                 onChanged: widget.isLoading
                     ? null

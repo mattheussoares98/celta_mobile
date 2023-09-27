@@ -166,6 +166,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                     }
                   },
                 ),
+                const SizedBox(height: 8),
                 InventoryInsertIndividualProductSwitch(
                   isIndividual: _isIndividual,
                   isLoading: inventoryProvider.isLoadingProducts ||

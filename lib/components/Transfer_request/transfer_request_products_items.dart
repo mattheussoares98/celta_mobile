@@ -1,6 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_all_stocks.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_insert_product_quantity_form.dart';
@@ -63,7 +62,7 @@ class _TransferRequestProductsItemsState
     required String enterpriseOriginCode,
     required String requestTypeCode,
   }) {
-    ShowAlertDialog().showAlertDialog(
+    ShowAlertDialog.showAlertDialog(
       context: context,
       title: "Confirmar exclusão",
       subtitle: "Deseja excluir o produto do carrinho?",
@@ -130,8 +129,7 @@ class _TransferRequestProductsItemsState
                   consultedProductController: widget.consultedProductController,
                 );
 
-                return PersonalizedCard.personalizedCard(
-                  context: context,
+                return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(

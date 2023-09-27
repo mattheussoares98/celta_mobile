@@ -35,7 +35,7 @@ class _CustomerRegisterFloatingActionButtonState
                   widget.changeSelectedIndexToAddAddres();
                 });
               } else {
-                ShowAlertDialog().showAlertDialog(
+                ShowAlertDialog.showAlertDialog(
                   context: context,
                   title: "Cadastrar cliente",
                   subtitle: "Deseja confirmar o cadastro do cliente?",

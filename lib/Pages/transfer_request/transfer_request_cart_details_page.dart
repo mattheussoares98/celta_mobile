@@ -59,7 +59,7 @@ class _TransferRequestCartDetailsPageState
       return null;
     } else {
       return () => {
-            ShowAlertDialog().showAlertDialog(
+            ShowAlertDialog.showAlertDialog(
               context: context,
               title: "Salvar pedido de transferência",
               subtitle: "Deseja salvar o pedido de transferência?",

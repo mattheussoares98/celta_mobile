@@ -214,7 +214,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                       controllerInDouble == 0
                                                   ? null
                                                   : () {
-                                                      ShowAlertDialog()
+                                                      ShowAlertDialog
                                                           .showAlertDialog(
                                                               context: context,
                                                               title:
@@ -257,8 +257,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                                   widget.textEditingController,
                                               formKey: _formKey,
                                               onFieldSubmitted: () {
-                                                ShowAlertDialog()
-                                                    .showAlertDialog(
+                                                ShowAlertDialog.showAlertDialog(
                                                   context: context,
                                                   title: "Atualizar o preço",
                                                   subtitle:
@@ -333,7 +332,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
                                       saleRequestProvider.isLoadingProcessCart
                                   ? null
                                   : () {
-                                      ShowAlertDialog().showAlertDialog(
+                                      ShowAlertDialog.showAlertDialog(
                                         context: context,
                                         title: "Limpar carrinho",
                                         subtitle:

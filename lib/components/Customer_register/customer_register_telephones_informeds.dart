@@ -1,4 +1,3 @@
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +45,7 @@ class _CustomerRegisterTelephonesInformedsState
           itemBuilder: (context, index) {
             Map<String, String> telephone =
                 customerRegisterProvider.telephones[index];
-            return PersonalizedCard.personalizedCard(
-              context: context,
+            return Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -63,7 +61,7 @@ class _CustomerRegisterTelephonesInformedsState
                     onPressed: customerRegisterProvider.isLoadingInsertCustomer
                         ? null
                         : () {
-                            ShowAlertDialog().showAlertDialog(
+                            ShowAlertDialog.showAlertDialog(
                               context: context,
                               title: "Excluir telefone",
                               subtitle: "Deseja realmente excluir o telefone?",

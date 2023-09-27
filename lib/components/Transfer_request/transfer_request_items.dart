@@ -1,6 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -29,18 +28,6 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
     return Expanded(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: FittedBox(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  'Selecione o modelo de pedido',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: transferRequestProvider.requestModelsCount,
@@ -55,8 +42,7 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
                     );
                   },
                   //sem esse Card, não funciona o gesture detector no campo inteiro
-                  child: PersonalizedCard.personalizedCard(
-                    context: context,
+                  child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

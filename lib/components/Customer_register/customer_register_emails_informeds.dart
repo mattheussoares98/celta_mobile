@@ -1,4 +1,3 @@
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +38,7 @@ class _CustomerRegisterEmailsInformedsState
           itemCount: customerRegisterProvider.emailsCount,
           itemBuilder: (context, index) {
             String email = customerRegisterProvider.emails[index];
-            return PersonalizedCard.personalizedCard(
-              context: context,
+            return Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -54,7 +52,7 @@ class _CustomerRegisterEmailsInformedsState
                     onPressed: customerRegisterProvider.isLoadingInsertCustomer
                         ? null
                         : () {
-                            ShowAlertDialog().showAlertDialog(
+                            ShowAlertDialog.showAlertDialog(
                               context: context,
                               title: "Excluir e-mail",
                               subtitle: "Deseja realmente excluir o e-mail?",

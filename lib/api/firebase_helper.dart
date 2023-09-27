@@ -44,7 +44,7 @@ class FirebaseHelper {
       _firebaseFirestore.collection("soapActions");
 
   static CollectionReference _cleckedLinkCollection =
-      _firebaseFirestore.collection("clickedLink");
+      _firebaseFirestore.collection("clickedLinks");
 
   static final _firebaseMessaging = FirebaseMessaging.instance;
 
@@ -256,13 +256,11 @@ class FirebaseHelper {
   static Future<void> addClickedInLink({
     required FirebaseCallEnum firebaseCallEnum,
   }) async {
-    DocumentReference docRef = _cleckedLinkCollection
-        .doc("cliclekLinks")
-        .collection(UserData.enterpriseName)
-        .doc("linkInformations");
+    DocumentReference docRef =
+        _cleckedLinkCollection.doc(UserData.enterpriseName);
 
     await docRef
-        .set(
+        .update(
           {
             firebaseCallEnum.name: {
               "timesClicked": FieldValue.increment(1),
@@ -271,7 +269,6 @@ class FirebaseHelper {
                   [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
             },
           },
-          SetOptions(merge: true),
         )
         .then((value) => print("Clicked link added"))
         .catchError((error) => print("Failed to add clicked link: $error"));

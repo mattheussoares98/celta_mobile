@@ -1,13 +1,11 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_all_stocks.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../Models/sale_request_models/sale_request_products_model.dart';
 import '../Global_widgets/show_alert_dialog.dart';
 
@@ -61,7 +59,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
     required double totalItemValue,
     required dynamic product,
   }) {
-    ShowAlertDialog().showAlertDialog(
+    ShowAlertDialog.showAlertDialog(
       context: context,
       title: "Confirmar exclusão",
       subtitle: "Deseja excluir o produto do carrinho?",
@@ -120,8 +118,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                   enterpriseCode: widget.enterpriseCode.toString(),
                 );
 
-                return PersonalizedCard.personalizedCard(
-                  context: context,
+                return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(

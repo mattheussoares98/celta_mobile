@@ -1,6 +1,5 @@
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/url_launcher.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/providers/login_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
@@ -18,8 +17,7 @@ class MyDrawer extends StatelessWidget {
   }) {
     return InkWell(
       onTap: onTap,
-      child: PersonalizedCard.personalizedCard(
-        context: context,
+      child: Card(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(
@@ -141,8 +139,7 @@ class MyDrawer extends StatelessWidget {
             drawerItem(
               context: context,
               onTap: () async {
-                Navigator.of(context).pop();
-                ShowAlertDialog().showAlertDialog(
+                ShowAlertDialog.showAlertDialog(
                   context: context,
                   title: 'Deseja fazer o logout?',
                   function: () async {

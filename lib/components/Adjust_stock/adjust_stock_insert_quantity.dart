@@ -153,6 +153,14 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                           color: Colors.grey,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Colors.grey,
+                        ),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
@@ -162,6 +170,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                         ),
                       ),
                       labelStyle: TextStyle(
+                        fontSize: 12,
                         color: adjustStockProvider.isLoadingProducts ||
                                 adjustStockProvider
                                     .isLoadingTypeStockAndJustifications ||
@@ -189,7 +198,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                         : () async {
                             if (_isValid()) {
                               print("formulários corretos. Pode salvar");
-                              ShowAlertDialog().showAlertDialog(
+                              ShowAlertDialog.showAlertDialog(
                                 context: context,
                                 title: "Confirmar ajuste",
                                 function: () async {

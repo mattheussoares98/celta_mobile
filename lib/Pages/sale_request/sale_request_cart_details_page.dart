@@ -55,7 +55,7 @@ class _SaleRequestCartDetailsPageState
       return null;
     } else if (saleRequestProvider.updatedCart) {
       return () => {
-            ShowAlertDialog().showAlertDialog(
+            ShowAlertDialog.showAlertDialog(
               context: context,
               title: "Calcular preços?",
               confirmMessage: "CALCULAR",
@@ -78,7 +78,7 @@ class _SaleRequestCartDetailsPageState
           };
     } else {
       return () => {
-            ShowAlertDialog().showAlertDialog(
+            ShowAlertDialog.showAlertDialog(
               context: context,
               title: "Salvar pedido",
               subtitle: "Deseja salvar o pedido?",

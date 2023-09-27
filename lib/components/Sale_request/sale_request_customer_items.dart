@@ -1,4 +1,3 @@
-import 'package:celta_inventario/Components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/sale_request_models/sale_request_customer_model.dart';
 import 'package:celta_inventario/components/Sale_request/sale_request_covenants_items.dart';
@@ -42,8 +41,7 @@ class _SaleRequestCustomersItemsState extends State<SaleRequestCustomersItems> {
                 SaleRequestCustomerModel customer = saleRequestProvider
                     .customers[widget.enterpriseCode.toString()]![index];
                 if (customer.Code == 1) {
-                  return PersonalizedCard.personalizedCard(
-                    context: context,
+                  return Card(
                     child: CheckboxListTile(
                         activeColor: Theme.of(context).colorScheme.primary,
                         title: const Text("Cliente consumidor"),
@@ -63,8 +61,7 @@ class _SaleRequestCustomersItemsState extends State<SaleRequestCustomersItems> {
                   );
                 }
 
-                return PersonalizedCard.personalizedCard(
-                  context: context,
+                return Card(
                   child: Column(
                     children: [
                       CheckboxListTile(

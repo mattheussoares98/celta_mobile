@@ -4,7 +4,6 @@ import 'package:celta_inventario/components/Transfer_between_package/transfer_be
 import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:provider/provider.dart';
 import '../Global_widgets/title_and_value.dart';
 
@@ -107,8 +106,7 @@ class _TransferBetweenPackageProductsItemsState
                             });
                           }
                         },
-                  child: PersonalizedCard.personalizedCard(
-                    context: context,
+                  child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

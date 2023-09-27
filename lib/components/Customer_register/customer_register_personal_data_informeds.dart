@@ -1,4 +1,3 @@
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +25,7 @@ class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
             fontStyle: FontStyle.italic,
           ),
         ),
-        PersonalizedCard.personalizedCard(
-          context: context,
+        Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

@@ -1,5 +1,4 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_liberate_check_buttons.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:flutter/material.dart';
@@ -26,15 +25,6 @@ class _ReceiptItemsState extends State<ReceiptItems> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: FittedBox(
-            child: Text(
-              'Selecione o recebimento',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
-        ),
         Expanded(
           child: ListView.builder(
             itemCount: widget.receiptProvider.receiptCount,
@@ -58,8 +48,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                   }
                 },
                 //sem esse Card, não funciona o gesture detector no campo inteiro
-                child: PersonalizedCard.personalizedCard(
-                  context: context,
+                child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(

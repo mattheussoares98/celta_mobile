@@ -172,6 +172,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                       ),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),

@@ -104,6 +104,14 @@ class _InsertQuantityTextFormFieldState
               color: Colors.grey,
             ),
           ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              style: BorderStyle.solid,
+              width: 2,
+              color: Colors.grey,
+            ),
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
@@ -113,12 +121,15 @@ class _InsertQuantityTextFormFieldState
             ),
           ),
           labelStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
             color:
                 widget.isLoading ? Colors.grey : Theme.of(context).primaryColor,
           ),
         ),
         style: const TextStyle(
           fontSize: 17,
+          fontWeight: FontWeight.normal,
         ),
         keyboardType: TextInputType.number,
       ),

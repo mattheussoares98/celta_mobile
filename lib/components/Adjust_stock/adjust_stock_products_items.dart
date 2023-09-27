@@ -3,7 +3,6 @@ import 'package:celta_inventario/components/Adjust_stock/adjust_stock_all_stocks
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:provider/provider.dart';
 import '../Global_widgets/title_and_value.dart';
 import 'adjust_stock_insert_quantity.dart';
@@ -108,8 +107,7 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                             });
                           }
                         },
-                  child: PersonalizedCard.personalizedCard(
-                    context: context,
+                  child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

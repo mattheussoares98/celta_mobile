@@ -1,7 +1,5 @@
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../providers/enterprise_provider.dart';
 
 class EnterpriseItems extends StatefulWidget {
@@ -22,19 +20,11 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Selecione a empresa',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ),
         Expanded(
           child: ListView.builder(
             itemCount: enterpriseProvider.enterpriseCount,
             itemBuilder: (ctx, index) {
-              return PersonalizedCard.personalizedCard(
-                context: context,
+              return Card(
                 child: ListTile(
                   title: Text(
                     enterpriseProvider.enterprises[index].nomeEmpresa,

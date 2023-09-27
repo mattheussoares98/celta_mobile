@@ -2,10 +2,8 @@ import 'package:celta_inventario/components/Global_widgets/title_and_value.dart'
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../Models/sale_request_models/sale_requests_model.dart';
 import '../../utils/app_routes.dart';
-import '../Global_widgets/personalized_card.dart';
 
 class SaleRequestModelsItems extends StatefulWidget {
   final bool hasDefaultRequestModel;
@@ -29,25 +27,15 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
     return Expanded(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FittedBox(
-              child: Text(
-                'Selecione o modelo de pedido',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: saleRequestProvider.requestsCount + 1,
               itemBuilder: (ctx, index) {
                 if (index == 0) {
-                  return PersonalizedCard.personalizedCard(
-                    context: context,
+                  return Card(
                     child: ListTile(
                       title: const Text(
-                        "Modelo de pedidos padrão",
+                        "Modelo de pedido padrão",
                         textAlign: TextAlign.center,
                       ),
                       onTap: saleRequestProvider.isLoadingRequests
@@ -74,8 +62,7 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
                   SaleRequestsModel request =
                       saleRequestProvider.requests[index - 1];
 
-                  return PersonalizedCard.personalizedCard(
-                    context: context,
+                  return Card(
                     child: GestureDetector(
                       onTap: () {
                         saleRequestProvider.updatedCart = true;

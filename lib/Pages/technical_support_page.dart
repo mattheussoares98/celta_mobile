@@ -1,6 +1,5 @@
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/url_launcher.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +43,7 @@ class TechnicalSupportPage extends StatelessWidget {
     bool isBusinessTime = _isBusinessTime();
     String currentDate = _getCurrentDate();
 
-    return PersonalizedCard.personalizedCard(
-      context: context,
+    return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -94,7 +92,7 @@ class TechnicalSupportPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (isBusinessTime) {
-                          ShowAlertDialog().showAlertDialog(
+                          ShowAlertDialog.showAlertDialog(
                             context: context,
                             title: "Enviar mensagem no plantão?",
                             subtitle:
@@ -128,7 +126,7 @@ class TechnicalSupportPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (!isBusinessTime && urlOutsideBusinessTime != null) {
-                        ShowAlertDialog().showAlertDialog(
+                        ShowAlertDialog.showAlertDialog(
                           showCloseAlertDialogButton: true,
                           showConfirmAndCancelMessage: false,
                           context: context,

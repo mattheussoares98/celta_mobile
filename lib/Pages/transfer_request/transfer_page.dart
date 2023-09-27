@@ -168,6 +168,7 @@ class _TransferPageState extends State<TransferPage> {
                       ),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),

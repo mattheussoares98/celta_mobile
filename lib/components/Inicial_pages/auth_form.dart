@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/login_provider.dart';
@@ -154,20 +155,10 @@ class _AuthFormState extends State<AuthForm>
                         color: Colors.black,
                         fontSize: 20,
                       ),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        labelStyle: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                        labelText: 'Usuário',
-                        counterStyle: const TextStyle(
-                          color: Colors.black,
-                        ),
+                      decoration: FormFieldDecoration.decoration(
+                        isLoading: loginProvider.isLoading,
+                        context: context,
+                        labelText: "Usuário",
                       ),
                     ),
                   ),
@@ -196,26 +187,24 @@ class _AuthFormState extends State<AuthForm>
                         }
                         return null;
                       },
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
+                      decoration: FormFieldDecoration.decoration(
+                        isLoading: loginProvider.isLoading,
+                        context: context,
+                        labelText: "Senha",
+                        sufixIcon: IconButton(
                           onPressed: () {
                             setState(() {
                               _passwordVisible = !_passwordVisible;
                             });
                           },
                           icon: _passwordVisible
-                              ? const Icon(Icons.remove_red_eye)
-                              : const Icon(Icons.visibility_off),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        labelText: 'Senha',
-                        labelStyle: const TextStyle(
-                          color: Colors.grey,
+                              ? Icon(
+                                  Icons.remove_red_eye,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : const Icon(
+                                  Icons.visibility_off,
+                                ),
                         ),
                       ),
                       obscureText: _passwordVisible ? false : true,
@@ -259,18 +248,10 @@ class _AuthFormState extends State<AuthForm>
                         // }
                         return null;
                       },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        hintText: 'Exp: "Celtaware"',
-                        labelText: 'Nome da empresa ou CCS',
-                        labelStyle: const TextStyle(
-                          color: Colors.grey,
-                        ),
+                      decoration: FormFieldDecoration.decoration(
+                        isLoading: loginProvider.isLoading,
+                        context: context,
+                        labelText: "Nome da empresa ou CCS",
                       ),
                     ),
                   ),

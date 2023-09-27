@@ -1,5 +1,4 @@
 import 'package:celta_inventario/Models/customer_register_models/customer_register_cep.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
@@ -53,8 +52,7 @@ class _CustomerRegisterAdressesInformedsState
             CustomerRegisterCepModel customerRegisterCepModel =
                 customerRegisterProvider.adresses[index];
 
-            return PersonalizedCard.personalizedCard(
-              context: context,
+            return Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -112,7 +110,7 @@ class _CustomerRegisterAdressesInformedsState
                               .isLoadingInsertCustomer
                           ? null
                           : () {
-                              ShowAlertDialog().showAlertDialog(
+                              ShowAlertDialog.showAlertDialog(
                                 context: context,
                                 title: "Remover endereço",
                                 subtitle:

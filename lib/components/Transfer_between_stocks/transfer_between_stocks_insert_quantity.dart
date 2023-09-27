@@ -159,6 +159,14 @@ class _TransferBetweenStocksInsertQuantityState
                           color: Colors.grey,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Colors.grey,
+                        ),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
@@ -168,6 +176,7 @@ class _TransferBetweenStocksInsertQuantityState
                         ),
                       ),
                       labelStyle: TextStyle(
+                        fontSize: 12,
                         color:
                             transferBetweenStocksProvider.isLoadingProducts ||
                                     transferBetweenStocksProvider
@@ -197,7 +206,7 @@ class _TransferBetweenStocksInsertQuantityState
                             ? null
                             : () async {
                                 if (_isValid()) {
-                                  ShowAlertDialog().showAlertDialog(
+                                  ShowAlertDialog.showAlertDialog(
                                     context: context,
                                     title: "Confirmar transferência",
                                     function: () async {

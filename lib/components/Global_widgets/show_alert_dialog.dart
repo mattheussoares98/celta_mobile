@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ShowAlertDialog {
-  showAlertDialog({
+  static showAlertDialog({
     required BuildContext context,
     required String title,
     required Function() function,
     String? subtitle,
-    double? titleSize = 30,
+    double? titleSize = 25,
     double? subtitleSize = 20,
     String? confirmMessage = "SIM",
     String? cancelMessage = "NÃO",
@@ -24,6 +24,8 @@ class ShowAlertDialog {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: titleSize,
+              fontFamily: "BebasNeue",
+              fontWeight: FontWeight.bold,
             ),
           ),
           content: subtitle == null
@@ -44,6 +46,29 @@ class ShowAlertDialog {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 30,
+                          horizontal: 30,
+                        ),
+                        child: Text(
+                          cancelMessage!,
+                          style: TextStyle(
+                            fontSize: cancelMessageSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 50),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -62,29 +87,6 @@ class ShowAlertDialog {
                           confirmMessage!,
                           style: TextStyle(
                             fontSize: confirmMessageSize,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 50),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          )),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 30,
-                          horizontal: 30,
-                        ),
-                        child: Text(
-                          cancelMessage!,
-                          style: TextStyle(
-                            fontSize: cancelMessageSize,
                           ),
                         ),
                       ),

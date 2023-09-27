@@ -408,7 +408,7 @@ class _CustomerRegisterAdressesPageState
                           style:
                               TextButton.styleFrom(backgroundColor: Colors.red),
                           onPressed: () {
-                            ShowAlertDialog().showAlertDialog(
+                            ShowAlertDialog.showAlertDialog(
                               context: context,
                               title: "Apagar dados digitados",
                               subtitle:

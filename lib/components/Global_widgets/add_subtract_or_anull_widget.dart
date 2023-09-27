@@ -159,6 +159,14 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                             color: Colors.grey,
                           ),
                         ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            style: BorderStyle.solid,
+                            width: 2,
+                            color: Colors.grey,
+                          ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
@@ -171,10 +179,13 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                           color: widget.isLoading
                               ? Colors.grey
                               : Theme.of(context).primaryColor,
+                          fontSize: 15,
                         ),
                       ),
                       style: const TextStyle(
                         fontSize: 17,
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
                       ),
                       keyboardType: TextInputType.number,
                     ),

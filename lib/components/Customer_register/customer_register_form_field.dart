@@ -60,14 +60,33 @@ class CustomerRegisterFormField extends StatelessWidget {
           fontSize: 15,
         ),
         decoration: InputDecoration(
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              style: BorderStyle.solid,
+              width: 2,
+              color: Colors.grey,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              style: BorderStyle.solid,
+              width: 2,
+              color: Colors.grey,
+            ),
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
+              style: BorderStyle.solid,
+              width: 2,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
           suffixIcon: suffixWidget != null ? suffixWidget : null,
           labelStyle: TextStyle(
+            fontSize: 15,
             color: Theme.of(context)
                 .colorScheme
                 .primary, // Use a cor primária do tema

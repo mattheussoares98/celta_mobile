@@ -122,7 +122,7 @@ class SaleRequestCartProductsItems {
                                 saleRequestProvider.isLoadingProcessCart
                             ? null
                             : () {
-                                ShowAlertDialog().showAlertDialog(
+                                ShowAlertDialog.showAlertDialog(
                                   context: context,
                                   title: "Remover item",
                                   subtitle:

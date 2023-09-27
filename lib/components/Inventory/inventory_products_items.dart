@@ -1,6 +1,5 @@
 import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
@@ -39,14 +38,12 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
 
     if (quantity != null && quantity >= 10000) {
       //se a quantidade digitada for maior que 10.000, vai abrir um alertDialog pra confirmar a quantidade
-      ShowAlertDialog().showAlertDialog(
-          confirmMessageSize: 300,
-          cancelMessageSize: 300,
+      ShowAlertDialog.showAlertDialog(
           context: context,
-          title: 'Deseja confirmar a quantidade?',
+          title: 'Confirmar quantidade?',
           subtitle: isSubtract!
-              ? 'Quantidade digitada: -${quantity.toStringAsFixed(3)}'
-              : 'Quantidade digitada: ${quantity.toStringAsFixed(3)}',
+              ? 'Quantidade digitada: -${ConvertString.convertToBrazilianNumber(quantity)}'
+              : 'Quantidade digitada: ${ConvertString.convertToBrazilianNumber(quantity)}',
           function: () async {
             await inventoryProvider.addQuantity(
               indexOfProduct: indexOfProduct,
@@ -93,7 +90,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
       return;
     }
 
-    ShowAlertDialog().showAlertDialog(
+    ShowAlertDialog.showAlertDialog(
       confirmMessageSize: 300,
       cancelMessageSize: 300,
       context: context,
@@ -197,8 +194,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                         index: index,
                       );
                     },
-                    child: PersonalizedCard.personalizedCard(
-                      context: context,
+                    child: Card(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Column(

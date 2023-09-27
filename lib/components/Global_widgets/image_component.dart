@@ -1,4 +1,3 @@
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:flutter/material.dart';
 
 class ImageComponent {
@@ -16,8 +15,7 @@ class ImageComponent {
           arguments: nextRoute,
         );
       },
-      child: PersonalizedCard.personalizedCard(
-        context: context,
+      child: Card(
         child: Stack(
           alignment: Alignment.center,
           children: [

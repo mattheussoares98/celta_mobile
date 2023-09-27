@@ -42,7 +42,13 @@ import 'providers/price_conference_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    print("erro pra iniciar o firebase: $e");
+  }
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     runApp(MyApp());
@@ -73,12 +79,39 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: ThemeData(
+          useMaterial3: true,
           primaryColor: ColorsTheme.principalColor,
+          inputDecorationTheme: const InputDecorationTheme(
+            //usado no dropdown
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+            ),
+          ),
+          dialogBackgroundColor: Colors.amber[50],
+          cardTheme: CardTheme(
+            color: Colors.grey[50],
+            surfaceTintColor: Colors.amber[100],
+            shadowColor: ColorsTheme.principalColor,
+            shape: const RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1,
+                color: ColorsTheme.principalColor,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            elevation: 5,
+          ),
           secondaryHeaderColor: ColorsTheme.text,
           appBarTheme: ThemeData().appBarTheme.copyWith(
                 actionsIconTheme: const IconThemeData(
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
+                iconTheme: const IconThemeData(color: Colors.white),
                 toolbarHeight: ResponsiveItems.appBarToolbarHeight,
                 backgroundColor: ColorsTheme.principalColor,
                 centerTitle: true,
@@ -111,8 +144,8 @@ class MyApp extends StatelessWidget {
             onSecondary: const Color.fromARGB(255, 92, 152, 94),
             error: Colors.red,
             onError: Colors.red,
-            background: ColorsTheme.principalColor,
-            onBackground: ColorsTheme.principalColor,
+            background: Colors.white,
+            onBackground: Colors.white,
             surface: const Color.fromARGB(255, 255, 242, 94),
             onSurface: const Color.fromARGB(255, 255, 242, 94),
           ),

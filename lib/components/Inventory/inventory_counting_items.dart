@@ -1,5 +1,4 @@
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -19,13 +18,6 @@ class InventoryCountingItems extends StatelessWidget {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Selecione a contagem',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ),
         Expanded(
           child: ListView.builder(
             itemCount: inventoryProvider
@@ -43,8 +35,7 @@ class InventoryCountingItems extends StatelessWidget {
                   );
                 },
                 //sem esse Card, não funciona o gesture detector no campo inteiro
-                child: PersonalizedCard.personalizedCard(
-                  context: context,
+                child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(

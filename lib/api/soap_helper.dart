@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
@@ -42,8 +43,9 @@ class SoapHelper {
         'Content-Type': 'text/xml; charset=utf-8',
         'SOAPAction': 'http://celtaware.com.br/$SOAPAction',
         'Accept-Language': 'en-US',
+        'Access-Control-Allow-Methods': '*',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE, HEAD',
+        'Access-Control-Allow-Headers': '*',
       };
 
       String parameterTags = '';
@@ -115,10 +117,12 @@ class SoapHelper {
           }
         }
       } else {
+        SoapHelperResponseParameters.errorMessage =
+            DefaultErrorMessageToFindServer.ERROR_MESSAGE;
         throw Exception('Failed to load data');
       }
     } catch (e) {
-      print(e);
+      print("erro para fazer a requisição http: $e");
     }
   }
 

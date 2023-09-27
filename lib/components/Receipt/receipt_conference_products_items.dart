@@ -1,7 +1,6 @@
 import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/receipt_models/receipt_products_model.dart';
-import 'package:celta_inventario/components/Global_widgets/personalized_card.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
@@ -88,7 +87,7 @@ class _ReceiptConferenceProductsItemsState
       return;
     }
 
-    ShowAlertDialog().showAlertDialog(
+    ShowAlertDialog.showAlertDialog(
       context: context,
       title: "Deseja realmente anular a quantidade?",
       function: () async {
@@ -188,8 +187,7 @@ class _ReceiptConferenceProductsItemsState
                             index: index,
                           );
                         },
-                  child: PersonalizedCard.personalizedCard(
-                    context: context,
+                  child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

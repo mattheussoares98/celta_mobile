@@ -141,10 +141,22 @@ class _TransferBetweenPackageInsertQuantityState
                                 ? Colors.grey
                                 : Theme.of(context).primaryColor,
                       ),
+                      hintStyle: const TextStyle(
+                        fontSize: 17,
+                        color: Colors.grey,
+                      ),
                       errorStyle: const TextStyle(
                         fontSize: 17,
                       ),
                       disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          style: BorderStyle.solid,
+                          width: 2,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: const BorderSide(
                           style: BorderStyle.solid,
@@ -190,7 +202,7 @@ class _TransferBetweenPackageInsertQuantityState
                             ? null
                             : () async {
                                 if (_isValid()) {
-                                  ShowAlertDialog().showAlertDialog(
+                                  ShowAlertDialog.showAlertDialog(
                                     context: context,
                                     title: "Confirmar transferência",
                                     function: () async {
