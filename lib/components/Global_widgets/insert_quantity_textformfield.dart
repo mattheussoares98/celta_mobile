@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -58,79 +59,14 @@ class _InsertQuantityTextFormFieldState
 
           widget.onChanged();
         },
-        validator: (value) {
-          if (value!.isEmpty && !widget.canReceiveEmptyValue) {
-            return 'Digite uma quantidade';
-          } else if (value == '0' || value == '0.' || value == '0,') {
-            return 'Digite uma quantidade';
-          } else if (value.contains('.') && value.contains(',')) {
-            return 'Carácter inválido';
-          } else if (value.contains('-')) {
-            return 'Carácter inválido';
-          } else if (value.contains(' ')) {
-            return 'Carácter inválido';
-          } else if (value.characters
-                  .toList()
-                  .fold<int>(0, (t, e) => e == "." ? t + e.length : t + 0) >
-              1) {
-            //verifica se tem mais de um ponto
-            return 'Carácter inválido';
-          } else if (value.characters
-                  .toList()
-                  .fold<int>(0, (t, e) => e == "," ? t + e.length : t + 0) >
-              1) {
-            //verifica se tem mais de uma vírgula
-            return 'Carácter inválido';
-          } else if (double.tryParse(value) == 0) {
-            return "Digite uma quantidade";
-          }
-          return null;
-        },
-        decoration: InputDecoration(
+        validator: FormFieldHelper.validatorOfNumber(),
+        decoration: FormFieldHelper.decoration(
+          isLoading: widget.isLoading,
+          context: context,
           labelText: widget.labelText,
           hintText: widget.hintText,
-          floatingLabelStyle: TextStyle(
-            color:
-                widget.isLoading ? Colors.grey : Theme.of(context).primaryColor,
-          ),
-          errorStyle: const TextStyle(
-            fontSize: 17,
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              style: BorderStyle.solid,
-              width: 2,
-              color: Colors.grey,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              style: BorderStyle.solid,
-              width: 2,
-              color: Colors.grey,
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-              style: BorderStyle.solid,
-              width: 2,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          labelStyle: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-            color:
-                widget.isLoading ? Colors.grey : Theme.of(context).primaryColor,
-          ),
         ),
-        style: const TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.normal,
-        ),
+        style: FormFieldHelper.style(),
         keyboardType: TextInputType.number,
       ),
     );

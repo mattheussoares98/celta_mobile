@@ -148,14 +148,8 @@ class _AuthFormState extends State<AuthForm>
 
                         return null;
                       },
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'OpenSans',
-                        decorationColor: Colors.black,
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                      decoration: FormFieldDecoration.decoration(
+                      style: FormFieldHelper.style(),
+                      decoration: FormFieldHelper.decoration(
                         isLoading: loginProvider.isLoading,
                         context: context,
                         labelText: "Usuário",
@@ -171,13 +165,7 @@ class _AuthFormState extends State<AuthForm>
                       focusNode: _passwordFocusNode,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).requestFocus(_urlFocusNode),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'OpenSans',
-                        decorationColor: Colors.black,
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
+                      style: FormFieldHelper.style(),
                       validator: (_name) {
                         _name = loginProvider.passwordController.text;
                         if (loginProvider.passwordController.text
@@ -187,11 +175,11 @@ class _AuthFormState extends State<AuthForm>
                         }
                         return null;
                       },
-                      decoration: FormFieldDecoration.decoration(
+                      decoration: FormFieldHelper.decoration(
                         isLoading: loginProvider.isLoading,
                         context: context,
                         labelText: "Senha",
-                        sufixIcon: IconButton(
+                        suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
                               _passwordVisible = !_passwordVisible;
@@ -223,13 +211,7 @@ class _AuthFormState extends State<AuthForm>
                       onFieldSubmitted: (_) =>
                           _submit(loginProvider: loginProvider),
                       focusNode: _urlFocusNode,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'OpenSans',
-                        decorationColor: Colors.black,
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
+                      style: FormFieldHelper.style(),
                       validator: (_url) {
                         _url =
                             loginProvider.enterpriseNameOrUrlCCSController.text;
@@ -248,7 +230,7 @@ class _AuthFormState extends State<AuthForm>
                         // }
                         return null;
                       },
-                      decoration: FormFieldDecoration.decoration(
+                      decoration: FormFieldHelper.decoration(
                         isLoading: loginProvider.isLoading,
                         context: context,
                         labelText: "Nome da empresa ou CCS",

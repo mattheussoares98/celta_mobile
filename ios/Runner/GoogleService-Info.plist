@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>137101492083-kk2u32s7va7v0cpvemk36bk8c2g4mslb.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAmPx8KFlC4KSv7SZpG3zVrAFSXKECTq1A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>137101492083</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.celtaInventario</string>
+	<key>PROJECT_ID</key>
+	<string>celtamobile-ac5b1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>celtamobile-ac5b1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:137101492083:ios:2da529507583387b458f06</string>
+</dict>
+</plist>

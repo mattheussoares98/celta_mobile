@@ -13,6 +13,7 @@ import 'package:celta_inventario/Pages/transfer_request/transfer_destiny_enterpr
 import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_page.dart';
 import 'package:celta_inventario/Pages/transfer_between_stocks_page.dart';
+import 'package:celta_inventario/firebase_options.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
@@ -44,7 +45,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   } catch (e) {
     print("erro pra iniciar o firebase: $e");
   }

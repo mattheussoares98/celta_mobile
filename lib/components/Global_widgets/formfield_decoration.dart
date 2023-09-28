@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FormFieldDecoration {
+class FormFieldHelper {
   static InputDecoration decoration({
     required bool isLoading,
     required BuildContext context,
@@ -10,7 +10,7 @@ class FormFieldDecoration {
     double? errorSize = 17,
     String? hintText,
     Widget? prefixIcon,
-    Widget? sufixIcon,
+    Widget? suffixIcon,
   }) {
     return InputDecoration(
       labelText: labelText,
@@ -53,8 +53,48 @@ class FormFieldDecoration {
         ),
       ),
       prefixIcon: prefixIcon,
-      suffixIcon: sufixIcon,
+      suffixIcon: suffixIcon,
       hintText: hintText,
     );
+  }
+
+  static TextStyle style() {
+    return const TextStyle(
+      fontSize: 18,
+      color: Colors.black,
+      fontWeight: FontWeight.normal,
+    );
+  }
+
+  static String? Function(String?)? validatorOfNumber() {
+    return (value) {
+      if (value!.isEmpty) {
+        return 'Digite uma quantidade';
+      } else if (value == '0' || value == '0.' || value == '0,') {
+        return 'Digite uma quantidade';
+      } else if (value.contains('.') && value.contains(',')) {
+        return 'Carácter inválido';
+      } else if (value.contains('-')) {
+        return 'Carácter inválido';
+      } else if (value.contains(' ')) {
+        return 'Carácter inválido';
+      } else if (value.characters
+              .toList()
+              .fold<int>(0, (t, e) => e == "." ? t + e.length : t + 0) >
+          1) {
+        //verifica se tem mais de um ponto
+        return 'Carácter inválido';
+      } else if (value.characters
+              .toList()
+              .fold<int>(0, (t, e) => e == "," ? t + e.length : t + 0) >
+          1) {
+        //verifica se tem mais de uma vírgula
+        return 'Carácter inválido';
+      } else if (double.tryParse(value) == 0 ||
+          double.tryParse(value) == null) {
+        return "Digite uma quantidade";
+      }
+      return null;
+    };
   }
 }

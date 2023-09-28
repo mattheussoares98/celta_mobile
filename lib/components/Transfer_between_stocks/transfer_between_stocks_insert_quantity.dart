@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:flutter/material.dart';
@@ -108,88 +109,17 @@ class _TransferBetweenStocksInsertQuantityState
                         );
                       }
                     },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Digite uma quantidade';
-                      } else if (value == '0' ||
-                          value == '0.' ||
-                          value == '0,') {
-                        return 'Digite uma quantidade';
-                      } else if (value.contains('.') && value.contains(',')) {
-                        return 'Carácter inválido';
-                      } else if (value.contains('-')) {
-                        return 'Carácter inválido';
-                      } else if (value.contains(' ')) {
-                        return 'Carácter inválido';
-                      } else if (value.characters.toList().fold<int>(
-                              0, (t, e) => e == "." ? t + e.length : t + 0) >
-                          1) {
-                        //verifica se tem mais de um ponto
-                        return 'Carácter inválido';
-                      } else if (value.characters.toList().fold<int>(
-                              0, (t, e) => e == "," ? t + e.length : t + 0) >
-                          1) {
-                        //verifica se tem mais de uma vírgula
-                        return 'Carácter inválido';
-                      } else if (double.tryParse(value) == 0) {
-                        return "Digite uma quantidade";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Digite a quantidade aqui',
-                      floatingLabelStyle: TextStyle(
-                        color:
-                            transferBetweenStocksProvider.isLoadingProducts ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingTypeStockAndJustifications ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingAdjustStock
-                                ? Colors.grey
-                                : Theme.of(context).primaryColor,
-                      ),
-                      errorStyle: const TextStyle(
-                        fontSize: 17,
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          style: BorderStyle.solid,
-                          width: 2,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          style: BorderStyle.solid,
-                          width: 2,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          style: BorderStyle.solid,
-                          width: 2,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      labelStyle: TextStyle(
-                        fontSize: 12,
-                        color:
-                            transferBetweenStocksProvider.isLoadingProducts ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingTypeStockAndJustifications ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingAdjustStock
-                                ? Colors.grey
-                                : Theme.of(context).primaryColor,
-                      ),
+                    validator: FormFieldHelper.validatorOfNumber(),
+                    decoration: FormFieldHelper.decoration(
+                      isLoading: transferBetweenStocksProvider
+                              .isLoadingProducts ||
+                          transferBetweenStocksProvider
+                              .isLoadingTypeStockAndJustifications ||
+                          transferBetweenStocksProvider.isLoadingAdjustStock,
+                      context: context,
+                      labelText: "Digite a quantidade",
                     ),
-                    style: const TextStyle(
-                      fontSize: 17,
-                    ),
+                    style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,
                   ),
                 ),

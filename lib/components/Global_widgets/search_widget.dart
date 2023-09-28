@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 
@@ -45,16 +46,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   Widget build(BuildContext context) {
     FocusNode focusNode = widget.focusNodeConsultProduct;
     return Padding(
-      padding: EdgeInsets.only(
-          bottom: 8,
-          left: 8,
-          right: (widget.useAutoScan == null ||
-                      widget.changeAutoScanValue == null) ||
-                  (widget.useLegacyCode == null ||
-                      widget.changeLegacyCodeValue == null)
-              ? 8
-              : 0,
-          top: 8),
+      padding: const EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -81,7 +73,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                     return null;
                   }
                 },
-                decoration: InputDecoration(
+                decoration: FormFieldHelper.decoration(
+                  isLoading: widget.isLoading,
+                  context: context,
+                  labelText: widget.labelText,
                   prefixIcon: IconButton(
                     onPressed: () {
                       widget.consultProductController.clear();
@@ -96,6 +91,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                       color: widget.isLoading ? Colors.grey : Colors.red,
                     ),
                   ),
+                  hintText: widget.useLegacyCode != null &&
+                          widget.useLegacyCode == true
+                      ? "Código legado"
+                      : widget.hintText,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Row(
@@ -152,53 +151,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                             ),
                           ),
                       ],
-                    ),
-                  ),
-                  hintText: widget.useLegacyCode != null &&
-                          widget.useLegacyCode == true
-                      ? "Código legado"
-                      : widget.hintText,
-                  labelText: widget.labelText,
-                  hintStyle: const TextStyle(
-                    fontSize: 17,
-                    color: Colors.grey,
-                  ),
-                  labelStyle: TextStyle(
-                    fontSize: 12,
-                    color: widget.isLoading
-                        ? Colors.grey
-                        : Theme.of(context).primaryColor,
-                  ),
-                  floatingLabelStyle: TextStyle(
-                    color: widget.isLoading
-                        ? Colors.grey
-                        : Theme.of(context).primaryColor,
-                  ),
-                  errorStyle: const TextStyle(
-                    fontSize: 17,
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      style: BorderStyle.solid,
-                      width: 2,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      style: BorderStyle.solid,
-                      width: 2,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      style: BorderStyle.solid,
-                      width: 2,
-                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
