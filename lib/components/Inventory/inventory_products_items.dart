@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
   addQuantity({
     bool? isSubtract = false,
     required InventoryProvider inventoryProvider,
+    required ConfigurationsProvider configurationsProvider,
     required int indexOfProduct,
   }) async {
     double? quantity = double.tryParse(
@@ -52,10 +54,11 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
               context: context,
               countingCode: widget.inventoryCountingCode,
               isSubtract: isSubtract,
+              configurationsProvider: configurationsProvider,
             );
 
             if (inventoryProvider.errorMessageQuantity == "" &&
-                inventoryProvider.useAutoScan) {
+                configurationsProvider.useAutoScan) {
               await widget.getProducts();
             }
           });
@@ -68,10 +71,11 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
         context: context,
         countingCode: widget.inventoryCountingCode,
         isSubtract: isSubtract!,
+        configurationsProvider: configurationsProvider,
       );
 
       if (inventoryProvider.errorMessageQuantity == "" &&
-          inventoryProvider.useAutoScan) {
+          configurationsProvider.useAutoScan) {
         await widget.getProducts();
       }
     }
@@ -79,6 +83,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
 
   anullQuantity({
     required InventoryProvider inventoryProvider,
+    required ConfigurationsProvider configurationsProvider,
     required int index,
   }) async {
     FocusScope.of(context).unfocus();
@@ -105,7 +110,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
         );
 
         if (inventoryProvider.errorMessageQuantity == "" &&
-            inventoryProvider.useAutoScan) {
+            configurationsProvider.useAutoScan) {
           await widget.getProducts();
         }
       },
@@ -174,6 +179,8 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: true);
 
     return Expanded(
       child: Container(
@@ -279,6 +286,8 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                                   await addQuantity(
                                     indexOfProduct: index,
                                     inventoryProvider: inventoryProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
                                   );
                                 },
                                 subtractQuantityFunction: () async {
@@ -286,11 +295,15 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                                     indexOfProduct: index,
                                     isSubtract: true,
                                     inventoryProvider: inventoryProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
                                   );
                                 },
                                 anullFunction: () async {
                                   await anullQuantity(
                                     inventoryProvider: inventoryProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
                                     index: index,
                                   );
                                 },
@@ -313,6 +326,8 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                                 addQuantity: () async {
                                   addQuantity(
                                     inventoryProvider: inventoryProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
                                     indexOfProduct: index,
                                   );
                                 },
@@ -320,6 +335,8 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
                                   addQuantity(
                                     isSubtract: true,
                                     inventoryProvider: inventoryProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
                                     indexOfProduct: index,
                                   );
                                 },

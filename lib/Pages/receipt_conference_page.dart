@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Receipt/receipt_conference_consult_p
 import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Components/Receipt/receipt_conference_products_items.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
@@ -61,15 +64,12 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SearchWidget(
-              useLegacyCode: receiptProvider.useLegacyCode,
-              changeLegacyCodeValue: receiptProvider.changeLegacyCodeValue,
-              useAutoScan: receiptProvider.useAutoScan,
-              changeAutoScanValue: receiptProvider.changeAutoScanValue,
               focusNodeConsultProduct: receiptProvider.consultProductFocusNode,
               isLoading: receiptProvider.consultingProducts ||
                   receiptProvider.isUpdatingQuantity,
               onPressSearch: () async {
                 await receiptProvider.getProducts(
+                  configurationsProvider: configurationsProvider,
                   docCode: arguments["grDocCode"],
                   controllerText: _consultProductController.text,
                   context: context,
@@ -109,6 +109,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
 
                   if (_consultProductController.text != "") {
                     await receiptProvider.getProducts(
+                      configurationsProvider: configurationsProvider,
                       docCode: arguments["grDocCode"],
                       controllerText: _consultProductController.text,
                       context: context,
@@ -122,6 +123,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 },
                 onFieldSubmitted: () async {
                   await receiptProvider.getProducts(
+                    configurationsProvider: configurationsProvider,
                     docCode: arguments["grDocCode"],
                     controllerText: _consultProductController.text,
                     context: context,

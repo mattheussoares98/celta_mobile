@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Components/Sale_request/sale_request_products_items.dart';
 import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
@@ -29,6 +30,8 @@ class _SaleRequestInsertProductsPageState
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: true);
 
     return WillPopScope(
       onWillPop: () async {
@@ -39,10 +42,6 @@ class _SaleRequestInsertProductsPageState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SearchWidget(
-            useLegacyCode: saleRequestProvider.useLegacyCode,
-            changeLegacyCodeValue: saleRequestProvider.changeLegacyCodeValue,
-            useAutoScan: saleRequestProvider.useAutoScan,
-            changeAutoScanValue: saleRequestProvider.changeAutoScanValue,
             consultProductController: _searchProductTextEditingController,
             isLoading: saleRequestProvider.isLoadingProducts,
             autofocus: false,
@@ -50,8 +49,8 @@ class _SaleRequestInsertProductsPageState
               _consultedProductController.clear();
 
               await saleRequestProvider.getProducts(
-                isLegacyCodeSearch: saleRequestProvider.useLegacyCode,
                 context: context,
+                configurationsProvider: configurationsProvider,
                 enterpriseCode: widget.enterpriseCode,
                 controllerText: _searchProductTextEditingController.text,
               );
@@ -87,7 +86,7 @@ class _SaleRequestInsertProductsPageState
                   }
 
                   await saleRequestProvider.getProducts(
-                    isLegacyCodeSearch: saleRequestProvider.useLegacyCode,
+                    configurationsProvider: configurationsProvider,
                     context: context,
                     enterpriseCode: widget.enterpriseCode,
                     controllerText: _searchProductTextEditingController.text,

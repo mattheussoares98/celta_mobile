@@ -1,5 +1,6 @@
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,6 +41,7 @@ class _TransferBetweenStocksInsertQuantityState
 
   confirmAdjustStock({
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     if (widget.consultedProductController.text.contains("\,")) {
       widget.consultedProductController.text =
@@ -61,7 +63,7 @@ class _TransferBetweenStocksInsertQuantityState
       widget.consultedProductController.clear();
     }
 
-    if (transferBetweenStocksProvider.useAutoScan &&
+    if (configurationsProvider.useAutoScan &&
         transferBetweenStocksProvider.errorMessageAdjustStock == "") {
       await widget.getProductsWithCamera();
     }
@@ -71,6 +73,7 @@ class _TransferBetweenStocksInsertQuantityState
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Column(
@@ -117,7 +120,7 @@ class _TransferBetweenStocksInsertQuantityState
                               .isLoadingTypeStockAndJustifications ||
                           transferBetweenStocksProvider.isLoadingAdjustStock,
                       context: context,
-                      labelText: "Digite a quantidade",
+                      labelText: "Quantidade",
                     ),
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,
@@ -143,6 +146,8 @@ class _TransferBetweenStocksInsertQuantityState
                                       await confirmAdjustStock(
                                         transferBetweenStocksProvider:
                                             transferBetweenStocksProvider,
+                                        configurationsProvider:
+                                            configurationsProvider,
                                       );
                                     },
                                   );

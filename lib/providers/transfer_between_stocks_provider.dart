@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_justification_model.dart';
 import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_type_model.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
@@ -82,21 +83,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _useLegacyCode = false;
-  bool get useLegacyCode => _useLegacyCode;
-  bool _useAutoScan = false;
-  bool get useAutoScan => _useAutoScan;
-
-  void changeAutoScanValue() {
-    _useAutoScan = !_useAutoScan;
-    notifyListeners();
-  }
-
-  void changeLegacyCodeValue() {
-    _useLegacyCode = !_useLegacyCode;
-    notifyListeners();
-  }
-
   Map<String, dynamic> jsonAdjustStock = {
     "EnterpriseCode": -1, //esse parâmetro vem da tela de empresas
     "ProductCode": -1, //quando clica no produto, altera o código
@@ -162,7 +148,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
@@ -180,7 +166,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
         },
         typeOfResponse: "GetProductCmxJsonResponse",
         SOAPAction: "GetProductCmxJson",
@@ -208,7 +194,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
@@ -219,7 +205,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
       controllerText: controllerText,
       context: context,
-      isLegacyCodeSearch: isLegacyCodeSearch,
+      configurationsProvider: configurationsProvider,
     );
 
     if (_products.isNotEmpty) {

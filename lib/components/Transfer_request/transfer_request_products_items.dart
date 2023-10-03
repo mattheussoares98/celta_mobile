@@ -3,6 +3,7 @@ import 'package:celta_inventario/Models/transfer_request/transfer_request_produc
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_all_stocks.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_insert_product_quantity_form.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -87,6 +88,10 @@ class _TransferRequestProductsItemsState
   @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider = Provider.of(
+      context,
+      listen: true,
+    );
+    ConfigurationsProvider configurationsProvider = Provider.of(
       context,
       listen: true,
     );
@@ -346,7 +351,7 @@ class _TransferRequestProductsItemsState
                                   selectedIndex = -1;
                                 });
 
-                                if (transferRequestProvider.useAutoScan) {
+                                if (configurationsProvider.useAutoScan) {
                                   await widget.getProductsWithCamera();
                                 }
                               },

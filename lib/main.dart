@@ -1,21 +1,22 @@
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
 import 'package:celta_inventario/Pages/adjust_stock_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_page.dart';
+import 'package:celta_inventario/Pages/drawer/configurations_page.dart';
 import 'package:celta_inventario/Pages/price_conference_page.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
 import 'package:celta_inventario/Pages/receipt_conference_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_model_page.dart';
-import 'package:celta_inventario/Pages/technical_support_page.dart';
+import 'package:celta_inventario/Pages/drawer/technical_support_page.dart';
 import 'package:celta_inventario/Pages/transfer_between_package/transfer_between_package_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_destiny_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterprise_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_page.dart';
 import 'package:celta_inventario/Pages/transfer_between_stocks_page.dart';
-import 'package:celta_inventario/firebase_options.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
@@ -43,15 +44,7 @@ import 'providers/price_conference_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  } catch (e) {
-    print("erro pra iniciar o firebase: $e");
-  }
-
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     runApp(MyApp());
@@ -79,6 +72,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenPackageProvider()),
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
+        ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -213,6 +207,7 @@ class MyApp extends StatelessWidget {
               const TransferBetweenPackagePage(),
           APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
           APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
+          APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
         },
       ),
     );

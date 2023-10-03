@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart'
 import 'package:celta_inventario/Components/Sale_request/sale_request_insert_product_quantity_form.dart';
 import 'package:celta_inventario/components/Global_widgets/show_all_stocks.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +86,10 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
+      context,
+      listen: true,
+    );
+    ConfigurationsProvider configurationsProvider = Provider.of(
       context,
       listen: true,
     );
@@ -239,7 +244,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                FittedBox(
+                                Expanded(
+                                  flex: 7,
                                   child: Text(
                                     "Qtd no carrinho: " +
                                         saleRequestProvider
@@ -261,7 +267,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   ),
                                 ),
                                 const SizedBox(width: 5),
-                                FittedBox(
+                                Expanded(
+                                  flex: 4,
                                   child: TextButton(
                                     style: TextButton.styleFrom(
                                       backgroundColor: Colors.red,
@@ -277,17 +284,20 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                               product: product,
                                             )
                                         : null,
-                                    child: const Row(
-                                      children: [
-                                        Text(
-                                          "Remover produto",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        Icon(
-                                          Icons.delete,
-                                          color: Colors.white,
-                                        ),
-                                      ],
+                                    child: const FittedBox(
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Remover ",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -319,7 +329,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                                   selectedIndex = -1;
                                 });
 
-                                if (saleRequestProvider.useAutoScan) {
+                                if (configurationsProvider.useAutoScan) {
                                   await widget.getProductsWithCamera();
                                 }
                               },

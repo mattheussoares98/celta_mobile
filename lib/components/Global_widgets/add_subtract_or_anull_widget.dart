@@ -110,7 +110,7 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                       decoration: FormFieldHelper.decoration(
                         isLoading: widget.isLoading,
                         context: context,
-                        labelText: 'Digite a quantidade aqui',
+                        labelText: 'Quantidade',
                       ),
                       style: FormFieldHelper.style(),
                       keyboardType: TextInputType.number,

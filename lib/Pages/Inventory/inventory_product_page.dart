@@ -3,6 +3,7 @@ import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/components/Inventory/inventory_search_product_button.dart';
 import 'package:celta_inventario/components/Inventory/inventory_insert_individual_product_switch.dart';
 import 'package:celta_inventario/components/Inventory/inventory_products_items.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
 
   Future<void> _searchProduct({
     required InventoryProvider inventoryProvider,
+    required ConfigurationsProvider configurationsProvider,
     required dynamic arguments,
   }) async {
     _consultedProductController.clear();
@@ -52,11 +54,12 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
           arguments["InventoryCountingsModel"].codigoInternoInventario,
       inventoryCountingCode:
           arguments["InventoryCountingsModel"].codigoInternoInvCont,
+      configurationsProvider: configurationsProvider,
     );
 
     if (inventoryProvider.products.isNotEmpty &&
         _isIndividual &&
-        !inventoryProvider.useAutoScan) {
+        !configurationsProvider.useAutoScan) {
       inventoryProvider.alterFocusToConsultProduct(
         context: context,
       );
@@ -73,12 +76,14 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
         inventoryProvider: inventoryProvider,
         arguments: arguments,
         indexOfProduct: 0,
+        configurationsProvider: configurationsProvider,
       );
     }
   }
 
   addQuantity({
     required InventoryProvider inventoryProvider,
+    required ConfigurationsProvider configurationsProvider,
     required dynamic arguments,
     required int indexOfProduct,
   }) async {
@@ -89,18 +94,24 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
       isSubtract: false,
       countingCode: arguments["InventoryCountingsModel"].codigoInternoInvCont,
       consultedProductController: _consultedProductController,
+      configurationsProvider: configurationsProvider,
     );
 
     if (inventoryProvider.errorMessageGetProducts == '' &&
-        inventoryProvider.useAutoScan) {
+        configurationsProvider.useAutoScan) {
       await _searchProduct(
-          inventoryProvider: inventoryProvider, arguments: arguments);
+        inventoryProvider: inventoryProvider,
+        arguments: arguments,
+        configurationsProvider: configurationsProvider,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: true);
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
@@ -130,11 +141,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
             Column(
               children: [
                 SearchWidget(
-                  useAutoScan: inventoryProvider.useAutoScan,
-                  useLegacyCode: inventoryProvider.useLegacyCode,
-                  changeAutoScanValue: inventoryProvider.changeAutoScanValue,
-                  changeLegacyCodeValue:
-                      inventoryProvider.changeLegacyCodeValue,
                   consultProductController: _consultProductController,
                   isLoading: inventoryProvider.isLoadingProducts ||
                       inventoryProvider.isLoadingQuantity,
@@ -142,6 +148,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                     await _searchProduct(
                       inventoryProvider: inventoryProvider,
                       arguments: arguments,
+                      configurationsProvider: configurationsProvider,
                     );
                     if (inventoryProvider.productsCount > 0) {
                       setState(() {
@@ -158,6 +165,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                     await _searchProduct(
                       inventoryProvider: inventoryProvider,
                       arguments: arguments,
+                      configurationsProvider: configurationsProvider,
                     );
                     if (inventoryProvider.productsCount > 0) {
                       setState(() {
@@ -190,6 +198,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                   await _searchProduct(
                     inventoryProvider: inventoryProvider,
                     arguments: arguments,
+                    configurationsProvider: configurationsProvider,
                   );
                 },
                 isIndividual: _isIndividual,

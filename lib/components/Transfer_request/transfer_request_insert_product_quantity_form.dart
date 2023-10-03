@@ -32,6 +32,16 @@ class TransferRequestInsertProductQuantityForm extends StatefulWidget {
 class _TransferRequestInsertProductQuantityFormState
     extends State<TransferRequestInsertProductQuantityForm> {
   addItemInCart() {
+    if (widget.consultedProductController.text.isEmpty) {
+      //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
+      setState(() {
+        widget.addProductInCart();
+      });
+
+      FocusScope.of(context).unfocus();
+      return;
+    }
+
     bool isValid = widget.consultedProductFormKey.currentState!.validate();
 
     double? controllerInDouble = double.tryParse(

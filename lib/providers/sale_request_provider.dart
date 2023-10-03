@@ -7,6 +7,7 @@ import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import '../Models/sale_request_models/sale_requests_model.dart';
@@ -119,21 +120,6 @@ class SaleRequestProvider with ChangeNotifier {
 
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
-
-  bool _useLegacyCode = false;
-  bool get useLegacyCode => _useLegacyCode;
-  bool _useAutoScan = false;
-  bool get useAutoScan => _useAutoScan;
-
-  void changeAutoScanValue() {
-    _useAutoScan = !_useAutoScan;
-    notifyListeners();
-  }
-
-  void changeLegacyCodeValue() {
-    _useLegacyCode = !_useLegacyCode;
-    notifyListeners();
-  }
 
   void clearRequests() {
     _requests.clear();
@@ -724,7 +710,7 @@ class SaleRequestProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _products.clear();
     _errorMessageProducts = "";
@@ -737,7 +723,7 @@ class SaleRequestProvider with ChangeNotifier {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
           "routineTypeInt": 1,
         },
         typeOfResponse: "GetProductJsonResponse",

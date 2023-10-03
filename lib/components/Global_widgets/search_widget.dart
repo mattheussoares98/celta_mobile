@@ -1,6 +1,9 @@
+import 'package:celta_inventario/components/Configurations/configurations_checkbox.dart';
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
   final bool isLoading;
@@ -9,19 +12,11 @@ class SearchWidget extends StatefulWidget {
   final FocusNode focusNodeConsultProduct;
   final String hintText;
   final String labelText;
-  final bool? useAutoScan;
-  final bool? useLegacyCode;
-  final Function? changeAutoScanValue;
-  final Function? changeLegacyCodeValue;
   final bool useCamera;
   final bool autofocus;
   const SearchWidget({
-    this.useAutoScan,
-    this.useLegacyCode,
     this.autofocus = true,
     this.useCamera = true,
-    this.changeAutoScanValue,
-    this.changeLegacyCodeValue,
     required this.consultProductController,
     required this.isLoading,
     required this.onPressSearch,
@@ -45,6 +40,8 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     FocusNode focusNode = widget.focusNodeConsultProduct;
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: true);
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Row(
@@ -91,8 +88,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       color: widget.isLoading ? Colors.grey : Colors.red,
                     ),
                   ),
-                  hintText: widget.useLegacyCode != null &&
-                          widget.useLegacyCode == true
+                  hintText: configurationsProvider.useLegacyCode == true
                       ? "Código legado"
                       : widget.hintText,
                   suffixIcon: Padding(
@@ -140,7 +136,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                       }
                                     },
                               child: Icon(
-                                widget.useAutoScan == true
+                                configurationsProvider.useAutoScan == true
                                     ? Icons.camera_alt
                                     : Icons.camera_alt_outlined,
                                 size: 40,
@@ -173,133 +169,64 @@ class _SearchWidgetState extends State<SearchWidget> {
               ),
             ),
           ),
-          // if ((widget.useAutoScan != null &&
-          //         widget.changeAutoScanValue != null) ||
-          //     (widget.useLegacyCode != null &&
-          //         widget.changeLegacyCodeValue != null))
-          //   _enableConfigurationsDialog(
-          //     isLoading: widget.isLoading,
-          //     useAutoScan:
-          //         widget.useAutoScan != null ? widget.useAutoScan! : null,
-          //     useLegacyCode:
-          //         widget.useLegacyCode != null ? widget.useLegacyCode! : null,
-          //     changeAutoScanValue: widget.changeAutoScanValue != null
-          //         ? widget.changeAutoScanValue
-          //         : null,
-          //     changeLegacyCodeValue: widget.changeLegacyCodeValue != null
-          //         ? widget.changeLegacyCodeValue!
-          //         : null,
-          //   ),
+          _enableConfigurationsDialog(
+            isLoading: widget.isLoading,
+            configurationsProvider: configurationsProvider,
+          ),
         ],
       ),
     );
   }
 
-  // _enableConfigurationsDialog({
-  //   bool? useAutoScan,
-  //   bool? useLegacyCode,
-  //   Function? changeAutoScanValue,
-  //   Function? changeLegacyCodeValue,
-  //   required bool isLoading,
-  // }) {
-  //   return IconButton(
-  //     icon: Icon(
-  //       Icons.settings,
-  //       color: widget.isLoading
-  //           ? Colors.grey
-  //           : Theme.of(context).colorScheme.primary,
-  //     ),
-  //     onPressed: isLoading
-  //         ? null
-  //         : () {
-  //             showDialog(
-  //               context: context,
-  //               builder: (BuildContext context) {
-  //                 bool? internUseAutoScan = useAutoScan;
-  //                 bool? internUseLegacyCode = useLegacyCode;
-  //                 return StatefulBuilder(
-  //                   builder: (context, setState) {
-  //                     return AlertDialog(
-  //                       title: const Center(child: Text('Habilitar')),
-  //                       content: SingleChildScrollView(
-  //                         child: Column(
-  //                           mainAxisSize: MainAxisSize.min,
-  //                           children: [
-  //                             if (useAutoScan != null &&
-  //                                 changeAutoScanValue != null)
-  //                               _personalizedCheckboxListTile(
-  //                                 internValue: internUseAutoScan!,
-  //                                 changeValue: () {
-  //                                   setState(
-  //                                     () => {
-  //                                       internUseAutoScan = !internUseAutoScan!,
-  //                                       changeAutoScanValue(),
-  //                                     },
-  //                                   );
-  //                                 },
-  //                                 configurationName: "Auto Scan",
-  //                               ),
-  //                             if (useLegacyCode != null &&
-  //                                 changeLegacyCodeValue != null)
-  //                               Padding(
-  //                                 padding: const EdgeInsets.only(top: 8.0),
-  //                                 child: _personalizedCheckboxListTile(
-  //                                   internValue: internUseLegacyCode!,
-  //                                   changeValue: () => setState(() => {
-  //                                         internUseLegacyCode =
-  //                                             !internUseLegacyCode!,
-  //                                         changeLegacyCodeValue(),
-  //                                       }),
-  //                                   configurationName: "Código legado",
-  //                                 ),
-  //                               ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                       actions: [
-  //                         TextButton(
-  //                           onPressed: () {
-  //                             Navigator.of(context).pop();
-  //                           },
-  //                           child: const Text('Fechar',
-  //                               textAlign: TextAlign.center),
-  //                         ),
-  //                       ],
-  //                     );
-  //                   },
-  //                 );
-  //               },
-  //             );
-  //           },
-  //   );
-  // }
-
-  // _personalizedCheckboxListTile({
-  //   required bool internValue,
-  //   required Function changeValue,
-  //   required String configurationName,
-  // }) {
-  //   return CheckboxListTile(
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.circular(10),
-  //       side: const BorderSide(
-  //         color: Colors.grey,
-  //         width: 1,
-  //       ),
-  //     ),
-  //     activeColor: internValue ? Colors.green : null,
-  //     title: FittedBox(
-  //       child: Text(
-  //         configurationName,
-  //         style: const TextStyle(fontSize: 15),
-  //       ),
-  //     ),
-  //     value: internValue,
-  //     onChanged: (value) {
-  //       setState(() {
-  //         changeValue();
-  //       });
-  //     },
-  //   );
-  // }
+  _enableConfigurationsDialog({
+    required bool isLoading,
+    required ConfigurationsProvider configurationsProvider,
+  }) {
+    return IconButton(
+      icon: Icon(
+        Icons.settings,
+        color: widget.isLoading
+            ? Colors.grey
+            : Theme.of(context).colorScheme.primary,
+      ),
+      onPressed: isLoading
+          ? null
+          : () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return AlertDialog(
+                        title: const FittedBox(
+                          child: Text(
+                            "Configurações de pesquisa",
+                            style: TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        content: const SingleChildScrollView(
+                          child: ConfigurationsCheckbox(
+                            showOnlyConfigurationOfSearch: true,
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Fechar',
+                                textAlign: TextAlign.center),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              );
+            },
+    );
+  }
 }

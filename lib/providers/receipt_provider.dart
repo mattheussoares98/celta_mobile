@@ -1,4 +1,5 @@
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
@@ -40,21 +41,6 @@ class ReceiptProvider with ChangeNotifier {
 
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
-
-  bool _useLegacyCode = false;
-  bool get useLegacyCode => _useLegacyCode;
-  bool _useAutoScan = false;
-  bool get useAutoScan => _useAutoScan;
-
-  void changeAutoScanValue() {
-    _useAutoScan = !_useAutoScan;
-    notifyListeners();
-  }
-
-  void changeLegacyCodeValue() {
-    _useLegacyCode = !_useLegacyCode;
-    notifyListeners();
-  }
 
   clearProducts() {
     _products = [];
@@ -266,6 +252,7 @@ class ReceiptProvider with ChangeNotifier {
     required String controllerText,
     required BuildContext context,
     required bool isSearchAllCountedProducts,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _products.clear();
     _errorMessageGetProducts = "";
@@ -273,7 +260,7 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
 
     int searchTypeInt = 0;
-    if (_useLegacyCode) searchTypeInt = 11;
+    if (configurationsProvider.useLegacyCode) searchTypeInt = 11;
     if (isSearchAllCountedProducts) searchTypeInt = 19;
 
     try {

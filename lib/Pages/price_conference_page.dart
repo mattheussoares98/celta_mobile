@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Components/Price_conference/price_conference_order_products_buttons.dart';
 import 'package:celta_inventario/Components/Price_conference/price_conference_items.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
   Widget build(BuildContext context) {
     PriceConferenceProvider priceConferenceProvider =
         Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
@@ -55,16 +58,13 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SearchWidget(
-              useLegacyCode: priceConferenceProvider.useLegacyCode,
-              changeLegacyCodeValue: () =>
-                  priceConferenceProvider.changeUseLegacyCode(),
               focusNodeConsultProduct:
                   priceConferenceProvider.consultProductFocusNode,
               isLoading: priceConferenceProvider.isLoading ||
                   priceConferenceProvider.isSendingToPrint,
               onPressSearch: () async {
                 await priceConferenceProvider.getProduct(
-                  isLegacyCodeSearch: priceConferenceProvider.useLegacyCode,
+                  configurationsProvider: configurationsProvider,
                   enterpriseCode: arguments["CodigoInterno_Empresa"],
                   controllerText: _consultProductController.text,
                   context: context,

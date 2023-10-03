@@ -7,7 +7,7 @@ class FormFieldHelper {
     required String labelText,
     double? hintSize = 17,
     double? labelSize = 15,
-    double? errorSize = 17,
+    double? errorSize = 12,
     String? hintText,
     Widget? prefixIcon,
     Widget? suffixIcon,
@@ -21,9 +21,12 @@ class FormFieldHelper {
       labelStyle: TextStyle(
         fontSize: labelSize,
         color: isLoading ? Colors.grey : Theme.of(context).primaryColor,
+        fontWeight: FontWeight.normal,
+        fontStyle: FontStyle.italic,
       ),
       floatingLabelStyle: TextStyle(
         color: isLoading ? Colors.grey : Theme.of(context).primaryColor,
+        fontWeight: FontWeight.normal,
       ),
       errorStyle: TextStyle(
         fontSize: errorSize,

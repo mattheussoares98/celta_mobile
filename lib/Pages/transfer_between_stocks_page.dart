@@ -1,6 +1,7 @@
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_products_items.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,8 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
+        Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
@@ -69,12 +72,6 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
             Column(
               children: [
                 SearchWidget(
-                  useLegacyCode: transferBetweenStocksProvider.useLegacyCode,
-                  changeLegacyCodeValue:
-                      transferBetweenStocksProvider.changeLegacyCodeValue,
-                  useAutoScan: transferBetweenStocksProvider.useAutoScan,
-                  changeAutoScanValue:
-                      transferBetweenStocksProvider.changeAutoScanValue,
                   focusNodeConsultProduct:
                       transferBetweenStocksProvider.consultProductFocusNode,
                   isLoading: transferBetweenStocksProvider.isLoadingProducts ||
@@ -84,8 +81,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
-                      isLegacyCodeSearch:
-                          transferBetweenStocksProvider.useLegacyCode,
+                      configurationsProvider: configurationsProvider,
                     );
 
                     if (transferBetweenStocksProvider.productsCount > 0) {
@@ -131,8 +127,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                     enterpriseCode: arguments["CodigoInterno_Empresa"],
                     controllerText: _consultProductController.text,
                     context: context,
-                    isLegacyCodeSearch:
-                        transferBetweenStocksProvider.useLegacyCode,
+                    configurationsProvider: configurationsProvider,
                   );
 
                   if (transferBetweenStocksProvider.productsCount > 0) {

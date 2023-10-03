@@ -14,28 +14,22 @@ class MyDrawer extends StatelessWidget {
     required Function()? onTap,
     required String text,
     required Widget leading,
+    Widget? subtitle,
   }) {
     return InkWell(
       onTap: onTap,
       child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              Container(
-                height: 35,
-                width: 35,
-                child: leading,
-              ),
-              const Padding(padding: EdgeInsets.only(right: 20)),
-              Text(
-                text,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ],
+        child: ListTile(
+          leading: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: leading,
+          ),
+          title: Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
         ),
       ),
@@ -62,11 +56,30 @@ class MyDrawer extends StatelessWidget {
               onTap: () async {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(
+                  APPROUTES.CONFIGURATIONS,
+                );
+              },
+              text: "Configurações",
+              leading: Icon(
+                Icons.settings,
+                size: 40,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            drawerItem(
+              context: context,
+              onTap: () async {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(
                   APPROUTES.TECHNICAL_SUPPORT,
                 );
               },
               text: "Suporte técnico",
-              leading: const Icon(Icons.add_call),
+              leading: Icon(
+                Icons.add_call,
+                size: 40,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             drawerItem(
               context: context,

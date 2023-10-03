@@ -260,7 +260,7 @@ class FirebaseHelper {
         _cleckedLinkCollection.doc(UserData.enterpriseName);
 
     await docRef
-        .update(
+        .set(
           {
             firebaseCallEnum.name: {
               "timesClicked": FieldValue.increment(1),
@@ -269,6 +269,7 @@ class FirebaseHelper {
                   [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
             },
           },
+          SetOptions(merge: true),
         )
         .then((value) => print("Clicked link added"))
         .catchError((error) => print("Failed to add clicked link: $error"));

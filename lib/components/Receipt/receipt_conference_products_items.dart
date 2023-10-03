@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull
 import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/Models/receipt_models/receipt_products_model.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ class _ReceiptConferenceProductsItemsState
     required String quantityText,
     required String validityDate,
     required ReceiptProductsModel product,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     await receiptProvider.updateQuantity(
       quantityText: quantityText,
@@ -59,7 +61,7 @@ class _ReceiptConferenceProductsItemsState
         selectedIndex = -1;
       });
 
-      if (receiptProvider.useAutoScan) {
+      if (configurationsProvider.useAutoScan) {
         await widget.getProductsWithCamera();
       }
 
@@ -76,6 +78,7 @@ class _ReceiptConferenceProductsItemsState
   anullQuantity({
     required int index,
     required ReceiptProvider receiptProvider,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     FocusScope.of(context).unfocus();
 
@@ -106,7 +109,7 @@ class _ReceiptConferenceProductsItemsState
           });
           widget.consultedProductController.clear();
 
-          if (receiptProvider.useAutoScan) {
+          if (configurationsProvider.useAutoScan) {
             await widget.getProductsWithCamera();
           }
         }
@@ -154,6 +157,7 @@ class _ReceiptConferenceProductsItemsState
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return Expanded(
       child: receiptProvider.productsCount <= 0
@@ -324,10 +328,14 @@ class _ReceiptConferenceProductsItemsState
                                       validityDate: product
                                           .DataValidade_ProcRecebDocProEmb,
                                       product: product,
+                                      configurationsProvider:
+                                          configurationsProvider,
                                     );
                                   },
                                   subtractQuantityFunction: () async {
                                     await updateQuantity(
+                                      configurationsProvider:
+                                          configurationsProvider,
                                       isSubtract: true,
                                       index: index,
                                       receiptProvider: receiptProvider,
@@ -342,6 +350,8 @@ class _ReceiptConferenceProductsItemsState
                                     await anullQuantity(
                                       index: index,
                                       receiptProvider: receiptProvider,
+                                      configurationsProvider:
+                                          configurationsProvider,
                                     );
                                   },
                                 ),

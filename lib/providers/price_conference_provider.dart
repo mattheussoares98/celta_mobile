@@ -1,3 +1,4 @@
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
@@ -16,18 +17,6 @@ class PriceConferenceProvider with ChangeNotifier {
   String _errorMessage = "";
 
   get errorMessage => _errorMessage;
-
-  bool _useLegacyCode = false;
-  bool get useLegacyCode => _useLegacyCode;
-
-  void changeUseLegacyCode({bool? newValue}) {
-    if (newValue != null) {
-      _useLegacyCode = newValue;
-    } else {
-      _useLegacyCode = !_useLegacyCode;
-    }
-    notifyListeners();
-  }
 
   convertSalePracticedRetailToDouble() {
     _products.forEach((element) {
@@ -116,13 +105,13 @@ class PriceConferenceProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     await _getProducts(
       enterpriseCode: enterpriseCode,
       controllerText: controllerText,
       context: context,
-      isLegacyCodeSearch: isLegacyCodeSearch,
+      isLegacyCodeSearch: configurationsProvider.useLegacyCode,
     );
 
     if (_errorMessage != "") {

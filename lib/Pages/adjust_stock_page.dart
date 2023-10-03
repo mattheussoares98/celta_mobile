@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Adjust_stock/adjust_stock_products_i
 import 'package:celta_inventario/components/Adjust_stock/adjust_stock_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
   @override
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider =
+        Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
@@ -66,11 +69,6 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
             Column(
               children: [
                 SearchWidget(
-                  useLegacyCode: adjustStockProvider.useLegacyCode,
-                  changeLegacyCodeValue:
-                      adjustStockProvider.changeLegacyCodeValue,
-                  useAutoScan: adjustStockProvider.useAutoScan,
-                  changeAutoScanValue: adjustStockProvider.changeAutoScanValue,
                   focusNodeConsultProduct:
                       adjustStockProvider.consultProductFocusNode,
                   isLoading: adjustStockProvider.isLoadingProducts ||
@@ -80,7 +78,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
-                      isLegacyCodeSearch: adjustStockProvider.useLegacyCode,
+                      configurationsProvider: configurationsProvider,
                     );
 
                     if (adjustStockProvider.productsCount > 0) {
@@ -125,7 +123,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
-                      isLegacyCodeSearch: adjustStockProvider.useLegacyCode,
+                      configurationsProvider: configurationsProvider,
                     );
 
                     if (adjustStockProvider.productsCount > 0) {

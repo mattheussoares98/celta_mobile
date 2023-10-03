@@ -79,6 +79,7 @@ class LoginProvider with ChangeNotifier {
   }) async {
     _errorMessage = '';
     _isLoading = true;
+    UserData.userName = user;
 
     notifyListeners();
 

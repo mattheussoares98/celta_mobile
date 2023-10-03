@@ -23,8 +23,8 @@ class InsertQuantityTextFormField extends StatefulWidget {
     this.isLoading = false,
     this.autoFocus = false,
     this.canReceiveEmptyValue = false,
-    this.labelText = "Digite a quantidade",
-    this.hintText = "Digite a quantidade",
+    this.labelText = "Quantidade",
+    this.hintText = "Quantidade",
     this.lengthLimitingTextInputFormatter = 10,
     Key? key,
   }) : super(key: key);

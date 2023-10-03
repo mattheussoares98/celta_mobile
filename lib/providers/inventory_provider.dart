@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Models/inventory/inventory_model.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
@@ -72,21 +73,6 @@ class InventoryProvider with ChangeNotifier {
   int _indexOfLastAddedQuantity = -1;
   int get indexOfLastAddedQuantity => _indexOfLastAddedQuantity;
 
-  bool _useLegacyCode = false;
-  bool get useLegacyCode => _useLegacyCode;
-  bool _useAutoScan = false;
-  bool get useAutoScan => _useAutoScan;
-
-  void changeAutoScanValue() {
-    _useAutoScan = !_useAutoScan;
-    notifyListeners();
-  }
-
-  void changeLegacyCodeValue() {
-    _useLegacyCode = !_useLegacyCode;
-    notifyListeners();
-  }
-
   Future<void> getInventory({
     required int enterpriseCode,
     required String? userIdentity,
@@ -145,6 +131,7 @@ class InventoryProvider with ChangeNotifier {
     required int inventoryProcessCode,
     required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _products.clear();
     _errorMessageGetProducts = "";
@@ -166,7 +153,7 @@ class InventoryProvider with ChangeNotifier {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": controllerText,
-          "searchTypeInt": _useLegacyCode ? 11 : 0,
+          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
           "inventoryProcessCode": inventoryProcessCode,
           "inventoryCountingCode": inventoryCountingCode,
         },
@@ -204,6 +191,7 @@ class InventoryProvider with ChangeNotifier {
     required bool isIndividual,
     required TextEditingController consultProductController,
     required int inventoryCountingCode,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     if (consultProductController.text.isEmpty) {
       //se não digitar o ean ou plu, vai abrir a câmera
@@ -218,6 +206,7 @@ class InventoryProvider with ChangeNotifier {
       context: context,
       inventoryCountingCode: inventoryCountingCode,
       inventoryProcessCode: inventoryProcessCode,
+      configurationsProvider: configurationsProvider,
     );
 
     if (_errorMessageGetProducts != '') {
@@ -254,6 +243,7 @@ class InventoryProvider with ChangeNotifier {
     required bool isSubtract,
     required BuildContext context,
     required int indexOfProduct,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     quantity = quantity.replaceAll(RegExp(r','), '.');
     double newQuantity = double.parse(quantity);
@@ -310,7 +300,7 @@ class InventoryProvider with ChangeNotifier {
           indexOfProduct: indexOfProduct,
         );
 
-        if (!_useAutoScan) {
+        if (!configurationsProvider.useAutoScan) {
           alterFocusToConsultedProduct(
             context: context,
           );
@@ -401,6 +391,7 @@ class InventoryProvider with ChangeNotifier {
     required bool isSubtract,
     required TextEditingController consultedProductController,
     required int indexOfProduct,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _isLoadingQuantity = true;
     notifyListeners();
@@ -419,6 +410,7 @@ class InventoryProvider with ChangeNotifier {
         quantity: isIndividual ? '1' : quantity.toString(),
         isSubtract: isSubtract,
         context: context,
+        configurationsProvider: configurationsProvider,
       );
 
       if (_errorMessageQuantity != "") {

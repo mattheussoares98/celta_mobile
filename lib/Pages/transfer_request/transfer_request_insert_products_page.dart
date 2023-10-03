@@ -2,6 +2,7 @@ import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_products_items.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class _TransferRequestInsertProductsPageState
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: true);
 
     return WillPopScope(
       onWillPop: () async {
@@ -43,11 +46,6 @@ class _TransferRequestInsertProductsPageState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SearchWidget(
-            useLegacyCode: transferRequestProvider.useLegacyCode,
-            changeLegacyCodeValue:
-                transferRequestProvider.changeLegacyCodeValue,
-            useAutoScan: transferRequestProvider.useAutoScan,
-            changeAutoScanValue: transferRequestProvider.changeAutoScanValue,
             consultProductController: _searchProductTextEditingController,
             isLoading: transferRequestProvider.isLoadingProducts,
             autofocus: false,
@@ -59,7 +57,7 @@ class _TransferRequestInsertProductsPageState
                 enterpriseOriginCode: widget.enterpriseOriginCode,
                 enterpriseDestinyCode: widget.enterpriseDestinyCode,
                 value: _searchProductTextEditingController.text,
-                isLegacyCodeSearch: transferRequestProvider.useLegacyCode,
+                configurationsProvider: configurationsProvider,
               );
 
               if (transferRequestProvider.productsCount > 0) {
@@ -97,7 +95,7 @@ class _TransferRequestInsertProductsPageState
                   enterpriseOriginCode: widget.enterpriseOriginCode,
                   enterpriseDestinyCode: widget.enterpriseDestinyCode,
                   value: _searchProductTextEditingController.text,
-                  isLegacyCodeSearch: transferRequestProvider.useLegacyCode,
+                  configurationsProvider: configurationsProvider,
                 );
 
                 if (transferRequestProvider.productsCount > 0) {

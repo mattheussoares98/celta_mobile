@@ -3,6 +3,7 @@ import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_products_items.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_stocks_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,13 +32,11 @@ class _TransferBetweenPackagePageState
     _consultProductController.dispose();
   }
 
-  bool _isLegacyCodeSearch = false;
-  bool _useLegacyCode = false;
-  bool _useAutoScan = false;
-
   @override
   Widget build(BuildContext context) {
     TransferBetweenPackageProvider transferBetweenPackageProvider =
+        Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
@@ -73,18 +72,6 @@ class _TransferBetweenPackagePageState
             Column(
               children: [
                 SearchWidget(
-                  useLegacyCode: _useLegacyCode,
-                  useAutoScan: _useAutoScan,
-                  changeLegacyCodeValue: () {
-                    setState(() {
-                      _useLegacyCode = !_useLegacyCode;
-                    });
-                  },
-                  changeAutoScanValue: () {
-                    setState(() {
-                      _useAutoScan = !_useAutoScan;
-                    });
-                  },
                   focusNodeConsultProduct:
                       transferBetweenPackageProvider.consultProductFocusNode,
                   isLoading: transferBetweenPackageProvider.isLoadingProducts ||
@@ -95,7 +82,7 @@ class _TransferBetweenPackagePageState
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       controllerText: _consultProductController.text,
                       context: context,
-                      isLegacyCodeSearch: _isLegacyCodeSearch,
+                      configurationsProvider: configurationsProvider,
                     );
 
                     //não estava funcionando passar o productsCount como parâmetro

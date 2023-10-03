@@ -1,3 +1,4 @@
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/receipt_provider.dart';
@@ -19,6 +20,7 @@ class _ConferenceConsultProductWithoutEanButtonState
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
     return Container(
       width: double.infinity,
       color: Theme.of(context).colorScheme.primary,
@@ -35,6 +37,7 @@ class _ConferenceConsultProductWithoutEanButtonState
                   context: context,
                   controllerText: "",
                   isSearchAllCountedProducts: true,
+                  configurationsProvider: configurationsProvider,
                 );
               },
         child: Text(

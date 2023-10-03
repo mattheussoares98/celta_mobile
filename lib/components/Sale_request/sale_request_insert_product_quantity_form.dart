@@ -34,6 +34,15 @@ class SaleRequestInsertProductQuantityForm extends StatefulWidget {
 class _SaleRequestInsertProductQuantityFormState
     extends State<SaleRequestInsertProductQuantityForm> {
   addItemInCart() {
+    if (widget.consultedProductController.text.isEmpty) {
+      //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
+      setState(() {
+        widget.addProductInCart();
+      });
+
+      FocusScope.of(context).unfocus();
+      return;
+    }
     bool isValid = widget.consultedProductFormKey.currentState!.validate();
 
     double? controllerInDouble = double.tryParse(

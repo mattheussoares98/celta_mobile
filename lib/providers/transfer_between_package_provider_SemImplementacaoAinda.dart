@@ -3,6 +3,7 @@ import 'package:celta_inventario/Models/transfer_between_package_models/transfer
 import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_product_model.dart';
 import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_type_model.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
@@ -157,7 +158,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
@@ -168,7 +169,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
       controllerText: controllerText,
       context: context,
-      isLegacyCodeSearch: isLegacyCodeSearch,
+      isLegacyCodeSearch: configurationsProvider.useLegacyCode,
     );
 
     if (_products.isNotEmpty) {

@@ -2,6 +2,7 @@ import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_justifi
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
 import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_type_model.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
@@ -38,21 +39,6 @@ class AdjustStockProvider with ChangeNotifier {
   String get justificationStockTypeName => _justificationStockTypeName;
   updateJustificationStockTypeName(String newValue) {
     _justificationStockTypeName = newValue;
-    notifyListeners();
-  }
-
-  bool _useLegacyCode = false;
-  bool get useLegacyCode => _useLegacyCode;
-  bool _useAutoScan = false;
-  bool get useAutoScan => _useAutoScan;
-
-  void changeAutoScanValue() {
-    _useAutoScan = !_useAutoScan;
-    notifyListeners();
-  }
-
-  void changeLegacyCodeValue() {
-    _useLegacyCode = !_useLegacyCode;
     notifyListeners();
   }
 
@@ -194,7 +180,7 @@ class AdjustStockProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText,
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _lastUpdatedQuantity = "";
     _indexOfLastProductChangedStockQuantity = -1;
@@ -205,7 +191,7 @@ class AdjustStockProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
       controllerText: controllerText,
       context: context,
-      isLegacyCodeSearch: isLegacyCodeSearch,
+      isLegacyCodeSearch: configurationsProvider.useLegacyCode,
     );
 
     if (_products.isNotEmpty) {

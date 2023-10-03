@@ -8,6 +8,7 @@ import 'package:celta_inventario/Models/transfer_request/transfer_request_model.
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,21 +81,6 @@ class TransferRequestProvider with ChangeNotifier {
   FocusNode consultedProductFocusNode = FocusNode();
   Map<String, Map<String, Map<String, List<TransferRequestCartProductsModel>>>>
       _cartProducts = {};
-
-  bool _useLegacyCode = false;
-  bool get useLegacyCode => _useLegacyCode;
-  bool _useAutoScan = false;
-  bool get useAutoScan => _useAutoScan;
-
-  void changeAutoScanValue() {
-    _useAutoScan = !_useAutoScan;
-    notifyListeners();
-  }
-
-  void changeLegacyCodeValue() {
-    _useLegacyCode = !_useLegacyCode;
-    notifyListeners();
-  }
 
   getCartProducts({
     required String enterpriseOriginCode,
@@ -608,7 +594,7 @@ class TransferRequestProvider with ChangeNotifier {
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String value,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _errorMessageProducts = '';
     _isLoadingProducts = true;
@@ -623,7 +609,7 @@ class TransferRequestProvider with ChangeNotifier {
           "enterpriseDestinyCode": enterpriseDestinyCode,
           "requestTypeCode": requestTypeCode,
           "searchValue": value,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
           // "routineTypeInt": "int",
         },
         typeOfResponse: "GetProductJsonByRequestTypeResponse",

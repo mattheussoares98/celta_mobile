@@ -130,7 +130,7 @@ class _TransferBetweenPackageInsertQuantityState
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Digite a quantidade aqui',
+                      labelText: 'Quantidade',
                       floatingLabelStyle: TextStyle(
                         color:
                             transferBetweenPackageProvider.isLoadingProducts ||

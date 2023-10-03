@@ -123,6 +123,8 @@ class SoapHelper {
       }
     } catch (e) {
       print("erro para fazer a requisição http: $e");
+      SoapHelperResponseParameters.errorMessage =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
   }
 

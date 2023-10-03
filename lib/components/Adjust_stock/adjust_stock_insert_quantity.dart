@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
 
   confirmAdjustStock({
     required AdjustStockProvider adjustStockProvider,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     if (widget.consultedProductController.text.contains("\,")) {
       widget.consultedProductController.text =
@@ -59,7 +61,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
     if (adjustStockProvider.errorMessageAdjustStock == "") {
       widget.consultedProductController.clear();
 
-      if (adjustStockProvider.useAutoScan) {
+      if (configurationsProvider.useAutoScan) {
         await widget.getProductWithCamera();
       }
     }
@@ -68,6 +70,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
   @override
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Column(
@@ -112,7 +115,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                               .isLoadingTypeStockAndJustifications ||
                           adjustStockProvider.isLoadingAdjustStock,
                       context: context,
-                      labelText: 'Digite a quantidade aqui',
+                      labelText: 'Quantidade',
                     ),
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,
@@ -137,6 +140,8 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                                 function: () async {
                                   await confirmAdjustStock(
                                     adjustStockProvider: adjustStockProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
                                   );
                                 },
                               );
