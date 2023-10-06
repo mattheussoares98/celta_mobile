@@ -1,4 +1,5 @@
 import 'package:celta_inventario/Models/configurations_model.dart';
+import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:flutter/material.dart';
 
 class ConfigurationsProvider with ChangeNotifier {
@@ -39,15 +40,26 @@ class ConfigurationsProvider with ChangeNotifier {
 
   List<ConfigurationsModel> get configurations => _configurations;
 
-  void changeUseAutoScan() {
-    _configurations[0].value = !_configurations[0].value;
-    _useAutoScan = !_useAutoScan;
+  Future<void> restoreConfigurations() async {
+    _useAutoScan = await PrefsInstance.getUseAutoScan();
+    _useLegacyCode = await PrefsInstance.getUseLegacyCode();
+    _configurations[0].value = _useAutoScan;
+    _configurations[1].value = _useLegacyCode;
+
     notifyListeners();
   }
 
-  void changeUseLegacyCode() {
+  void changeUseAutoScan() async {
+    _configurations[0].value = !_configurations[0].value;
+    _useAutoScan = !_useAutoScan;
+    notifyListeners();
+    await PrefsInstance.setUseAutoScanValue(_useAutoScan);
+  }
+
+  void changeUseLegacyCode() async {
     _configurations[1].value = !_configurations[1].value;
     _useLegacyCode = !_useLegacyCode;
     notifyListeners();
+    await PrefsInstance.setUseLegacyCodeValue(_useLegacyCode);
   }
 }

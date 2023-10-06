@@ -6,7 +6,7 @@ class ImageComponent {
     required String routine,
     required String route,
     required BuildContext context,
-    required String nextRoute,
+    String? nextRoute,
   }) {
     return InkWell(
       onTap: () {

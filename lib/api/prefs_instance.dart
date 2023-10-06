@@ -1,168 +1,200 @@
+// ignore_for_file: unused_element
+
 import 'dart:convert';
 
+import 'package:celta_inventario/utils/user_data.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum _PrefsKeys {
+  userIdentity,
+  user,
+  urlCCS,
+  enterpriseName,
+  customers,
+  cart,
+  mySoaps,
+  useAutoScan,
+  useLegacyCode,
+}
+
 class PrefsInstance {
-  static Future<void> removeNotUsedKeys() async {}
+  static late SharedPreferences _prefs;
+  static Future<void> removeNotUsedPrefsKeys() async {}
+
+  static Future<bool> _keyHasString(String key) async {
+    _prefs = await SharedPreferences.getInstance();
+    bool hasValue = await _prefs.getString(key) != null &&
+        await _prefs.getString(key) != "";
+    return hasValue;
+  }
+
+  static Future<bool> _keyHasBool(String key) async {
+    _prefs = await SharedPreferences.getInstance();
+
+    bool containsKey = _prefs.containsKey(key);
+    bool hasValue =
+        await _prefs.getBool(key) != null && await _prefs.getBool(key) != false;
+    return hasValue;
+  }
+
+  static Future<void> _setString({
+    required _PrefsKeys prefsKeys,
+    required String value,
+  }) async {
+    await _prefs.setString(prefsKeys.name, value);
+  }
+
+  static Future<bool> _setBool({
+    required _PrefsKeys prefsKeys,
+    required bool value,
+  }) async {
+    _prefs = await SharedPreferences.getInstance();
+    bool successToSetBool = await _prefs.setBool(prefsKeys.name, value);
+    return successToSetBool;
+  }
+
+  static Future<String> _getString({
+    required _PrefsKeys prefsKeys,
+  }) async {
+    _prefs = await SharedPreferences.getInstance();
+    if (await _keyHasString(prefsKeys.name)) {
+      return await _prefs.getString(prefsKeys.name)!;
+    } else {
+      return "";
+    }
+  }
+
+  static Future<bool> _getBool({
+    required _PrefsKeys prefsKeys,
+  }) async {
+    _prefs = await SharedPreferences.getInstance();
+    if (await _keyHasBool(prefsKeys.name)) {
+      return await _prefs.getBool(prefsKeys.name)!;
+    } else {
+      return false;
+    }
+  }
 
   static Future<bool> isLogged() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return await prefs.getString('userIdentity') != "" &&
-        await prefs.getString('userIdentity') != null;
+    return await _keyHasString(_PrefsKeys.userIdentity.name);
   }
 
   static Future<String> getUserIdentity() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (await isLogged()) {
-      return await prefs.getString('userIdentity')!;
+      return await _getString(prefsKeys: _PrefsKeys.userIdentity);
     } else {
       return "";
     }
   }
 
   static Future<String> getUserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    if (await prefs.getString('user') != null) {
-      return await prefs.getString('user')!;
-    } else {
-      return "";
-    }
-  }
-
-  static Future<bool> hasUserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    return await prefs.getString('user') != null &&
-        await prefs.getString('user') != "";
-  }
-
-  static Future<bool> hasUrlCcs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    return await prefs.getString('urlCCS') != null &&
-        await prefs.getString('urlCCS') != "";
+    return await _getString(prefsKeys: _PrefsKeys.user);
   }
 
   static Future<String> getUrlCcs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    if (await hasUrlCcs()) {
-      return await prefs.getString('urlCCS')!;
-    } else {
-      return "";
-    }
+    return await _getString(prefsKeys: _PrefsKeys.urlCCS);
   }
 
   static Future<void> setUrlCcs(String newUrlCcs) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString('urlCCS', newUrlCcs);
-  }
-
-  static Future<bool> hasEnterpriseName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    return await prefs.getString('enterpriseName') != null &&
-        await prefs.getString('enterpriseName') != "";
+    await _setString(prefsKeys: _PrefsKeys.urlCCS, value: newUrlCcs);
   }
 
   static Future<String> getEnterpriseName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    if (await hasEnterpriseName()) {
-      return await prefs.getString('enterpriseName')!;
-    } else {
-      return "";
-    }
+    return await _getString(prefsKeys: _PrefsKeys.enterpriseName);
   }
 
   static Future<void> setEnterpriseName(String newEnterpriseName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString('enterpriseName', newEnterpriseName);
+    await _setString(
+        prefsKeys: _PrefsKeys.enterpriseName, value: newEnterpriseName);
   }
 
   static Future<void> setUserIdentity(String newIdentity) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userIdentity', newIdentity);
+    await _setString(prefsKeys: _PrefsKeys.userIdentity, value: newIdentity);
   }
 
   static Future<void> setUserName(String userName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user', userName);
+    await _setString(prefsKeys: _PrefsKeys.user, value: userName);
   }
 
   static Future<void> setCustomerSaleRequest(String newCustomers) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("customers", newCustomers);
+    await _setString(prefsKeys: _PrefsKeys.customers, value: newCustomers);
   }
 
   static Future<void> clearCustomerSaleRequest() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("customers", "");
-  }
-
-  static Future<bool> hasCustomerSaleRequest() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('customers') != "" &&
-        prefs.getString('customers') != null;
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.setString(_PrefsKeys.customers.name, "");
   }
 
   static Future<String> getCustomerSaleRequest() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (await hasCustomerSaleRequest()) {
-      return await prefs.getString("customers")!;
-    } else {
-      return "";
-    }
-  }
-
-  static Future<bool> hasCartSaleRequest() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('cart') != "" && prefs.getString('cart') != null;
+    return await _getString(prefsKeys: _PrefsKeys.customers);
   }
 
   static Future<String> getCartSaleRequest() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (await hasCustomerSaleRequest()) {
-      return await prefs.getString("cart")!;
-    } else {
-      return "";
-    }
+    return await _getString(prefsKeys: _PrefsKeys.cart);
   }
 
   static Future<void> setCartSaleRequest(String newCart) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("cart", newCart);
+    await _setString(prefsKeys: _PrefsKeys.cart, value: newCart);
   }
 
   static Future<void> clearCartSaleRequest() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("cart", "");
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.setString(_PrefsKeys.cart.name, "");
   }
 
   static Future<void> setSoaps(List<dynamic> mySoaps) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();
     List<String> encodedMySoaps =
         mySoaps.map((item) => json.encode(item)).toList();
-    await prefs.setStringList('mySoaps', encodedMySoaps);
+    await _prefs.setStringList(_PrefsKeys.mySoaps.name, encodedMySoaps);
   }
 
   static Future<void> clearSoaps() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("mySoaps");
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.remove(_PrefsKeys.mySoaps.name);
   }
 
   static Future<List<dynamic>> getSoaps() async {
     List<dynamic> mySoaps = [];
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('mySoaps') != null) {
-      List<String> encodedMySoaps = await prefs.getStringList('mySoaps')!;
+    _prefs = await SharedPreferences.getInstance();
+    if (_prefs.getStringList(_PrefsKeys.mySoaps.name) != null) {
+      List<String> encodedMySoaps =
+          await _prefs.getStringList(_PrefsKeys.mySoaps.name)!;
 
       mySoaps = encodedMySoaps.map((item) => json.decode(item)).toList();
     }
 
     return mySoaps;
+  }
+
+  static Future<void> setUseAutoScanValue(bool newValue) async {
+    await _setBool(prefsKeys: _PrefsKeys.useAutoScan, value: newValue);
+  }
+
+  static Future<void> setUseLegacyCodeValue(bool newValue) async {
+    await _setBool(prefsKeys: _PrefsKeys.useLegacyCode, value: newValue);
+  }
+
+  static Future<void> restoreUserAndEnterpriseNameOrUrlCCS({
+    required TextEditingController enterpriseNameOrUrlCCSController,
+    required TextEditingController userController,
+  }) async {
+    userController.text = await PrefsInstance.getUserName();
+    UserData.userName = userController.text;
+
+    UserData.urlCCS = await PrefsInstance.getUrlCcs();
+
+    enterpriseNameOrUrlCCSController.text =
+        await PrefsInstance.getEnterpriseName();
+    UserData.enterpriseName = enterpriseNameOrUrlCCSController.text;
+  }
+
+  static Future<bool> getUseAutoScan() async {
+    return await _getBool(prefsKeys: _PrefsKeys.useAutoScan);
+  }
+
+  static Future<bool> getUseLegacyCode() async {
+    return await _getBool(prefsKeys: _PrefsKeys.useLegacyCode);
   }
 }

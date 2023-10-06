@@ -131,9 +131,9 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   restorecustomers(String enterpriseCode) async {
-    if (await PrefsInstance.hasCustomerSaleRequest()) {
-      var _key = await PrefsInstance.getCustomerSaleRequest();
-      Map customersInDatabase = jsonDecode(_key);
+    String customers = await PrefsInstance.getCustomerSaleRequest();
+    if (customers != "") {
+      Map customersInDatabase = jsonDecode(customers);
 
       List<SaleRequestCustomerModel> customersTemp = [];
       customersInDatabase.forEach((key, value) {
@@ -215,9 +215,9 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   restoreProducts(String enterpriseCode) async {
-    if (await PrefsInstance.hasCartSaleRequest()) {
-      var _key = await PrefsInstance.getCartSaleRequest();
-      Map cartProductsInDatabase = jsonDecode(_key);
+    String cart = await PrefsInstance.getCartSaleRequest();
+    if (cart != "") {
+      Map cartProductsInDatabase = jsonDecode(cart);
 
       List<SaleRequestCartProductsModel> cartProductsTemp = [];
       cartProductsInDatabase.forEach((key, value) {

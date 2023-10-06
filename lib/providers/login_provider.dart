@@ -44,33 +44,6 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> restoreBaseUrl() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   if (await prefs.getString('urlCCS') != null &&
-  //       await prefs.getString('urlCCS') != "") {
-  //     BaseUrl.urlCCS = await prefs.getString('urlCCS')!;
-  //   }
-  // }
-
-  restoreUserAndEnterpriseNameOrUrlCCS({
-    required TextEditingController enterpriseNameOrUrlCCSController,
-    required TextEditingController userController,
-  }) async {
-    userController.text = await PrefsInstance.getUserName();
-    UserData.userName = userController.text;
-
-    if (await PrefsInstance.hasUrlCcs()) {
-      UserData.urlCCS = await PrefsInstance.getUrlCcs();
-    }
-
-    if (await PrefsInstance.hasEnterpriseName()) {
-      enterpriseNameOrUrlCCSController.text =
-          await PrefsInstance.getEnterpriseName();
-
-      UserData.enterpriseName = enterpriseNameOrUrlCCSController.text;
-    }
-  }
-
   login({
     required String user,
     required String password,

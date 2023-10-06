@@ -1,3 +1,4 @@
+import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +75,7 @@ class _AuthFormState extends State<AuthForm>
     if (!isLoaded) {
       await loginProvider.verifyIsLogged();
 
-      await loginProvider.restoreUserAndEnterpriseNameOrUrlCCS(
+      await PrefsInstance.restoreUserAndEnterpriseNameOrUrlCCS(
         enterpriseNameOrUrlCCSController:
             loginProvider.enterpriseNameOrUrlCCSController,
         userController: loginProvider.userController,

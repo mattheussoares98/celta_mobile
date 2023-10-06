@@ -224,15 +224,16 @@ class FirebaseHelper {
   }
 
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    // print("title: ${message.notification?.title}");
-    // print("body: ${message.notification?.body}");
-    // print("data: ${message.data}");
+    print('Got a message whilst in the background!');
+    print("title: ${message.notification?.title}");
+    print("body: ${message.notification?.body}");
+    print("data: ${message.data}");
   }
 
   static Future<void> initNotifications(BuildContext context) async {
     await _firebaseMessaging.requestPermission();
-    // final fcmToken = await _firebaseMessaging.getToken();
-    // print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
+    final fcmToken = await _firebaseMessaging.getToken();
+    print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
     // mensagens pelo site do firebase
 
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
@@ -241,16 +242,16 @@ class FirebaseHelper {
     //primeiro plano, vai executar a função abaixo
 
     //abaixo recebe a notificação em primeiro plano
-    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //   print('Got a message whilst in the foreground!');
-    //   print('Message data: ${message.data}');
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
 
-    //   if (message.notification != null) {
-    //     print(
-    //         'Título da notificação: ${message.notification!.title.toString()}');
-    //     print('Texto da notificação: ${message.notification!.body}');
-    //   }
-    // });
+      if (message.notification != null) {
+        print(
+            'Título da notificação: ${message.notification!.title.toString()}');
+        print('Texto da notificação: ${message.notification!.body}');
+      }
+    });
   }
 
   static Future<void> addClickedInLink({

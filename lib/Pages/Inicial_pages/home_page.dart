@@ -1,7 +1,10 @@
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/components/Inicial_pages/my_drawer.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/app_routes.dart';
+import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/image_component.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,16 +15,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String userName = "";
+  bool isLoaded = false;
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    if (await PrefsInstance.hasUserName()) {
-      userName = await PrefsInstance.getUserName();
-    }
+    if (!isLoaded) {
+      UserData.userName = await PrefsInstance.getUserName();
 
-    setState(() {});
+      setState(() {});
+      ConfigurationsProvider configurationsProvider =
+          Provider.of(context, listen: false);
+      await configurationsProvider.restoreConfigurations();
+
+      isLoaded = true;
+    }
   }
 
   int returnSize() {
@@ -40,7 +48,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            userName,
+            UserData.userName,
           ),
         ),
       ),
@@ -110,13 +118,13 @@ class _HomePageState extends State<HomePage> {
             nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
             context: context,
           ),
-          ImageComponent.image(
-            imagePath: 'lib/assets/Images/newClient.jpg',
-            routine: 'Cadastro de clientes',
-            route: APPROUTES.CUSTOMER_REGISTER,
-            nextRoute: "não vai para outra página",
-            context: context,
-          ),
+          // ImageComponent.image(
+          //   imagePath: 'lib/assets/Images/newClient.jpg',
+          //   routine: 'Cadastro de clientes',
+          //   route: APPROUTES.CUSTOMER_REGISTER,
+          //   nextRoute: "não vai para outra página",
+          //   context: context,
+          // ),
         ],
       ),
     );
