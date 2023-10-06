@@ -190,8 +190,8 @@ class TechnicalSupportPage extends StatelessWidget {
             ),
             personalizedButton(
               firebaseCallEnum: FirebaseCallEnum.bsWhats,
-              businessDays: "Todos dias",
-              businessHours: "Fora do horário comercial",
+              businessDays: "Segunda à sexta, exceto feriados",
+              businessHours: "08:00 às 17:00",
               childTitle: "Whats suporte BS",
               messageLeftButton: "Whats plantão",
               messageCenterButton: "Whats comercial",

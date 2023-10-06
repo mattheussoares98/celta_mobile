@@ -145,8 +145,8 @@ class MyApp extends StatelessWidget {
             onError: Colors.red,
             background: Colors.white,
             onBackground: Colors.white,
-            surface: const Color.fromARGB(255, 255, 242, 94),
-            onSurface: const Color.fromARGB(255, 255, 242, 94),
+            surface: Colors.white,
+            onSurface: Colors.white,
           ),
         ).copyWith(
           textTheme: ThemeData.light().textTheme.copyWith(

@@ -14,6 +14,7 @@ class ShowSnackbarMessage {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -27,13 +28,16 @@ class ShowSnackbarMessage {
               TextButton(
                 style: TextButton.styleFrom(
                   elevation: 10,
-                  backgroundColor: Colors.amber,
+                  backgroundColor: Colors.amberAccent,
                 ),
                 onPressed: () => {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                   functionSnackBarAction(),
                 },
-                child: Text(labelSnackBarAction),
+                child: Text(
+                  labelSnackBarAction,
+                  style: const TextStyle(color: Colors.black),
+                ),
               ),
           ],
         ),
