@@ -32,7 +32,6 @@ class PrefsInstance {
   static Future<bool> _keyHasBool(String key) async {
     _prefs = await SharedPreferences.getInstance();
 
-    bool containsKey = _prefs.containsKey(key);
     bool hasValue =
         await _prefs.getBool(key) != null && await _prefs.getBool(key) != false;
     return hasValue;
