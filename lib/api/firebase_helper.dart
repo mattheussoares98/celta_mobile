@@ -1,6 +1,8 @@
 import 'package:celta_inventario/Models/firebase_client_model.dart';
+import 'package:celta_inventario/firebase_options.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
@@ -231,6 +233,9 @@ class FirebaseHelper {
   }
 
   static Future<void> initNotifications(BuildContext context) async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
     print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de

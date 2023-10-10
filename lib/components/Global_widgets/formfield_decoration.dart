@@ -47,6 +47,14 @@ class FormFieldHelper {
           color: Colors.grey,
         ),
       ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          width: 1,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
