@@ -6,6 +6,7 @@ import 'package:celta_inventario/components/Inventory/inventory_products_items.d
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -107,6 +108,79 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     }
   }
 
+  Widget searchButtonAndIndividualSwitch({
+    required InventoryProvider inventoryProvider,
+    required ConfigurationsProvider configurationsProvider,
+  }) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+    return MediaQuery.of(context).size.width < 900
+        ? Column(
+            children: [
+              SearchProductButton(
+                isIndividual: _isIndividual,
+                searchProduct: () async {
+                  await _searchProduct(
+                    inventoryProvider: inventoryProvider,
+                    arguments: arguments,
+                    configurationsProvider: configurationsProvider,
+                  );
+                  if (inventoryProvider.productsCount > 0) {
+                    setState(() {
+                      _consultProductController.text = "";
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 8),
+              InventoryInsertIndividualProductSwitch(
+                isIndividual: _isIndividual,
+                isLoading: inventoryProvider.isLoadingProducts ||
+                    inventoryProvider.isLoadingQuantity,
+                changeValue: () {
+                  setState(() {
+                    _isIndividual = !_isIndividual;
+                  });
+                },
+              ),
+            ],
+          )
+        : Row(
+            children: [
+              Expanded(
+                child: InventoryInsertIndividualProductSwitch(
+                  isIndividual: _isIndividual,
+                  isLoading: inventoryProvider.isLoadingProducts ||
+                      inventoryProvider.isLoadingQuantity,
+                  changeValue: () {
+                    setState(() {
+                      _isIndividual = !_isIndividual;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: SearchProductButton(
+                  isIndividual: _isIndividual,
+                  searchProduct: () async {
+                    await _searchProduct(
+                      inventoryProvider: inventoryProvider,
+                      arguments: arguments,
+                      configurationsProvider: configurationsProvider,
+                    );
+                    if (inventoryProvider.productsCount > 0) {
+                      setState(() {
+                        _consultProductController.text = "";
+                      });
+                    }
+                  },
+                ),
+              ),
+            ],
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
@@ -115,11 +189,14 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
-      onWillPop: () async {
-        inventoryProvider.clearProducts();
-        return true;
-      },
+      onWillPop: inventoryProvider.isLoadingQuantity
+          ? null
+          : () async {
+              inventoryProvider.clearProducts();
+              return true;
+            },
       child: Scaffold(
+        resizeToAvoidBottomInset: kIsWeb ? false : true,
         appBar: AppBar(
           title: const Text(
             'PRODUTOS',
@@ -159,31 +236,9 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                   focusNodeConsultProduct:
                       inventoryProvider.consultProductFocusNode,
                 ),
-                SearchProductButton(
-                  isIndividual: _isIndividual,
-                  searchProduct: () async {
-                    await _searchProduct(
-                      inventoryProvider: inventoryProvider,
-                      arguments: arguments,
-                      configurationsProvider: configurationsProvider,
-                    );
-                    if (inventoryProvider.productsCount > 0) {
-                      setState(() {
-                        _consultProductController.text = "";
-                      });
-                    }
-                  },
-                ),
-                const SizedBox(height: 8),
-                InventoryInsertIndividualProductSwitch(
-                  isIndividual: _isIndividual,
-                  isLoading: inventoryProvider.isLoadingProducts ||
-                      inventoryProvider.isLoadingQuantity,
-                  changeValue: () {
-                    setState(() {
-                      _isIndividual = !_isIndividual;
-                    });
-                  },
+                searchButtonAndIndividualSwitch(
+                  inventoryProvider: inventoryProvider,
+                  configurationsProvider: configurationsProvider,
                 ),
               ],
             ),

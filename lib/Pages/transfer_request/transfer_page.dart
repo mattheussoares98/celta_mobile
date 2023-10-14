@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_cart_details_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_insert_products_page.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/convert_string.dart';
@@ -89,7 +90,7 @@ class _TransferPageState extends State<TransferPage> {
         return true;
       },
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: kIsWeb ? false : true,
         appBar: AppBar(
           title: FittedBox(
             child: Text(

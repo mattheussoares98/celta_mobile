@@ -4,6 +4,8 @@ import 'package:celta_inventario/components/Global_widgets/show_snackbar_message
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/utils/responsive_items.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Global_widgets/show_alert_dialog.dart';
@@ -141,6 +143,22 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
       return;
     }
 
+    if (kIsWeb) {
+      if (_selectedIndex != index) {
+        setState(() {
+          _selectedIndex = index;
+          changeFocusToConsultedProductFocusNode(
+            inventoryProvider: inventoryProvider,
+          );
+        });
+      } else {
+        setState(() {
+          _selectedIndex = -1;
+        });
+      }
+      return;
+    }
+
     if (_selectedIndex != index) {
       setState(() {
         _selectedIndex = index;
@@ -176,180 +194,187 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
 
   int _selectedIndex = -1;
 
+  Widget itemOfList({
+    required InventoryProvider inventoryProvider,
+    required int index,
+    required ConfigurationsProvider configurationsProvider,
+  }) {
+    return InkWell(
+      onTap: () {
+        selectIndexAndFocus(
+          inventoryProvider: inventoryProvider,
+          index: index,
+        );
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Produto",
+                value: inventoryProvider.products[index].productName,
+                fontSize: 20,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "PLU",
+                value: inventoryProvider.products[index].plu,
+                fontSize: 20,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Qtd contada",
+                value: inventoryProvider
+                            .products[index].quantidadeInvContProEmb ==
+                        -1
+                    //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
+                    ? 'Sem contagem'
+                    : ConvertString.convertToBrazilianNumber(
+                        inventoryProvider
+                            .products[index].quantidadeInvContProEmb,
+                      ),
+                subtitleColor:
+                    inventoryProvider.products[index].quantidadeInvContProEmb !=
+                            -1
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.error,
+                otherWidget: Icon(
+                  _selectedIndex != index
+                      ? Icons.arrow_drop_down_sharp
+                      : Icons.arrow_drop_up_sharp,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 30,
+                ),
+                fontSize: 20,
+              ),
+              if (inventoryProvider.lastQuantityAdded != 0 &&
+                  _selectedIndex == index &&
+                  inventoryProvider.indexOfLastAddedQuantity == index)
+                const SizedBox(height: 3),
+              if (inventoryProvider.lastQuantityAdded != 0 &&
+                  _selectedIndex == index &&
+                  inventoryProvider.indexOfLastAddedQuantity == index)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: FittedBox(
+                    child: Text(
+                      'Última quantidade adicionada:  ${inventoryProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')}',
+                      style: TextStyle(
+                        fontSize: 100,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'BebasNeue',
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 1,
+                        wordSpacing: 4,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 8),
+              if (!widget.isIndividual && _selectedIndex == index)
+                AddSubtractOrAnullWidget(
+                  onFieldSubmitted: () async {
+                    // await widget.getProducts();
+                  },
+                  addButtonText: "SOMAR",
+                  subtractButtonText: "SUBTRAIR",
+                  isUpdatingQuantity: inventoryProvider.isLoadingQuantity,
+                  addQuantityFunction: () async {
+                    await addQuantity(
+                      indexOfProduct: index,
+                      inventoryProvider: inventoryProvider,
+                      configurationsProvider: configurationsProvider,
+                    );
+                  },
+                  subtractQuantityFunction: () async {
+                    await addQuantity(
+                      indexOfProduct: index,
+                      isSubtract: true,
+                      inventoryProvider: inventoryProvider,
+                      configurationsProvider: configurationsProvider,
+                    );
+                  },
+                  anullFunction: () async {
+                    await anullQuantity(
+                      inventoryProvider: inventoryProvider,
+                      configurationsProvider: configurationsProvider,
+                      index: index,
+                    );
+                  },
+                  isLoading: inventoryProvider.isLoadingQuantity ? true : false,
+                  consultedProductController: widget.consultedProductController,
+                  consultedProductFocusNode:
+                      inventoryProvider.consultedProductFocusNode,
+                ),
+              if (widget.isIndividual && _selectedIndex == index)
+                InsertOneQuantity(
+                  isIndividual: widget.isIndividual,
+                  inventoryCountingCode: widget.inventoryCountingCode,
+                  consultedProductController: widget.consultedProductController,
+                  indexOfProduct: index,
+                  addQuantity: () async {
+                    addQuantity(
+                      inventoryProvider: inventoryProvider,
+                      configurationsProvider: configurationsProvider,
+                      indexOfProduct: index,
+                    );
+                  },
+                  subtractQuantity: () async {
+                    addQuantity(
+                      isSubtract: true,
+                      inventoryProvider: inventoryProvider,
+                      configurationsProvider: configurationsProvider,
+                      indexOfProduct: index,
+                    );
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
 
+    int itensPerLine = ResponsiveItems.getItensPerLine(context);
+    int productsCount = inventoryProvider.productsCount;
+
     return Expanded(
       child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: inventoryProvider.productsCount,
-                itemBuilder: (context, index) {
-                  if (inventoryProvider.productsCount == 1) {
-                    _selectedIndex = index;
-                  }
-                  return GestureDetector(
-                    onTap: () {
-                      selectIndexAndFocus(
-                        inventoryProvider: inventoryProvider,
-                        index: index,
-                      );
-                    },
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "Produto",
-                              value:
-                                  inventoryProvider.products[index].productName,
-                              fontSize: 20,
-                            ),
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "PLU",
-                              value: inventoryProvider.products[index].plu,
-                              fontSize: 20,
-                            ),
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "Qtd contada",
-                              value: inventoryProvider.products[index]
-                                          .quantidadeInvContProEmb ==
-                                      -1
-                                  //quando o valor está nulo, eu coloco como "-1" pra tratar um bug
-                                  ? 'Sem contagem'
-                                  : ConvertString.convertToBrazilianNumber(
-                                      inventoryProvider.products[index]
-                                          .quantidadeInvContProEmb,
-                                    ),
-                              subtitleColor: inventoryProvider.products[index]
-                                          .quantidadeInvContProEmb !=
-                                      -1
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.error,
-                              otherWidget: Icon(
-                                _selectedIndex != index
-                                    ? Icons.arrow_drop_down_sharp
-                                    : Icons.arrow_drop_up_sharp,
-                                color: Theme.of(context).colorScheme.primary,
-                                size: 30,
-                              ),
-                              fontSize: 20,
-                            ),
-                            if (inventoryProvider.lastQuantityAdded != 0 &&
-                                _selectedIndex == index &&
-                                inventoryProvider.indexOfLastAddedQuantity ==
-                                    index)
-                              const SizedBox(height: 3),
-                            if (inventoryProvider.lastQuantityAdded != 0 &&
-                                _selectedIndex == index &&
-                                inventoryProvider.indexOfLastAddedQuantity ==
-                                    index)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: FittedBox(
-                                  child: Text(
-                                    'Última quantidade adicionada:  ${inventoryProvider.lastQuantityAdded.toStringAsFixed(3).replaceAll(RegExp(r'\.'), ',')}',
-                                    style: TextStyle(
-                                      fontSize: 100,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'BebasNeue',
-                                      fontStyle: FontStyle.italic,
-                                      letterSpacing: 1,
-                                      wordSpacing: 4,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ),
-                              ),
-                            const SizedBox(height: 8),
-                            if (!widget.isIndividual && _selectedIndex == index)
-                              AddSubtractOrAnullWidget(
-                                onFieldSubmitted: () async {
-                                  await widget.getProducts();
-                                },
-                                addButtonText: "SOMAR",
-                                subtractButtonText: "SUBTRAIR",
-                                isUpdatingQuantity:
-                                    inventoryProvider.isLoadingQuantity,
-                                addQuantityFunction: () async {
-                                  await addQuantity(
-                                    indexOfProduct: index,
-                                    inventoryProvider: inventoryProvider,
-                                    configurationsProvider:
-                                        configurationsProvider,
-                                  );
-                                },
-                                subtractQuantityFunction: () async {
-                                  await addQuantity(
-                                    indexOfProduct: index,
-                                    isSubtract: true,
-                                    inventoryProvider: inventoryProvider,
-                                    configurationsProvider:
-                                        configurationsProvider,
-                                  );
-                                },
-                                anullFunction: () async {
-                                  await anullQuantity(
-                                    inventoryProvider: inventoryProvider,
-                                    configurationsProvider:
-                                        configurationsProvider,
-                                    index: index,
-                                  );
-                                },
-                                isLoading: inventoryProvider.isLoadingQuantity
-                                    ? true
-                                    : false,
-                                consultedProductController:
-                                    widget.consultedProductController,
-                                consultedProductFocusNode:
-                                    inventoryProvider.consultedProductFocusNode,
-                              ),
-                            if (widget.isIndividual && _selectedIndex == index)
-                              InsertOneQuantity(
-                                isIndividual: widget.isIndividual,
-                                inventoryCountingCode:
-                                    widget.inventoryCountingCode,
-                                consultedProductController:
-                                    widget.consultedProductController,
-                                indexOfProduct: index,
-                                addQuantity: () async {
-                                  addQuantity(
-                                    inventoryProvider: inventoryProvider,
-                                    configurationsProvider:
-                                        configurationsProvider,
-                                    indexOfProduct: index,
-                                  );
-                                },
-                                subtractQuantity: () async {
-                                  addQuantity(
-                                    isSubtract: true,
-                                    inventoryProvider: inventoryProvider,
-                                    configurationsProvider:
-                                        configurationsProvider,
-                                    indexOfProduct: index,
-                                  );
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
+        child: ListView.builder(
+          itemCount: inventoryProvider.productsCount,
+          itemBuilder: (context, index) {
+            if (inventoryProvider.productsCount == 1) {
+              _selectedIndex = index;
+            }
+
+            final startIndex = index * itensPerLine;
+            final endIndex = (startIndex + itensPerLine <= productsCount)
+                ? startIndex + itensPerLine
+                : productsCount;
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i = startIndex; i < endIndex; i++)
+                  Expanded(
+                    child: itemOfList(
+                      inventoryProvider: inventoryProvider,
+                      index: i,
+                      configurationsProvider: configurationsProvider,
                     ),
-                  );
-                },
-              ),
-            ),
-          ],
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );

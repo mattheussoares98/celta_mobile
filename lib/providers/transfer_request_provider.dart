@@ -82,7 +82,7 @@ class TransferRequestProvider with ChangeNotifier {
   Map<String, Map<String, Map<String, List<TransferRequestCartProductsModel>>>>
       _cartProducts = {};
 
-  getCartProducts({
+  List<TransferRequestCartProductsModel> getCartProducts({
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,

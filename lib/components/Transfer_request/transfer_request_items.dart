@@ -34,7 +34,7 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
               itemBuilder: (context, index) {
                 TransferRequestModel transfer =
                     transferRequestProvider.requestModels[index];
-                return GestureDetector(
+                return InkWell(
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,

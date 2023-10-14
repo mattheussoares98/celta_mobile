@@ -3,6 +3,8 @@ import 'package:celta_inventario/components/Transfer_between_stocks/transfer_bet
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_insert_quantity.dart';
 import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
+import 'package:celta_inventario/utils/responsive_items.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Global_widgets/title_and_value.dart';
@@ -29,12 +31,170 @@ class TransferBetweenStocksProductsItems extends StatefulWidget {
 
 class _TransferBetweenStocksProductsItemsState
     extends State<TransferBetweenStocksProductsItems> {
-  int selectedIndex = -1;
+  int _selectedIndex = -1;
+
+  changeFocusToConsultedProductFocusNode({
+    required TransferBetweenStocksProvider transferBetweenStocksProvider,
+  }) {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      //se não colocar em um future pra mudar o foco,
+      //não funciona corretamente
+      FocusScope.of(context).requestFocus(
+        transferBetweenStocksProvider.consultedProductFocusNode,
+      );
+    });
+  }
+
+  selectIndexAndFocus({
+    required TransferBetweenStocksProvider transferBetweenStocksProvider,
+    required int index,
+  }) {
+    widget.consultedProductController.text = "";
+
+    if (transferBetweenStocksProvider.productsCount == 1 ||
+        transferBetweenStocksProvider.isLoadingProducts ||
+        transferBetweenStocksProvider.isLoadingAdjustStock) {
+      return;
+    }
+
+    if (kIsWeb) {
+      if (_selectedIndex != index) {
+        setState(() {
+          _selectedIndex = index;
+          changeFocusToConsultedProductFocusNode(
+            transferBetweenStocksProvider: transferBetweenStocksProvider,
+          );
+        });
+      } else {
+        setState(() {
+          _selectedIndex = -1;
+        });
+      }
+      return;
+    }
+
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+
+      if (transferBetweenStocksProvider.consultedProductFocusNode.hasFocus &&
+          MediaQuery.of(context).viewInsets.bottom == 0) {
+        FocusScope.of(context).unfocus();
+        changeFocusToConsultedProductFocusNode(
+          transferBetweenStocksProvider: transferBetweenStocksProvider,
+        );
+      }
+      if (!transferBetweenStocksProvider.consultedProductFocusNode.hasFocus) {
+        changeFocusToConsultedProductFocusNode(
+          transferBetweenStocksProvider: transferBetweenStocksProvider,
+        );
+      }
+      return;
+    }
+
+    if (_selectedIndex == index) {
+      if (!transferBetweenStocksProvider.consultedProductFocusNode.hasFocus) {
+        changeFocusToConsultedProductFocusNode(
+          transferBetweenStocksProvider: transferBetweenStocksProvider,
+        );
+      } else {
+        setState(() {
+          _selectedIndex = -1;
+        });
+      }
+    }
+  }
+
+  Widget itemOfList({
+    required TransferBetweenStocksProvider transferBetweenStocksProvider,
+    required int index,
+  }) {
+    TransferBetweenStocksProductModel product =
+        transferBetweenStocksProvider.products[index];
+    return InkWell(
+      onTap: transferBetweenStocksProvider
+                  .isLoadingTypeStockAndJustifications ||
+              transferBetweenStocksProvider.isLoadingAdjustStock
+          ? null
+          : () {
+              transferBetweenStocksProvider
+                      .jsonAdjustStock["ProductPackingCode"] =
+                  product.ProductPackingCode;
+              transferBetweenStocksProvider.jsonAdjustStock["ProductCode"] =
+                  product.ProductCode;
+              selectIndexAndFocus(
+                transferBetweenStocksProvider: transferBetweenStocksProvider,
+                index: index,
+              );
+            },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Nome",
+                value: product.Name,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "PLU",
+                value: product.PriceLookUp,
+                otherWidget: TransferBetweenStocksAllStocks
+                    .transferBetweenStocksAllStocks(
+                  context: context,
+                  hasStocks: product.Stocks.length > 0,
+                  product: product,
+                  isLoading: transferBetweenStocksProvider.isLoadingAdjustStock,
+                ),
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Embalagem",
+                value: product.PackingQuantity,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Estoque atual",
+                value: ConvertString.convertToBrazilianNumber(
+                  product.CurrentStock,
+                ),
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Saldo estoque de venda",
+                value: ConvertString.convertToBrazilianNumber(
+                  product.SaldoEstoqueVenda,
+                ),
+                otherWidget: Icon(
+                  _selectedIndex != index
+                      ? Icons.arrow_drop_down_sharp
+                      : Icons.arrow_drop_up_sharp,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 30,
+                ),
+              ),
+              if (_selectedIndex == index)
+                TransferBetweenStocksInsertQuantity(
+                  consultedProductController: widget.consultedProductController,
+                  dropDownFormKey: widget.dropDownFormKey,
+                  insertQuantityFormKey: widget.insertQuantityFormKey,
+                  internalEnterpriseCode: widget.internalEnterpriseCode,
+                  index: index,
+                  getProductsWithCamera: widget.getProductsWithCamera,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
+    int itensPerLine = ResponsiveItems.getItensPerLine(context);
+    int productsCount = transferBetweenStocksProvider.productsCount;
+
     return Expanded(
       child: Column(
         mainAxisAlignment: transferBetweenStocksProvider.productsCount > 1
@@ -43,137 +203,29 @@ class _TransferBetweenStocksProductsItemsState
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: transferBetweenStocksProvider.productsCount,
+              itemCount: productsCount,
               itemBuilder: (context, index) {
-                TransferBetweenStocksProductModel product =
-                    transferBetweenStocksProvider.products[index];
-
                 if (transferBetweenStocksProvider.productsCount == 1) {
-                  selectedIndex = index;
+                  _selectedIndex = index;
                 }
-                return GestureDetector(
-                  onTap: transferBetweenStocksProvider
-                              .isLoadingTypeStockAndJustifications ||
-                          transferBetweenStocksProvider.isLoadingAdjustStock
-                      ? null
-                      : () {
-                          transferBetweenStocksProvider
-                                  .jsonAdjustStock["ProductPackingCode"] =
-                              product.ProductPackingCode;
-                          transferBetweenStocksProvider
-                                  .jsonAdjustStock["ProductCode"] =
-                              product.ProductCode;
-                          if (!transferBetweenStocksProvider
-                                  .consultedProductFocusNode.hasFocus &&
-                              selectedIndex == index) {
-                            //só cai aqui quando está exibindo a opção de
-                            //alterar/anular a quantidade de algum produto e ele
-                            //não está com o foco. Ao clicar nele novamnete, ao
-                            //invés de minimizá-lo, só altera o foco novamente
-                            //pra ele
 
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () {
-                              //se não colocar em um future pra mudar o foco,
-                              //não funciona corretamente
-                              FocusScope.of(context).requestFocus(
-                                transferBetweenStocksProvider
-                                    .consultedProductFocusNode,
-                              );
-                            });
-                            return;
-                          }
-                          if (selectedIndex != index) {
-                            widget.consultedProductController.clear();
-                            //necessário apagar o campo da quantidade quando
-                            //mudar de produto selecionado
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () {
-                              //se não colocar em um future pra mudar o foco,
-                              //não funciona corretamente
-                              FocusScope.of(context).requestFocus(
-                                transferBetweenStocksProvider
-                                    .consultedProductFocusNode,
-                              );
-                            });
+                final startIndex = index * itensPerLine;
+                final endIndex = (startIndex + itensPerLine <= productsCount)
+                    ? startIndex + itensPerLine
+                    : productsCount;
 
-                            setState(() {
-                              selectedIndex = index;
-                              //isso faz com que apareça os botões de "conferir"
-                              //e "liberar" somente no item selecionado
-                            });
-                          } else {
-                            FocusScope.of(context).unfocus();
-                            //quando clica no mesmo produto, fecha o teclado. Se
-                            //não fizer isso, o foco volta para o de consulta de
-                            //produtos
-                            setState(() {
-                              selectedIndex = -1;
-                            });
-                          }
-                        },
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Nome",
-                            value: product.Name,
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "PLU",
-                            value: product.PriceLookUp,
-                            otherWidget: TransferBetweenStocksAllStocks
-                                .transferBetweenStocksAllStocks(
-                              context: context,
-                              hasStocks: product.Stocks.length > 0,
-                              product: product,
-                              isLoading: transferBetweenStocksProvider
-                                  .isLoadingAdjustStock,
-                            ),
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Embalagem",
-                            value: product.PackingQuantity,
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Estoque atual",
-                            value: ConvertString.convertToBrazilianNumber(
-                              product.CurrentStock,
-                            ),
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Saldo estoque de venda",
-                            value: ConvertString.convertToBrazilianNumber(
-                              product.SaldoEstoqueVenda,
-                            ),
-                            otherWidget: Icon(
-                              selectedIndex != index
-                                  ? Icons.arrow_drop_down_sharp
-                                  : Icons.arrow_drop_up_sharp,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 30,
-                            ),
-                          ),
-                          if (selectedIndex == index)
-                            TransferBetweenStocksInsertQuantity(
-                              consultedProductController:
-                                  widget.consultedProductController,
-                              dropDownFormKey: widget.dropDownFormKey,
-                              insertQuantityFormKey:
-                                  widget.insertQuantityFormKey,
-                              internalEnterpriseCode:
-                                  widget.internalEnterpriseCode,
-                              index: index,
-                              getProductsWithCamera:
-                                  widget.getProductsWithCamera,
-                            ),
-                        ],
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (var i = startIndex; i < endIndex; i++)
+                      Expanded(
+                        child: itemOfList(
+                          index: i,
+                          transferBetweenStocksProvider:
+                              transferBetweenStocksProvider,
+                        ),
                       ),
-                    ),
-                  ),
+                  ],
                 );
               },
             ),

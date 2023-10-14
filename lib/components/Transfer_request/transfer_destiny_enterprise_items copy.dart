@@ -34,7 +34,7 @@ class _TransferDestinyEnterpriseItemsState
               itemBuilder: (context, index) {
                 TransferDestinyEnterpriseModel destinyEnterprise =
                     transferRequestProvider.destinyEnterprises[index];
-                return GestureDetector(
+                return InkWell(
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER,

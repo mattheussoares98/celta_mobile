@@ -20,7 +20,7 @@ class InventoryItems extends StatelessWidget {
           child: ListView.builder(
             itemCount: inventoryProvider.inventoryCount,
             itemBuilder: (context, index) {
-              return GestureDetector(
+              return InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.COUNTINGS,

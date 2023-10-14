@@ -5,6 +5,8 @@ import 'package:celta_inventario/components/Global_widgets/title_and_value.dart'
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
+import 'package:celta_inventario/utils/responsive_items.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,18 +30,38 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
 
   FocusNode _focusNode = FocusNode();
 
-  changeFocus({
+  changeFocusToConsultedProductFocusNode({
     required SaleRequestProvider saleRequestProvider,
+  }) {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      //se não colocar em um future pra mudar o foco,
+      //não funciona corretamente
+      FocusScope.of(context).requestFocus(
+        _focusNode,
+      );
+    });
+  }
+
+  selectIndexAndFocus({
     required int index,
+    required SaleRequestProvider saleRequestProvider,
   }) async {
-    if (!_focusNode.hasFocus && _selectedIndex == index) {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        FocusScope.of(context).requestFocus(
-          _focusNode,
-        );
-      });
+    if (kIsWeb) {
+      if (_selectedIndex != index) {
+        setState(() {
+          _selectedIndex = index;
+          changeFocusToConsultedProductFocusNode(
+            saleRequestProvider: saleRequestProvider,
+          );
+        });
+      } else {
+        setState(() {
+          _selectedIndex = -1;
+        });
+      }
       return;
     }
+
     if (_selectedIndex != index) {
       widget.textEditingController.text = "";
       widget.textEditingController.clear();
@@ -102,18 +124,183 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    SaleRequestProvider saleRequestProvider = Provider.of(context);
+  Widget itemOfList({
+    required SaleRequestProvider saleRequestProvider,
+    required int index,
+  }) {
     double? controllerInDouble = double.tryParse(
       widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
     );
 
+    var cartProducts =
+        saleRequestProvider.getCartProducts(widget.enterpriseCode);
+
+    SaleRequestCartProductsModel product = cartProducts[index];
+    return Card(
+      child: Column(
+        children: [
+          SaleRequestCartProductsItems.saleRequestCartProductsItems(
+            updateSelectedIndex: () {
+              setState(() {
+                _selectedIndex = -1;
+              });
+            },
+            saleRequestProvider: saleRequestProvider,
+            changeFocus: () => selectIndexAndFocus(
+              saleRequestProvider: saleRequestProvider,
+              index: index,
+            ),
+            context: context,
+            index: index,
+            product: product,
+            enterpriseCode: widget.enterpriseCode,
+            selectedIndex: _selectedIndex,
+          ),
+          if (_selectedIndex == index)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 55,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Preço venda",
+                              value: ConvertString.convertToBRL(
+                                product.RetailPracticedPrice,
+                              ),
+                            ),
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Mín. atacado",
+                              value: product.MinimumWholeQuantity.toString(),
+                            ),
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Preço atacado",
+                              value: ConvertString.convertToBRL(
+                                product.WholePracticedPrice,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 45,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(300, 60),
+                          ),
+                          onPressed: controllerInDouble == null ||
+                                  controllerInDouble == 0
+                              ? null
+                              : () {
+                                  ShowAlertDialog.showAlertDialog(
+                                      context: context,
+                                      title: "Atualizar o preço",
+                                      subtitle:
+                                          "Deseja realmente atualizar a quantidade e o preço?",
+                                      function: () {
+                                        updateProductInCart(
+                                          saleRequestProvider:
+                                              saleRequestProvider,
+                                          product: product,
+                                          index: index,
+                                        );
+
+                                        FocusScope.of(context).unfocus();
+                                      });
+                                },
+                          child: const Text("ATUALIZAR"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 55,
+                        child: InsertQuantityTextFormField(
+                          isLoading:
+                              saleRequestProvider.isLoadingSaveSaleRequest ||
+                                  saleRequestProvider.isLoadingProcessCart,
+                          lengthLimitingTextInputFormatter: 8,
+                          focusNode: _focusNode,
+                          textEditingController: widget.textEditingController,
+                          formKey: _formKey,
+                          onFieldSubmitted: () {
+                            ShowAlertDialog.showAlertDialog(
+                              context: context,
+                              title: "Atualizar o preço",
+                              subtitle:
+                                  "Deseja realmente atualizar a quantidade e o preço?",
+                              function: () => updateProductInCart(
+                                saleRequestProvider: saleRequestProvider,
+                                product: product,
+                                index: index,
+                              ),
+                            );
+                          },
+                          onChanged: () {
+                            setState(() {});
+                          },
+                          labelText: "Digite a nova quantidade",
+                          hintText: "Nova quantidade",
+                        ),
+                      ),
+                      Expanded(
+                        flex: 45,
+                        child: Column(
+                          children: [
+                            const FittedBox(
+                              child: Text(
+                                " NOVO PREÇO",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                            FittedBox(
+                              child: Text(
+                                getNewPrice(
+                                  product: product,
+                                ),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SaleRequestProvider saleRequestProvider = Provider.of(context);
+
     int cartProductsCount =
         saleRequestProvider.cartProductsCount(widget.enterpriseCode.toString());
 
-    var cartProducts =
-        saleRequestProvider.getCartProducts(widget.enterpriseCode);
+    int itensPerLine = ResponsiveItems.getItensPerLine(context);
 
     return Expanded(
       child: Column(
@@ -125,204 +312,26 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
               child: ListView.builder(
                 itemCount: cartProductsCount,
                 itemBuilder: (context, index) {
-                  SaleRequestCartProductsModel product = cartProducts[index];
+                  final startIndex = index * itensPerLine;
+                  final endIndex =
+                      (startIndex + itensPerLine <= cartProductsCount)
+                          ? startIndex + itensPerLine
+                          : cartProductsCount;
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 3),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              SaleRequestCartProductsItems
-                                  .saleRequestCartProductsItems(
-                                updateSelectedIndex: () {
-                                  setState(() {
-                                    _selectedIndex = -1;
-                                  });
-                                },
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (var i = startIndex; i < endIndex; i++)
+                            Expanded(
+                              child: itemOfList(
                                 saleRequestProvider: saleRequestProvider,
-                                changeFocus: () => changeFocus(
-                                  saleRequestProvider: saleRequestProvider,
-                                  index: index,
-                                ),
-                                context: context,
-                                index: index,
-                                product: product,
-                                enterpriseCode: widget.enterpriseCode,
-                                selectedIndex: _selectedIndex,
+                                index: i,
                               ),
-                              if (_selectedIndex == index)
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            flex: 55,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                TitleAndSubtitle
-                                                    .titleAndSubtitle(
-                                                  title: "Preço venda",
-                                                  value: ConvertString
-                                                      .convertToBRL(
-                                                    product
-                                                        .RetailPracticedPrice,
-                                                  ),
-                                                ),
-                                                TitleAndSubtitle
-                                                    .titleAndSubtitle(
-                                                  title: "Mín. atacado",
-                                                  value: product
-                                                          .MinimumWholeQuantity
-                                                      .toString(),
-                                                ),
-                                                TitleAndSubtitle
-                                                    .titleAndSubtitle(
-                                                  title: "Preço atacado",
-                                                  value: ConvertString
-                                                      .convertToBRL(
-                                                    product.WholePracticedPrice,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 45,
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                fixedSize: const Size(300, 60),
-                                              ),
-                                              onPressed: controllerInDouble ==
-                                                          null ||
-                                                      controllerInDouble == 0
-                                                  ? null
-                                                  : () {
-                                                      ShowAlertDialog
-                                                          .showAlertDialog(
-                                                              context: context,
-                                                              title:
-                                                                  "Atualizar o preço",
-                                                              subtitle:
-                                                                  "Deseja realmente atualizar a quantidade e o preço?",
-                                                              function: () {
-                                                                updateProductInCart(
-                                                                  saleRequestProvider:
-                                                                      saleRequestProvider,
-                                                                  product:
-                                                                      product,
-                                                                  index: index,
-                                                                );
-
-                                                                FocusScope.of(
-                                                                        context)
-                                                                    .unfocus();
-                                                              });
-                                                    },
-                                              child: const Text("ATUALIZAR"),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 55,
-                                            child: InsertQuantityTextFormField(
-                                              isLoading: saleRequestProvider
-                                                      .isLoadingSaveSaleRequest ||
-                                                  saleRequestProvider
-                                                      .isLoadingProcessCart,
-                                              lengthLimitingTextInputFormatter:
-                                                  8,
-                                              focusNode: _focusNode,
-                                              textEditingController:
-                                                  widget.textEditingController,
-                                              formKey: _formKey,
-                                              onFieldSubmitted: () {
-                                                ShowAlertDialog.showAlertDialog(
-                                                  context: context,
-                                                  title: "Atualizar o preço",
-                                                  subtitle:
-                                                      "Deseja realmente atualizar a quantidade e o preço?",
-                                                  function: () =>
-                                                      updateProductInCart(
-                                                    saleRequestProvider:
-                                                        saleRequestProvider,
-                                                    product: product,
-                                                    index: index,
-                                                  ),
-                                                );
-                                              },
-                                              onChanged: () {
-                                                setState(() {});
-                                              },
-                                              labelText:
-                                                  "Digite a nova quantidade",
-                                              hintText: "Nova quantidade",
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 45,
-                                            child: Column(
-                                              children: [
-                                                const FittedBox(
-                                                  child: Text(
-                                                    " NOVO PREÇO",
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                    ),
-                                                  ),
-                                                ),
-                                                FittedBox(
-                                                  child: Text(
-                                                    getNewPrice(
-                                                      product: product,
-                                                    ),
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
+                            ),
+                        ],
                       ),
                       if (index == cartProductsCount - 1 &&
                           cartProductsCount > 1)

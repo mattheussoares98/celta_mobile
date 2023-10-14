@@ -47,6 +47,14 @@ class FormFieldHelper {
           color: Colors.grey,
         ),
       ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          style: BorderStyle.solid,
+          width: 1,
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
@@ -101,8 +109,8 @@ class FormFieldHelper {
           1) {
         //verifica se tem mais de uma vírgula
         return 'Carácter inválido';
-      } else if (double.tryParse(value) == 0 ||
-          double.tryParse(value) == null) {
+      } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == 0 ||
+          double.tryParse(value.replaceAll(RegExp(r','), '.')) == null) {
         return "Digite uma quantidade";
       }
       return null;

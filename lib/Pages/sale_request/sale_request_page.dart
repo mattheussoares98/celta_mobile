@@ -2,6 +2,7 @@ import 'package:celta_inventario/Pages/sale_request/sale_request_insert_customer
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/convert_string.dart';
@@ -97,7 +98,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         return true;
       },
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: kIsWeb ? false : true,
         appBar: AppBar(
           title: FittedBox(
             child: Text(
@@ -141,7 +142,6 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                           setState(() {
                             _selectedIndex = 2;
                           });
-                          saleRequestProvider.clearProducts();
                         },
                       ),
                       Positioned(

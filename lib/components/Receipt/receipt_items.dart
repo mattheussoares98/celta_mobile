@@ -30,7 +30,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
             itemCount: widget.receiptProvider.receiptCount,
             itemBuilder: (context, index) {
               ReceiptModel receipt = widget.receiptProvider.receipts[index];
-              return GestureDetector(
+              return InkWell(
                 onTap: () {
                   if (widget.receiptProvider.isLoadingLiberateCheck) {
                     //não permite mudar o recebimento enquanto está carregando uma liberação

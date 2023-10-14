@@ -4,6 +4,7 @@ import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Components/Global_widgets/search_widget.dart';
@@ -46,6 +47,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
         return true;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: kIsWeb ? false : true,
         appBar: AppBar(
           title: const Text(
             'AJUSTE DE ESTOQUE  ',

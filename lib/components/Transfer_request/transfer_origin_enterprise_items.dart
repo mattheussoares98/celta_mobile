@@ -32,7 +32,7 @@ class _TransferOriginEnterpriseItemsState
               itemBuilder: (context, index) {
                 TransferOriginEnterpriseModel originEnterprise =
                     transferRequestProvider.originEnterprises[index];
-                return GestureDetector(
+                return InkWell(
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER_DESTINY_ENTERPRISE,

@@ -23,7 +23,7 @@ class InventoryCountingItems extends StatelessWidget {
             itemCount: inventoryProvider
                 .getCountingsQuantity(arguments["codigoInternoInventario"]),
             itemBuilder: (ctx, index) {
-              return GestureDetector(
+              return InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.INVENTORY_PRODUCTS,

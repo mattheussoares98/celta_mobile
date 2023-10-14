@@ -45,7 +45,7 @@ class _TransferBetweenPackageProductsItemsState
               itemBuilder: (context, index) {
                 TransferBetweenPackageProductModel product =
                     transferBetweenPackageProvider.products[index];
-                return GestureDetector(
+                return InkWell(
                   onTap: transferBetweenPackageProvider
                               .isLoadingTypeStockAndJustifications ||
                           transferBetweenPackageProvider.isLoadingAdjustStock

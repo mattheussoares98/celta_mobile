@@ -63,7 +63,7 @@ class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
                       saleRequestProvider.requests[index - 1];
 
                   return Card(
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         saleRequestProvider.updatedCart = true;
                         Navigator.of(context).pushNamed(
