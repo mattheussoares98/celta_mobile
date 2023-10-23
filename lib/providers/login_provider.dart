@@ -4,6 +4,7 @@ import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:xml2json/xml2json.dart';
@@ -53,10 +54,13 @@ class LoginProvider with ChangeNotifier {
     _errorMessage = '';
     _isLoading = true;
     UserData.userName = user;
+    await PrefsInstance.setUserName();
 
     notifyListeners();
 
-    if (_changedEnterpriseNameOrUrlCcs || UserData.urlCCS == "") {
+    if (_changedEnterpriseNameOrUrlCcs ||
+        UserData.urlCCS == "" ||
+        !UserData.urlCCS.contains("https")) {
       _errorMessage =
           await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
         enterpriseNameOrUrlCCSController.text,
@@ -64,7 +68,7 @@ class LoginProvider with ChangeNotifier {
     }
 
     if (_errorMessage != "" &&
-        !_isUrl(
+        !ConvertString.isUrl(
           enterpriseNameOrUrlCCSController.text,
         )) {
       ShowSnackbarMessage.showMessage(
@@ -108,9 +112,8 @@ class LoginProvider with ChangeNotifier {
 
         _loginController?.add(true);
 
-        await PrefsInstance.setUserIdentity(UserData.crossIdentity);
-        await PrefsInstance.setUserName(user);
-
+        await PrefsInstance.setUserIdentity();
+        await PrefsInstance.setUrlCcsAndEnterpriseName();
         await FirebaseHelper.addCcsClientInFirebase();
       }
     } catch (e) {
@@ -126,19 +129,13 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isUrl(String text) {
-    return text.toLowerCase().contains('http') &&
-        text.toLowerCase().contains('//') &&
-        text.toLowerCase().contains(':') &&
-        text.toLowerCase().contains('ccs');
-  }
-
   logout() async {
-    await PrefsInstance.setUserIdentity("");
-    await PrefsInstance.setUrlCcs("");
-
     UserData.crossIdentity = "";
     UserData.urlCCS = "";
+
+    await PrefsInstance.setUserIdentity();
+    await PrefsInstance.setUrlCcsAndEnterpriseName();
+
     _loginController?.add(false);
   }
 }

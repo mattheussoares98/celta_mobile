@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:celta_inventario/components/Inicial_pages/auth_form.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -49,6 +50,7 @@ class _LoginPageState extends State<LoginPage>
     _animationController!.forward();
     final _key = GlobalKey<FormState>();
     return Scaffold(
+      resizeToAvoidBottomInset: kIsWeb ? false : true,
       body: Stack(
         children: [
           Container(

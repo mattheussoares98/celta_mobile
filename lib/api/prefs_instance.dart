@@ -1,7 +1,6 @@
 // ignore_for_file: unused_element
 
 import 'dart:convert';
-
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,25 +94,28 @@ class PrefsInstance {
     return await _getString(prefsKeys: _PrefsKeys.urlCCS);
   }
 
-  static Future<void> setUrlCcs(String newUrlCcs) async {
-    await _setString(prefsKeys: _PrefsKeys.urlCCS, value: newUrlCcs);
+  static Future<void> setUrlCcsAndEnterpriseName() async {
+    await _setString(
+      prefsKeys: _PrefsKeys.urlCCS,
+      value: UserData.urlCCS,
+    );
+    await _setString(
+      prefsKeys: _PrefsKeys.enterpriseName,
+      value: UserData.enterpriseName,
+    );
   }
 
   static Future<String> getEnterpriseName() async {
     return await _getString(prefsKeys: _PrefsKeys.enterpriseName);
   }
 
-  static Future<void> setEnterpriseName(String newEnterpriseName) async {
+  static Future<void> setUserIdentity() async {
     await _setString(
-        prefsKeys: _PrefsKeys.enterpriseName, value: newEnterpriseName);
+        prefsKeys: _PrefsKeys.userIdentity, value: UserData.crossIdentity);
   }
 
-  static Future<void> setUserIdentity(String newIdentity) async {
-    await _setString(prefsKeys: _PrefsKeys.userIdentity, value: newIdentity);
-  }
-
-  static Future<void> setUserName(String userName) async {
-    await _setString(prefsKeys: _PrefsKeys.user, value: userName);
+  static Future<void> setUserName() async {
+    await _setString(prefsKeys: _PrefsKeys.user, value: UserData.userName);
   }
 
   static Future<void> setCustomerSaleRequest(String newCustomers) async {
@@ -181,12 +183,14 @@ class PrefsInstance {
   }) async {
     userController.text = await PrefsInstance.getUserName();
     UserData.userName = userController.text;
-
     UserData.urlCCS = await PrefsInstance.getUrlCcs();
+    UserData.enterpriseName = await PrefsInstance.getEnterpriseName();
 
-    enterpriseNameOrUrlCCSController.text =
-        await PrefsInstance.getEnterpriseName();
-    UserData.enterpriseName = enterpriseNameOrUrlCCSController.text;
+    if (UserData.enterpriseName != "") {
+      enterpriseNameOrUrlCCSController.text = UserData.enterpriseName;
+    } else {
+      enterpriseNameOrUrlCCSController.text = UserData.urlCCS;
+    }
   }
 
   static Future<bool> getUseAutoScan() async {

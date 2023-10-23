@@ -45,6 +45,13 @@ class ConvertString {
     return newText;
   }
 
+  static bool isUrl(String text) {
+    return text.toLowerCase().contains('http') &&
+        text.toLowerCase().contains('//') &&
+        text.toLowerCase().contains(':') &&
+        text.toLowerCase().contains('ccs');
+  }
+
   // static String convertToRemoveSpecialCaracters(dynamic value) {
   //deixar comentado pra se precisar usar futuramente
   //   value = value.toString();

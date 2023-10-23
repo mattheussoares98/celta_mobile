@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class FirebaseClientModel {
   final String enterpriseName;
   final String urlCCS;
@@ -7,10 +9,18 @@ class FirebaseClientModel {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'enterpriseName':
-          enterpriseName.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
-      'urlCCS': urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
-    };
+    if (kIsWeb) {
+      return {
+        'enterpriseName':
+            enterpriseName.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+        'urlCCSWeb': urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+      };
+    } else {
+      return {
+        'enterpriseName':
+            enterpriseName.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+        'urlCCS': urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+      };
+    }
   }
 }
