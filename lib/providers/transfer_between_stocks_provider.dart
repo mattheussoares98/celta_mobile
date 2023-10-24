@@ -152,11 +152,6 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }) async {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
-    _originStockTypes.clear();
-    _destinyStockTypes.clear();
-    _justifications.clear();
-    _justificationStockTypeName = "";
-    _justificationHasStockType = false;
 
     notifyListeners();
 
@@ -208,9 +203,10 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       configurationsProvider: configurationsProvider,
     );
 
-    if (_products.isNotEmpty) {
-      await _getStockTypeAndJustifications(context);
-      return;
+    if (_justifications.isEmpty ||
+        _destinyStockTypes.isEmpty ||
+        _originStockTypes.isEmpty) {
+      await getStockTypeAndJustifications(context);
     }
 
     if (_errorMessageGetProducts != "") {
@@ -316,7 +312,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getStockTypeAndJustifications(BuildContext context) async {
+  Future<void> getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
     _justificationHasStockType = false;

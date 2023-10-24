@@ -92,8 +92,36 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                   },
                   consultProductController: _consultProductController,
                 ),
-                TransferBetweenStocksJustificationsAndStocksDropwdownWidget(
-                  dropDownFormKey: _dropDownFormKey,
+                Row(
+                  children: [
+                    Expanded(
+                      child:
+                          TransferBetweenStocksJustificationsAndStocksDropwdownWidget(
+                        dropDownFormKey: _dropDownFormKey,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.refresh,
+                        size: 30,
+                        color: transferBetweenStocksProvider
+                                    .isLoadingTypeStockAndJustifications ||
+                                transferBetweenStocksProvider
+                                    .isLoadingAdjustStock
+                            ? Colors.grey
+                            : Theme.of(context).colorScheme.primary,
+                      ),
+                      tooltip: "Consultar justificativas e estoques",
+                      onPressed: transferBetweenStocksProvider
+                                  .isLoadingTypeStockAndJustifications ||
+                              transferBetweenStocksProvider.isLoadingAdjustStock
+                          ? null
+                          : () async {
+                              await transferBetweenStocksProvider
+                                  .getStockTypeAndJustifications(context);
+                            },
+                    ),
+                  ],
                 ),
               ],
             ),
