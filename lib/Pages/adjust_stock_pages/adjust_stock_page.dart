@@ -89,8 +89,34 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                   },
                   consultProductController: _consultProductController,
                 ),
-                AdjustStockJustificationsStockDropwdownWidget(
-                  dropDownFormKey: _dropDownFormKey,
+                Row(
+                  children: [
+                    Expanded(
+                      child: AdjustStockJustificationsStockDropwdownWidget(
+                        dropDownFormKey: _dropDownFormKey,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.refresh,
+                        size: 30,
+                        color: adjustStockProvider
+                                    .isLoadingTypeStockAndJustifications ||
+                                adjustStockProvider.isLoadingAdjustStock
+                            ? Colors.grey
+                            : Theme.of(context).colorScheme.primary,
+                      ),
+                      tooltip: "Consultar justificativas e estoques",
+                      onPressed: adjustStockProvider
+                                  .isLoadingTypeStockAndJustifications ||
+                              adjustStockProvider.isLoadingAdjustStock
+                          ? null
+                          : () async {
+                              await adjustStockProvider
+                                  .getStockTypeAndJustifications(context);
+                            },
+                    ),
+                  ],
                 ),
               ],
             ),

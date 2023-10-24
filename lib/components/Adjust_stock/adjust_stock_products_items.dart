@@ -169,6 +169,26 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                   size: 30,
                 ),
               ),
+              if (adjustStockProvider.lastUpdatedQuantity != "" &&
+                  adjustStockProvider.indexOfLastProductChangedStockQuantity ==
+                      index)
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "Última quantidade confirmada: ${adjustStockProvider.lastUpdatedQuantity}",
+                      style: TextStyle(
+                        fontSize: 100,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'BebasNeue',
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 1,
+                        wordSpacing: 4,
+                      ),
+                    ),
+                  ),
+                ),
               if (_selectedIndex == index)
                 AdjustStockInsertQuantity(
                   consultedProductController: widget.consultedProductController,
@@ -177,6 +197,11 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                   internalEnterpriseCode: widget.internalEnterpriseCode,
                   index: index,
                   getProductWithCamera: widget.getProductWithCamera,
+                  updateSelectedIndex: () {
+                    setState(() {
+                      _selectedIndex = -1;
+                    });
+                  },
                 ),
             ],
           ),

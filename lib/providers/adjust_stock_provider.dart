@@ -139,10 +139,10 @@ class AdjustStockProvider with ChangeNotifier {
   }) async {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
-    _stockTypes.clear();
-    _justifications.clear();
-    _justificationStockTypeName = "";
-    _justificationHasStockType = false;
+    // _stockTypes.clear();
+    // _justifications.clear();
+    // _justificationStockTypeName = "";
+    // _justificationHasStockType = false;
 
     notifyListeners();
 
@@ -187,17 +187,16 @@ class AdjustStockProvider with ChangeNotifier {
     _products.clear();
     notifyListeners();
 
+    if (_justifications.isEmpty || _stockTypes.isEmpty) {
+      await getStockTypeAndJustifications(context);
+    }
+
     await _getProducts(
       enterpriseCode: enterpriseCode,
       controllerText: controllerText,
       context: context,
       isLegacyCodeSearch: configurationsProvider.useLegacyCode,
     );
-
-    if (_products.isNotEmpty) {
-      await _getStockTypeAndJustifications(context);
-      return;
-    }
 
     if (_errorMessageGetProducts != "") {
       //quando da erro para consultar os produtos, muda o foco novamente para o
@@ -285,7 +284,7 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getStockTypeAndJustifications(BuildContext context) async {
+  Future<void> getStockTypeAndJustifications(BuildContext context) async {
     _isLoadingTypeStockAndJustifications = true;
     _errorMessageTypeStockAndJustifications = "";
     _justificationHasStockType = false;

@@ -174,13 +174,13 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           child: Text(
                             adjustStockProvider.justificationHasStockType
                                 ? adjustStockProvider.justificationStockTypeName
-                                : "Estoque de origem",
+                                : "Estoque de destino",
                           ),
                         ),
               isExpanded: true,
               hint: Center(
                 child: Text(
-                  'Estoque de origem',
+                  'Estoque de destino',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),

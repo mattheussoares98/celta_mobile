@@ -13,9 +13,11 @@ class AdjustStockInsertQuantity extends StatefulWidget {
   final int internalEnterpriseCode;
   final int index;
   final Function getProductWithCamera;
+  final Function updateSelectedIndex;
 
   const AdjustStockInsertQuantity({
     required this.internalEnterpriseCode,
+    required this.updateSelectedIndex,
     required this.getProductWithCamera,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
@@ -60,6 +62,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
 
     if (adjustStockProvider.errorMessageAdjustStock == "") {
       widget.consultedProductController.clear();
+      widget.updateSelectedIndex();
 
       if (configurationsProvider.useAutoScan) {
         await widget.getProductWithCamera();
@@ -181,29 +184,6 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
               ],
             ),
           ),
-          if (adjustStockProvider.lastUpdatedQuantity != "" &&
-              // adjustStockProvider
-              //         .indexOfLastProductChangedStockQuantity !=
-              //     -1 &&
-              adjustStockProvider.indexOfLastProductChangedStockQuantity ==
-                  widget.index)
-            FittedBox(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "Última quantidade confirmada: ${adjustStockProvider.lastUpdatedQuantity}",
-                  style: TextStyle(
-                    fontSize: 100,
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'BebasNeue',
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 1,
-                    wordSpacing: 4,
-                  ),
-                ),
-              ),
-            ),
         ],
       ),
     );
