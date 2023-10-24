@@ -434,10 +434,12 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getRequestModels() async {
+  Future<void> getRequestModels({bool isConsultingAgain = false}) async {
     _errorMessageRequestModel = '';
     _isLoadingRequestModel = true;
     _destinyEnterprises.clear();
+
+    if (isConsultingAgain) notifyListeners();
 
     try {
       await SoapHelper.soapPost(
@@ -473,10 +475,13 @@ class TransferRequestProvider with ChangeNotifier {
 
   Future<void> getOriginEnterprises({
     required int requestTypeCode,
+    bool isConsultingAgain = false,
   }) async {
     _errorMessageOriginEnterprise = '';
     _isLoadingOriginEnterprise = true;
     _originEnterprises.clear();
+
+    if (isConsultingAgain) notifyListeners();
 
     try {
       await SoapHelper.soapPost(
@@ -552,10 +557,13 @@ class TransferRequestProvider with ChangeNotifier {
   Future<void> getDestinyEnterprises({
     required int requestTypeCode,
     required int enterpriseOriginCode,
+    bool isConsultingAgain = false,
   }) async {
     _errorMessageDestinyEnterprise = '';
     _isLoadingDestinyEnterprise = true;
     _destinyEnterprises.clear();
+
+    if (isConsultingAgain) notifyListeners();
 
     try {
       await SoapHelper.soapPost(

@@ -65,6 +65,21 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
               "Modelos de pedido",
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: saleRequestProvider.isLoadingRequests
+                  ? null
+                  : () async {
+                      await saleRequestProvider.getRequests(
+                        enterpriseCode: arguments["CodigoInterno_Empresa"],
+                        context: context,
+                        isConsultingAgain: true,
+                      );
+                    },
+              tooltip: "Consultar inventários",
+              icon: const Icon(Icons.refresh),
+            ),
+          ],
           leading: IconButton(
             onPressed: saleRequestProvider.isLoadingRequests
                 ? null
@@ -77,38 +92,45 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
             ),
           ),
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            if (saleRequestProvider.isLoadingRequests)
-              Expanded(
-                child: ConsultingWidget.consultingWidget(
-                  title: 'Consultando modelos de pedido',
+        body: RefreshIndicator(
+          onRefresh: () => saleRequestProvider.getRequests(
+            enterpriseCode: arguments["CodigoInterno_Empresa"],
+            context: context,
+            isConsultingAgain: true,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              if (saleRequestProvider.isLoadingRequests)
+                Expanded(
+                  child: ConsultingWidget.consultingWidget(
+                    title: 'Consultando modelos de pedido',
+                  ),
                 ),
-              ),
-            if (!saleRequestProvider.isLoadingRequests)
-              SaleRequestModelsItems(
-                hasDefaultRequestModel: _hasDefaultRequestModel,
-                enterpriseCode: arguments["CodigoInterno_Empresa"],
-                saleRequestTypeCode:
-                    arguments["CodigoInternoVendaMobile_ModeloPedido"],
-              ),
-            if (saleRequestProvider.errorMessageRequests != "" &&
-                saleRequestProvider.productsCount == 0)
-              Expanded(
-                child: TryAgainWidget.tryAgain(
-                  errorMessage: saleRequestProvider.errorMessageRequests,
-                  request: () async {
-                    setState(() {});
-                    await saleRequestProvider.getRequests(
-                      enterpriseCode: arguments["CodigoInterno_Empresa"],
-                      context: context,
-                    );
-                  },
+              if (!saleRequestProvider.isLoadingRequests)
+                SaleRequestModelsItems(
+                  hasDefaultRequestModel: _hasDefaultRequestModel,
+                  enterpriseCode: arguments["CodigoInterno_Empresa"],
+                  saleRequestTypeCode:
+                      arguments["CodigoInternoVendaMobile_ModeloPedido"],
                 ),
-              ),
-          ],
+              if (saleRequestProvider.errorMessageRequests != "" &&
+                  saleRequestProvider.productsCount == 0)
+                Expanded(
+                  child: TryAgainWidget.tryAgain(
+                    errorMessage: saleRequestProvider.errorMessageRequests,
+                    request: () async {
+                      setState(() {});
+                      await saleRequestProvider.getRequests(
+                        enterpriseCode: arguments["CodigoInterno_Empresa"],
+                        context: context,
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -14,9 +14,7 @@ class EnterprisePage extends StatefulWidget {
 
 class EnterprisePageState extends State<EnterprisePage> {
   getEnterprises(EnterpriseProvider enterpriseProvider) async {
-    await enterpriseProvider.getEnterprises(
-      context: context,
-    );
+    await enterpriseProvider.getEnterprises();
   }
 
   @override
@@ -40,29 +38,49 @@ class EnterprisePageState extends State<EnterprisePage> {
         title: const Text(
           'EMPRESAS',
         ),
-      ),
-      body: Column(
-        children: [
-          if (enterpriseProvider.isLoadingEnterprises)
-            Expanded(
-              child: ConsultingWidget.consultingWidget(
-                  title: 'Consultando empresas'),
-            ),
-          if (enterpriseProvider.errorMessage != '' &&
-              !enterpriseProvider.isLoadingEnterprises)
-            Expanded(
-              child: TryAgainWidget.tryAgain(
-                errorMessage: enterpriseProvider.errorMessage,
-                request: () async {
-                  setState(() {});
-                  await getEnterprises(enterpriseProvider);
-                },
-              ),
-            ),
-          if (enterpriseProvider.errorMessage == "" &&
-              !enterpriseProvider.isLoadingEnterprises)
-            Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
+        actions: [
+          IconButton(
+            onPressed: enterpriseProvider.isLoadingEnterprises
+                ? null
+                : () async {
+                    await enterpriseProvider.getEnterprises(
+                      isConsultingAgain: true,
+                    );
+                  },
+            tooltip: "Consultar empresas",
+            icon: const Icon(Icons.refresh),
+          ),
         ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await enterpriseProvider.getEnterprises(
+            isConsultingAgain: true,
+          );
+        },
+        child: Column(
+          children: [
+            if (enterpriseProvider.isLoadingEnterprises)
+              Expanded(
+                child: ConsultingWidget.consultingWidget(
+                    title: 'Consultando empresas'),
+              ),
+            if (enterpriseProvider.errorMessage != '' &&
+                !enterpriseProvider.isLoadingEnterprises)
+              Expanded(
+                child: TryAgainWidget.tryAgain(
+                  errorMessage: enterpriseProvider.errorMessage,
+                  request: () async {
+                    setState(() {});
+                    await getEnterprises(enterpriseProvider);
+                  },
+                ),
+              ),
+            if (enterpriseProvider.errorMessage == "" &&
+                !enterpriseProvider.isLoadingEnterprises)
+              Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
+          ],
+        ),
       ),
     );
   }

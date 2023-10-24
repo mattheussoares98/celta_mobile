@@ -58,36 +58,61 @@ class _TransferDestinyEnterprisePageState
               Icons.arrow_back_outlined,
             ),
           ),
-        ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (transferRequestProvider.isLoadingDestinyEnterprise)
-              Expanded(
-                child: ConsultingWidget.consultingWidget(
-                  title: 'Consultando empresas de destino',
-                ),
-              ),
-            if (!transferRequestProvider.isLoadingDestinyEnterprise &&
-                transferRequestProvider.errorMessageDestinyEnterprise == "")
-              const TransferDestinyEnterpriseItems(),
-            if (transferRequestProvider.errorMessageDestinyEnterprise != '' &&
-                !transferRequestProvider.isLoadingDestinyEnterprise)
-              Expanded(
-                child: TryAgainWidget.tryAgain(
-                    errorMessage:
-                        transferRequestProvider.errorMessageDestinyEnterprise,
-                    request: () async {
-                      setState(() {});
+          actions: [
+            IconButton(
+              onPressed: transferRequestProvider.isLoadingDestinyEnterprise
+                  ? null
+                  : () async {
                       await transferRequestProvider.getDestinyEnterprises(
                         enterpriseOriginCode: arguments["enterpriseOriginCode"],
                         requestTypeCode: arguments["requestTypeCode"],
+                        isConsultingAgain: true,
                       );
-                    }),
-              ),
+                    },
+              tooltip: "Consultar inventários",
+              icon: const Icon(Icons.refresh),
+            ),
           ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await transferRequestProvider.getDestinyEnterprises(
+              enterpriseOriginCode: arguments["enterpriseOriginCode"],
+              requestTypeCode: arguments["requestTypeCode"],
+              isConsultingAgain: true,
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (transferRequestProvider.isLoadingDestinyEnterprise)
+                Expanded(
+                  child: ConsultingWidget.consultingWidget(
+                    title: 'Consultando empresas de destino',
+                  ),
+                ),
+              if (!transferRequestProvider.isLoadingDestinyEnterprise &&
+                  transferRequestProvider.errorMessageDestinyEnterprise == "")
+                const TransferDestinyEnterpriseItems(),
+              if (transferRequestProvider.errorMessageDestinyEnterprise != '' &&
+                  !transferRequestProvider.isLoadingDestinyEnterprise)
+                Expanded(
+                  child: TryAgainWidget.tryAgain(
+                      errorMessage:
+                          transferRequestProvider.errorMessageDestinyEnterprise,
+                      request: () async {
+                        setState(() {});
+                        await transferRequestProvider.getDestinyEnterprises(
+                          enterpriseOriginCode:
+                              arguments["enterpriseOriginCode"],
+                          requestTypeCode: arguments["requestTypeCode"],
+                        );
+                      }),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -57,35 +57,57 @@ class _TransferOriginEnterprisePageState
               Icons.arrow_back_outlined,
             ),
           ),
-        ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (transferRequestProvider.isLoadingOriginEnterprise)
-              Expanded(
-                child: ConsultingWidget.consultingWidget(
-                  title: 'Consultando empresas de origem',
-                ),
-              ),
-            if (!transferRequestProvider.isLoadingOriginEnterprise &&
-                transferRequestProvider.errorMessageOriginEnterprise == "")
-              const TransferOriginEnterpriseItems(),
-            if (transferRequestProvider.errorMessageOriginEnterprise != '' &&
-                !transferRequestProvider.isLoadingOriginEnterprise)
-              Expanded(
-                child: TryAgainWidget.tryAgain(
-                    errorMessage:
-                        transferRequestProvider.errorMessageOriginEnterprise,
-                    request: () async {
-                      setState(() {});
+          actions: [
+            IconButton(
+              onPressed: transferRequestProvider.isLoadingOriginEnterprise
+                  ? null
+                  : () async {
                       await transferRequestProvider.getOriginEnterprises(
                         requestTypeCode: requestTypeCode,
+                        isConsultingAgain: true,
                       );
-                    }),
-              ),
+                    },
+              tooltip: "Consultar inventários",
+              icon: const Icon(Icons.refresh),
+            ),
           ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await transferRequestProvider.getOriginEnterprises(
+              requestTypeCode: requestTypeCode,
+              isConsultingAgain: true,
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (transferRequestProvider.isLoadingOriginEnterprise)
+                Expanded(
+                  child: ConsultingWidget.consultingWidget(
+                    title: 'Consultando empresas de origem',
+                  ),
+                ),
+              if (!transferRequestProvider.isLoadingOriginEnterprise &&
+                  transferRequestProvider.errorMessageOriginEnterprise == "")
+                const TransferOriginEnterpriseItems(),
+              if (transferRequestProvider.errorMessageOriginEnterprise != '' &&
+                  !transferRequestProvider.isLoadingOriginEnterprise)
+                Expanded(
+                  child: TryAgainWidget.tryAgain(
+                      errorMessage:
+                          transferRequestProvider.errorMessageOriginEnterprise,
+                      request: () async {
+                        setState(() {});
+                        await transferRequestProvider.getOriginEnterprises(
+                          requestTypeCode: requestTypeCode,
+                        );
+                      }),
+                ),
+            ],
+          ),
         ),
       ),
     );

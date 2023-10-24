@@ -469,10 +469,13 @@ class SaleRequestProvider with ChangeNotifier {
   Future<void> getRequests({
     required int enterpriseCode,
     required BuildContext context,
+    bool? isConsultingAgain = false,
   }) async {
     _isLoadingRequests = true;
     _errorMessageRequests = "";
     _requests.clear();
+
+    if (isConsultingAgain!) notifyListeners();
 
     try {
       await SoapHelper.soapPost(

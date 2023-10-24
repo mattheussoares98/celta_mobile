@@ -37,37 +37,61 @@ class _ReceiptPageState extends State<ReceiptPage> {
         title: const Text(
           'RECEBIMENTOS',
         ),
-      ),
-      body: Column(
-        children: [
-          if (receiptProvider.isLoadingReceipt)
-            Expanded(
-              child: ConsultingWidget.consultingWidget(
-                  title: 'Consultando recebimentos'),
-            ),
-          if (receiptProvider.errorMessage != '' &&
-              receiptProvider.receiptCount == 0 &&
-              !receiptProvider.isLoadingReceipt)
-            Expanded(
-              child: TryAgainWidget.tryAgain(
-                  errorMessage: receiptProvider.errorMessage,
-                  request: () async {
-                    setState(() {});
+        actions: [
+          IconButton(
+            onPressed: receiptProvider.isLoadingReceipt
+                ? null
+                : () async {
                     await receiptProvider.getReceipt(
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       context: context,
+                      isSearchingAgain: true,
                     );
-                  }),
-            ),
-          if (!receiptProvider.isLoadingReceipt &&
-              receiptProvider.errorMessage == '')
-            Expanded(
-              child: ReceiptItems(
-                enterpriseCode: arguments["CodigoInterno_Empresa"],
-                receiptProvider: receiptProvider,
-              ),
-            ),
+                  },
+            tooltip: "Consultar recebimentos",
+            icon: const Icon(Icons.refresh),
+          ),
         ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await receiptProvider.getReceipt(
+            enterpriseCode: arguments["CodigoInterno_Empresa"],
+            context: context,
+            isSearchingAgain: true,
+          );
+        },
+        child: Column(
+          children: [
+            if (receiptProvider.isLoadingReceipt)
+              Expanded(
+                child: ConsultingWidget.consultingWidget(
+                    title: 'Consultando recebimentos'),
+              ),
+            if (receiptProvider.errorMessage != '' &&
+                receiptProvider.receiptCount == 0 &&
+                !receiptProvider.isLoadingReceipt)
+              Expanded(
+                child: TryAgainWidget.tryAgain(
+                    errorMessage: receiptProvider.errorMessage,
+                    request: () async {
+                      setState(() {});
+                      await receiptProvider.getReceipt(
+                        enterpriseCode: arguments["CodigoInterno_Empresa"],
+                        context: context,
+                      );
+                    }),
+              ),
+            if (!receiptProvider.isLoadingReceipt &&
+                receiptProvider.errorMessage == '')
+              Expanded(
+                child: ReceiptItems(
+                  enterpriseCode: arguments["CodigoInterno_Empresa"],
+                  receiptProvider: receiptProvider,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

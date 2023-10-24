@@ -40,29 +40,53 @@ class _InventoryPageState extends State<InventoryPage> {
         title: const Text(
           'INVENTÁRIOS',
         ),
-      ),
-      body: Column(
-        children: [
-          if (inventoryProvider.isLoadingInventorys)
-            Expanded(
-                child: ConsultingWidget.consultingWidget(
-                    title: 'Consultando inventários')),
-          if (inventoryProvider.errorMessage != '')
-            Expanded(
-              child: TryAgainWidget.tryAgain(
-                errorMessage: inventoryProvider.errorMessage,
-                request: () async => setState(() {
-                  inventoryProvider.getInventory(
-                    enterpriseCode: arguments["CodigoInterno_Empresa"],
-                    userIdentity: UserData.crossIdentity,
-                  );
-                }),
-              ),
-            ),
-          if (inventoryProvider.errorMessage == "" &&
-              !inventoryProvider.isLoadingInventorys)
-            const Expanded(child: const InventoryItems()),
+        actions: [
+          IconButton(
+            onPressed: inventoryProvider.isLoadingInventorys
+                ? null
+                : () async {
+                    await inventoryProvider.getInventory(
+                      enterpriseCode: arguments["CodigoInterno_Empresa"],
+                      userIdentity: UserData.crossIdentity,
+                      isConsultingAgain: true,
+                    );
+                  },
+            tooltip: "Consultar inventários",
+            icon: const Icon(Icons.refresh),
+          ),
         ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await inventoryProvider.getInventory(
+            enterpriseCode: arguments["CodigoInterno_Empresa"],
+            userIdentity: UserData.crossIdentity,
+            isConsultingAgain: true,
+          );
+        },
+        child: Column(
+          children: [
+            if (inventoryProvider.isLoadingInventorys)
+              Expanded(
+                  child: ConsultingWidget.consultingWidget(
+                      title: 'Consultando inventários')),
+            if (inventoryProvider.errorMessage != '')
+              Expanded(
+                child: TryAgainWidget.tryAgain(
+                  errorMessage: inventoryProvider.errorMessage,
+                  request: () async => setState(() {
+                    inventoryProvider.getInventory(
+                      enterpriseCode: arguments["CodigoInterno_Empresa"],
+                      userIdentity: UserData.crossIdentity,
+                    );
+                  }),
+                ),
+              ),
+            if (inventoryProvider.errorMessage == "" &&
+                !inventoryProvider.isLoadingInventorys)
+              const Expanded(child: const InventoryItems()),
+          ],
+        ),
       ),
     );
   }

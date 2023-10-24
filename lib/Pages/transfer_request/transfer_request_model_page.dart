@@ -51,33 +51,50 @@ class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
               Icons.arrow_back_outlined,
             ),
           ),
-        ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (transferRequestProvider.isLoadingRequestModel)
-              Expanded(
-                child: ConsultingWidget.consultingWidget(
-                  title: 'Consultando modelos de pedido',
-                ),
-              ),
-            if (!transferRequestProvider.isLoadingRequestModel &&
-                transferRequestProvider.errorMessageRequestModel == "")
-              const TransferRequestItems(),
-            if (transferRequestProvider.errorMessageRequestModel != '' &&
-                !transferRequestProvider.isLoadingRequestModel)
-              Expanded(
-                child: TryAgainWidget.tryAgain(
-                    errorMessage:
-                        transferRequestProvider.errorMessageRequestModel,
-                    request: () async {
-                      setState(() {});
-                      await transferRequestProvider.getRequestModels();
-                    }),
-              ),
+          actions: [
+            IconButton(
+              onPressed: transferRequestProvider.isLoadingRequestModel
+                  ? null
+                  : () async {
+                      transferRequestProvider.getRequestModels(
+                          isConsultingAgain: true);
+                    },
+              tooltip: "Consultar modelos de pedido",
+              icon: const Icon(Icons.refresh),
+            ),
           ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            transferRequestProvider.getRequestModels(isConsultingAgain: true);
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (transferRequestProvider.isLoadingRequestModel)
+                Expanded(
+                  child: ConsultingWidget.consultingWidget(
+                    title: 'Consultando modelos de pedido',
+                  ),
+                ),
+              if (!transferRequestProvider.isLoadingRequestModel &&
+                  transferRequestProvider.errorMessageRequestModel == "")
+                const TransferRequestItems(),
+              if (transferRequestProvider.errorMessageRequestModel != '' &&
+                  !transferRequestProvider.isLoadingRequestModel)
+                Expanded(
+                  child: TryAgainWidget.tryAgain(
+                      errorMessage:
+                          transferRequestProvider.errorMessageRequestModel,
+                      request: () async {
+                        setState(() {});
+                        await transferRequestProvider.getRequestModels();
+                      }),
+                ),
+            ],
+          ),
         ),
       ),
     );

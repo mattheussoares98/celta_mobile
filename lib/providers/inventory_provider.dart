@@ -76,12 +76,14 @@ class InventoryProvider with ChangeNotifier {
   Future<void> getInventory({
     required int enterpriseCode,
     required String? userIdentity,
+    bool? isConsultingAgain = false,
   }) async {
     _isLoadingInventorys = true;
     _inventorys.clear();
     _errorMessageInventorys = '';
     _countings.clear();
-    // notifyListeners();
+
+    if (isConsultingAgain!) notifyListeners();
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
 

@@ -17,7 +17,7 @@ class EnterpriseProvider with ChangeNotifier {
 
   bool get isLoadingEnterprises => _isLoadingEnterprises;
   Future getEnterprises({
-    required BuildContext context,
+    bool? isConsultingAgain = false,
   }) async {
     if (_isLoadingEnterprises) {
       return;
@@ -25,7 +25,7 @@ class EnterpriseProvider with ChangeNotifier {
     _enterprises.clear();
     _errorMessage = '';
     _isLoadingEnterprises = true;
-    // notifyListeners();
+    if (isConsultingAgain!) notifyListeners();
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
 
