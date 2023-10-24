@@ -8,7 +8,7 @@ import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Components/Global_widgets/consulting_widget.dart';
+import '../../Components/Global_widgets/consulting_widget.dart';
 
 class ReceiptConferencePage extends StatefulWidget {
   const ReceiptConferencePage({Key? key}) : super(key: key);

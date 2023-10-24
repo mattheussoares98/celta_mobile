@@ -3,7 +3,7 @@ import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dar
 import 'package:celta_inventario/Components/Global_widgets/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/receipt_provider.dart';
+import '../../providers/receipt_provider.dart';
 
 class ReceiptPage extends StatefulWidget {
   const ReceiptPage({Key? key}) : super(key: key);
