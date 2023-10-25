@@ -88,6 +88,8 @@ class MyDrawer extends StatelessWidget {
                   context: context,
                   url: 'https://www.celtaware.com.br',
                 );
+
+                Navigator.of(context).pop();
                 FirebaseHelper.addClickedInLink(
                   firebaseCallEnum: FirebaseCallEnum.aboutUs,
                 );
@@ -105,6 +107,8 @@ class MyDrawer extends StatelessWidget {
                   context: context,
                   url: 'https://www.instagram.com/celtaware_erp',
                 );
+                Navigator.of(context).pop();
+
                 FirebaseHelper.addClickedInLink(
                   firebaseCallEnum: FirebaseCallEnum.instagram,
                 );
@@ -122,6 +126,8 @@ class MyDrawer extends StatelessWidget {
                   context: context,
                   url: 'https://www.linkedin.com/company/celtaware',
                 );
+                Navigator.of(context).pop();
+
                 FirebaseHelper.addClickedInLink(
                   firebaseCallEnum: FirebaseCallEnum.linkedin,
                 );
@@ -139,6 +145,8 @@ class MyDrawer extends StatelessWidget {
                   context: context,
                   url: 'https://m.facebook.com/Celtaware',
                 );
+                Navigator.of(context).pop();
+
                 FirebaseHelper.addClickedInLink(
                   firebaseCallEnum: FirebaseCallEnum.facebook,
                 );
