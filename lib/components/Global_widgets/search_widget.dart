@@ -1,9 +1,7 @@
 import 'package:celta_inventario/components/Configurations/configurations_checkbox.dart';
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -125,19 +123,12 @@ class _SearchWidgetState extends State<SearchWidget> {
                               onTap: widget.isLoading
                                   ? null
                                   : () async {
-                                      if (kIsWeb) {
-                                        ShowSnackbarMessage.showMessage(
-                                          message:
-                                              "A câmera não funciona na versão web",
-                                          context: context,
-                                        );
-                                        return;
-                                      }
                                       FocusScope.of(context).unfocus();
                                       widget.consultProductController.clear();
 
                                       widget.consultProductController.text =
-                                          await ScanBarCode.scanBarcode();
+                                          await ScanBarCode.scanBarcode(
+                                              context);
 
                                       if (widget
                                               .consultProductController.text !=

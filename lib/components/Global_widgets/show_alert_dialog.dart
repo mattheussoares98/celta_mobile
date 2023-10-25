@@ -14,6 +14,7 @@ class ShowAlertDialog {
     double? cancelMessageSize = 40,
     bool? showConfirmAndCancelMessage = true,
     bool? showCloseAlertDialogButton = false,
+    Widget? otherWidgetAction,
   }) {
     showDialog(
       context: context,
@@ -40,7 +41,7 @@ class ShowAlertDialog {
           actionsPadding: const EdgeInsets.all(10),
           actions: [
             if (showConfirmAndCancelMessage == true)
-              FittedBox(
+              Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -75,8 +76,8 @@ class ShowAlertDialog {
                         ),
                       ),
                       onPressed: () {
-                        function();
                         Navigator.of(context).pop();
+                        function();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -95,12 +96,18 @@ class ShowAlertDialog {
                 ),
               ),
             if (showCloseAlertDialogButton == true)
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Fechar"),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Fechar",
+                    style: TextStyle(fontSize: subtitleSize),
+                  ),
+                ),
               ),
+            if (otherWidgetAction != null) otherWidgetAction,
           ],
         );
       },

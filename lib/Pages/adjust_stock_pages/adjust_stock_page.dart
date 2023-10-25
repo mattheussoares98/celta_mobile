@@ -102,14 +102,16 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                         size: 30,
                         color: adjustStockProvider
                                     .isLoadingTypeStockAndJustifications ||
-                                adjustStockProvider.isLoadingAdjustStock
+                                adjustStockProvider.isLoadingAdjustStock ||
+                                adjustStockProvider.isLoadingProducts
                             ? Colors.grey
                             : Theme.of(context).colorScheme.primary,
                       ),
                       tooltip: "Consultar justificativas e estoques",
                       onPressed: adjustStockProvider
                                   .isLoadingTypeStockAndJustifications ||
-                              adjustStockProvider.isLoadingAdjustStock
+                              adjustStockProvider.isLoadingAdjustStock ||
+                              adjustStockProvider.isLoadingProducts
                           ? null
                           : () async {
                               await adjustStockProvider
@@ -141,7 +143,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                     _consultProductController.clear();
 
                     _consultProductController.text =
-                        await ScanBarCode.scanBarcode();
+                        await ScanBarCode.scanBarcode(context);
 
                     if (_consultProductController.text == "") {
                       return;

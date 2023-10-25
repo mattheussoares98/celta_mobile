@@ -15,25 +15,17 @@ enum _PrefsKeys {
   mySoaps,
   useAutoScan,
   useLegacyCode,
+  showMessageToUseCameraInWebVersion,
 }
 
 class PrefsInstance {
   static late SharedPreferences _prefs;
   static Future<void> removeNotUsedPrefsKeys() async {}
 
-  static Future<bool> _keyHasString(String key) async {
-    _prefs = await SharedPreferences.getInstance();
-    bool hasValue = await _prefs.getString(key) != null &&
-        await _prefs.getString(key) != "";
-    return hasValue;
-  }
-
-  static Future<bool> _keyHasBool(String key) async {
+  static Future<bool> _prefsContainsKey(String key) async {
     _prefs = await SharedPreferences.getInstance();
 
-    bool hasValue =
-        await _prefs.getBool(key) != null && await _prefs.getBool(key) != false;
-    return hasValue;
+    return _prefs.containsKey(key);
   }
 
   static Future<void> _setString({
@@ -56,7 +48,7 @@ class PrefsInstance {
     required _PrefsKeys prefsKeys,
   }) async {
     _prefs = await SharedPreferences.getInstance();
-    if (await _keyHasString(prefsKeys.name)) {
+    if (await _prefsContainsKey(prefsKeys.name)) {
       return await _prefs.getString(prefsKeys.name)!;
     } else {
       return "";
@@ -67,7 +59,7 @@ class PrefsInstance {
     required _PrefsKeys prefsKeys,
   }) async {
     _prefs = await SharedPreferences.getInstance();
-    if (await _keyHasBool(prefsKeys.name)) {
+    if (await _prefsContainsKey(prefsKeys.name)) {
       return await _prefs.getBool(prefsKeys.name)!;
     } else {
       return false;
@@ -75,7 +67,7 @@ class PrefsInstance {
   }
 
   static Future<bool> isLogged() async {
-    return await _keyHasString(_PrefsKeys.userIdentity.name);
+    return await _prefsContainsKey(_PrefsKeys.userIdentity.name);
   }
 
   static Future<String> getUserIdentity() async {
@@ -199,5 +191,23 @@ class PrefsInstance {
 
   static Future<bool> getUseLegacyCode() async {
     return await _getBool(prefsKeys: _PrefsKeys.useLegacyCode);
+  }
+
+  static Future<void> setToNoShowAgainMessageToUseCameraInWebVersion() async {
+    await _setBool(
+        prefsKeys: _PrefsKeys.showMessageToUseCameraInWebVersion, value: false);
+  }
+
+  static Future<bool> getShowMessageToUseCameraInWebVersion() async {
+    if (!await _prefsContainsKey(
+        _PrefsKeys.showMessageToUseCameraInWebVersion.name)) {
+      await _setBool(
+        prefsKeys: _PrefsKeys.showMessageToUseCameraInWebVersion,
+        value: true,
+      );
+    }
+
+    return await _getBool(
+        prefsKeys: _PrefsKeys.showMessageToUseCameraInWebVersion);
   }
 }

@@ -197,7 +197,7 @@ class InventoryProvider with ChangeNotifier {
   }) async {
     if (consultProductController.text.isEmpty) {
       //se não digitar o ean ou plu, vai abrir a câmera
-      consultProductController.text = await ScanBarCode.scanBarcode();
+      consultProductController.text = await ScanBarCode.scanBarcode(context);
     }
 
     if (consultProductController.text.isEmpty) return;

@@ -107,7 +107,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   _consultProductController.clear();
 
                   _consultProductController.text =
-                      await ScanBarCode.scanBarcode();
+                      await ScanBarCode.scanBarcode(context);
 
                   if (_consultProductController.text != "") {
                     await receiptProvider.getProducts(

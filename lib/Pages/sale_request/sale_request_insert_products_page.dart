@@ -79,7 +79,7 @@ class _SaleRequestInsertProductsPageState
                   _searchProductTextEditingController.clear();
 
                   _searchProductTextEditingController.text =
-                      await ScanBarCode.scanBarcode();
+                      await ScanBarCode.scanBarcode(context);
 
                   if (_searchProductTextEditingController.text == "") {
                     return;

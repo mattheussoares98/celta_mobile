@@ -323,7 +323,7 @@ class AdjustStockProvider with ChangeNotifier {
     FirebaseHelper.addSoapCallInFirebase(
       firebaseCallEnum: FirebaseCallEnum.adjustStockConfirmQuantity,
     );
-    print(jsonAdjustStock.toString());
+    //print(jsonAdjustStock.toString());
 
     _updateProductCodeAndProductPackingCode(indexOfProduct);
 

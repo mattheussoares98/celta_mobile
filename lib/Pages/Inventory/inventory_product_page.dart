@@ -40,7 +40,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
 
     if (_consultProductController.text.isEmpty) {
       //se não digitar o ean ou plu, vai abrir a câmera
-      _consultProductController.text = await ScanBarCode.scanBarcode();
+      _consultProductController.text = await ScanBarCode.scanBarcode(context);
     }
 
     if (_consultProductController.text.isEmpty) return;

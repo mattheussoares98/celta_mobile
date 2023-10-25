@@ -107,14 +107,17 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                         color: transferBetweenStocksProvider
                                     .isLoadingTypeStockAndJustifications ||
                                 transferBetweenStocksProvider
-                                    .isLoadingAdjustStock
+                                    .isLoadingAdjustStock ||
+                                transferBetweenStocksProvider.isLoadingProducts
                             ? Colors.grey
                             : Theme.of(context).colorScheme.primary,
                       ),
                       tooltip: "Consultar justificativas e estoques",
                       onPressed: transferBetweenStocksProvider
                                   .isLoadingTypeStockAndJustifications ||
-                              transferBetweenStocksProvider.isLoadingAdjustStock
+                              transferBetweenStocksProvider
+                                  .isLoadingAdjustStock ||
+                              transferBetweenStocksProvider.isLoadingProducts
                           ? null
                           : () async {
                               await transferBetweenStocksProvider
@@ -147,7 +150,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                   _consultProductController.clear();
 
                   _consultProductController.text =
-                      await ScanBarCode.scanBarcode();
+                      await ScanBarCode.scanBarcode(context);
 
                   if (_consultProductController.text == "") {
                     return;
