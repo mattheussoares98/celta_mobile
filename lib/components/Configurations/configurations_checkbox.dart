@@ -1,4 +1,5 @@
 import 'package:celta_inventario/providers/configurations_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +22,9 @@ class _ConfigurationsCheckboxState extends State<ConfigurationsCheckbox> {
     return Column(
         children: configurationsProvider.configurations
             .map(
-              (e) => !e.isConfigurationOfSearch &&
-                      widget.showOnlyConfigurationOfSearch
+              (e) => (!e.isConfigurationOfSearch &&
+                          widget.showOnlyConfigurationOfSearch) ||
+                      (kIsWeb && !e.showInWeb)
                   ? Container()
                   : Card(
                       child: CheckboxListTile(

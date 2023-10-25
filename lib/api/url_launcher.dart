@@ -6,7 +6,7 @@ class UrlLauncher {
     required String url,
     required BuildContext context,
   }) async {
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
 
     final Uri _url = Uri.parse(url);
     try {

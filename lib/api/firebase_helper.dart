@@ -174,10 +174,10 @@ class FirebaseHelper {
       batch.commit().then(
         (value) async {
           await PrefsInstance.clearSoaps();
-          print("soapInformation adicionada");
+          //print("soapInformation adicionada");
         },
       ).catchError((error) {
-        print("Erro para adicionar a soapInformation: $error");
+        //print("Erro para adicionar a soapInformation: $error");
       });
     }
   }
@@ -227,8 +227,8 @@ class FirebaseHelper {
       //utilizada
       _clientsCollection
           .add(firebaseClientModel.toJson())
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
+          .then((value) => value)
+          .catchError((error) => error);
     }
   }
 
@@ -284,8 +284,8 @@ class FirebaseHelper {
           },
           SetOptions(merge: true),
         )
-        .then((value) => print("Clicked link added"))
-        .catchError((error) => print("Failed to add clicked link: $error"));
+        .then((value) => value)
+        .catchError((error) => error);
   }
 
   static Future<QuerySnapshot<Object?>> _getQuerySnapshot({
@@ -312,7 +312,7 @@ class FirebaseHelper {
           },
           SetOptions(merge: true),
         )
-        .then((value) => print("urlCCSWeb added"))
-        .catchError((error) => print("Failed to add urlCCSWeb: $error"));
+        .then((value) => value)
+        .catchError((error) => error);
   }
 }

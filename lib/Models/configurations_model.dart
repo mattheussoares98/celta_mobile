@@ -4,6 +4,7 @@ class ConfigurationsModel {
   bool value;
   Function changeValue;
   String subtitle;
+  bool showInWeb;
 
   ConfigurationsModel({
     required this.isConfigurationOfSearch,
@@ -11,5 +12,6 @@ class ConfigurationsModel {
     required this.value,
     required this.changeValue,
     required this.subtitle,
+    required this.showInWeb,
   });
 }
