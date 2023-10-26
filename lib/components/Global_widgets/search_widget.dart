@@ -2,7 +2,9 @@ import 'package:celta_inventario/components/Configurations/configurations_checkb
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -97,6 +99,50 @@ class _SearchWidgetState extends State<SearchWidget> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (kIsWeb)
+                          TextButton(
+                            onPressed: widget.isLoading
+                                ? null
+                                : () async {
+                                    ClipboardData? clipboardData =
+                                        await Clipboard.getData('text/plain');
+                                    widget.consultProductController.text =
+                                        clipboardData?.text ?? '';
+                                  },
+                            child: const Text(
+                              "colar\ntexto",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        // InkWell(
+                        //   onTap: widget.isLoading
+                        //       ? null
+                        //       : () async {
+                        //           ClipboardData? clipboardData =
+                        //               await Clipboard.getData('text/plain');
+                        //           widget.consultProductController.text =
+                        //               clipboardData?.text ?? '';
+                        //         },
+                        //   child: Column(
+                        //     children: [
+                        //       Icon(
+                        //         Icons.content_paste_search_sharp,
+                        //         size: 35,
+                        //         color: widget.isLoading
+                        //             ? Colors.grey
+                        //             : Theme.of(context).primaryColor,
+                        //       ),
+                        //       const Text(
+                        //         "colar",
+                        //         style: TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         InkWell(
                           onTap: widget.isLoading
                               ? null

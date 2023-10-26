@@ -67,7 +67,10 @@ class PrefsInstance {
   }
 
   static Future<bool> isLogged() async {
-    return await _prefsContainsKey(_PrefsKeys.userIdentity.name);
+    _prefs = await SharedPreferences.getInstance();
+    ;
+    return await _prefs.containsKey(_PrefsKeys.userIdentity.name) &&
+        await _getString(prefsKeys: _PrefsKeys.userIdentity) != "";
   }
 
   static Future<String> getUserIdentity() async {

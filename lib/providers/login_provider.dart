@@ -58,9 +58,7 @@ class LoginProvider with ChangeNotifier {
 
     notifyListeners();
 
-    if (_changedEnterpriseNameOrUrlCcs ||
-        UserData.urlCCS == "" ||
-        !UserData.urlCCS.contains("https")) {
+    if (_changedEnterpriseNameOrUrlCcs || UserData.urlCCS == "") {
       _errorMessage =
           await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
         enterpriseNameOrUrlCCSController.text,

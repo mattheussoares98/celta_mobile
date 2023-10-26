@@ -120,17 +120,17 @@ class FirebaseHelper {
     }
 
     if (querySnapshot.size > 0) {
+      await _updateCcsAndEnterpriseNameByDocument(
+        documentSnapshot: querySnapshot.docs[0],
+        enterpriseNameOrurlCCSControllerText:
+            enterpriseNameOrurlCCSControllerText,
+      );
+
       errorMessage = "";
     } else {
       errorMessage =
           "A empresa não foi encontrada no banco de dados. Entre em contato com o suporte e solicite a URL do CCS para fazer o login";
     }
-
-    await _updateCcsAndEnterpriseNameByDocument(
-      documentSnapshot: querySnapshot.docs[0],
-      enterpriseNameOrurlCCSControllerText:
-          enterpriseNameOrurlCCSControllerText,
-    );
 
     return errorMessage;
   }

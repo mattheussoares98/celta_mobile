@@ -41,7 +41,7 @@ class ShowAlertDialog {
           actionsPadding: const EdgeInsets.all(10),
           actions: [
             if (showConfirmAndCancelMessage == true)
-              Expanded(
+              FittedBox(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
