@@ -61,13 +61,9 @@ class FirebaseHelper {
     if (data.containsKey('urlCCS') && !kIsWeb) {
       enterpriseNameOrurlCCSControllerText = data['urlCCS'];
       UserData.urlCCS = data['urlCCS'];
-
-      await PrefsInstance.setUrlCcsAndEnterpriseName();
     } else if (data.containsKey("urlCCSWeb") && kIsWeb) {
       enterpriseNameOrurlCCSControllerText = data['urlCCSWeb'];
       UserData.urlCCS = data['urlCCSWeb'];
-
-      await PrefsInstance.setUrlCcsAndEnterpriseName();
     } else if (data.containsKey('urlCCS') && kIsWeb) {
       enterpriseNameOrurlCCSControllerText = data['urlCCS'];
       UserData.urlCCS = data['urlCCS'];
@@ -83,8 +79,6 @@ class FirebaseHelper {
       enterpriseNameOrurlCCSControllerText = data['enterpriseName'];
       UserData.enterpriseName = data['enterpriseName'];
     }
-
-    await PrefsInstance.setUrlCcsAndEnterpriseName();
   }
 
   static Future<String> getUrlFromFirebaseAndReturnErrorIfHas(
@@ -104,14 +98,16 @@ class FirebaseHelper {
       );
     }
 
-    if (querySnapshot?.size == 0 &&
+    if (querySnapshot == null &&
         ConvertString.isUrl(enterpriseNameOrurlCCSControllerText)) {
       querySnapshot = await _getQuerySnapshot(
         collection: _clientsCollection,
         fieldToSearch: 'urlCCS',
         isEqualTo: enterpriseNameOrurlCCSControllerText,
       );
-    } else {
+    }
+
+    if (querySnapshot == null) {
       querySnapshot = await _getQuerySnapshot(
         collection: _clientsCollection,
         fieldToSearch: 'enterpriseName',
@@ -119,7 +115,7 @@ class FirebaseHelper {
       );
     }
 
-    if (querySnapshot.size > 0) {
+    if (querySnapshot != null) {
       await _updateCcsAndEnterpriseNameByDocument(
         documentSnapshot: querySnapshot.docs[0],
         enterpriseNameOrurlCCSControllerText:

@@ -55,10 +55,13 @@ class LoginProvider with ChangeNotifier {
     _isLoading = true;
     UserData.userName = user;
     await PrefsInstance.setUserName();
-
     notifyListeners();
 
-    if (_changedEnterpriseNameOrUrlCcs || UserData.urlCCS == "") {
+    if (_changedEnterpriseNameOrUrlCcs) {
+      if (ConvertString.isUrl(enterpriseNameOrUrlCCSController.text)) {
+        UserData.urlCCS = enterpriseNameOrUrlCCSController.text;
+      }
+
       _errorMessage =
           await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
         enterpriseNameOrUrlCCSController.text,
@@ -123,16 +126,16 @@ class LoginProvider with ChangeNotifier {
         context: context,
       );
     }
+
+    _changedEnterpriseNameOrUrlCcs = false;
     _isLoading = false;
     notifyListeners();
   }
 
   logout() async {
     UserData.crossIdentity = "";
-    UserData.urlCCS = "";
 
     await PrefsInstance.setUserIdentity();
-    await PrefsInstance.setUrlCcsAndEnterpriseName();
 
     _loginController?.add(false);
   }
