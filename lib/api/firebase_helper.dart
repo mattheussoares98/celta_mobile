@@ -115,7 +115,7 @@ class FirebaseHelper {
       );
     }
 
-    if (querySnapshot != null) {
+    if (querySnapshot.size > 0) {
       await _updateCcsAndEnterpriseNameByDocument(
         documentSnapshot: querySnapshot.docs[0],
         enterpriseNameOrurlCCSControllerText:

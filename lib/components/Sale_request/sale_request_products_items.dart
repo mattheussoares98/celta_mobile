@@ -194,7 +194,8 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 value: product.PLU.toString(),
-                otherWidget: ShowAllStocks.showAllStocks(
+
+                otherWidget: ShowAllStocksWidget(
                   productModel: product,
                   hasAssociatedsStock: product.StorageAreaAddress != "" ||
                       product.StockByEnterpriseAssociateds.length > 0,
@@ -204,6 +205,16 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                       product.StockByEnterpriseAssociateds.length,
                   stocksLength: product.Stocks.length,
                 ),
+                // otherWidget: ShowAllStocks.showAllStocks(
+                //   productModel: product,
+                //   hasAssociatedsStock: product.StorageAreaAddress != "" ||
+                //       product.StockByEnterpriseAssociateds.length > 0,
+                //   hasStocks: product.Stocks.length > 0,
+                //   context: context,
+                //   stockByEnterpriseAssociatedsLength:
+                //       product.StockByEnterpriseAssociateds.length,
+                //   stocksLength: product.Stocks.length,
+                // ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produto",
