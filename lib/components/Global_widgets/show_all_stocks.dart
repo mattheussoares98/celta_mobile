@@ -52,7 +52,7 @@ class _ShowAllStocksWidgetState extends State<ShowAllStocksWidget> {
               return AlertDialog(
                 content: Container(
                   height: MediaQuery.of(context).size.height * 0.8,
-                  width: MediaQuery.of(context).size.height * 0.9,
+                  width: MediaQuery.of(context).size.height * 0.95,
                   child: PageView(
                     controller: _pageController,
                     children: [
@@ -73,25 +73,74 @@ class _ShowAllStocksWidgetState extends State<ShowAllStocksWidget> {
                 ),
                 actions: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          _pageController.previousPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: const Text('Anterior'),
+                      Expanded(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {
+                            _pageController.previousPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                          },
+                          child: const Column(
+                            children: [
+                              Text(
+                                'Estoque na',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'empresa',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          _pageController.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: const Text('Próxima'),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                          },
+                          child: const Column(
+                            children: [
+                              Text(
+                                'Estoques',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'associados',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -123,12 +172,12 @@ Widget enterpriseStocks({
               "Estoques na empresa",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
-                fontSize: 30,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 fontFamily: "Bebasneue",
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
@@ -179,16 +228,19 @@ Widget associatedStocks({
           ),
         )
       : Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               "Estoques nas empresas associadas",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
-                fontSize: 30,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 fontFamily: "Bebasneue",
               ),
+              textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
@@ -198,11 +250,11 @@ Widget associatedStocks({
                   int index,
                 ) {
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       if (index == 0)
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             FittedBox(
                               child: Row(
@@ -234,6 +286,7 @@ Widget associatedStocks({
                       if (index == 0 &&
                           productModel.StockByEnterpriseAssociateds.length > 1)
                         const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
                               height: 40,
@@ -248,6 +301,7 @@ Widget associatedStocks({
                                   fontSize: 30,
                                   fontFamily: "BebasNeue",
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             SizedBox(
