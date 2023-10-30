@@ -1,10 +1,15 @@
+import 'package:celta_inventario/api/prefs_instance.dart';
+import 'package:celta_inventario/api/url_launcher.dart';
 import 'package:celta_inventario/components/Configurations/configurations_checkbox.dart';
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -37,6 +42,100 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   isValid() {
     return _formKey.currentState!.validate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    try {
+      await PlatformPlus.platform.init();
+    } catch (error) {
+      print("Error to init platform: $error");
+    }
+  }
+
+  Future<void> _openCamera() async {
+    if (PlatformPlus.platform.isAndroidWeb) {
+      ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: "Instalar aplicativo?",
+        subtitle:
+            "Você está usando um dispositivo android. O ideal é utilizar o aplicativo\n\nDeseja instalar o aplicativo?",
+        function: () async {
+          await UrlLauncher.searchAndLaunchUrl(
+            url:
+                "https://play.google.com/store/apps/details?id=br.com.celtaware.inventario",
+            context: context,
+          );
+        },
+      );
+    } else if (PlatformPlus.platform.isWindowsWeb) {
+      ShowSnackbarMessage.showMessage(
+        message: "A câmera não funciona na versão web",
+        context: context,
+      );
+    } else if (PlatformPlus.platform.isIOSWeb) {
+      _showMessageToOpenIosApp(context);
+    } else {
+      FocusScope.of(context).unfocus();
+      widget.consultProductController.clear();
+
+      widget.consultProductController.text =
+          await ScanBarCode.scanBarcode(context);
+
+      if (widget.consultProductController.text != "") {
+        await widget.onPressSearch();
+      }
+    }
+  }
+
+  static Future<void> _showMessageToOpenIosApp(BuildContext context) async {
+    bool showMessageAgain =
+        await PrefsInstance.getShowMessageToUseCameraInWebVersion();
+
+    if (!showMessageAgain) {
+      await UrlLauncher.searchAndLaunchUrl(
+        url: "https://apps.apple.com/pt/app/quick-barcode-scanner/id1237149717",
+        context: context,
+      );
+    } else {
+      ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: "LEIA COM ATENÇÃO!",
+        titleSize: 35,
+        subtitle:
+            "Como você está usando um dispositivo iOS, não conseguimos acessar a câmera do celular para ler o código de barras.\n\nVocê pode instalar QUALQUER aplicativo de leitura de código de barras, fazer a leitura do código de barras pelo aplicativo, copiar esse código de barras, retornar para o site e colar o código de barras copiado.\n\nDeseja abrir um aplicativo de leitura de código de barras?",
+        function: () async {
+          await UrlLauncher.searchAndLaunchUrl(
+            url:
+                "https://apps.apple.com/pt/app/quick-barcode-scanner/id1237149717",
+            context: context,
+          );
+        },
+        otherWidgetAction: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: TextButton(
+                onPressed: () async {
+                  await PrefsInstance
+                      .setToNoShowAgainMessageToUseCameraInWebVersion();
+                },
+                child: const Text(
+                  "Fechar mensagem e não exibir novamente",
+                  style: TextStyle(fontSize: 35),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -116,33 +215,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                               ),
                             ),
                           ),
-                        // InkWell(
-                        //   onTap: widget.isLoading
-                        //       ? null
-                        //       : () async {
-                        //           ClipboardData? clipboardData =
-                        //               await Clipboard.getData('text/plain');
-                        //           widget.consultProductController.text =
-                        //               clipboardData?.text ?? '';
-                        //         },
-                        //   child: Column(
-                        //     children: [
-                        //       Icon(
-                        //         Icons.content_paste_search_sharp,
-                        //         size: 35,
-                        //         color: widget.isLoading
-                        //             ? Colors.grey
-                        //             : Theme.of(context).primaryColor,
-                        //       ),
-                        //       const Text(
-                        //         "colar",
-                        //         style: TextStyle(
-                        //           fontWeight: FontWeight.bold,
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         InkWell(
                           onTap: widget.isLoading
                               ? null
@@ -169,18 +241,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                               onTap: widget.isLoading
                                   ? null
                                   : () async {
-                                      FocusScope.of(context).unfocus();
-                                      widget.consultProductController.clear();
-
-                                      widget.consultProductController.text =
-                                          await ScanBarCode.scanBarcode(
-                                              context);
-
-                                      if (widget
-                                              .consultProductController.text !=
-                                          "") {
-                                        await widget.onPressSearch();
-                                      }
+                                      await _openCamera();
                                     },
                               child: Icon(
                                 configurationsProvider.useAutoScan == true

@@ -1,8 +1,11 @@
 import 'dart:math';
+import 'package:celta_inventario/api/url_launcher.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Inicial_pages/auth_form.dart';
 import 'package:celta_inventario/utils/colors_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_plus/platform_plus.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -37,6 +40,31 @@ class _LoginPageState extends State<LoginPage>
     );
 
     super.initState();
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    try {
+      await PlatformPlus.platform.init();
+    } catch (error) {
+      print("Error to init platform: $error");
+    }
+
+    if (PlatformPlus.platform.isAndroidWeb) {
+      ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: "Instalar aplicativo?",
+        subtitle:
+            "Você está usando o site por um android, por isso o ideal é utilizar o aplicativo\n\nDeseja instalar o aplicativo?",
+        function: () {
+          UrlLauncher.searchAndLaunchUrl(
+            url:
+                "https://play.google.com/store/apps/details?id=br.com.celtaware.inventario",
+            context: context,
+          );
+        },
+      );
+    }
   }
 
   @override
