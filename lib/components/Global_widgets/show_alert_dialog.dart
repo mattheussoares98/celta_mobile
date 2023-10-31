@@ -41,11 +41,11 @@ class ShowAlertDialog {
           actionsPadding: const EdgeInsets.all(10),
           actions: [
             if (showConfirmAndCancelMessage == true)
-              FittedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
@@ -56,19 +56,22 @@ class ShowAlertDialog {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 30,
-                          horizontal: 30,
+                          vertical: 15,
+                          horizontal: 15,
                         ),
                         child: Text(
                           cancelMessage!,
                           style: TextStyle(
                             fontSize: cancelMessageSize,
                           ),
+                          maxLines: 1,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 50),
-                    ElevatedButton(
+                  ),
+                  const SizedBox(width: 50),
+                  Expanded(
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
@@ -81,19 +84,20 @@ class ShowAlertDialog {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 30,
-                          horizontal: 30,
+                          vertical: 15,
+                          horizontal: 15,
                         ),
                         child: Text(
                           confirmMessage!,
                           style: TextStyle(
                             fontSize: confirmMessageSize,
                           ),
+                          maxLines: 1,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             if (showCloseAlertDialogButton == true)
               Center(

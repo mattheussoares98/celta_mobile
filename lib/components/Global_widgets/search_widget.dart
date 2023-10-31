@@ -105,6 +105,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     } else {
       ShowAlertDialog.showAlertDialog(
         context: context,
+        subtitleSize: 15,
         title: "LEIA COM ATENÇÃO!",
         titleSize: 35,
         subtitle:
@@ -116,23 +117,27 @@ class _SearchWidgetState extends State<SearchWidget> {
             context: context,
           );
         },
-        otherWidgetAction: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: TextButton(
-                onPressed: () async {
-                  await PrefsInstance
-                      .setToNoShowAgainMessageToUseCameraInWebVersion();
-                },
-                child: const Text(
-                  "Fechar mensagem e não exibir novamente",
-                  style: TextStyle(fontSize: 35),
+        otherWidgetAction: FittedBox(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 50.0, bottom: 20),
+                child: TextButton(
+                  onPressed: () async {
+                    await PrefsInstance
+                        .setToNoShowAgainMessageToUseCameraInWebVersion();
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Fechar mensagem e não exibir novamente",
+                    style: TextStyle(fontSize: 35),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
