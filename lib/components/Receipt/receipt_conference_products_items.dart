@@ -137,8 +137,7 @@ class _ReceiptConferenceProductsItemsState
   }) {
     widget.consultedProductController.text = "";
 
-    if (receiptProvider.productsCount == 1 ||
-        receiptProvider.consultingProducts ||
+    if (receiptProvider.consultingProducts ||
         receiptProvider.isLoadingValidityDate) {
       return;
     }

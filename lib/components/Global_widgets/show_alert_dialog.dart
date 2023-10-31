@@ -56,20 +56,22 @@ class ShowAlertDialog {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
+                          vertical: 8,
+                          horizontal: 8,
                         ),
-                        child: Text(
-                          cancelMessage!,
-                          style: TextStyle(
-                            fontSize: cancelMessageSize,
+                        child: FittedBox(
+                          child: Text(
+                            cancelMessage!,
+                            style: TextStyle(
+                              fontSize: cancelMessageSize,
+                            ),
+                            maxLines: 1,
                           ),
-                          maxLines: 1,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 50),
+                  const SizedBox(width: 30),
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -84,15 +86,17 @@ class ShowAlertDialog {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 15,
+                          vertical: 8,
+                          horizontal: 8,
                         ),
-                        child: Text(
-                          confirmMessage!,
-                          style: TextStyle(
-                            fontSize: confirmMessageSize,
+                        child: FittedBox(
+                          child: Text(
+                            confirmMessage!,
+                            style: TextStyle(
+                              fontSize: confirmMessageSize,
+                            ),
+                            maxLines: 1,
                           ),
-                          maxLines: 1,
                         ),
                       ),
                     ),

@@ -61,7 +61,6 @@ class LoginProvider with ChangeNotifier {
       if (ConvertString.isUrl(enterpriseNameOrUrlCCSController.text)) {
         UserData.urlCCS = enterpriseNameOrUrlCCSController.text;
       }
-
       _errorMessage =
           await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
         enterpriseNameOrUrlCCSController.text,
@@ -73,8 +72,7 @@ class LoginProvider with ChangeNotifier {
           enterpriseNameOrUrlCCSController.text,
         )) {
       ShowSnackbarMessage.showMessage(
-        message:
-            "A empresa não foi encontrada no banco de dados. Entre em contato com o suporte e solicite a URL do CCS para fazer o login",
+        message: _errorMessage,
         context: context,
       );
       _isLoading = false;
@@ -111,11 +109,12 @@ class LoginProvider with ChangeNotifier {
         Map toParker2 = json.decode(toParker);
         UserData.crossIdentity = toParker2['string'];
 
-        _loginController?.add(true);
-
         await PrefsInstance.setUserIdentity();
         await PrefsInstance.setUrlCcsAndEnterpriseName();
         await FirebaseHelper.addCcsClientInFirebase();
+
+        _loginController?.add(true);
+        _changedEnterpriseNameOrUrlCcs = false;
       }
     } catch (e) {
       // _updateErrorMessage(e.toString());
@@ -127,7 +126,6 @@ class LoginProvider with ChangeNotifier {
       );
     }
 
-    _changedEnterpriseNameOrUrlCcs = false;
     _isLoading = false;
     notifyListeners();
   }
