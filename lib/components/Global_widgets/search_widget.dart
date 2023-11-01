@@ -212,6 +212,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                                         await Clipboard.getData('text/plain');
                                     widget.consultProductController.text =
                                         clipboardData?.text ?? '';
+
+                                    await widget.onPressSearch();
                                   },
                             child: const Text(
                               "colar\ntexto",
