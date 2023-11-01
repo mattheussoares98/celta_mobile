@@ -96,6 +96,21 @@ class _TransferBetweenStocksInsertQuantityState
                         : true,
                     controller: widget.consultedProductController,
                     inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                    onFieldSubmitted: (_) async {
+                      if (_isValid()) {
+                        ShowAlertDialog.showAlertDialog(
+                          context: context,
+                          title: "Confirmar transferência",
+                          function: () async {
+                            await confirmAdjustStock(
+                              transferBetweenStocksProvider:
+                                  transferBetweenStocksProvider,
+                              configurationsProvider: configurationsProvider,
+                            );
+                          },
+                        );
+                      }
+                    },
                     onChanged: (value) {
                       if (value.isEmpty || value == '-') {
                         value = '0';

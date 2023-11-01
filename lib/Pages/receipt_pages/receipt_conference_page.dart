@@ -123,19 +123,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                     _consultProductController.clear();
                   }
                 },
-                onFieldSubmitted: () async {
-                  await receiptProvider.getProducts(
-                    configurationsProvider: configurationsProvider,
-                    docCode: arguments["grDocCode"],
-                    controllerText: _consultProductController.text,
-                    context: context,
-                    isSearchAllCountedProducts: false,
-                  );
-
-                  if (receiptProvider.productsCount > 0) {
-                    _consultProductController.clear();
-                  }
-                },
                 docCode: arguments["grDocCode"],
                 consultedProductController: _consultedProductController,
                 consultProductController: _consultProductController,

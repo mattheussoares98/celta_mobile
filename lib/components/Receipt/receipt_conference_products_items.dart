@@ -16,13 +16,11 @@ class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;
   final TextEditingController consultedProductController;
   final TextEditingController consultProductController;
-  final Function onFieldSubmitted;
   final Function getProductsWithCamera;
 
   const ReceiptConferenceProductsItems({
     required this.getProductsWithCamera,
     required this.consultedProductController,
-    required this.onFieldSubmitted,
     required this.consultProductController,
     required this.docCode,
     Key? key,
@@ -308,7 +306,15 @@ class _ReceiptConferenceProductsItemsState
                     const SizedBox(height: 10),
                     AddSubtractOrAnullWidget(
                       onFieldSubmitted: () async {
-                        await widget.onFieldSubmitted();
+                        await updateQuantity(
+                          isSubtract: false,
+                          index: index,
+                          receiptProvider: receiptProvider,
+                          quantityText: widget.consultedProductController.text,
+                          validityDate: product.DataValidade_ProcRecebDocProEmb,
+                          product: product,
+                          configurationsProvider: configurationsProvider,
+                        );
                       },
                       addButtonText: "SOMAR E CONFIRMAR VALIDADE",
                       subtractButtonText: "SUBTRAIR E\nCONFIRMAR\nVALIDADE",

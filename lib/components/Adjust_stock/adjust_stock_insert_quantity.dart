@@ -120,6 +120,21 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                       context: context,
                       labelText: 'Quantidade',
                     ),
+                    onFieldSubmitted: (_) async {
+                      if (_isValid()) {
+                        print("formulários corretos. Pode salvar");
+                        ShowAlertDialog.showAlertDialog(
+                          context: context,
+                          title: "Confirmar ajuste",
+                          function: () async {
+                            await confirmAdjustStock(
+                              adjustStockProvider: adjustStockProvider,
+                              configurationsProvider: configurationsProvider,
+                            );
+                          },
+                        );
+                      }
+                    },
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,
                   ),
