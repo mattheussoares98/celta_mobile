@@ -63,6 +63,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           context: context,
           controllerText: "-1",
           enterpriseCode: arguments["Code"].toString(),
+          searchOnlyDefaultCustomer: true,
         );
       }
     }

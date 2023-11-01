@@ -623,6 +623,7 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required String controllerText,
     required String enterpriseCode,
+    bool? searchOnlyDefaultCustomer = false,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
@@ -630,11 +631,15 @@ class SaleRequestProvider with ChangeNotifier {
 
     await _clearcustomers(enterpriseCode);
 
-    await _getCustomers(
-      searchTypeInt: 2, //exactCode
-      controllerText: "-1", //consumidor
-      enterpriseCode: enterpriseCode,
-    );
+    if (searchOnlyDefaultCustomer!) {
+      await _getCustomers(
+        searchTypeInt: 2, //exactCode
+        controllerText: "-1", //consumidor
+        enterpriseCode: enterpriseCode,
+      );
+      //está consultando o cliente consumidor e por isso precisa retornar
+      return;
+    }
 
     int? codeValue = int.tryParse(controllerText);
     if (codeValue == null) {
