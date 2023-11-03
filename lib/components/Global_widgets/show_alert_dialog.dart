@@ -47,6 +47,7 @@ class ShowAlertDialog {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(60, 60),
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -54,19 +55,13 @@ class ShowAlertDialog {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 8,
-                        ),
-                        child: FittedBox(
-                          child: Text(
-                            cancelMessage!,
-                            style: TextStyle(
-                              fontSize: cancelMessageSize,
-                            ),
-                            maxLines: 1,
+                      child: FittedBox(
+                        child: Text(
+                          cancelMessage!,
+                          style: TextStyle(
+                            fontSize: cancelMessageSize,
                           ),
+                          maxLines: 1,
                         ),
                       ),
                     ),
@@ -75,6 +70,7 @@ class ShowAlertDialog {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(60, 60),
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -84,19 +80,13 @@ class ShowAlertDialog {
                         Navigator.of(context).pop();
                         function();
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 8,
-                        ),
-                        child: FittedBox(
-                          child: Text(
-                            confirmMessage!,
-                            style: TextStyle(
-                              fontSize: confirmMessageSize,
-                            ),
-                            maxLines: 1,
+                      child: FittedBox(
+                        child: Text(
+                          confirmMessage!,
+                          style: TextStyle(
+                            fontSize: confirmMessageSize,
                           ),
+                          maxLines: 1,
                         ),
                       ),
                     ),

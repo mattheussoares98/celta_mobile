@@ -101,6 +101,13 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         secondsDuration: 7,
       );
+      setState(() {
+        _selectedIndex = index;
+        changeFocusToConsultedProductFocusNode(
+          saleRequestProvider: saleRequestProvider,
+        );
+      });
+
       return;
     }
 

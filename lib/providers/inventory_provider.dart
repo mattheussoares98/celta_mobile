@@ -211,12 +211,8 @@ class InventoryProvider with ChangeNotifier {
       configurationsProvider: configurationsProvider,
     );
 
-    if (_errorMessageGetProducts != '') {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        //se não colocar em um future pra mudar o foco, não funciona corretamente
-        FocusScope.of(context).requestFocus(consultProductFocusNode);
-        //altera o foco para o campo de pesquisa novamente
-      });
+    if (_errorMessageGetProducts != '' && !isIndividual && productsCount == 1) {
+      alterFocusToConsultProduct(context: context);
     }
   }
 
@@ -246,6 +242,7 @@ class InventoryProvider with ChangeNotifier {
     required BuildContext context,
     required int indexOfProduct,
     required ConfigurationsProvider configurationsProvider,
+    required bool isIndividual,
   }) async {
     quantity = quantity.replaceAll(RegExp(r','), '.');
     double newQuantity = double.parse(quantity);
@@ -302,7 +299,9 @@ class InventoryProvider with ChangeNotifier {
           indexOfProduct: indexOfProduct,
         );
 
-        if (!configurationsProvider.useAutoScan) {
+        if (!configurationsProvider.useAutoScan &&
+            productsCount == 1 &&
+            !isIndividual) {
           alterFocusToConsultedProduct(
             context: context,
           );
@@ -413,6 +412,7 @@ class InventoryProvider with ChangeNotifier {
         isSubtract: isSubtract,
         context: context,
         configurationsProvider: configurationsProvider,
+        isIndividual: isIndividual,
       );
 
       if (_errorMessageQuantity != "") {

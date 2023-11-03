@@ -202,30 +202,6 @@ class _TransferBetweenStocksInsertQuantityState
               ],
             ),
           ),
-          if (transferBetweenStocksProvider.lastUpdatedQuantity != "" &&
-              // transferBetweenStocksProvider
-              //         .indexOfLastProductChangedStockQuantity !=
-              //     -1 &&
-              transferBetweenStocksProvider
-                      .indexOfLastProductChangedStockQuantity ==
-                  widget.index)
-            FittedBox(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "Última quantidade confirmada: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
-                  style: TextStyle(
-                    fontSize: 100,
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'BebasNeue',
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 1,
-                    wordSpacing: 4,
-                  ),
-                ),
-              ),
-            ),
         ],
       ),
     );

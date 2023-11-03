@@ -119,18 +119,6 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
     );
   }
 
-  changeFocusToConsultedProductFocusNode({
-    required InventoryProvider inventoryProvider,
-  }) {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      //se não colocar em um future pra mudar o foco,
-      //não funciona corretamente
-      FocusScope.of(context).requestFocus(
-        inventoryProvider.consultedProductFocusNode,
-      );
-    });
-  }
-
   selectIndexAndFocus({
     required InventoryProvider inventoryProvider,
     required int index,
@@ -147,9 +135,7 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
       if (_selectedIndex != index) {
         setState(() {
           _selectedIndex = index;
-          changeFocusToConsultedProductFocusNode(
-            inventoryProvider: inventoryProvider,
-          );
+          inventoryProvider.alterFocusToConsultedProduct(context: context);
         });
       } else {
         setState(() {
@@ -167,23 +153,17 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
       if (inventoryProvider.consultedProductFocusNode.hasFocus &&
           MediaQuery.of(context).viewInsets.bottom == 0) {
         FocusScope.of(context).unfocus();
-        changeFocusToConsultedProductFocusNode(
-          inventoryProvider: inventoryProvider,
-        );
+        inventoryProvider.alterFocusToConsultedProduct(context: context);
       }
       if (!inventoryProvider.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          inventoryProvider: inventoryProvider,
-        );
+        inventoryProvider.alterFocusToConsultedProduct(context: context);
       }
       return;
     }
 
     if (_selectedIndex == index) {
       if (!inventoryProvider.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          inventoryProvider: inventoryProvider,
-        );
+        inventoryProvider.alterFocusToConsultedProduct(context: context);
       } else {
         setState(() {
           _selectedIndex = -1;

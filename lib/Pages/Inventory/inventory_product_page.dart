@@ -58,14 +58,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
       configurationsProvider: configurationsProvider,
     );
 
-    if (inventoryProvider.products.isNotEmpty &&
-        _isIndividual &&
-        !configurationsProvider.useAutoScan) {
-      inventoryProvider.alterFocusToConsultProduct(
-        context: context,
-      );
-    }
-
     if (inventoryProvider.productsCount > 0) {
       _consultProductController.clear();
     }
@@ -78,6 +70,15 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
         arguments: arguments,
         indexOfProduct: 0,
         configurationsProvider: configurationsProvider,
+      );
+    }
+
+    if (inventoryProvider.errorMessageQuantity == "" &&
+        _isIndividual &&
+        inventoryProvider.productsCount == 1 &&
+        !configurationsProvider.useAutoScan) {
+      inventoryProvider.alterFocusToConsultProduct(
+        context: context,
       );
     }
   }
