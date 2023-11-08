@@ -29,7 +29,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
     );
 
     if (!_isLoaded) {
-      if (arguments["CodigoInternoVendaMobile_ModeloPedido"] == 0) {
+      if (arguments["CodigoInternoVendaMobile_ModeloPedido"] == -1) {
         //significa que não possui um modelo de pedido de vendas padrão cadastrado no BS
         _hasDefaultRequestModel = false;
       } else {
