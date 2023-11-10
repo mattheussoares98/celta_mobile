@@ -140,6 +140,13 @@ class _HomePageState extends State<HomePage> {
             //   nextRoute: "não vai para outra página",
             //   context: context,
             // ),
+            ImageComponent.image(
+              imagePath: 'lib/assets/Images/buyRequest.jpg',
+              routine: 'Pedido de compras',
+              route: APPROUTES.BUYERS,
+              // nextRoute: APPROUTES.BUYERS,
+              context: context,
+            ),
           ],
         ),
       ),

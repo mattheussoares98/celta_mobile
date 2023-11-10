@@ -26,4 +26,5 @@ class APPROUTES {
   static const CUSTOMER_REGISTER = '/CUSTOMER_REGISTER';
   static const TECHNICAL_SUPPORT = '/TECHNICAL_SUPPORT';
   static const CONFIGURATIONS = '/CONFIGURATIONS';
+  static const BUYERS = '/BUYERS';
 }

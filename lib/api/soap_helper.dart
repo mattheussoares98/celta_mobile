@@ -29,7 +29,7 @@ class SoapHelperResponseParameters {
 }
 
 class SoapHelper {
-  static soapPost({
+  static Future<void> soapPost({
     required Map<String, dynamic> parameters,
     required String typeOfResponse,
     String? typeOfResult,

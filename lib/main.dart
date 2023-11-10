@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
 import 'package:celta_inventario/Pages/adjust_stock_pages/adjust_stock_page.dart';
+import 'package:celta_inventario/Pages/buy_request/buy_request_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_page.dart';
 import 'package:celta_inventario/Pages/drawer/configurations_page.dart';
 import 'package:celta_inventario/Pages/price_conference_pages/price_conference_page.dart';
@@ -17,6 +18,7 @@ import 'package:celta_inventario/Pages/transfer_between_stocks_pages/transfer_be
 import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
+import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:celta_inventario/providers/inventory_provider.dart';
@@ -74,6 +76,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransferBetweenPackageProvider()),
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
         ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
+        ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -209,6 +212,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
           APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
           APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
+          APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
         },
       ),
     );
