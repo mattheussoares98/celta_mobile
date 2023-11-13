@@ -158,10 +158,10 @@ class FirebaseHelper {
           {
             firebaseCallEnum.name: {
               kIsWeb ? "webTimesUsed" : "timesUsed": FieldValue.increment(1),
-              'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
-              'datesUsed': FieldValue.arrayUnion(
-                  [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
             },
+            'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
+            'datesUsed': FieldValue.arrayUnion(
+                [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
           },
           SetOptions(merge: true),
         );
