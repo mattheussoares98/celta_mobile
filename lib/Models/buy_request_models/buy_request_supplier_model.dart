@@ -1,10 +1,16 @@
 import 'dart:convert';
 
 class BuyRequestSupplierModel {
-  final double Value;
+  final String CrossIdentity;
+  final String SearchValue;
+  final int RoutineInt;
+  final int Routine;
 
   BuyRequestSupplierModel({
-    required this.Value,
+    required this.CrossIdentity,
+    required this.SearchValue,
+    required this.RoutineInt,
+    required this.Routine,
   });
 
   static responseAsStringToBuyRequestSupplierModel({
@@ -29,7 +35,10 @@ class BuyRequestSupplierModel {
     responseAsMap.forEach((id, data) {
       listToAdd.add(
         BuyRequestSupplierModel(
-          Value: data["Value"],
+          CrossIdentity: data["CrossIdentity"],
+          SearchValue: data["SearchValue"],
+          RoutineInt: data["RoutineInt"],
+          Routine: data["Routine"],
         ),
       );
     });

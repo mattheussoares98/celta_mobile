@@ -21,9 +21,11 @@ class SearchWidget extends StatefulWidget {
   final String labelText;
   final bool useCamera;
   final bool autofocus;
+  final bool showConfigurationsIcon;
   const SearchWidget({
     this.autofocus = true,
     this.useCamera = true,
+    this.showConfigurationsIcon = true,
     required this.consultProductController,
     required this.isLoading,
     required this.onPressSearch,
@@ -284,10 +286,11 @@ class _SearchWidgetState extends State<SearchWidget> {
               ),
             ),
           ),
-          _enableConfigurationsDialog(
-            isLoading: widget.isLoading,
-            configurationsProvider: configurationsProvider,
-          ),
+          if (widget.showConfigurationsIcon)
+            _enableConfigurationsDialog(
+              isLoading: widget.isLoading,
+              configurationsProvider: configurationsProvider,
+            ),
         ],
       ),
     );

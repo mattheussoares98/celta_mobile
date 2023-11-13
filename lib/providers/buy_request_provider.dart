@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/Models/but_request_models/buy_request_buyer_model.dart';
-import 'package:celta_inventario/Models/but_request_models/buy_request_product_model.dart';
-import 'package:celta_inventario/Models/but_request_models/buy_request_requests_model.dart';
-import 'package:celta_inventario/Models/but_request_models/buy_request_supplier_model.dart';
+import 'package:celta_inventario/Models/buy_request_models/buy_request_buyer_model.dart';
+import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
+import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
+import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
@@ -35,12 +35,13 @@ class BuyRequestProvider with ChangeNotifier {
   String get errorMessageRequestsType => _errorMessageRequestsType;
   int get requestsTypeCount => _requestsType.length;
 
-  List<BuyRequestSupplierModel> _supplier = [];
-  List<BuyRequestSupplierModel> get supplier => _supplier;
+  List<BuyRequestSupplierModel> _suppliers = [];
+  List<BuyRequestSupplierModel> get suppliers => _suppliers;
   bool _isLoadingSupplier = false;
   bool get isLoadingSupplier => _isLoadingSupplier;
   String _errorMessageSupplier = "";
   String get errorMessageSupplier => _errorMessageSupplier;
+  int get suppliersCount => _suppliers.length;
 
   void clearProducts() {
     _products.clear();
@@ -52,6 +53,10 @@ class BuyRequestProvider with ChangeNotifier {
 
   void clearRequestsType() {
     _requestsType.clear();
+  }
+
+  void clearSuppliers() {
+    _suppliers.clear();
   }
 
   Future<void> getProducts() async {
@@ -131,7 +136,7 @@ class BuyRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      print("Erro para obter os compradores: $e");
       _errorMessageBuyer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageBuyer,
@@ -156,10 +161,10 @@ class BuyRequestProvider with ChangeNotifier {
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "inclusiveBuy": true,
+          "inclusiveTransfer": false,
+          "inclusiveSale": false,
           // "simpleSearchValue": "string",
           // "enterpriseCode": "int",
-          // "inclusiveTransfer": "boolean",
-          // "inclusiveSale": "boolean",
         },
         serviceASMX: "CeltaRequestTypeService.asmx",
         typeOfResponse: "GetRequestTypesJsonResponse",
@@ -173,18 +178,64 @@ class BuyRequestProvider with ChangeNotifier {
         BuyRequestRequestsTypeModel
             .responseAsStringToBuyRequestRequestsTypeModel(
           responseAsString: SoapHelperResponseParameters.responseAsString,
-          listToAdd: _buyers,
+          listToAdd: _requestsType,
         );
       }
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      print("Erro para obter os modelos de pedido: $e");
       _errorMessageRequestsType = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
-        message: _errorMessageBuyer,
+        message: _errorMessageRequestsType,
         context: context,
       );
     }
     _isLoadingRequestsType = false;
+    notifyListeners();
+  }
+
+  Future<void> getSuppliers({
+    required BuildContext context,
+  }) async {
+    _errorMessageSupplier = "";
+    _isLoadingSupplier = true;
+    clearSuppliers();
+    notifyListeners();
+
+    Map jsonGetSupplier = {
+      "CrossIdentity": UserData.crossIdentity,
+      "SearchValue": "1",
+      "RoutineInt": 2,
+      // "Routine": 0,
+    };
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetSupplier),
+        },
+        serviceASMX: "CeltaSupplierService.asmx",
+        typeOfResponse: "GetSupplierJsonResponse",
+        SOAPAction: "GetSupplierJson",
+        typeOfResult: "GetSupplierJsonResult",
+      );
+
+      _errorMessageSupplier = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageSupplier == "") {
+        BuyRequestSupplierModel.responseAsStringToBuyRequestSupplierModel(
+          responseAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _suppliers,
+        );
+      }
+    } catch (e) {
+      print("Erro para obter os fornecedores: $e");
+      _errorMessageSupplier = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageSupplier,
+        context: context,
+      );
+    }
+    _isLoadingSupplier = false;
     notifyListeners();
   }
 }

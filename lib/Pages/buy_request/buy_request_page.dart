@@ -68,6 +68,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
     return WillPopScope(
       onWillPop: () async {
         buyRequestProvider.clearBuyers();
+        buyRequestProvider.clearRequestsType();
         return true;
       },
       child: Scaffold(
