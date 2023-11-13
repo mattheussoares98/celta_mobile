@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:celta_inventario/Models/customer_register_models/customer_register_cep.dart';
+import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/requests_http.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
@@ -354,6 +355,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     if (selectedSexDropDown.value != null) {
       _jsonInsertCustomer["SexType"] =
           selectedSexDropDown.value!.substring(0, 1).toUpperCase();
+    } else {
+      _jsonInsertCustomer["SexType"] = "M";
     }
     _jsonInsertCustomer["Emails"] = _emails;
     _jsonInsertCustomer["Telephones"] = _telephones;
@@ -389,6 +392,8 @@ class CustomerRegisterProvider with ChangeNotifier {
 
       if (_errorMessageInsertCustomer == "") {
         _clearAllDataInformed();
+        FirebaseHelper.addSoapCallInFirebase(
+            firebaseCallEnum: FirebaseCallEnum.customerRegister);
       }
     } catch (e) {
       print('Erro para cadastrar o cliente: $e');

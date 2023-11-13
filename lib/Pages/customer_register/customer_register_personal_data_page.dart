@@ -50,9 +50,27 @@ class _CustomerRegisterPersonalDataPageState
   }
 
   bool cpfCnpjEnabled = true;
+  void updateCpfCnpjEnabled() {
+    CustomerRegisterProvider customerRegisterProvider =
+        Provider.of(context, listen: false);
+
+    if (customerRegisterProvider.cpfCnpjController.text.length > 11) {
+      setState(() {
+        cpfCnpjEnabled = false;
+      });
+    } else {
+      setState(() {
+        cpfCnpjEnabled = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+
+    updateCpfCnpjEnabled();
+
     return SingleChildScrollView(
       child: Form(
         key: widget.personFormKey,
@@ -101,16 +119,7 @@ class _CustomerRegisterPersonalDataPageState
               keyboardType: TextInputType.number,
               enabled: true,
               onChanged: (value) {
-                if (customerRegisterProvider.cpfCnpjController.text.length >
-                    11) {
-                  setState(() {
-                    cpfCnpjEnabled = false;
-                  });
-                } else {
-                  setState(() {
-                    cpfCnpjEnabled = true;
-                  });
-                }
+                updateCpfCnpjEnabled();
               },
               suffixWidget: IconButton(
                 onPressed: () {
