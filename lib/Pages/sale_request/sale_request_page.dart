@@ -2,6 +2,7 @@ import 'package:celta_inventario/Pages/sale_request/sale_request_insert_customer
 import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
 import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
 import 'package:celta_inventario/providers/sale_request_provider.dart';
+import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -243,6 +244,17 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             );
           },
         ),
+        floatingActionButton: _selectedIndex == 1
+            ? FloatingActionButton(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: const Icon(Icons.person_add, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    APPROUTES.CUSTOMER_REGISTER,
+                  );
+                },
+              )
+            : null,
       ),
     );
   }

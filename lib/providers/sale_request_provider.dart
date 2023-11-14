@@ -631,13 +631,13 @@ class SaleRequestProvider with ChangeNotifier {
 
     await _clearcustomers(enterpriseCode);
 
+    await _getCustomers(
+      searchTypeInt: 2, //exactCode
+      controllerText: "-1", //consumidor
+      enterpriseCode: enterpriseCode,
+    );
+
     if (searchOnlyDefaultCustomer!) {
-      await _getCustomers(
-        searchTypeInt: 2, //exactCode
-        controllerText: "-1", //consumidor
-        enterpriseCode: enterpriseCode,
-      );
-      //está consultando o cliente consumidor e por isso precisa retornar
       return;
     }
 
