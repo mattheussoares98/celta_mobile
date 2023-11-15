@@ -4,7 +4,14 @@ import 'package:celta_inventario/components/Buy_request/buy_request_suppliers.da
 import 'package:flutter/material.dart';
 
 class BuyRequestIdentificationPage extends StatefulWidget {
-  const BuyRequestIdentificationPage({Key? key}) : super(key: key);
+  final GlobalKey<FormFieldState> buyersKey;
+  final GlobalKey<FormFieldState> requestsKey;
+
+  const BuyRequestIdentificationPage({
+    required this.buyersKey,
+    required this.requestsKey,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<BuyRequestIdentificationPage> createState() =>
@@ -13,29 +20,19 @@ class BuyRequestIdentificationPage extends StatefulWidget {
 
 class _BuyRequestIdentificationPageState
     extends State<BuyRequestIdentificationPage> {
-  final GlobalKey<FormState> _dropDownFormKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _dropDownFormKey,
-      child: const Padding(
-        padding: const EdgeInsets.all(3.0),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BuyRequestBuyersDropwodn(),
-                  SizedBox(height: 20),
-                  BuyRequestRequestsTypeDropdown(),
-                  SizedBox(height: 20),
-                  BuyRequestSuplliers(),
-                ],
-              ),
-            ),
+            BuyRequestBuyersDropwodn(buyersKey: widget.buyersKey),
+            const SizedBox(height: 20),
+            BuyRequestRequestsTypeDropdown(requestsKey: widget.requestsKey),
+            const SizedBox(height: 20),
+            const BuyRequestSuplliers(),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:celta_inventario/Pages/buy_request/buy_request_details_page.dart
 import 'package:celta_inventario/Pages/buy_request/buy_request_enterprises_page.dart';
 import 'package:celta_inventario/Pages/buy_request/buy_request_identification_page.dart';
 import 'package:celta_inventario/Pages/buy_request/buy_request_insert_products_page.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,9 @@ class BuyRequestPage extends StatefulWidget {
   @override
   State<BuyRequestPage> createState() => _BuyRequestPageState();
 }
+
+final GlobalKey<FormFieldState> _buyersKey = GlobalKey();
+final GlobalKey<FormFieldState> _requestsKey = GlobalKey();
 
 class _BuyRequestPageState extends State<BuyRequestPage> {
   @override
@@ -31,7 +35,10 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
   }
 
   List<Widget> _pages = <Widget>[
-    const BuyRequestIdentificationPage(),
+    BuyRequestIdentificationPage(
+      buyersKey: _buyersKey,
+      requestsKey: _requestsKey,
+    ),
     const BuyRequestEnterprisesPage(),
     const BuyRequestInsertProductsPage(),
     const BuyRequestDetailsPage(),
@@ -46,6 +53,13 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
   int _selectedIndex = 0;
 
+  bool _selectedBuyerAndRequestType() {
+    bool buyersIsValid = _buyersKey.currentState?.validate() ?? false;
+    bool requestsIsValid = _requestsKey.currentState?.validate() ?? false;
+
+    return buyersIsValid && requestsIsValid;
+  }
+
   void _onItemTapped({
     required int index,
     required BuyRequestProvider buyRequestProvider,
@@ -54,6 +68,22 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
         buyRequestProvider.isLoadingProducts ||
         buyRequestProvider.isLoadingRequestsType ||
         buyRequestProvider.isLoadingSupplier) return;
+
+    if (_selectedIndex == 0) {
+      if (!_selectedBuyerAndRequestType()) {
+        ShowSnackbarMessage.showMessage(
+          message: "Selecione um comprador e um modelo de pedido",
+          context: context,
+        );
+        return;
+      } else if (buyRequestProvider.selectedSupplier == null) {
+        ShowSnackbarMessage.showMessage(
+          message: "Selecione um fornecedor",
+          context: context,
+        );
+        return;
+      }
+    }
 
     setState(() {
       _selectedIndex = index;
@@ -67,8 +97,6 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        buyRequestProvider.clearBuyers();
-        buyRequestProvider.clearRequestsType();
         return true;
       },
       child: Scaffold(

@@ -7,13 +7,17 @@ class BuyRequestDropdownFormfield extends StatefulWidget {
   final String disabledHintText;
   final String? Function(dynamic)? validator;
   final List<DropdownMenuItem<dynamic>>? items;
+  final void Function(dynamic)? onChanged;
+  final dynamic value;
 
   const BuyRequestDropdownFormfield({
+    required this.value,
     required this.dropdownKey,
     required this.isLoading,
     required this.disabledHintText,
     required this.items,
     required this.isLoadingMessage,
+    required this.onChanged,
     this.validator,
     Key? key,
   }) : super(key: key);
@@ -30,6 +34,7 @@ class _BuyRequestDropdownFormfieldState
     return DropdownButtonFormField<dynamic>(
       // isDense: false,
       key: widget.dropdownKey,
+      value: widget.value,
       disabledHint: widget.isLoading
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -63,9 +68,7 @@ class _BuyRequestDropdownFormfieldState
         ),
       ),
       validator: widget.validator,
-      onChanged: (value) {
-        print(value);
-      },
+      onChanged: widget.onChanged,
       items: widget.items,
     );
   }

@@ -42,6 +42,28 @@ class BuyRequestProvider with ChangeNotifier {
   String _errorMessageSupplier = "";
   String get errorMessageSupplier => _errorMessageSupplier;
   int get suppliersCount => _suppliers.length;
+  BuyRequestSupplierModel? selectedSupplier;
+  set selectedBuyerDropDown(String? value) {
+    _selectedBuyerDropDown = value;
+    notifyListeners();
+  }
+
+  List<BuyRequestSupplierModel> _enterprises = [];
+  List<BuyRequestSupplierModel> get enterprises => _enterprises;
+  bool _isLoadingEnterprises = false;
+  bool get isLoadingEnterprises => _isLoadingEnterprises;
+  String _errorMessageEnterprises = "";
+  String get errorMessageEnterprises => _errorMessageEnterprises;
+  int get enterprisesCount => _enterprises.length;
+  String? _selectedBuyerDropDown;
+  String? get selectedBuyerDropDown => _selectedBuyerDropDown;
+
+  String? _selectedRequestModel;
+  String? get selectedRequestModel => _selectedRequestModel;
+  set selectedRequestModel(String? value) {
+    _selectedRequestModel = value;
+    notifyListeners();
+  }
 
   void clearProducts() {
     _products.clear();
@@ -57,6 +79,11 @@ class BuyRequestProvider with ChangeNotifier {
 
   void clearSuppliers() {
     _suppliers.clear();
+    selectedSupplier = null;
+  }
+
+  void clearEnterprises() {
+    _enterprises.clear();
   }
 
   Future<void> getProducts() async {
@@ -134,6 +161,12 @@ class BuyRequestProvider with ChangeNotifier {
           responseAsString: SoapHelperResponseParameters.responseAsString,
           listToAdd: _buyers,
         );
+      } else {
+        ShowSnackbarMessage.showMessage(
+          message:
+              "Ocorreu um erro não esperado para consultar os compradores. Verifique a sua internet",
+          context: context,
+        );
       }
     } catch (e) {
       print("Erro para obter os compradores: $e");
@@ -180,6 +213,12 @@ class BuyRequestProvider with ChangeNotifier {
           responseAsString: SoapHelperResponseParameters.responseAsString,
           listToAdd: _requestsType,
         );
+      } else {
+        ShowSnackbarMessage.showMessage(
+          message:
+              "Ocorreu um erro não esperado para consultar os modelos de pedido. Verifique a sua internet",
+          context: context,
+        );
       }
     } catch (e) {
       print("Erro para obter os modelos de pedido: $e");
@@ -195,6 +234,7 @@ class BuyRequestProvider with ChangeNotifier {
 
   Future<void> getSuppliers({
     required BuildContext context,
+    required String searchValue,
   }) async {
     _errorMessageSupplier = "";
     _isLoadingSupplier = true;
@@ -203,7 +243,7 @@ class BuyRequestProvider with ChangeNotifier {
 
     Map jsonGetSupplier = {
       "CrossIdentity": UserData.crossIdentity,
-      "SearchValue": "1",
+      "SearchValue": searchValue,
       "RoutineInt": 2,
       // "Routine": 0,
     };
@@ -236,6 +276,50 @@ class BuyRequestProvider with ChangeNotifier {
       );
     }
     _isLoadingSupplier = false;
+    notifyListeners();
+  }
+
+  Future<void> getEnterprises({
+    required BuildContext context,
+    bool isSearchingAgain = false,
+  }) async {
+    _errorMessageEnterprises = "";
+    _isLoadingEnterprises = true;
+    clearEnterprises();
+    if (isSearchingAgain) notifyListeners();
+
+    Map jsonGetEnterprises = {
+      "crossIdentity": UserData.crossIdentity,
+    };
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetEnterprises),
+        },
+        serviceASMX: "CeltaEnterpriseService.asmx",
+        typeOfResponse: "GetEnterprisesJsonResponse",
+        SOAPAction: "GetEnterprisesJson",
+        typeOfResult: "GetEnterprisesJsonResult",
+      );
+
+      _errorMessageEnterprises = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageEnterprises == "") {
+        // BuyRequestSupplierModel.responseAsStringToBuyRequestSupplierModel(
+        //   responseAsString: SoapHelperResponseParameters.responseAsString,
+        //   listToAdd: _suppliers,
+        // );
+      }
+    } catch (e) {
+      print("Erro para obter os fornecedores: $e");
+      _errorMessageEnterprises = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageEnterprises,
+        context: context,
+      );
+    }
+    _isLoadingEnterprises = false;
     notifyListeners();
   }
 }

@@ -1,16 +1,30 @@
 import 'dart:convert';
 
 class BuyRequestSupplierModel {
-  final String CrossIdentity;
-  final String SearchValue;
-  final int RoutineInt;
-  final int Routine;
+  final int Code;
+  final String Name;
+  final String FantasizesName;
+  final String CnpjCpfNumber;
+  final String InscriptionRgNumber;
+  final String SupplierType;
+  final String SupplierRegimeType;
+  final String Date;
+  final List? Emails;
+  final List? Telephones;
+  final List? Addresses;
 
   BuyRequestSupplierModel({
-    required this.CrossIdentity,
-    required this.SearchValue,
-    required this.RoutineInt,
-    required this.Routine,
+    required this.Code,
+    required this.Name,
+    required this.FantasizesName,
+    required this.CnpjCpfNumber,
+    required this.InscriptionRgNumber,
+    required this.SupplierType,
+    required this.SupplierRegimeType,
+    required this.Date,
+    this.Emails,
+    this.Telephones,
+    this.Addresses,
   });
 
   static responseAsStringToBuyRequestSupplierModel({
@@ -35,10 +49,17 @@ class BuyRequestSupplierModel {
     responseAsMap.forEach((id, data) {
       listToAdd.add(
         BuyRequestSupplierModel(
-          CrossIdentity: data["CrossIdentity"],
-          SearchValue: data["SearchValue"],
-          RoutineInt: data["RoutineInt"],
-          Routine: data["Routine"],
+          Code: data["Code"],
+          Name: data["Name"],
+          FantasizesName: data["FantasizesName"],
+          CnpjCpfNumber: data["CnpjCpfNumber"],
+          InscriptionRgNumber: data["InscriptionRgNumber"],
+          SupplierType: data["SupplierType"],
+          SupplierRegimeType: data["SupplierRegimeType"],
+          Date: data["Date"],
+          Addresses: data["Addresses"],
+          Emails: data["Emails"],
+          Telephones: data["Telephones"],
         ),
       );
     });

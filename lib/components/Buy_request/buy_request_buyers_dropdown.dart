@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BuyRequestBuyersDropwodn extends StatefulWidget {
-  const BuyRequestBuyersDropwodn({Key? key}) : super(key: key);
+  final GlobalKey<FormFieldState> buyersKey;
+  const BuyRequestBuyersDropwodn({
+    required this.buyersKey,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<BuyRequestBuyersDropwodn> createState() =>
@@ -12,57 +16,47 @@ class BuyRequestBuyersDropwodn extends StatefulWidget {
 }
 
 class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
-  final GlobalKey<FormFieldState> _keyBuyers = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Comprador"),
+        const Text(
+          "Comprador",
+          style: TextStyle(
+            color: Colors.grey,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         Row(
           children: [
             Expanded(
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  dropdownKey: _keyBuyers,
+                  value: buyRequestProvider.selectedBuyerDropDown,
+                  onChanged: (value) {
+                    buyRequestProvider.selectedBuyerDropDown = value;
+                  },
+                  dropdownKey: widget.buyersKey,
                   isLoading: buyRequestProvider.isLoadingBuyer,
                   disabledHintText: "Comprador",
                   isLoadingMessage: "Consultando compradores",
                   validator: (value) {
-                    return "";
+                    if (value == null) {
+                      return "Selecione o comprador";
+                    }
+
+                    return null;
                   },
                   items: buyRequestProvider.buyers
                       .map(
                         (value) => DropdownMenuItem(
+                          value: value.CpfNumber,
                           alignment: Alignment.center,
-                          onTap: () {
-                            // adjustStockProvider.jsonAdjustStock["JustificationCode"] =
-                            //     value.CodigoInterno_JustMov;
-
-                            // if (value.CodigoInterno_TipoEstoque
-                            //         .CodigoInterno_TipoEstoque !=
-                            //     -1) {
-                            //   adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
-                            //       value.CodigoInterno_TipoEstoque
-                            //           .CodigoInterno_TipoEstoque;
-                            //   adjustStockProvider.justificationHasStockType = true;
-
-                            //   setState(() {
-                            //     adjustStockProvider.updateJustificationStockTypeName(
-                            //       value.CodigoInterno_TipoEstoque.Nome_TipoEstoque,
-                            //     );
-                            //   });
-                            // } else {
-                            //   adjustStockProvider.justificationHasStockType = false;
-                            // }
-
-                            // adjustStockProvider.typeOperator = value
-                            //     .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
-                          },
-                          value: value.Name,
+                          onTap: () {},
                           child: FittedBox(
                             child: Column(
                               children: [
@@ -88,7 +82,7 @@ class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
               onPressed: buyRequestProvider.isLoadingBuyer
                   ? null
                   : () async {
-                      _keyBuyers.currentState?.reset();
+                      widget.buyersKey.currentState?.reset();
 
                       await buyRequestProvider.getBuyers(
                         isSearchingAgain: true,

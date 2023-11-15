@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BuyRequestRequestsTypeDropdown extends StatefulWidget {
-  const BuyRequestRequestsTypeDropdown({Key? key}) : super(key: key);
+  final GlobalKey<FormFieldState> requestsKey;
+
+  const BuyRequestRequestsTypeDropdown({
+    required this.requestsKey,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<BuyRequestRequestsTypeDropdown> createState() =>
@@ -13,8 +18,6 @@ class BuyRequestRequestsTypeDropdown extends StatefulWidget {
 
 class _BuyRequestRequestsTypeDropdownState
     extends State<BuyRequestRequestsTypeDropdown> {
-  final GlobalKey<FormFieldState> _keyRequests = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
@@ -22,49 +25,41 @@ class _BuyRequestRequestsTypeDropdownState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Modelo de pedido de compra"),
+        const Text(
+          "Modelo de pedido de compra",
+          style: TextStyle(
+            color: Colors.grey,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         Row(
           children: [
             Expanded(
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  dropdownKey: _keyRequests,
+                  value: buyRequestProvider.selectedRequestModel,
+                  onChanged: (value) {
+                    buyRequestProvider.selectedRequestModel = value;
+                  },
+                  dropdownKey: widget.requestsKey,
                   isLoading: buyRequestProvider.isLoadingRequestsType,
                   disabledHintText: "Modelo de pedido",
                   isLoadingMessage: "Consultando modelos",
                   validator: (value) {
-                    return "";
+                    if (value == null) {
+                      return "Selecione o modelo de pedido";
+                    }
+
+                    return null;
                   },
                   items: buyRequestProvider.requestsType
                       .map(
                         (value) => DropdownMenuItem(
+                          value: value.Name,
                           alignment: Alignment.center,
-                          onTap: () {
-                            // adjustStockProvider.jsonAdjustStock["JustificationCode"] =
-                            //     value.CodigoInterno_JustMov;
-
-                            // if (value.CodigoInterno_TipoEstoque
-                            //         .CodigoInterno_TipoEstoque !=
-                            //     -1) {
-                            //   adjustStockProvider.jsonAdjustStock["StockTypeCode"] =
-                            //       value.CodigoInterno_TipoEstoque
-                            //           .CodigoInterno_TipoEstoque;
-                            //   adjustStockProvider.justificationHasStockType = true;
-
-                            //   setState(() {
-                            //     adjustStockProvider.updateJustificationStockTypeName(
-                            //       value.CodigoInterno_TipoEstoque.Nome_TipoEstoque,
-                            //     );
-                            //   });
-                            // } else {
-                            //   adjustStockProvider.justificationHasStockType = false;
-                            // }
-
-                            // adjustStockProvider.typeOperator = value
-                            //     .TypeOperator; //usado pra aplicação saber se precisa somar ou subtrair o valor do estoque atual
-                          },
-                          value: value.Code,
+                          onTap: () {},
                           child: FittedBox(
                             child: Column(
                               children: [
@@ -73,18 +68,6 @@ class _BuyRequestRequestsTypeDropdownState
                                     value.Name.toString(),
                                   ),
                                 ),
-                                // Center(
-                                //   child: Text(
-                                //     value.UnitValueTypeString
-                                //         .toString(),
-                                //   ),
-                                // ),
-                                // Center(
-                                //   child: Text(
-                                //     value.UseWholePriceString
-                                //         .toString(),
-                                //   ),
-                                // ),
                                 const Divider(
                                   height: 4,
                                   color: Colors.black,
@@ -102,7 +85,7 @@ class _BuyRequestRequestsTypeDropdownState
               onPressed: buyRequestProvider.isLoadingRequestsType
                   ? null
                   : () async {
-                      _keyRequests.currentState?.reset();
+                      widget.requestsKey.currentState?.reset();
 
                       await buyRequestProvider.getRequestsType(
                         context: context,
