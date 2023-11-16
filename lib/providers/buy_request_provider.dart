@@ -26,6 +26,12 @@ class BuyRequestProvider with ChangeNotifier {
   String _errorMessageBuyer = "";
   String get errorMessageBuyer => _errorMessageBuyer;
   int get buyersCount => _buyers.length;
+  BuyRequestBuyerModel? _selectedBuyer;
+  BuyRequestBuyerModel? get selectedBuyer => _selectedBuyer;
+  set selectedBuyer(BuyRequestBuyerModel? value) {
+    _selectedBuyer = value;
+    notifyListeners();
+  }
 
   List<BuyRequestRequestsTypeModel> _requestsType = [];
   List<BuyRequestRequestsTypeModel> get requestsType => _requestsType;
@@ -34,6 +40,13 @@ class BuyRequestProvider with ChangeNotifier {
   String _errorMessageRequestsType = "";
   String get errorMessageRequestsType => _errorMessageRequestsType;
   int get requestsTypeCount => _requestsType.length;
+  BuyRequestRequestsTypeModel? _selectedRequestModel;
+  BuyRequestRequestsTypeModel? get selectedRequestModel =>
+      _selectedRequestModel;
+  set selectedRequestModel(BuyRequestRequestsTypeModel? value) {
+    _selectedRequestModel = value;
+    notifyListeners();
+  }
 
   List<BuyRequestSupplierModel> _suppliers = [];
   List<BuyRequestSupplierModel> get suppliers => _suppliers;
@@ -58,13 +71,6 @@ class BuyRequestProvider with ChangeNotifier {
   String? _selectedBuyerDropDown;
   String? get selectedBuyerDropDown => _selectedBuyerDropDown;
 
-  String? _selectedRequestModel;
-  String? get selectedRequestModel => _selectedRequestModel;
-  set selectedRequestModel(String? value) {
-    _selectedRequestModel = value;
-    notifyListeners();
-  }
-
   void clearProducts() {
     _products.clear();
   }
@@ -86,36 +92,61 @@ class BuyRequestProvider with ChangeNotifier {
     _enterprises.clear();
   }
 
-  Future<void> getProducts() async {
+  Future<void> getProducts({
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
     _products.clear();
-    // notifyListeners();
+    notifyListeners();
+
+    Map jsonGetProducts = {
+      "CrossIdentity": UserData.crossIdentity,
+      "RoutineInt": 2,
+      "SearchValue": searchValue,
+      // "SearchTypeInt": 0,
+      "RequestTypeCode": _selectedRequestModel!.Code,
+      "EnterpriseCodes": [1, 2, 3, 4],
+      // "EnterpriseDestinyCode": 0,
+      "SupplierCode": selectedSupplier!.Code,
+      // "SearchType": 0,
+      // "Routine": 0,
+    };
 
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "param": "value",
+          "filters": json.encode(jsonGetProducts),
         },
-        typeOfResponse: "typeOfResponse",
-        SOAPAction: "SOAPAction",
-        serviceASMX: "serviceASMX",
+        typeOfResponse: "GetProductsJsonResponse",
+        SOAPAction: "GetProductsJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductsJsonResult",
       );
 
+      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+
+      SoapHelperResponseParameters.responseAsString;
+
       if (_errorMessageGetProducts == "") {
-        //converter dados
-        // InventoryProductModel.responseInStringToInventoryProductModel(
-        //   data: SoapHelperResponseParameters.responseAsMap["Produtos"],
-        //   listToAdd: _products,
-        // );
+        BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
+          responseAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _products,
+        );
+      } else {
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageGetProducts,
+          context: context,
+        );
       }
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      // ShowSnackbarMessage.showMessage(
-      //   message: _errorMessageQuantity,
-      //   context: context,
-      // );
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageGetProducts,
+        context: context,
+      );
     } finally {
       _isLoadingProducts = false;
       notifyListeners();
@@ -310,9 +341,14 @@ class BuyRequestProvider with ChangeNotifier {
         //   responseAsString: SoapHelperResponseParameters.responseAsString,
         //   listToAdd: _suppliers,
         // );
+      } else {
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageEnterprises,
+          context: context,
+        );
       }
     } catch (e) {
-      print("Erro para obter os fornecedores: $e");
+      print("Erro para obter as empresas: $e");
       _errorMessageEnterprises = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageEnterprises,

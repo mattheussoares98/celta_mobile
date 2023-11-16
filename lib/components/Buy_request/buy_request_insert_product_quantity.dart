@@ -1,0 +1,203 @@
+import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
+import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
+import 'package:celta_inventario/providers/adjust_stock_provider.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+class BuyRequestInsertProductQuantity extends StatefulWidget {
+  final TextEditingController consultedProductController;
+  final GlobalKey<FormState> insertQuantityFormKey;
+  final int internalEnterpriseCode;
+  final int index;
+  final Function getProductWithCamera;
+  final Function updateSelectedIndex;
+
+  const BuyRequestInsertProductQuantity({
+    required this.internalEnterpriseCode,
+    required this.updateSelectedIndex,
+    required this.getProductWithCamera,
+    required this.insertQuantityFormKey,
+    required this.consultedProductController,
+    required this.index,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<BuyRequestInsertProductQuantity> createState() =>
+      _BuyRequestInsertProductQuantity();
+}
+
+class _BuyRequestInsertProductQuantity
+    extends State<BuyRequestInsertProductQuantity> {
+  bool _isValid() {
+    widget.insertQuantityFormKey.currentState!.validate();
+
+    return widget.insertQuantityFormKey.currentState!.validate();
+  }
+
+  confirmAdjustStock({
+    required AdjustStockProvider adjustStockProvider,
+    required ConfigurationsProvider configurationsProvider,
+  }) async {
+    if (widget.consultedProductController.text.contains("\,")) {
+      widget.consultedProductController.text =
+          widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.');
+    }
+    adjustStockProvider.jsonAdjustStock["Quantity"] =
+        widget.consultedProductController.text;
+
+    adjustStockProvider.jsonAdjustStock["EnterpriseCode"] =
+        widget.internalEnterpriseCode.toString();
+
+    await adjustStockProvider.confirmAdjustStock(
+      context: context,
+      indexOfProduct: widget.index,
+      consultedProductControllerText: widget.consultedProductController.text,
+    );
+
+    if (adjustStockProvider.errorMessageAdjustStock == "") {
+      widget.consultedProductController.clear();
+      widget.updateSelectedIndex();
+
+      if (configurationsProvider.useAutoScan) {
+        await widget.getProductWithCamera();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AdjustStockProvider adjustStockProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          Form(
+            key: widget.insertQuantityFormKey,
+            child: Row(
+              children: [
+                Flexible(
+                  flex: 10,
+                  child: TextFormField(
+                    // autofocus: true,
+                    focusNode: adjustStockProvider.consultedProductFocusNode,
+                    enabled: adjustStockProvider.isLoadingProducts ||
+                            adjustStockProvider
+                                .isLoadingTypeStockAndJustifications ||
+                            adjustStockProvider.isLoadingAdjustStock
+                        ? false
+                        : true,
+                    controller: widget.consultedProductController,
+                    inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                    onChanged: (value) {
+                      if (value.isEmpty || value == '-') {
+                        value = '0';
+                      }
+                      if (value.startsWith(",") || value.startsWith(".")) {
+                        widget.consultedProductController.text =
+                            "0" + widget.consultedProductController.text;
+                        widget.consultedProductController.selection =
+                            TextSelection.fromPosition(
+                          TextPosition(
+                            offset:
+                                widget.consultedProductController.text.length,
+                          ),
+                        );
+                      }
+                    },
+                    validator: FormFieldHelper.validatorOfNumber(),
+                    decoration: FormFieldHelper.decoration(
+                      isLoading: adjustStockProvider.isLoadingProducts ||
+                          adjustStockProvider
+                              .isLoadingTypeStockAndJustifications ||
+                          adjustStockProvider.isLoadingAdjustStock,
+                      context: context,
+                      labelText: 'Quantidade',
+                    ),
+                    onFieldSubmitted: (_) async {
+                      if (_isValid()) {
+                        print("formulários corretos. Pode salvar");
+                        ShowAlertDialog.showAlertDialog(
+                          context: context,
+                          title: "Confirmar ajuste",
+                          function: () async {
+                            await confirmAdjustStock(
+                              adjustStockProvider: adjustStockProvider,
+                              configurationsProvider: configurationsProvider,
+                            );
+                          },
+                        );
+                      }
+                    },
+                    style: FormFieldHelper.style(),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Flexible(
+                  flex: 9,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 60),
+                      maximumSize: const Size(double.infinity, 60),
+                    ),
+                    onPressed: adjustStockProvider.isLoadingAdjustStock
+                        ? null
+                        : () async {
+                            if (_isValid()) {
+                              print("formulários corretos. Pode salvar");
+                              ShowAlertDialog.showAlertDialog(
+                                context: context,
+                                title: "Confirmar ajuste",
+                                function: () async {
+                                  await confirmAdjustStock(
+                                    adjustStockProvider: adjustStockProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
+                                  );
+                                },
+                              );
+                            }
+                          },
+                    child: adjustStockProvider.isLoadingAdjustStock
+                        ? FittedBox(
+                            child: Row(
+                              children: [
+                                const Text(
+                                  "AGUARDE",
+                                  style: const TextStyle(
+                                    fontSize: 50,
+                                  ),
+                                ),
+                                const SizedBox(width: 30),
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const FittedBox(
+                            child: Text(
+                              "CONFIRMAR",
+                              style: const TextStyle(
+                                fontSize: 50,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

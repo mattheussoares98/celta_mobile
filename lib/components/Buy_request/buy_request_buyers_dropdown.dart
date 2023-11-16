@@ -36,10 +36,8 @@ class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  value: buyRequestProvider.selectedBuyerDropDown,
-                  onChanged: (value) {
-                    buyRequestProvider.selectedBuyerDropDown = value;
-                  },
+                  onChanged: (value) {},
+                  value: buyRequestProvider.selectedBuyer?.Name,
                   dropdownKey: widget.buyersKey,
                   isLoading: buyRequestProvider.isLoadingBuyer,
                   disabledHintText: "Comprador",
@@ -54,9 +52,11 @@ class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
                   items: buyRequestProvider.buyers
                       .map(
                         (value) => DropdownMenuItem(
-                          value: value.CpfNumber,
+                          value: value.Name,
                           alignment: Alignment.center,
-                          onTap: () {},
+                          onTap: () {
+                            buyRequestProvider.selectedBuyer = value;
+                          },
                           child: FittedBox(
                             child: Column(
                               children: [

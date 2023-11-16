@@ -39,10 +39,8 @@ class _BuyRequestRequestsTypeDropdownState
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  value: buyRequestProvider.selectedRequestModel,
-                  onChanged: (value) {
-                    buyRequestProvider.selectedRequestModel = value;
-                  },
+                  onChanged: (value) {},
+                  value: buyRequestProvider.selectedRequestModel?.Name,
                   dropdownKey: widget.requestsKey,
                   isLoading: buyRequestProvider.isLoadingRequestsType,
                   disabledHintText: "Modelo de pedido",
@@ -59,7 +57,9 @@ class _BuyRequestRequestsTypeDropdownState
                         (value) => DropdownMenuItem(
                           value: value.Name,
                           alignment: Alignment.center,
-                          onTap: () {},
+                          onTap: () {
+                            buyRequestProvider.selectedRequestModel = value;
+                          },
                           child: FittedBox(
                             child: Column(
                               children: [

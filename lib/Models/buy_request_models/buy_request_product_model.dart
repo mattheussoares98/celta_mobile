@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 class BuyRequestProductsModel {
-  final int ProductCode;
-  final int ProductPackingCode;
   final String PLU;
   final String Name;
   final String PackingQuantity;
+  final String BalanceLabelType;
+  final int EnterpriseCode;
+  final int ProductCode;
+  final int ProductPackingCode;
+  final double Value;
   final double RetailPracticedPrice;
   final double RetailSalePrice;
   final double RetailOfferPrice;
@@ -17,17 +20,28 @@ class BuyRequestProductsModel {
   final double ECommerceOfferPrice;
   final double MinimumWholeQuantity;
   final double BalanceStockSale;
-  final String StorageAreaAddress;
-  final double Value;
-  final List<dynamic> StockByEnterpriseAssociateds;
-  final List<dynamic> Stocks;
+  final double BalanceLabelQuantity;
+  final double OperationalCost;
+  final double ReplacementCost;
+  final double ReplacementCostMidle;
+  final double LiquidCost;
+  final double LiquidCostMidle;
+  final double RealCost;
+  final double RealLiquidCost;
+  final double FiscalCost;
+  final double FiscalLiquidCost;
+  final List<Map<dynamic, dynamic>>? StockByEnterpriseAssociateds;
+  final List<Map<dynamic, dynamic>>? StorageAreaAddress;
+  final List<dynamic>? Stocks;
 
   BuyRequestProductsModel({
-    required this.ProductCode,
-    required this.ProductPackingCode,
     required this.PLU,
     required this.Name,
     required this.PackingQuantity,
+    required this.EnterpriseCode,
+    required this.ProductCode,
+    required this.ProductPackingCode,
+    required this.Value,
     required this.RetailPracticedPrice,
     required this.RetailSalePrice,
     required this.RetailOfferPrice,
@@ -39,10 +53,20 @@ class BuyRequestProductsModel {
     required this.ECommerceOfferPrice,
     required this.MinimumWholeQuantity,
     required this.BalanceStockSale,
-    required this.StorageAreaAddress,
-    required this.StockByEnterpriseAssociateds,
+    required this.BalanceLabelType,
+    required this.BalanceLabelQuantity,
+    required this.OperationalCost,
+    required this.ReplacementCost,
+    required this.ReplacementCostMidle,
+    required this.LiquidCost,
+    required this.LiquidCostMidle,
+    required this.RealCost,
+    required this.RealLiquidCost,
+    required this.FiscalCost,
+    required this.FiscalLiquidCost,
     required this.Stocks,
-    required this.Value,
+    this.StockByEnterpriseAssociateds,
+    this.StorageAreaAddress,
   });
 
   static responseAsStringToBuyRequestProductsModel({
@@ -67,11 +91,13 @@ class BuyRequestProductsModel {
     responseAsMap.forEach((id, data) {
       listToAdd.add(
         BuyRequestProductsModel(
-          ProductCode: data["ProductCode"],
-          ProductPackingCode: data["ProductPackingCode"],
           PLU: data["PLU"],
           Name: data["Name"],
           PackingQuantity: data["PackingQuantity"],
+          EnterpriseCode: data["EnterpriseCode"],
+          ProductCode: data["ProductCode"],
+          ProductPackingCode: data["ProductPackingCode"],
+          Value: data["Value"],
           RetailPracticedPrice: data["RetailPracticedPrice"],
           RetailSalePrice: data["RetailSalePrice"],
           RetailOfferPrice: data["RetailOfferPrice"],
@@ -83,11 +109,20 @@ class BuyRequestProductsModel {
           ECommerceOfferPrice: data["ECommerceOfferPrice"],
           MinimumWholeQuantity: data["MinimumWholeQuantity"],
           BalanceStockSale: data["BalanceStockSale"],
-          Value: data["Value"],
-          StorageAreaAddress: data["StorageAreaAddress"] ?? "",
-          StockByEnterpriseAssociateds:
-              data["StockByEnterpriseAssociateds"] ?? [],
-          Stocks: data["Stocks"] ?? [],
+          BalanceLabelType: data["BalanceLabelType"],
+          BalanceLabelQuantity: data["BalanceLabelQuantity"],
+          OperationalCost: data["OperationalCost"],
+          ReplacementCost: data["ReplacementCost"],
+          ReplacementCostMidle: data["ReplacementCostMidle"],
+          LiquidCost: data["LiquidCost"],
+          LiquidCostMidle: data["LiquidCostMidle"],
+          RealCost: data["RealCost"],
+          RealLiquidCost: data["RealLiquidCost"],
+          FiscalCost: data["FiscalCost"],
+          FiscalLiquidCost: data["FiscalLiquidCost"],
+          Stocks: data["Stocks"],
+          StockByEnterpriseAssociateds: data["StockByEnterpriseAssociateds"],
+          StorageAreaAddress: data["StorageAreaAddress"],
         ),
       );
     });
