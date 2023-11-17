@@ -1,7 +1,9 @@
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_insert_product_quantity.dart';
+import 'package:celta_inventario/components/Buy_request/buy_request_remove_product_widget.dart';
 import 'package:celta_inventario/components/Global_widgets/show_all_stocks.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +12,16 @@ import '../Global_widgets/title_and_value.dart';
 
 class BuyRequestProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;
-  final TextEditingController consultedProductController;
-  final FocusNode consultedProductFocusNode;
+  final TextEditingController quantityController;
+  final TextEditingController priceController;
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductWithCamera;
   const BuyRequestProductsItems({
     required this.internalEnterpriseCode,
     required this.getProductWithCamera,
-    required this.consultedProductController,
+    required this.quantityController,
+    required this.priceController,
     required this.insertQuantityFormKey,
-    required this.consultedProductFocusNode,
     Key? key,
   }) : super(key: key);
 
@@ -29,16 +31,13 @@ class BuyRequestProductsItems extends StatefulWidget {
 }
 
 class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
-  int _selectedIndex = -1;
-
-  changeFocusToConsultedProductFocusNode({
-    required BuyRequestProvider buyRequestProvider,
-  }) {
+  changeFocusToConsultedProductFocusNode() {
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     Future.delayed(const Duration(milliseconds: 300), () {
       //se não colocar em um future pra mudar o foco,
       //não funciona corretamente
       FocusScope.of(context).requestFocus(
-        widget.consultedProductFocusNode,
+        buyRequestProvider.quantityFocusNode,
       );
     });
   }
@@ -47,7 +46,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     required BuyRequestProvider buyRequestProvider,
     required int index,
   }) {
-    widget.consultedProductController.text = "";
+    widget.quantityController.text = "";
 
     if (buyRequestProvider.productsCount == 1 ||
         buyRequestProvider.isLoadingProducts) {
@@ -55,49 +54,41 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     }
 
     if (kIsWeb) {
-      if (_selectedIndex != index) {
+      if (buyRequestProvider.indexOfSelectedProduct != index) {
         setState(() {
-          _selectedIndex = index;
-          changeFocusToConsultedProductFocusNode(
-            buyRequestProvider: buyRequestProvider,
-          );
+          buyRequestProvider.indexOfSelectedProduct = index;
+          changeFocusToConsultedProductFocusNode();
         });
       } else {
         setState(() {
-          _selectedIndex = -1;
+          buyRequestProvider.indexOfSelectedProduct = -1;
         });
       }
       return;
     }
 
-    if (_selectedIndex != index) {
+    if (buyRequestProvider.indexOfSelectedProduct != index) {
       setState(() {
-        _selectedIndex = index;
+        buyRequestProvider.indexOfSelectedProduct = index;
       });
 
-      if (widget.consultedProductFocusNode.hasFocus &&
+      if (buyRequestProvider.quantityFocusNode.hasFocus &&
           MediaQuery.of(context).viewInsets.bottom == 0) {
         FocusScope.of(context).unfocus();
-        changeFocusToConsultedProductFocusNode(
-          buyRequestProvider: buyRequestProvider,
-        );
+        changeFocusToConsultedProductFocusNode();
       }
-      if (!widget.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          buyRequestProvider: buyRequestProvider,
-        );
+      if (!buyRequestProvider.quantityFocusNode.hasFocus) {
+        changeFocusToConsultedProductFocusNode();
       }
       return;
     }
 
-    if (_selectedIndex == index) {
-      if (!widget.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          buyRequestProvider: buyRequestProvider,
-        );
+    if (buyRequestProvider.indexOfSelectedProduct == index) {
+      if (!buyRequestProvider.quantityFocusNode.hasFocus) {
+        changeFocusToConsultedProductFocusNode();
       } else {
         setState(() {
-          _selectedIndex = -1;
+          buyRequestProvider.indexOfSelectedProduct = -1;
         });
       }
     }
@@ -125,15 +116,11 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TitleAndSubtitle.titleAndSubtitle(
-                title: "Nome",
-                value: product.Name,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 value: product.PLU,
                 otherWidget: ShowAllStocksWidget(
                   productModel: product,
-                  hasAssociatedsStock: product.StorageAreaAddress != "" ||
+                  hasAssociatedsStock: product.StorageAreaAddress != null &&
                       product.StockByEnterpriseAssociateds != null,
                   hasStocks: product.Stocks != null,
                   context: context,
@@ -143,20 +130,45 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                 ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
+                title: "Nome",
+                value: product.Name,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
                 title: "Embalagem",
                 value: product.PackingQuantity,
               ),
-              if (_selectedIndex == index)
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Quantidade",
+                value: ConvertString.convertToBrazilianNumber(product.quantity),
+                subtitleColor: product.quantity == 0
+                    ? Colors.red
+                    : Theme.of(context).colorScheme.primary,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Preço",
+                value: ConvertString.convertToBRL(product.Value),
+                subtitleColor: product.Value == 0 ? Colors.red : Colors.green,
+                otherWidget: Icon(
+                  buyRequestProvider.indexOfSelectedProduct != index
+                      ? Icons.arrow_drop_down_sharp
+                      : Icons.arrow_drop_up_sharp,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 30,
+                ),
+              ),
+              if (product.quantity > 0)
+                buyRequestRemoveProduct(
+                  buyRequestProvider: buyRequestProvider,
+                  product: product,
+                  context: context,
+                ),
+              if (buyRequestProvider.indexOfSelectedProduct == index)
                 BuyRequestInsertProductQuantity(
                   internalEnterpriseCode: product.EnterpriseCode,
-                  updateSelectedIndex: () {
-                    setState(() {
-                      _selectedIndex = -1;
-                    });
-                  },
                   getProductWithCamera: widget.getProductWithCamera,
                   insertQuantityFormKey: widget.insertQuantityFormKey,
-                  consultedProductController: widget.consultedProductController,
+                  priceController: widget.priceController,
+                  quantityController: widget.quantityController,
                   index: index,
                 ),
             ],
@@ -183,7 +195,9 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
           itemCount: buyRequestProvider.productsCount,
           itemBuilder: (context, index) {
             if (buyRequestProvider.productsCount == 1) {
-              _selectedIndex = index;
+              buyRequestProvider.indexOfSelectedProduct = index;
+            } else if (buyRequestProvider.productsCount == 0) {
+              buyRequestProvider.indexOfSelectedProduct = -1;
             }
 
             final startIndex = index * itensPerLine;

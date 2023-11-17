@@ -1,25 +1,23 @@
-import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
-import 'package:celta_inventario/providers/adjust_stock_provider.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
+import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BuyRequestInsertProductQuantity extends StatefulWidget {
-  final TextEditingController consultedProductController;
+  final TextEditingController quantityController;
+  final TextEditingController priceController;
   final GlobalKey<FormState> insertQuantityFormKey;
   final int internalEnterpriseCode;
   final int index;
   final Function getProductWithCamera;
-  final Function updateSelectedIndex;
 
   const BuyRequestInsertProductQuantity({
     required this.internalEnterpriseCode,
-    required this.updateSelectedIndex,
+    required this.priceController,
     required this.getProductWithCamera,
     required this.insertQuantityFormKey,
-    required this.consultedProductController,
+    required this.quantityController,
     required this.index,
     Key? key,
   }) : super(key: key);
@@ -37,40 +35,40 @@ class _BuyRequestInsertProductQuantity
     return widget.insertQuantityFormKey.currentState!.validate();
   }
 
-  confirmAdjustStock({
-    required AdjustStockProvider adjustStockProvider,
-    required ConfigurationsProvider configurationsProvider,
-  }) async {
-    if (widget.consultedProductController.text.contains("\,")) {
-      widget.consultedProductController.text =
-          widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.');
+  void onChanged({
+    required String value,
+    required TextEditingController textController,
+  }) {
+    if (value.isEmpty || value == '-') {
+      value = '0';
     }
-    adjustStockProvider.jsonAdjustStock["Quantity"] =
-        widget.consultedProductController.text;
+    if (value.startsWith(",") || value.startsWith(".")) {
+      textController.text = "0" + textController.text;
+      textController.selection = TextSelection.fromPosition(
+        TextPosition(
+          offset: textController.text.length,
+        ),
+      );
+    }
+  }
 
-    adjustStockProvider.jsonAdjustStock["EnterpriseCode"] =
-        widget.internalEnterpriseCode.toString();
-
-    await adjustStockProvider.confirmAdjustStock(
-      context: context,
-      indexOfProduct: widget.index,
-      consultedProductControllerText: widget.consultedProductController.text,
+  void updateProductInCart() {
+    if (!_isValid()) return;
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
+    buyRequestProvider.updateProductInCart(
+      priceController: widget.priceController,
+      quantityController: widget.quantityController,
+      index: widget.index,
     );
-
-    if (adjustStockProvider.errorMessageAdjustStock == "") {
-      widget.consultedProductController.clear();
-      widget.updateSelectedIndex();
-
-      if (configurationsProvider.useAutoScan) {
-        await widget.getProductWithCamera();
-      }
-    }
+    widget.priceController.text = "";
+    widget.quantityController.text = "";
+    FocusScope.of(context).unfocus();
+    buyRequestProvider.indexOfSelectedProduct = -1;
   }
 
   @override
   Widget build(BuildContext context) {
-    AdjustStockProvider adjustStockProvider = Provider.of(context);
-    ConfigurationsProvider configurationsProvider = Provider.of(context);
+    BuyRequestProvider buyRequestProvider = Provider.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Column(
@@ -83,54 +81,50 @@ class _BuyRequestInsertProductQuantity
                   flex: 10,
                   child: TextFormField(
                     // autofocus: true,
-                    focusNode: adjustStockProvider.consultedProductFocusNode,
-                    enabled: adjustStockProvider.isLoadingProducts ||
-                            adjustStockProvider
-                                .isLoadingTypeStockAndJustifications ||
-                            adjustStockProvider.isLoadingAdjustStock
-                        ? false
-                        : true,
-                    controller: widget.consultedProductController,
-                    inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                    onChanged: (value) {
-                      if (value.isEmpty || value == '-') {
-                        value = '0';
-                      }
-                      if (value.startsWith(",") || value.startsWith(".")) {
-                        widget.consultedProductController.text =
-                            "0" + widget.consultedProductController.text;
-                        widget.consultedProductController.selection =
-                            TextSelection.fromPosition(
-                          TextPosition(
-                            offset:
-                                widget.consultedProductController.text.length,
-                          ),
-                        );
-                      }
-                    },
+                    focusNode: buyRequestProvider.quantityFocusNode,
+                    enabled: !buyRequestProvider.isLoadingProducts,
+                    controller: widget.quantityController,
+                    inputFormatters: [LengthLimitingTextInputFormatter(7)],
+                    onChanged: (value) => onChanged(
+                      textController: widget.quantityController,
+                      value: value,
+                    ),
+                    autovalidateMode: AutovalidateMode.always,
                     validator: FormFieldHelper.validatorOfNumber(),
                     decoration: FormFieldHelper.decoration(
-                      isLoading: adjustStockProvider.isLoadingProducts ||
-                          adjustStockProvider
-                              .isLoadingTypeStockAndJustifications ||
-                          adjustStockProvider.isLoadingAdjustStock,
+                      isLoading: buyRequestProvider.isLoadingProducts,
                       context: context,
                       labelText: 'Quantidade',
                     ),
                     onFieldSubmitted: (_) async {
-                      if (_isValid()) {
-                        print("formulários corretos. Pode salvar");
-                        ShowAlertDialog.showAlertDialog(
-                          context: context,
-                          title: "Confirmar ajuste",
-                          function: () async {
-                            await confirmAdjustStock(
-                              adjustStockProvider: adjustStockProvider,
-                              configurationsProvider: configurationsProvider,
-                            );
-                          },
-                        );
-                      }
+                      FocusScope.of(context)
+                          .requestFocus(buyRequestProvider.priceFocusNode);
+                    },
+                    style: FormFieldHelper.style(),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Flexible(
+                  flex: 10,
+                  child: TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    focusNode: buyRequestProvider.priceFocusNode,
+                    enabled: !buyRequestProvider.isLoadingProducts,
+                    controller: widget.priceController,
+                    inputFormatters: [LengthLimitingTextInputFormatter(7)],
+                    onChanged: (value) => onChanged(
+                      textController: widget.priceController,
+                      value: value,
+                    ),
+                    validator: FormFieldHelper.validatorOfNumber(),
+                    decoration: FormFieldHelper.decoration(
+                      isLoading: false,
+                      context: context,
+                      labelText: 'Preço',
+                    ),
+                    onFieldSubmitted: (_) async {
+                      updateProductInCart();
                     },
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,
@@ -138,59 +132,20 @@ class _BuyRequestInsertProductQuantity
                 ),
                 const SizedBox(width: 5),
                 Flexible(
-                  flex: 9,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 60),
-                      maximumSize: const Size(double.infinity, 60),
+                  flex: 6,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.white,
                     ),
-                    onPressed: adjustStockProvider.isLoadingAdjustStock
-                        ? null
-                        : () async {
-                            if (_isValid()) {
-                              print("formulários corretos. Pode salvar");
-                              ShowAlertDialog.showAlertDialog(
-                                context: context,
-                                title: "Confirmar ajuste",
-                                function: () async {
-                                  await confirmAdjustStock(
-                                    adjustStockProvider: adjustStockProvider,
-                                    configurationsProvider:
-                                        configurationsProvider,
-                                  );
-                                },
-                              );
-                            }
-                          },
-                    child: adjustStockProvider.isLoadingAdjustStock
-                        ? FittedBox(
-                            child: Row(
-                              children: [
-                                const Text(
-                                  "AGUARDE",
-                                  style: const TextStyle(
-                                    fontSize: 50,
-                                  ),
-                                ),
-                                const SizedBox(width: 30),
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : const FittedBox(
-                            child: Text(
-                              "CONFIRMAR",
-                              style: const TextStyle(
-                                fontSize: 50,
-                              ),
-                            ),
-                          ),
+                    onPressed: () async {
+                      updateProductInCart();
+                    },
+                    child: const FittedBox(
+                      child: Text(
+                        "ATUALIZAR",
+                      ),
+                    ),
                   ),
                 ),
               ],

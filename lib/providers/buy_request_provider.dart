@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:celta_inventario/Models/buy_request_models/buy_request_buyer_model.dart';
+import 'package:celta_inventario/Models/buy_request_models/buy_request_cart_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
@@ -71,16 +72,61 @@ class BuyRequestProvider with ChangeNotifier {
   String? _selectedBuyerDropDown;
   String? get selectedBuyerDropDown => _selectedBuyerDropDown;
 
+  List<BuyRequestCartProductModel> _cartProducts = [];
+  int get cartProductsCount => _cartProducts.length;
+
+  FocusNode focusNodeConsultProduct = FocusNode();
+  FocusNode quantityFocusNode = FocusNode();
+  FocusNode priceFocusNode = FocusNode();
+  int indexOfSelectedProduct = -1;
+
+  Map jsonBuyRequest = {
+    "crossId": UserData.crossIdentity,
+    "BuyerCode": 0,
+    "RequestTypeCode": 0,
+    "SupplierCode": 0,
+    "DateOfCreation": "2023-10-25T10:07:00",
+    "Observations": "",
+    "Enterprises": [
+      {"EnterpriseCode": 2, "IsPrincipal": true},
+      {"EnterpriseCode": 3, "IsPrincipal": false}
+    ],
+    "Products": [
+      {
+        "EnterpriseCode": 2,
+        "ProductPackingCode": 1084,
+        "Value": 10.0,
+        "Quantity": 5,
+        "IncrementPercentageOrValue": "R\$",
+        "IncrementValue": 0,
+        "DiscountPercentageOrValue": "R\$",
+        "DiscountValue": 0
+      },
+      {
+        "EnterpriseCode": 3,
+        "ProductPackingCode": 1084,
+        "Value": 12.0,
+        "Quantity": 7,
+        "IncrementPercentageOrValue": "R\$",
+        "IncrementValue": 0,
+        "DiscountPercentageOrValue": "R\$",
+        "DiscountValue": 0
+      }
+    ],
+  };
+
   void clearProducts() {
     _products.clear();
   }
 
   void clearBuyers() {
     _buyers.clear();
+    _selectedBuyer = null;
   }
 
   void clearRequestsType() {
     _requestsType.clear();
+    _selectedRequestModel = null;
   }
 
   void clearSuppliers() {
@@ -92,6 +138,22 @@ class BuyRequestProvider with ChangeNotifier {
     _enterprises.clear();
   }
 
+  void updateProductWithProductCart() {
+    for (int i = 0; i < _products.length; i++) {
+      for (int j = 0; j < _cartProducts.length; j++) {
+        if (_products[i].ProductPackingCode ==
+                _cartProducts[j].ProductPackingCode &&
+            _products[i].EnterpriseCode == _cartProducts[j].EnterpriseCode) {
+          _products[i].Value = _cartProducts[j].Value;
+          _products[i].quantity = _cartProducts[j].Quantity;
+
+          break;
+        }
+      }
+    }
+    notifyListeners();
+  }
+
   Future<void> getProducts({
     required String searchValue,
     required BuildContext context,
@@ -99,6 +161,7 @@ class BuyRequestProvider with ChangeNotifier {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
     _products.clear();
+    indexOfSelectedProduct = -1;
     notifyListeners();
 
     Map jsonGetProducts = {
@@ -134,6 +197,8 @@ class BuyRequestProvider with ChangeNotifier {
           responseAsString: SoapHelperResponseParameters.responseAsString,
           listToAdd: _products,
         );
+
+        updateProductWithProductCart();
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageGetProducts,
@@ -356,6 +421,52 @@ class BuyRequestProvider with ChangeNotifier {
       );
     }
     _isLoadingEnterprises = false;
+    notifyListeners();
+  }
+
+  void updateProductInCart({
+    required TextEditingController priceController,
+    required TextEditingController quantityController,
+    required int index,
+  }) {
+    BuyRequestProductsModel product = _products[index];
+    double price =
+        double.parse(priceController.text.replaceAll(RegExp(r','), '.'));
+    double quantity =
+        double.parse(quantityController.text.replaceAll(RegExp(r','), '.'));
+    product.quantity = quantity;
+    product.Value = price;
+
+    BuyRequestCartProductModel cartProduct = BuyRequestCartProductModel(
+      EnterpriseCode: product.EnterpriseCode,
+      ProductPackingCode: product.ProductPackingCode,
+      Value: price,
+      Quantity: quantity,
+      IncrementPercentageOrValue: "R\$",
+      IncrementValue: 0,
+      DiscountPercentageOrValue: "R\$",
+      DiscountValue: 0,
+    );
+    _cartProducts.add(cartProduct);
+    notifyListeners();
+  }
+
+  void removeProductFromCart(BuyRequestProductsModel product) {
+    int indexOfProduct = _products.indexWhere(
+      (element) =>
+          element.ProductPackingCode == product.ProductPackingCode &&
+          element.EnterpriseCode == product.EnterpriseCode,
+    );
+
+    _products[indexOfProduct].Value = 0;
+    _products[indexOfProduct].quantity = 0;
+
+    _cartProducts.removeWhere(
+      (element) =>
+          element.ProductPackingCode == product.ProductPackingCode &&
+          element.EnterpriseCode == product.EnterpriseCode,
+    );
+
     notifyListeners();
   }
 }

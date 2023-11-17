@@ -8,7 +8,6 @@ class BuyRequestProductsModel {
   final int EnterpriseCode;
   final int ProductCode;
   final int ProductPackingCode;
-  final double Value;
   final double RetailPracticedPrice;
   final double RetailSalePrice;
   final double RetailOfferPrice;
@@ -33,6 +32,8 @@ class BuyRequestProductsModel {
   final List<Map<dynamic, dynamic>>? StockByEnterpriseAssociateds;
   final List<Map<dynamic, dynamic>>? StorageAreaAddress;
   final List<dynamic>? Stocks;
+  double Value;
+  double quantity;
 
   BuyRequestProductsModel({
     required this.PLU,
@@ -67,6 +68,7 @@ class BuyRequestProductsModel {
     required this.Stocks,
     this.StockByEnterpriseAssociateds,
     this.StorageAreaAddress,
+    this.quantity = 0,
   });
 
   static responseAsStringToBuyRequestProductsModel({

@@ -1,5 +1,3 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
@@ -18,10 +16,29 @@ class BuyRequestInsertProductsPage extends StatefulWidget {
 class _BuyRequestInsertProductsPageState
     extends State<BuyRequestInsertProductsPage> {
   TextEditingController consultProductController = TextEditingController();
-  TextEditingController consultedProductController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   final GlobalKey<FormState> insertQuantityFormKey = GlobalKey();
-  FocusNode focusNodeConsultProduct = FocusNode();
-  FocusNode focusNodeConsultedProduct = FocusNode();
+
+  getProductWithCamera(BuyRequestProvider buyRequestProvider) async {
+    FocusScope.of(context).unfocus();
+    consultProductController.clear();
+
+    consultProductController.text = await ScanBarCode.scanBarcode(context);
+
+    if (consultProductController.text == "") {
+      return;
+    }
+
+    buyRequestProvider.getProducts(
+      searchValue: consultProductController.text,
+      context: context,
+    );
+
+    if (buyRequestProvider.productsCount > 0) {
+      consultProductController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +47,8 @@ class _BuyRequestInsertProductsPageState
       child: Column(
         children: [
           SearchWidget(
+            autofocus: false,
+            showConfigurationsIcon: false,
             consultProductController: consultProductController,
             isLoading: buyRequestProvider.isLoadingProducts,
             onPressSearch: () async {
@@ -38,34 +57,17 @@ class _BuyRequestInsertProductsPageState
                 context: context,
               );
             },
-            focusNodeConsultProduct: focusNodeConsultProduct,
+            focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
           ),
           if (buyRequestProvider.isLoadingProducts)
             const CircularProgressIndicator(),
           BuyRequestProductsItems(
+            priceController: priceController,
             insertQuantityFormKey: insertQuantityFormKey,
             internalEnterpriseCode: 1,
-            consultedProductController: consultedProductController,
-            consultedProductFocusNode: focusNodeConsultedProduct,
+            quantityController: quantityController,
             getProductWithCamera: () async {
-              FocusScope.of(context).unfocus();
-              consultProductController.clear();
-
-              consultProductController.text =
-                  await ScanBarCode.scanBarcode(context);
-
-              if (consultProductController.text == "") {
-                return;
-              }
-
-              buyRequestProvider.getProducts(
-                searchValue: consultProductController.text,
-                context: context,
-              );
-
-              if (buyRequestProvider.productsCount > 0) {
-                consultProductController.clear();
-              }
+              await getProductWithCamera(buyRequestProvider);
             },
           ),
         ],

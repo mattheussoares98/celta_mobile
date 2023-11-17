@@ -105,48 +105,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
             appBarTitles.elementAt(_selectedIndex),
           ),
         ),
-        body: RefreshIndicator(
-            onRefresh: () async {
-              await buyRequestProvider.getBuyers(
-                isSearchingAgain: true,
-                context: context,
-              );
-            },
-            child: _pages.elementAt(_selectedIndex)
-
-            // Column(
-            //   children: [
-            //     if (buyRequestProvider.isLoadingBuyer)
-            //       Expanded(
-            //         child: ConsultingWidget.consultingWidget(
-            //             title: 'Consultando compradores'),
-            //       ),
-            //     if (buyRequestProvider.errorMessageBuyer != '' &&
-            //         buyRequestProvider.buyersCount == 0 &&
-            //         !buyRequestProvider.isLoadingBuyer)
-            //       Expanded(
-            //         child: TryAgainWidget.tryAgain(
-            //             errorMessage: buyRequestProvider.errorMessageBuyer,
-            //             request: () async {
-            //               setState(() {});
-            //               await buyRequestProvider.getBuyers(
-            //                 // enterpriseCode: arguments["CodigoInterno_Empresa"],
-            //                 // context: context,
-            //                 isSearchingAgain: true,
-            //               );
-            //             }),
-            //       ),
-            //     // if (!buyRequestProvider.isLoadingBuyer &&
-            //     //     buyRequestProvider.errorMessageBuyer == '')
-            //     //   Expanded(
-            //     //     child: ReceiptItems(
-            //     //       enterpriseCode: arguments["CodigoInterno_Empresa"],
-            //     //       // BuyRequestProvider: BuyRequestProvider,
-            //     //     ),
-            //     //   ),
-            //   ],
-            // ),
-            ),
+        body: _pages.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
@@ -164,7 +123,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
               ),
               label: 'Empresas',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               label: 'Produtos',
               icon: Stack(
                 children: [
@@ -172,27 +131,27 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                     Icons.shopping_cart,
                     size: 35,
                   ),
-                  // if (cartProductsCount > 0)
-                  //   Positioned(
-                  //     top: 0,
-                  //     right: 0,
-                  //     child: CircleAvatar(
-                  //       backgroundColor: Colors.red,
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(2.0),
-                  //         child: FittedBox(
-                  //           child: Text(
-                  //             cartProductsCount.toString(),
-                  //             style: const TextStyle(
-                  //               fontWeight: FontWeight.bold,
-                  //               color: Colors.white,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       maxRadius: 9,
-                  //     ),
-                  //   ),
+                  if (buyRequestProvider.cartProductsCount > 0)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.red,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: FittedBox(
+                            child: Text(
+                              buyRequestProvider.cartProductsCount.toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        maxRadius: 9,
+                      ),
+                    ),
                 ],
               ),
             ),
