@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 
 class BuyRequestProvider with ChangeNotifier {
   List<BuyRequestProductsModel> _products = [];
-  List<BuyRequestProductsModel> get products => _products;
+  List<BuyRequestProductsModel> get products => [..._products];
   bool _isLoadingProducts = false;
   bool get isLoadingProducts => _isLoadingProducts;
   String _errorMessageGetProducts = "";
@@ -21,7 +21,7 @@ class BuyRequestProvider with ChangeNotifier {
   int get productsCount => _products.length;
 
   List<BuyRequestBuyerModel> _buyers = [];
-  List<BuyRequestBuyerModel> get buyers => _buyers;
+  List<BuyRequestBuyerModel> get buyers => [..._buyers];
   bool _isLoadingBuyer = false;
   bool get isLoadingBuyer => _isLoadingBuyer;
   String _errorMessageBuyer = "";
@@ -35,7 +35,7 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   List<BuyRequestRequestsTypeModel> _requestsType = [];
-  List<BuyRequestRequestsTypeModel> get requestsType => _requestsType;
+  List<BuyRequestRequestsTypeModel> get requestsType => [..._requestsType];
   bool _isLoadingRequestsType = false;
   bool get isLoadingRequestsType => _isLoadingRequestsType;
   String _errorMessageRequestsType = "";
@@ -50,7 +50,7 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   List<BuyRequestSupplierModel> _suppliers = [];
-  List<BuyRequestSupplierModel> get suppliers => _suppliers;
+  List<BuyRequestSupplierModel> get suppliers => [..._suppliers];
   bool _isLoadingSupplier = false;
   bool get isLoadingSupplier => _isLoadingSupplier;
   String _errorMessageSupplier = "";
@@ -63,7 +63,7 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   List<BuyRequestSupplierModel> _enterprises = [];
-  List<BuyRequestSupplierModel> get enterprises => _enterprises;
+  List<BuyRequestSupplierModel> get enterprises => [..._enterprises];
   bool _isLoadingEnterprises = false;
   bool get isLoadingEnterprises => _isLoadingEnterprises;
   String _errorMessageEnterprises = "";
@@ -73,12 +73,16 @@ class BuyRequestProvider with ChangeNotifier {
   String? get selectedBuyerDropDown => _selectedBuyerDropDown;
 
   List<BuyRequestCartProductModel> _cartProducts = [];
+  List<BuyRequestCartProductModel> get cartProducts => [..._cartProducts];
   int get cartProductsCount => _cartProducts.length;
 
   FocusNode focusNodeConsultProduct = FocusNode();
   FocusNode quantityFocusNode = FocusNode();
   FocusNode priceFocusNode = FocusNode();
   int indexOfSelectedProduct = -1;
+  TextEditingController quantityController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  final GlobalKey<FormState> insertQuantityFormKey = GlobalKey();
 
   Map jsonBuyRequest = {
     "crossId": UserData.crossIdentity,
@@ -138,7 +142,19 @@ class BuyRequestProvider with ChangeNotifier {
     _enterprises.clear();
   }
 
-  void updateProductWithProductCart() {
+  bool hasProductInCart(BuyRequestProductsModel product) {
+    int index = _cartProducts.indexWhere((cartProduct) =>
+        product.ProductPackingCode == cartProduct.ProductPackingCode &&
+        product.EnterpriseCode == cartProduct.EnterpriseCode);
+
+    if (index == -1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  void _updateProductWithProductCart() {
     for (int i = 0; i < _products.length; i++) {
       for (int j = 0; j < _cartProducts.length; j++) {
         if (_products[i].ProductPackingCode ==
@@ -198,7 +214,7 @@ class BuyRequestProvider with ChangeNotifier {
           listToAdd: _products,
         );
 
-        updateProductWithProductCart();
+        _updateProductWithProductCart();
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageGetProducts,

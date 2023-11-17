@@ -16,9 +16,6 @@ class BuyRequestInsertProductsPage extends StatefulWidget {
 class _BuyRequestInsertProductsPageState
     extends State<BuyRequestInsertProductsPage> {
   TextEditingController consultProductController = TextEditingController();
-  TextEditingController quantityController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  final GlobalKey<FormState> insertQuantityFormKey = GlobalKey();
 
   getProductWithCamera(BuyRequestProvider buyRequestProvider) async {
     FocusScope.of(context).unfocus();
@@ -61,15 +58,7 @@ class _BuyRequestInsertProductsPageState
           ),
           if (buyRequestProvider.isLoadingProducts)
             const CircularProgressIndicator(),
-          BuyRequestProductsItems(
-            priceController: priceController,
-            insertQuantityFormKey: insertQuantityFormKey,
-            internalEnterpriseCode: 1,
-            quantityController: quantityController,
-            getProductWithCamera: () async {
-              await getProductWithCamera(buyRequestProvider);
-            },
-          ),
+          const BuyRequestProductsItems(),
         ],
       ),
     );

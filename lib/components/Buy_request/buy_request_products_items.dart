@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Models/buy_request_models/buy_request_cart_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_insert_product_quantity.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_remove_product_widget.dart';
@@ -11,17 +12,9 @@ import 'package:provider/provider.dart';
 import '../Global_widgets/title_and_value.dart';
 
 class BuyRequestProductsItems extends StatefulWidget {
-  final int internalEnterpriseCode;
-  final TextEditingController quantityController;
-  final TextEditingController priceController;
-  final GlobalKey<FormState> insertQuantityFormKey;
-  final Function getProductWithCamera;
+  final bool showOnlyCartProducts;
   const BuyRequestProductsItems({
-    required this.internalEnterpriseCode,
-    required this.getProductWithCamera,
-    required this.quantityController,
-    required this.priceController,
-    required this.insertQuantityFormKey,
+    this.showOnlyCartProducts = false,
     Key? key,
   }) : super(key: key);
 
@@ -46,7 +39,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     required BuyRequestProvider buyRequestProvider,
     required int index,
   }) {
-    widget.quantityController.text = "";
+    buyRequestProvider.quantityController.text = "";
 
     if (buyRequestProvider.productsCount == 1 ||
         buyRequestProvider.isLoadingProducts) {
@@ -99,6 +92,14 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     required int index,
   }) {
     BuyRequestProductsModel product = buyRequestProvider.products[index];
+
+    if (widget.showOnlyCartProducts) {
+      bool dontHaveProductInCart =
+          !buyRequestProvider.hasProductInCart(product);
+      if (dontHaveProductInCart) {
+        return Container();
+      }
+    }
 
     return InkWell(
       onTap: buyRequestProvider.isLoadingProducts
@@ -164,11 +165,10 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                 ),
               if (buyRequestProvider.indexOfSelectedProduct == index)
                 BuyRequestInsertProductQuantity(
-                  internalEnterpriseCode: product.EnterpriseCode,
-                  getProductWithCamera: widget.getProductWithCamera,
-                  insertQuantityFormKey: widget.insertQuantityFormKey,
-                  priceController: widget.priceController,
-                  quantityController: widget.quantityController,
+                  insertQuantityFormKey:
+                      buyRequestProvider.insertQuantityFormKey,
+                  priceController: buyRequestProvider.priceController,
+                  quantityController: buyRequestProvider.quantityController,
                   index: index,
                 ),
             ],

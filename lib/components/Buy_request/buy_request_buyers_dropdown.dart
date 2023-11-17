@@ -5,8 +5,12 @@ import 'package:provider/provider.dart';
 
 class BuyRequestBuyersDropwodn extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;
+  final bool enabledChangeBuyer;
+  final bool showRefreshIcon;
   const BuyRequestBuyersDropwodn({
     required this.buyersKey,
+    this.enabledChangeBuyer = true,
+    this.showRefreshIcon = true,
     Key? key,
   }) : super(key: key);
 
@@ -36,7 +40,8 @@ class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  onChanged: (value) {},
+                  onChanged:
+                      widget.enabledChangeBuyer == false ? null : (value) {},
                   value: buyRequestProvider.selectedBuyer?.Name,
                   dropdownKey: widget.buyersKey,
                   isLoading: buyRequestProvider.isLoadingBuyer,
@@ -78,25 +83,26 @@ class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: buyRequestProvider.isLoadingBuyer
-                  ? null
-                  : () async {
-                      widget.buyersKey.currentState?.reset();
+            if (widget.showRefreshIcon)
+              IconButton(
+                onPressed: buyRequestProvider.isLoadingBuyer
+                    ? null
+                    : () async {
+                        widget.buyersKey.currentState?.reset();
 
-                      await buyRequestProvider.getBuyers(
-                        isSearchingAgain: true,
-                        context: context,
-                      );
-                    },
-              tooltip: "Pesquisar compradores novamente",
-              icon: Icon(
-                Icons.refresh,
-                color: buyRequestProvider.isLoadingBuyer
-                    ? Colors.grey
-                    : Theme.of(context).colorScheme.primary,
+                        await buyRequestProvider.getBuyers(
+                          isSearchingAgain: true,
+                          context: context,
+                        );
+                      },
+                tooltip: "Pesquisar compradores novamente",
+                icon: Icon(
+                  Icons.refresh,
+                  color: buyRequestProvider.isLoadingBuyer
+                      ? Colors.grey
+                      : Theme.of(context).colorScheme.primary,
+                ),
               ),
-            ),
           ],
         ),
       ],

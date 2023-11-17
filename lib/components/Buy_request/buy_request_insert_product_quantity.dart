@@ -8,14 +8,10 @@ class BuyRequestInsertProductQuantity extends StatefulWidget {
   final TextEditingController quantityController;
   final TextEditingController priceController;
   final GlobalKey<FormState> insertQuantityFormKey;
-  final int internalEnterpriseCode;
   final int index;
-  final Function getProductWithCamera;
 
   const BuyRequestInsertProductQuantity({
-    required this.internalEnterpriseCode,
     required this.priceController,
-    required this.getProductWithCamera,
     required this.insertQuantityFormKey,
     required this.quantityController,
     required this.index,

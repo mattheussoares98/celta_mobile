@@ -5,9 +5,13 @@ import 'package:provider/provider.dart';
 
 class BuyRequestRequestsTypeDropdown extends StatefulWidget {
   final GlobalKey<FormFieldState> requestsKey;
+  final bool enabledChangeBuyer;
+  final bool showRefreshIcon;
 
   const BuyRequestRequestsTypeDropdown({
     required this.requestsKey,
+    this.enabledChangeBuyer = true,
+    this.showRefreshIcon = true,
     Key? key,
   }) : super(key: key);
 
@@ -39,7 +43,8 @@ class _BuyRequestRequestsTypeDropdownState
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  onChanged: (value) {},
+                  onChanged:
+                      widget.enabledChangeBuyer == false ? null : (value) {},
                   value: buyRequestProvider.selectedRequestModel?.Name,
                   dropdownKey: widget.requestsKey,
                   isLoading: buyRequestProvider.isLoadingRequestsType,
@@ -81,25 +86,26 @@ class _BuyRequestRequestsTypeDropdownState
                 ),
               ),
             ),
-            IconButton(
-              onPressed: buyRequestProvider.isLoadingRequestsType
-                  ? null
-                  : () async {
-                      widget.requestsKey.currentState?.reset();
+            if (widget.showRefreshIcon)
+              IconButton(
+                onPressed: buyRequestProvider.isLoadingRequestsType
+                    ? null
+                    : () async {
+                        widget.requestsKey.currentState?.reset();
 
-                      await buyRequestProvider.getRequestsType(
-                        context: context,
-                        isSearchingAgain: true,
-                      );
-                    },
-              tooltip: "Pesquisar modelos de pedido novamente",
-              icon: Icon(
-                Icons.refresh,
-                color: buyRequestProvider.isLoadingRequestsType
-                    ? Colors.grey
-                    : Theme.of(context).colorScheme.primary,
+                        await buyRequestProvider.getRequestsType(
+                          context: context,
+                          isSearchingAgain: true,
+                        );
+                      },
+                tooltip: "Pesquisar modelos de pedido novamente",
+                icon: Icon(
+                  Icons.refresh,
+                  color: buyRequestProvider.isLoadingRequestsType
+                      ? Colors.grey
+                      : Theme.of(context).colorScheme.primary,
+                ),
               ),
-            ),
           ],
         ),
       ],
