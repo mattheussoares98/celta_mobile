@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
+import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +12,14 @@ buyRequestRemoveProduct({
 }) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Expanded(
         flex: 7,
-        child: Text(
-          "Qtd no carrinho: " +
-              ConvertString.convertToBrazilianNumber(product.quantity),
-          style: const TextStyle(
-            color: Colors.red,
-            fontWeight: FontWeight.bold,
-          ),
+        child: TitleAndSubtitle.titleAndSubtitle(
+          title: "Quantidade",
+          value: ConvertString.convertToBrazilianNumber(product.quantity),
+          subtitleColor: Theme.of(context).colorScheme.primary,
         ),
       ),
       const SizedBox(width: 5),

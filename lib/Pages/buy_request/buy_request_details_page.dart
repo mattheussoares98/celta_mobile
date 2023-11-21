@@ -1,4 +1,5 @@
 import 'package:celta_inventario/components/Buy_request/buy_request_buyers_dropdown.dart';
+import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_requests_type_dropdown.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
@@ -97,14 +98,13 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                 ),
               ),
             const SizedBox(height: 20),
-            const Text(
-              "Empresas",
-              style: TextStyle(
-                color: Colors.grey,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
+            if (buyRequestProvider.hasSelectedEnterprise)
+              const BuyRequestEnterprises(showOnlySelectedsEnterprises: true),
+            if (!buyRequestProvider.hasSelectedEnterprise)
+              Text(
+                buyRequestProvider.selectedRequestModel?.Name ??
+                    "Não selecionado ainda",
               ),
-            ),
             const Text(
               "Produtos",
               style: TextStyle(

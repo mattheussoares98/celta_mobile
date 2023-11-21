@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:celta_inventario/Models/buy_request_models/buy_request_buyer_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_cart_product_model.dart';
+import 'package:celta_inventario/Models/buy_request_models/buy_request_enterprise_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
@@ -29,8 +30,15 @@ class BuyRequestProvider with ChangeNotifier {
   int get buyersCount => _buyers.length;
   BuyRequestBuyerModel? _selectedBuyer;
   BuyRequestBuyerModel? get selectedBuyer => _selectedBuyer;
+  String? _selectedBuyerDropDown;
+  String? get selectedBuyerDropDown => _selectedBuyerDropDown;
   set selectedBuyer(BuyRequestBuyerModel? value) {
     _selectedBuyer = value;
+    notifyListeners();
+  }
+
+  set selectedBuyerDropDown(String? value) {
+    _selectedBuyerDropDown = value;
     notifyListeners();
   }
 
@@ -45,6 +53,12 @@ class BuyRequestProvider with ChangeNotifier {
   BuyRequestRequestsTypeModel? get selectedRequestModel =>
       _selectedRequestModel;
   set selectedRequestModel(BuyRequestRequestsTypeModel? value) {
+    if (_selectedRequestModel != null) {
+      clearSuppliers();
+      clearProducts();
+      _clearCartProducts();
+      clearEnterprises();
+    }
     _selectedRequestModel = value;
     notifyListeners();
   }
@@ -56,21 +70,32 @@ class BuyRequestProvider with ChangeNotifier {
   String _errorMessageSupplier = "";
   String get errorMessageSupplier => _errorMessageSupplier;
   int get suppliersCount => _suppliers.length;
-  BuyRequestSupplierModel? selectedSupplier;
-  set selectedBuyerDropDown(String? value) {
-    _selectedBuyerDropDown = value;
+  BuyRequestSupplierModel? _selectedSupplier;
+  BuyRequestSupplierModel? get selectedSupplier => _selectedSupplier;
+  set selectedSupplier(BuyRequestSupplierModel? value) {
+    if (_selectedSupplier != null) {
+      changeSelectedRequestModel();
+    }
     notifyListeners();
   }
 
-  List<BuyRequestSupplierModel> _enterprises = [];
-  List<BuyRequestSupplierModel> get enterprises => [..._enterprises];
+  List<BuyRequestEnterpriseModel> _enterprises = [];
+  List<BuyRequestEnterpriseModel> get enterprises => [..._enterprises];
   bool _isLoadingEnterprises = false;
   bool get isLoadingEnterprises => _isLoadingEnterprises;
   String _errorMessageEnterprises = "";
   String get errorMessageEnterprises => _errorMessageEnterprises;
   int get enterprisesCount => _enterprises.length;
-  String? _selectedBuyerDropDown;
-  String? get selectedBuyerDropDown => _selectedBuyerDropDown;
+  bool get hasSelectedEnterprise {
+    bool hasSelectedEnterprise = false;
+    for (var index = 0; index < _enterprises.length; index++) {
+      if (_enterprises[index].selected) {
+        hasSelectedEnterprise = true;
+        break;
+      }
+    }
+    return hasSelectedEnterprise;
+  }
 
   List<BuyRequestCartProductModel> _cartProducts = [];
   List<BuyRequestCartProductModel> get cartProducts => [..._cartProducts];
@@ -123,6 +148,10 @@ class BuyRequestProvider with ChangeNotifier {
     _products.clear();
   }
 
+  void _clearCartProducts() {
+    _cartProducts.clear();
+  }
+
   void clearBuyers() {
     _buyers.clear();
     _selectedBuyer = null;
@@ -140,6 +169,12 @@ class BuyRequestProvider with ChangeNotifier {
 
   void clearEnterprises() {
     _enterprises.clear();
+  }
+
+  void _unselectEnterprises() {
+    _enterprises.forEach((element) {
+      element.selected = false;
+    });
   }
 
   bool hasProductInCart(BuyRequestProductsModel product) {
@@ -170,6 +205,13 @@ class BuyRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void changeSelectedRequestModel() {
+    clearSuppliers();
+    clearEnterprises();
+    clearProducts();
+    _clearCartProducts();
+  }
+
   Future<void> getProducts({
     required String searchValue,
     required BuildContext context,
@@ -188,7 +230,7 @@ class BuyRequestProvider with ChangeNotifier {
       "RequestTypeCode": _selectedRequestModel!.Code,
       "EnterpriseCodes": [1, 2, 3, 4],
       // "EnterpriseDestinyCode": 0,
-      "SupplierCode": selectedSupplier!.Code,
+      "SupplierCode": _selectedSupplier!.Code,
       // "SearchType": 0,
       // "Routine": 0,
     };
@@ -215,6 +257,8 @@ class BuyRequestProvider with ChangeNotifier {
         );
 
         _updateProductWithProductCart();
+
+        _products.sort((a, b) => a.PLU.compareTo(b.PLU));
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageGetProducts,
@@ -400,14 +444,15 @@ class BuyRequestProvider with ChangeNotifier {
     clearEnterprises();
     if (isSearchingAgain) notifyListeners();
 
-    Map jsonGetEnterprises = {
-      "crossIdentity": UserData.crossIdentity,
-    };
+    // Map jsonGetEnterprises = {
+    //   "crossIdentity": UserData.crossIdentity,
+    // };
 
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "filters": json.encode(jsonGetEnterprises),
+          "crossIdentity": UserData.crossIdentity,
+          // "filters": json.encode(jsonGetEnterprises),
         },
         serviceASMX: "CeltaEnterpriseService.asmx",
         typeOfResponse: "GetEnterprisesJsonResponse",
@@ -418,10 +463,10 @@ class BuyRequestProvider with ChangeNotifier {
       _errorMessageEnterprises = SoapHelperResponseParameters.errorMessage;
 
       if (_errorMessageEnterprises == "") {
-        // BuyRequestSupplierModel.responseAsStringToBuyRequestSupplierModel(
-        //   responseAsString: SoapHelperResponseParameters.responseAsString,
-        //   listToAdd: _suppliers,
-        // );
+        BuyRequestEnterpriseModel.responseAsStringToBuyRequestEnterpriseModel(
+          responseAsString: SoapHelperResponseParameters.responseAsString,
+          listToAdd: _enterprises,
+        );
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageEnterprises,

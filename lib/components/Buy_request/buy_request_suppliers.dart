@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -20,16 +21,27 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
   @override
   void initState() {
     super.initState();
-    updateSelectedSupplier();
+    restoreSelectedSupplier();
   }
 
-  void updateSelectedSupplier() {
+  void restoreSelectedSupplier() {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
 
     if (buyRequestProvider.selectedSupplier != null) {
       _groupValue = buyRequestProvider.suppliers
           .indexOf(buyRequestProvider.selectedSupplier!);
     }
+  }
+
+  void updateSelectedSupplier({
+    required int? value,
+    required BuyRequestProvider buyRequestProvider,
+    required BuyRequestSupplierModel supplier,
+  }) {
+    setState(() {
+      _groupValue = value!;
+    });
+    buyRequestProvider.selectedSupplier = supplier;
   }
 
   @override
@@ -85,10 +97,27 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
                   vertical: VisualDensity.minimumDensity,
                 ),
                 onChanged: (int? value) {
-                  setState(() {
-                    _groupValue = value!;
-                  });
-                  buyRequestProvider.selectedSupplier = supplier;
+                  if (buyRequestProvider.selectedSupplier == null) {
+                    updateSelectedSupplier(
+                      value: value,
+                      buyRequestProvider: buyRequestProvider,
+                      supplier: supplier,
+                    );
+                  } else {
+                    ShowAlertDialog.showAlertDialog(
+                      context: context,
+                      title: "Atualizar fornecedor",
+                      subtitle:
+                          "Se você alterar o fornecedor, todos produtos serão removidos e todas empresas serão desmarcadas.\n\nDeseja realmente alterar o fornecedor?",
+                      function: () {
+                        updateSelectedSupplier(
+                          value: value,
+                          buyRequestProvider: buyRequestProvider,
+                          supplier: supplier,
+                        );
+                      },
+                    );
+                  }
                 },
                 subtitle: Column(
                   children: [

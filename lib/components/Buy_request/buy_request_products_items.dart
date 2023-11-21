@@ -1,4 +1,3 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_cart_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_insert_product_quantity.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_remove_product_widget.dart';
@@ -135,15 +134,12 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                 value: product.Name,
               ),
               TitleAndSubtitle.titleAndSubtitle(
-                title: "Embalagem",
-                value: product.PackingQuantity,
+                title: "Empresa",
+                value: product.EnterpriseCode.toString(),
               ),
               TitleAndSubtitle.titleAndSubtitle(
-                title: "Quantidade",
-                value: ConvertString.convertToBrazilianNumber(product.quantity),
-                subtitleColor: product.quantity == 0
-                    ? Colors.red
-                    : Theme.of(context).colorScheme.primary,
+                title: "Embalagem",
+                value: product.PackingQuantity,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço",

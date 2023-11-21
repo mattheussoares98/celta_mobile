@@ -53,7 +53,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
   int _selectedIndex = 0;
 
-  bool _selectedBuyerAndRequestType() {
+  bool _hasSelectedBuyerAndRequestType() {
     bool buyersIsValid = _buyersKey.currentState?.validate() ?? false;
     bool requestsIsValid = _requestsKey.currentState?.validate() ?? false;
 
@@ -70,7 +70,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
         buyRequestProvider.isLoadingSupplier) return;
 
     if (_selectedIndex == 0) {
-      if (!_selectedBuyerAndRequestType()) {
+      if (!_hasSelectedBuyerAndRequestType() && (index == 1 || index == 2)) {
         ShowSnackbarMessage.showMessage(
           message: "Selecione um comprador e um modelo de pedido",
           context: context,
@@ -79,6 +79,20 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
       } else if (buyRequestProvider.selectedSupplier == null) {
         ShowSnackbarMessage.showMessage(
           message: "Selecione um fornecedor",
+          context: context,
+        );
+        return;
+      } else if (index == 2 && !buyRequestProvider.hasSelectedEnterprise) {
+        ShowSnackbarMessage.showMessage(
+          message: "Selecione pelo menos uma empresa",
+          context: context,
+        );
+        return;
+      }
+    } else if (_selectedIndex == 1) {
+      if (!buyRequestProvider.hasSelectedEnterprise && index == 2) {
+        ShowSnackbarMessage.showMessage(
+          message: "Selecione pelo menos uma empresa",
           context: context,
         );
         return;

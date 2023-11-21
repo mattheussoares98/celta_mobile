@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,11 +21,15 @@ class _BuyRequestEnterprisesPageState extends State<BuyRequestEnterprisesPage> {
 
   Future<void> _getEnterprises() async {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
+    if (buyRequestProvider.enterprisesCount > 0) return;
     await buyRequestProvider.getEnterprises(context: context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Text("Empresas");
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: BuyRequestEnterprises(),
+    );
   }
 }
