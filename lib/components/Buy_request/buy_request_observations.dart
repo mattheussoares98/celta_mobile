@@ -1,0 +1,34 @@
+import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
+import 'package:celta_inventario/providers/buy_request_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class BuyRequestObservations extends StatelessWidget {
+  const BuyRequestObservations({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxHeight: 200,
+        ),
+        child: TextField(
+          onChanged: (value) {
+            buyRequestProvider.observations = value;
+          },
+          maxLines: null,
+          maxLength: 1000,
+          decoration: FormFieldHelper.decoration(
+            isLoading: false,
+            context: context,
+            labelText: 'Observações',
+          ),
+          style: FormFieldHelper.style(),
+        ),
+      ),
+    );
+  }
+}

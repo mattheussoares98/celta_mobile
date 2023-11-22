@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_buyer_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_cart_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_enterprise_model.dart';
+import 'package:celta_inventario/Models/buy_request_models/buy_request_enterprise_selected_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
@@ -34,11 +35,12 @@ class BuyRequestProvider with ChangeNotifier {
   String? get selectedBuyerDropDown => _selectedBuyerDropDown;
   set selectedBuyer(BuyRequestBuyerModel? value) {
     _selectedBuyer = value;
-    notifyListeners();
-  }
 
-  set selectedBuyerDropDown(String? value) {
-    _selectedBuyerDropDown = value;
+    if (value != null) {
+      _jsonBuyRequest["BuyerCode"] = value.Code;
+    } else {
+      _jsonBuyRequest["BuyerCode"] = -1;
+    }
     notifyListeners();
   }
 
@@ -53,13 +55,18 @@ class BuyRequestProvider with ChangeNotifier {
   BuyRequestRequestsTypeModel? get selectedRequestModel =>
       _selectedRequestModel;
   set selectedRequestModel(BuyRequestRequestsTypeModel? value) {
-    if (_selectedRequestModel != null) {
+    _selectedRequestModel = value;
+
+    if (value != null) {
+      _jsonBuyRequest["RequestTypeCode"] = value.Code;
       clearSuppliers();
       clearProducts();
       _clearCartProducts();
       clearEnterprises();
+    } else {
+      _jsonBuyRequest["RequestTypeCode"] = -1;
     }
-    _selectedRequestModel = value;
+
     notifyListeners();
   }
 
@@ -73,8 +80,13 @@ class BuyRequestProvider with ChangeNotifier {
   BuyRequestSupplierModel? _selectedSupplier;
   BuyRequestSupplierModel? get selectedSupplier => _selectedSupplier;
   set selectedSupplier(BuyRequestSupplierModel? value) {
-    if (_selectedSupplier != null) {
-      changeSelectedRequestModel();
+    _selectedSupplier = value;
+
+    if (value != null) {
+      clearEnterprises();
+      clearProducts();
+      _clearCartProducts();
+      _jsonBuyRequest["SupplierCode"] = value.Code;
     }
     notifyListeners();
   }
@@ -97,6 +109,8 @@ class BuyRequestProvider with ChangeNotifier {
     return hasSelectedEnterprise;
   }
 
+  List<BuyRequestEnterpriseSelectedModel> _enterprisesSelecteds = [];
+
   List<BuyRequestCartProductModel> _cartProducts = [];
   List<BuyRequestCartProductModel> get cartProducts => [..._cartProducts];
   int get cartProductsCount => _cartProducts.length;
@@ -109,40 +123,74 @@ class BuyRequestProvider with ChangeNotifier {
   TextEditingController priceController = TextEditingController();
   final GlobalKey<FormState> insertQuantityFormKey = GlobalKey();
 
-  Map jsonBuyRequest = {
+  String _obvervations = "";
+  String get observations => _obvervations;
+  set observations(String newValue) {
+    _obvervations = newValue;
+    _jsonBuyRequest["Observations"] = newValue;
+  }
+
+  Map _jsonBuyRequest = {
     "crossId": UserData.crossIdentity,
-    "BuyerCode": 0,
-    "RequestTypeCode": 0,
-    "SupplierCode": 0,
-    "DateOfCreation": "2023-10-25T10:07:00",
+    "BuyerCode": -1,
+    "RequestTypeCode": -1,
+    "SupplierCode": -1,
+    // "DateOfCreation": DateTime.now(),
+    // "DateOfCreation": "2023-10-25T10:07:00",
     "Observations": "",
-    "Enterprises": [
-      {"EnterpriseCode": 2, "IsPrincipal": true},
-      {"EnterpriseCode": 3, "IsPrincipal": false}
-    ],
-    "Products": [
-      {
-        "EnterpriseCode": 2,
-        "ProductPackingCode": 1084,
-        "Value": 10.0,
-        "Quantity": 5,
-        "IncrementPercentageOrValue": "R\$",
-        "IncrementValue": 0,
-        "DiscountPercentageOrValue": "R\$",
-        "DiscountValue": 0
-      },
-      {
-        "EnterpriseCode": 3,
-        "ProductPackingCode": 1084,
-        "Value": 12.0,
-        "Quantity": 7,
-        "IncrementPercentageOrValue": "R\$",
-        "IncrementValue": 0,
-        "DiscountPercentageOrValue": "R\$",
-        "DiscountValue": 0
-      }
-    ],
+    "Enterprises": [],
+    "Products": [],
   };
+
+  void updateSelectedEnterprise(BuyRequestEnterpriseModel enterprise) {
+    int indexOfEnterprise = _enterprises.indexOf(enterprise);
+
+    final newEnterprise = BuyRequestEnterpriseModel(
+      Code: enterprise.Code,
+      SaleRequestTypeCode: enterprise.SaleRequestTypeCode,
+      PersonalizedCode: enterprise.PersonalizedCode,
+      Name: enterprise.Name,
+      FantasizesName: enterprise.FantasizesName,
+      CnpjNumber: enterprise.CnpjNumber,
+      InscriptionNumber: enterprise.InscriptionNumber,
+      selected: !enterprise.selected, //única propriedade que muda
+    );
+
+    if (indexOfEnterprise != -1) {
+      _enterprises[indexOfEnterprise] = newEnterprise;
+    }
+
+    _addOrRemoveEnterprisesSelecteds(enterprise);
+    _updateEnterprisesIn_JsonBuyRequest();
+
+    notifyListeners();
+  }
+
+  _updateEnterprisesIn_JsonBuyRequest() {
+    _jsonBuyRequest["Enterprises"] =
+        _enterprisesSelecteds.map((e) => e.toJson()).toList();
+  }
+
+  _addOrRemoveEnterprisesSelecteds(BuyRequestEnterpriseModel enterprise) {
+    int indexOfSelectedEnterprise = _enterprisesSelecteds
+        .indexWhere((element) => element.EnterpriseCode == enterprise.Code);
+
+    if (indexOfSelectedEnterprise == -1) {
+      final selectedEnterprise = BuyRequestEnterpriseSelectedModel(
+        IsPrincipal: _enterprisesSelecteds.isEmpty,
+        EnterpriseCode: enterprise.Code,
+      );
+
+      _enterprisesSelecteds.add(selectedEnterprise);
+    } else {
+      _enterprisesSelecteds.removeAt(indexOfSelectedEnterprise);
+    }
+  }
+
+  void _clearEnterprisesSelecteds() {
+    _enterprisesSelecteds.clear();
+    _jsonBuyRequest["Enterprises"] = [];
+  }
 
   void clearProducts() {
     _products.clear();
@@ -154,12 +202,12 @@ class BuyRequestProvider with ChangeNotifier {
 
   void clearBuyers() {
     _buyers.clear();
-    _selectedBuyer = null;
+    selectedBuyer = null;
   }
 
   void clearRequestsType() {
     _requestsType.clear();
-    _selectedRequestModel = null;
+    selectedRequestModel = null;
   }
 
   void clearSuppliers() {
@@ -169,12 +217,7 @@ class BuyRequestProvider with ChangeNotifier {
 
   void clearEnterprises() {
     _enterprises.clear();
-  }
-
-  void _unselectEnterprises() {
-    _enterprises.forEach((element) {
-      element.selected = false;
-    });
+    _clearEnterprisesSelecteds();
   }
 
   bool hasProductInCart(BuyRequestProductsModel product) {
@@ -190,6 +233,14 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   void _updateProductWithProductCart() {
+    if (cartProductsCount == 0) {
+      _products.forEach((element) {
+        element.Value = 0;
+        element.quantity = 0;
+      });
+      return;
+    }
+
     for (int i = 0; i < _products.length; i++) {
       for (int j = 0; j < _cartProducts.length; j++) {
         if (_products[i].ProductPackingCode ==
@@ -226,11 +277,11 @@ class BuyRequestProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 2,
       "SearchValue": searchValue,
-      // "SearchTypeInt": 0,
       "RequestTypeCode": _selectedRequestModel!.Code,
       "EnterpriseCodes": [1, 2, 3, 4],
-      // "EnterpriseDestinyCode": 0,
       "SupplierCode": _selectedSupplier!.Code,
+      // "EnterpriseDestinyCode": 0,
+      // "SearchTypeInt": 0,
       // "SearchType": 0,
       // "Routine": 0,
     };
@@ -509,6 +560,8 @@ class BuyRequestProvider with ChangeNotifier {
       DiscountValue: 0,
     );
     _cartProducts.add(cartProduct);
+
+    _jsonBuyRequest["Products"] = _cartProducts.map((e) => e.toJson()).toList();
     notifyListeners();
   }
 

@@ -18,4 +18,15 @@ class BuyRequestCartProductModel {
     required this.DiscountPercentageOrValue,
     required this.DiscountValue,
   });
+
+  toJson() => {
+        "EnterpriseCode": EnterpriseCode,
+        "ProductPackingCode": ProductPackingCode,
+        "Value": Value,
+        "Quantity": Quantity,
+        "IncrementPercentageOrValue": IncrementPercentageOrValue,
+        "IncrementValue": IncrementValue,
+        "DiscountPercentageOrValue": DiscountPercentageOrValue,
+        "DiscountValue": DiscountValue,
+      };
 }

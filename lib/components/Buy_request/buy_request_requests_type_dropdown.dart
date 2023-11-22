@@ -1,7 +1,9 @@
+import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_dropdownformfield.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import "../Global_widgets/show_alert_dialog.dart";
 
 class BuyRequestRequestsTypeDropdown extends StatefulWidget {
   final GlobalKey<FormFieldState> requestsKey;
@@ -23,6 +25,72 @@ class BuyRequestRequestsTypeDropdown extends StatefulWidget {
 class _BuyRequestRequestsTypeDropdownState
     extends State<BuyRequestRequestsTypeDropdown> {
   @override
+  void initState() {
+    super.initState();
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
+    atualValue = buyRequestProvider.selectedRequestModel?.Name;
+  }
+
+  String? previousValue;
+  String? atualValue;
+
+  void onChange({
+    required BuyRequestProvider buyRequestProvider,
+    required dynamic value,
+  }) {
+    if (value == atualValue) {
+      return;
+    }
+
+    BuyRequestRequestsTypeModel selectedRequestModel = buyRequestProvider
+        .requestsType
+        .firstWhere((element) => element.Name == value);
+
+    widget.requestsKey.currentState?.reset();
+    setState(() {
+      atualValue = previousValue;
+    });
+
+    if (buyRequestProvider.selectedRequestModel == null ||
+        buyRequestProvider.selectedSupplier == null) {
+      setState(() {
+        atualValue = value;
+      });
+      buyRequestProvider.selectedRequestModel = selectedRequestModel;
+    } else {
+      ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: "Alterar valor",
+        subtitle:
+            "Se você alterar o modelo de pedido, todos fornecedores, empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
+        function: () {
+          widget.requestsKey.currentState?.reset();
+
+          setState(() {
+            atualValue = value;
+          });
+
+          buyRequestProvider.selectedRequestModel = selectedRequestModel;
+        },
+      );
+    }
+    if (atualValue != buyRequestProvider.selectedRequestModel?.Name) {
+      atualValue = buyRequestProvider.selectedRequestModel?.Name;
+    }
+  }
+
+  Future<void> getRequestsType(BuyRequestProvider buyRequestProvider) async {
+    widget.requestsKey.currentState?.reset();
+
+    await buyRequestProvider.getRequestsType(
+      context: context,
+      isSearchingAgain: true,
+    );
+
+    atualValue = null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
 
@@ -43,9 +111,15 @@ class _BuyRequestRequestsTypeDropdownState
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  onChanged:
-                      widget.enabledChangeBuyer == false ? null : (value) {},
-                  value: buyRequestProvider.selectedRequestModel?.Name,
+                  onChanged: widget.enabledChangeBuyer == false
+                      ? null
+                      : (value) {
+                          onChange(
+                            buyRequestProvider: buyRequestProvider,
+                            value: value,
+                          );
+                        },
+                  value: atualValue,
                   dropdownKey: widget.requestsKey,
                   isLoading: buyRequestProvider.isLoadingRequestsType,
                   disabledHintText: "Modelo de pedido",
@@ -63,7 +137,7 @@ class _BuyRequestRequestsTypeDropdownState
                           value: value.Name,
                           alignment: Alignment.center,
                           onTap: () {
-                            buyRequestProvider.selectedRequestModel = value;
+                            // buyRequestProvider.selectedRequestModel = value;
                           },
                           child: FittedBox(
                             child: Column(
@@ -91,12 +165,21 @@ class _BuyRequestRequestsTypeDropdownState
                 onPressed: buyRequestProvider.isLoadingRequestsType
                     ? null
                     : () async {
-                        widget.requestsKey.currentState?.reset();
-
-                        await buyRequestProvider.getRequestsType(
-                          context: context,
-                          isSearchingAgain: true,
-                        );
+                        if (buyRequestProvider.selectedSupplier != null ||
+                            buyRequestProvider.hasSelectedEnterprise ||
+                            buyRequestProvider.cartProductsCount > 0) {
+                          ShowAlertDialog.showAlertDialog(
+                            context: context,
+                            title: "Pesquisar novamente",
+                            subtitle:
+                                "Se você pesquisar os modelos de pedido, todos fornecedores, empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
+                            function: () async {
+                              await getRequestsType(buyRequestProvider);
+                            },
+                          );
+                        } else {
+                          await getRequestsType(buyRequestProvider);
+                        }
                       },
                 tooltip: "Pesquisar modelos de pedido novamente",
                 icon: Icon(

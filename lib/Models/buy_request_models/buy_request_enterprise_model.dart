@@ -8,7 +8,7 @@ class BuyRequestEnterpriseModel {
   final String FantasizesName;
   final String CnpjNumber;
   final String InscriptionNumber;
-  bool selected;
+  final bool selected;
 
   BuyRequestEnterpriseModel({
     required this.Code,

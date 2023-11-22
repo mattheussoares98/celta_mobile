@@ -56,9 +56,7 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
                     vertical: VisualDensity.minimumDensity,
                   ),
                   onChanged: (bool? value) {
-                    setState(() {
-                      enterprise.selected = value!;
-                    });
+                    buyRequestProvider.updateSelectedEnterprise(enterprise);
                   },
                   subtitle: Column(
                     children: [
@@ -91,7 +89,10 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
               child: TextButton(
                 onPressed: () async {
                   if (buyRequestProvider.productsCount == 0) {
-                    await buyRequestProvider.getEnterprises(context: context);
+                    await buyRequestProvider.getEnterprises(
+                      context: context,
+                      isSearchingAgain: true,
+                    );
                   } else {
                     ShowAlertDialog.showAlertDialog(
                       context: context,
@@ -118,12 +119,12 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
               ),
             ),
           if (buyRequestProvider.isLoadingEnterprises)
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: Column(
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
                     children: [
                       Text(
                         "Consultando empresas",
@@ -137,8 +138,8 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
                       CircularProgressIndicator(color: Colors.grey),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
         ],
       ),

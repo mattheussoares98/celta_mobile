@@ -57,7 +57,23 @@ class _BuyRequestInsertProductsPageState
             focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
           ),
           if (buyRequestProvider.isLoadingProducts)
-            const CircularProgressIndicator(),
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Column(
+                children: [
+                  Text(
+                    "Consultando produto(s)",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  CircularProgressIndicator(color: Colors.grey),
+                ],
+              ),
+            ),
           const BuyRequestProductsItems(),
         ],
       ),

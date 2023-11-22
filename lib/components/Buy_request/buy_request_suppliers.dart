@@ -38,10 +38,27 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
     required BuyRequestProvider buyRequestProvider,
     required BuyRequestSupplierModel supplier,
   }) {
-    setState(() {
-      _groupValue = value!;
-    });
-    buyRequestProvider.selectedSupplier = supplier;
+    if (buyRequestProvider.selectedSupplier != null &&
+        (buyRequestProvider.hasSelectedEnterprise ||
+            buyRequestProvider.cartProductsCount > 0)) {
+      ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: "Alterar fornecedor",
+        subtitle:
+            "Se você alterar o fornecedor, todas empresas e produtos serão removidos do pedido de compras.\n\nDeseja realmente alterar o fornecedor?",
+        function: () {
+          setState(() {
+            _groupValue = value!;
+          });
+          buyRequestProvider.selectedSupplier = supplier;
+        },
+      );
+    } else {
+      setState(() {
+        _groupValue = value!;
+      });
+      buyRequestProvider.selectedSupplier = supplier;
+    }
   }
 
   @override
@@ -97,27 +114,11 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
                   vertical: VisualDensity.minimumDensity,
                 ),
                 onChanged: (int? value) {
-                  if (buyRequestProvider.selectedSupplier == null) {
-                    updateSelectedSupplier(
-                      value: value,
-                      buyRequestProvider: buyRequestProvider,
-                      supplier: supplier,
-                    );
-                  } else {
-                    ShowAlertDialog.showAlertDialog(
-                      context: context,
-                      title: "Atualizar fornecedor",
-                      subtitle:
-                          "Se você alterar o fornecedor, todos produtos serão removidos e todas empresas serão desmarcadas.\n\nDeseja realmente alterar o fornecedor?",
-                      function: () {
-                        updateSelectedSupplier(
-                          value: value,
-                          buyRequestProvider: buyRequestProvider,
-                          supplier: supplier,
-                        );
-                      },
-                    );
-                  }
+                  updateSelectedSupplier(
+                    value: value,
+                    buyRequestProvider: buyRequestProvider,
+                    supplier: supplier,
+                  );
                 },
                 subtitle: Column(
                   children: [

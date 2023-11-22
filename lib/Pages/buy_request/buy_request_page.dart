@@ -65,9 +65,10 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
     required BuyRequestProvider buyRequestProvider,
   }) {
     if (buyRequestProvider.isLoadingBuyer ||
-        buyRequestProvider.isLoadingProducts ||
         buyRequestProvider.isLoadingRequestsType ||
-        buyRequestProvider.isLoadingSupplier) return;
+        buyRequestProvider.isLoadingSupplier ||
+        buyRequestProvider.isLoadingEnterprises ||
+        buyRequestProvider.isLoadingProducts) return;
 
     if (_selectedIndex == 0) {
       if (!_hasSelectedBuyerAndRequestType() && (index == 1 || index == 2)) {
@@ -82,7 +83,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
           context: context,
         );
         return;
-      } else if (index == 2 && !buyRequestProvider.hasSelectedEnterprise) {
+      } else if ((index == 2) && !buyRequestProvider.hasSelectedEnterprise) {
         ShowSnackbarMessage.showMessage(
           message: "Selecione pelo menos uma empresa",
           context: context,
