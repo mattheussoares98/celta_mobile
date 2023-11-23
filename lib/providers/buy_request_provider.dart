@@ -7,6 +7,7 @@ import 'package:celta_inventario/Models/buy_request_models/buy_request_enterpris
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
+import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
@@ -31,8 +32,6 @@ class BuyRequestProvider with ChangeNotifier {
   int get buyersCount => _buyers.length;
   BuyRequestBuyerModel? _selectedBuyer;
   BuyRequestBuyerModel? get selectedBuyer => _selectedBuyer;
-  String? _selectedBuyerDropDown;
-  String? get selectedBuyerDropDown => _selectedBuyerDropDown;
   set selectedBuyer(BuyRequestBuyerModel? value) {
     _selectedBuyer = value;
 
@@ -41,6 +40,7 @@ class BuyRequestProvider with ChangeNotifier {
     } else {
       _jsonBuyRequest["BuyerCode"] = -1;
     }
+    _updateBuyRequestInDatabase();
     notifyListeners();
   }
 
@@ -68,6 +68,7 @@ class BuyRequestProvider with ChangeNotifier {
     }
 
     notifyListeners();
+    _updateBuyRequestInDatabase();
   }
 
   List<BuyRequestSupplierModel> _suppliers = [];
@@ -89,6 +90,7 @@ class BuyRequestProvider with ChangeNotifier {
       _jsonBuyRequest["SupplierCode"] = value.Code;
     }
     notifyListeners();
+    _updateBuyRequestInDatabase();
   }
 
   List<BuyRequestEnterpriseModel> _enterprises = [];
@@ -108,6 +110,11 @@ class BuyRequestProvider with ChangeNotifier {
     }
     return hasSelectedEnterprise;
   }
+
+  bool _isLoadingInsertBuyRequest = false;
+  bool get isLoadingInsertBuyRequest => _isLoadingInsertBuyRequest;
+  String _errorMessageInsertBuyRequest = "";
+  String get errorMessageInsertBuyRequest => _errorMessageInsertBuyRequest;
 
   List<BuyRequestEnterpriseSelectedModel> _enterprisesSelecteds = [];
 
@@ -131,7 +138,7 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   Map _jsonBuyRequest = {
-    "crossId": UserData.crossIdentity,
+    "CrossIdentity": UserData.crossIdentity,
     "BuyerCode": -1,
     "RequestTypeCode": -1,
     "SupplierCode": -1,
@@ -141,6 +148,50 @@ class BuyRequestProvider with ChangeNotifier {
     "Enterprises": [],
     "Products": [],
   };
+
+  double get totalCartPrice {
+    double total = _cartProducts.fold(0, (previousValue, product) {
+      double productTotal = product.Quantity * product.Value;
+      return previousValue + productTotal;
+    });
+
+    return total;
+  }
+
+  Future<void> _updateBuyRequestInDatabase() async {
+    var buyersJsonList = _buyers.map((buyer) => buyer.toJson()).toList();
+    var suppliersJsonList =
+        _suppliers.map((supplier) => supplier.toJson()).toList();
+    var enterprisesJsonList =
+        _enterprises.map((enterprise) => enterprise.toJson()).toList();
+    var cartProductsJsonList =
+        _cartProducts.map((cartProduct) => cartProduct.toJson()).toList();
+    var requestsTypesJsonList =
+        _requestsType.map((requestsType) => requestsType.toJson()).toList();
+
+    Map _json = {
+      "buyers": buyersJsonList,
+      "suplliers": suppliersJsonList,
+      "enterprises": enterprisesJsonList,
+      "cartProducts": cartProductsJsonList,
+      "requestsType": requestsTypesJsonList,
+      "observations": _obvervations,
+      "selectedBuyer": _selectedBuyer?.toJson(),
+      "selectedRequestModel": _selectedRequestModel?.toJson(),
+      "selectedSupplier": _selectedSupplier?.toJson(),
+    };
+
+    await PrefsInstance.setBuyRequest(json.encode(_json));
+  }
+
+  Future<void> restoreBuyRequestDataInDatabase() async {
+    var teste = await PrefsInstance.getBuyRequest();
+    Map testeMap = json.decode(teste);
+    _buyers = testeMap["buyers"].forEach((element) {
+      BuyRequestBuyerModel.fromJson(element);
+    });
+    var x = 1;
+  }
 
   void updateSelectedEnterprise(BuyRequestEnterpriseModel enterprise) {
     int indexOfEnterprise = _enterprises.indexOf(enterprise);
@@ -161,14 +212,15 @@ class BuyRequestProvider with ChangeNotifier {
     }
 
     _addOrRemoveEnterprisesSelecteds(enterprise);
-    _updateEnterprisesIn_JsonBuyRequest();
+    _updateEnterprisesInJsonBuyRequest();
 
     notifyListeners();
   }
 
-  _updateEnterprisesIn_JsonBuyRequest() {
+  _updateEnterprisesInJsonBuyRequest() {
     _jsonBuyRequest["Enterprises"] =
         _enterprisesSelecteds.map((e) => e.toJson()).toList();
+    _updateBuyRequestInDatabase();
   }
 
   _addOrRemoveEnterprisesSelecteds(BuyRequestEnterpriseModel enterprise) {
@@ -202,12 +254,12 @@ class BuyRequestProvider with ChangeNotifier {
 
   void clearBuyers() {
     _buyers.clear();
-    selectedBuyer = null;
+    _selectedBuyer = null;
   }
 
   void clearRequestsType() {
     _requestsType.clear();
-    selectedRequestModel = null;
+    _selectedRequestModel = null;
   }
 
   void clearSuppliers() {
@@ -541,11 +593,12 @@ class BuyRequestProvider with ChangeNotifier {
     required TextEditingController quantityController,
     required int index,
   }) {
-    BuyRequestProductsModel product = _products[index];
     double price =
         double.parse(priceController.text.replaceAll(RegExp(r','), '.'));
     double quantity =
         double.parse(quantityController.text.replaceAll(RegExp(r','), '.'));
+
+    BuyRequestProductsModel product = _products[index];
     product.quantity = quantity;
     product.Value = price;
 
@@ -559,10 +612,21 @@ class BuyRequestProvider with ChangeNotifier {
       DiscountPercentageOrValue: "R\$",
       DiscountValue: 0,
     );
-    _cartProducts.add(cartProduct);
+
+    int indexOfCartProduct = _cartProducts.indexWhere((element) =>
+        element.EnterpriseCode == product.EnterpriseCode &&
+        element.ProductPackingCode == product.ProductPackingCode);
+
+    if (indexOfCartProduct == -1) {
+      _cartProducts.add(cartProduct);
+    } else {
+      _cartProducts[indexOfCartProduct] = cartProduct;
+    }
 
     _jsonBuyRequest["Products"] = _cartProducts.map((e) => e.toJson()).toList();
     notifyListeners();
+
+    _updateBuyRequestInDatabase();
   }
 
   void removeProductFromCart(BuyRequestProductsModel product) {
@@ -581,6 +645,46 @@ class BuyRequestProvider with ChangeNotifier {
           element.EnterpriseCode == product.EnterpriseCode,
     );
 
+    notifyListeners();
+    _updateBuyRequestInDatabase();
+  }
+
+  Future<void> insertBuyRequest(BuildContext context) async {
+    _isLoadingInsertBuyRequest = true;
+    notifyListeners();
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "json": '${json.encode(_jsonBuyRequest)}',
+        },
+        serviceASMX: "CeltaBuyRequestService.asmx",
+        typeOfResponse: "InsertResponse",
+        SOAPAction: "Insert",
+        typeOfResult: "InsertResult",
+      );
+
+      _errorMessageInsertBuyRequest = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorMessageInsertBuyRequest != "") {
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageInsertBuyRequest,
+          context: context,
+        );
+      }
+
+      _updateBuyRequestInDatabase();
+    } catch (e) {
+      print("Erro para salvar o pedido: $e");
+      _errorMessageInsertBuyRequest =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageInsertBuyRequest,
+        context: context,
+      );
+    }
+
+    _isLoadingInsertBuyRequest = false;
     notifyListeners();
   }
 }

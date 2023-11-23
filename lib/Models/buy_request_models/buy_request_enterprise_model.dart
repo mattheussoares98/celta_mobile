@@ -54,4 +54,15 @@ class BuyRequestEnterpriseModel {
       );
     });
   }
+
+  toJson() => {
+        "Code": Code,
+        "SaleRequestTypeCode": SaleRequestTypeCode,
+        "PersonalizedCode": PersonalizedCode,
+        "Name": Name,
+        "FantasizesName": FantasizesName,
+        "CnpjNumber": CnpjNumber,
+        "InscriptionNumber": InscriptionNumber,
+        "selected": selected,
+      };
 }

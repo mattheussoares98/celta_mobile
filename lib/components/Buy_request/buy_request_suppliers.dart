@@ -61,6 +61,17 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
     }
   }
 
+  Future<void> getSuppliers(BuyRequestProvider buyRequestProvider) async {
+    _groupValue = -1;
+    await buyRequestProvider.getSuppliers(
+      context: context,
+      searchValue: searchValueController.text,
+    );
+    if (buyRequestProvider.suppliersCount > 0) {
+      searchValueController.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
@@ -84,13 +95,18 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
           consultProductController: searchValueController,
           isLoading: buyRequestProvider.isLoadingSupplier,
           onPressSearch: () async {
-            _groupValue = -1;
-            await buyRequestProvider.getSuppliers(
-              context: context,
-              searchValue: searchValueController.text,
-            );
-            if (buyRequestProvider.suppliersCount > 0) {
-              searchValueController.clear();
+            if (buyRequestProvider.hasSelectedEnterprise) {
+              ShowAlertDialog.showAlertDialog(
+                context: context,
+                title: "Pesquisar fornecedores",
+                subtitle:
+                    "Se você consultar os fornecedores novamente, todas empresas e produtos serão removidos.\n\nDeseja realmente pesquisar novamente?",
+                function: () async {
+                  await getSuppliers(buyRequestProvider);
+                },
+              );
+            } else {
+              await getSuppliers(buyRequestProvider);
             }
           },
           focusNodeConsultProduct: focusNodeConsultProduct,

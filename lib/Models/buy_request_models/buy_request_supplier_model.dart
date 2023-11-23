@@ -64,4 +64,18 @@ class BuyRequestSupplierModel {
       );
     });
   }
+
+  toJson() => {
+        "Code": Code,
+        "Name": Name,
+        "FantasizesName": FantasizesName,
+        "CnpjCpfNumber": CnpjCpfNumber,
+        "InscriptionRgNumber": InscriptionRgNumber,
+        "SupplierType": SupplierType,
+        "SupplierRegimeType": SupplierRegimeType,
+        "Date": Date,
+        "Emails": Emails,
+        "Telephones": Telephones,
+        "Addresses": Addresses,
+      };
 }

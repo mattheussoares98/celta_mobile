@@ -3,6 +3,7 @@ import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.
 import 'package:celta_inventario/components/Buy_request/buy_request_observations.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_requests_type_dropdown.dart';
+import 'package:celta_inventario/components/Buy_request/buy_request_save.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -95,79 +96,88 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BuyRequestBuyersDropwodn(
-              buyersKey: buyersKey,
-              enabledChangeBuyer: false,
-              showRefreshIcon: false,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: BuyRequestRequestsTypeDropdown(
-                requestsKey: requestsKey,
-                enabledChangeBuyer: false,
-                showRefreshIcon: false,
-              ),
-            ),
-            selectedSupplierWidget(buyRequestProvider),
-            if (buyRequestProvider.hasSelectedEnterprise)
-              const Padding(
-                padding: EdgeInsets.only(top: 20.0),
-                child: BuyRequestEnterprises(
-                  showOnlySelectedsEnterprises: true,
-                ),
-              ),
-            if (!buyRequestProvider.hasSelectedEnterprise)
-              const Padding(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Text(
-                  "Não há empresa selecionada",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 183, 28, 28),
-                    fontStyle: FontStyle.italic,
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const BuyRequestObservations(),
+                  BuyRequestBuyersDropwodn(
+                    buyersKey: buyersKey,
+                    enabledChangeBuyer: false,
+                    showRefreshIcon: false,
                   ),
-                ),
-              ),
-            if (buyRequestProvider.cartProductsCount == 0)
-              const Padding(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Text(
-                  "Não há produtos informados",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 183, 28, 28),
-                    fontStyle: FontStyle.italic,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: BuyRequestRequestsTypeDropdown(
+                      requestsKey: requestsKey,
+                      enabledChangeBuyer: false,
+                      showRefreshIcon: false,
+                    ),
                   ),
-                ),
-              ),
-            if (buyRequestProvider.cartProductsCount > 0)
-              const Padding(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Produtos",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
+                  selectedSupplierWidget(buyRequestProvider),
+                  if (buyRequestProvider.hasSelectedEnterprise)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: BuyRequestEnterprises(
+                        showOnlySelectedsEnterprises: true,
                       ),
                     ),
-                    BuyRequestProductsItems(
-                      showOnlyCartProducts: true,
+                  if (!buyRequestProvider.hasSelectedEnterprise)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: Text(
+                        "Não há empresa selecionada",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 183, 28, 28),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  if (buyRequestProvider.cartProductsCount == 0)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: Text(
+                        "Não há produtos informados",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 183, 28, 28),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ),
+                  if (buyRequestProvider.cartProductsCount > 0)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Produtos",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          BuyRequestProductsItems(
+                            showOnlyCartProducts: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ),
-            const BuyRequestObservations(),
-          ],
+            ),
+          ),
         ),
-      ),
+        BuyRequestSave(
+          keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom > 0,
+        ),
+      ],
     );
   }
 }

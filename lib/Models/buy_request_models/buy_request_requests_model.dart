@@ -66,4 +66,18 @@ class BuyRequestRequestsTypeModel {
       );
     });
   }
+
+  toJson() => {
+        "Code": Code,
+        "PersonalizedCode": PersonalizedCode,
+        "Name": Name,
+        "OperationType": OperationType,
+        "OperationTypeString": OperationTypeString,
+        "UseWholePrice": UseWholePrice,
+        "UseWholePriceString": UseWholePriceString,
+        "UnitValueType": UnitValueType,
+        "UnitValueTypeString": UnitValueTypeString,
+        "TransferUnitValueType": TransferUnitValueType,
+        "TransferUnitValueTypeString": TransferUnitValueTypeString,
+      };
 }

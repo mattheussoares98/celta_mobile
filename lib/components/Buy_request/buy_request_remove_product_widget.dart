@@ -27,18 +27,22 @@ buyRequestRemoveProduct({
         flex: 4,
         child: TextButton(
           style: TextButton.styleFrom(
-            backgroundColor: Colors.red,
+            backgroundColor: buyRequestProvider.isLoadingInsertBuyRequest
+                ? Colors.grey
+                : Colors.red,
           ),
-          onPressed: () {
-            ShowAlertDialog.showAlertDialog(
-              context: context,
-              title: "Remover produto",
-              subtitle: "Remover produto do carrinho?",
-              function: () {
-                buyRequestProvider.removeProductFromCart(product);
-              },
-            );
-          },
+          onPressed: buyRequestProvider.isLoadingInsertBuyRequest
+              ? null
+              : () {
+                  ShowAlertDialog.showAlertDialog(
+                    context: context,
+                    title: "Remover produto",
+                    subtitle: "Remover produto do carrinho?",
+                    function: () {
+                      buyRequestProvider.removeProductFromCart(product);
+                    },
+                  );
+                },
           child: const FittedBox(
             child: Row(
               children: [

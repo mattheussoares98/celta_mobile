@@ -16,6 +16,7 @@ enum _PrefsKeys {
   useAutoScan,
   useLegacyCode,
   showMessageToUseCameraInWebVersion,
+  buyRequest,
 }
 
 class PrefsInstance {
@@ -32,6 +33,7 @@ class PrefsInstance {
     required _PrefsKeys prefsKeys,
     required String value,
   }) async {
+    _prefs = await SharedPreferences.getInstance();
     await _prefs.setString(prefsKeys.name, value);
   }
 
@@ -212,5 +214,13 @@ class PrefsInstance {
 
     return await _getBool(
         prefsKeys: _PrefsKeys.showMessageToUseCameraInWebVersion);
+  }
+
+  static Future<void> setBuyRequest(String newBuyRequest) async {
+    await _setString(prefsKeys: _PrefsKeys.buyRequest, value: newBuyRequest);
+  }
+
+  static Future<String> getBuyRequest() async {
+    return await _getString(prefsKeys: _PrefsKeys.buyRequest);
   }
 }

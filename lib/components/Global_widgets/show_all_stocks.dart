@@ -9,6 +9,7 @@ class ShowAllStocksWidget extends StatefulWidget {
   final BuildContext context;
   final int stockByEnterpriseAssociatedsLength;
   final int stocksLength;
+  final bool isLoading;
   const ShowAllStocksWidget({
     required this.productModel,
     required this.hasAssociatedsStock,
@@ -16,6 +17,7 @@ class ShowAllStocksWidget extends StatefulWidget {
     required this.context,
     required this.stockByEnterpriseAssociatedsLength,
     required this.stocksLength,
+    this.isLoading = false,
     Key? key,
   }) : super(key: key);
 
@@ -33,7 +35,9 @@ class _ShowAllStocksWidgetState extends State<ShowAllStocksWidget> {
           Text(
             "Estoque",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+              color: widget.isLoading
+                  ? Colors.grey
+                  : Theme.of(context).colorScheme.primary,
               fontSize: 20,
             ),
           ),
@@ -41,113 +45,117 @@ class _ShowAllStocksWidgetState extends State<ShowAllStocksWidget> {
           Icon(
             Icons.info,
             size: 30,
-            color: Theme.of(context).colorScheme.primary,
+            color: widget.isLoading
+                ? Colors.grey
+                : Theme.of(context).colorScheme.primary,
           ),
         ],
       ),
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  width: MediaQuery.of(context).size.height * 0.95,
-                  child: PageView(
-                    controller: _pageController,
-                    children: [
-                      enterpriseStocks(
-                        hasStocks: widget.hasStocks,
-                        productModel: widget.productModel,
-                        context: context,
-                      ),
-                      associatedStocks(
-                        hasAssociatedsStock: widget.hasAssociatedsStock,
-                        stockByEnterpriseAssociatedsLength:
-                            widget.stockByEnterpriseAssociatedsLength,
-                        productModel: widget.productModel,
-                        context: context,
-                      ),
-                    ],
-                  ),
-                ),
-                actions: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            textStyle: const TextStyle(
-                              color: Colors.white,
+      onTap: widget.isLoading
+          ? null
+          : () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: Container(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        width: MediaQuery.of(context).size.height * 0.95,
+                        child: PageView(
+                          controller: _pageController,
+                          children: [
+                            enterpriseStocks(
+                              hasStocks: widget.hasStocks,
+                              productModel: widget.productModel,
+                              context: context,
                             ),
-                          ),
-                          onPressed: () {
-                            _pageController.previousPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.ease,
-                            );
-                          },
-                          child: const Column(
-                            children: [
-                              Text(
-                                'Estoque na',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                'empresa',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
+                            associatedStocks(
+                              hasAssociatedsStock: widget.hasAssociatedsStock,
+                              stockByEnterpriseAssociatedsLength:
+                                  widget.stockByEnterpriseAssociatedsLength,
+                              productModel: widget.productModel,
+                              context: context,
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            textStyle: const TextStyle(
-                              color: Colors.white,
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  textStyle: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _pageController.previousPage(
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.ease,
+                                  );
+                                },
+                                child: const Column(
+                                  children: [
+                                    Text(
+                                      'Estoque na',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      'empresa',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.ease,
-                            );
-                          },
-                          child: const Column(
-                            children: [
-                              Text(
-                                'Estoques',
-                                style: const TextStyle(
-                                  color: Colors.white,
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  textStyle: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _pageController.nextPage(
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.ease,
+                                  );
+                                },
+                                child: const Column(
+                                  children: [
+                                    Text(
+                                      'Estoques',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      'associados',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                'associados',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            });
-      },
+                      ],
+                    );
+                  });
+            },
     );
   }
 }

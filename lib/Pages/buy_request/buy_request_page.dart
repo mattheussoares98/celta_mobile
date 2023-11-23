@@ -2,6 +2,7 @@ import 'package:celta_inventario/Pages/buy_request/buy_request_details_page.dart
 import 'package:celta_inventario/Pages/buy_request/buy_request_enterprises_page.dart';
 import 'package:celta_inventario/Pages/buy_request/buy_request_identification_page.dart';
 import 'package:celta_inventario/Pages/buy_request/buy_request_insert_products_page.dart';
+import 'package:celta_inventario/components/Buy_request/buy_request_app_bar_actions.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,13 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
   Future<void> getData() async {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
-    if (buyRequestProvider.buyersCount == 0) {
-      buyRequestProvider.getBuyers(context: context);
-    }
+    await buyRequestProvider.restoreBuyRequestDataInDatabase();
+
     if (buyRequestProvider.requestsTypeCount == 0) {
       buyRequestProvider.getRequestsType(context: context);
+    }
+    if (buyRequestProvider.buyersCount == 0) {
+      buyRequestProvider.getBuyers(context: context);
     }
   }
 
@@ -68,7 +71,8 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
         buyRequestProvider.isLoadingRequestsType ||
         buyRequestProvider.isLoadingSupplier ||
         buyRequestProvider.isLoadingEnterprises ||
-        buyRequestProvider.isLoadingProducts) return;
+        buyRequestProvider.isLoadingProducts ||
+        buyRequestProvider.isLoadingInsertBuyRequest) return;
 
     if (_selectedIndex == 0) {
       if (!_hasSelectedBuyerAndRequestType() && (index == 1 || index == 2)) {
@@ -108,17 +112,29 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
-    // Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return WillPopScope(
-      onWillPop: () async {
-        return true;
-      },
+      onWillPop: buyRequestProvider.isLoadingInsertBuyRequest
+          ? null
+          : () async {
+              return true;
+            },
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: buyRequestProvider.isLoadingInsertBuyRequest
+                ? null
+                : () {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+            icon: const Icon(Icons.arrow_back),
+          ),
           title: Text(
             appBarTitles.elementAt(_selectedIndex),
           ),
+          actions: [const BuyRequestCartAppbarAction()],
         ),
         body: _pages.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(

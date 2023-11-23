@@ -101,7 +101,8 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     }
 
     return InkWell(
-      onTap: buyRequestProvider.isLoadingProducts
+      onTap: buyRequestProvider.isLoadingProducts ||
+              buyRequestProvider.isLoadingInsertBuyRequest
           ? null
           : () {
               selectIndexAndFocus(
@@ -119,6 +120,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                 title: "PLU",
                 value: product.PLU,
                 otherWidget: ShowAllStocksWidget(
+                  isLoading: buyRequestProvider.isLoadingInsertBuyRequest,
                   productModel: product,
                   hasAssociatedsStock: product.StorageAreaAddress != null &&
                       product.StockByEnterpriseAssociateds != null,

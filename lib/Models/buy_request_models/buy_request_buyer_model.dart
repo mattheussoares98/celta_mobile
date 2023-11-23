@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 class BuyRequestBuyerModel {
-  final int Code; /*  "Code":10 */
-  final String PersonalizedCode; /*  "PersonalizedCode":"9999" */
-  final String Name; /*  "Name":"Celtaware" */
-  final String NameReduced; /*  "NameReduced":"" */
-  final String CpfNumber; /*  "CpfNumber":"39367507852" */
-  final String RgNumber; /*  "RgNumber":"" */
-  final bool Seller; /*  "Seller":false */
-  final bool Buyer; /*  "Buyer":false,}; */
+  final int Code;
+  final String PersonalizedCode;
+  final String Name;
+  final String NameReduced;
+  final String CpfNumber;
+  final String RgNumber;
+  final bool Seller;
+  final bool Buyer;
 
   BuyRequestBuyerModel({
     required this.Code,
@@ -55,4 +55,26 @@ class BuyRequestBuyerModel {
       );
     });
   }
+
+  toJson() => {
+        "Code": Code,
+        "PersonalizedCode": PersonalizedCode,
+        "Name": Name,
+        "NameReduced": NameReduced,
+        "CpfNumber": CpfNumber,
+        "RgNumber": RgNumber,
+        "Seller": Seller,
+        "Buyer": Buyer,
+      };
+
+  static fromJson(Map json) => BuyRequestBuyerModel(
+        Code: json["Code"],
+        PersonalizedCode: json["PersonalizedCode"],
+        Name: json["Name"],
+        NameReduced: json["NameReduced"],
+        CpfNumber: json["CpfNumber"],
+        RgNumber: json["RgNumber"],
+        Seller: json["Seller"],
+        Buyer: json["Buyer"],
+      );
 }
