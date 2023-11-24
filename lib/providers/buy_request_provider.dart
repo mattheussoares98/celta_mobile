@@ -35,12 +35,6 @@ class BuyRequestProvider with ChangeNotifier {
   set selectedBuyer(BuyRequestBuyerModel? value) {
     _selectedBuyer = value;
 
-    if (value != null) {
-      _jsonBuyRequest["BuyerCode"] = value.Code;
-    } else {
-      _jsonBuyRequest["BuyerCode"] = -1;
-    }
-    _updateBuyRequestInDatabase();
     notifyListeners();
   }
 
@@ -57,18 +51,12 @@ class BuyRequestProvider with ChangeNotifier {
   set selectedRequestModel(BuyRequestRequestsTypeModel? value) {
     _selectedRequestModel = value;
 
-    if (value != null) {
-      _jsonBuyRequest["RequestTypeCode"] = value.Code;
-      clearSuppliers();
-      clearProducts();
-      _clearCartProducts();
-      clearEnterprises();
-    } else {
-      _jsonBuyRequest["RequestTypeCode"] = -1;
-    }
+    clearSuppliers();
+    clearProducts();
+    _clearCartProducts();
+    clearEnterprises();
 
     notifyListeners();
-    _updateBuyRequestInDatabase();
   }
 
   List<BuyRequestSupplierModel> _suppliers = [];
@@ -83,12 +71,10 @@ class BuyRequestProvider with ChangeNotifier {
   set selectedSupplier(BuyRequestSupplierModel? value) {
     _selectedSupplier = value;
 
-    if (value != null) {
-      clearEnterprises();
-      clearProducts();
-      _clearCartProducts();
-      _jsonBuyRequest["SupplierCode"] = value.Code;
-    }
+    clearEnterprises();
+    clearProducts();
+    _clearCartProducts();
+
     notifyListeners();
     _updateBuyRequestInDatabase();
   }
@@ -134,20 +120,20 @@ class BuyRequestProvider with ChangeNotifier {
   String get observations => _obvervations;
   set observations(String newValue) {
     _obvervations = newValue;
-    _jsonBuyRequest["Observations"] = newValue;
+    _updateBuyRequestInDatabase();
   }
 
-  Map _jsonBuyRequest = {
-    "CrossIdentity": UserData.crossIdentity,
-    "BuyerCode": -1,
-    "RequestTypeCode": -1,
-    "SupplierCode": -1,
-    // "DateOfCreation": DateTime.now(),
-    // "DateOfCreation": "2023-10-25T10:07:00",
-    "Observations": "",
-    "Enterprises": [],
-    "Products": [],
-  };
+  Map get _jsonBuyRequest => {
+        "CrossIdentity": UserData.crossIdentity,
+        "BuyerCode": -1,
+        "RequestTypeCode": -1,
+        "SupplierCode": -1,
+        // "DateOfCreation": DateTime.now(),
+        // "DateOfCreation": "2023-10-25T10:07:00",
+        "Observations": "",
+        "Enterprises": [],
+        "Products": [],
+      };
 
   double get totalCartPrice {
     double total = _cartProducts.fold(0, (previousValue, product) {
@@ -171,7 +157,7 @@ class BuyRequestProvider with ChangeNotifier {
 
     Map _json = {
       "buyers": buyersJsonList,
-      "suplliers": suppliersJsonList,
+      "suppliers": suppliersJsonList,
       "enterprises": enterprisesJsonList,
       "cartProducts": cartProductsJsonList,
       "requestsType": requestsTypesJsonList,
@@ -185,15 +171,82 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   Future<void> restoreBuyRequestDataInDatabase() async {
-    var teste = await PrefsInstance.getBuyRequest();
-    Map testeMap = json.decode(teste);
-    _buyers = testeMap["buyers"].forEach((element) {
-      BuyRequestBuyerModel.fromJson(element);
-    });
-    var x = 1;
+    String buyRequestStringInDatabase = await PrefsInstance.getBuyRequest();
+
+    if (buyRequestStringInDatabase == "") {
+      return;
+    }
+
+    Map jsonInDatabase = {};
+    jsonInDatabase = json.decode(buyRequestStringInDatabase);
+
+    _restoreRequestTypeAndSelectedRequestType(jsonInDatabase);
+    _restoreBuyersAndSelectedBuyer(jsonInDatabase);
+    _restoreSuppliersAndSelectedSuppliers(jsonInDatabase);
+    _restoreEnterprises(jsonInDatabase);
+    notifyListeners();
   }
 
-  void updateSelectedEnterprise(BuyRequestEnterpriseModel enterprise) {
+  _restoreBuyersAndSelectedBuyer(Map jsonInDatabase) {
+    List<BuyRequestBuyerModel> buyersTemp = [];
+    if (jsonInDatabase.containsKey("buyers")) {
+      jsonInDatabase["buyers"].forEach((element) {
+        buyersTemp.add(BuyRequestBuyerModel.fromJson(element));
+      });
+      _buyers = buyersTemp;
+    }
+
+    if (jsonInDatabase.containsKey("selectedBuyer") &&
+        jsonInDatabase["selectedBuyer"] != null) {
+      _selectedBuyer =
+          BuyRequestBuyerModel.fromJson(jsonInDatabase["selectedBuyer"]);
+    }
+  }
+
+  _restoreRequestTypeAndSelectedRequestType(Map jsonInDatabase) {
+    List<BuyRequestRequestsTypeModel> requestsTypeTemp = [];
+    if (jsonInDatabase.containsKey("requestsType")) {
+      jsonInDatabase["requestsType"].forEach((element) {
+        requestsTypeTemp.add(BuyRequestRequestsTypeModel.fromJson(element));
+      });
+      _requestsType = requestsTypeTemp;
+    }
+
+    if (jsonInDatabase.containsKey("selectedRequestModel") &&
+        jsonInDatabase["selectedRequestModel"] != null) {
+      _selectedRequestModel = BuyRequestRequestsTypeModel.fromJson(
+          jsonInDatabase["selectedRequestModel"]);
+    }
+  }
+
+  _restoreSuppliersAndSelectedSuppliers(Map jsonInDatabase) {
+    List<BuyRequestSupplierModel> suppliersTemp = [];
+    if (jsonInDatabase.containsKey("suppliers")) {
+      jsonInDatabase["suppliers"].forEach((element) {
+        suppliersTemp.add(BuyRequestSupplierModel.fromJson(element));
+      });
+      _suppliers = suppliersTemp;
+    }
+
+    if (jsonInDatabase.containsKey("selectedSupplier") &&
+        jsonInDatabase["selectedSupplier"] != null) {
+      _selectedSupplier =
+          BuyRequestSupplierModel.fromJson(jsonInDatabase["selectedSupplier"]);
+    }
+  }
+
+  _restoreEnterprises(Map jsonInDatabase) {
+    List<BuyRequestEnterpriseModel> enterprisesTemp = [];
+
+    if (jsonInDatabase.containsKey("enterprises")) {
+      jsonInDatabase["enterprises"].forEach((element) {
+        enterprisesTemp.add(BuyRequestEnterpriseModel.fromJson(element));
+      });
+      _enterprises = enterprisesTemp;
+    }
+  }
+
+  void updateSelectedEnterprise(BuyRequestEnterpriseModel enterprise) async {
     int indexOfEnterprise = _enterprises.indexOf(enterprise);
 
     final newEnterprise = BuyRequestEnterpriseModel(
@@ -212,15 +265,9 @@ class BuyRequestProvider with ChangeNotifier {
     }
 
     _addOrRemoveEnterprisesSelecteds(enterprise);
-    _updateEnterprisesInJsonBuyRequest();
+    await _updateBuyRequestInDatabase();
 
     notifyListeners();
-  }
-
-  _updateEnterprisesInJsonBuyRequest() {
-    _jsonBuyRequest["Enterprises"] =
-        _enterprisesSelecteds.map((e) => e.toJson()).toList();
-    _updateBuyRequestInDatabase();
   }
 
   _addOrRemoveEnterprisesSelecteds(BuyRequestEnterpriseModel enterprise) {
@@ -241,7 +288,6 @@ class BuyRequestProvider with ChangeNotifier {
 
   void _clearEnterprisesSelecteds() {
     _enterprisesSelecteds.clear();
-    _jsonBuyRequest["Enterprises"] = [];
   }
 
   void clearProducts() {
@@ -264,7 +310,7 @@ class BuyRequestProvider with ChangeNotifier {
 
   void clearSuppliers() {
     _suppliers.clear();
-    selectedSupplier = null;
+    _selectedSupplier = null;
   }
 
   void clearEnterprises() {
@@ -540,22 +586,17 @@ class BuyRequestProvider with ChangeNotifier {
 
   Future<void> getEnterprises({
     required BuildContext context,
-    bool isSearchingAgain = false,
+    bool isSearchingAgain = true,
   }) async {
     _errorMessageEnterprises = "";
     _isLoadingEnterprises = true;
     clearEnterprises();
     if (isSearchingAgain) notifyListeners();
 
-    // Map jsonGetEnterprises = {
-    //   "crossIdentity": UserData.crossIdentity,
-    // };
-
     try {
       await SoapHelper.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          // "filters": json.encode(jsonGetEnterprises),
         },
         serviceASMX: "CeltaEnterpriseService.asmx",
         typeOfResponse: "GetEnterprisesJsonResponse",
@@ -570,6 +611,8 @@ class BuyRequestProvider with ChangeNotifier {
           responseAsString: SoapHelperResponseParameters.responseAsString,
           listToAdd: _enterprises,
         );
+
+        await _updateBuyRequestInDatabase();
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageEnterprises,
@@ -623,10 +666,7 @@ class BuyRequestProvider with ChangeNotifier {
       _cartProducts[indexOfCartProduct] = cartProduct;
     }
 
-    _jsonBuyRequest["Products"] = _cartProducts.map((e) => e.toJson()).toList();
     notifyListeners();
-
-    _updateBuyRequestInDatabase();
   }
 
   void removeProductFromCart(BuyRequestProductsModel product) {
@@ -646,7 +686,6 @@ class BuyRequestProvider with ChangeNotifier {
     );
 
     notifyListeners();
-    _updateBuyRequestInDatabase();
   }
 
   Future<void> insertBuyRequest(BuildContext context) async {
@@ -672,8 +711,6 @@ class BuyRequestProvider with ChangeNotifier {
           context: context,
         );
       }
-
-      _updateBuyRequestInDatabase();
     } catch (e) {
       print("Erro para salvar o pedido: $e");
       _errorMessageInsertBuyRequest =

@@ -65,4 +65,15 @@ class BuyRequestEnterpriseModel {
         "InscriptionNumber": InscriptionNumber,
         "selected": selected,
       };
+
+  static fromJson(Map json) => BuyRequestEnterpriseModel(
+        Code: json["Code"],
+        SaleRequestTypeCode: json["SaleRequestTypeCode"],
+        PersonalizedCode: json["PersonalizedCode"],
+        Name: json["Name"],
+        FantasizesName: json["FantasizesName"],
+        CnpjNumber: json["CnpjNumber"],
+        InscriptionNumber: json["InscriptionNumber"],
+        selected: json["selected"],
+      );
 }

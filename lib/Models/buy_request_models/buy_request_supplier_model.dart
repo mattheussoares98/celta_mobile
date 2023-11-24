@@ -78,4 +78,15 @@ class BuyRequestSupplierModel {
         "Telephones": Telephones,
         "Addresses": Addresses,
       };
+
+  static fromJson(Map json) => BuyRequestSupplierModel(
+        Code: json["Code"],
+        Name: json["Name"],
+        FantasizesName: json["FantasizesName"],
+        CnpjCpfNumber: json["CnpjCpfNumber"],
+        InscriptionRgNumber: json["InscriptionRgNumber"],
+        SupplierType: json["SupplierType"],
+        SupplierRegimeType: json["SupplierRegimeType"],
+        Date: json["Date"],
+      );
 }

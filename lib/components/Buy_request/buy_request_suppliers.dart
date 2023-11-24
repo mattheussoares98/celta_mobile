@@ -18,21 +18,6 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
   FocusNode focusNodeConsultProduct = FocusNode();
   int _groupValue = -1;
 
-  @override
-  void initState() {
-    super.initState();
-    restoreSelectedSupplier();
-  }
-
-  void restoreSelectedSupplier() {
-    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
-
-    if (buyRequestProvider.selectedSupplier != null) {
-      _groupValue = buyRequestProvider.suppliers
-          .indexOf(buyRequestProvider.selectedSupplier!);
-    }
-  }
-
   void updateSelectedSupplier({
     required int? value,
     required BuyRequestProvider buyRequestProvider,
@@ -75,6 +60,10 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
+    _groupValue = buyRequestProvider.suppliers.indexWhere((element) =>
+        element.CnpjCpfNumber ==
+        buyRequestProvider.selectedSupplier?.CnpjCpfNumber);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

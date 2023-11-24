@@ -19,14 +19,19 @@ final GlobalKey<FormFieldState> _buyersKey = GlobalKey();
 final GlobalKey<FormFieldState> _requestsKey = GlobalKey();
 
 class _BuyRequestPageState extends State<BuyRequestPage> {
+  bool _isLoaded = false;
   @override
-  void initState() {
-    super.initState();
-    getData();
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if (!_isLoaded) {
+      _isLoaded = true;
+      await getData();
+    }
   }
 
   Future<void> getData() async {
-    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
     await buyRequestProvider.restoreBuyRequestDataInDatabase();
 
     if (buyRequestProvider.requestsTypeCount == 0) {
@@ -67,12 +72,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
     required int index,
     required BuyRequestProvider buyRequestProvider,
   }) {
-    if (buyRequestProvider.isLoadingBuyer ||
-        buyRequestProvider.isLoadingRequestsType ||
-        buyRequestProvider.isLoadingSupplier ||
-        buyRequestProvider.isLoadingEnterprises ||
-        buyRequestProvider.isLoadingProducts ||
-        buyRequestProvider.isLoadingInsertBuyRequest) return;
+    if (buyRequestProvider.isLoadingInsertBuyRequest) return;
 
     if (_selectedIndex == 0) {
       if (!_hasSelectedBuyerAndRequestType() && (index == 1 || index == 2)) {
@@ -114,15 +114,18 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
 
     return WillPopScope(
-      onWillPop: buyRequestProvider.isLoadingInsertBuyRequest
-          ? null
-          : () async {
-              return true;
-            },
+      onWillPop: () async {
+        return true;
+      },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: buyRequestProvider.isLoadingInsertBuyRequest
+            onPressed: buyRequestProvider.isLoadingBuyer ||
+                    buyRequestProvider.isLoadingRequestsType ||
+                    buyRequestProvider.isLoadingSupplier ||
+                    buyRequestProvider.isLoadingEnterprises ||
+                    buyRequestProvider.isLoadingProducts ||
+                    buyRequestProvider.isLoadingInsertBuyRequest
                 ? null
                 : () {
                     if (Navigator.of(context).canPop()) {

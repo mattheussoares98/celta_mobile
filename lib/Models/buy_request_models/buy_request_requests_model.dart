@@ -1,19 +1,17 @@
 import 'dart:convert';
 
 class BuyRequestRequestsTypeModel {
-  final int Code; /* "Code":5, */
-  final String PersonalizedCode; /* "PersonalizedCode":"5", */
-  final String Name; /* "Name":"Pedido de compras", */
-  final int OperationType; /* "OperationType":1, */
-  final String OperationTypeString; /* "OperationTypeString":"Entrada", */
-  final int UseWholePrice; /* "UseWholePrice":3, */
-  final String UseWholePriceString; /* "UseWholePriceString":"Não se aplica", */
-  final int UnitValueType; /* "UnitValueType":8, */
-  final String
-      UnitValueTypeString; /* "UnitValueTypeString":"Definido pelo sistema", */
-  final int TransferUnitValueType; /* "TransferUnitValueType":8, */
-  final String
-      TransferUnitValueTypeString; /* "TransferUnitValueTypeString":"Definido pelo sistema"} */
+  final int Code;
+  final String PersonalizedCode;
+  final String Name;
+  final int OperationType;
+  final String OperationTypeString;
+  final int UseWholePrice;
+  final String UseWholePriceString;
+  final int UnitValueType;
+  final String UnitValueTypeString;
+  final int TransferUnitValueType;
+  final String TransferUnitValueTypeString;
 
   BuyRequestRequestsTypeModel({
     required this.Code,
@@ -80,4 +78,18 @@ class BuyRequestRequestsTypeModel {
         "TransferUnitValueType": TransferUnitValueType,
         "TransferUnitValueTypeString": TransferUnitValueTypeString,
       };
+
+  static fromJson(Map json) => BuyRequestRequestsTypeModel(
+        Code: json["Code"],
+        PersonalizedCode: json["PersonalizedCode"],
+        Name: json["Name"],
+        OperationType: json["OperationType"],
+        OperationTypeString: json["OperationTypeString"],
+        UseWholePrice: json["UseWholePrice"],
+        UseWholePriceString: json["UseWholePriceString"],
+        UnitValueType: json["UnitValueType"],
+        UnitValueTypeString: json["UnitValueTypeString"],
+        TransferUnitValueType: json["TransferUnitValueType"],
+        TransferUnitValueTypeString: json["TransferUnitValueTypeString"],
+      );
 }

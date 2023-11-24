@@ -7,12 +7,12 @@ import "../Global_widgets/show_alert_dialog.dart";
 
 class BuyRequestRequestsTypeDropdown extends StatefulWidget {
   final GlobalKey<FormFieldState> requestsKey;
-  final bool enabledChangeBuyer;
+  final bool enabledChangeRequestsType;
   final bool showRefreshIcon;
 
   const BuyRequestRequestsTypeDropdown({
     required this.requestsKey,
-    this.enabledChangeBuyer = true,
+    this.enabledChangeRequestsType = true,
     this.showRefreshIcon = true,
     Key? key,
   }) : super(key: key);
@@ -24,13 +24,6 @@ class BuyRequestRequestsTypeDropdown extends StatefulWidget {
 
 class _BuyRequestRequestsTypeDropdownState
     extends State<BuyRequestRequestsTypeDropdown> {
-  @override
-  void initState() {
-    super.initState();
-    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
-    atualValue = buyRequestProvider.selectedRequestModel?.Name;
-  }
-
   String? previousValue;
   String? atualValue;
 
@@ -93,6 +86,7 @@ class _BuyRequestRequestsTypeDropdownState
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
+    atualValue = buyRequestProvider.selectedRequestModel?.Name;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +105,7 @@ class _BuyRequestRequestsTypeDropdownState
               child: Card(
                 shape: const RoundedRectangleBorder(),
                 child: BuyRequestDropdownFormfield(
-                  onChanged: widget.enabledChangeBuyer == false
+                  onChanged: widget.enabledChangeRequestsType == false
                       ? null
                       : (value) {
                           onChange(

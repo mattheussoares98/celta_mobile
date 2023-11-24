@@ -115,7 +115,7 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                     padding: const EdgeInsets.only(top: 20.0),
                     child: BuyRequestRequestsTypeDropdown(
                       requestsKey: requestsKey,
-                      enabledChangeBuyer: false,
+                      enabledChangeRequestsType: false,
                       showRefreshIcon: false,
                     ),
                   ),
