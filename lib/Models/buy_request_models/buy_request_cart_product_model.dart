@@ -30,8 +30,7 @@ class BuyRequestCartProductModel {
         "DiscountValue": DiscountValue,
       };
 
-  factory BuyRequestCartProductModel.fromJson(Map json) =>
-      BuyRequestCartProductModel(
+  static fromJson(Map json) => BuyRequestCartProductModel(
         EnterpriseCode: json["EnterpriseCode"],
         ProductPackingCode: json["ProductPackingCode"],
         Value: json["Value"],

@@ -35,6 +35,11 @@ class BuyRequestProvider with ChangeNotifier {
   set selectedBuyer(BuyRequestBuyerModel? value) {
     _selectedBuyer = value;
 
+    if (value != null) {
+      _jsonBuyRequest["SupplierCode"] = value.Code;
+    } else {
+      _jsonBuyRequest["SupplierCode"] = -1;
+    }
     notifyListeners();
   }
 
@@ -51,11 +56,18 @@ class BuyRequestProvider with ChangeNotifier {
   set selectedRequestModel(BuyRequestRequestsTypeModel? value) {
     _selectedRequestModel = value;
 
-    _clearSuppliers();
-    _clearProducts();
-    _clearCartProducts();
-    _clearEnterprises();
+    if (enterprisesCount > 0) {
+      _clearSuppliers();
+      _clearProducts();
+      _clearCartProducts();
+      _clearEnterprises();
+    }
 
+    if (value != null) {
+      _jsonBuyRequest["RequestTypeCode"] = value.Code;
+    } else {
+      _jsonBuyRequest["RequestTypeCode"] = -1;
+    }
     notifyListeners();
   }
 
@@ -74,6 +86,12 @@ class BuyRequestProvider with ChangeNotifier {
     _clearEnterprises();
     _clearProducts();
     _clearCartProducts();
+
+    if (value != null) {
+      _jsonBuyRequest["SupplierCode"] = value.Code;
+    } else {
+      _jsonBuyRequest["SupplierCode"] = -1;
+    }
 
     notifyListeners();
   }
@@ -103,12 +121,17 @@ class BuyRequestProvider with ChangeNotifier {
 
   List<BuyRequestEnterpriseSelectedModel> _enterprisesSelecteds = [];
 
-  List<BuyRequestCartProductModel> _cartProducts = [];
-  List<BuyRequestCartProductModel> get cartProducts => [..._cartProducts];
-  int get cartProductsCount => _cartProducts.length;
+  List<BuyRequestProductsModel> _productsInCart = [];
+  List<BuyRequestProductsModel> get cartProducts => [..._productsInCart];
+  int get cartProductsCount => _productsInCart.length;
 
   TextEditingController _observationsController = TextEditingController();
   TextEditingController get observationsController => _observationsController;
+  void updateObservationsControllerText(String newValue) {
+    _observationsController.text = newValue;
+    _jsonBuyRequest["Observations"] = newValue;
+    _updateDataInDatabase();
+  }
 
   FocusNode focusNodeConsultProduct = FocusNode();
   FocusNode quantityFocusNode = FocusNode();
@@ -131,12 +154,18 @@ class BuyRequestProvider with ChangeNotifier {
       };
 
   double get totalCartPrice {
-    double total = _cartProducts.fold(0, (previousValue, product) {
-      double productTotal = product.Quantity * product.Value;
+    double total = _productsInCart.fold(0, (previousValue, product) {
+      double productTotal = product.quantity * product.Value;
       return previousValue + productTotal;
     });
 
     return total;
+  }
+
+  _updateEnterprisesInJsonBuyRequest() {
+    _jsonBuyRequest["Enterprises"] =
+        _enterprisesSelecteds.map((e) => e.toJson()).toList();
+    _updateDataInDatabase();
   }
 
   Future<void> _updateDataInDatabase() async {
@@ -146,7 +175,7 @@ class BuyRequestProvider with ChangeNotifier {
     var enterprisesJsonList =
         _enterprises.map((enterprise) => enterprise.toJson()).toList();
     var cartProductsJsonList =
-        _cartProducts.map((cartProduct) => cartProduct.toJson()).toList();
+        _productsInCart.map((cartProduct) => cartProduct.toJson()).toList();
     var requestsTypesJsonList =
         _requestsType.map((requestsType) => requestsType.toJson()).toList();
 
@@ -244,19 +273,19 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   _restoreCartProducts(Map jsonInDatabase) {
-    List<BuyRequestCartProductModel> cartProductsTemp = [];
+    List<BuyRequestProductsModel> cartProductsTemp = [];
 
     if (jsonInDatabase.containsKey("cartProducts")) {
       jsonInDatabase["cartProducts"].forEach((element) {
-        cartProductsTemp.add(BuyRequestCartProductModel.fromJson(element));
+        cartProductsTemp.add(BuyRequestProductsModel.fromJson(element));
       });
-      _cartProducts = cartProductsTemp;
+      _productsInCart = cartProductsTemp;
     }
   }
 
   _restoreObservations(Map jsonInDatabase) {
     if (jsonInDatabase.containsKey("observations")) {
-      observationsController.text = jsonInDatabase["observations"];
+      _observationsController.text = jsonInDatabase["observations"];
     }
   }
 
@@ -279,6 +308,7 @@ class BuyRequestProvider with ChangeNotifier {
     }
 
     _addOrRemoveEnterprisesSelecteds(enterprise);
+    _updateEnterprisesInJsonBuyRequest();
     await _updateDataInDatabase();
 
     notifyListeners();
@@ -310,7 +340,7 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   void _clearCartProducts() {
-    _cartProducts.clear();
+    _productsInCart.clear();
   }
 
   void _clearBuyers() {
@@ -334,7 +364,7 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   bool hasProductInCart(BuyRequestProductsModel product) {
-    int index = _cartProducts.indexWhere((cartProduct) =>
+    int index = _productsInCart.indexWhere((cartProduct) =>
         product.ProductPackingCode == cartProduct.ProductPackingCode &&
         product.EnterpriseCode == cartProduct.EnterpriseCode);
 
@@ -355,12 +385,12 @@ class BuyRequestProvider with ChangeNotifier {
     }
 
     for (int i = 0; i < _products.length; i++) {
-      for (int j = 0; j < _cartProducts.length; j++) {
+      for (int j = 0; j < _productsInCart.length; j++) {
         if (_products[i].ProductPackingCode ==
-                _cartProducts[j].ProductPackingCode &&
-            _products[i].EnterpriseCode == _cartProducts[j].EnterpriseCode) {
-          _products[i].Value = _cartProducts[j].Value;
-          _products[i].quantity = _cartProducts[j].Quantity;
+                _productsInCart[j].ProductPackingCode &&
+            _products[i].EnterpriseCode == _productsInCart[j].EnterpriseCode) {
+          _products[i].Value = _productsInCart[j].Value;
+          _products[i].quantity = _productsInCart[j].quantity;
 
           break;
         }
@@ -662,25 +692,14 @@ class BuyRequestProvider with ChangeNotifier {
     product.quantity = quantity;
     product.Value = price;
 
-    BuyRequestCartProductModel cartProduct = BuyRequestCartProductModel(
-      EnterpriseCode: product.EnterpriseCode,
-      ProductPackingCode: product.ProductPackingCode,
-      Value: price,
-      Quantity: quantity,
-      IncrementPercentageOrValue: "R\$",
-      IncrementValue: 0,
-      DiscountPercentageOrValue: "R\$",
-      DiscountValue: 0,
-    );
-
-    int indexOfCartProduct = _cartProducts.indexWhere((element) =>
+    int indexOfCartProduct = _productsInCart.indexWhere((element) =>
         element.EnterpriseCode == product.EnterpriseCode &&
         element.ProductPackingCode == product.ProductPackingCode);
 
     if (indexOfCartProduct == -1) {
-      _cartProducts.add(cartProduct);
+      _productsInCart.add(product);
     } else {
-      _cartProducts[indexOfCartProduct] = cartProduct;
+      _productsInCart[indexOfCartProduct] = product;
     }
 
     await _updateDataInDatabase();
@@ -698,7 +717,7 @@ class BuyRequestProvider with ChangeNotifier {
     _products[indexOfProduct].Value = 0;
     _products[indexOfProduct].quantity = 0;
 
-    _cartProducts.removeWhere(
+    _productsInCart.removeWhere(
       (element) =>
           element.ProductPackingCode == product.ProductPackingCode &&
           element.EnterpriseCode == product.EnterpriseCode,
@@ -709,9 +728,29 @@ class BuyRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  _updateProductToCartProductInJsonBuyRequest() {
+    List<BuyRequestCartProductModel> cartProducts =
+        _productsInCart.map((BuyRequestProductsModel product) {
+      return BuyRequestCartProductModel(
+        EnterpriseCode: product.EnterpriseCode,
+        ProductPackingCode: product.ProductPackingCode,
+        Value: product.Value,
+        Quantity: product.quantity,
+        IncrementPercentageOrValue: "R\$",
+        IncrementValue: 0,
+        DiscountPercentageOrValue: "R\$",
+        DiscountValue: 0,
+      );
+    }).toList();
+
+    _jsonBuyRequest["Products"] = cartProducts.map((e) => e.toJson()).toList();
+    var x = 1;
+  }
+
   Future<void> insertBuyRequest(BuildContext context) async {
     _isLoadingInsertBuyRequest = true;
     notifyListeners();
+    _updateProductToCartProductInJsonBuyRequest();
 
     try {
       await SoapHelper.soapPost(

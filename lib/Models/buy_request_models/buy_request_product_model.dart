@@ -129,4 +129,81 @@ class BuyRequestProductsModel {
       );
     });
   }
+
+  static fromJson(Map json) => BuyRequestProductsModel(
+        PLU: json["PLU"],
+        Name: json["Name"],
+        PackingQuantity: json["PackingQuantity"],
+        EnterpriseCode: json["EnterpriseCode"],
+        ProductCode: json["ProductCode"],
+        ProductPackingCode: json["ProductPackingCode"],
+        Value: json["Value"],
+        RetailPracticedPrice: json["RetailPracticedPrice"],
+        RetailSalePrice: json["RetailSalePrice"],
+        RetailOfferPrice: json["RetailOfferPrice"],
+        WholePracticedPrice: json["WholePracticedPrice"],
+        WholeSalePrice: json["WholeSalePrice"],
+        WholeOfferPrice: json["WholeOfferPrice"],
+        ECommercePracticedPrice: json["ECommercePracticedPrice"],
+        ECommerceSalePrice: json["ECommerceSalePrice"],
+        ECommerceOfferPrice: json["ECommerceOfferPrice"],
+        MinimumWholeQuantity: json["MinimumWholeQuantity"],
+        BalanceStockSale: json["BalanceStockSale"],
+        BalanceLabelType: json["BalanceLabelType"],
+        BalanceLabelQuantity: json["BalanceLabelQuantity"],
+        OperationalCost: json["OperationalCost"],
+        ReplacementCost: json["ReplacementCost"],
+        ReplacementCostMidle: json["ReplacementCostMidle"],
+        LiquidCost: json["LiquidCost"],
+        LiquidCostMidle: json["LiquidCostMidle"],
+        RealCost: json["RealCost"],
+        RealLiquidCost: json["RealLiquidCost"],
+        FiscalCost: json["FiscalCost"],
+        FiscalLiquidCost: json["FiscalLiquidCost"],
+        Stocks: json["Stocks"],
+        StockByEnterpriseAssociateds:
+            json.containsKey("StockByEnterpriseAssociateds")
+                ? json["StockByEnterpriseAssociateds"]
+                : null,
+        StorageAreaAddress: json.containsKey("StorageAreaAddress")
+            ? json["StorageAreaAddress"]
+            : null,
+        quantity: json.containsKey("quantity") ? json["quantity"] : null,
+      );
+
+  Map toJson() => {
+        "PLU": PLU,
+        "Name": Name,
+        "PackingQuantity": PackingQuantity,
+        "EnterpriseCode": EnterpriseCode,
+        "ProductCode": ProductCode,
+        "ProductPackingCode": ProductPackingCode,
+        "Value": Value,
+        "RetailPracticedPrice": RetailPracticedPrice,
+        "RetailSalePrice": RetailSalePrice,
+        "RetailOfferPrice": RetailOfferPrice,
+        "WholePracticedPrice": WholePracticedPrice,
+        "WholeSalePrice": WholeSalePrice,
+        "WholeOfferPrice": WholeOfferPrice,
+        "ECommercePracticedPrice": ECommercePracticedPrice,
+        "ECommerceSalePrice": ECommerceSalePrice,
+        "ECommerceOfferPrice": ECommerceOfferPrice,
+        "MinimumWholeQuantity": MinimumWholeQuantity,
+        "BalanceStockSale": BalanceStockSale,
+        "BalanceLabelType": BalanceLabelType,
+        "BalanceLabelQuantity": BalanceLabelQuantity,
+        "OperationalCost": OperationalCost,
+        "ReplacementCost": ReplacementCost,
+        "ReplacementCostMidle": ReplacementCostMidle,
+        "LiquidCost": LiquidCost,
+        "LiquidCostMidle": LiquidCostMidle,
+        "RealCost": RealCost,
+        "RealLiquidCost": RealLiquidCost,
+        "FiscalCost": FiscalCost,
+        "FiscalLiquidCost": FiscalLiquidCost,
+        "Stocks": Stocks,
+        "StockByEnterpriseAssociateds": StockByEnterpriseAssociateds,
+        "StorageAreaAddress": StorageAreaAddress,
+        "quantity": quantity,
+      };
 }

@@ -5,7 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BuyRequestObservations extends StatefulWidget {
-  const BuyRequestObservations({Key? key}) : super(key: key);
+  final FocusNode focusNode;
+  const BuyRequestObservations({
+    required this.focusNode,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<BuyRequestObservations> createState() => _BuyRequestObservationsState();
@@ -22,11 +26,12 @@ class _BuyRequestObservationsState extends State<BuyRequestObservations> {
           maxHeight: 200,
         ),
         child: TextField(
+          focusNode: widget.focusNode,
           controller: buyRequestProvider.observationsController,
           enabled: !buyRequestProvider.isLoadingInsertBuyRequest,
           inputFormatters: [NoLineBreakFormatter()],
           onChanged: (value) {
-            buyRequestProvider.observationsController.text = value;
+            buyRequestProvider.updateObservationsControllerText(value);
           },
           maxLines: null,
           maxLength: 1000,

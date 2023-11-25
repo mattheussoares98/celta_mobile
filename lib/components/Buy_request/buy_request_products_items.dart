@@ -91,14 +91,12 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     required BuyRequestProvider buyRequestProvider,
     required int index,
   }) {
-    BuyRequestProductsModel product = buyRequestProvider.products[index];
+    BuyRequestProductsModel product;
 
     if (widget.showOnlyCartProducts) {
-      bool dontHaveProductInCart =
-          !buyRequestProvider.hasProductInCart(product);
-      if (dontHaveProductInCart) {
-        return Container();
-      }
+      product = buyRequestProvider.cartProducts[index];
+    } else {
+      product = buyRequestProvider.products[index];
     }
 
     return InkWell(
@@ -201,17 +199,23 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
-    int productsCount = buyRequestProvider.productsCount;
+    int productsCount = widget.showOnlyCartProducts
+        ? buyRequestProvider.cartProductsCount
+        : buyRequestProvider.productsCount;
 
     return Column(
-      mainAxisAlignment: buyRequestProvider.productsCount > 1
+      mainAxisAlignment: buyRequestProvider.productsCount > 1 ||
+              (widget.showOnlyCartProducts &&
+                  buyRequestProvider.cartProductsCount > 1)
           ? MainAxisAlignment.center
           : MainAxisAlignment.start,
       children: [
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: buyRequestProvider.productsCount,
+          itemCount: widget.showOnlyCartProducts
+              ? buyRequestProvider.cartProductsCount
+              : buyRequestProvider.productsCount,
           itemBuilder: (context, index) {
             if (buyRequestProvider.productsCount == 1) {
               buyRequestProvider.indexOfSelectedProduct = index;

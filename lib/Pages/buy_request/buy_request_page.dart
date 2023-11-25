@@ -83,12 +83,6 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
           context: context,
         );
         return;
-      } else if (buyRequestProvider.selectedSupplier == null) {
-        ShowSnackbarMessage.showMessage(
-          message: "Selecione um fornecedor",
-          context: context,
-        );
-        return;
       } else if ((index == 2) && !buyRequestProvider.hasSelectedEnterprise) {
         ShowSnackbarMessage.showMessage(
           message: "Selecione pelo menos uma empresa",

@@ -92,9 +92,15 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
     }
   }
 
+  FocusNode _focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
+
+    _focusNode.addListener(() {
+      setState(() {});
+    });
 
     return Column(
       children: [
@@ -105,7 +111,7 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const BuyRequestObservations(),
+                  BuyRequestObservations(focusNode: _focusNode),
                   BuyRequestBuyersDropwodn(
                     buyersKey: buyersKey,
                     enabledChangeBuyer: false,
@@ -174,9 +180,7 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
             ),
           ),
         ),
-        BuyRequestSave(
-          keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom > 0,
-        ),
+        if (!_focusNode.hasFocus) const BuyRequestSave(),
       ],
     );
   }

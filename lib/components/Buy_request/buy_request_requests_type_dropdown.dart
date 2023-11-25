@@ -162,7 +162,8 @@ class _BuyRequestRequestsTypeDropdownState
                         if (buyRequestProvider.selectedSupplier != null ||
                             buyRequestProvider.hasSelectedEnterprise ||
                             buyRequestProvider.cartProductsCount > 0 ||
-                            buyRequestProvider.suppliersCount > 0) {
+                            buyRequestProvider.suppliersCount > 0 ||
+                            buyRequestProvider.enterprisesCount > 0) {
                           ShowAlertDialog.showAlertDialog(
                             context: context,
                             title: "Pesquisar novamente",

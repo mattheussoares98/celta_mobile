@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BuyRequestSave extends StatefulWidget {
-  final bool keyboardIsOpen;
   const BuyRequestSave({
-    required this.keyboardIsOpen,
     Key? key,
   }) : super(key: key);
 
@@ -35,7 +33,6 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
-    if (widget.keyboardIsOpen) return Container();
     return Container(
       color: Colors.grey[400],
       child: Padding(
