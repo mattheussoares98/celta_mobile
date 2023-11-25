@@ -52,8 +52,6 @@ class _BuyRequestInsertProductQuantity
     if (!_isValid()) return;
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     buyRequestProvider.updateProductInCart(
-      priceController: widget.priceController,
-      quantityController: widget.quantityController,
       index: widget.index,
     );
     widget.priceController.text = "";

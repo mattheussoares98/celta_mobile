@@ -29,4 +29,16 @@ class BuyRequestCartProductModel {
         "DiscountPercentageOrValue": DiscountPercentageOrValue,
         "DiscountValue": DiscountValue,
       };
+
+  factory BuyRequestCartProductModel.fromJson(Map json) =>
+      BuyRequestCartProductModel(
+        EnterpriseCode: json["EnterpriseCode"],
+        ProductPackingCode: json["ProductPackingCode"],
+        Value: json["Value"],
+        Quantity: json["Quantity"],
+        IncrementPercentageOrValue: json["IncrementPercentageOrValue"],
+        IncrementValue: json["IncrementValue"],
+        DiscountPercentageOrValue: json["DiscountPercentageOrValue"],
+        DiscountValue: json["DiscountValue"],
+      );
 }

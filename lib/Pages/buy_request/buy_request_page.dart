@@ -32,12 +32,14 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
   Future<void> getData() async {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
-    await buyRequestProvider.restoreBuyRequestDataInDatabase();
+    await buyRequestProvider.restoreDataByDatabase();
 
-    if (buyRequestProvider.requestsTypeCount == 0) {
+    if (buyRequestProvider.requestsTypeCount == 0 &&
+        buyRequestProvider.selectedRequestModel == null) {
       buyRequestProvider.getRequestsType(context: context);
     }
-    if (buyRequestProvider.buyersCount == 0) {
+    if (buyRequestProvider.buyersCount == 0 &&
+        buyRequestProvider.selectedBuyer == null) {
       buyRequestProvider.getBuyers(context: context);
     }
   }
@@ -115,23 +117,43 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        return true;
+        if (buyRequestProvider.isLoadingBuyer ||
+            buyRequestProvider.isLoadingRequestsType ||
+            buyRequestProvider.isLoadingSupplier ||
+            buyRequestProvider.isLoadingEnterprises ||
+            buyRequestProvider.isLoadingProducts ||
+            buyRequestProvider.isLoadingInsertBuyRequest) {
+          ShowSnackbarMessage.showMessage(
+            message: "Aguarde o término do processamento",
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            context: context,
+          );
+          return false;
+        } else {
+          return true;
+        }
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: buyRequestProvider.isLoadingBuyer ||
-                    buyRequestProvider.isLoadingRequestsType ||
-                    buyRequestProvider.isLoadingSupplier ||
-                    buyRequestProvider.isLoadingEnterprises ||
-                    buyRequestProvider.isLoadingProducts ||
-                    buyRequestProvider.isLoadingInsertBuyRequest
-                ? null
-                : () {
-                    if (Navigator.of(context).canPop()) {
-                      Navigator.of(context).pop();
-                    }
-                  },
+            onPressed: () {
+              if (buyRequestProvider.isLoadingBuyer ||
+                  buyRequestProvider.isLoadingRequestsType ||
+                  buyRequestProvider.isLoadingSupplier ||
+                  buyRequestProvider.isLoadingEnterprises ||
+                  buyRequestProvider.isLoadingProducts ||
+                  buyRequestProvider.isLoadingInsertBuyRequest) {
+                ShowSnackbarMessage.showMessage(
+                  message: "Aguarde o término do processamento",
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  context: context,
+                );
+              } else {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+              }
+            },
             icon: const Icon(Icons.arrow_back),
           ),
           title: Text(

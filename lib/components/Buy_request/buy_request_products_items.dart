@@ -1,6 +1,7 @@
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_insert_product_quantity.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_remove_product_widget.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_all_stocks.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:celta_inventario/utils/convert_string.dart';
@@ -117,6 +118,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TitleAndSubtitle.titleAndSubtitle(
+                fontSize: 15,
                 title: "PLU",
                 value: product.PLU,
                 otherWidget: ShowAllStocksWidget(
@@ -129,30 +131,48 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                   stockByEnterpriseAssociatedsLength:
                       product.StockByEnterpriseAssociateds?.length ?? 0,
                   stocksLength: product.Stocks?.length ?? 0,
+                  fontSize: 15,
+                  iconSize: 25,
                 ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
+                fontSize: 15,
                 title: "Nome",
                 value: product.Name,
               ),
               TitleAndSubtitle.titleAndSubtitle(
+                fontSize: 15,
                 title: "Empresa",
                 value: product.EnterpriseCode.toString(),
               ),
               TitleAndSubtitle.titleAndSubtitle(
+                fontSize: 15,
                 title: "Embalagem",
                 value: product.PackingQuantity,
               ),
               TitleAndSubtitle.titleAndSubtitle(
+                fontSize: 15,
                 title: "Preço",
                 value: ConvertString.convertToBRL(product.Value),
                 subtitleColor: product.Value == 0 ? Colors.red : Colors.green,
-                otherWidget: Icon(
-                  buyRequestProvider.indexOfSelectedProduct != index
-                      ? Icons.arrow_drop_down_sharp
-                      : Icons.arrow_drop_up_sharp,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 30,
+                otherWidget: InkWell(
+                  onTap: buyRequestProvider.isLoadingInsertBuyRequest
+                      ? null
+                      : () {
+                          ShowAlertDialog.showAlertDialog(
+                            context: context,
+                            title: "Remover produto",
+                            subtitle: "Remover produto do carrinho?",
+                            function: () {
+                              buyRequestProvider.removeProductFromCart(product);
+                            },
+                          );
+                        },
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    size: 25,
+                  ),
                 ),
               ),
               if (product.quantity > 0)
@@ -160,6 +180,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                   buyRequestProvider: buyRequestProvider,
                   product: product,
                   context: context,
+                  index: index,
                 ),
               if (buyRequestProvider.indexOfSelectedProduct == index)
                 BuyRequestInsertProductQuantity(

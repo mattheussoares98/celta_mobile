@@ -10,6 +10,8 @@ class ShowAllStocksWidget extends StatefulWidget {
   final int stockByEnterpriseAssociatedsLength;
   final int stocksLength;
   final bool isLoading;
+  final double fontSize;
+  final double iconSize;
   const ShowAllStocksWidget({
     required this.productModel,
     required this.hasAssociatedsStock,
@@ -18,6 +20,8 @@ class ShowAllStocksWidget extends StatefulWidget {
     required this.stockByEnterpriseAssociatedsLength,
     required this.stocksLength,
     this.isLoading = false,
+    this.fontSize = 20,
+    this.iconSize = 30,
     Key? key,
   }) : super(key: key);
 
@@ -38,13 +42,13 @@ class _ShowAllStocksWidgetState extends State<ShowAllStocksWidget> {
               color: widget.isLoading
                   ? Colors.grey
                   : Theme.of(context).colorScheme.primary,
-              fontSize: 20,
+              fontSize: widget.fontSize,
             ),
           ),
           const SizedBox(width: 3),
           Icon(
             Icons.info,
-            size: 30,
+            size: widget.iconSize,
             color: widget.isLoading
                 ? Colors.grey
                 : Theme.of(context).colorScheme.primary,

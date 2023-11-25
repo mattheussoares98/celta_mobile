@@ -22,10 +22,11 @@ class _BuyRequestObservationsState extends State<BuyRequestObservations> {
           maxHeight: 200,
         ),
         child: TextField(
+          controller: buyRequestProvider.observationsController,
           enabled: !buyRequestProvider.isLoadingInsertBuyRequest,
           inputFormatters: [NoLineBreakFormatter()],
           onChanged: (value) {
-            buyRequestProvider.observations = value;
+            buyRequestProvider.observationsController.text = value;
           },
           maxLines: null,
           maxLength: 1000,

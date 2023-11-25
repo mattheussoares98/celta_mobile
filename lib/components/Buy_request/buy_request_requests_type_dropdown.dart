@@ -85,7 +85,7 @@ class _BuyRequestRequestsTypeDropdownState
 
   @override
   Widget build(BuildContext context) {
-    BuyRequestProvider buyRequestProvider = Provider.of(context);
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
     atualValue = buyRequestProvider.selectedRequestModel?.Name;
 
     return Column(
@@ -161,7 +161,8 @@ class _BuyRequestRequestsTypeDropdownState
                     : () async {
                         if (buyRequestProvider.selectedSupplier != null ||
                             buyRequestProvider.hasSelectedEnterprise ||
-                            buyRequestProvider.cartProductsCount > 0) {
+                            buyRequestProvider.cartProductsCount > 0 ||
+                            buyRequestProvider.suppliersCount > 0) {
                           ShowAlertDialog.showAlertDialog(
                             context: context,
                             title: "Pesquisar novamente",

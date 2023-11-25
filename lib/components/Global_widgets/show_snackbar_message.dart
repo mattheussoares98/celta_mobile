@@ -4,8 +4,6 @@ class ShowSnackbarMessage {
   static showMessage({
     required String message,
     required BuildContext context,
-    //sempre que cai no catch das requisições http é porque não encontrou o
-    //servidor. Nesse caso pode exibir uma mensagem padrão
     String labelSnackBarAction = "",
     Function? functionSnackBarAction,
     Color backgroundColor = Colors.red,
