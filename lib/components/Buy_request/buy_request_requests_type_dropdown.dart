@@ -161,7 +161,7 @@ class _BuyRequestRequestsTypeDropdownState
                     : () async {
                         if (buyRequestProvider.selectedSupplier != null ||
                             buyRequestProvider.hasSelectedEnterprise ||
-                            buyRequestProvider.cartProductsCount > 0 ||
+                            buyRequestProvider.productsInCartCount > 0 ||
                             buyRequestProvider.suppliersCount > 0 ||
                             buyRequestProvider.enterprisesCount > 0) {
                           ShowAlertDialog.showAlertDialog(

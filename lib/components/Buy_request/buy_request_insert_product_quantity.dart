@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,13 @@ class BuyRequestInsertProductQuantity extends StatefulWidget {
   final TextEditingController quantityController;
   final TextEditingController priceController;
   final GlobalKey<FormState> insertQuantityFormKey;
-  final int index;
+  final BuyRequestProductsModel product;
 
   const BuyRequestInsertProductQuantity({
     required this.priceController,
     required this.insertQuantityFormKey,
     required this.quantityController,
-    required this.index,
+    required this.product,
     Key? key,
   }) : super(key: key);
 
@@ -48,12 +49,10 @@ class _BuyRequestInsertProductQuantity
     }
   }
 
-  void updateProductInCart() {
+  void updateProductInCart(BuyRequestProductsModel product) {
     if (!_isValid()) return;
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
-    buyRequestProvider.updateProductInCart(
-      index: widget.index,
-    );
+    buyRequestProvider.updateProductInCart(product: product);
     widget.priceController.text = "";
     widget.quantityController.text = "";
     FocusScope.of(context).unfocus();
@@ -118,7 +117,7 @@ class _BuyRequestInsertProductQuantity
                       labelText: 'Preço',
                     ),
                     onFieldSubmitted: (_) async {
-                      updateProductInCart();
+                      updateProductInCart(widget.product);
                     },
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,
@@ -133,7 +132,7 @@ class _BuyRequestInsertProductQuantity
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () async {
-                      updateProductInCart();
+                      updateProductInCart(widget.product);
                     },
                     child: const FittedBox(
                       child: Text(

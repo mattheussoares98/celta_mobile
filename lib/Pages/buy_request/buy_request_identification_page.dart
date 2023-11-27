@@ -1,7 +1,9 @@
 import 'package:celta_inventario/components/Buy_request/buy_request_buyers_dropdown.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_requests_type_dropdown.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_suppliers.dart';
+import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BuyRequestIdentificationPage extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;
@@ -20,6 +22,32 @@ class BuyRequestIdentificationPage extends StatefulWidget {
 
 class _BuyRequestIdentificationPageState
     extends State<BuyRequestIdentificationPage> {
+  bool _isLoaded = false;
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if (!_isLoaded) {
+      _isLoaded = true;
+      await getRequestsAndBuyers();
+    }
+  }
+
+  Future<void> getRequestsAndBuyers() async {
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
+
+    if (buyRequestProvider.requestsTypeCount == 0 &&
+        buyRequestProvider.selectedRequestModel == null &&
+        !buyRequestProvider.isLoadingRequestsType) {
+      buyRequestProvider.getRequestsType(context: context);
+    }
+    if (buyRequestProvider.buyersCount == 0 &&
+        buyRequestProvider.selectedBuyer == null &&
+        buyRequestProvider.isLoadingBuyer) {
+      buyRequestProvider.getBuyers(context: context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

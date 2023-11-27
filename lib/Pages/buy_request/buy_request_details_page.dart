@@ -144,7 +144,7 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                         ),
                       ),
                     ),
-                  if (buyRequestProvider.cartProductsCount == 0)
+                  if (buyRequestProvider.productsInCartCount == 0)
                     const Padding(
                       padding: EdgeInsets.only(top: 20.0),
                       child: Text(
@@ -155,7 +155,7 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                         ),
                       ),
                     ),
-                  if (buyRequestProvider.cartProductsCount > 0)
+                  if (buyRequestProvider.productsInCartCount > 0)
                     const Padding(
                       padding: EdgeInsets.only(top: 20.0),
                       child: Column(

@@ -56,7 +56,10 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
                     vertical: VisualDensity.minimumDensity,
                   ),
                   onChanged: (bool? value) {
-                    buyRequestProvider.updateSelectedEnterprise(enterprise);
+                    buyRequestProvider.updateSelectedEnterprise(
+                      context: context,
+                      enterprise: enterprise,
+                    );
                   },
                   subtitle: Column(
                     children: [

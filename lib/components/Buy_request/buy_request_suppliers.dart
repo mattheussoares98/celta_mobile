@@ -25,7 +25,7 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
   }) {
     if (buyRequestProvider.selectedSupplier != null &&
         (buyRequestProvider.hasSelectedEnterprise ||
-            buyRequestProvider.cartProductsCount > 0)) {
+            buyRequestProvider.productsInCartCount > 0)) {
       ShowAlertDialog.showAlertDialog(
         context: context,
         title: "Alterar fornecedor",

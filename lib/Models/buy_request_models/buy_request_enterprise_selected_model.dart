@@ -11,4 +11,10 @@ class BuyRequestEnterpriseSelectedModel {
         "IsPrincipal": IsPrincipal,
         "EnterpriseCode": EnterpriseCode,
       };
+
+  static BuyRequestEnterpriseSelectedModel fromJson(Map json) =>
+      BuyRequestEnterpriseSelectedModel(
+        IsPrincipal: json["IsPrincipal"],
+        EnterpriseCode: json["EnterpriseCode"],
+      );
 }

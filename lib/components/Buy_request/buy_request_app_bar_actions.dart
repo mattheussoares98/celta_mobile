@@ -46,7 +46,7 @@ class _BuyRequestCartAppbarActionState
                     padding: const EdgeInsets.all(2.0),
                     child: FittedBox(
                       child: Text(
-                        buyRequestProvider.cartProductsCount.toString(),
+                        buyRequestProvider.productsInCartCount.toString(),
                       ),
                     ),
                   ),

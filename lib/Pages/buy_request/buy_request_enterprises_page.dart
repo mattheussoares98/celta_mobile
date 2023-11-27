@@ -22,7 +22,8 @@ class _BuyRequestEnterprisesPageState extends State<BuyRequestEnterprisesPage> {
   Future<void> _getEnterprises() async {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     if (buyRequestProvider.enterprisesCount > 0) return;
-    await buyRequestProvider.getEnterprises(context: context);
+    await buyRequestProvider.getEnterprises(
+        context: context, isSearchingAgain: false);
   }
 
   @override

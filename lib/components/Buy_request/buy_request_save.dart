@@ -23,7 +23,7 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
       return "Selecione o fornecedor";
     } else if (!buyRequestProvider.hasSelectedEnterprise) {
       return "Selecione a empresa";
-    } else if (buyRequestProvider.cartProductsCount == 0) {
+    } else if (buyRequestProvider.productsInCartCount == 0) {
       return "Insira produtos";
     } else {
       return "Salvar pedido";
@@ -60,7 +60,7 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
                       ),
                       FittedBox(
                         child: Text(
-                          buyRequestProvider.cartProductsCount.toString(),
+                          buyRequestProvider.productsInCartCount.toString(),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
@@ -109,7 +109,7 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
                               buyRequestProvider.selectedRequestModel == null ||
                               buyRequestProvider.selectedSupplier == null ||
                               !buyRequestProvider.hasSelectedEnterprise ||
-                              buyRequestProvider.cartProductsCount == 0
+                              buyRequestProvider.productsInCartCount == 0
                           ? null
                           : () async {
                               ShowAlertDialog.showAlertDialog(

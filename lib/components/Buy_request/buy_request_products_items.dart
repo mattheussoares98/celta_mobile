@@ -1,6 +1,5 @@
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_insert_product_quantity.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_remove_product_widget.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_all_stocks.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
@@ -24,7 +23,7 @@ class BuyRequestProductsItems extends StatefulWidget {
 }
 
 class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
-  changeFocusToConsultedProductFocusNode() {
+  changeFocusToSelectedProductFocusNode() {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     Future.delayed(const Duration(milliseconds: 300), () {
       //se não colocar em um future pra mudar o foco,
@@ -40,9 +39,9 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     required int index,
   }) {
     buyRequestProvider.quantityController.text = "";
+    buyRequestProvider.priceController.text = "";
 
-    if (buyRequestProvider.productsCount == 1 ||
-        buyRequestProvider.isLoadingProducts) {
+    if (buyRequestProvider.isLoadingProducts) {
       return;
     }
 
@@ -50,7 +49,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
       if (buyRequestProvider.indexOfSelectedProduct != index) {
         setState(() {
           buyRequestProvider.indexOfSelectedProduct = index;
-          changeFocusToConsultedProductFocusNode();
+          changeFocusToSelectedProductFocusNode();
         });
       } else {
         setState(() {
@@ -68,17 +67,17 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
       if (buyRequestProvider.quantityFocusNode.hasFocus &&
           MediaQuery.of(context).viewInsets.bottom == 0) {
         FocusScope.of(context).unfocus();
-        changeFocusToConsultedProductFocusNode();
+        changeFocusToSelectedProductFocusNode();
       }
       if (!buyRequestProvider.quantityFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode();
+        changeFocusToSelectedProductFocusNode();
       }
       return;
     }
 
     if (buyRequestProvider.indexOfSelectedProduct == index) {
       if (!buyRequestProvider.quantityFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode();
+        changeFocusToSelectedProductFocusNode();
       } else {
         setState(() {
           buyRequestProvider.indexOfSelectedProduct = -1;
@@ -91,10 +90,10 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     required BuyRequestProvider buyRequestProvider,
     required int index,
   }) {
-    BuyRequestProductsModel product;
+    late BuyRequestProductsModel product;
 
     if (widget.showOnlyCartProducts) {
-      product = buyRequestProvider.cartProducts[index];
+      product = buyRequestProvider.productsInCart[index];
     } else {
       product = buyRequestProvider.products[index];
     }
@@ -147,12 +146,6 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                 fontSize: 15,
                 title: "Embalagem",
                 value: product.PackingQuantity,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                fontSize: 15,
-                title: "Preço",
-                value: ConvertString.convertToBRL(product.Value),
-                subtitleColor: product.Value == 0 ? Colors.red : Colors.green,
                 otherWidget: InkWell(
                   onTap: buyRequestProvider.isLoadingInsertBuyRequest
                       ? null
@@ -173,12 +166,49 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                   ),
                 ),
               ),
+              TitleAndSubtitle.titleAndSubtitle(
+                fontSize: 15,
+                title: "Preço",
+                value: ConvertString.convertToBRL(product.Value),
+                subtitleColor: product.Value == 0 ? Colors.red : Colors.green,
+                otherWidget: product.quantity > 0
+                    ? null
+                    : Icon(
+                        buyRequestProvider.indexOfSelectedProduct != index
+                            ? Icons.arrow_drop_down_sharp
+                            : Icons.arrow_drop_up_sharp,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 30,
+                      ),
+              ),
               if (product.quantity > 0)
-                buyRequestRemoveProduct(
-                  buyRequestProvider: buyRequestProvider,
-                  product: product,
-                  context: context,
-                  index: index,
+                Column(
+                  children: [
+                    TitleAndSubtitle.titleAndSubtitle(
+                      fontSize: 15,
+                      title: "Quantidade",
+                      value: ConvertString.convertToBrazilianNumber(
+                          product.quantity),
+                      subtitleColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    TitleAndSubtitle.titleAndSubtitle(
+                      title: "Total",
+                      fontSize: 15,
+                      value: ConvertString.convertToBRL(
+                        product.Value * product.quantity,
+                      ),
+                      subtitleColor: Theme.of(context).colorScheme.primary,
+                      otherWidget: product.quantity == 0
+                          ? null
+                          : Icon(
+                              buyRequestProvider.indexOfSelectedProduct != index
+                                  ? Icons.arrow_drop_down_sharp
+                                  : Icons.arrow_drop_up_sharp,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 30,
+                            ),
+                    ),
+                  ],
                 ),
               if (buyRequestProvider.indexOfSelectedProduct == index)
                 BuyRequestInsertProductQuantity(
@@ -186,7 +216,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                       buyRequestProvider.insertQuantityFormKey,
                   priceController: buyRequestProvider.priceController,
                   quantityController: buyRequestProvider.quantityController,
-                  index: index,
+                  product: product,
                 ),
             ],
           ),
@@ -200,13 +230,13 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
     int productsCount = widget.showOnlyCartProducts
-        ? buyRequestProvider.cartProductsCount
+        ? buyRequestProvider.productsInCartCount
         : buyRequestProvider.productsCount;
 
     return Column(
       mainAxisAlignment: buyRequestProvider.productsCount > 1 ||
               (widget.showOnlyCartProducts &&
-                  buyRequestProvider.cartProductsCount > 1)
+                  buyRequestProvider.productsInCartCount > 1)
           ? MainAxisAlignment.center
           : MainAxisAlignment.start,
       children: [
@@ -214,12 +244,14 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: widget.showOnlyCartProducts
-              ? buyRequestProvider.cartProductsCount
+              ? buyRequestProvider.productsInCartCount
               : buyRequestProvider.productsCount,
           itemBuilder: (context, index) {
-            if (buyRequestProvider.productsCount == 1) {
+            if (buyRequestProvider.productsCount == 1 &&
+                !widget.showOnlyCartProducts) {
               buyRequestProvider.indexOfSelectedProduct = index;
-            } else if (buyRequestProvider.productsCount == 0) {
+            } else if (buyRequestProvider.productsCount == 0 &&
+                !widget.showOnlyCartProducts) {
               buyRequestProvider.indexOfSelectedProduct = -1;
             }
 

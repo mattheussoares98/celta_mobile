@@ -26,22 +26,13 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
     if (!_isLoaded) {
       _isLoaded = true;
-      await getData();
+      await restoreDataByDatabase();
     }
   }
 
-  Future<void> getData() async {
+  Future<void> restoreDataByDatabase() async {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
     await buyRequestProvider.restoreDataByDatabase();
-
-    if (buyRequestProvider.requestsTypeCount == 0 &&
-        buyRequestProvider.selectedRequestModel == null) {
-      buyRequestProvider.getRequestsType(context: context);
-    }
-    if (buyRequestProvider.buyersCount == 0 &&
-        buyRequestProvider.selectedBuyer == null) {
-      buyRequestProvider.getBuyers(context: context);
-    }
   }
 
   List<Widget> _pages = <Widget>[
@@ -83,6 +74,13 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
           context: context,
         );
         return;
+      } else if ((index == 1 || index == 2) &&
+          buyRequestProvider.selectedSupplier == null) {
+        ShowSnackbarMessage.showMessage(
+          message: "Selecione um fornecedor",
+          context: context,
+        );
+        return;
       } else if ((index == 2) && !buyRequestProvider.hasSelectedEnterprise) {
         ShowSnackbarMessage.showMessage(
           message: "Selecione pelo menos uma empresa",
@@ -91,7 +89,9 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
         return;
       }
     } else if (_selectedIndex == 1) {
-      if (!buyRequestProvider.hasSelectedEnterprise && index == 2) {
+      if (buyRequestProvider.isLoadingEnterprises) {
+        return;
+      } else if (!buyRequestProvider.hasSelectedEnterprise && index == 2) {
         ShowSnackbarMessage.showMessage(
           message: "Selecione pelo menos uma empresa",
           context: context,
@@ -181,7 +181,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                     Icons.shopping_cart,
                     size: 35,
                   ),
-                  if (buyRequestProvider.cartProductsCount > 0)
+                  if (buyRequestProvider.productsInCartCount > 0)
                     Positioned(
                       top: 0,
                       right: 0,
@@ -191,7 +191,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                           padding: const EdgeInsets.all(2.0),
                           child: FittedBox(
                             child: Text(
-                              buyRequestProvider.cartProductsCount.toString(),
+                              buyRequestProvider.productsInCartCount.toString(),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
