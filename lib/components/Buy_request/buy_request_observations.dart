@@ -53,8 +53,13 @@ class NoLineBreakFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // Impede a quebra de linha substituindo qualquer caractere de quebra de linha por um espaço em branco.
     String newString = newValue.text.replaceAll(RegExp(r'\n'), '');
-    return newValue.copyWith(text: newString);
+    int selectionIndex = newValue.selection.baseOffset -
+        (newValue.text.length - newString.length);
+
+    return TextEditingValue(
+      text: newString,
+      selection: TextSelection.collapsed(offset: selectionIndex),
+    );
   }
 }

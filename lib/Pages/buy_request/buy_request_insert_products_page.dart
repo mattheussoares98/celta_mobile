@@ -1,6 +1,7 @@
 import 'package:celta_inventario/components/Buy_request/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,10 @@ class _BuyRequestInsertProductsPageState
     extends State<BuyRequestInsertProductsPage> {
   TextEditingController consultProductController = TextEditingController();
 
-  getProductWithCamera(BuyRequestProvider buyRequestProvider) async {
+  getProductWithCamera({
+    required BuyRequestProvider buyRequestProvider,
+    required ConfigurationsProvider configurationsProvider,
+  }) async {
     FocusScope.of(context).unfocus();
     consultProductController.clear();
 
@@ -30,6 +34,7 @@ class _BuyRequestInsertProductsPageState
     buyRequestProvider.getProducts(
       searchValue: consultProductController.text,
       context: context,
+      configurationsProvider: configurationsProvider,
     );
 
     if (buyRequestProvider.productsCount > 0) {
@@ -40,19 +45,25 @@ class _BuyRequestInsertProductsPageState
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
     return SingleChildScrollView(
       child: Column(
         children: [
           SearchWidget(
             autofocus: false,
-            showConfigurationsIcon: false,
+            showConfigurationsIcon: true,
             consultProductController: consultProductController,
             isLoading: buyRequestProvider.isLoadingProducts,
             onPressSearch: () async {
               await buyRequestProvider.getProducts(
+                configurationsProvider: configurationsProvider,
                 searchValue: consultProductController.text,
                 context: context,
               );
+
+              if (buyRequestProvider.errorMessageGetProducts == "") {
+                consultProductController.text = "";
+              }
             },
             focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
           ),

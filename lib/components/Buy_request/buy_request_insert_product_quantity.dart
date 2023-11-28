@@ -75,7 +75,8 @@ class _BuyRequestInsertProductQuantity
                   child: TextFormField(
                     // autofocus: true,
                     focusNode: buyRequestProvider.quantityFocusNode,
-                    enabled: !buyRequestProvider.isLoadingProducts,
+                    enabled: !buyRequestProvider.isLoadingProducts &&
+                        !buyRequestProvider.isLoadingInsertBuyRequest,
                     controller: widget.quantityController,
                     inputFormatters: [LengthLimitingTextInputFormatter(7)],
                     onChanged: (value) => onChanged(
@@ -103,7 +104,8 @@ class _BuyRequestInsertProductQuantity
                   child: TextFormField(
                     autovalidateMode: AutovalidateMode.always,
                     focusNode: buyRequestProvider.priceFocusNode,
-                    enabled: !buyRequestProvider.isLoadingProducts,
+                    enabled: !buyRequestProvider.isLoadingProducts &&
+                        !buyRequestProvider.isLoadingInsertBuyRequest,
                     controller: widget.priceController,
                     inputFormatters: [LengthLimitingTextInputFormatter(7)],
                     onChanged: (value) => onChanged(

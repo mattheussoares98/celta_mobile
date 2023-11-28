@@ -41,7 +41,8 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     buyRequestProvider.quantityController.text = "";
     buyRequestProvider.priceController.text = "";
 
-    if (buyRequestProvider.isLoadingProducts) {
+    if (buyRequestProvider.isLoadingProducts ||
+        buyRequestProvider.isLoadingInsertBuyRequest) {
       return;
     }
 
@@ -140,14 +141,23 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
               TitleAndSubtitle.titleAndSubtitle(
                 fontSize: 15,
                 title: "Empresa",
-                value: product.EnterpriseCode.toString(),
+                value: buyRequestProvider.enterprises
+                    .firstWhere(
+                      (element) => product.EnterpriseCode == element.Code,
+                    )
+                    .Name,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 fontSize: 15,
                 title: "Embalagem",
                 value: product.PackingQuantity,
                 otherWidget: InkWell(
-                  onTap: buyRequestProvider.isLoadingInsertBuyRequest
+                  onTap: buyRequestProvider.isLoadingInsertBuyRequest ||
+                          buyRequestProvider.productsInCart.indexWhere(
+                                  (element) =>
+                                      element.EnterpriseCode ==
+                                      product.EnterpriseCode) ==
+                              -1
                       ? null
                       : () {
                           ShowAlertDialog.showAlertDialog(
@@ -159,9 +169,15 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                             },
                           );
                         },
-                  child: const Icon(
+                  child: Icon(
                     Icons.delete,
-                    color: Colors.red,
+                    color: buyRequestProvider.productsInCart.indexWhere(
+                                (element) =>
+                                    element.EnterpriseCode ==
+                                    product.EnterpriseCode) !=
+                            -1
+                        ? Colors.red
+                        : Colors.grey,
                     size: 25,
                   ),
                 ),

@@ -44,18 +44,13 @@ class _BuyRequestRequestsTypeDropdownState
       atualValue = previousValue;
     });
 
-    if (buyRequestProvider.selectedRequestModel == null ||
-        buyRequestProvider.selectedSupplier == null) {
-      setState(() {
-        atualValue = value;
-      });
-      buyRequestProvider.selectedRequestModel = selectedRequestModel;
-    } else {
+    if (buyRequestProvider.enterprisesCount > 0 ||
+        buyRequestProvider.productsInCartCount > 0) {
       ShowAlertDialog.showAlertDialog(
         context: context,
         title: "Alterar valor",
         subtitle:
-            "Se você alterar o modelo de pedido, todos fornecedores, empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
+            "Se você alterar o modelo de pedido, todas empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
         function: () {
           widget.requestsKey.currentState?.reset();
 
@@ -66,7 +61,13 @@ class _BuyRequestRequestsTypeDropdownState
           buyRequestProvider.selectedRequestModel = selectedRequestModel;
         },
       );
+    } else {
+      setState(() {
+        atualValue = value;
+      });
+      buyRequestProvider.selectedRequestModel = selectedRequestModel;
     }
+
     if (atualValue != buyRequestProvider.selectedRequestModel?.Name) {
       atualValue = buyRequestProvider.selectedRequestModel?.Name;
     }
@@ -75,10 +76,26 @@ class _BuyRequestRequestsTypeDropdownState
   Future<void> getRequestsType(BuyRequestProvider buyRequestProvider) async {
     widget.requestsKey.currentState?.reset();
 
-    await buyRequestProvider.getRequestsType(
-      context: context,
-      isSearchingAgain: true,
-    );
+    if (buyRequestProvider.enterprisesCount > 0 ||
+        buyRequestProvider.productsInCartCount > 0) {
+      ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: "Consultar modelos",
+        subtitle:
+            "Se você consultar os modelos, todas empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
+        function: () async {
+          await buyRequestProvider.getRequestsType(
+            context: context,
+            isSearchingAgain: true,
+          );
+        },
+      );
+    } else {
+      await buyRequestProvider.getRequestsType(
+        context: context,
+        isSearchingAgain: true,
+      );
+    }
 
     atualValue = null;
   }
@@ -159,23 +176,7 @@ class _BuyRequestRequestsTypeDropdownState
                 onPressed: buyRequestProvider.isLoadingRequestsType
                     ? null
                     : () async {
-                        if (buyRequestProvider.selectedSupplier != null ||
-                            buyRequestProvider.hasSelectedEnterprise ||
-                            buyRequestProvider.productsInCartCount > 0 ||
-                            buyRequestProvider.suppliersCount > 0 ||
-                            buyRequestProvider.enterprisesCount > 0) {
-                          ShowAlertDialog.showAlertDialog(
-                            context: context,
-                            title: "Pesquisar novamente",
-                            subtitle:
-                                "Se você pesquisar os modelos de pedido, todos fornecedores, empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
-                            function: () async {
-                              await getRequestsType(buyRequestProvider);
-                            },
-                          );
-                        } else {
-                          await getRequestsType(buyRequestProvider);
-                        }
+                        await getRequestsType(buyRequestProvider);
                       },
                 tooltip: "Pesquisar modelos de pedido novamente",
                 icon: Icon(

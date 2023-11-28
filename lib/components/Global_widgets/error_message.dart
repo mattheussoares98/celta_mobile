@@ -13,21 +13,16 @@ class ErrorMessage extends StatelessWidget {
       flex: 2,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Text(
-                errorMessage,
-                style: const TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
-              ),
+        child: Expanded(
+          child: Text(
+            errorMessage,
+            style: const TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
             ),
-          ],
+          ),
         ),
       ),
     );

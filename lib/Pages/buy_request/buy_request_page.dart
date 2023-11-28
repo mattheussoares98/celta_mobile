@@ -26,7 +26,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
     if (!_isLoaded) {
       _isLoaded = true;
-      await restoreDataByDatabase();
+      // await restoreDataByDatabase();
     }
   }
 
@@ -168,7 +168,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
             ),
             const BottomNavigationBarItem(
               icon: Icon(
-                Icons.r_mobiledata,
+                Icons.business,
                 size: 35,
               ),
               label: 'Empresas',
@@ -207,7 +207,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
             ),
             const BottomNavigationBarItem(
               icon: Icon(
-                Icons.details,
+                Icons.check_box_outlined,
                 size: 35,
               ),
               label: 'Confirmação',

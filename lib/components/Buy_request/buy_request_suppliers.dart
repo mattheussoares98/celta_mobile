@@ -24,7 +24,7 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
     required BuyRequestSupplierModel supplier,
   }) {
     if (buyRequestProvider.selectedSupplier != null &&
-        (buyRequestProvider.hasSelectedEnterprise ||
+        (buyRequestProvider.enterprisesCount > 0 ||
             buyRequestProvider.productsInCartCount > 0)) {
       ShowAlertDialog.showAlertDialog(
         context: context,
@@ -84,7 +84,7 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
           consultProductController: searchValueController,
           isLoading: buyRequestProvider.isLoadingSupplier,
           onPressSearch: () async {
-            if (buyRequestProvider.hasSelectedEnterprise) {
+            if (buyRequestProvider.enterprisesCount > 0) {
               ShowAlertDialog.showAlertDialog(
                 context: context,
                 title: "Pesquisar fornecedores",

@@ -11,6 +11,7 @@ import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
+import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +36,8 @@ class BuyRequestProvider with ChangeNotifier {
   BuyRequestBuyerModel? get selectedBuyer => _selectedBuyer;
   set selectedBuyer(BuyRequestBuyerModel? value) {
     _selectedBuyer = value;
-
     notifyListeners();
+    _updateDataInDatabase();
   }
 
   List<BuyRequestRequestsTypeModel> _requestsType = [];
@@ -53,13 +54,13 @@ class BuyRequestProvider with ChangeNotifier {
     _selectedRequestModel = value;
 
     if (enterprisesCount > 0) {
-      _clearSuppliers();
       _clearProducts();
       _clearCartProducts();
       _clearEnterprisesAndSelectedEnterprises();
+      _observationsController.text = "";
     }
-
     notifyListeners();
+    _updateDataInDatabase();
   }
 
   List<BuyRequestSupplierModel> _suppliers = [];
@@ -77,8 +78,9 @@ class BuyRequestProvider with ChangeNotifier {
     _clearEnterprisesAndSelectedEnterprises();
     _clearProducts();
     _clearCartProducts();
-
+    _observationsController.text = "";
     notifyListeners();
+    _updateDataInDatabase();
   }
 
   static List<BuyRequestEnterpriseModel> _enterprises = [];
@@ -326,33 +328,30 @@ class BuyRequestProvider with ChangeNotifier {
         subtitle:
             "Há produtos informados com a empresa que foi selecionada. Ao remover a seleção da empresa, os produtos dessa empresa serão removidos do pedido.\n\nDeseja realmente retirar a seleção da empresa?",
         title: "Remover produtos",
-        function: () {
+        function: () async {
           _addOrRemoveEnterprisesSelecteds(enterprise);
+          await _removeProductsByEnterpriseCode(enterprise.Code);
+          await _updateDataInDatabase();
         },
       );
     } else {
-      int indexOfEnterprise = _enterprises.indexOf(enterprise);
-
-      final newEnterprise = BuyRequestEnterpriseModel(
-        Code: enterprise.Code,
-        SaleRequestTypeCode: enterprise.SaleRequestTypeCode,
-        PersonalizedCode: enterprise.PersonalizedCode,
-        Name: enterprise.Name,
-        FantasizesName: enterprise.FantasizesName,
-        CnpjNumber: enterprise.CnpjNumber,
-        InscriptionNumber: enterprise.InscriptionNumber,
-        selected: !enterprise.selected, //única propriedade que muda
-      );
-
-      if (indexOfEnterprise != -1) {
-        _enterprises[indexOfEnterprise] = newEnterprise;
-      }
-
       _addOrRemoveEnterprisesSelecteds(enterprise);
+      await _updateDataInDatabase();
     }
 
-    await _updateDataInDatabase();
+    notifyListeners();
+  }
 
+  _removeProductsByEnterpriseCode(int enterpriseCode) async {
+    _productsInCart.removeWhere(
+      (element) => element.EnterpriseCode == enterpriseCode,
+    );
+    _products.forEach((element) {
+      if (element.EnterpriseCode == enterpriseCode) {
+        element.quantity = 0;
+        element.Value = 0;
+      }
+    });
     notifyListeners();
   }
 
@@ -464,6 +463,7 @@ class BuyRequestProvider with ChangeNotifier {
   Future<void> getProducts({
     required String searchValue,
     required BuildContext context,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
@@ -476,10 +476,11 @@ class BuyRequestProvider with ChangeNotifier {
       "RoutineInt": 2,
       "SearchValue": searchValue,
       "RequestTypeCode": _selectedRequestModel!.Code,
-      "EnterpriseCodes": [1, 2, 3, 4],
+      "EnterpriseCodes":
+          _enterprisesSelecteds.map((e) => e.EnterpriseCode).toList(),
       "SupplierCode": _selectedSupplier!.Code,
       // "EnterpriseDestinyCode": 0,
-      // "SearchTypeInt": 0,
+      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
       // "SearchType": 0,
       // "Routine": 0,
     };
@@ -694,17 +695,29 @@ class BuyRequestProvider with ChangeNotifier {
     _errorMessageEnterprises = "";
     _isLoadingEnterprises = true;
     _clearEnterprisesAndSelectedEnterprises();
+    _clearProducts();
+    _clearCartProducts();
     if (isSearchingAgain) notifyListeners();
+
+    Map jsonGetEnterprises = {
+      "CrossIdentity": UserData.crossIdentity,
+      "RoutineInt": 2,
+      "SearchValue": "%",
+      "SupplierCode": _selectedSupplier!.Code,
+      // "RequestTypeCode": _selectedRequestModel!.Code,
+      // "EnterpriseOriginCode": 0,
+      // "Routine": 0,
+    };
 
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserData.crossIdentity,
+          "filters": json.encode(jsonGetEnterprises),
         },
         serviceASMX: "CeltaEnterpriseService.asmx",
-        typeOfResponse: "GetEnterprisesJsonResponse",
-        SOAPAction: "GetEnterprisesJson",
-        typeOfResult: "GetEnterprisesJsonResult",
+        typeOfResponse: "GetEnterprisesJsonByFiltersResponse",
+        SOAPAction: "GetEnterprisesJsonByFilters",
+        typeOfResult: "GetEnterprisesJsonByFiltersResult",
       );
 
       _errorMessageEnterprises = SoapHelperResponseParameters.errorMessage;
@@ -716,11 +729,6 @@ class BuyRequestProvider with ChangeNotifier {
         );
 
         await _updateDataInDatabase();
-      } else {
-        ShowSnackbarMessage.showMessage(
-          message: _errorMessageEnterprises,
-          context: context,
-        );
       }
     } catch (e) {
       print("Erro para obter as empresas: $e");

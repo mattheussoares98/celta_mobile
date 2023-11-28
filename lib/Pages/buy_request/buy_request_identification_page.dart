@@ -29,22 +29,24 @@ class _BuyRequestIdentificationPageState
 
     if (!_isLoaded) {
       _isLoaded = true;
-      await getRequestsAndBuyers();
+      await restoreDataAndGetRequestsAndBuyers();
     }
   }
 
-  Future<void> getRequestsAndBuyers() async {
+  Future<void> restoreDataAndGetRequestsAndBuyers() async {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
+
+    await buyRequestProvider.restoreDataByDatabase();
 
     if (buyRequestProvider.requestsTypeCount == 0 &&
         buyRequestProvider.selectedRequestModel == null &&
         !buyRequestProvider.isLoadingRequestsType) {
-      buyRequestProvider.getRequestsType(context: context);
+      await buyRequestProvider.getRequestsType(context: context);
     }
     if (buyRequestProvider.buyersCount == 0 &&
         buyRequestProvider.selectedBuyer == null &&
-        buyRequestProvider.isLoadingBuyer) {
-      buyRequestProvider.getBuyers(context: context);
+        !buyRequestProvider.isLoadingBuyer) {
+      await buyRequestProvider.getBuyers(context: context);
     }
   }
 

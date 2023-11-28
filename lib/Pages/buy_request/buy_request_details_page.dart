@@ -95,6 +95,14 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
   FocusNode _focusNode = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
+    buyRequestProvider.indexOfSelectedProduct = -1;
+  }
+
+  @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
 
