@@ -1,4 +1,4 @@
-import 'package:celta_inventario/components/Buy_request/buy_request_products_items.dart';
+import 'package:celta_inventario/components/Buy_request/products/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';

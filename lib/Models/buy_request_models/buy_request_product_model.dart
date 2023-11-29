@@ -32,7 +32,8 @@ class BuyRequestProductsModel {
   final List<Map<dynamic, dynamic>>? StockByEnterpriseAssociateds;
   final List<Map<dynamic, dynamic>>? StorageAreaAddress;
   final List<dynamic>? Stocks;
-  double Value;
+  final double Value;
+  double ValueTyped;
   double quantity;
 
   BuyRequestProductsModel({
@@ -69,6 +70,7 @@ class BuyRequestProductsModel {
     this.StockByEnterpriseAssociateds,
     this.StorageAreaAddress,
     this.quantity = 0,
+    this.ValueTyped = 0,
   });
 
   static responseAsStringToBuyRequestProductsModel({
@@ -100,6 +102,7 @@ class BuyRequestProductsModel {
           ProductCode: data["ProductCode"],
           ProductPackingCode: data["ProductPackingCode"],
           Value: data["Value"],
+          ValueTyped: data["Value"] == 0.0 ? data["RealCost"] : data["Value"],
           RetailPracticedPrice: data["RetailPracticedPrice"],
           RetailSalePrice: data["RetailSalePrice"],
           RetailOfferPrice: data["RetailOfferPrice"],
@@ -138,6 +141,7 @@ class BuyRequestProductsModel {
         ProductCode: json["ProductCode"],
         ProductPackingCode: json["ProductPackingCode"],
         Value: json["Value"],
+        ValueTyped: json["ValueTyped"],
         RetailPracticedPrice: json["RetailPracticedPrice"],
         RetailSalePrice: json["RetailSalePrice"],
         RetailOfferPrice: json["RetailOfferPrice"],
@@ -179,6 +183,7 @@ class BuyRequestProductsModel {
         "ProductCode": ProductCode,
         "ProductPackingCode": ProductPackingCode,
         "Value": Value,
+        "ValueTyped": ValueTyped,
         "RetailPracticedPrice": RetailPracticedPrice,
         "RetailSalePrice": RetailSalePrice,
         "RetailOfferPrice": RetailOfferPrice,

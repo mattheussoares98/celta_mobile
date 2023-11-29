@@ -3,6 +3,7 @@ import 'package:celta_inventario/Pages/buy_request/buy_request_enterprises_page.
 import 'package:celta_inventario/Pages/buy_request/buy_request_identification_page.dart';
 import 'package:celta_inventario/Pages/buy_request/buy_request_insert_products_page.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_app_bar_actions.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -19,22 +20,6 @@ final GlobalKey<FormFieldState> _buyersKey = GlobalKey();
 final GlobalKey<FormFieldState> _requestsKey = GlobalKey();
 
 class _BuyRequestPageState extends State<BuyRequestPage> {
-  bool _isLoaded = false;
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-
-    if (!_isLoaded) {
-      _isLoaded = true;
-      // await restoreDataByDatabase();
-    }
-  }
-
-  Future<void> restoreDataByDatabase() async {
-    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
-    await buyRequestProvider.restoreDataByDatabase();
-  }
-
   List<Widget> _pages = <Widget>[
     BuyRequestIdentificationPage(
       buyersKey: _buyersKey,
@@ -222,6 +207,41 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
             );
           },
         ),
+        floatingActionButton: _selectedIndex != 3
+            ? null
+            : Padding(
+                padding: const EdgeInsets.only(bottom: 50.0),
+                child: FloatingActionButton(
+                  onPressed: (buyRequestProvider.observationsController.text ==
+                                  "" &&
+                              buyRequestProvider.selectedBuyer == null &&
+                              buyRequestProvider.selectedRequestModel == null &&
+                              buyRequestProvider.selectedSupplier == null) ||
+                          buyRequestProvider.isLoadingInsertBuyRequest
+                      ? null
+                      : () {
+                          ShowAlertDialog.showAlertDialog(
+                            context: context,
+                            title: "Apagar todos dados",
+                            subtitle:
+                                "Deseja realmente apagar todos dados do pedido de compras?",
+                            function: () {
+                              buyRequestProvider.clearAllData();
+                            },
+                          );
+                        },
+                  child: const Icon(Icons.delete),
+                  backgroundColor: (buyRequestProvider
+                                      .observationsController.text ==
+                                  "" &&
+                              buyRequestProvider.selectedBuyer == null &&
+                              buyRequestProvider.selectedRequestModel == null &&
+                              buyRequestProvider.selectedSupplier == null) ||
+                          buyRequestProvider.isLoadingInsertBuyRequest
+                      ? Colors.grey.withOpacity(0.75)
+                      : Colors.red.withOpacity(0.75),
+                ),
+              ),
       ),
     );
   }

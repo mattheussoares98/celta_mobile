@@ -91,8 +91,19 @@ class _BuyRequestInsertProductQuantity
                       labelText: 'Quantidade',
                     ),
                     onFieldSubmitted: (_) async {
+                      if (buyRequestProvider.quantityController.text.isEmpty ||
+                          buyRequestProvider.quantityController.text == "") {
+                        return;
+                      }
                       FocusScope.of(context)
                           .requestFocus(buyRequestProvider.priceFocusNode);
+                      //seleciona todo o texto de preço
+                      buyRequestProvider.priceController.selection =
+                          TextSelection(
+                        baseOffset: 0,
+                        extentOffset:
+                            buyRequestProvider.priceController.text.length,
+                      );
                     },
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,

@@ -117,6 +117,7 @@ class BuyRequestProvider with ChangeNotifier {
   void updateObservationsControllerText(String newValue) {
     _observationsController.text = newValue;
     _updateDataInDatabase();
+    notifyListeners();
   }
 
   FocusNode focusNodeConsultProduct = FocusNode();
@@ -154,7 +155,7 @@ class BuyRequestProvider with ChangeNotifier {
 
   double get totalCartPrice {
     double total = _productsInCart.fold(0, (previousValue, product) {
-      double productTotal = product.quantity * product.Value;
+      double productTotal = product.quantity * product.ValueTyped;
       return previousValue + productTotal;
     });
 
@@ -329,13 +330,13 @@ class BuyRequestProvider with ChangeNotifier {
             "Há produtos informados com a empresa que foi selecionada. Ao remover a seleção da empresa, os produtos dessa empresa serão removidos do pedido.\n\nDeseja realmente retirar a seleção da empresa?",
         title: "Remover produtos",
         function: () async {
-          _addOrRemoveEnterprisesSelecteds(enterprise);
+          _updateSelectedEnterprise(enterprise);
           await _removeProductsByEnterpriseCode(enterprise.Code);
           await _updateDataInDatabase();
         },
       );
     } else {
-      _addOrRemoveEnterprisesSelecteds(enterprise);
+      _updateSelectedEnterprise(enterprise);
       await _updateDataInDatabase();
     }
 
@@ -346,31 +347,18 @@ class BuyRequestProvider with ChangeNotifier {
     _productsInCart.removeWhere(
       (element) => element.EnterpriseCode == enterpriseCode,
     );
-    _products.forEach((element) {
-      if (element.EnterpriseCode == enterpriseCode) {
-        element.quantity = 0;
-        element.Value = 0;
-      }
-    });
+    _products.removeWhere(
+      (element) => element.EnterpriseCode == enterpriseCode,
+    );
     notifyListeners();
   }
 
-  _addOrRemoveEnterprisesSelecteds(BuyRequestEnterpriseModel enterprise) async {
+  _updateSelectedEnterprise(BuyRequestEnterpriseModel enterprise) async {
     int indexOfEnterprise = _enterprises.indexOf(enterprise);
 
-    final newEnterprise = BuyRequestEnterpriseModel(
-      Code: enterprise.Code,
-      SaleRequestTypeCode: enterprise.SaleRequestTypeCode,
-      PersonalizedCode: enterprise.PersonalizedCode,
-      Name: enterprise.Name,
-      FantasizesName: enterprise.FantasizesName,
-      CnpjNumber: enterprise.CnpjNumber,
-      InscriptionNumber: enterprise.InscriptionNumber,
-      selected: !enterprise.selected, //única propriedade que muda
-    );
-
     if (indexOfEnterprise != -1) {
-      _enterprises[indexOfEnterprise] = newEnterprise;
+      _enterprises[indexOfEnterprise].selected =
+          !_enterprises[indexOfEnterprise].selected;
     }
 
     int indexOfSelectedEnterprise = _enterprisesSelecteds
@@ -385,6 +373,7 @@ class BuyRequestProvider with ChangeNotifier {
       _enterprisesSelecteds.add(selectedEnterprise);
     } else {
       _enterprisesSelecteds.removeAt(indexOfSelectedEnterprise);
+      _removeProductsByEnterpriseCode(enterprise.Code);
     }
   }
 
@@ -430,10 +419,6 @@ class BuyRequestProvider with ChangeNotifier {
 
   void _updateProductWithProductCart() {
     if (productsInCartCount == 0) {
-      _products.forEach((element) {
-        element.Value = 0;
-        element.quantity = 0;
-      });
       return;
     }
 
@@ -442,7 +427,7 @@ class BuyRequestProvider with ChangeNotifier {
         if (_products[i].ProductPackingCode ==
                 _productsInCart[j].ProductPackingCode &&
             _products[i].EnterpriseCode == _productsInCart[j].EnterpriseCode) {
-          _products[i].Value = _productsInCart[j].Value;
+          _products[i].ValueTyped = _productsInCart[j].ValueTyped;
           _products[i].quantity = _productsInCart[j].quantity;
 
           break;
@@ -469,6 +454,8 @@ class BuyRequestProvider with ChangeNotifier {
     _isLoadingProducts = true;
     _products.clear();
     indexOfSelectedProduct = -1;
+    priceController.text = "";
+    quantityController.text = "";
     notifyListeners();
 
     Map jsonGetProducts = {
@@ -702,9 +689,9 @@ class BuyRequestProvider with ChangeNotifier {
     Map jsonGetEnterprises = {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 2,
-      "SearchValue": "%",
       "SupplierCode": _selectedSupplier!.Code,
-      // "RequestTypeCode": _selectedRequestModel!.Code,
+      "RequestTypeCode": _selectedRequestModel!.Code,
+      // "SearchValue": "%",
       // "EnterpriseOriginCode": 0,
       // "Routine": 0,
     };
@@ -751,7 +738,7 @@ class BuyRequestProvider with ChangeNotifier {
         double.parse(quantityController.text.replaceAll(RegExp(r','), '.'));
 
     product.quantity = quantity;
-    product.Value = price;
+    product.ValueTyped = price;
 
     int indexOfCartProduct = _productsInCart.indexWhere((element) =>
         element.EnterpriseCode == product.EnterpriseCode &&
@@ -775,7 +762,7 @@ class BuyRequestProvider with ChangeNotifier {
           element.EnterpriseCode == product.EnterpriseCode,
     );
 
-    _products[indexOfProduct].Value = 0;
+    _products[indexOfProduct].ValueTyped = 0;
     _products[indexOfProduct].quantity = 0;
 
     _productsInCart.removeWhere(
@@ -819,7 +806,7 @@ class BuyRequestProvider with ChangeNotifier {
         .map((product) => BuyRequestCartProductModel(
               EnterpriseCode: product.EnterpriseCode,
               ProductPackingCode: product.ProductPackingCode,
-              Value: product.Value,
+              Value: product.ValueTyped,
               Quantity: product.quantity,
               IncrementPercentageOrValue: "R\$",
               IncrementValue: 0,
@@ -829,7 +816,7 @@ class BuyRequestProvider with ChangeNotifier {
         .toList();
   }
 
-  void _clearAllData() {
+  void clearAllData() {
     _clearBuyers();
     _clearRequestsType();
     _clearSuppliers();
@@ -871,7 +858,7 @@ class BuyRequestProvider with ChangeNotifier {
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
-        _clearAllData();
+        clearAllData();
         await _updateDataInDatabase();
       }
     } catch (e) {

@@ -1,8 +1,8 @@
-import 'package:celta_inventario/components/Buy_request/buy_request_buyers_dropdown.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_observations.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_products_items.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_requests_type_dropdown.dart';
+import 'package:celta_inventario/components/Buy_request/identification/buy_request_buyers_dropdown.dart';
+import 'package:celta_inventario/components/Buy_request/identification/buy_request_requests_type_dropdown.dart';
+import 'package:celta_inventario/components/Buy_request/products/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_save.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';

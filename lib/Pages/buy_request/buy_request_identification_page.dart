@@ -1,9 +1,10 @@
-import 'package:celta_inventario/components/Buy_request/buy_request_buyers_dropdown.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_requests_type_dropdown.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_suppliers.dart';
+import 'package:celta_inventario/components/Buy_request/identification/buy_request_buyers_dropdown.dart';
+import 'package:celta_inventario/components/Buy_request/identification/buy_request_suppliers.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/Buy_request/identification/buy_request_requests_type_dropdown.dart';
 
 class BuyRequestIdentificationPage extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;
@@ -41,12 +42,12 @@ class _BuyRequestIdentificationPageState
     if (buyRequestProvider.requestsTypeCount == 0 &&
         buyRequestProvider.selectedRequestModel == null &&
         !buyRequestProvider.isLoadingRequestsType) {
-      await buyRequestProvider.getRequestsType(context: context);
+      buyRequestProvider.getRequestsType(context: context);
     }
     if (buyRequestProvider.buyersCount == 0 &&
         buyRequestProvider.selectedBuyer == null &&
         !buyRequestProvider.isLoadingBuyer) {
-      await buyRequestProvider.getBuyers(context: context);
+      buyRequestProvider.getBuyers(context: context);
     }
   }
 

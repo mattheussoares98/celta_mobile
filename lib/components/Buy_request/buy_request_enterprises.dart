@@ -85,10 +85,10 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
                     },
                     subtitle: Column(
                       children: [
-                        // TitleAndSubtitle.titleAndSubtitle(
-                        //   title: "Código",
-                        //   value: enterprise.Code.toString(),
-                        // ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Código",
+                          value: enterprise.PersonalizedCode.toString(),
+                        ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Nome",
                           value: enterprise.Name,
