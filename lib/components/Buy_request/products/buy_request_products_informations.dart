@@ -102,7 +102,8 @@ class BuyRequestProductsInformations extends StatelessWidget {
           fontSize: 15,
           title: "Custo",
           value: ConvertString.convertToBRL(practicedValue),
-          subtitleColor: product.ValueTyped == 0 ? Colors.red : Colors.green,
+          subtitleColor:
+              double.parse(practicedValue) == 0 ? Colors.red : Colors.green,
           otherWidget: product.quantity > 0
               ? null
               : Icon(
