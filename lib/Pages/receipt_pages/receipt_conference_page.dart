@@ -8,7 +8,8 @@ import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Components/Global_widgets/consulting_widget.dart';
+
+import '../../components/Global_widgets/searching_widget.dart';
 
 class ReceiptConferencePage extends StatefulWidget {
   const ReceiptConferencePage({Key? key}) : super(key: key);
@@ -97,8 +98,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               ),
             if (receiptProvider.consultingProducts)
               Expanded(
-                child: ConsultingWidget.consultingWidget(
-                    title: 'Consultando produtos'),
+                child: searchingWidget(title: 'Consultando produtos'),
               ),
             if (!receiptProvider.consultingProducts)
               ReceiptConferenceProductsItems(

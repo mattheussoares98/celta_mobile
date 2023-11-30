@@ -1,5 +1,5 @@
-import 'package:celta_inventario/components/Global_widgets/consulting_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/try_again.dart';
+import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
+import 'package:celta_inventario/components/Global_widgets/searchAgain.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_origin_enterprise_items.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +86,7 @@ class _TransferOriginEnterprisePageState
             children: [
               if (transferRequestProvider.isLoadingOriginEnterprise)
                 Expanded(
-                  child: ConsultingWidget.consultingWidget(
+                  child: searchingWidget(
                     title: 'Consultando empresas de origem',
                   ),
                 ),
@@ -96,7 +96,7 @@ class _TransferOriginEnterprisePageState
               if (transferRequestProvider.errorMessageOriginEnterprise != '' &&
                   !transferRequestProvider.isLoadingOriginEnterprise)
                 Expanded(
-                  child: TryAgainWidget.tryAgain(
+                  child: searchAgain(
                       errorMessage:
                           transferRequestProvider.errorMessageOriginEnterprise,
                       request: () async {

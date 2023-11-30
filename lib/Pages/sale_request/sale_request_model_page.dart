@@ -2,8 +2,8 @@ import 'package:celta_inventario/components/Sale_request/sale_request_models_ite
 import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Components/Global_widgets/consulting_widget.dart';
-import '../../Components/Global_widgets/try_again.dart';
+import '../../components/Global_widgets/searchAgain.dart';
+import '../../components/Global_widgets/searching_widget.dart';
 
 class SaleRequestModelPage extends StatefulWidget {
   const SaleRequestModelPage({
@@ -104,7 +104,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
             children: [
               if (saleRequestProvider.isLoadingRequests)
                 Expanded(
-                  child: ConsultingWidget.consultingWidget(
+                  child: searchingWidget(
                     title: 'Consultando modelos de pedido',
                   ),
                 ),
@@ -118,7 +118,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
               if (saleRequestProvider.errorMessageRequests != "" &&
                   saleRequestProvider.productsCount == 0)
                 Expanded(
-                  child: TryAgainWidget.tryAgain(
+                  child: searchAgain(
                     errorMessage: saleRequestProvider.errorMessageRequests,
                     request: () async {
                       setState(() {});

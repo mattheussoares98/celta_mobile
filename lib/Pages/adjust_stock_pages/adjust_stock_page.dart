@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/search_widget.dart';
-import '../../Components/Global_widgets/consulting_widget.dart';
+import '../../components/Global_widgets/searching_widget.dart';
 
 class AdjustStockPage extends StatefulWidget {
   const AdjustStockPage({Key? key}) : super(key: key);
@@ -124,7 +124,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
             ),
             if (adjustStockProvider.isLoadingProducts)
               Expanded(
-                child: ConsultingWidget.consultingWidget(
+                child: searchingWidget(
                   title: 'Consultando produtos',
                 ),
               ),

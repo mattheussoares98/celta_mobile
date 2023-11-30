@@ -1,5 +1,5 @@
-import 'package:celta_inventario/components/Global_widgets/consulting_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/try_again.dart';
+import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
+import 'package:celta_inventario/components/Global_widgets/searchAgain.dart';
 import 'package:celta_inventario/components/Transfer_request/transfer_request_items.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +75,7 @@ class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
             children: [
               if (transferRequestProvider.isLoadingRequestModel)
                 Expanded(
-                  child: ConsultingWidget.consultingWidget(
+                  child: searchingWidget(
                     title: 'Consultando modelos de pedido',
                   ),
                 ),
@@ -85,7 +85,7 @@ class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
               if (transferRequestProvider.errorMessageRequestModel != '' &&
                   !transferRequestProvider.isLoadingRequestModel)
                 Expanded(
-                  child: TryAgainWidget.tryAgain(
+                  child: searchAgain(
                       errorMessage:
                           transferRequestProvider.errorMessageRequestModel,
                       request: () async {

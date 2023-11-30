@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/search_widget.dart';
-import '../../Components/Global_widgets/try_again.dart';
+import '../../components/Global_widgets/searchAgain.dart';
+import '../../components/Global_widgets/searching_widget.dart';
 import '../../components/Sale_request/sale_request_customer_items.dart';
 import '../../providers/sale_request_provider.dart';
-import '../../Components/Global_widgets/consulting_widget.dart';
 import '../../Components/Global_widgets/error_message.dart';
 
 class SaleRequestInsertCustomer extends StatefulWidget {
@@ -62,7 +62,7 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
                     .customersCount(widget.enterpriseCode.toString()) ==
                 0)
           Expanded(
-            child: TryAgainWidget.tryAgain(
+            child: searchAgain(
               errorMessage:
                   'Ocorreu um erro para consultar o cliente "consumidor"',
               request: () async {
@@ -83,8 +83,7 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
           ),
         if (saleRequestProvider.isLoadingCustomer)
           Expanded(
-            child: ConsultingWidget.consultingWidget(
-                title: "Consultando clientes"),
+            child: searchingWidget(title: "Consultando clientes"),
           ),
       ],
     );

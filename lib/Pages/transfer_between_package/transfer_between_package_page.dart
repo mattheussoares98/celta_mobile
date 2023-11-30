@@ -1,4 +1,4 @@
-import 'package:celta_inventario/components/Global_widgets/consulting_widget.dart';
+import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_products_items.dart';
 import 'package:celta_inventario/components/Transfer_between_package/transfer_between_stocks_justifications_stocks_dropdown.dart';
@@ -105,7 +105,7 @@ class _TransferBetweenPackagePageState
             ),
             if (transferBetweenPackageProvider.isLoadingProducts)
               Expanded(
-                child: ConsultingWidget.consultingWidget(
+                child: searchingWidget(
                   title: 'Consultando produtos',
                 ),
               ),

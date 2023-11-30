@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/search_widget.dart';
-import '../../Components/Global_widgets/consulting_widget.dart';
+import '../../components/Global_widgets/searching_widget.dart';
 
 class TransferBetweenStockPage extends StatefulWidget {
   const TransferBetweenStockPage({Key? key}) : super(key: key);
@@ -130,7 +130,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
             ),
             if (transferBetweenStocksProvider.isLoadingProducts)
               Expanded(
-                child: ConsultingWidget.consultingWidget(
+                child: searchingWidget(
                   title: 'Consultando produtos',
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:celta_inventario/components/Buy_request/products/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
+import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
 import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/utils/scan_bar_code.dart';
@@ -68,23 +69,7 @@ class _BuyRequestInsertProductsPageState
             focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
           ),
           if (buyRequestProvider.isLoadingProducts)
-            const Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: Column(
-                children: [
-                  Text(
-                    "Consultando produto(s)",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  CircularProgressIndicator(color: Colors.grey),
-                ],
-              ),
-            ),
+            searchingWidget(title: "Consultando produtos"),
           const BuyRequestProductsItems(),
         ],
       ),

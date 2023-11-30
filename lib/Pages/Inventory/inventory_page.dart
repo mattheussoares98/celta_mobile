@@ -1,9 +1,9 @@
-import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
-import 'package:celta_inventario/Components/Global_widgets/try_again.dart';
 import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Inventory/inventory_items.dart';
+import '../../components/Global_widgets/searchAgain.dart';
+import '../../components/Global_widgets/searching_widget.dart';
 import '../../providers/inventory_provider.dart';
 
 class InventoryPage extends StatefulWidget {
@@ -68,11 +68,10 @@ class _InventoryPageState extends State<InventoryPage> {
           children: [
             if (inventoryProvider.isLoadingInventorys)
               Expanded(
-                  child: ConsultingWidget.consultingWidget(
-                      title: 'Consultando inventários')),
+                  child: searchingWidget(title: 'Consultando inventários')),
             if (inventoryProvider.errorMessage != '')
               Expanded(
-                child: TryAgainWidget.tryAgain(
+                child: searchAgain(
                   errorMessage: inventoryProvider.errorMessage,
                   request: () async => setState(() {
                     inventoryProvider.getInventory(

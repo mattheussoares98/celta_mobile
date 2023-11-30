@@ -1,8 +1,8 @@
 import 'package:celta_inventario/Components/Receipt/receipt_items.dart';
-import 'package:celta_inventario/Components/Global_widgets/consulting_widget.dart';
-import 'package:celta_inventario/Components/Global_widgets/try_again.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../components/Global_widgets/searchAgain.dart';
+import '../../components/Global_widgets/searching_widget.dart';
 import '../../providers/receipt_provider.dart';
 
 class ReceiptPage extends StatefulWidget {
@@ -65,14 +65,13 @@ class _ReceiptPageState extends State<ReceiptPage> {
           children: [
             if (receiptProvider.isLoadingReceipt)
               Expanded(
-                child: ConsultingWidget.consultingWidget(
-                    title: 'Consultando recebimentos'),
+                child: searchingWidget(title: 'Consultando recebimentos'),
               ),
             if (receiptProvider.errorMessage != '' &&
                 receiptProvider.receiptCount == 0 &&
                 !receiptProvider.isLoadingReceipt)
               Expanded(
-                child: TryAgainWidget.tryAgain(
+                child: searchAgain(
                     errorMessage: receiptProvider.errorMessage,
                     request: () async {
                       setState(() {});
