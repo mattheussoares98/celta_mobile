@@ -2,6 +2,7 @@ import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.
 import 'package:celta_inventario/components/Buy_request/buy_request_observations.dart';
 import 'package:celta_inventario/components/Buy_request/identification/buy_request_buyers_dropdown.dart';
 import 'package:celta_inventario/components/Buy_request/identification/buy_request_requests_type_dropdown.dart';
+import 'package:celta_inventario/components/Buy_request/products/buy_request_order_products.dart';
 import 'package:celta_inventario/components/Buy_request/products/buy_request_products_items.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_save.dart';
 import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
@@ -164,12 +165,12 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                       ),
                     ),
                   if (buyRequestProvider.productsInCartCount > 0)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Produtos",
                             style: TextStyle(
                               color: Colors.grey,
@@ -177,7 +178,9 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          BuyRequestProductsItems(
+                          if (buyRequestProvider.productsInCartCount > 2)
+                            const BuyRequestOrderProducts(),
+                          const BuyRequestProductsItems(
                             showOnlyCartProducts: true,
                           ),
                         ],

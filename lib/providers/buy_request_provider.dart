@@ -445,6 +445,42 @@ class BuyRequestProvider with ChangeNotifier {
     await _updateDataInDatabase();
   }
 
+  void orderUpByEnterprise() {
+    _productsInCart
+        .sort((a, b) => a.EnterpriseCode.compareTo(b.EnterpriseCode));
+
+    notifyListeners();
+  }
+
+  void orderDownByEnterprise() {
+    _productsInCart
+        .sort((a, b) => b.EnterpriseCode.compareTo(a.EnterpriseCode));
+
+    notifyListeners();
+  }
+
+  void orderUpByName() {
+    _productsInCart.sort((a, b) => a.Name.compareTo(b.Name));
+    notifyListeners();
+  }
+
+  void orderDownByName() {
+    _productsInCart.sort((a, b) => b.Name.compareTo(a.Name));
+    notifyListeners();
+  }
+
+  void orderDownByTotalCost() {
+    _productsInCart.sort((a, b) =>
+        (b.ValueTyped * b.quantity).compareTo(a.ValueTyped * a.quantity));
+    notifyListeners();
+  }
+
+  void orderUpByTotalCost() {
+    _productsInCart.sort((a, b) =>
+        (a.ValueTyped * a.quantity).compareTo(b.ValueTyped * b.quantity));
+    notifyListeners();
+  }
+
   Future<void> getProducts({
     required String searchValue,
     required BuildContext context,
@@ -495,7 +531,7 @@ class BuyRequestProvider with ChangeNotifier {
 
         _updateProductWithProductCart();
 
-        _products.sort((a, b) => a.PLU.compareTo(b.PLU));
+        orderUpByEnterprise();
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageGetProducts,
