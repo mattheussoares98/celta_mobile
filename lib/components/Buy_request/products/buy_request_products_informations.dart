@@ -30,12 +30,6 @@ class BuyRequestProductsInformations extends StatelessWidget {
     return "(${enterprise.PersonalizedCode}) - " + enterprise.Name;
   }
 
-  bool _productAlreadyInCart() {
-    return buyRequestProvider.productsInCart.indexWhere(
-            (element) => element.EnterpriseCode == product.EnterpriseCode) !=
-        -1;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -75,16 +69,14 @@ class BuyRequestProductsInformations extends StatelessWidget {
           otherWidget: InkWell(
             child: Icon(
               Icons.delete,
-              color: _productAlreadyInCart() &&
+              color: product.quantity > 0 &&
                       !buyRequestProvider.isLoadingInsertBuyRequest
                   ? Colors.red
                   : Colors.grey,
               size: 25,
             ),
-            onTap: buyRequestProvider.isLoadingInsertBuyRequest ||
-                    buyRequestProvider.productsInCart.indexWhere((element) =>
-                            element.EnterpriseCode == product.EnterpriseCode) ==
-                        -1
+            onTap: product.quantity == 0 ||
+                    buyRequestProvider.isLoadingInsertBuyRequest
                 ? null
                 : () {
                     ShowAlertDialog.showAlertDialog(

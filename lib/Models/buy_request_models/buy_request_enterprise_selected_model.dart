@@ -1,5 +1,5 @@
 class BuyRequestEnterpriseSelectedModel {
-  final bool IsPrincipal;
+  bool IsPrincipal;
   final int EnterpriseCode;
 
   BuyRequestEnterpriseSelectedModel({

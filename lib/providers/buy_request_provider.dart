@@ -297,7 +297,6 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   bool _containsProductInSelectedEnterprise({
-    required BuildContext context,
     required BuyRequestEnterpriseModel enterprise,
   }) {
     bool _containsProductWithTheEnterprise = false;
@@ -319,7 +318,6 @@ class BuyRequestProvider with ChangeNotifier {
   }) async {
     bool containsProductInSelectedEnterprise =
         _containsProductInSelectedEnterprise(
-      context: context,
       enterprise: enterprise,
     );
 
@@ -374,6 +372,15 @@ class BuyRequestProvider with ChangeNotifier {
     } else {
       _enterprisesSelecteds.removeAt(indexOfSelectedEnterprise);
       _removeProductsByEnterpriseCode(enterprise.Code);
+
+      int indexOfPrincipalEnterprise = _enterprisesSelecteds
+          .indexWhere((element) => element.IsPrincipal == true);
+
+      if (indexOfPrincipalEnterprise == -1 &&
+          _enterprisesSelecteds.length > 0) {
+        //não há empresa principal, por isso precisa adicionar uma como principal
+        _enterprisesSelecteds[0].IsPrincipal = true;
+      }
     }
   }
 
