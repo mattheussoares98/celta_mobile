@@ -23,7 +23,10 @@ class ConvertString {
     return newText;
   }
 
-  static String convertToBrazilianNumber(dynamic value) {
+  static String convertToBrazilianNumber(
+    dynamic value, {
+    int? decimalHouses = 3,
+  }) {
     value = value.toString();
 
     if (value.toString().contains(",")) {
@@ -39,7 +42,14 @@ class ConvertString {
 
     value = double.tryParse(value.toString())!;
 
-    final formatter = new NumberFormat("#,##0.000", "pt_BR");
+    NumberFormat formatter = new NumberFormat("#,##0.000", "pt_BR");
+
+    if (decimalHouses == 1) {
+      formatter = new NumberFormat("#,##0.0", "pt_BR");
+    } else if (decimalHouses == 2) {
+      formatter = new NumberFormat("#,##0.00", "pt_BR");
+    }
+
     String newText = formatter.format(value);
 
     return newText;

@@ -817,8 +817,10 @@ class BuyRequestProvider with ChangeNotifier {
           element.EnterpriseCode == product.EnterpriseCode,
     );
 
-    _products[indexOfProduct].ValueTyped = 0;
-    _products[indexOfProduct].quantity = 0;
+    if (indexOfProduct != -1) {
+      _products[indexOfProduct].ValueTyped = 0;
+      _products[indexOfProduct].quantity = 0;
+    }
 
     _productsInCart.removeWhere(
       (element) =>

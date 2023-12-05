@@ -94,41 +94,7 @@ class BuyRequestProductsModel {
 
     responseAsMap.forEach((id, data) {
       listToAdd.add(
-        BuyRequestProductsModel(
-          PLU: data["PLU"],
-          Name: data["Name"],
-          PackingQuantity: data["PackingQuantity"],
-          EnterpriseCode: data["EnterpriseCode"],
-          ProductCode: data["ProductCode"],
-          ProductPackingCode: data["ProductPackingCode"],
-          Value: data["Value"],
-          ValueTyped: data["Value"] == 0.0 ? data["RealCost"] : data["Value"],
-          RetailPracticedPrice: data["RetailPracticedPrice"],
-          RetailSalePrice: data["RetailSalePrice"],
-          RetailOfferPrice: data["RetailOfferPrice"],
-          WholePracticedPrice: data["WholePracticedPrice"],
-          WholeSalePrice: data["WholeSalePrice"],
-          WholeOfferPrice: data["WholeOfferPrice"],
-          ECommercePracticedPrice: data["ECommercePracticedPrice"],
-          ECommerceSalePrice: data["ECommerceSalePrice"],
-          ECommerceOfferPrice: data["ECommerceOfferPrice"],
-          MinimumWholeQuantity: data["MinimumWholeQuantity"],
-          BalanceStockSale: data["BalanceStockSale"],
-          BalanceLabelType: data["BalanceLabelType"],
-          BalanceLabelQuantity: data["BalanceLabelQuantity"],
-          OperationalCost: data["OperationalCost"],
-          ReplacementCost: data["ReplacementCost"],
-          ReplacementCostMidle: data["ReplacementCostMidle"],
-          LiquidCost: data["LiquidCost"],
-          LiquidCostMidle: data["LiquidCostMidle"],
-          RealCost: data["RealCost"],
-          RealLiquidCost: data["RealLiquidCost"],
-          FiscalCost: data["FiscalCost"],
-          FiscalLiquidCost: data["FiscalLiquidCost"],
-          Stocks: data["Stocks"],
-          StockByEnterpriseAssociateds: data["StockByEnterpriseAssociateds"],
-          StorageAreaAddress: data["StorageAreaAddress"],
-        ),
+        BuyRequestProductsModel.fromJson(data),
       );
     });
   }
@@ -141,7 +107,7 @@ class BuyRequestProductsModel {
         ProductCode: json["ProductCode"],
         ProductPackingCode: json["ProductPackingCode"],
         Value: json["Value"],
-        ValueTyped: json["ValueTyped"],
+        ValueTyped: json["ValueTyped"] ?? 0,
         RetailPracticedPrice: json["RetailPracticedPrice"],
         RetailSalePrice: json["RetailSalePrice"],
         RetailOfferPrice: json["RetailOfferPrice"],
@@ -165,14 +131,9 @@ class BuyRequestProductsModel {
         FiscalCost: json["FiscalCost"],
         FiscalLiquidCost: json["FiscalLiquidCost"],
         Stocks: json["Stocks"],
-        StockByEnterpriseAssociateds:
-            json.containsKey("StockByEnterpriseAssociateds")
-                ? json["StockByEnterpriseAssociateds"]
-                : null,
-        StorageAreaAddress: json.containsKey("StorageAreaAddress")
-            ? json["StorageAreaAddress"]
-            : null,
-        quantity: json.containsKey("quantity") ? json["quantity"] : null,
+        StockByEnterpriseAssociateds: json["StockByEnterpriseAssociateds"],
+        StorageAreaAddress: json["StorageAreaAddress"],
+        quantity: json["quantity"] ?? 0,
       );
 
   Map toJson() => {

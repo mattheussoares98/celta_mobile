@@ -34,6 +34,7 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
       buyRequestProvider.priceController.text =
           ConvertString.convertToBrazilianNumber(
         practicedValue(product),
+        decimalHouses: 2,
       );
     });
   }
@@ -151,10 +152,6 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
                   ),
                   if (buyRequestProvider.indexOfSelectedProduct == index)
                     BuyRequestInsertProductQuantity(
-                      insertQuantityFormKey:
-                          buyRequestProvider.insertQuantityFormKey,
-                      priceController: buyRequestProvider.priceController,
-                      quantityController: buyRequestProvider.quantityController,
                       product: product,
                     ),
                 ],

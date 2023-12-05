@@ -6,15 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BuyRequestInsertProductQuantity extends StatefulWidget {
-  final TextEditingController quantityController;
-  final TextEditingController priceController;
-  final GlobalKey<FormState> insertQuantityFormKey;
   final BuyRequestProductsModel product;
 
   const BuyRequestInsertProductQuantity({
-    required this.priceController,
-    required this.insertQuantityFormKey,
-    required this.quantityController,
     required this.product,
     Key? key,
   }) : super(key: key);
@@ -27,9 +21,10 @@ class BuyRequestInsertProductQuantity extends StatefulWidget {
 class _BuyRequestInsertProductQuantity
     extends State<BuyRequestInsertProductQuantity> {
   bool _isValid() {
-    widget.insertQuantityFormKey.currentState!.validate();
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
+    buyRequestProvider.insertQuantityFormKey.currentState!.validate();
 
-    return widget.insertQuantityFormKey.currentState!.validate();
+    return buyRequestProvider.insertQuantityFormKey.currentState!.validate();
   }
 
   void onChanged({
@@ -49,14 +44,26 @@ class _BuyRequestInsertProductQuantity
     }
   }
 
-  void updateProductInCart(BuyRequestProductsModel product) {
-    if (!_isValid()) return;
+  void _updateProductInCart(BuyRequestProductsModel product) {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
-    buyRequestProvider.updateProductInCart(product: product);
-    widget.priceController.text = "";
-    widget.quantityController.text = "";
-    FocusScope.of(context).unfocus();
-    buyRequestProvider.indexOfSelectedProduct = -1;
+    if (!_isValid()) {
+      double? quantity = double.tryParse(
+        buyRequestProvider.quantityController.text,
+      );
+
+      if (quantity == null) {
+        FocusScope.of(context)
+            .requestFocus(buyRequestProvider.quantityFocusNode);
+      } else {
+        FocusScope.of(context).requestFocus(buyRequestProvider.priceFocusNode);
+      }
+    } else {
+      buyRequestProvider.updateProductInCart(product: product);
+      buyRequestProvider.priceController.text = "";
+      buyRequestProvider.quantityController.text = "";
+      FocusScope.of(context).unfocus();
+      buyRequestProvider.indexOfSelectedProduct = -1;
+    }
   }
 
   @override
@@ -67,7 +74,7 @@ class _BuyRequestInsertProductQuantity
       child: Column(
         children: [
           Form(
-            key: widget.insertQuantityFormKey,
+            key: buyRequestProvider.insertQuantityFormKey,
             child: Row(
               children: [
                 Flexible(
@@ -77,10 +84,10 @@ class _BuyRequestInsertProductQuantity
                     focusNode: buyRequestProvider.quantityFocusNode,
                     enabled: !buyRequestProvider.isLoadingProducts &&
                         !buyRequestProvider.isLoadingInsertBuyRequest,
-                    controller: widget.quantityController,
+                    controller: buyRequestProvider.quantityController,
                     inputFormatters: [LengthLimitingTextInputFormatter(7)],
                     onChanged: (value) => onChanged(
-                      textController: widget.quantityController,
+                      textController: buyRequestProvider.quantityController,
                       value: value,
                     ),
                     autovalidateMode: AutovalidateMode.always,
@@ -91,7 +98,7 @@ class _BuyRequestInsertProductQuantity
                       labelText: 'Quantidade',
                     ),
                     onFieldSubmitted: (_) async {
-                      if (!_isValid()) {
+                      if (buyRequestProvider.quantityController.text.isEmpty) {
                         FocusScope.of(context)
                             .requestFocus(buyRequestProvider.quantityFocusNode);
                       } else {
@@ -118,10 +125,10 @@ class _BuyRequestInsertProductQuantity
                     focusNode: buyRequestProvider.priceFocusNode,
                     enabled: !buyRequestProvider.isLoadingProducts &&
                         !buyRequestProvider.isLoadingInsertBuyRequest,
-                    controller: widget.priceController,
+                    controller: buyRequestProvider.priceController,
                     inputFormatters: [LengthLimitingTextInputFormatter(7)],
                     onChanged: (value) => onChanged(
-                      textController: widget.priceController,
+                      textController: buyRequestProvider.priceController,
                       value: value,
                     ),
                     validator: FormFieldHelper.validatorOfNumber(),
@@ -131,11 +138,11 @@ class _BuyRequestInsertProductQuantity
                       labelText: 'Preço',
                     ),
                     onFieldSubmitted: (_) async {
-                      if (!_isValid()) {
+                      if (buyRequestProvider.priceController.text.isEmpty) {
                         FocusScope.of(context)
                             .requestFocus(buyRequestProvider.priceFocusNode);
                       } else {
-                        updateProductInCart(widget.product);
+                        _updateProductInCart(widget.product);
                       }
                     },
                     style: FormFieldHelper.style(),
@@ -151,7 +158,7 @@ class _BuyRequestInsertProductQuantity
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () async {
-                      updateProductInCart(widget.product);
+                      _updateProductInCart(widget.product);
                     },
                     child: const FittedBox(
                       child: Text(
