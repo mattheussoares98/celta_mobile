@@ -118,8 +118,88 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Card(
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          color: Colors.grey,
+                        )),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Column(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                buyRequestProvider
+                                        .expandLastRequestSavedNumbers =
+                                    !buyRequestProvider
+                                        .expandLastRequestSavedNumbers;
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    buyRequestProvider
+                                            .expandLastRequestSavedNumbers
+                                        ? "Ocultar últimos pedidos salvos"
+                                        : "Exibir últimos pedidos salvos",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Icon(
+                                  buyRequestProvider
+                                          .expandLastRequestSavedNumbers
+                                      ? Icons.arrow_drop_up
+                                      : Icons.arrow_drop_down,
+                                )
+                              ],
+                            ),
+                          ),
+                          if (buyRequestProvider.expandLastRequestSavedNumbers)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Divider(color: Colors.black26),
+                            ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, bottom: 8),
+                            child: Visibility(
+                              visible: buyRequestProvider
+                                  .expandLastRequestSavedNumbers,
+                              child: buyRequestProvider
+                                          .lastRequestSavedNumber !=
+                                      ""
+                                  ? Text(
+                                      buyRequestProvider.lastRequestSavedNumber,
+                                      style: const TextStyle(
+                                        fontFamily: "BebasNeue",
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    )
+                                  : const Text(
+                                      "Não foram encontrados pedidos",
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   BuyRequestObservations(focusNode: _focusNode),
                   BuyRequestBuyersDropwodn(
                     buyersKey: buyersKey,

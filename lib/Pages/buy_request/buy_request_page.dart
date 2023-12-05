@@ -212,6 +212,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
             : Padding(
                 padding: const EdgeInsets.only(bottom: 50.0),
                 child: FloatingActionButton(
+                  tooltip: "Limpar todos os dados do pedido",
                   onPressed: (buyRequestProvider.observationsController.text ==
                                   "" &&
                               buyRequestProvider.selectedBuyer == null &&

@@ -182,6 +182,16 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
               ),
             ],
           ),
+        if (buyRequestProvider.errorMessageSupplier != "")
+          Text(
+            buyRequestProvider.errorMessageSupplier,
+            style: const TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
       ],
     );
   }

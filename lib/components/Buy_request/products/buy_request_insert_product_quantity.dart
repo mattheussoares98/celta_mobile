@@ -91,19 +91,20 @@ class _BuyRequestInsertProductQuantity
                       labelText: 'Quantidade',
                     ),
                     onFieldSubmitted: (_) async {
-                      if (buyRequestProvider.quantityController.text.isEmpty ||
-                          buyRequestProvider.quantityController.text == "") {
-                        return;
+                      if (!_isValid()) {
+                        FocusScope.of(context)
+                            .requestFocus(buyRequestProvider.quantityFocusNode);
+                      } else {
+                        FocusScope.of(context)
+                            .requestFocus(buyRequestProvider.priceFocusNode);
+                        //seleciona todo o texto de preço
+                        buyRequestProvider.priceController.selection =
+                            TextSelection(
+                          baseOffset: 0,
+                          extentOffset:
+                              buyRequestProvider.priceController.text.length,
+                        );
                       }
-                      FocusScope.of(context)
-                          .requestFocus(buyRequestProvider.priceFocusNode);
-                      //seleciona todo o texto de preço
-                      buyRequestProvider.priceController.selection =
-                          TextSelection(
-                        baseOffset: 0,
-                        extentOffset:
-                            buyRequestProvider.priceController.text.length,
-                      );
                     },
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,
@@ -130,7 +131,12 @@ class _BuyRequestInsertProductQuantity
                       labelText: 'Preço',
                     ),
                     onFieldSubmitted: (_) async {
-                      updateProductInCart(widget.product);
+                      if (!_isValid()) {
+                        FocusScope.of(context)
+                            .requestFocus(buyRequestProvider.priceFocusNode);
+                      } else {
+                        updateProductInCart(widget.product);
+                      }
                     },
                     style: FormFieldHelper.style(),
                     keyboardType: TextInputType.number,

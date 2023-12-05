@@ -128,6 +128,10 @@ class BuyRequestProvider with ChangeNotifier {
   TextEditingController priceController = TextEditingController();
   final GlobalKey<FormState> insertQuantityFormKey = GlobalKey();
 
+  String _lastRequestSavedNumber = "";
+  String get lastRequestSavedNumber => _lastRequestSavedNumber;
+  bool expandLastRequestSavedNumbers = false;
+
   Map<String, dynamic> _jsonBuyRequest = {
     "CrossIdentity": UserData.crossIdentity,
     "BuyerCode": _selectedBuyer?.Code ?? -1,
@@ -186,6 +190,7 @@ class BuyRequestProvider with ChangeNotifier {
       "selectedBuyer": _selectedBuyer?.toJson(),
       "selectedRequestModel": _selectedRequestModel?.toJson(),
       "selectedSupplier": _selectedSupplier?.toJson(),
+      "lastRequestSavedNumber": _lastRequestSavedNumber,
     };
 
     await PrefsInstance.setBuyRequest(json.encode(_json));
@@ -207,6 +212,7 @@ class BuyRequestProvider with ChangeNotifier {
     _restoreEnterprisesAndSelectedEnterprises(jsonInDatabase);
     _restoreCartProducts(jsonInDatabase);
     _restoreObservations(jsonInDatabase);
+    _restoreLastRequestSavedNumber(jsonInDatabase);
     notifyListeners();
   }
 
@@ -293,6 +299,12 @@ class BuyRequestProvider with ChangeNotifier {
   _restoreObservations(Map jsonInDatabase) {
     if (jsonInDatabase.containsKey("observations")) {
       _observationsController.text = jsonInDatabase["observations"];
+    }
+  }
+
+  _restoreLastRequestSavedNumber(Map jsonInDatabase) {
+    if (jsonInDatabase.containsKey("lastRequestSavedNumber")) {
+      _lastRequestSavedNumber = jsonInDatabase["lastRequestSavedNumber"];
     }
   }
 
@@ -732,8 +744,8 @@ class BuyRequestProvider with ChangeNotifier {
     Map jsonGetEnterprises = {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 2,
-      "SupplierCode": _selectedSupplier!.Code,
-      "RequestTypeCode": _selectedRequestModel!.Code,
+      "SupplierCode": _selectedSupplier!.Code, //7
+      "RequestTypeCode": _selectedRequestModel!.Code, //33
       // "SearchValue": "%",
       // "EnterpriseOriginCode": 0,
       // "Routine": 0,
@@ -871,6 +883,17 @@ class BuyRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  _updateLastRequestNumber() {
+    RegExp regex = RegExp(r'\(([\d\s\|]+)\)');
+
+    // Encontre correspondências na string
+    Iterable<RegExpMatch> matches =
+        regex.allMatches(SoapHelperResponseParameters.responseAsString);
+
+    _lastRequestSavedNumber = matches.first.group(1).toString();
+    expandLastRequestSavedNumbers = true;
+  }
+
   Future<void> insertBuyRequest(BuildContext context) async {
     _isLoadingInsertBuyRequest = true;
     notifyListeners();
@@ -895,9 +918,12 @@ class BuyRequestProvider with ChangeNotifier {
           message: _errorMessageInsertBuyRequest,
           context: context,
         );
+        _lastRequestSavedNumber = "";
+        expandLastRequestSavedNumbers = false;
       } else {
+        _updateLastRequestNumber();
         ShowSnackbarMessage.showMessage(
-          message: "O pedido de compra foi inserido com sucesso!",
+          message: SoapHelperResponseParameters.responseAsString,
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
