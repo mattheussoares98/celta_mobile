@@ -47,6 +47,7 @@ class _BuyRequestCartAppbarActionState
                     child: FittedBox(
                       child: Text(
                         buyRequestProvider.productsInCartCount.toString(),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),

@@ -41,11 +41,11 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         transferBetweenStocksProvider
             .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: kIsWeb ? false : true,

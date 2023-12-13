@@ -94,8 +94,14 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !buyRequestProvider.isLoadingBuyer &&
+          !buyRequestProvider.isLoadingRequestsType &&
+          !buyRequestProvider.isLoadingSupplier &&
+          !buyRequestProvider.isLoadingEnterprises &&
+          !buyRequestProvider.isLoadingProducts &&
+          !buyRequestProvider.isLoadingInsertBuyRequest,
+      onPopInvoked: (_) async {
         if (buyRequestProvider.isLoadingBuyer ||
             buyRequestProvider.isLoadingRequestsType ||
             buyRequestProvider.isLoadingSupplier ||
@@ -107,9 +113,6 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
             backgroundColor: Theme.of(context).colorScheme.primary,
             context: context,
           );
-          return false;
-        } else {
-          return true;
         }
       },
       child: Scaffold(

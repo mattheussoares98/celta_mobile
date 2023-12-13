@@ -92,12 +92,11 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       ),
     ];
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (saleRequestProvider.isLoadingSaveSaleRequest ||
-            saleRequestProvider.isLoadingProcessCart) return false;
+    return PopScope(
+      canPop: !saleRequestProvider.isLoadingSaveSaleRequest &&
+          saleRequestProvider.isLoadingProcessCart,
+      onPopInvoked: (_) async {
         saleRequestProvider.clearProducts();
-        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: kIsWeb ? false : true,
@@ -156,6 +155,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                             child: FittedBox(
                               child: Text(
                                 cartProductsCount.toString(),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           ),

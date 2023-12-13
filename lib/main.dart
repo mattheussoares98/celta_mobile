@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          dialogBackgroundColor: Colors.amber[50],
+          dialogBackgroundColor: Colors.white,
           cardTheme: CardTheme(
             color: Colors.grey[50],
             surfaceTintColor: Colors.amber[100],
@@ -136,6 +136,14 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
+          ),
+          datePickerTheme: const DatePickerThemeData(
+            backgroundColor: Colors.white,
+            shadowColor: Colors.white,
+            dividerColor: Colors.amberAccent,
+            headerBackgroundColor: ColorsTheme.principalColor,
+            surfaceTintColor: Colors.white,
+            headerForegroundColor: Colors.white,
           ),
           colorScheme: const ColorScheme(
             brightness: Brightness.light,

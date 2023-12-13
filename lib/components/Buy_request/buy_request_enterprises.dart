@@ -63,16 +63,6 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          if (buyRequestProvider.errorMessageEnterprises != "")
-            Text(
-              buyRequestProvider.errorMessageEnterprises,
-              style: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-              ),
-            ),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

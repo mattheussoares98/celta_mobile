@@ -31,12 +31,9 @@ class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);
 
-    return WillPopScope(
-      onWillPop: () async {
-        // adjustStockProvider
-        //     .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-        return true;
-      },
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {},
       child: Scaffold(
         appBar: AppBar(
           title: const Text(

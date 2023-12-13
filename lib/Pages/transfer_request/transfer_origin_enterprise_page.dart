@@ -38,10 +38,10 @@ class _TransferOriginEnterprisePageState
 
     int requestTypeCode = ModalRoute.of(context)!.settings.arguments as int;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         transferRequestProvider.clearOriginEnterprise();
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(

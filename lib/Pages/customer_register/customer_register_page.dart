@@ -179,14 +179,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
     // customerRegisterProvider.changeIsLoadingInsertCustomer();
-    return WillPopScope(
-      onWillPop: () async {
-        if (canExitPage(customerRegisterProvider)) {
-          return true;
-        } else {
-          return false;
-        }
-      },
+    return PopScope(
+      canPop: canExitPage(customerRegisterProvider),
       child: Scaffold(
         appBar: AppBar(
           title: Text(

@@ -51,11 +51,10 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (saleRequestProvider.isLoadingRequests) return false;
+    return PopScope(
+      canPop: !saleRequestProvider.isLoadingRequests,
+      onPopInvoked: (_) async {
         saleRequestProvider.clearProducts();
-        return true;
       },
       child: Scaffold(
         // resizeToAvoidBottomInset: false,

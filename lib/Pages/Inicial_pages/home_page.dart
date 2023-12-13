@@ -55,9 +55,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: const MyDrawer(),
-      body: WillPopScope(
-        onWillPop: () async {
-          bool pop = false;
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (_) async {
           ShowAlertDialog.showAlertDialog(
             context: context,
             title: "Fechar o aplicativo",
@@ -66,7 +66,6 @@ class _HomePageState extends State<HomePage> {
               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
             },
           );
-          return pop;
         },
         child: GridView.count(
           crossAxisCount: returnSize(), // define o número de colunas

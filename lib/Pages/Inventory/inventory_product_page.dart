@@ -189,13 +189,11 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
         Provider.of(context, listen: true);
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: inventoryProvider.isLoadingQuantity
-          ? null
-          : () async {
-              inventoryProvider.clearProducts();
-              return true;
-            },
+    return PopScope(
+      canPop: !inventoryProvider.isLoadingQuantity,
+      onPopInvoked: (_) async {
+        inventoryProvider.clearProducts();
+      },
       child: Scaffold(
         resizeToAvoidBottomInset: kIsWeb ? false : true,
         appBar: AppBar(

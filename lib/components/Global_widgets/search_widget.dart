@@ -46,19 +46,19 @@ class _SearchWidgetState extends State<SearchWidget> {
     return _formKey.currentState!.validate();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initPlatformState();
+  // }
 
-  Future<void> initPlatformState() async {
-    try {
-      await PlatformPlus.platform.init();
-    } catch (error) {
-      print("Error to init platform: $error");
-    }
-  }
+  // Future<void> initPlatformState() async {
+  //   try {
+  //     await PlatformPlus.platform.init();
+  //   } catch (error) {
+  //     print("Error to init platform: $error");
+  //   }
+  // }
 
   Future<void> _openCamera() async {
     if (PlatformPlus.platform.isAndroidWeb) {

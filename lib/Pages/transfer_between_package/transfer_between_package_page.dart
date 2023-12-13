@@ -40,11 +40,11 @@ class _TransferBetweenPackagePageState
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         transferBetweenPackageProvider
             .clearProductsJustificationsPackageAndJsonAdjustStock();
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(

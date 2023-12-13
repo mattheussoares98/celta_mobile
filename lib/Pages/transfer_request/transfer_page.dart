@@ -82,12 +82,12 @@ class _TransferPageState extends State<TransferPage> {
       ),
     ];
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         // if (saleRequestProvider.isLoadingSaveSaleRequest ||
         //     saleRequestProvider.isLoadingProcessCart) return false;
         // saleRequestProvider.clearProducts();
-        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: kIsWeb ? false : true,

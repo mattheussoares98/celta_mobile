@@ -39,10 +39,10 @@ class _TransferDestinyEnterprisePageState
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         transferRequestProvider.clearDestinyEnterprise();
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(

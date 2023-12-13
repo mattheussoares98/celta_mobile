@@ -34,10 +34,10 @@ class _SaleRequestInsertProductsPageState
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         saleRequestProvider.clearProducts();
-        return true;
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

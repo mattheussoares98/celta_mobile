@@ -40,11 +40,10 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (_) async {
         adjustStockProvider
             .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: kIsWeb ? false : true,

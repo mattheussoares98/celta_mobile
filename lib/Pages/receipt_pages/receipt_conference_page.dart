@@ -36,12 +36,12 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         Future.delayed(const Duration(milliseconds: 300), () {
           receiptProvider.clearProducts();
         });
-        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: kIsWeb ? false : true,

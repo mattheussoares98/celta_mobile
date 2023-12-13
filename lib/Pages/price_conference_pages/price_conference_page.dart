@@ -33,10 +33,10 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (_) async {
         priceConferenceProvider.clearProducts();
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(
