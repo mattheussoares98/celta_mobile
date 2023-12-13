@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_justifications_stocks_dropdown.dart';
 import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_products_items.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
@@ -44,8 +45,20 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return PopScope(
-      canPop: true,
+      canPop: !transferBetweenStocksProvider.isLoadingAdjustStock &&
+          !transferBetweenStocksProvider.isLoadingProducts &&
+          !transferBetweenStocksProvider.isLoadingTypeStockAndJustifications,
       onPopInvoked: (_) async {
+        if (transferBetweenStocksProvider.isLoadingAdjustStock ||
+            transferBetweenStocksProvider.isLoadingProducts ||
+            transferBetweenStocksProvider.isLoadingTypeStockAndJustifications) {
+          ShowSnackbarMessage.showMessage(
+            message: "Aguarde o término do processamento",
+            context: context,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          );
+          return;
+        }
         transferBetweenStocksProvider
             .clearProductsJustificationsStockTypesAndJsonAdjustStock();
       },
@@ -58,11 +71,16 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
             ),
           ),
           leading: IconButton(
-            onPressed: () {
-              transferBetweenStocksProvider
-                  .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-              Navigator.of(context).pop();
-            },
+            onPressed: transferBetweenStocksProvider.isLoadingAdjustStock ||
+                    transferBetweenStocksProvider.isLoadingProducts ||
+                    transferBetweenStocksProvider
+                        .isLoadingTypeStockAndJustifications
+                ? null
+                : () {
+                    transferBetweenStocksProvider
+                        .clearProductsJustificationsStockTypesAndJsonAdjustStock();
+                    Navigator.of(context).pop();
+                  },
             icon: const Icon(
               Icons.arrow_back_outlined,
             ),
