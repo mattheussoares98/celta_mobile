@@ -219,43 +219,41 @@ class _TransferBetweenStocksProductsItemsState
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
     int productsCount = transferBetweenStocksProvider.productsCount;
 
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: transferBetweenStocksProvider.productsCount > 1
-            ? MainAxisAlignment.center
-            : MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: productsCount,
-              itemBuilder: (context, index) {
-                if (transferBetweenStocksProvider.productsCount == 1) {
-                  _selectedIndex = index;
-                }
+    return Column(
+      mainAxisAlignment: transferBetweenStocksProvider.productsCount > 1
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.start,
+      children: [
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: productsCount,
+          itemBuilder: (context, index) {
+            if (transferBetweenStocksProvider.productsCount == 1) {
+              _selectedIndex = index;
+            }
 
-                final startIndex = index * itensPerLine;
-                final endIndex = (startIndex + itensPerLine <= productsCount)
-                    ? startIndex + itensPerLine
-                    : productsCount;
+            final startIndex = index * itensPerLine;
+            final endIndex = (startIndex + itensPerLine <= productsCount)
+                ? startIndex + itensPerLine
+                : productsCount;
 
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var i = startIndex; i < endIndex; i++)
-                      Expanded(
-                        child: itemOfList(
-                          index: i,
-                          transferBetweenStocksProvider:
-                              transferBetweenStocksProvider,
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i = startIndex; i < endIndex; i++)
+                  Expanded(
+                    child: itemOfList(
+                      index: i,
+                      transferBetweenStocksProvider:
+                          transferBetweenStocksProvider,
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }

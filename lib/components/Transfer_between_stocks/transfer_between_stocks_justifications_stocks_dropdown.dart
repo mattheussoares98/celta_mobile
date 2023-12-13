@@ -4,10 +4,16 @@ import 'package:provider/provider.dart';
 
 class TransferBetweenStocksJustificationsAndStocksDropwdownWidget
     extends StatefulWidget {
+  final GlobalKey<FormFieldState> keyJustifications;
+  final GlobalKey<FormFieldState> keyOriginStockType;
+  final GlobalKey<FormFieldState> keyDestinyStockType;
   final GlobalKey<FormState> dropDownFormKey;
 
   const TransferBetweenStocksJustificationsAndStocksDropwdownWidget({
     required this.dropDownFormKey,
+    required this.keyJustifications,
+    required this.keyOriginStockType,
+    required this.keyDestinyStockType,
     Key? key,
   }) : super(key: key);
 
@@ -30,15 +36,28 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
   //altera o nome do dropdown do tipo de estoque e atualiza o código do estoque
   //que precisa ser enviado na requisição do json
 
+  bool _changedJustifications = false;
+  bool _changedOriginStockType = false;
+  bool _changedDestinyStockType = false;
+
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
 
     if (transferBetweenStocksProvider.isLoadingTypeStockAndJustifications) {
-      _keyJustifications.currentState?.reset();
-      _keyOriginStockType.currentState?.reset();
-      _keyDestinyStockType.currentState?.reset();
+      if (_changedJustifications) {
+        _keyJustifications.currentState?.reset();
+        _changedJustifications = false;
+      }
+      if (_changedOriginStockType) {
+        _keyOriginStockType.currentState?.reset();
+        _changedOriginStockType = false;
+      }
+      if (_changedDestinyStockType) {
+        _keyDestinyStockType.currentState?.reset();
+        _changedDestinyStockType = false;
+      }
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -95,7 +114,7 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
                       transferBetweenStocksProvider.products.isEmpty
                   ? null
                   : (value) {
-                      print(value);
+                      _changedJustifications = true;
                     },
               items: transferBetweenStocksProvider.justifications
                   .map(
@@ -210,7 +229,9 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
                       transferBetweenStocksProvider.justificationHasStockType ||
                       transferBetweenStocksProvider.products.isEmpty
                   ? null
-                  : (value) {},
+                  : (value) {
+                      _changedOriginStockType = true;
+                    },
               items: transferBetweenStocksProvider.originStockTypes
                   .map(
                     (value) => DropdownMenuItem(
@@ -306,7 +327,7 @@ class _TransferBetweenStocksJustificationsAndStocksDropwdownWidgetState
                       transferBetweenStocksProvider.products.isEmpty
                   ? null
                   : (value) {
-                      print("mudou o value $value");
+                      _changedDestinyStockType = true;
                     },
               items: transferBetweenStocksProvider.destinyStockTypes
                   .map(
