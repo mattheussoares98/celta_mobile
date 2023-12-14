@@ -257,7 +257,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void _clearAllDataInformed() {
+  void clearAllDataInformed() {
     clearPersonalDataControllers();
     clearAdressControllers(clearCep: true);
     clearEmailControllers();
@@ -391,7 +391,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       _errorMessageInsertCustomer = SoapHelperResponseParameters.errorMessage;
 
       if (_errorMessageInsertCustomer == "") {
-        _clearAllDataInformed();
+        clearAllDataInformed();
         FirebaseHelper.addSoapCallInFirebase(
             firebaseCallEnum: FirebaseCallEnum.customerRegister);
       }

@@ -4,6 +4,7 @@ import 'package:celta_inventario/Pages/customer_register/customer_register_perso
 import 'package:celta_inventario/Pages/customer_register/customer_register_email_page.dart';
 import 'package:celta_inventario/Pages/customer_register/customer_register_telephones_page.dart';
 import 'package:celta_inventario/components/Customer_register/customer_register_floating_action_button.dart';
+import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
 import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
@@ -262,22 +263,57 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         ),
         body: _pages.elementAt(_selectedIndex),
         floatingActionButton: _selectedIndex == 4
-            ? CustomerRegisterFloatingActionButton(
-                selectedIndex: _selectedIndex,
-                changeSelectedIndexToAddAddres: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-                changeFormKeysToInvalid: () {
-                  setState(() {
-                    customerRegisterProvider.personFormKeyIsValid = false;
-                    customerRegisterProvider.adressFormKeyIsValid = false;
-                    customerRegisterProvider.emailFormKeyIsValid = false;
-                    customerRegisterProvider.telephoneFormKeyIsValid = false;
-                    _selectedIndex = 0;
-                  });
-                },
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30.0),
+                    child: FloatingActionButton(
+                      tooltip: "Limpar todos os dados do pedido",
+                      onPressed:
+                          customerRegisterProvider.isLoadingInsertCustomer ||
+                                  customerRegisterProvider
+                                      .nameController.text.isEmpty
+                              ? null
+                              : () {
+                                  ShowAlertDialog.showAlertDialog(
+                                    context: context,
+                                    title: "Apagar TODOS dados",
+                                    subtitle:
+                                        "Deseja realmente limpar todos os dados do pedido?",
+                                    function: () {
+                                      customerRegisterProvider
+                                          .clearAllDataInformed();
+                                    },
+                                  );
+                                },
+                      child: const Icon(Icons.delete, color: Colors.white),
+                      backgroundColor:
+                          customerRegisterProvider.isLoadingInsertCustomer ||
+                                  customerRegisterProvider
+                                      .nameController.text.isEmpty
+                              ? Colors.grey.withOpacity(0.75)
+                              : Colors.red.withOpacity(0.75),
+                    ),
+                  ),
+                  CustomerRegisterFloatingActionButton(
+                    changeSelectedIndexToAddAddres: () {
+                      setState(() {
+                        _selectedIndex = 1;
+                      });
+                    },
+                    changeFormKeysToInvalid: () {
+                      setState(() {
+                        customerRegisterProvider.personFormKeyIsValid = false;
+                        customerRegisterProvider.adressFormKeyIsValid = false;
+                        customerRegisterProvider.emailFormKeyIsValid = false;
+                        customerRegisterProvider.telephoneFormKeyIsValid =
+                            false;
+                        _selectedIndex = 0;
+                      });
+                    },
+                  ),
+                ],
               )
             : null,
       ),

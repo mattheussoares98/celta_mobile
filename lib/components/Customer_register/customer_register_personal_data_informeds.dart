@@ -13,9 +13,6 @@ class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Divider(
-          height: 20,
-        ),
         const Text(
           "Dados pessoais informados",
           style: TextStyle(

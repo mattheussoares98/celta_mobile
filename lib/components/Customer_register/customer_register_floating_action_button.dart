@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomerRegisterFloatingActionButton extends StatefulWidget {
-  final int selectedIndex;
   final Function changeSelectedIndexToAddAddres;
   final Function changeFormKeysToInvalid;
   const CustomerRegisterFloatingActionButton({
-    required this.selectedIndex,
     required this.changeSelectedIndexToAddAddres,
     required this.changeFormKeysToInvalid,
     Key? key,

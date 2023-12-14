@@ -22,9 +22,10 @@ class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          CustomerRegisterPersonalDataInformeds(
-            customerRegisterProvider: customerRegisterProvider,
-          ),
+          if (customerRegisterProvider.nameController.text.isNotEmpty)
+            CustomerRegisterPersonalDataInformeds(
+              customerRegisterProvider: customerRegisterProvider,
+            ),
           if (customerRegisterProvider.adressesCount > 0)
             const CustomerRegisterAdressesInformeds(),
           if (customerRegisterProvider.emailsCount > 0)
