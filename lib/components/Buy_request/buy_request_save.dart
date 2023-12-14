@@ -145,8 +145,9 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
                                 child: Text(
                                   textButtonMessage(buyRequestProvider),
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w100,
                                     fontSize: 17,
+                                    color: Colors.red,
                                   ),
                                 ),
                               ),

@@ -53,16 +53,6 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
             ? MainAxisAlignment.start
             : MainAxisAlignment.center,
         children: [
-          if (!buyRequestProvider.isLoadingEnterprises &&
-              buyRequestProvider.enterprisesCount > 0)
-            const Text(
-              "Empresas",
-              style: TextStyle(
-                color: Colors.grey,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

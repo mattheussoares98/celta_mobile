@@ -85,7 +85,8 @@ class FormFieldHelper {
     );
   }
 
-  static String? Function(String?)? validatorOfNumber() {
+  static String? Function(String?)? validatorOfNumber(
+      {int maxDecimalPlaces = 2}) {
     return (value) {
       if (value!.isEmpty) {
         return 'Digite uma quantidade';
@@ -101,18 +102,25 @@ class FormFieldHelper {
               .toList()
               .fold<int>(0, (t, e) => e == "." ? t + e.length : t + 0) >
           1) {
-        //verifica se tem mais de um ponto
+        // verifica se tem mais de um ponto
         return 'Carácter inválido';
       } else if (value.characters
               .toList()
               .fold<int>(0, (t, e) => e == "," ? t + e.length : t + 0) >
           1) {
-        //verifica se tem mais de uma vírgula
+        // verifica se tem mais de uma vírgula
         return 'Carácter inválido';
       } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == 0 ||
           double.tryParse(value.replaceAll(RegExp(r','), '.')) == null) {
         return "Digite uma quantidade";
       }
+
+      // Adiciona a verificação do número máximo de casas decimais
+      List<String> parts = value.replaceAll(RegExp(r'\,'), '.').split('.');
+      if (parts.length > 1 && parts[1].length > maxDecimalPlaces) {
+        return '$maxDecimalPlaces casas decimais';
+      }
+
       return null;
     };
   }

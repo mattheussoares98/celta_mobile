@@ -36,6 +36,10 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
         practicedValue(product),
         decimalHouses: 2,
       );
+
+      buyRequestProvider.priceController.text = buyRequestProvider
+          .priceController.text
+          .replaceAll(RegExp(r'\.'), ',');
     });
   }
 

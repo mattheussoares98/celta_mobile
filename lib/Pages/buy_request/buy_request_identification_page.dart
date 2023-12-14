@@ -4,6 +4,7 @@ import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/Buy_request/buy_request_title_component.dart';
 import '../../components/Buy_request/identification/buy_request_requests_type_dropdown.dart';
 
 class BuyRequestIdentificationPage extends StatefulWidget {
@@ -59,10 +60,22 @@ class _BuyRequestIdentificationPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            buyRequestTitleComponent(
+              title: "Comprador",
+              context: context,
+            ),
             BuyRequestBuyersDropwodn(buyersKey: widget.buyersKey),
             const SizedBox(height: 20),
+            buyRequestTitleComponent(
+              title: "Modelo de pedido de compra",
+              context: context,
+            ),
             BuyRequestRequestsTypeDropdown(requestsKey: widget.requestsKey),
             const SizedBox(height: 20),
+            buyRequestTitleComponent(
+              title: "Fornecedores",
+              context: context,
+            ),
             const BuyRequestSuplliers(),
           ],
         ),

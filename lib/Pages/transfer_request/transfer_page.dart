@@ -146,6 +146,7 @@ class _TransferPageState extends State<TransferPage> {
                             child: FittedBox(
                               child: Text(
                                 cartProductsCount.toString(),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           ),

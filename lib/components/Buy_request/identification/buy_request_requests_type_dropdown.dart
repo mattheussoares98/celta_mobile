@@ -105,89 +105,76 @@ class _BuyRequestRequestsTypeDropdownState
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
     atualValue = buyRequestProvider.selectedRequestModel?.Name;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        const Text(
-          "Modelo de pedido de compra",
-          style: TextStyle(
-            color: Colors.grey,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold,
+        Expanded(
+          child: Card(
+            shape: const RoundedRectangleBorder(),
+            child: BuyRequestDropdownFormfield(
+              onChanged: widget.enabledChangeRequestsType == false
+                  ? null
+                  : (value) {
+                      onChange(
+                        buyRequestProvider: buyRequestProvider,
+                        value: value,
+                      );
+                    },
+              value: atualValue,
+              dropdownKey: widget.requestsKey,
+              isLoading: buyRequestProvider.isLoadingRequestsType,
+              disabledHintText: "Modelo de pedido",
+              isLoadingMessage: "Consultando modelos",
+              validator: (value) {
+                if (value == null) {
+                  return "Selecione o modelo de pedido";
+                }
+
+                return null;
+              },
+              items: buyRequestProvider.requestsType
+                  .map(
+                    (value) => DropdownMenuItem(
+                      value: value.Name,
+                      alignment: Alignment.center,
+                      onTap: () {
+                        // buyRequestProvider.selectedRequestModel = value;
+                      },
+                      child: FittedBox(
+                        child: Column(
+                          children: [
+                            Center(
+                              child: Text(
+                                value.Name.toString(),
+                              ),
+                            ),
+                            const Divider(
+                              height: 4,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ),
-        Row(
-          children: [
-            Expanded(
-              child: Card(
-                shape: const RoundedRectangleBorder(),
-                child: BuyRequestDropdownFormfield(
-                  onChanged: widget.enabledChangeRequestsType == false
-                      ? null
-                      : (value) {
-                          onChange(
-                            buyRequestProvider: buyRequestProvider,
-                            value: value,
-                          );
-                        },
-                  value: atualValue,
-                  dropdownKey: widget.requestsKey,
-                  isLoading: buyRequestProvider.isLoadingRequestsType,
-                  disabledHintText: "Modelo de pedido",
-                  isLoadingMessage: "Consultando modelos",
-                  validator: (value) {
-                    if (value == null) {
-                      return "Selecione o modelo de pedido";
-                    }
-
-                    return null;
+        if (widget.showRefreshIcon)
+          IconButton(
+            onPressed: buyRequestProvider.isLoadingRequestsType
+                ? null
+                : () async {
+                    await getRequestsType(buyRequestProvider);
                   },
-                  items: buyRequestProvider.requestsType
-                      .map(
-                        (value) => DropdownMenuItem(
-                          value: value.Name,
-                          alignment: Alignment.center,
-                          onTap: () {
-                            // buyRequestProvider.selectedRequestModel = value;
-                          },
-                          child: FittedBox(
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: Text(
-                                    value.Name.toString(),
-                                  ),
-                                ),
-                                const Divider(
-                                  height: 4,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
+            tooltip: "Pesquisar modelos de pedido novamente",
+            icon: Icon(
+              Icons.refresh,
+              color: buyRequestProvider.isLoadingRequestsType
+                  ? Colors.grey
+                  : Theme.of(context).colorScheme.primary,
             ),
-            if (widget.showRefreshIcon)
-              IconButton(
-                onPressed: buyRequestProvider.isLoadingRequestsType
-                    ? null
-                    : () async {
-                        await getRequestsType(buyRequestProvider);
-                      },
-                tooltip: "Pesquisar modelos de pedido novamente",
-                icon: Icon(
-                  Icons.refresh,
-                  color: buyRequestProvider.isLoadingRequestsType
-                      ? Colors.grey
-                      : Theme.of(context).colorScheme.primary,
-                ),
-              ),
-          ],
-        ),
+          ),
       ],
     );
   }

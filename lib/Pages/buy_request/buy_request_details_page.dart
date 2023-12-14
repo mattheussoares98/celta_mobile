@@ -1,5 +1,6 @@
 import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.dart';
 import 'package:celta_inventario/components/Buy_request/buy_request_observations.dart';
+import 'package:celta_inventario/components/Buy_request/buy_request_title_component.dart';
 import 'package:celta_inventario/components/Buy_request/details/last_saved_requests.dart';
 import 'package:celta_inventario/components/Buy_request/identification/buy_request_buyers_dropdown.dart';
 import 'package:celta_inventario/components/Buy_request/identification/buy_request_requests_type_dropdown.dart';
@@ -23,75 +24,60 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
   GlobalKey<FormFieldState<dynamic>> requestsKey = GlobalKey();
 
   Widget selectedSupplierWidget(BuyRequestProvider buyRequestProvider) {
-    if (buyRequestProvider.selectedSupplier != null)
-      return Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Fornecedor",
-              style: TextStyle(
-                color: Colors.grey,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Código",
-                      value:
-                          buyRequestProvider.selectedSupplier!.Code.toString(),
-                    ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Nome",
-                      value: buyRequestProvider.selectedSupplier!.Name,
-                    ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Nome fantasia",
-                      value:
-                          buyRequestProvider.selectedSupplier!.FantasizesName,
-                    ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "CPF/CNPJ",
-                      value: buyRequestProvider.selectedSupplier!.CnpjCpfNumber,
-                    ),
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Tipo de comércio",
-                      value: buyRequestProvider.selectedSupplier!.SupplierType,
-                    ),
-                    if (buyRequestProvider.selectedSupplier!.Addresses != null)
-                      Text(buyRequestProvider.selectedSupplier!.Addresses
-                          .toString()),
-                    if (buyRequestProvider.selectedSupplier!.Telephones != null)
-                      Text(buyRequestProvider.selectedSupplier!.Telephones
-                          .toString()),
-                    if (buyRequestProvider.selectedSupplier!.Emails != null)
-                      Text(buyRequestProvider.selectedSupplier!.Emails
-                          .toString()),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    else {
-      return const Padding(
-        padding: EdgeInsets.only(top: 20.0),
-        child: Text(
-          "Não há fornecedor selecionado",
-          style: TextStyle(
-            color: Color.fromARGB(255, 183, 28, 28),
-            fontStyle: FontStyle.italic,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: buyRequestTitleComponent(
+            title: buyRequestProvider.selectedSupplier == null
+                ? "Selecione o fornecedor"
+                : "Fornecedor",
+            context: context,
+            isError: buyRequestProvider.selectedSupplier == null,
           ),
         ),
-      );
-    }
+        if (buyRequestProvider.selectedSupplier != null)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Código",
+                    value: buyRequestProvider.selectedSupplier!.Code.toString(),
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Nome",
+                    value: buyRequestProvider.selectedSupplier!.Name,
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Nome fantasia",
+                    value: buyRequestProvider.selectedSupplier!.FantasizesName,
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "CPF/CNPJ",
+                    value: buyRequestProvider.selectedSupplier!.CnpjCpfNumber,
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Tipo de comércio",
+                    value: buyRequestProvider.selectedSupplier!.SupplierType,
+                  ),
+                  if (buyRequestProvider.selectedSupplier!.Addresses != null)
+                    Text(buyRequestProvider.selectedSupplier!.Addresses
+                        .toString()),
+                  if (buyRequestProvider.selectedSupplier!.Telephones != null)
+                    Text(buyRequestProvider.selectedSupplier!.Telephones
+                        .toString()),
+                  if (buyRequestProvider.selectedSupplier!.Emails != null)
+                    Text(
+                        buyRequestProvider.selectedSupplier!.Emails.toString()),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   FocusNode _focusNode = FocusNode();
@@ -123,6 +109,13 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                 children: [
                   const LastSavedRequests(),
                   BuyRequestObservations(focusNode: _focusNode),
+                  buyRequestTitleComponent(
+                    title: buyRequestProvider.selectedBuyer == null
+                        ? "Selecione o comprador"
+                        : "Comprador",
+                    context: context,
+                    isError: buyRequestProvider.selectedBuyer == null,
+                  ),
                   BuyRequestBuyersDropwodn(
                     buyersKey: buyersKey,
                     enabledChangeBuyer: false,
@@ -130,56 +123,46 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),
-                    child: BuyRequestRequestsTypeDropdown(
-                      requestsKey: requestsKey,
-                      enabledChangeRequestsType: false,
-                      showRefreshIcon: false,
+                    child: buyRequestTitleComponent(
+                      errorTitle: "Selecione o modelo de pedido",
+                      title: "Modelo de pedido",
+                      context: context,
+                      isError: buyRequestProvider.selectedRequestModel == null,
                     ),
                   ),
+                  BuyRequestRequestsTypeDropdown(
+                    requestsKey: requestsKey,
+                    enabledChangeRequestsType: false,
+                    showRefreshIcon: false,
+                  ),
                   selectedSupplierWidget(buyRequestProvider),
-                  if (buyRequestProvider.hasSelectedEnterprise)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: BuyRequestEnterprises(
-                        showOnlySelectedsEnterprises: true,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: buyRequestTitleComponent(
+                      title: "Empresas",
+                      errorTitle: "Selecione a(s) empresa(s)",
+                      context: context,
+                      isError: !buyRequestProvider.hasSelectedEnterprise,
                     ),
-                  if (!buyRequestProvider.hasSelectedEnterprise)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Text(
-                        "Não há empresa selecionada",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 183, 28, 28),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
+                  ),
+                  const BuyRequestEnterprises(
+                    showOnlySelectedsEnterprises: true,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: buyRequestTitleComponent(
+                      errorTitle: "Insira produtos",
+                      title: "Produtos",
+                      context: context,
+                      isError: buyRequestProvider.productsInCartCount == 0,
                     ),
-                  if (buyRequestProvider.productsInCartCount == 0)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Text(
-                        "Não há produtos informados",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 183, 28, 28),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ),
+                  ),
                   if (buyRequestProvider.productsInCartCount > 0)
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Produtos",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           if (buyRequestProvider.productsInCartCount > 2)
                             const BuyRequestOrderProducts(),
                           const BuyRequestProductsItems(

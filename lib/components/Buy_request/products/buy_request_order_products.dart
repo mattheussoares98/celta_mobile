@@ -28,22 +28,22 @@ class _BuyRequestOrderProductsState extends State<BuyRequestOrderProducts> {
         _Item(
           name: "Nome do produto em ordem crescente",
           selected: false,
-          sort: () => buyRequestProvider.orderUpByName(),
+          sort: () => buyRequestProvider.orderCartUpByName(),
         ),
         _Item(
           name: "Nome do produto em ordem decrescente",
           selected: false,
-          sort: () => buyRequestProvider.orderDownByName(),
+          sort: () => buyRequestProvider.orderCartDownByName(),
         ),
         _Item(
           name: "Custo total em ordem crescente",
           selected: false,
-          sort: () => buyRequestProvider.orderUpByTotalCost(),
+          sort: () => buyRequestProvider.orderCartUpByTotalCost(),
         ),
         _Item(
           name: "Custo total em ordem decrescente",
           selected: false,
-          sort: () => buyRequestProvider.orderDownByTotalCost(),
+          sort: () => buyRequestProvider.orderCartDownByTotalCost(),
         ),
       ];
 

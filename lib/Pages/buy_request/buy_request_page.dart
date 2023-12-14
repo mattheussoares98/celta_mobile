@@ -83,6 +83,26 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
         );
         return;
       }
+    } else if (_selectedIndex == 3) {
+      if (index == 1) {
+        if (buyRequestProvider.selectedBuyer == null ||
+            buyRequestProvider.selectedRequestModel == null ||
+            buyRequestProvider.selectedSupplier == null) {
+          ShowSnackbarMessage.showMessage(
+            message: "Informe os dados de identificação",
+            context: context,
+          );
+          return;
+        }
+      } else if (index == 2) {
+        if (buyRequestProvider.hasSelectedEnterprise == false) {
+          ShowSnackbarMessage.showMessage(
+            message: "Selecione pelo menos uma empresa",
+            context: context,
+          );
+          return;
+        }
+      }
     }
 
     setState(() {
@@ -234,7 +254,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                             },
                           );
                         },
-                  child: const Icon(Icons.delete),
+                  child: const Icon(Icons.delete, color: Colors.white),
                   backgroundColor: (buyRequestProvider
                                       .observationsController.text ==
                                   "" &&

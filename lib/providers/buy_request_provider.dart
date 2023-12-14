@@ -478,23 +478,28 @@ class BuyRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void orderUpByName() {
+  void _orderProductsUpByPlu() {
+    _products.sort((a, b) => a.PLU.compareTo(b.PLU));
+    notifyListeners();
+  }
+
+  void orderCartUpByName() {
     _productsInCart.sort((a, b) => a.Name.compareTo(b.Name));
     notifyListeners();
   }
 
-  void orderDownByName() {
+  void orderCartDownByName() {
     _productsInCart.sort((a, b) => b.Name.compareTo(a.Name));
     notifyListeners();
   }
 
-  void orderDownByTotalCost() {
+  void orderCartDownByTotalCost() {
     _productsInCart.sort((a, b) =>
         (b.ValueTyped * b.quantity).compareTo(a.ValueTyped * a.quantity));
     notifyListeners();
   }
 
-  void orderUpByTotalCost() {
+  void orderCartUpByTotalCost() {
     _productsInCart.sort((a, b) =>
         (a.ValueTyped * a.quantity).compareTo(b.ValueTyped * b.quantity));
     notifyListeners();
@@ -550,7 +555,7 @@ class BuyRequestProvider with ChangeNotifier {
 
         _updateProductWithProductCart();
 
-        orderUpByEnterprise();
+        _orderProductsUpByPlu();
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageGetProducts,

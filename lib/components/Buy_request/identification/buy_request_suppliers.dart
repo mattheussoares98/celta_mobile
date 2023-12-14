@@ -67,14 +67,6 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Fornecedores",
-          style: TextStyle(
-            color: Colors.grey,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         SearchWidget(
           showConfigurationsIcon: false,
           hintText: "Fornecedor",

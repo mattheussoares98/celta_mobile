@@ -91,7 +91,8 @@ class _BuyRequestInsertProductQuantity
                       value: value,
                     ),
                     autovalidateMode: AutovalidateMode.always,
-                    validator: FormFieldHelper.validatorOfNumber(),
+                    validator:
+                        FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 3),
                     decoration: FormFieldHelper.decoration(
                       isLoading: buyRequestProvider.isLoadingProducts,
                       context: context,
@@ -131,7 +132,8 @@ class _BuyRequestInsertProductQuantity
                       textController: buyRequestProvider.priceController,
                       value: value,
                     ),
-                    validator: FormFieldHelper.validatorOfNumber(),
+                    validator:
+                        FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 2),
                     decoration: FormFieldHelper.decoration(
                       isLoading: false,
                       context: context,

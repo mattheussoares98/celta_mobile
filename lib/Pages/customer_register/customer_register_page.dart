@@ -143,11 +143,11 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         _hasAdressInformed(
           customerRegisterProvider: customerRegisterProvider,
         )) {
-      ShowSnackbarMessage.showMessage(
-        message:
-            "Termine de adicionar o endereço ou apague os dados para sair da página",
-        context: context,
-      );
+      // ShowSnackbarMessage.showMessage(
+      //   message:
+      //       "Termine de adicionar o endereço ou apague os dados para sair da página",
+      //   context: context,
+      // );
       return false;
     } else if (customerRegisterProvider.isLoadingInsertCustomer) {
       return false;
@@ -187,12 +187,13 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
             appBarTitles[_selectedIndex],
           ),
           leading: IconButton(
-            onPressed: () {
-              //fazer algo que quiser quando o usuário clicar no botão de voltar
-              if (canExitPage(customerRegisterProvider)) {
-                Navigator.of(context).pop();
-              }
-            },
+            onPressed: !canExitPage(customerRegisterProvider)
+                ? null
+                : () {
+                    if (canExitPage(customerRegisterProvider)) {
+                      Navigator.of(context).pop();
+                    }
+                  },
             icon: const Icon(
               Icons.arrow_back_outlined,
             ),

@@ -378,8 +378,16 @@ class SaleRequestProvider with ChangeNotifier {
       _cartProducts[enterpriseCode]!.clear();
     }
 
+    await _clearcustomers(enterpriseCode);
+    clearProducts();
     await PrefsInstance.clearCartSaleRequest();
     _updatedCart = true;
+
+    await _getCustomers(
+      searchTypeInt: 2, //exactCode
+      controllerText: "-1", //consumidor
+      enterpriseCode: enterpriseCode,
+    );
 
     notifyListeners();
   }

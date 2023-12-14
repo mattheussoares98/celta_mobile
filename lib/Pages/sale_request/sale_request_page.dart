@@ -6,6 +6,7 @@ import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../components/Global_widgets/show_alert_dialog.dart';
 import '../../utils/convert_string.dart';
 
 class SaleRequestPage extends StatefulWidget {
@@ -34,6 +35,55 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Widget? _floatingActionButton(SaleRequestProvider saleRequestProvider) {
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+    if (_selectedIndex == 1) {
+      return FloatingActionButton(
+        tooltip: "Cadastrar cliente",
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: const Icon(Icons.person_add, color: Colors.white),
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            APPROUTES.CUSTOMER_REGISTER,
+          );
+        },
+      );
+    } else if (_selectedIndex == 2) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: FloatingActionButton(
+          tooltip: "Limpar todos os dados do pedido",
+          onPressed: (saleRequestProvider
+                          .cartProductsCount(arguments["Code"].toString()) ==
+                      0) ||
+                  saleRequestProvider.isLoadingSaveSaleRequest
+              ? null
+              : () {
+                  ShowAlertDialog.showAlertDialog(
+                    context: context,
+                    title: "Apagar TODOS dados",
+                    subtitle:
+                        "Deseja realmente limpar todos os dados do pedido?",
+                    function: () {
+                      saleRequestProvider
+                          .clearCart(arguments["Code"].toString());
+                    },
+                  );
+                },
+          child: const Icon(Icons.delete, color: Colors.white),
+          backgroundColor: (saleRequestProvider
+                          .cartProductsCount(arguments["Code"].toString()) ==
+                      0) ||
+                  saleRequestProvider.isLoadingSaveSaleRequest
+              ? Colors.grey.withOpacity(0.75)
+              : Colors.red.withOpacity(0.75),
+        ),
+      );
+    }
+    return null;
   }
 
   bool _isLoaded = false;
@@ -244,17 +294,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             );
           },
         ),
-        floatingActionButton: _selectedIndex == 1
-            ? FloatingActionButton(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: const Icon(Icons.person_add, color: Colors.white),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    APPROUTES.CUSTOMER_REGISTER,
-                  );
-                },
-              )
-            : null,
+        floatingActionButton: _floatingActionButton(saleRequestProvider),
       ),
     );
   }
