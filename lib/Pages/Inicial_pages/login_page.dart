@@ -40,16 +40,10 @@ class _LoginPageState extends State<LoginPage>
     );
 
     super.initState();
-    initPlatformState();
+    showMessageToInstallApp();
   }
 
-  Future<void> initPlatformState() async {
-    try {
-      await PlatformPlus.platform.init();
-    } catch (error) {
-      print("Error to init platform: $error");
-    }
-
+  Future<void> showMessageToInstallApp() async {
     if (PlatformPlus.platform.isAndroidWeb) {
       ShowAlertDialog.showAlertDialog(
         context: context,

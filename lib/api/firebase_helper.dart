@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:intl/intl.dart';
 
@@ -240,7 +239,7 @@ class FirebaseHelper {
     print("data: ${message.data}");
   }
 
-  static Future<void> initNotifications(BuildContext context) async {
+  static Future<void> initNotifications() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );

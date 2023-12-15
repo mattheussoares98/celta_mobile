@@ -34,6 +34,7 @@ import 'package:celta_inventario/utils/colors_theme.dart';
 import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 import 'Pages/transfer_request/transfer_page.dart';
 import 'pages/Inicial_pages/home_page.dart';
@@ -46,6 +47,8 @@ import 'providers/price_conference_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await PlatformPlus.platform.init();
+  await FirebaseHelper.initNotifications();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
@@ -56,7 +59,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseHelper.initNotifications(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
