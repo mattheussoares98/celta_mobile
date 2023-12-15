@@ -146,36 +146,40 @@ class FirebaseHelper {
     if (mySoaps.length < 5) {
       await PrefsInstance.setSoaps(mySoaps);
     } else {
-      WriteBatch batch = firestore.batch();
+      try {
+        WriteBatch batch = firestore.batch();
 
-      mySoaps.forEach((soapAction) {
-        DocumentReference docRef = _soapActionsCollection
-            .doc(DateFormat('yyyy-MM').format(DateTime.now()))
-            .collection("soapInformations")
-            .doc(UserData.enterpriseName);
+        mySoaps.forEach((soapAction) {
+          DocumentReference docRef = _soapActionsCollection
+              .doc(DateFormat('yyyy-MM').format(DateTime.now()))
+              .collection("soapInformations")
+              .doc(UserData.enterpriseName);
 
-        batch.set(
-          docRef,
-          {
-            firebaseCallEnum.name: {
-              kIsWeb ? "webTimesUsed" : "timesUsed": FieldValue.increment(1),
+          batch.set(
+            docRef,
+            {
+              firebaseCallEnum.name: {
+                kIsWeb ? "webTimesUsed" : "timesUsed": FieldValue.increment(1),
+              },
+              'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
+              'datesUsed': FieldValue.arrayUnion(
+                  [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
             },
-            'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
-            'datesUsed': FieldValue.arrayUnion(
-                [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
-          },
-          SetOptions(merge: true),
-        );
-      });
+            SetOptions(merge: true),
+          );
+        });
 
-      batch.commit().then(
-        (value) async {
-          await PrefsInstance.clearSoaps();
-          //print("soapInformation adicionada");
-        },
-      ).catchError((error) {
-        //print("Erro para adicionar a soapInformation: $error");
-      });
+        batch.commit().then(
+          (value) async {
+            await PrefsInstance.clearSoaps();
+            //print("soapInformation adicionada");
+          },
+        ).catchError((error) {
+          //print("Erro para adicionar a soapInformation: $error");
+        });
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
