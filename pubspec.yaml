@@ -29,11 +29,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.17.0
-  http: ^0.13.4
+  intl: ^0.19.0
+  http: ^1.1.2
   date_format: ^2.0.5
   flutter_barcode_scanner: ^2.0.0
-  xml2json: ^5.3.2
+  xml2json: ^6.2.1
   sqflite: ^2.0.2
   path: ^1.8.0
   shared_preferences: ^2.0.13
@@ -52,7 +52,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.9.2
+  flutter_launcher_icons: ^0.13.1
 
 flutter_icons: 
   android: true
