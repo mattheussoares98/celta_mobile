@@ -7,6 +7,7 @@ import 'package:celta_inventario/Models/buy_request_models/buy_request_enterpris
 import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
 import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
+import 'package:celta_inventario/api/firebase_helper.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:celta_inventario/api/soap_helper.dart';
 import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
@@ -936,6 +937,8 @@ class BuyRequestProvider with ChangeNotifier {
         );
         clearAllData();
         await _updateDataInDatabase();
+        FirebaseHelper.addSoapCallInFirebase(
+            firebaseCallEnum: FirebaseCallEnum.buyRequestSave);
       }
     } catch (e) {
       print("Erro para salvar o pedido: $e");

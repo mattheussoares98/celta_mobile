@@ -146,7 +146,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     return PopScope(
       canPop: !saleRequestProvider.isLoadingSaveSaleRequest &&
-          saleRequestProvider.isLoadingProcessCart,
+          !saleRequestProvider.isLoadingProcessCart,
       onPopInvoked: (_) async {
         saleRequestProvider.clearProducts();
       },

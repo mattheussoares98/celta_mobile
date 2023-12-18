@@ -29,6 +29,7 @@ enum FirebaseCallEnum {
   infrastructureWhats,
   administrativeWhats,
   customerRegister,
+  buyRequestSave,
 }
 
 class FirebaseHelper {
