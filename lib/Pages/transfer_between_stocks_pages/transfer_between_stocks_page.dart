@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/search_widget.dart';
+import '../../components/Global_widgets/error_message.dart';
 import '../../components/Global_widgets/searching_widget.dart';
 
 class TransferBetweenStockPage extends StatefulWidget {
@@ -172,14 +173,9 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                   title: 'Consultando produtos',
                 ),
               if (transferBetweenStocksProvider.errorMessageGetProducts != "")
-                Text(
-                  transferBetweenStocksProvider.errorMessageGetProducts,
-                  style: const TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
+                ErrorMessage(
+                  errorMessage:
+                      transferBetweenStocksProvider.errorMessageGetProducts,
                 ),
               if (!transferBetweenStocksProvider.isLoadingProducts)
                 TransferBetweenStocksProductsItems(

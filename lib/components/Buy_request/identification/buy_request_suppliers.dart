@@ -6,6 +6,8 @@ import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Global_widgets/error_message.dart';
+
 class BuyRequestSuplliers extends StatefulWidget {
   const BuyRequestSuplliers({Key? key}) : super(key: key);
 
@@ -175,15 +177,7 @@ class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
             ],
           ),
         if (buyRequestProvider.errorMessageSupplier != "")
-          Text(
-            buyRequestProvider.errorMessageSupplier,
-            style: const TextStyle(
-              fontFamily: 'OpenSans',
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-            ),
-          ),
+          ErrorMessage(errorMessage: buyRequestProvider.errorMessageSupplier),
       ],
     );
   }

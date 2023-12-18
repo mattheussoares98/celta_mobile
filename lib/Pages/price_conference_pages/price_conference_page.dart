@@ -5,6 +5,7 @@ import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/search_widget.dart';
+import '../../components/Global_widgets/error_message.dart';
 import '../../components/Global_widgets/searching_widget.dart';
 
 class PriceConferencePage extends StatefulWidget {
@@ -92,15 +93,8 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                 priceConferenceProvider.productsCount == 0)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  priceConferenceProvider.errorMessage,
-                  style: const TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
+                child: ErrorMessage(
+                    errorMessage: priceConferenceProvider.errorMessage),
               ),
             if (!priceConferenceProvider.isLoading)
               PriceConferenceItems(

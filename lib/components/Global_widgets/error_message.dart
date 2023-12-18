@@ -9,20 +9,15 @@ class ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Expanded(
-          child: Text(
-            errorMessage,
-            style: const TextStyle(
-              fontFamily: 'OpenSans',
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-            ),
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        errorMessage,
+        style: const TextStyle(
+          fontFamily: 'OpenSans',
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+          color: Colors.red,
         ),
       ),
     );
