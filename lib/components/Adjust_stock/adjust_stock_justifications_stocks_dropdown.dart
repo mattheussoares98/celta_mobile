@@ -19,23 +19,23 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
     extends State<AdjustStockJustificationsStockDropwdownWidget> {
   final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
   final GlobalKey<FormFieldState> _keyOriginStockType = GlobalKey();
-  final GlobalKey<FormFieldState> _keyDestinyStockType = GlobalKey();
 
-  //se a justificativa possuir um código de estoque atrelado, significa que
-  //somente esse estoque pode ser alterado quando selecionar essa justificativa.
-  //Por isso, quando selecionar a justificativa, está validando se ela possui um
-  //estoque atrelado e caso tenha, desativa o dropdown de tipo de estoque,
-  //altera o nome do dropdown do tipo de estoque e atualiza o código do estoque
-  //que precisa ser enviado na requisição do json
+  bool _changedJustifications = false;
+  bool _changedOriginStockType = false;
 
   @override
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider = Provider.of(context);
 
     if (adjustStockProvider.isLoadingTypeStockAndJustifications) {
-      _keyJustifications.currentState?.reset();
-      _keyOriginStockType.currentState?.reset();
-      _keyDestinyStockType.currentState?.reset();
+      if (_changedJustifications) {
+        _keyJustifications.currentState?.reset();
+        _changedJustifications = false;
+      }
+      if (_changedOriginStockType) {
+        _keyOriginStockType.currentState?.reset();
+        _changedOriginStockType = false;
+      }
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -92,7 +92,7 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           adjustStockProvider.products.isEmpty
                       ? null
                       : (value) {
-                          print(value);
+                          _changedJustifications = true;
                         },
               items: adjustStockProvider.justifications
                   .map(
@@ -202,7 +202,9 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
                           adjustStockProvider.justificationHasStockType ||
                           adjustStockProvider.products.isEmpty
                       ? null
-                      : (value) {},
+                      : (value) {
+                          _changedOriginStockType = true;
+                        },
               items: adjustStockProvider.stockTypes
                   .map(
                     (value) => DropdownMenuItem(
