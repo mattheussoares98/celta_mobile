@@ -2,7 +2,6 @@ import 'package:celta_inventario/Components/Price_conference/price_conference_or
 import 'package:celta_inventario/Components/Price_conference/price_conference_items.dart';
 import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:celta_inventario/providers/price_conference_provider.dart';
-import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Components/Global_widgets/search_widget.dart';
@@ -91,8 +90,17 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
               ),
             if (priceConferenceProvider.errorMessage != "" &&
                 priceConferenceProvider.productsCount == 0)
-              ErrorMessage(
-                errorMessage: priceConferenceProvider.errorMessage,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  priceConferenceProvider.errorMessage,
+                  style: const TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
               ),
             if (!priceConferenceProvider.isLoading)
               PriceConferenceItems(
