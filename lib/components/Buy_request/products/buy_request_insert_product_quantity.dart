@@ -92,7 +92,7 @@ class _BuyRequestInsertProductQuantity
                     ),
                     autovalidateMode: AutovalidateMode.always,
                     validator:
-                        FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 3),
+                        FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 2),
                     decoration: FormFieldHelper.decoration(
                       isLoading: buyRequestProvider.isLoadingProducts,
                       context: context,

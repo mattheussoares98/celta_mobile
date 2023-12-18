@@ -86,7 +86,7 @@ class FormFieldHelper {
   }
 
   static String? Function(String?)? validatorOfNumber(
-      {int maxDecimalPlaces = 2}) {
+      {int maxDecimalPlaces = 3}) {
     return (value) {
       if (value!.isEmpty) {
         return 'Digite uma quantidade';

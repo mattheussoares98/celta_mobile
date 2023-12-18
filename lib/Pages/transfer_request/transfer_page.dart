@@ -1,5 +1,6 @@
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_cart_details_page.dart';
 import 'package:celta_inventario/Pages/transfer_request/transfer_request_insert_products_page.dart';
+import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -83,11 +84,14 @@ class _TransferPageState extends State<TransferPage> {
     ];
 
     return PopScope(
-      canPop: true,
+      canPop: !(transferRequestProvider.isLoadingSaveTransferRequest),
       onPopInvoked: (_) async {
-        // if (saleRequestProvider.isLoadingSaveSaleRequest ||
-        //     saleRequestProvider.isLoadingProcessCart) return false;
-        // saleRequestProvider.clearProducts();
+        if (transferRequestProvider.isLoadingSaveTransferRequest) {
+          ShowSnackbarMessage.showMessage(
+            message: "Aguarde salvar o pedido",
+            context: context,
+          );
+        }
       },
       child: Scaffold(
         resizeToAvoidBottomInset: kIsWeb ? false : true,

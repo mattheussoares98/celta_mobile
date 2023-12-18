@@ -59,7 +59,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           onPressed: (saleRequestProvider
                           .cartProductsCount(arguments["Code"].toString()) ==
                       0) ||
-                  saleRequestProvider.isLoadingSaveSaleRequest
+                  saleRequestProvider.isLoadingSaveSaleRequest ||
+                  saleRequestProvider.isLoadingProcessCart
               ? null
               : () {
                   ShowAlertDialog.showAlertDialog(
@@ -77,7 +78,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           backgroundColor: (saleRequestProvider
                           .cartProductsCount(arguments["Code"].toString()) ==
                       0) ||
-                  saleRequestProvider.isLoadingSaveSaleRequest
+                  saleRequestProvider.isLoadingSaveSaleRequest ||
+                  saleRequestProvider.isLoadingProcessCart
               ? Colors.grey.withOpacity(0.75)
               : Colors.red.withOpacity(0.75),
         ),

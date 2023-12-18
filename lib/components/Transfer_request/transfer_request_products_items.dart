@@ -165,9 +165,9 @@ class _TransferRequestProductsItemsState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FittedBox(
+                    Expanded(
                       child: Text(
-                        "Qtd no carrinho: " +
+                        "Qtd: " +
                             transferRequestProvider
                                 .getTotalItensInCart(
                                   ProductPackingCode:
@@ -191,7 +191,7 @@ class _TransferRequestProductsItemsState
                       ),
                     ),
                     const SizedBox(width: 5),
-                    FittedBox(
+                    Expanded(
                       child: TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.red,
@@ -215,17 +215,19 @@ class _TransferRequestProductsItemsState
                                       arguments["requestTypeCode"].toString(),
                                 )
                             : null,
-                        child: const Row(
-                          children: [
-                            Text(
-                              "Remover produto",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ),
-                          ],
+                        child: const FittedBox(
+                          child: Row(
+                            children: [
+                              Text(
+                                "Remover produto",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

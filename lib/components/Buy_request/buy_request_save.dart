@@ -30,6 +30,15 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
     }
   }
 
+  bool _canSaveBuyRequest(BuyRequestProvider buyRequestProvider) {
+    return !buyRequestProvider.isLoadingInsertBuyRequest &&
+        buyRequestProvider.selectedBuyer != null &&
+        buyRequestProvider.selectedRequestModel != null &&
+        buyRequestProvider.selectedSupplier != null &&
+        buyRequestProvider.hasSelectedEnterprise &&
+        buyRequestProvider.productsInCartCount > 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
@@ -104,12 +113,7 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ElevatedButton(
-                      onPressed: buyRequestProvider.isLoadingInsertBuyRequest ||
-                              buyRequestProvider.selectedBuyer == null ||
-                              buyRequestProvider.selectedRequestModel == null ||
-                              buyRequestProvider.selectedSupplier == null ||
-                              !buyRequestProvider.hasSelectedEnterprise ||
-                              buyRequestProvider.productsInCartCount == 0
+                      onPressed: !_canSaveBuyRequest(buyRequestProvider)
                           ? null
                           : () async {
                               ShowAlertDialog.showAlertDialog(
@@ -144,10 +148,13 @@ class _BuyRequestSaveState extends State<BuyRequestSave> {
                               child: FittedBox(
                                 child: Text(
                                   textButtonMessage(buyRequestProvider),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w100,
                                     fontSize: 17,
-                                    color: Colors.red,
+                                    color:
+                                        !_canSaveBuyRequest(buyRequestProvider)
+                                            ? Colors.red
+                                            : Colors.white,
                                   ),
                                 ),
                               ),
