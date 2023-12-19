@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:intl/intl.dart';
+import 'package:platform_plus/platform_plus.dart';
 
 enum FirebaseCallEnum {
   adjustStockConfirmQuantity,
@@ -240,10 +241,20 @@ class FirebaseHelper {
     print("data: ${message.data}");
   }
 
-  static Future<void> initNotifications() async {
+  static Future<void> initFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    await _initNotifications();
+  }
+
+  static Future<void> _initNotifications() async {
+    if (PlatformPlus.platform.isWindowsWeb ||
+        PlatformPlus.platform.isAndroidWeb ||
+        PlatformPlus.platform.isAndroidWeb) {
+      return;
+    }
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
     print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de

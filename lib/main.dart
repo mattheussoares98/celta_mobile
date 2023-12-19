@@ -48,7 +48,7 @@ import 'providers/price_conference_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PlatformPlus.platform.init();
-  await FirebaseHelper.initNotifications();
+  await FirebaseHelper.initFirebase();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
