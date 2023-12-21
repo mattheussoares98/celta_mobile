@@ -176,7 +176,8 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
             ),
           ),
         ),
-        if (!_focusNode.hasFocus) const BuyRequestSave(),
+        if (MediaQuery.of(context).viewInsets.bottom == 0)
+          const BuyRequestSave(),
       ],
     );
   }
