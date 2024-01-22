@@ -135,6 +135,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     List<Widget> _pages = <Widget>[
       SaleRequestInsertProductsPage(
         enterpriseCode: arguments["Code"],
+        requestTypeCode: arguments["SaleRequestTypeCode"],
       ),
       SaleRequestInsertCustomer(enterpriseCode: arguments["Code"]),
       SaleRequestCartDetailsPage(

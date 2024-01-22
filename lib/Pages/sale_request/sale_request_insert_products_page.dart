@@ -11,8 +11,10 @@ import '../../components/Global_widgets/searching_widget.dart';
 
 class SaleRequestInsertProductsPage extends StatefulWidget {
   final int enterpriseCode;
+  final int requestTypeCode;
   const SaleRequestInsertProductsPage({
     required this.enterpriseCode,
+    required this.requestTypeCode,
     Key? key,
   }) : super(key: key);
 
@@ -54,6 +56,7 @@ class _SaleRequestInsertProductsPageState
                 configurationsProvider: configurationsProvider,
                 enterpriseCode: widget.enterpriseCode,
                 controllerText: _searchProductTextEditingController.text,
+                requestTypeCode: widget.requestTypeCode,
               );
 
               if (saleRequestProvider.productsCount > 0) {
@@ -90,6 +93,7 @@ class _SaleRequestInsertProductsPageState
                     context: context,
                     enterpriseCode: widget.enterpriseCode,
                     controllerText: _searchProductTextEditingController.text,
+                    requestTypeCode: widget.requestTypeCode,
                   );
 
                   if (saleRequestProvider.productsCount > 0) {

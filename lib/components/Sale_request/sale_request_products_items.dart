@@ -201,27 +201,18 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 value: product.PLU.toString(),
-
                 otherWidget: ShowAllStocksWidget(
                   productModel: product,
                   hasAssociatedsStock: product.StorageAreaAddress != "" ||
-                      product.StockByEnterpriseAssociateds.length > 0,
-                  hasStocks: product.Stocks.length > 0,
+                      (product.StockByEnterpriseAssociateds != null &&
+                          product.StockByEnterpriseAssociateds!.length > 0),
+                  hasStocks:
+                      product.Stocks != null && product.Stocks!.length > 0,
                   context: context,
                   stockByEnterpriseAssociatedsLength:
-                      product.StockByEnterpriseAssociateds.length,
-                  stocksLength: product.Stocks.length,
+                      product.StockByEnterpriseAssociateds?.length ?? 0,
+                  stocksLength: product.Stocks?.length ?? 0,
                 ),
-                // otherWidget: ShowAllStocks.showAllStocks(
-                //   productModel: product,
-                //   hasAssociatedsStock: product.StorageAreaAddress != "" ||
-                //       product.StockByEnterpriseAssociateds.length > 0,
-                //   hasStocks: product.Stocks.length > 0,
-                //   context: context,
-                //   stockByEnterpriseAssociatedsLength:
-                //       product.StockByEnterpriseAssociateds.length,
-                //   stocksLength: product.Stocks.length,
-                // ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produto",
@@ -231,7 +222,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço de venda",
                 value: ConvertString.convertToBRL(
-                  product.RetailPracticedPrice,
+                  _totalItemValue,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,
               ),

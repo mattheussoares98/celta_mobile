@@ -22,8 +22,8 @@ class SaleRequestCartProductsModel {
   double ECommerceOfferPrice;
   double MinimumWholeQuantity;
   double BalanceStockSale;
-  String StorageAreaAddress;
-  List<dynamic> StockByEnterpriseAssociateds;
+  List<dynamic>? StockByEnterpriseAssociateds;
+  String? StorageAreaAddress;
   String
       AutomaticDiscountPercentageOrValue; //essa informação só vem quando processa o carrinho. Algumas informações como o nome do produto eu preciso exibir e não retorna o nome do produto no processamento do carrinho, por isso adiciono essas informações aqui quando processa o carrinho ou quando atualiza o carrinho
   double
@@ -70,7 +70,7 @@ class SaleRequestCartProductsModel {
       : ProductPackingCode = json["ProductPackingCode"],
         Name = json["Name"],
         Quantity = json["Quantity"],
-        Value = json["Value"],
+        Value = json["Value"] == 0 ? json["RetailPracticedPrice"] : json["Value"],
         IncrementPercentageOrValue = json["IncrementPercentageOrValue"] ?? "",
         IncrementValue = json["IncrementValue"],
         DiscountPercentageOrValue = json["DiscountPercentageOrValue"] ?? "",

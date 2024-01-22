@@ -187,7 +187,7 @@ class SaleRequestProvider with ChangeNotifier {
       _quantityToAdd = 1;
     }
 
-    double _totalItemValue = _quantityToAdd * product.RetailPracticedPrice;
+    double _totalItemValue = _quantityToAdd * product.Value;
 
     double? controllerInDouble = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
@@ -252,7 +252,7 @@ class SaleRequestProvider with ChangeNotifier {
       ProductPackingCode: product.ProductPackingCode,
       Name: product.Name,
       Quantity: quantity,
-      Value: product.RetailPracticedPrice,
+      Value: product.Value,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
@@ -284,8 +284,8 @@ class SaleRequestProvider with ChangeNotifier {
           element.ProductPackingCode == product.ProductPackingCode);
 
       _cartProducts[enterpriseCode]![index].Quantity += quantity;
-      _cartProducts[enterpriseCode]![index].Value =
-          product.RetailPracticedPrice;
+      _cartProducts[enterpriseCode]![index].Value = product.Value;
+      
     } else {
       if (_cartProducts[enterpriseCode.toString()] != null) {
         _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);
@@ -320,7 +320,7 @@ class SaleRequestProvider with ChangeNotifier {
 
   getTotalItemPrice(SaleRequestCartProductsModel product) {
     if (product.TotalLiquid == 0) {
-      return (product.RetailSalePrice * product.Quantity) -
+      return (product.Value * product.Quantity) -
           product.AutomaticDiscountValue;
     } else {
       return product.TotalLiquid;
@@ -727,25 +727,35 @@ class SaleRequestProvider with ChangeNotifier {
     required String controllerText,
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
+    required int requestTypeCode,
   }) async {
     _products.clear();
     _errorMessageProducts = "";
     _isLoadingProducts = true;
     notifyListeners();
 
+    Map jsonGetProducts = {
+      "CrossIdentity": UserData.crossIdentity,
+      "SearchValue": controllerText,
+      "RequestTypeCode": requestTypeCode,
+      "EnterpriseCodes": [enterpriseCode],
+      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+      "RoutineInt": 1,
+      // "SupplierCode": _selectedSupplier!.Code,
+      // "EnterpriseDestinyCode": 0,
+      // "SearchType": 0,
+      // "Routine": 0,
+    };
+
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": controllerText,
-          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
-          "routineTypeInt": 1,
+          "filters": json.encode(jsonGetProducts),
         },
-        typeOfResponse: "GetProductJsonResponse",
-        SOAPAction: "GetProductJson",
+        typeOfResponse: "GetProductsJsonResponse",
+        SOAPAction: "GetProductsJson",
         serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductJsonResult",
+        typeOfResult: "GetProductsJsonResult",
       );
 
       _errorMessageProducts = SoapHelperResponseParameters.errorMessage;
