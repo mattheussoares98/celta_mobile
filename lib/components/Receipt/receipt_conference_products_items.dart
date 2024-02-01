@@ -249,6 +249,7 @@ class _ReceiptConferenceProductsItemsState
                             lastDate: DateTime.now().add(
                               const Duration(days: 3650),
                             ),
+                            locale: const Locale('pt', 'BR'),
                           );
 
                           if (validityDate != null) {

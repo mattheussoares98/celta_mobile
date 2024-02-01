@@ -1,3 +1,4 @@
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
 import 'package:celta_inventario/Pages/adjust_stock_pages/adjust_stock_page.dart';
 import 'package:celta_inventario/Pages/buy_request/buy_request_page.dart';
@@ -81,6 +82,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
       ],
       child: MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        supportedLocales: [const Locale('pt', 'BR')],
         theme: ThemeData(
           useMaterial3: true,
           primaryColor: ColorsTheme.principalColor,

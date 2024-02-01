@@ -221,6 +221,7 @@ class _CustomerRegisterPersonalDataPageState
                                 .subtract(const Duration(days: 1825)),
                             lastDate: DateTime.now()
                                 .subtract(const Duration(days: 1825)),
+                            locale: const Locale('pt', 'BR'),
                           );
 
                           if (validityDate != null) {
