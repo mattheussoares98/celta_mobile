@@ -1,3 +1,5 @@
+import 'package:celta_inventario/Pages/search_concurrent_prices/search_concurrent_prices_page.dart';
+import 'package:celta_inventario/providers/search_concurrent_prices_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
 import 'package:celta_inventario/Pages/adjust_stock_pages/adjust_stock_page.dart';
@@ -80,6 +82,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
         ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
+        ChangeNotifierProvider(create: (_) => ResearchConcurrentPricesProvider()),
       ],
       child: MaterialApp(
         localizationsDelegates: [
@@ -230,6 +233,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
           APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
           APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
+          APPROUTES.SEARCH_CONCURRENT_PRICES: (ctx) =>
+              const SearchConcurrentPricePage(),
         },
       ),
     );

@@ -145,6 +145,13 @@ class _HomePageState extends State<HomePage> {
               // nextRoute: APPROUTES.BUYERS,
               context: context,
             ),
+            ImageComponent.image(
+              imagePath: 'lib/assets/Images/search_concurrent_price.jpg',
+              routine: 'Preços concorrentes',
+              route: APPROUTES.SEARCH_CONCURRENT_PRICES,
+              // nextRoute: APPROUTES.BUYERS,
+              context: context,
+            ),
           ],
         ),
       ),
