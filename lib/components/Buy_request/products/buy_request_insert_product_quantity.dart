@@ -1,9 +1,10 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../../../models/buy_request/buy_request.dart';
+import '../../../providers/providers.dart';
+import '../../global_widgets/global_widgets.dart';
 
 class BuyRequestInsertProductQuantity extends StatefulWidget {
   final BuyRequestProductsModel product;

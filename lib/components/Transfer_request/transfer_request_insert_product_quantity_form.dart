@@ -1,9 +1,11 @@
-import 'package:celta_inventario/Components/Global_widgets/insert_quantity_textformfield.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
-import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../utils/convert_string.dart';
+
+import '../../models/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
+
 
 class TransferRequestInsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;

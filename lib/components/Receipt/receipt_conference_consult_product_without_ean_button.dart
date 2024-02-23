@@ -1,7 +1,7 @@
-import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/receipt_provider.dart';
+
+import '../../providers/providers.dart';
 
 class ConferenceConsultProductWithoutEanButton extends StatefulWidget {
   final int docCode;

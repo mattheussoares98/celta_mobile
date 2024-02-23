@@ -1,14 +1,14 @@
-import 'package:celta_inventario/Models/firebase_client_model.dart';
-import 'package:celta_inventario/firebase_options.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
+
+import '../firebase_options.dart';
+import '../models/firebase/firebase.dart';
+import '../utils/utils.dart';
+import './api.dart';
 
 enum FirebaseCallEnum {
   adjustStockConfirmQuantity,

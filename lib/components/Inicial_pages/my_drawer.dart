@@ -1,10 +1,10 @@
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/url_launcher.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/providers/login_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../api/api.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);

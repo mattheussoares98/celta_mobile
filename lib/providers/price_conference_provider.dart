@@ -1,10 +1,9 @@
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_data.dart';
-import 'package:flutter/cupertino.dart';
-import '../Models/price_conference_product_model.dart';
+import 'package:flutter/material.dart';
+
+import '../api/api.dart';
+import '../models/price_conference/price_conference.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class PriceConferenceProvider with ChangeNotifier {
   List<PriceConferenceProductsModel> _products = [];

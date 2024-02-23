@@ -1,11 +1,9 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_enterprise_model.dart';
-import 'package:celta_inventario/components/Global_widgets/searchAgain.dart';
-import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/buy_request/buy_request.dart';
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class BuyRequestEnterprises extends StatefulWidget {
   final bool showOnlySelectedsEnterprises;
@@ -110,7 +108,7 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
               request: () async => _getEnterprises(buyRequestProvider),
             ),
           if (buyRequestProvider.isLoadingEnterprises)
-            searchingWidget(title: "Consultando empresas"),
+            SearchingWidget(title: "Consultando empresas"),
         ],
       ),
     );

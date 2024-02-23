@@ -1,8 +1,9 @@
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class BuyRequestObservations extends StatefulWidget {
   final FocusNode focusNode;

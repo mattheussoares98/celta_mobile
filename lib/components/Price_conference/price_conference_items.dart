@@ -1,10 +1,10 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Components/Price_conference/price_conference_send_print_button.dart';
-import 'package:celta_inventario/Models/price_conference_product_model.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/material.dart';
-import '../../providers/price_conference_provider.dart';
+
+import '../../models/price_conference/price_conference.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
+import 'price_conference.dart';
 
 class PriceConferenceItems extends StatefulWidget {
   final PriceConferenceProvider priceConferenceProvider;

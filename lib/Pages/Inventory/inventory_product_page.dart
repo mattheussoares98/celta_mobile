@@ -1,14 +1,11 @@
-import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
-import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
-import 'package:celta_inventario/components/Inventory/inventory_search_product_button.dart';
-import 'package:celta_inventario/components/Inventory/inventory_insert_individual_product_switch.dart';
-import 'package:celta_inventario/components/Inventory/inventory_products_items.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/providers/inventory_provider.dart';
-import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/inventory/inventory.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class InventoryProductsPage extends StatefulWidget {
   const InventoryProductsPage({Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_product_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/transfer_between_package/transfer_between_package.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class TransferBetweenPackageAllStocks {
   static transferBetweenPackageAllStocks({

@@ -1,9 +1,9 @@
-import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/searchAgain.dart';
-import 'package:celta_inventario/components/Transfer_request/transfer_origin_enterprise_items.dart';
-import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
 
 class TransferOriginEnterprisePage extends StatefulWidget {
   const TransferOriginEnterprisePage({Key? key}) : super(key: key);
@@ -86,7 +86,7 @@ class _TransferOriginEnterprisePageState
             children: [
               if (transferRequestProvider.isLoadingOriginEnterprise)
                 Expanded(
-                  child: searchingWidget(
+                  child: SearchingWidget(
                     title: 'Consultando empresas de origem',
                   ),
                 ),

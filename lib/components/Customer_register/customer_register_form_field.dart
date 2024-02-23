@@ -1,6 +1,7 @@
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../global_widgets/global_widgets.dart';
 
 class CustomerRegisterFormField extends StatelessWidget {
   final int? limitOfCaracters;

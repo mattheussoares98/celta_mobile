@@ -1,13 +1,12 @@
-import 'package:celta_inventario/Pages/sale_request/sale_request_insert_customer.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_insert_products_page.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_cart_details_page.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../components/Global_widgets/show_alert_dialog.dart';
-import '../../utils/convert_string.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import 'sale_request.dart';
+
 
 class SaleRequestPage extends StatefulWidget {
   const SaleRequestPage({Key? key}) : super(key: key);

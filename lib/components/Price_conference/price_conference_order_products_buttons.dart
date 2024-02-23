@@ -1,5 +1,6 @@
-import 'package:celta_inventario/providers/price_conference_provider.dart';
 import 'package:flutter/material.dart';
+
+import '../../providers/providers.dart';
 
 class PriceConferenceOrderProductsButtons extends StatefulWidget {
   final PriceConferenceProvider priceConferenceProvider;

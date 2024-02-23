@@ -1,11 +1,9 @@
-import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/convert_string.dart';
+import '../../models/sale_request/sale_request.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class SaleRequestCartProductsItems {
   static Widget _titleAndSubtitle({

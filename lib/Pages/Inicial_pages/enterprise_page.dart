@@ -1,9 +1,8 @@
-import 'package:celta_inventario/Components/Global_widgets/enterprise_items.dart';
-import 'package:celta_inventario/providers/enterprise_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../components/Global_widgets/searchAgain.dart';
-import '../../components/Global_widgets/searching_widget.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
 
 class EnterprisePage extends StatefulWidget {
   const EnterprisePage({Key? key}) : super(key: key);
@@ -62,7 +61,7 @@ class EnterprisePageState extends State<EnterprisePage> {
           children: [
             if (enterpriseProvider.isLoadingEnterprises)
               Expanded(
-                child: searchingWidget(title: 'Consultando empresas'),
+                child: SearchingWidget(title: 'Consultando empresas'),
               ),
             if (enterpriseProvider.errorMessage != '' &&
                 !enterpriseProvider.isLoadingEnterprises)

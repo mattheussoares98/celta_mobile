@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../utils/convert_string.dart';
-import '../Global_widgets/title_and_value.dart';
+
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class SaleRequestAssociatedStocksWidget {
   static saleRequestAssociatedStocksWidget({

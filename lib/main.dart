@@ -1,52 +1,25 @@
-import 'package:celta_inventario/Pages/search_concurrent_prices/search_concurrent_prices_page.dart';
-import 'package:celta_inventario/providers/search_concurrent_prices_provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:celta_inventario/Pages/Inicial_pages/enterprise_page.dart';
-import 'package:celta_inventario/Pages/adjust_stock_pages/adjust_stock_page.dart';
-import 'package:celta_inventario/Pages/buy_request/buy_request_page.dart';
-import 'package:celta_inventario/Pages/customer_register/customer_register_page.dart';
-import 'package:celta_inventario/Pages/drawer/configurations_page.dart';
-import 'package:celta_inventario/Pages/price_conference_pages/price_conference_page.dart';
-import 'package:celta_inventario/Pages/Inventory/inventory_counting_page.dart';
-import 'package:celta_inventario/Pages/receipt_pages/receipt_conference_page.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_manual_default_request_model_page.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_page.dart';
-import 'package:celta_inventario/Pages/sale_request/sale_request_model_page.dart';
-import 'package:celta_inventario/Pages/drawer/technical_support_page.dart';
-import 'package:celta_inventario/Pages/transfer_between_package/transfer_between_package_page.dart';
-import 'package:celta_inventario/Pages/transfer_request/transfer_destiny_enterprise_page.dart';
-import 'package:celta_inventario/Pages/transfer_request/transfer_origin_enterprise_page.dart';
-import 'package:celta_inventario/Pages/transfer_request/transfer_request_model_page.dart';
-import 'package:celta_inventario/Pages/transfer_between_stocks_pages/transfer_between_stocks_page.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/providers/adjust_stock_provider.dart';
-import 'package:celta_inventario/Pages/Inventory/inventory_page.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/providers/customer_register_provider.dart';
-import 'package:celta_inventario/providers/inventory_provider.dart';
-import 'package:celta_inventario/Pages/Inventory/inventory_product_page.dart';
-import 'package:celta_inventario/Pages/receipt_pages/receipt_page.dart';
-import 'package:celta_inventario/providers/receipt_provider.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
-import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
-import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
-import 'package:celta_inventario/providers/transfer_request_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
-import 'package:celta_inventario/utils/colors_theme.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
-import 'Pages/transfer_request/transfer_page.dart';
-import 'pages/Inicial_pages/home_page.dart';
-import 'pages/Inicial_pages/login_or_home_page.dart';
-import 'pages/Inicial_pages/login_page.dart';
-import 'providers/enterprise_provider.dart';
-import 'providers/login_provider.dart';
-import 'pages/Inicial_pages/splash_page.dart';
-import 'providers/price_conference_provider.dart';
+
+import 'pages/adjust_stock/adjust_stock.dart';
+import 'pages/buy_request/buy_request.dart';
+import 'pages/customer_register/customer_register.dart';
+import 'pages/drawer/drawer.dart';
+import 'pages/inicial_pages/inicial_pages.dart';
+import 'pages/inventory/inventory.dart';
+import 'pages/price_conference/price_conference.dart';
+import 'pages/receipt/receipt.dart';
+import 'pages/research_concurrent_prices/research_concurrent_prices.dart';
+import 'pages/sale_request/sale_request.dart';
+import 'pages/transfer_between_package/transfer_between_package.dart';
+import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
+import 'pages/transfer_request/transfer_request.dart';
+import 'api/api.dart';
+import 'providers/providers.dart';
+import 'utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +55,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
         ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
-        ChangeNotifierProvider(create: (_) => ResearchConcurrentPricesProvider()),
+        ChangeNotifierProvider(
+            create: (_) => ResearchConcurrentPricesProvider()),
       ],
       child: MaterialApp(
         localizationsDelegates: [

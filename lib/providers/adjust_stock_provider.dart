@@ -1,14 +1,11 @@
-import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_justification_model.dart';
-import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
-import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_type_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/adjust_stock/adjust_stock.dart';
+import '../models/adjust_stock/adjust_stock_type_model.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class AdjustStockProvider with ChangeNotifier {
   List<AdjustStockProductModel> _products = [];

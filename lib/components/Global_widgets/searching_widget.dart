@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget searchingWidget({
+Widget SearchingWidget({
   required String title,
 }) {
   return Padding(

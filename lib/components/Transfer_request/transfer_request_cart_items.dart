@@ -1,14 +1,12 @@
-import 'package:celta_inventario/Components/Global_widgets/insert_quantity_textformfield.dart';
-import 'package:celta_inventario/components/Transfer_request/transfer_request_cart_products_items.dart';
-import 'package:celta_inventario/providers/transfer_request_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Models/transfer_request/transfer_request_cart_products_model.dart';
+import '../../models/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
+import 'transfer_request.dart';
 
 class TransferRequestCartItems extends StatefulWidget {
   final TextEditingController textEditingController;

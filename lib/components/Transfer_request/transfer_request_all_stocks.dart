@@ -1,8 +1,8 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/transfer_request/transfer_request.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class TransferRequestAllStocks {
   static transferRequestAllStocks({

@@ -1,14 +1,10 @@
-import 'package:celta_inventario/Models/inventory/inventory_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/utils/scan_bar_code.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_data.dart';
-import 'package:flutter/cupertino.dart';
-import '../Models/inventory/countings_model.dart';
-import '../Models/inventory/inventory_product_model.dart';
+import 'package:flutter/material.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/inventory/inventory.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class InventoryProvider with ChangeNotifier {
   final List<InventoryModel> _inventorys = [];

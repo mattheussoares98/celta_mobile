@@ -1,15 +1,11 @@
-import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/providers/inventory_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Global_widgets/show_alert_dialog.dart';
-import 'inventory_insert_one_quantity.dart';
+
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
+import './inventory.dart';
 
 class InventoryProductsItems extends StatefulWidget {
   final int inventoryCountingCode;

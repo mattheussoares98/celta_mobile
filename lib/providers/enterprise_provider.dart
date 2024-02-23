@@ -1,9 +1,8 @@
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import '../Models/enterprise_models/enterprise_model.dart';
+
+import '../api/api.dart';
+import '../models/enterprise/enterprise.dart';
+import '../utils/utils.dart';
 
 class EnterpriseProvider with ChangeNotifier {
   List<EnterpriseModel> _enterprises = [];

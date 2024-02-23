@@ -1,9 +1,10 @@
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
+import '../../models/sale_request/sale_request.dart';
+import '../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Models/sale_request_models/sale_requests_model.dart';
-import '../../utils/app_routes.dart';
+
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class SaleRequestModelsItems extends StatefulWidget {
   final bool hasDefaultRequestModel;

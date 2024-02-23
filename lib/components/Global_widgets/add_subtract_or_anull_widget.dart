@@ -1,7 +1,7 @@
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'addOrSubtractButton.dart';
+
+import './global_widgets.dart';
 
 class AddSubtractOrAnullWidget extends StatefulWidget {
   final bool isLoading;

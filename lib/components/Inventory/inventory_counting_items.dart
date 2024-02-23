@@ -1,8 +1,9 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/inventory_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class InventoryCountingItems extends StatelessWidget {
   final int codigoInternoEmpresa;

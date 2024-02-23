@@ -1,12 +1,9 @@
-import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
-import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_products_items.dart';
-import 'package:celta_inventario/components/Transfer_between_package/transfer_between_stocks_justifications_stocks_dropdown.dart';
-import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/Transfer_between_package/transfer_between_package.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
 
 class TransferBetweenPackagePage extends StatefulWidget {
   const TransferBetweenPackagePage({Key? key}) : super(key: key);
@@ -105,7 +102,7 @@ class _TransferBetweenPackagePageState
             ),
             if (transferBetweenPackageProvider.isLoadingProducts)
               Expanded(
-                child: searchingWidget(
+                child: SearchingWidget(
                   title: 'Consultando produtos',
                 ),
               ),

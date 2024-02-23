@@ -1,9 +1,10 @@
-import 'package:celta_inventario/Components/Sale_request/sale_request_cart_items.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/Components/Global_widgets/show_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/sale_request/sale_request.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class SaleRequestCartDetailsPage extends StatefulWidget {
   final int enterpriseCode;

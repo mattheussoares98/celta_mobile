@@ -1,12 +1,11 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
-import 'package:celta_inventario/components/Buy_request/products/buy_request_insert_product_quantity.dart';
-import 'package:celta_inventario/components/Buy_request/products/buy_request_products_informations.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../models/buy_request/buy_request.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../buy_request.dart';
 
 class BuyRequestProductsItems extends StatefulWidget {
   final bool showOnlyCartProducts;

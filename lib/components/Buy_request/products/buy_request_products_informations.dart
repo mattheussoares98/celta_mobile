@@ -1,10 +1,10 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
-import 'package:celta_inventario/components/Buy_request/products/buy_request_costs_and_stocks.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
+
+import '../../../models/buy_request/buy_request.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../global_widgets/global_widgets.dart';
+import '../buy_request.dart';
 
 class BuyRequestProductsInformations extends StatelessWidget {
   final BuyRequestProvider buyRequestProvider;

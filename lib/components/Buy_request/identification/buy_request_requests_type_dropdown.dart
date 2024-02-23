@@ -1,9 +1,9 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
-import 'package:celta_inventario/components/Buy_request/identification/buy_request_dropdownformfield.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../models/buy_request/buy_request.dart';
+import '../../../providers/providers.dart';
+import '../../global_widgets/global_widgets.dart';
+import '../buy_request.dart';
 
 class BuyRequestRequestsTypeDropdown extends StatefulWidget {
   final GlobalKey<FormFieldState> requestsKey;

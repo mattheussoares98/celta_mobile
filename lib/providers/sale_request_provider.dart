@@ -1,17 +1,12 @@
 import 'dart:convert';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_cart_products_model.dart';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_customer_model.dart';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_process_cart_model.dart';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_products_model.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/prefs_instance.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/user_data.dart';
+
 import 'package:flutter/material.dart';
-import '../Models/sale_request_models/sale_requests_model.dart';
-import '../utils/default_error_message_to_find_server.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/sale_request/sale_request.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class SaleRequestProvider with ChangeNotifier {
   bool _isLoadingRequests = false;
@@ -285,7 +280,6 @@ class SaleRequestProvider with ChangeNotifier {
 
       _cartProducts[enterpriseCode]![index].Quantity += quantity;
       _cartProducts[enterpriseCode]![index].Value = product.Value;
-      
     } else {
       if (_cartProducts[enterpriseCode.toString()] != null) {
         _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);

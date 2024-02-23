@@ -1,7 +1,8 @@
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/providers/receipt_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class LiberateCheckButtons extends StatefulWidget {
   final int grDocCode;

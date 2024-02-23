@@ -1,7 +1,8 @@
-import 'package:celta_inventario/components/Buy_request/identification/buy_request_dropdownformfield.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../providers/providers.dart';
+import '../buy_request.dart';
 
 class BuyRequestBuyersDropwodn extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;

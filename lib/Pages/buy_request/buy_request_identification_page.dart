@@ -1,11 +1,9 @@
-import 'package:celta_inventario/components/Buy_request/identification/buy_request_buyers_dropdown.dart';
-import 'package:celta_inventario/components/Buy_request/identification/buy_request_suppliers.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/Buy_request/buy_request_title_component.dart';
-import '../../components/Buy_request/identification/buy_request_requests_type_dropdown.dart';
+import '../../components/buy_request/buy_request.dart';
+import '../../providers/providers.dart';
+
 
 class BuyRequestIdentificationPage extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;

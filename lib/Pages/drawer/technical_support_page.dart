@@ -1,9 +1,8 @@
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/url_launcher.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../api/api.dart';
+import '../../components/global_widgets/global_widgets.dart';
 
 class TechnicalSupportPage extends StatelessWidget {
   const TechnicalSupportPage({Key? key}) : super(key: key);

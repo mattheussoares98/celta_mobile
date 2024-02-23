@@ -1,9 +1,9 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Components/Receipt/receipt_liberate_check_buttons.dart';
-import 'package:celta_inventario/providers/receipt_provider.dart';
 import 'package:flutter/material.dart';
 
-import '../../Models/receipt_models/receipt_model.dart';
+import '../../models/receipt/receipt.dart';
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
+import 'receipt.dart';
 
 class ReceiptItems extends StatefulWidget {
   final ReceiptProvider receiptProvider;

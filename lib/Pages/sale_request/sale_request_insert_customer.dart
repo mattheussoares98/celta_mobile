@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Components/Global_widgets/search_widget.dart';
-import '../../components/Global_widgets/searchAgain.dart';
-import '../../components/Global_widgets/searching_widget.dart';
-import '../../components/Sale_request/sale_request_customer_items.dart';
-import '../../providers/sale_request_provider.dart';
-import '../../Components/Global_widgets/error_message.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/sale_request/sale_request.dart';
+import '../../providers/providers.dart';
 
 class SaleRequestInsertCustomer extends StatefulWidget {
   final int enterpriseCode;
@@ -83,7 +81,7 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
           ),
         if (saleRequestProvider.isLoadingCustomer)
           Expanded(
-            child: searchingWidget(title: "Consultando clientes"),
+            child: SearchingWidget(title: "Consultando clientes"),
           ),
       ],
     );

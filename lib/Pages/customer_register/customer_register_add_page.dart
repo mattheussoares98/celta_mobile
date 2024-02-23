@@ -1,10 +1,8 @@
-import 'package:celta_inventario/components/Customer_register/customer_register_adresses_informeds.dart';
-import 'package:celta_inventario/components/Customer_register/customer_register_emails_informeds.dart';
-import 'package:celta_inventario/components/Customer_register/customer_register_personal_data_informeds.dart';
-import 'package:celta_inventario/components/Customer_register/customer_register_telephones_informeds.dart';
-import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/customer_register/customer_register.dart';
+import '../../providers/providers.dart';
 
 class CustomerRegisterAddPage extends StatefulWidget {
   const CustomerRegisterAddPage({Key? key}) : super(key: key);

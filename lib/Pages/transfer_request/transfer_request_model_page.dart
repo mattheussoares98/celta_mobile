@@ -1,9 +1,9 @@
-import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/searchAgain.dart';
-import 'package:celta_inventario/components/Transfer_request/transfer_request_items.dart';
-import 'package:celta_inventario/providers/transfer_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
 
 class TransferRequestModelPage extends StatefulWidget {
   const TransferRequestModelPage({Key? key}) : super(key: key);
@@ -72,7 +72,7 @@ class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
             children: [
               if (transferRequestProvider.isLoadingRequestModel)
                 Expanded(
-                  child: searchingWidget(
+                  child: SearchingWidget(
                     title: 'Consultando modelos de pedido',
                   ),
                 ),

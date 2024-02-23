@@ -1,13 +1,12 @@
-import 'package:celta_inventario/Models/adjust_stock_models/adjust_stock_product_model.dart';
-import 'package:celta_inventario/components/Adjust_stock/adjust_stock_all_stocks.dart';
-import 'package:celta_inventario/providers/adjust_stock_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Global_widgets/title_and_value.dart';
-import 'adjust_stock_insert_quantity.dart';
+
+import '../../models/adjust_stock/adjust_stock.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
+import './adjust_stock.dart';
 
 class AdjustStockProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;

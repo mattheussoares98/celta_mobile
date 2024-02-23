@@ -1,6 +1,7 @@
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'global_widgets.dart';
 
 class InsertQuantityTextFormField extends StatefulWidget {
   final FocusNode focusNode;

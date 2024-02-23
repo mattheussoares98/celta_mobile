@@ -1,13 +1,11 @@
 import 'dart:convert';
-import 'package:celta_inventario/Models/customer_register_models/customer_register_cep.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/requests_http.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/customer_register/customer_register.dart';
+import '../utils/utils.dart';
 
 class CustomerRegisterProvider with ChangeNotifier {
   final TextEditingController nameController = TextEditingController();

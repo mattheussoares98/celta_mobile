@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_justification_model.dart';
-import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_product_model.dart';
-import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_type_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_data.dart';
+
 import 'package:flutter/material.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/transfer_between_package/transfer_between_package.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class TransferBetweenPackageProvider with ChangeNotifier {
   List<TransferBetweenPackageProductModel> _products = [];

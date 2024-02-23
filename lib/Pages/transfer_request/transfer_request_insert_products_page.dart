@@ -1,13 +1,10 @@
-import 'package:celta_inventario/Components/Global_widgets/search_widget.dart';
-import 'package:celta_inventario/Components/Global_widgets/error_message.dart';
-import 'package:celta_inventario/components/Transfer_request/transfer_request_products_items.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/providers/transfer_request_provider.dart';
-import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/Global_widgets/searching_widget.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class TransferRequestInsertProductsPage extends StatefulWidget {
   final String requestTypeCode;
@@ -74,7 +71,7 @@ class _TransferRequestInsertProductsPageState
             ),
           if (transferRequestProvider.isLoadingProducts)
             Expanded(
-              child: searchingWidget(title: "Consultando produtos"),
+              child: SearchingWidget(title: "Consultando produtos"),
             ),
           if (transferRequestProvider.productsCount > 0)
             TransferRequestProductsItems(

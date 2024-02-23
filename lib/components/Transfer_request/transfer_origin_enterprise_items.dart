@@ -1,9 +1,10 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterprise_model.dart';
-import 'package:celta_inventario/providers/transfer_request_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class TransferOriginEnterpriseItems extends StatefulWidget {
   const TransferOriginEnterpriseItems({

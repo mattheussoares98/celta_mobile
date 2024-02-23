@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../Components/Inventory/inventory_counting_items.dart';
+
+import '../../components/inventory/inventory.dart';
 
 class CountingPage extends StatefulWidget {
   const CountingPage({Key? key}) : super(key: key);

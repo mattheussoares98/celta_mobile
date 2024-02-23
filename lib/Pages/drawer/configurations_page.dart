@@ -1,5 +1,6 @@
-import 'package:celta_inventario/components/Configurations/configurations_checkbox.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/configurations/configurations.dart';
 
 class ConfigurationsPage extends StatefulWidget {
   const ConfigurationsPage({Key? key}) : super(key: key);

@@ -1,9 +1,10 @@
-import 'package:celta_inventario/components/Sale_request/sale_request_models_items.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../components/Global_widgets/searchAgain.dart';
-import '../../components/Global_widgets/searching_widget.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/sale_request/sale_request.dart';
+import '../../providers/providers.dart';
+
 
 class SaleRequestModelPage extends StatefulWidget {
   const SaleRequestModelPage({
@@ -103,7 +104,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
             children: [
               if (saleRequestProvider.isLoadingRequests)
                 Expanded(
-                  child: searchingWidget(
+                  child: SearchingWidget(
                     title: 'Consultando modelos de pedido',
                   ),
                 ),

@@ -1,8 +1,9 @@
-import 'package:celta_inventario/api/prefs_instance.dart';
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/login_provider.dart';
+
+import '../../api/api.dart';
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class AuthForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;

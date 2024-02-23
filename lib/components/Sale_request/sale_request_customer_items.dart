@@ -1,9 +1,10 @@
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/sale_request_models/sale_request_customer_model.dart';
-import 'package:celta_inventario/components/Sale_request/sale_request_covenants_items.dart';
-import 'package:celta_inventario/providers/sale_request_provider.dart';
+import '../../models/sale_request/sale_request.dart';
+import '../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../global_widgets/global_widgets.dart';
+import 'sale_request.dart';
 
 class SaleRequestCustomersItems extends StatefulWidget {
   final int enterpriseCode;

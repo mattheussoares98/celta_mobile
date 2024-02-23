@@ -1,11 +1,11 @@
-import 'package:celta_inventario/Models/transfer_between_package_models/transfer_between_package_product_model.dart';
-import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_all_stocks.dart';
-import 'package:celta_inventario/components/Transfer_between_package/transfer_between_package_insert_quantity.dart';
-import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Global_widgets/title_and_value.dart';
+
+import '../../models/transfer_between_package/transfer_between_package.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
+import 'transfer_between_package.dart';
 
 class TransferBetweenPackageProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;

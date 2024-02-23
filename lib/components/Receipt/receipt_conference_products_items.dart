@@ -1,16 +1,11 @@
-import 'package:celta_inventario/Components/Global_widgets/add_subtract_or_anull_widget.dart';
-import 'package:celta_inventario/Components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/Models/receipt_models/receipt_products_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/providers/receipt_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Global_widgets/show_alert_dialog.dart';
+import '../../models/receipt/receipt.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class ReceiptConferenceProductsItems extends StatefulWidget {
   final int docCode;

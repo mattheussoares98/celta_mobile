@@ -1,21 +1,11 @@
 import 'dart:convert';
-
-import 'package:celta_inventario/Models/buy_request_models/buy_request_buyer_model.dart';
-import 'package:celta_inventario/Models/buy_request_models/buy_request_cart_product_model.dart';
-import 'package:celta_inventario/Models/buy_request_models/buy_request_enterprise_model.dart';
-import 'package:celta_inventario/Models/buy_request_models/buy_request_enterprise_selected_model.dart';
-import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
-import 'package:celta_inventario/Models/buy_request_models/buy_request_requests_model.dart';
-import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/prefs_instance.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/buy_request/buy_request.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class BuyRequestProvider with ChangeNotifier {
   List<BuyRequestProductsModel> _products = [];

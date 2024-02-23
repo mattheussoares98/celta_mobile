@@ -1,7 +1,8 @@
-import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/buy_request/buy_request.dart';
+import '../../providers/providers.dart';
 
 class BuyRequestEnterprisesPage extends StatefulWidget {
   const BuyRequestEnterprisesPage({Key? key}) : super(key: key);

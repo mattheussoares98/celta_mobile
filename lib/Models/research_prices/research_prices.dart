@@ -1,0 +1,1 @@
+export 'research_prices_model.dart';

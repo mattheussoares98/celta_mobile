@@ -1,6 +1,7 @@
-import 'package:celta_inventario/providers/adjust_stock_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
 
 class AdjustStockJustificationsStockDropwdownWidget extends StatefulWidget {
   final GlobalKey<FormState> dropDownFormKey;
@@ -25,7 +26,8 @@ class _AdjustStockJustificationsStockDropwdownWidgetState
 
   @override
   Widget build(BuildContext context) {
-    AdjustStockProvider adjustStockProvider = Provider.of(context);
+    AdjustStockProvider adjustStockProvider =
+        Provider.of<AdjustStockProvider>(context);
 
     if (adjustStockProvider.isLoadingTypeStockAndJustifications) {
       if (_changedJustifications) {

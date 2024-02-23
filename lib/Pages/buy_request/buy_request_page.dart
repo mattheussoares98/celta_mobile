@@ -1,13 +1,10 @@
-import 'package:celta_inventario/Pages/buy_request/buy_request_details_page.dart';
-import 'package:celta_inventario/Pages/buy_request/buy_request_enterprises_page.dart';
-import 'package:celta_inventario/Pages/buy_request/buy_request_identification_page.dart';
-import 'package:celta_inventario/Pages/buy_request/buy_request_insert_products_page.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_app_bar_actions.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/buy_request/buy_request.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
+import 'buy_request.dart';
 
 class BuyRequestPage extends StatefulWidget {
   const BuyRequestPage({Key? key}) : super(key: key);

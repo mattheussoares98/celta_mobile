@@ -1,8 +1,11 @@
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/providers/transfer_between_package_provider_SemImplementacaoAinda.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class TransferBetweenPackageInsertQuantity extends StatefulWidget {
   final TextEditingController consultedProductController;

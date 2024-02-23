@@ -1,11 +1,10 @@
-import 'package:celta_inventario/components/Buy_request/products/buy_request_products_items.dart';
-import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/searching_widget.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/buy_request/products/products.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class BuyRequestInsertProductsPage extends StatefulWidget {
   const BuyRequestInsertProductsPage({Key? key}) : super(key: key);
@@ -69,7 +68,7 @@ class _BuyRequestInsertProductsPageState
             focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
           ),
           if (buyRequestProvider.isLoadingProducts)
-            searchingWidget(title: "Consultando produtos"),
+            SearchingWidget(title: "Consultando produtos"),
           const BuyRequestProductsItems(),
         ],
       ),

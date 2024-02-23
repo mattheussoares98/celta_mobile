@@ -1,6 +1,7 @@
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
+
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
   final CustomerRegisterProvider customerRegisterProvider;

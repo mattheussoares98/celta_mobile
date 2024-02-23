@@ -1,8 +1,9 @@
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
 
 class BuyRequestSave extends StatefulWidget {
   const BuyRequestSave({

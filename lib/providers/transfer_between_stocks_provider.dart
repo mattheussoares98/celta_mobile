@@ -1,16 +1,11 @@
-import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_justification_model.dart';
-import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_type_model.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-import '../Models/transfer_between_stocks_models/transfer_between_stock_product_model.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/transfer_between_stocks/transfer_between_stocks.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class TransferBetweenStocksProvider with ChangeNotifier {
   List<TransferBetweenStocksProductModel> _products = [];

@@ -1,16 +1,14 @@
-import 'package:celta_inventario/api/prefs_instance.dart';
-import 'package:celta_inventario/api/url_launcher.dart';
-import 'package:celta_inventario/components/Configurations/configurations_checkbox.dart';
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/scan_bar_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
+
+import '../../api/api.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../configurations/configurations.dart';
+import './global_widgets.dart';
 
 class SearchWidget extends StatefulWidget {
   final bool isLoading;

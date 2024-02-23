@@ -1,9 +1,9 @@
-// ignore_for_file: unused_element
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../utils/utils.dart';
 
 enum _PrefsKeys {
   userIdentity,

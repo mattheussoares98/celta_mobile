@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../utils/convert_string.dart';
-import '../Global_widgets/title_and_value.dart';
+
+import '../../utils/utils.dart';
+import 'global_widgets.dart';
 
 class ShowAllStocksWidget extends StatefulWidget {
   final dynamic productModel;

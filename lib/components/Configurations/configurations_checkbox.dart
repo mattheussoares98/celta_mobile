@@ -1,7 +1,8 @@
-import 'package:celta_inventario/providers/configurations_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
 
 class ConfigurationsCheckbox extends StatefulWidget {
   final bool showOnlyConfigurationOfSearch;

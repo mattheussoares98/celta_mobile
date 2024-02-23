@@ -1,13 +1,12 @@
-import 'package:celta_inventario/api/prefs_instance.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Inicial_pages/my_drawer.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../Components/Global_widgets/image_component.dart';
+
+import '../../api/api.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/inicial_pages/inicial_pages.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -148,8 +147,8 @@ class _HomePageState extends State<HomePage> {
             ImageComponent.image(
               imagePath: 'lib/assets/Images/search_concurrent_price.jpg',
               routine: 'Preços concorrentes',
-              route: APPROUTES.SEARCH_CONCURRENT_PRICES,
-              // nextRoute: APPROUTES.BUYERS,
+              route: APPROUTES.ENTERPRISE,
+              nextRoute: APPROUTES.SEARCH_CONCURRENT_PRICES,
               context: context,
             ),
           ],

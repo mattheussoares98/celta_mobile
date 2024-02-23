@@ -1,12 +1,10 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_supplier_model.dart';
-import 'package:celta_inventario/components/Global_widgets/search_widget.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Global_widgets/error_message.dart';
+import '../../../models/buy_request/buy_request.dart';
+import '../../../providers/providers.dart';
+import '../../global_widgets/global_widgets.dart';
+
 
 class BuyRequestSuplliers extends StatefulWidget {
   const BuyRequestSuplliers({Key? key}) : super(key: key);

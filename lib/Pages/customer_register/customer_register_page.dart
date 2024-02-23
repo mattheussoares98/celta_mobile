@@ -1,14 +1,10 @@
-import 'package:celta_inventario/Pages/customer_register/customer_register_add_page.dart';
-import 'package:celta_inventario/Pages/customer_register/customer_register_adresses_page.dart';
-import 'package:celta_inventario/Pages/customer_register/customer_register_personal_data_page.dart';
-import 'package:celta_inventario/Pages/customer_register/customer_register_email_page.dart';
-import 'package:celta_inventario/Pages/customer_register/customer_register_telephones_page.dart';
-import 'package:celta_inventario/components/Customer_register/customer_register_floating_action_button.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/customer_register/customer_register.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
+import 'customer_register.dart';
 
 class CustomerRegisterPage extends StatefulWidget {
   const CustomerRegisterPage({Key? key}) : super(key: key);

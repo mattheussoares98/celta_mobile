@@ -1,0 +1,1 @@
+export 'adjust_stock_page.dart';

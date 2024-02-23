@@ -1,13 +1,10 @@
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
-import '../Models/receipt_models/receipt_model.dart';
-import '../Models/receipt_models/receipt_products_model.dart';
 
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/receipt/receipt.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 class ReceiptProvider with ChangeNotifier {
   final List<ReceiptModel> _receipts = [];
 

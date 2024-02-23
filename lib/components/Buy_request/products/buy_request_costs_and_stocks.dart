@@ -1,7 +1,8 @@
-import 'package:celta_inventario/Models/buy_request_models/buy_request_product_model.dart';
 import 'package:flutter/material.dart';
-import '../../../utils/convert_string.dart';
-import '../../Global_widgets/title_and_value.dart';
+
+import '../../../models/buy_request/buy_request.dart';
+import '../../../utils/utils.dart';
+import '../../global_widgets/global_widgets.dart';
 
 class BuyRequestCostsAndStocks extends StatefulWidget {
   final BuyRequestProductsModel product;

@@ -1,18 +1,12 @@
-import 'dart:async';
 import 'dart:convert';
-import 'package:celta_inventario/Models/transfer_request/transfer_request_cart_products_model.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_request_products_model.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_destiny_enterprise_model.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_origin_enterprise_model.dart';
-import 'package:celta_inventario/Models/transfer_request/transfer_request_model.dart';
-import 'package:celta_inventario/api/firebase_helper.dart';
-import 'package:celta_inventario/api/soap_helper.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/default_error_message_to_find_server.dart';
+
+import '../api/api.dart';
+import '../components/global_widgets/global_widgets.dart';
+import '../models/transfer_request/transfer_request.dart';
+import '../utils/utils.dart';
+import './providers.dart';
 
 class TransferRequestProvider with ChangeNotifier {
   String _errorMessageRequestModel = '';

@@ -1,8 +1,8 @@
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class CustomerRegisterFloatingActionButton extends StatefulWidget {
   final Function changeSelectedIndexToAddAddres;

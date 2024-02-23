@@ -1,6 +1,7 @@
-import 'package:celta_inventario/Models/configurations_model.dart';
-import 'package:celta_inventario/api/prefs_instance.dart';
 import 'package:flutter/material.dart';
+
+import '../api/api.dart';
+import '../models/configurations/configurations.dart';
 
 class ConfigurationsProvider with ChangeNotifier {
   bool _useAutoScan = false;

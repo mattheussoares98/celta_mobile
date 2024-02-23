@@ -1,9 +1,9 @@
-import 'package:celta_inventario/Models/customer_register_models/customer_register_cep.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/customer_register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/customer_register/customer_register.dart';
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class CustomerRegisterAdressesInformeds extends StatefulWidget {
   const CustomerRegisterAdressesInformeds({

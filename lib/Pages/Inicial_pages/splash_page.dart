@@ -1,5 +1,6 @@
-import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/utils.dart';
 
 class SplashPage extends StatefulWidget {
   @override

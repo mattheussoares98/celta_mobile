@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
-import 'package:celta_inventario/utils/user_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
+
+import '../utils/utils.dart';
 
 class SoapHelperResponseParameters {
   static final SoapHelperResponseParameters _instance =

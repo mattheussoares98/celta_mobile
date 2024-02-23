@@ -1,16 +1,9 @@
-import 'package:celta_inventario/components/Buy_request/buy_request_enterprises.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_observations.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_title_component.dart';
-import 'package:celta_inventario/components/Buy_request/details/last_saved_requests.dart';
-import 'package:celta_inventario/components/Buy_request/identification/buy_request_buyers_dropdown.dart';
-import 'package:celta_inventario/components/Buy_request/identification/buy_request_requests_type_dropdown.dart';
-import 'package:celta_inventario/components/Buy_request/products/buy_request_order_products.dart';
-import 'package:celta_inventario/components/Buy_request/products/buy_request_products_items.dart';
-import 'package:celta_inventario/components/Buy_request/buy_request_save.dart';
-import 'package:celta_inventario/components/Global_widgets/title_and_value.dart';
-import 'package:celta_inventario/providers/buy_request_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/buy_request/buy_request.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
 
 class BuyRequestDetailsPage extends StatefulWidget {
   const BuyRequestDetailsPage({Key? key}) : super(key: key);

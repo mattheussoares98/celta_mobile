@@ -1,8 +1,8 @@
-import 'package:celta_inventario/providers/sale_request_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
-import '../../Models/sale_request_models/sale_request_covenant_model.dart';
+import '../../models/sale_request/sale_request.dart';
+import '../../providers/providers.dart';
 
 class SaleRequestCovenantsItems extends StatefulWidget {
   final List<SaleRequestCovenantsModel> covenants;

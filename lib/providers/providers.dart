@@ -1,0 +1,14 @@
+export './adjust_stock_provider.dart';
+export './buy_request_provider.dart';
+export './configurations_provider.dart';
+export './customer_register_provider.dart';
+export './enterprise_provider.dart';
+export './inventory_provider.dart';
+export './login_provider.dart';
+export './price_conference_provider.dart';
+export './receipt_provider.dart';
+export './sale_request_provider.dart';
+export 'research_concurrent_prices_provider.dart';
+export './transfer_between_package_provider_SemImplementacaoAinda.dart';
+export './transfer_between_stocks_provider.dart';
+export './transfer_request_provider.dart';

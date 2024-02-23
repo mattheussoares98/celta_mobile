@@ -1,11 +1,13 @@
 import 'dart:math';
-import 'package:celta_inventario/api/url_launcher.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/components/Inicial_pages/auth_form.dart';
-import 'package:celta_inventario/utils/colors_theme.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_plus/platform_plus.dart';
+
+import '../../api/api.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../components/inicial_pages/inicial_pages.dart';
+import '../../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

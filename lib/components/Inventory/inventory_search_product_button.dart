@@ -1,6 +1,7 @@
-import 'package:celta_inventario/providers/inventory_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/inventory_provider.dart';
 
 class SearchProductButton extends StatefulWidget {
   final bool isIndividual;

@@ -1,13 +1,12 @@
-import 'package:celta_inventario/Models/transfer_between_stocks_models/transfer_between_stock_product_model.dart';
-import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_all_stocks.dart';
-import 'package:celta_inventario/components/Transfer_between_stocks/transfer_between_stocks_insert_quantity.dart';
-import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
-import 'package:celta_inventario/utils/convert_string.dart';
-import 'package:celta_inventario/utils/responsive_items.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Global_widgets/title_and_value.dart';
+
+import '../../models/transfer_between_stocks/transfer_between_stocks.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
+import '../global_widgets/global_widgets.dart';
+import 'transfer_between_stocks.dart';
 
 class TransferBetweenStocksProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;

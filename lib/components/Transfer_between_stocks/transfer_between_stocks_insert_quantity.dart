@@ -1,10 +1,9 @@
-import 'package:celta_inventario/components/Global_widgets/formfield_decoration.dart';
-import 'package:celta_inventario/components/Global_widgets/show_alert_dialog.dart';
-import 'package:celta_inventario/providers/configurations_provider.dart';
-import 'package:celta_inventario/providers/transfer_between_stocks_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/providers.dart';
+import '../global_widgets/global_widgets.dart';
 
 class TransferBetweenStocksInsertQuantity extends StatefulWidget {
   final TextEditingController consultedProductController;
