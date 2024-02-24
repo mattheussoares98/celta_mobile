@@ -12,7 +12,7 @@ import 'pages/inicial_pages/inicial_pages.dart';
 import 'pages/inventory/inventory.dart';
 import 'pages/price_conference/price_conference.dart';
 import 'pages/receipt/receipt.dart';
-import 'pages/research_concurrent_prices/research_concurrent_prices.dart';
+import 'pages/research_prices/research_prices.dart';
 import 'pages/sale_request/sale_request.dart';
 import 'pages/transfer_between_package/transfer_between_package.dart';
 import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
         ChangeNotifierProvider(
-            create: (_) => ResearchConcurrentPricesProvider()),
+            create: (_) => ResearchPricesProvider()),
       ],
       child: MaterialApp(
         localizationsDelegates: [
@@ -208,7 +208,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
           APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
           APPROUTES.SEARCH_CONCURRENT_PRICES: (ctx) =>
-              const SearchConcurrentPricePage(),
+              const ResearchConcurrentPricesPage(),
         },
       ),
     );
