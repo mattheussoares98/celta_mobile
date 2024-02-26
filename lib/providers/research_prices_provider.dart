@@ -17,6 +17,11 @@ class ResearchPricesProvider with ChangeNotifier {
   int get researchPricesCount => _researchPrices.length;
   FocusNode researchPricesFocusNode = FocusNode();
 
+  bool _isLoadingAddOrUpdateResearch = false;
+  bool get isLoadingAddOrUpdateResearch => _isLoadingAddOrUpdateResearch;
+  String _errorAddOrUpdateResearch = "";
+  String get errorAddOrUpdateResearch => _errorAddOrUpdateResearch = "";
+
   bool _isLoadingGetConcurrents = false;
   bool get isLoadingGetConcurrents => _isLoadingGetConcurrents;
   String _errorGetConcurrents = "";
@@ -89,6 +94,55 @@ class ResearchPricesProvider with ChangeNotifier {
     }
 
     _isLoadingGetResearchPrices = false;
+    notifyListeners();
+  }
+
+  Future<void> addOrUpdateResearch({
+    required BuildContext context,
+    required bool isNewResearch,
+    required String name,
+    required String observations,
+  }) async {
+    _isLoadingAddOrUpdateResearch = true;
+    _errorAddOrUpdateResearch = "";
+    notifyListeners();
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "CrossIdentity": UserData.crossIdentity,
+          "Code": isNewResearch
+              ? 1
+              : 0, //Inserir ou alterar depende do código estar preenchido
+          "EnterpriseCode": 1,
+          // "EnterpriseName": "EnterpriseName",
+          "CreationDate": DateTime.now().toString(),
+          "Name": name,
+          "Observation": observations,
+        },
+        typeOfResponse: "UserCanLoginJsonResponse",
+        SOAPAction: "UserCanLoginJson",
+        serviceASMX: "CeltaSecurityService.asmx",
+        typeOfResult: "UserCanLoginJsonResult",
+      );
+
+      _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
+      if (_errorGetResearchPrices != "") {
+        ShowSnackbarMessage.showMessage(
+          message: _errorAddOrUpdateResearch,
+          context: context,
+        );
+      } else {
+        Map resultAsMap =
+            json.decode(SoapHelperResponseParameters.responseAsString);
+        _researchPrices.add(resultAsMap as ResearchsModel);
+        //converter os dados para ResearchPricesModel
+      }
+    } catch (e) {
+      _errorGetResearchPrices = SoapHelperResponseParameters.errorMessage;
+    }
+
+    _isLoadingAddOrUpdateResearch = false;
     notifyListeners();
   }
 

@@ -1,8 +1,9 @@
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
+import '../../components/research_prices/research_prices.dart';
 
 class ResearchConcurrentPricesPage extends StatefulWidget {
   const ResearchConcurrentPricesPage({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _ResearchConcurrentPricesPageState
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'PREÇOS CONCORRENTES',
+            'PESQUISAS CADASTRADAS',
           ),
           leading: IconButton(
             onPressed: () {
@@ -50,26 +51,6 @@ class _ResearchConcurrentPricesPageState
         body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            SearchWidget(
-              focusNodeConsultProduct:
-                  researchPricesProvider.researchPricesFocusNode,
-              isLoading: researchPricesProvider.isLoadingResearchPrices,
-              onPressSearch: () async {
-                await researchPricesProvider.getResearchPrices(context);
-
-                //não estava funcionando passar o productsCount como parâmetro
-                //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                //textEditingController após a consulta dos produtos se encontrar
-                //algum produto
-                if (researchPricesProvider.researchPricesCount > 0) {
-                  //se for maior que 0 significa que deu certo a consulta e
-                  //por isso pode apagar o que foi escrito no campo de
-                  //consulta
-                  _searchResearchsController.clear();
-                }
-              },
-              consultProductController: _searchResearchsController,
-            ),
             if (researchPricesProvider.isLoadingResearchPrices)
               Expanded(
                 child: SearchingWidget(
@@ -81,9 +62,9 @@ class _ResearchConcurrentPricesPageState
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ErrorMessage(
-                    errorMessage: researchPricesProvider.errorGetResearchPrices),
+                    errorMessage:
+                        researchPricesProvider.errorGetResearchPrices),
               ),
-            Container(),
             // if (!researchPricesProvider.isLoadingResearchPrices)
             // PriceConferenceItems(
             //   researchPricesProvider: researchPricesProvider,
@@ -95,6 +76,20 @@ class _ResearchConcurrentPricesPageState
             //   PriceConferenceOrderProductsButtons(
             //       researchPricesProvider: researchPricesProvider)
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          tooltip: "Nova pesquisa de preços",
+          onPressed: () {
+            researchPricesModalBottom(
+              context: context,
+              isNewResearch: true,
+              isLoading: researchPricesProvider.isLoadingResearchPrices,
+              name: "name",
+              observations: "observations",
+              researchPricesProvider: researchPricesProvider,
+            );
+          },
         ),
       ),
     );
