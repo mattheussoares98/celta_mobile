@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../../Models/research_prices/research_prices.dart';
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
-import '../models/research_prices/research_prices.dart';
 import '../utils/utils.dart';
 
 class ResearchPricesProvider with ChangeNotifier {
@@ -12,8 +12,8 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingResearchPrices => _isLoadingGetResearchPrices;
   String _errorGetResearchPrices = "";
   String get errorGetResearchPrices => _errorGetResearchPrices;
-  final List<ResearchsModel> _researchPrices = [];
-  List<ResearchsModel> get researchPrices => [..._researchPrices];
+  final List<ResearchModel> _researchPrices = [];
+  List<ResearchModel> get researchPrices => [..._researchPrices];
   int get researchPricesCount => _researchPrices.length;
   FocusNode researchPricesFocusNode = FocusNode();
 
@@ -40,6 +40,8 @@ class ResearchPricesProvider with ChangeNotifier {
 
   void clearConcurrents() {
     _concurrents.clear();
+    _errorConcurrents = "";
+    _isLoadingConcurrents = false;
     notifyListeners();
   }
 
@@ -73,15 +75,15 @@ class ResearchPricesProvider with ChangeNotifier {
     if (notifyListenersFromUpdate) notifyListeners();
 
     await _getResearchPrices(
-      isExactCode: true,
+      isExactCode: false,
       enterpriseCode: enterpriseCode,
     );
-    if (researchPricesCount == 0) {
-      await _getResearchPrices(
-        isExactCode: false,
-        enterpriseCode: enterpriseCode,
-      );
-    }
+    // if (researchPricesCount == 0) {
+    //   await _getResearchPrices(
+    //     isExactCode: false,
+    //     enterpriseCode: enterpriseCode,
+    //   );
+    // }
 
     if (_errorGetResearchPrices != "") {
       ShowSnackbarMessage.showMessage(
@@ -89,14 +91,14 @@ class ResearchPricesProvider with ChangeNotifier {
         context: context,
       );
     } else {
-      Map resultAsMap =
-          json.decode(SoapHelperResponseParameters.responseAsString);
-      _researchPrices.add(resultAsMap as ResearchsModel);
-      //converter os dados para ResearchPricesModel
+      ResearchModel.resultAsStringToResearchModel(
+        resultAsString: SoapHelperResponseParameters.responseAsString,
+        listToAdd: _researchPrices,
+      );
     }
 
     _isLoadingGetResearchPrices = false;
-    notifyListeners();
+    if (notifyListenersFromUpdate) notifyListeners();
   }
 
   Future<void> addOrUpdateResearch({
@@ -141,7 +143,7 @@ class ResearchPricesProvider with ChangeNotifier {
       } else {
         Map resultAsMap =
             json.decode(SoapHelperResponseParameters.responseAsString);
-        _researchPrices.add(resultAsMap as ResearchsModel);
+        _researchPrices.add(resultAsMap as ResearchModel);
         //converter os dados para ResearchPricesModel
       }
     } catch (e) {
