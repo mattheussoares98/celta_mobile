@@ -70,6 +70,7 @@ class ResearchPricesProvider with ChangeNotifier {
     required bool notifyListenersFromUpdate,
     required int enterpriseCode,
   }) async {
+    _researchPrices.clear();
     _errorGetResearchPrices = "";
     _isLoadingGetResearchPrices = true;
     if (notifyListenersFromUpdate) notifyListeners();
