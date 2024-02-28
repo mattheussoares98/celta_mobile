@@ -6,7 +6,6 @@ import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import '../global_widgets/global_widgets.dart';
 
-
 class TransferRequestInsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
   final TextEditingController consultedProductController;

@@ -7,7 +7,6 @@ import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'sale_request.dart';
 
-
 class SaleRequestPage extends StatefulWidget {
   const SaleRequestPage({Key? key}) : super(key: key);
 

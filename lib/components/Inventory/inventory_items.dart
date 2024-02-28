@@ -6,7 +6,6 @@ import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import '../global_widgets/global_widgets.dart';
 
-
 class InventoryItems extends StatelessWidget {
   const InventoryItems({Key? key}) : super(key: key);
 

@@ -123,8 +123,8 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
           ],
         ),
         floatingActionButton: GestureDetector(
-          onTap: (){
-             Navigator.of(context)
+          onTap: () {
+            Navigator.of(context)
                 .pushNamed(APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE);
           },
           child: CircleAvatar(

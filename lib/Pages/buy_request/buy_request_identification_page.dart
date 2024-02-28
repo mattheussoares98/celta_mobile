@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../components/buy_request/buy_request.dart';
 import '../../providers/providers.dart';
 
-
 class BuyRequestIdentificationPage extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;
   final GlobalKey<FormFieldState> requestsKey;

@@ -7,8 +7,6 @@ import '../../utils/utils.dart';
 import '../global_widgets/global_widgets.dart';
 import 'transfer_request.dart';
 
-
-
 class TransferRequestProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final Function getProductsWithCamera;

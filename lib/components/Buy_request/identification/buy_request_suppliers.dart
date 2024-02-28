@@ -5,7 +5,6 @@ import '../../../models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
 import '../../global_widgets/global_widgets.dart';
 
-
 class BuyRequestSuplliers extends StatefulWidget {
   const BuyRequestSuplliers({Key? key}) : super(key: key);
 

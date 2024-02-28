@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 import 'inicial_pages.dart';
 
-
 class AuthOrHoMePage extends StatefulWidget {
   const AuthOrHoMePage({Key? key}) : super(key: key);
 

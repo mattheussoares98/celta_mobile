@@ -5,7 +5,6 @@ import '../../components/global_widgets/global_widgets.dart';
 import '../../components/sale_request/sale_request.dart';
 import '../../providers/providers.dart';
 
-
 class SaleRequestModelPage extends StatefulWidget {
   const SaleRequestModelPage({
     Key? key,

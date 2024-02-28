@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import '../../Models/research_prices/research_prices.dart';
+import '../models/research_prices/research_prices.dart';
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
 import '../utils/utils.dart';
