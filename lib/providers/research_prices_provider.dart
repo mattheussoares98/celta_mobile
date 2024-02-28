@@ -98,7 +98,7 @@ class ResearchPricesProvider with ChangeNotifier {
     }
 
     _isLoadingGetResearchPrices = false;
-    if (notifyListenersFromUpdate) notifyListeners();
+    notifyListeners();
   }
 
   Future<void> addOrUpdateResearch({

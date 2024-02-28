@@ -1,9 +1,9 @@
-import 'package:celta_inventario/providers/research_prices_provider.dart';
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/utils.dart';
 import '../../components/global_widgets/global_widgets.dart';
+import '../../components/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 
 class ResearchPricesPage extends StatefulWidget {
@@ -110,16 +110,8 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                     errorMessage:
                         researchPricesProvider.errorGetResearchPrices),
               ),
-            // if (!researchPricesProvider.isLoadingResearchPrices)
-            // PriceConferenceItems(
-            //   researchPricesProvider: researchPricesProvider,
-            //   internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
-            // ),
-            // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
-            //     researchPricesProvider.researchPricesCount > 1)
-            //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
-            //   PriceConferenceOrderProductsButtons(
-            //       researchPricesProvider: researchPricesProvider)
+            if (researchPricesProvider.researchPricesCount > 0)
+              const ResearchPricesItems(),
           ],
         ),
         floatingActionButton: GestureDetector(
