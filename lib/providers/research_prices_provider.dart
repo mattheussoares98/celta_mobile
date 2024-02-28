@@ -11,7 +11,7 @@ class ResearchPricesProvider with ChangeNotifier {
   bool _isLoadingGetResearchPrices = false;
   bool get isLoadingResearchPrices => _isLoadingGetResearchPrices;
   String _errorGetResearchPrices = "";
-  String get errorGetResearchPrices => _errorGetResearchPrices = "";
+  String get errorGetResearchPrices => _errorGetResearchPrices;
   final List<ResearchsModel> _researchPrices = [];
   List<ResearchsModel> get researchPrices => [..._researchPrices];
   int get researchPricesCount => _researchPrices.length;
@@ -20,24 +20,21 @@ class ResearchPricesProvider with ChangeNotifier {
   bool _isLoadingAddOrUpdateResearch = false;
   bool get isLoadingAddOrUpdateResearch => _isLoadingAddOrUpdateResearch;
   String _errorAddOrUpdateResearch = "";
-  String get errorAddOrUpdateResearch => _errorAddOrUpdateResearch = "";
+  String get errorAddOrUpdateResearch => _errorAddOrUpdateResearch;
 
-  bool _isLoadingGetConcurrents = false;
-  bool get isLoadingGetConcurrents => _isLoadingGetConcurrents;
-  String _errorGetConcurrents = "";
-  String get errorGetConcurrents => _errorGetConcurrents = "";
+  bool _isLoadingConcurrents = false;
+  bool get isLoadingConcurrents => _isLoadingConcurrents;
+  String _errorConcurrents = "";
+  String get errorConcurrents => _errorConcurrents;
   final List<ConcurrentsModel> _concurrents = [];
   List<ConcurrentsModel> get concurrents => [..._concurrents];
   int get concurrentsCount => _concurrents.length;
   FocusNode concurrentsFocusNode = FocusNode();
 
-  bool _isLoadingCreateConcurrents = false;
-  bool get isLoadingCreateConcurrents => _isLoadingCreateConcurrents;
-  String _errorCreateConcurrents = "";
-  String get errorCreateConcurrents => _errorCreateConcurrents = "";
-
   void clearResearchPrices() {
     _researchPrices.clear();
+    _errorGetResearchPrices = "";
+    _isLoadingGetResearchPrices = false;
     notifyListeners();
   }
 
@@ -46,39 +43,44 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getResearchPrices({required bool isExactCode}) async {
+  Future<void> _getResearchPrices({
+    required bool isExactCode,
+    required int enterpriseCode,
+  }) async {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "CrossIdentity": UserData.crossIdentity,
-          "EnterpriseCode": 1,
-          // "InitialCreationDate": DateTime.MinValue,
-          // "FinalCreationDate": DateTime.Now,
-          "SearchValue": isExactCode
-              //ExactCode = 1, ApproximateName = 2
-              ? 1
-              : 2,
-          "SearchTypeInt": 2
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseCode,
+          // "creationDate" : "",
         },
-        typeOfResponse: "UserCanLoginJsonResponse",
-        SOAPAction: "UserCanLoginJson",
-        serviceASMX: "CeltaSecurityService.asmx",
-        typeOfResult: "UserCanLoginJsonResult",
+        typeOfResponse: "GetResearchOfPriceResponse",
+        SOAPAction: "GetResearchOfPrice",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+        typeOfResult: "GetResearchOfPriceResult",
       );
       _errorGetResearchPrices = SoapHelperResponseParameters.errorMessage;
     } catch (e) {}
   }
 
-  Future<void> getResearchPrices(
-    BuildContext context,
-  ) async {
+  Future<void> getResearchPrices({
+    required BuildContext context,
+    required bool notifyListenersFromUpdate,
+    required int enterpriseCode,
+  }) async {
     _errorGetResearchPrices = "";
     _isLoadingGetResearchPrices = true;
-    notifyListeners();
+    if (notifyListenersFromUpdate) notifyListeners();
 
-    await _getResearchPrices(isExactCode: true);
-    if (_researchPrices == 0) {
-      await _getResearchPrices(isExactCode: false);
+    await _getResearchPrices(
+      isExactCode: true,
+      enterpriseCode: enterpriseCode,
+    );
+    if (researchPricesCount == 0) {
+      await _getResearchPrices(
+        isExactCode: false,
+        enterpriseCode: enterpriseCode,
+      );
     }
 
     if (_errorGetResearchPrices != "") {
@@ -102,32 +104,36 @@ class ResearchPricesProvider with ChangeNotifier {
     required bool isNewResearch,
     required String name,
     required String observations,
+    required int enterpriseCode,
   }) async {
     _isLoadingAddOrUpdateResearch = true;
     _errorAddOrUpdateResearch = "";
     notifyListeners();
 
     try {
+      var jsonBody = json.encode(
+        {
+          "CrossIdentity": UserData.crossIdentity,
+          "Code": 1,
+          "EnterpriseCode": 1,
+          "EnterpriseName": "EnterpriseName",
+          "CreationDate": "2024-02-27T16:31:58.4818772-03:00",
+          "Name": "Name",
+          "Observation": "Observations",
+        },
+      );
       await SoapHelper.soapPost(
         parameters: {
-          "CrossIdentity": UserData.crossIdentity,
-          "Code": isNewResearch
-              ? 1
-              : 0, //Inserir ou alterar depende do código estar preenchido
-          "EnterpriseCode": 1,
-          // "EnterpriseName": "EnterpriseName",
-          "CreationDate": DateTime.now().toString(),
-          "Name": name,
-          "Observation": observations,
+          "Json": jsonBody,
         },
-        typeOfResponse: "UserCanLoginJsonResponse",
-        SOAPAction: "UserCanLoginJson",
-        serviceASMX: "CeltaSecurityService.asmx",
-        typeOfResult: "UserCanLoginJsonResult",
+        typeOfResponse: "InsertUpdateResearchOfPriceResponse",
+        SOAPAction: "InsertUpdateResearchOfPrice",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+        typeOfResult: "InsertUpdateResearchOfPriceResult",
       );
 
       _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
-      if (_errorGetResearchPrices != "") {
+      if (_errorAddOrUpdateResearch != "") {
         ShowSnackbarMessage.showMessage(
           message: _errorAddOrUpdateResearch,
           context: context,
@@ -139,84 +145,104 @@ class ResearchPricesProvider with ChangeNotifier {
         //converter os dados para ResearchPricesModel
       }
     } catch (e) {
-      _errorGetResearchPrices = SoapHelperResponseParameters.errorMessage;
+      print(e.toString());
+      _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
+    }
+
+    if (_errorAddOrUpdateResearch != "") {
+      ShowSnackbarMessage.showMessage(
+        message: _errorAddOrUpdateResearch,
+        context: context,
+      );
     }
 
     _isLoadingAddOrUpdateResearch = false;
     notifyListeners();
   }
 
-  Future<void> createConcurrentPrices(
-    BuildContext context,
-  ) async {
-    _errorCreateConcurrents = "";
-    _isLoadingCreateConcurrents = true;
+  Future<void> createConcurrentPrices({
+    required BuildContext context,
+    // required int researchOfPriceCode,
+    // required String concurrentCode,
+    // required String observation,
+    // required String adress,
+  }) async {
+    _errorConcurrents = "";
+    _isLoadingConcurrents = true;
     notifyListeners();
 
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "ResearchOfPriceCode": 0,
-          "ConcurrentCode": 0,
-          "Name": "Name",
-          "Observation": "Observation",
-          // "Address" : JsonAddress.Default(),
+          "json": json.encode({
+            "ResearchOfPriceCode": 0,
+            "ConcurrentCode": 0,
+            "Name": "Name",
+            "Observation": "Observation",
+            "Address": "teste",
+          })
         },
-        typeOfResponse: "UserCanLoginJsonResponse",
-        SOAPAction: "UserCanLoginJson",
-        serviceASMX: "CeltaSecurityService.asmx",
-        typeOfResult: "UserCanLoginJsonResult",
+        typeOfResponse: "InsertUpdateConcurrentJsonResponse",
+        SOAPAction: "InsertUpdateConcurrentJson",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+        typeOfResult: "InsertUpdateConcurrentJsonResult",
       );
-      _errorCreateConcurrents = SoapHelperResponseParameters.errorMessage;
-    } catch (e) {}
-
-    if (_errorCreateConcurrents != "") {
-      ShowSnackbarMessage.showMessage(
-        message: _errorCreateConcurrents,
-        context: context,
-      );
-    } else {
-      //converter os dados para ResearchPricesModel
-      // Map resultAsMap =
-      //     json.decode(SoapHelperResponseParameters.responseAsString);
+      _errorConcurrents = SoapHelperResponseParameters.errorMessage;
+    } catch (e) {
+      _errorConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
 
-    _isLoadingCreateConcurrents = false;
+    // if (_errorConcurrents != "") {
+    //   ShowSnackbarMessage.showMessage(
+    //     message: _errorConcurrents,
+    //     context: context,
+    //   );
+    // } else {
+    //   //converter os dados para ResearchPricesModel
+    //   // Map resultAsMap =
+    //   //     json.decode(SoapHelperResponseParameters.responseAsString);
+    // }
+
+    _isLoadingConcurrents = false;
     notifyListeners();
   }
 
   Future<void> _getConcurrents({required bool isExactCode}) async {
+    var jsonBody = json.encode({
+      "CrossIdentity": UserData.crossIdentity,
+      "SearchValue": "",
+      "SearchTypeInt": isExactCode ? 1 : 2,
+    });
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "CrossIdentity": "CrossIdentity",
-          "SearchValue": isExactCode ? 1 : 2,
-          "SearchTypeInt": 2,
+          "json": jsonBody,
         },
-        typeOfResponse: "UserCanLoginJsonResponse",
-        SOAPAction: "UserCanLoginJson",
-        serviceASMX: "CeltaSecurityService.asmx",
-        typeOfResult: "UserCanLoginJsonResult",
+        SOAPAction: "GetConcurrentJson",
+        typeOfResponse: "GetConcurrentJsonResponse",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+        typeOfResult: "GetConcurrentJsonResult",
       );
-      _errorGetConcurrents = SoapHelperResponseParameters.errorMessage;
+      _errorConcurrents = SoapHelperResponseParameters.errorMessage;
     } catch (e) {}
   }
 
-  Future<void> getConcurrents(
-    BuildContext context,
-  ) async {
-    _errorGetConcurrents = "";
-    _isLoadingGetConcurrents = true;
-    notifyListeners();
+  Future<void> getConcurrents({
+    required BuildContext context,
+    required bool notifyListenersFromUpdate,
+  }) async {
+    _errorConcurrents = "";
+    _isLoadingConcurrents = true;
+    if (notifyListenersFromUpdate) notifyListeners();
 
     await _getConcurrents(isExactCode: true);
-    if (_concurrents == 0) {
+    if (concurrentsCount == 0) {
       await _getConcurrents(isExactCode: false);
     }
 
-    if (_errorGetConcurrents != "") {
+    if (_errorConcurrents != "") {
       ShowSnackbarMessage.showMessage(
-        message: _errorGetConcurrents,
+        message: _errorConcurrents,
         context: context,
       );
     } else {
@@ -226,7 +252,7 @@ class ResearchPricesProvider with ChangeNotifier {
       _concurrents.add(resultAsMap as ConcurrentsModel);
     }
 
-    _isLoadingGetConcurrents = false;
+    _isLoadingConcurrents = false;
     notifyListeners();
   }
 }

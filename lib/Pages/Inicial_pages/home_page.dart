@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
               imagePath: 'lib/assets/Images/search_concurrent_price.jpg',
               routine: 'Preços concorrentes',
               route: APPROUTES.ENTERPRISE,
-              nextRoute: APPROUTES.SEARCH_CONCURRENT_PRICES,
+              nextRoute: APPROUTES.RESEARCH_PRICES,
               context: context,
             ),
           ],

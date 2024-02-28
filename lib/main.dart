@@ -207,8 +207,12 @@ class MyApp extends StatelessWidget {
           APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
           APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
           APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
-          APPROUTES.SEARCH_CONCURRENT_PRICES: (ctx) =>
-              const ResearchConcurrentPricesPage(),
+          APPROUTES.RESEARCH_PRICES: (ctx) =>
+              const ResearchPricesPage(),
+          APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE: (ctx) =>
+              const InsertOrUpdateResearchPrice(),
+          APPROUTES.RESEARCH_PRICES_CONCURRENTS: (ctx) =>
+              const ConcurrentsPage(),
         },
       ),
     );

@@ -1,26 +1,44 @@
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
+import '/components/research_prices/research_prices.dart';
 
 class ConcurrentsPage extends StatefulWidget {
   const ConcurrentsPage({Key? key}) : super(key: key);
 
   @override
-  State<ConcurrentsPage> createState() =>
-      _ResearchConcurrentPricesPageState();
+  State<ConcurrentsPage> createState() => _ConcurrentsPageState();
 }
 
-class _ResearchConcurrentPricesPageState
-    extends State<ConcurrentsPage> {
-  final TextEditingController _searchConcurrentsController =
-      TextEditingController();
+class _ConcurrentsPageState extends State<ConcurrentsPage> {
+  Future<void> _getConcurrents({
+    required bool notifyListenersFromUpdate,
+    required ResearchPricesProvider researchPricesProvider,
+  }) async {
+    await researchPricesProvider.getConcurrents(
+      context: context,
+      notifyListenersFromUpdate: notifyListenersFromUpdate,
+    );
+  }
 
+  bool _isLoaded = false;
   @override
-  void dispose() {
-    super.dispose();
-    _searchConcurrentsController.dispose();
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    ResearchPricesProvider researchPricesProvider =
+        Provider.of(context, listen: true);
+
+    if (!_isLoaded) {
+      await _getConcurrents(
+        notifyListenersFromUpdate: false,
+        researchPricesProvider: researchPricesProvider,
+      );
+    }
+
+    _isLoaded = true;
   }
 
   @override
@@ -35,11 +53,11 @@ class _ResearchConcurrentPricesPageState
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'PREÇOS CONCORRENTES',
+            'CONCORRENTES',
           ),
           leading: IconButton(
             onPressed: () {
-              researchPricesProvider.clearResearchPrices();
+              researchPricesProvider.clearConcurrents();
               Navigator.of(context).pop();
             },
             icon: const Icon(
@@ -50,51 +68,53 @@ class _ResearchConcurrentPricesPageState
         body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            SearchWidget(
-              focusNodeConsultProduct:
-                  researchPricesProvider.researchPricesFocusNode,
-              isLoading: researchPricesProvider.isLoadingResearchPrices,
-              onPressSearch: () async {
-                await researchPricesProvider.getResearchPrices(context);
-
-                //não estava funcionando passar o productsCount como parâmetro
-                //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                //textEditingController após a consulta dos produtos se encontrar
-                //algum produto
-                if (researchPricesProvider.researchPricesCount > 0) {
-                  //se for maior que 0 significa que deu certo a consulta e
-                  //por isso pode apagar o que foi escrito no campo de
-                  //consulta
-                  _searchConcurrentsController.clear();
-                }
+            ElevatedButton(
+              onPressed: () async {
+                await _getConcurrents(
+                  notifyListenersFromUpdate: true,
+                  researchPricesProvider: researchPricesProvider,
+                );
               },
-              consultProductController: _searchConcurrentsController,
+              child: const Text("Consultar novamente"),
             ),
-            if (researchPricesProvider.isLoadingResearchPrices)
+            if (researchPricesProvider.isLoadingConcurrents)
               Expanded(
                 child: SearchingWidget(
-                  title: 'Consultando pesquisas de preço',
+                  title: 'Pesquisando concorrentes',
                 ),
               ),
-            if (researchPricesProvider.errorGetResearchPrices != "" &&
-                researchPricesProvider.researchPricesCount == 0)
+            if (researchPricesProvider.errorConcurrents != "" &&
+                researchPricesProvider.concurrentsCount == 0)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ErrorMessage(
-                    errorMessage: researchPricesProvider.errorGetResearchPrices),
+                    errorMessage: researchPricesProvider.errorConcurrents),
               ),
-            Container(),
-            // if (!researchPricesProvider.isLoadingResearchPrices)
+            // if (!researchPricesProvider.isLoadingConcurrents)
             // PriceConferenceItems(
             //   researchPricesProvider: researchPricesProvider,
             //   internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
             // ),
             // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
-            //     researchPricesProvider.researchPricesCount > 1)
+            //     researchPricesProvider.concurrentsCount > 1)
             //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
             //   PriceConferenceOrderProductsButtons(
             //       researchPricesProvider: researchPricesProvider)
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          tooltip: "Nova pesquisa de preços",
+          backgroundColor: researchPricesProvider.isLoadingConcurrents
+              ? Colors.grey.withOpacity(0.75)
+              : Colors.red.withOpacity(0.75),
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return const ConcurrentsModalBottom();
+                });
+          },
         ),
       ),
     );

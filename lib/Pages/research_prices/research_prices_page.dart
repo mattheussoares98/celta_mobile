@@ -1,20 +1,19 @@
+import 'package:celta_inventario/providers/research_prices_provider.dart';
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
-import '../../components/research_prices/research_prices.dart';
 
-class ResearchConcurrentPricesPage extends StatefulWidget {
-  const ResearchConcurrentPricesPage({Key? key}) : super(key: key);
+class ResearchPricesPage extends StatefulWidget {
+  const ResearchPricesPage({Key? key}) : super(key: key);
 
   @override
-  State<ResearchConcurrentPricesPage> createState() =>
-      _ResearchConcurrentPricesPageState();
+  State<ResearchPricesPage> createState() => _ResearchPricesPageState();
 }
 
-class _ResearchConcurrentPricesPageState
-    extends State<ResearchConcurrentPricesPage> {
+class _ResearchPricesPageState extends State<ResearchPricesPage> {
   final TextEditingController _searchResearchsController =
       TextEditingController();
 
@@ -22,6 +21,34 @@ class _ResearchConcurrentPricesPageState
   void dispose() {
     super.dispose();
     _searchResearchsController.dispose();
+  }
+
+  Future<void> _getResearchPrices({
+    required bool notityListenersFromUpdate,
+    required ResearchPricesProvider researchPricesProvider,
+  }) async {
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    await researchPricesProvider.getResearchPrices(
+      context: context,
+      notifyListenersFromUpdate: notityListenersFromUpdate,
+      enterpriseCode: arguments["CodigoInterno_Empresa"],
+    );
+  }
+
+  bool _isLoaded = false;
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if (!_isLoaded) {
+      ResearchPricesProvider researchPricesProvider =
+          Provider.of(context, listen: true);
+      await _getResearchPrices(
+        notityListenersFromUpdate: false,
+        researchPricesProvider: researchPricesProvider,
+      );
+      _isLoaded = true;
+    }
   }
 
   @override
@@ -32,11 +59,15 @@ class _ResearchConcurrentPricesPageState
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) async {},
+      onPopInvoked: (_) async {
+        researchPricesProvider.clearResearchPrices();
+      },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'PESQUISAS CADASTRADAS',
+          title: const FittedBox(
+            child: Text(
+              'PESQUISAS CADASTRADAS',
+            ),
           ),
           leading: IconButton(
             onPressed: () {
@@ -47,6 +78,20 @@ class _ResearchConcurrentPricesPageState
               Icons.arrow_back_outlined,
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: researchPricesProvider.isLoadingResearchPrices
+                  ? null
+                  : () async {
+                      await _getResearchPrices(
+                        notityListenersFromUpdate: true,
+                        researchPricesProvider: researchPricesProvider,
+                      );
+                    },
+              tooltip: "Consultar recebimentos",
+              icon: const Icon(Icons.refresh),
+            ),
+          ],
         ),
         body: Column(
           mainAxisSize: MainAxisSize.max,
@@ -77,19 +122,28 @@ class _ResearchConcurrentPricesPageState
             //       researchPricesProvider: researchPricesProvider)
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          tooltip: "Nova pesquisa de preços",
-          onPressed: () {
-            researchPricesModalBottom(
-              context: context,
-              isNewResearch: true,
-              isLoading: researchPricesProvider.isLoadingResearchPrices,
-              name: "name",
-              observations: "observations",
-              researchPricesProvider: researchPricesProvider,
-            );
+        floatingActionButton: GestureDetector(
+          onTap: (){
+             Navigator.of(context)
+                .pushNamed(APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE);
           },
+          child: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            minRadius: 35,
+            maxRadius: 35,
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: FittedBox(
+                child: Center(
+                  child: Text(
+                    "nova\npesquisa",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

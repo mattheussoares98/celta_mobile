@@ -119,6 +119,7 @@ class SoapHelper {
       } else {
         SoapHelperResponseParameters.errorMessage =
             DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+            print(response.body);
         throw Exception('Failed to load data');
       }
     } catch (e) {
