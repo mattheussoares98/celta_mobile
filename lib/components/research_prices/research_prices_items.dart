@@ -7,7 +7,11 @@ import '../../utils/utils.dart';
 import '../global_widgets/global_widgets.dart';
 
 class ResearchPricesItems extends StatefulWidget {
-  const ResearchPricesItems({Key? key}) : super(key: key);
+  final int enterpriseCode;
+  const ResearchPricesItems({
+    required this.enterpriseCode,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ResearchPricesItems> createState() => _ResearchPricesItemsState();
@@ -51,29 +55,39 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Concorrentes",
-                  value: research.Concurrents.toString(),
+                  value: research.Concurrents.isEmpty
+                      ? "Não há"
+                      : research.Concurrents.toString(),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Observação",
-                  value: research.Observation.toString(),
-                  otherWidget: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
-                        arguments: research,
-                      );
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      size: 30,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  value: research.Observation.isEmpty
+                      ? "Não há"
+                      : research.Observation,
+                ),
+                if (research.Products?.isNotEmpty == true)
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text("Visualizar produtos"),
                   ),
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Produtos",
-                  value: research.Products.toString(),
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+                          arguments: {
+                            "research": research,
+                            "enterpriseCode": widget.enterpriseCode,
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.edit),
+                      label: const Text("Alterar pesquisa"),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

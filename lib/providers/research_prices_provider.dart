@@ -104,10 +104,11 @@ class ResearchPricesProvider with ChangeNotifier {
 
   Future<void> addOrUpdateResearch({
     required BuildContext context,
-    required bool isNewResearch,
-    required String name,
-    required String observations,
     required int enterpriseCode,
+    String? enterpriseName,
+    String? observation,
+    String? researchName,
+    ResearchModel? research,
   }) async {
     _isLoadingAddOrUpdateResearch = true;
     _errorAddOrUpdateResearch = "";
@@ -117,12 +118,12 @@ class ResearchPricesProvider with ChangeNotifier {
       var jsonBody = json.encode(
         {
           "CrossIdentity": UserData.crossIdentity,
-          "Code": 1,
-          "EnterpriseCode": 1,
-          "EnterpriseName": "EnterpriseName",
-          "CreationDate": "2024-02-27T16:31:58.4818772-03:00",
-          "Name": "Name",
-          "Observation": "Observations",
+          "Code": research == null ? 0 : research.Code,
+          "EnterpriseCode": enterpriseCode,
+          "EnterpriseName": enterpriseName,
+          "CreationDate": DateTime.now().toIso8601String(),
+          "Name": researchName,
+          "Observation": observation,
         },
       );
       await SoapHelper.soapPost(

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
-import '/components/research_prices/research_prices.dart';
 
 class ConcurrentsPage extends StatefulWidget {
   const ConcurrentsPage({Key? key}) : super(key: key);
@@ -108,13 +107,7 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
           backgroundColor: researchPricesProvider.isLoadingConcurrents
               ? Colors.grey.withOpacity(0.75)
               : Colors.red.withOpacity(0.75),
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return const ConcurrentsModalBottom();
-                });
-          },
+          onPressed: () {},
         ),
       ),
     );

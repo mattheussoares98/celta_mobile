@@ -27,20 +27,22 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
     required bool notityListenersFromUpdate,
     required ResearchPricesProvider researchPricesProvider,
   }) async {
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
     await researchPricesProvider.getResearchPrices(
       context: context,
       notifyListenersFromUpdate: notityListenersFromUpdate,
-      enterpriseCode: arguments["CodigoInterno_Empresa"],
+      enterpriseCode: enterpriseCode!,
     );
   }
 
   bool _isLoaded = false;
+  int? enterpriseCode;
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
     if (!_isLoaded) {
+      Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      enterpriseCode = arguments["CodigoInterno_Empresa"];
       ResearchPricesProvider researchPricesProvider =
           Provider.of(context, listen: true);
       await _getResearchPrices(
@@ -55,7 +57,6 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider =
         Provider.of(context, listen: true);
-    // Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return PopScope(
       canPop: true,
@@ -111,16 +112,22 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                         researchPricesProvider.errorGetResearchPrices),
               ),
             if (researchPricesProvider.researchPricesCount > 0)
-              const ResearchPricesItems(),
+              ResearchPricesItems(enterpriseCode: enterpriseCode!),
           ],
         ),
         floatingActionButton: GestureDetector(
-          onTap: () {
-            Navigator.of(context)
-                .pushNamed(APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE);
-          },
+          onTap: researchPricesProvider.isLoadingResearchPrices
+              ? null
+              : () {
+                  Navigator.of(context).pushNamed(
+                    APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+                    arguments: {"enterpriseCode": enterpriseCode},
+                  );
+                },
           child: CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: researchPricesProvider.isLoadingResearchPrices
+                ? Colors.grey
+                : Theme.of(context).colorScheme.primary,
             minRadius: 35,
             maxRadius: 35,
             child: const Padding(
