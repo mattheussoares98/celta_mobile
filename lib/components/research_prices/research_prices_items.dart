@@ -56,6 +56,19 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Observação",
                   value: research.Observation.toString(),
+                  otherWidget: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+                        arguments: research,
+                      );
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      size: 30,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Produtos",
