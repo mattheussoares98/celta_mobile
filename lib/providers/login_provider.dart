@@ -53,6 +53,7 @@ class LoginProvider with ChangeNotifier {
     _isLoading = true;
     UserData.userName = user;
     await PrefsInstance.setUserName();
+    await PrefsInstance.setUrlCcsAndEnterpriseName();
     notifyListeners();
 
     if (_changedEnterpriseNameOrUrlCcs) {
@@ -108,7 +109,6 @@ class LoginProvider with ChangeNotifier {
         UserData.crossIdentity = toParker2['string'];
 
         await PrefsInstance.setUserIdentity();
-        await PrefsInstance.setUrlCcsAndEnterpriseName();
         await FirebaseHelper.addCcsClientInFirebase();
 
         _loginController?.add(true);
