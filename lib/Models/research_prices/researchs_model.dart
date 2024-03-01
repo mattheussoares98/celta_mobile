@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../Models/research_prices/research_prices.dart';
+import '../../models/research_prices/research_prices.dart';
 
 class ResearchModel {
   final int Code;
@@ -34,19 +34,12 @@ class ResearchModel {
           Code: element["Code"],
           CreationDate: DateTime.parse(element["CreationDate"]),
           Observation: element["Observation"],
-          Concurrents: convertConcurrents(element["Concurrents"]),
+          Concurrents: ConcurrentsModel.convertToConcurrents(element["Concurrents"]),
           Products: element["Products"],
         ),
       );
     });
   }
 
-  static List<ConcurrentsModel> convertConcurrents(List concurrents) {
-    List<ConcurrentsModel> list = [];
-    concurrents.forEach((element) {
-      list.add(ConcurrentsModel.fromJson(element));
-    });
 
-    return list;
-  }
 }

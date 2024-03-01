@@ -1,10 +1,10 @@
-import 'package:celta_inventario/models/research_prices/research_prices.dart';
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/utils.dart';
 import '../global_widgets/global_widgets.dart';
+import '../../models/research_prices/research_prices.dart';
+import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class ResearchPricesItems extends StatefulWidget {
   final int enterpriseCode;
@@ -25,71 +25,53 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
     required ResearchPricesProvider researchPricesProvider,
   }) {
     ResearchModel research = researchPricesProvider.researchPrices[index];
-    return Container(
-      child: InkWell(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-          if (researchPricesProvider.isLoadingResearchPrices ||
-              researchPricesProvider.isLoadingAddOrUpdateResearch) return;
-          setState(() {
-            if (selectedIndex == index) {
-              selectedIndex = -1;
-            } else {
-              selectedIndex = index;
-            }
-          });
-        },
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Código",
-                  value: research.Code.toString(),
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Data de criação",
-                  value: research.CreationDate.toString(),
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Concorrentes",
-                  value: research.Concurrents.isEmpty
-                      ? "Não há"
-                      : research.Concurrents.toString(),
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Observação",
-                  value: research.Observation.isEmpty
-                      ? "Não há"
-                      : research.Observation,
-                ),
-                if (research.Products?.isNotEmpty == true)
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text("Visualizar produtos"),
+    return InkWell(
+      onTap: () {
+        researchPricesProvider.updateSelectedResearch(research);
+        Navigator.of(context).pushNamed(
+          APPROUTES.CONCURRENTS,
+          arguments: widget.enterpriseCode,
+        );
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Código",
+                value: research.Code.toString(),
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Data de criação",
+                value: research.CreationDate.toString(),
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Observação",
+                value: research.Observation.isEmpty
+                    ? "Não há"
+                    : research.Observation,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      researchPricesProvider.updateSelectedResearch(research);
+                      Navigator.of(context).pushNamed(
+                        APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+                        arguments: {
+                          "enterpriseCode": widget.enterpriseCode,
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.edit),
+                    label: const Text("Alterar pesquisa"),
                   ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
-                          arguments: {
-                            "research": research,
-                            "enterpriseCode": widget.enterpriseCode,
-                          },
-                        );
-                      },
-                      icon: const Icon(Icons.edit),
-                      label: const Text("Alterar pesquisa"),
-                    ),
-                  ],
-                )
-              ],
-            ),
+                ],
+              )
+            ],
           ),
         ),
       ),

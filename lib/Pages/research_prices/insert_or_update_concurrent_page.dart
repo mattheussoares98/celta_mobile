@@ -1,38 +1,33 @@
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../providers/providers.dart';
 import '../../models/research_prices/research_prices.dart';
 
-class InsertOrUpdateResearchPrice extends StatefulWidget {
-  const InsertOrUpdateResearchPrice({super.key});
+class InsertOrUpdateConcurrentPage extends StatefulWidget {
+  const InsertOrUpdateConcurrentPage({super.key});
 
   @override
-  State<InsertOrUpdateResearchPrice> createState() =>
-      _InsertOrUpdateResearchPriceState();
+  State<InsertOrUpdateConcurrentPage> createState() =>
+      _InsertOrUpdateConcurrentPageState();
 }
 
-class _InsertOrUpdateResearchPriceState
-    extends State<InsertOrUpdateResearchPrice> {
-  FocusNode enterpriseNameFocusNode = FocusNode();
-  TextEditingController enterpriseNameController = TextEditingController();
-
+class _InsertOrUpdateConcurrentPageState
+    extends State<InsertOrUpdateConcurrentPage> {
   FocusNode nameFocusNode = FocusNode();
-  TextEditingController researchNameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   FocusNode observationFocusNode = FocusNode();
   TextEditingController observationController = TextEditingController();
 
-  void _updateControllers(ResearchModel? research) {
-    if (research != null) {
-      observationController.text = research.Observation;
-      enterpriseNameController.text = research.EnterpriseName ?? "";
-      researchNameController.text = research.Name ?? "";
+  void _updateControllers(ConcurrentsModel? concurrent) {
+    if (concurrent != null) {
+      observationController.text = concurrent.Observation;
+      nameController.text = concurrent.Name;
     }
   }
 
-  ResearchModel? research;
   int? enterpriseCode;
 
   bool _isLoaded = false;
@@ -41,11 +36,12 @@ class _InsertOrUpdateResearchPriceState
     super.didChangeDependencies();
 
     if (!_isLoaded) {
+      ResearchPricesProvider researchPricesProvider = Provider.of(context);
+
       _isLoaded = true;
-      Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
-      research = arguments["research"];
-      enterpriseCode = arguments["enterpriseCode"];
-      _updateControllers(research);
+      enterpriseCode = ModalRoute.of(context)!.settings.arguments as int;
+
+      _updateControllers(researchPricesProvider.selectedConcurrent);
     }
   }
 
@@ -55,8 +51,12 @@ class _InsertOrUpdateResearchPriceState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          research == null ? "Cadastrar pesquisa" : "Alterar pesquisa",
+        title: FittedBox(
+          child: Text(
+            researchPricesProvider.selectedConcurrent == null
+                ? "Cadastrar concorrente"
+                : "Alterar concorrente",
+          ),
         ),
         leading: IconButton(
           onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
@@ -78,7 +78,7 @@ class _InsertOrUpdateResearchPriceState
                 autofocus: true,
                 focusNode: nameFocusNode,
                 enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
-                controller: researchNameController,
+                controller: nameController,
                 decoration: FormFieldHelper.decoration(
                   isLoading:
                       researchPricesProvider.isLoadingAddOrUpdateResearch,
@@ -109,22 +109,6 @@ class _InsertOrUpdateResearchPriceState
                 style: FormFieldHelper.style(),
               ),
               const SizedBox(height: 8),
-              TextFormField(
-                focusNode: enterpriseNameFocusNode,
-                enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
-                controller: enterpriseNameController,
-                decoration: FormFieldHelper.decoration(
-                  isLoading:
-                      researchPricesProvider.isLoadingAddOrUpdateResearch,
-                  context: context,
-                  labelText: 'Nome da empresa',
-                ),
-                onFieldSubmitted: (_) async {
-                  FocusScope.of(context).requestFocus();
-                },
-                style: FormFieldHelper.style(),
-              ),
-              const SizedBox(height: 8),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(200, 40),
@@ -132,21 +116,15 @@ class _InsertOrUpdateResearchPriceState
                 onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
                     ? null
                     : () async {
-                        await researchPricesProvider.addOrUpdateResearch(
-                          context: context,
-                          research: research,
-                          enterpriseCode: enterpriseCode!,
-                          enterpriseName: enterpriseNameController.text,
-                          observation: observationController.text,
-                          researchName: researchNameController.text,
-                        );
+                        await researchPricesProvider.addOrUpdateConcurrent(
+                            context: context);
                       },
                 child: researchPricesProvider.isLoadingAddOrUpdateResearch
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            research == null
+                            researchPricesProvider.selectedConcurrent == null
                                 ? "CADASTRANDO..."
                                 : "ALTERARANDO...",
                           ),
@@ -155,7 +133,9 @@ class _InsertOrUpdateResearchPriceState
                         ],
                       )
                     : Text(
-                        research == null ? "CADASTRAR" : "ALTERAR",
+                        researchPricesProvider.selectedConcurrent == null
+                            ? "CADASTRAR"
+                            : "ALTERAR",
                       ),
               ),
             ],

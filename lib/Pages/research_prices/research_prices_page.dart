@@ -94,55 +94,42 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
             ),
           ],
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            if (researchPricesProvider.isLoadingResearchPrices)
-              Expanded(
-                child: SearchingWidget(
-                  title: 'Consultando pesquisas de preço',
-                ),
-              ),
-            if (researchPricesProvider.errorGetResearchPrices != "" &&
-                researchPricesProvider.researchPricesCount == 0)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ErrorMessage(
-                    errorMessage:
-                        researchPricesProvider.errorGetResearchPrices),
-              ),
-            if (researchPricesProvider.researchPricesCount > 0)
-              ResearchPricesItems(enterpriseCode: enterpriseCode!),
-          ],
-        ),
-        floatingActionButton: GestureDetector(
-          onTap: researchPricesProvider.isLoadingResearchPrices
-              ? null
-              : () {
-                  Navigator.of(context).pushNamed(
-                    APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
-                    arguments: {"enterpriseCode": enterpriseCode},
-                  );
-                },
-          child: CircleAvatar(
-            backgroundColor: researchPricesProvider.isLoadingResearchPrices
-                ? Colors.grey
-                : Theme.of(context).colorScheme.primary,
-            minRadius: 35,
-            maxRadius: 35,
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: FittedBox(
-                child: Center(
-                  child: Text(
-                    "nova\npesquisa",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await _getResearchPrices(
+              notityListenersFromUpdate: true,
+              researchPricesProvider: researchPricesProvider,
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              if (researchPricesProvider.isLoadingResearchPrices)
+                Expanded(
+                  child: SearchingWidget(
+                    title: 'Consultando pesquisas de preço',
                   ),
                 ),
-              ),
-            ),
+              if (researchPricesProvider.errorGetResearchPrices != "" &&
+                  researchPricesProvider.researchPricesCount == 0)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ErrorMessage(
+                      errorMessage:
+                          researchPricesProvider.errorGetResearchPrices),
+                ),
+              if (researchPricesProvider.researchPricesCount > 0)
+                ResearchPricesItems(enterpriseCode: enterpriseCode!),
+            ],
           ),
+        ),
+        floatingActionButton: floatingPersonalizedButton(
+          context: context,
+          researchPricesProvider: researchPricesProvider,
+          nextRoute: APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+          isLoading: researchPricesProvider.isLoadingResearchPrices,
+          messageButton: "criar\npesquisa".toUpperCase(),
+          arguments: {"enterpriseCode": enterpriseCode},
         ),
       ),
     );

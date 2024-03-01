@@ -211,8 +211,10 @@ class MyApp extends StatelessWidget {
               const ResearchPricesPage(),
           APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE: (ctx) =>
               const InsertOrUpdateResearchPrice(),
-          APPROUTES.RESEARCH_PRICES_CONCURRENTS: (ctx) =>
+          APPROUTES.CONCURRENTS: (ctx) =>
               const ConcurrentsPage(),
+          APPROUTES.INSERT_OR_UPDATE_CONCORRENT: (ctx) =>
+              const InsertOrUpdateConcurrentPage(),
         },
       ),
     );

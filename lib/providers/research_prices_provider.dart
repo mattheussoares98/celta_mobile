@@ -31,10 +31,23 @@ class ResearchPricesProvider with ChangeNotifier {
   int get concurrentsCount => _concurrents.length;
   FocusNode concurrentsFocusNode = FocusNode();
 
+  ResearchModel? _selectedResearch;
+  ResearchModel? get selectedResearch => _selectedResearch;
+  updateSelectedResearch(ResearchModel? research) {
+    _selectedResearch = research;
+  }
+
+  ConcurrentsModel? _selectedConcurrent;
+  ConcurrentsModel? get selectedConcurrent => _selectedConcurrent;
+  updateSelectedConcurrent(ConcurrentsModel? concurrent) {
+    _selectedConcurrent = concurrent;
+  }
+
   void clearResearchPrices() {
     _researchPrices.clear();
     _errorGetResearchPrices = "";
     _isLoadingGetResearchPrices = false;
+    updateSelectedResearch(null);
     notifyListeners();
   }
 
@@ -42,6 +55,7 @@ class ResearchPricesProvider with ChangeNotifier {
     _concurrents.clear();
     _errorConcurrents = "";
     _isLoadingConcurrents = false;
+    updateSelectedConcurrent(null);
     notifyListeners();
   }
 
@@ -164,7 +178,7 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createConcurrentPrices({
+  Future<void> addOrUpdateConcurrent({
     required BuildContext context,
     // required int researchOfPriceCode,
     // required String concurrentCode,
@@ -179,19 +193,28 @@ class ResearchPricesProvider with ChangeNotifier {
       await SoapHelper.soapPost(
         parameters: {
           "json": json.encode({
+            "CrossIdentity": UserData.crossIdentity,
             "ResearchOfPriceCode": 0,
             "ConcurrentCode": 0,
-            "Name": "Name",
-            "Observation": "Observation",
-            "Address": "teste",
+            "Name": "novo concorrente",
+            "Observation": "nova observação",
           })
         },
+        // "Address": "teste",
         typeOfResponse: "InsertUpdateConcurrentJsonResponse",
         SOAPAction: "InsertUpdateConcurrentJson",
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "InsertUpdateConcurrentJsonResult",
       );
       _errorConcurrents = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorConcurrents == "") {
+        ShowSnackbarMessage.showMessage(
+          message: "Concorrente inserido com sucesso!",
+          backgroundColor: Colors.green,
+          context: context,
+        );
+      }
     } catch (e) {
       _errorConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
@@ -211,11 +234,15 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getConcurrents({required bool isExactCode}) async {
+  Future<void> _getConcurrents({
+    required bool isExactCode,
+    required BuildContext context,
+  }) async {
     var jsonBody = json.encode({
       "CrossIdentity": UserData.crossIdentity,
-      "SearchValue": "",
-      "SearchTypeInt": isExactCode ? 1 : 2,
+      "SearchValue":
+          "%", // "SearchTypeInt - ExactCode = 1, ApproximateName = 2"
+      "SearchTypeInt": 2,
     });
     try {
       await SoapHelper.soapPost(
@@ -228,6 +255,13 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "GetConcurrentJsonResult",
       );
       _errorConcurrents = SoapHelperResponseParameters.errorMessage;
+
+      List resultAsList =
+          json.decode(SoapHelperResponseParameters.responseAsString);
+      ConcurrentsModel.addConcurrentsWithResultAsList(
+        listToAdd: _concurrents,
+        resultAsList: resultAsList,
+      );
     } catch (e) {}
   }
 
@@ -235,26 +269,11 @@ class ResearchPricesProvider with ChangeNotifier {
     required BuildContext context,
     required bool notifyListenersFromUpdate,
   }) async {
-    _errorConcurrents = "";
+    clearConcurrents();
     _isLoadingConcurrents = true;
     if (notifyListenersFromUpdate) notifyListeners();
 
-    await _getConcurrents(isExactCode: true);
-    if (concurrentsCount == 0) {
-      await _getConcurrents(isExactCode: false);
-    }
-
-    if (_errorConcurrents != "") {
-      ShowSnackbarMessage.showMessage(
-        message: _errorConcurrents,
-        context: context,
-      );
-    } else {
-      //converter os dados para ResearchPricesModel
-      Map resultAsMap =
-          json.decode(SoapHelperResponseParameters.responseAsString);
-      _concurrents.add(resultAsMap as ConcurrentsModel);
-    }
+    await _getConcurrents(isExactCode: false, context: context);
 
     _isLoadingConcurrents = false;
     notifyListeners();

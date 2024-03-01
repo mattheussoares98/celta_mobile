@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
+import '../../components/research_prices/research_prices.dart';
+import '../../utils/utils.dart';
 
 class ConcurrentsPage extends StatefulWidget {
   const ConcurrentsPage({Key? key}) : super(key: key);
@@ -44,11 +46,12 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider =
         Provider.of(context, listen: true);
-    // Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) async {},
+      onPopInvoked: (_) async {
+        researchPricesProvider.clearConcurrents();
+      },
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -56,6 +59,7 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
           ),
           leading: IconButton(
             onPressed: () {
+              researchPricesProvider.updateSelectedConcurrent(null);
               researchPricesProvider.clearConcurrents();
               Navigator.of(context).pop();
             },
@@ -82,6 +86,8 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
                   title: 'Pesquisando concorrentes',
                 ),
               ),
+            if (researchPricesProvider.concurrentsCount > 0)
+              const ConcurrentsItems(),
             if (researchPricesProvider.errorConcurrents != "" &&
                 researchPricesProvider.concurrentsCount == 0)
               Padding(
@@ -89,25 +95,14 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
                 child: ErrorMessage(
                     errorMessage: researchPricesProvider.errorConcurrents),
               ),
-            // if (!researchPricesProvider.isLoadingConcurrents)
-            // PriceConferenceItems(
-            //   researchPricesProvider: researchPricesProvider,
-            //   internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
-            // ),
-            // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
-            //     researchPricesProvider.concurrentsCount > 1)
-            //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
-            //   PriceConferenceOrderProductsButtons(
-            //       researchPricesProvider: researchPricesProvider)
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          tooltip: "Nova pesquisa de preços",
-          backgroundColor: researchPricesProvider.isLoadingConcurrents
-              ? Colors.grey.withOpacity(0.75)
-              : Colors.red.withOpacity(0.75),
-          onPressed: () {},
+        floatingActionButton: floatingPersonalizedButton(
+          context: context,
+          researchPricesProvider: researchPricesProvider,
+          nextRoute: APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+          isLoading: researchPricesProvider.isLoadingResearchPrices,
+          messageButton: "criar\nconcorrente".toUpperCase(),
         ),
       ),
     );
