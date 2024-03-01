@@ -17,6 +17,8 @@ class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider =
         Provider.of(context, listen: true);
+    AddressProvider addressProvider = Provider.of(context, listen: true);
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -24,7 +26,7 @@ class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
             CustomerRegisterPersonalDataInformeds(
               customerRegisterProvider: customerRegisterProvider,
             ),
-          if (customerRegisterProvider.adressesCount > 0)
+          if (addressProvider.adressesCount > 0)
             const CustomerRegisterAdressesInformeds(),
           if (customerRegisterProvider.emailsCount > 0)
             const CustomerRegisterEmailsInformeds(),

@@ -1,7 +1,7 @@
+import 'package:celta_inventario/models/address/address.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/customer_register/customer_register.dart';
 import '../../providers/providers.dart';
 import '../global_widgets/global_widgets.dart';
 
@@ -18,18 +18,19 @@ class CustomerRegisterAdressesInformeds extends StatefulWidget {
 class _CustomerRegisterAdressesInformedsState
     extends State<CustomerRegisterAdressesInformeds> {
   String _getState({
-    required CustomerRegisterProvider customerRegisterProvider,
-    required CustomerRegisterCepModel customerRegisterCepModel,
+    required AddressProvider addressProvider,
+    required AddressModel addressModel,
   }) {
-    int? index =
-        customerRegisterProvider.adresses.indexOf(customerRegisterCepModel);
+    int? index = addressProvider.adresses.indexOf(addressModel);
 
-    return customerRegisterProvider.adresses[index].State!;
+    return addressProvider.adresses[index].State!;
   }
 
   @override
   Widget build(BuildContext context) {
+    AddressProvider addressProvider = Provider.of(context);
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+
     return Column(
       children: [
         const Divider(
@@ -47,10 +48,9 @@ class _CustomerRegisterAdressesInformedsState
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: customerRegisterProvider.adressesCount,
+          itemCount: addressProvider.adressesCount,
           itemBuilder: ((context, index) {
-            CustomerRegisterCepModel customerRegisterCepModel =
-                customerRegisterProvider.adresses[index];
+            AddressModel addressModel = addressProvider.adresses[index];
 
             return Card(
               child: Padding(
@@ -59,40 +59,40 @@ class _CustomerRegisterAdressesInformedsState
                   children: [
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "CEP",
-                      value: customerRegisterCepModel.Zip,
+                      value: addressModel.Zip,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Logradouro",
-                      value: customerRegisterCepModel.Address,
+                      value: addressModel.Address,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Bairro",
-                      value: customerRegisterCepModel.District,
+                      value: addressModel.District,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Cidade",
-                      value: customerRegisterCepModel.City,
+                      value: addressModel.City,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Estado",
                       value: _getState(
-                        customerRegisterProvider: customerRegisterProvider,
-                        customerRegisterCepModel: customerRegisterCepModel,
+                        addressProvider: addressProvider,
+                        addressModel: addressModel,
                       ),
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Número",
-                      value: customerRegisterCepModel.Number.toString(),
+                      value: addressModel.Number.toString(),
                     ),
-                    if (customerRegisterCepModel.Complement != "")
+                    if (addressModel.Complement != "")
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Complemento",
-                        value: customerRegisterCepModel.Complement,
+                        value: addressModel.Complement,
                       ),
-                    if (customerRegisterCepModel.Reference != "")
+                    if (addressModel.Reference != "")
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Referência",
-                        value: customerRegisterCepModel.Reference,
+                        value: addressModel.Reference,
                       ),
                     ElevatedButton(
                       style: ButtonStyle(
@@ -106,20 +106,20 @@ class _CustomerRegisterAdressesInformedsState
                         maximumSize: const MaterialStatePropertyAll(
                             Size(double.infinity, 30)),
                       ),
-                      onPressed: customerRegisterProvider
-                              .isLoadingInsertCustomer
-                          ? null
-                          : () {
-                              ShowAlertDialog.showAlertDialog(
-                                context: context,
-                                title: "Remover endereço",
-                                subtitle:
-                                    "Deseja realmente remover o endereço?",
-                                function: () {
-                                  customerRegisterProvider.removeAdress(index);
+                      onPressed:
+                          customerRegisterProvider.isLoadingInsertCustomer
+                              ? null
+                              : () {
+                                  ShowAlertDialog.showAlertDialog(
+                                    context: context,
+                                    title: "Remover endereço",
+                                    subtitle:
+                                        "Deseja realmente remover o endereço?",
+                                    function: () {
+                                      addressProvider.removeAdress(index);
+                                    },
+                                  );
                                 },
-                              );
-                            },
                       child: const Text("Remover endereço"),
                     ),
                   ],

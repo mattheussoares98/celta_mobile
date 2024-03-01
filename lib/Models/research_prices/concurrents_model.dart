@@ -1,11 +1,11 @@
-import './research_prices.dart';
+import '../../models/address/address.dart';
 
 class ConcurrentsModel {
   final int ResearchOfPriceCode;
   final int ConcurrentCode;
   final String Name;
   final String Observation;
-  final AdressModel Address;
+  final AddressModel Address;
 
   ConcurrentsModel({
     required this.ResearchOfPriceCode,
@@ -21,7 +21,7 @@ class ConcurrentsModel {
       ConcurrentCode: json["ConcurrentCode"],
       Name: json["Name"],
       Observation: json["Observation"],
-      Address: AdressModel.fromJson(json["Address"]),
+      Address: AddressModel.fromJson(json["Address"]),
     );
   }
 

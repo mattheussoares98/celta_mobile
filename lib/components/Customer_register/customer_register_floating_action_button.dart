@@ -23,12 +23,13 @@ class _CustomerRegisterFloatingActionButtonState
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+    AddressProvider addressProvider = Provider.of(context);
 
     return InkWell(
       onTap: customerRegisterProvider.isLoadingInsertCustomer
           ? null
           : () async {
-              if (customerRegisterProvider.adressesCount == 0) {
+              if (addressProvider.adressesCount == 0) {
                 setState(() {
                   widget.changeSelectedIndexToAddAddres();
                 });
@@ -38,7 +39,7 @@ class _CustomerRegisterFloatingActionButtonState
                   title: "Cadastrar cliente",
                   subtitle: "Deseja confirmar o cadastro do cliente?",
                   function: () async {
-                    await customerRegisterProvider.insertCustomer();
+                    await customerRegisterProvider.insertCustomer(addressProvider);
 
                     if (customerRegisterProvider.errorMessageInsertCustomer ==
                         "") {
@@ -102,7 +103,7 @@ class _CustomerRegisterFloatingActionButtonState
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        customerRegisterProvider.adressesCount > 0
+                        addressProvider.adressesCount > 0
                             ? "SALVAR"
                             : "Adicione\num\nendereço",
                         textAlign: TextAlign.center,
@@ -111,7 +112,7 @@ class _CustomerRegisterFloatingActionButtonState
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      if (customerRegisterProvider.adressesCount > 0)
+                      if (addressProvider.adressesCount > 0)
                         const Icon(
                           Icons.person_add,
                           color: Colors.white,

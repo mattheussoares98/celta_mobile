@@ -63,16 +63,18 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   bool _formKeyIsValid() {
     CustomerRegisterProvider customerRegisterProvider =
         Provider.of(context, listen: false);
+
+    AddressProvider addressProvider = Provider.of(context, listen: false);
     if (_selectedIndex == 0) {
       customerRegisterProvider.personFormKeyIsValid =
           _personFormKey.currentState!.validate();
       return customerRegisterProvider.personFormKeyIsValid;
     }
     if (_selectedIndex == 1) {
-      customerRegisterProvider.adressFormKeyIsValid =
+      addressProvider.adressFormKeyIsValid =
           _adressFormKey.currentState!.validate();
 
-      return customerRegisterProvider.adressFormKeyIsValid;
+      return addressProvider.adressFormKeyIsValid;
     }
     if (_selectedIndex == 2) {
       customerRegisterProvider.emailFormKeyIsValid =
@@ -91,35 +93,32 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     }
   }
 
-  bool _hasAdressInformed({
-    required CustomerRegisterProvider customerRegisterProvider,
-  }) {
-    return customerRegisterProvider.adressController.text.isNotEmpty ||
-        customerRegisterProvider.cityController.text.isNotEmpty ||
-        customerRegisterProvider.complementController.text.isNotEmpty ||
-        customerRegisterProvider.districtController.text.isNotEmpty ||
-        customerRegisterProvider.selectedStateDropDown.value != null ||
-        customerRegisterProvider.numberController.text.isNotEmpty ||
-        customerRegisterProvider.referenceController.text.isNotEmpty ||
-        customerRegisterProvider.cepController.text.isNotEmpty;
+  bool _hasAdressInformed(
+    AddressProvider addressProvider,
+  ) {
+    return addressProvider.adressController.text.isNotEmpty ||
+        addressProvider.cityController.text.isNotEmpty ||
+        addressProvider.complementController.text.isNotEmpty ||
+        addressProvider.districtController.text.isNotEmpty ||
+        addressProvider.selectedStateDropDown.value != null ||
+        addressProvider.numberController.text.isNotEmpty ||
+        addressProvider.referenceController.text.isNotEmpty ||
+        addressProvider.cepController.text.isNotEmpty;
   }
 
   void _onItemTapped({
     required int index,
     // required SaleRequestProvider saleRequestProvider,
   }) {
-    CustomerRegisterProvider customerRegisterProvider =
-        Provider.of(context, listen: false);
+    AddressProvider addressProvider = Provider.of(context, listen: false);
 
-    bool hasAdressInformed =
-        _hasAdressInformed(customerRegisterProvider: customerRegisterProvider);
+    bool hasAdressInformed = _hasAdressInformed(addressProvider);
 
     String errorMessage = "Informe os dados necessários!";
-    if (hasAdressInformed && customerRegisterProvider.adressFormKeyIsValid) {
+    if (hasAdressInformed && addressProvider.adressFormKeyIsValid) {
       errorMessage =
           "Adicione o endereço ou apague os dados para mudar de tela!";
-    } else if (hasAdressInformed &&
-        !customerRegisterProvider.adressFormKeyIsValid) {
+    } else if (hasAdressInformed && !addressProvider.adressFormKeyIsValid) {
       errorMessage = "Corrija os dados e salve o endereço para mudar de tela!";
     }
 
@@ -135,10 +134,13 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     }
   }
 
-  bool canExitPage(CustomerRegisterProvider customerRegisterProvider) {
+  bool canExitPage({
+    required CustomerRegisterProvider customerRegisterProvider,
+    required AddressProvider addressProvider,
+  }) {
     if (_selectedIndex == 1 &&
         _hasAdressInformed(
-          customerRegisterProvider: customerRegisterProvider,
+          addressProvider,
         )) {
       // ShowSnackbarMessage.showMessage(
       //   message:
@@ -159,7 +161,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       CustomerRegisterPersonalDataPage(
         personFormKey: _personFormKey,
       ),
-      CustomerRegisterAdressesPage(
+      AddressComponent(
         validateAdressFormKey: _formKeyIsValid,
         adressFormKey: _adressFormKey,
       ),
@@ -175,19 +177,29 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     ];
 
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+    AddressProvider addressProvider = Provider.of(context);
     // customerRegisterProvider.changeIsLoadingInsertCustomer();
     return PopScope(
-      canPop: canExitPage(customerRegisterProvider),
+      canPop: canExitPage(
+        addressProvider: addressProvider,
+        customerRegisterProvider: customerRegisterProvider,
+      ),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
             appBarTitles[_selectedIndex],
           ),
           leading: IconButton(
-            onPressed: !canExitPage(customerRegisterProvider)
+            onPressed: !canExitPage(
+              addressProvider: addressProvider,
+              customerRegisterProvider: customerRegisterProvider,
+            )
                 ? null
                 : () {
-                    if (canExitPage(customerRegisterProvider)) {
+                    if (canExitPage(
+                      addressProvider: addressProvider,
+                      customerRegisterProvider: customerRegisterProvider,
+                    )) {
                       Navigator.of(context).pop();
                     }
                   },
@@ -211,9 +223,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               label: 'Endereço',
               icon: iconAccordingFormIsValid(
                 icon: Icons.room_outlined,
-                hasDataAndIsValid:
-                    customerRegisterProvider.adressFormKeyIsValid &&
-                        customerRegisterProvider.adressesCount > 0,
+                hasDataAndIsValid: addressProvider.adressFormKeyIsValid &&
+                    addressProvider.adressesCount > 0,
               ),
             ),
             BottomNavigationBarItem(
@@ -239,8 +250,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                 icon: Icons.check,
                 hasDataAndIsValid:
                     customerRegisterProvider.personFormKeyIsValid &&
-                        (customerRegisterProvider.adressFormKeyIsValid &&
-                            customerRegisterProvider.adressesCount > 0),
+                        (addressProvider.adressFormKeyIsValid &&
+                            addressProvider.adressesCount > 0),
               ),
               label: 'Salvar',
             ),
@@ -279,7 +290,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                         "Deseja realmente limpar todos os dados do pedido?",
                                     function: () {
                                       customerRegisterProvider
-                                          .clearAllDataInformed();
+                                          .clearAllDataInformed(addressProvider);
                                     },
                                   );
                                 },
@@ -301,7 +312,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     changeFormKeysToInvalid: () {
                       setState(() {
                         customerRegisterProvider.personFormKeyIsValid = false;
-                        customerRegisterProvider.adressFormKeyIsValid = false;
+                        addressProvider.adressFormKeyIsValid = false;
                         customerRegisterProvider.emailFormKeyIsValid = false;
                         customerRegisterProvider.telephoneFormKeyIsValid =
                             false;

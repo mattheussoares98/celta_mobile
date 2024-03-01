@@ -12,3 +12,4 @@ export './show_alert_dialog.dart';
 export './show_all_stocks.dart';
 export './show_snackbar_message.dart';
 export './title_and_value.dart';
+export './address_component.dart';

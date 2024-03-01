@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/customer_register/customer_register.dart';
-import '../../components/global_widgets/global_widgets.dart';
+import '../customer_register/customer_register.dart';
+import './global_widgets.dart';
 import '../../providers/providers.dart';
 
-class CustomerRegisterAdressesPage extends StatefulWidget {
+class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
   final Function validateAdressFormKey;
-  const CustomerRegisterAdressesPage({
+  const AddressComponent({
     required this.adressFormKey,
     Key? key,
     required this.validateAdressFormKey,
   }) : super(key: key);
 
   @override
-  State<CustomerRegisterAdressesPage> createState() =>
-      _CustomerRegisterAdressesPageState();
+  State<AddressComponent> createState() => _AddressComponentState();
 }
 
-class _CustomerRegisterAdressesPageState
-    extends State<CustomerRegisterAdressesPage> {
+class _AddressComponentState extends State<AddressComponent> {
   final FocusNode _cepFocusNode = FocusNode();
   final FocusNode _adressFocusNode = FocusNode();
   final FocusNode _districtFocusNode = FocusNode();
@@ -29,12 +27,11 @@ class _CustomerRegisterAdressesPageState
   final FocusNode _numberFocusNode = FocusNode();
   final FocusNode _complementFocusNode = FocusNode();
   final FocusNode _referenceFocusNode = FocusNode();
-  String teste = "São Paulo";
 
   _getAdressByCep({
-    required CustomerRegisterProvider customerRegisterProvider,
+    required AddressProvider addressProvider,
   }) async {
-    if (customerRegisterProvider.cepController.text.length < 8) {
+    if (addressProvider.cepController.text.length < 8) {
       ShowSnackbarMessage.showMessage(
         message: "O CEP deve conter 8 dígitos!",
         context: context,
@@ -43,17 +40,17 @@ class _CustomerRegisterAdressesPageState
       return;
     }
 
-    await customerRegisterProvider.getAddressByCep(
+    await addressProvider.getAddressByCep(
       context: context,
     );
 
-    if (customerRegisterProvider.errorMessageGetAdressByCep == "") {
+    if (addressProvider.errorMessageGetAdressByCep == "") {
       Future.delayed(const Duration(milliseconds: 100), () {
         FocusScope.of(context).requestFocus(_numberFocusNode);
       });
     } else {
       ShowSnackbarMessage.showMessage(
-        message: customerRegisterProvider.errorMessageGetAdressByCep,
+        message: addressProvider.errorMessageGetAdressByCep,
         context: context,
       );
     }
@@ -65,10 +62,9 @@ class _CustomerRegisterAdressesPageState
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    CustomerRegisterProvider customerRegisterProvider =
+    AddressProvider addressProvider =
         Provider.of(context, listen: true);
-    _selectedStateDropDown.value =
-        customerRegisterProvider.selectedStateDropDown.value;
+    _selectedStateDropDown.value = addressProvider.selectedStateDropDown.value;
   }
 
   @override
@@ -86,7 +82,7 @@ class _CustomerRegisterAdressesPageState
 
   @override
   Widget build(BuildContext context) {
-    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+    AddressProvider addressProvider = Provider.of(context);
     return SingleChildScrollView(
       child: Form(
         key: widget.adressFormKey,
@@ -94,17 +90,17 @@ class _CustomerRegisterAdressesPageState
           children: [
             CustomerRegisterFormField(
               keyboardType: TextInputType.number,
-              enabled: customerRegisterProvider.isLoadingCep ? false : true,
+              enabled: addressProvider.isLoadingCep ? false : true,
               focusNode: _cepFocusNode,
-              onFieldSubmitted: customerRegisterProvider.isLoadingCep
+              onFieldSubmitted: addressProvider.isLoadingCep
                   ? null
                   : (String? value) async {
                       await _getAdressByCep(
-                        customerRegisterProvider: customerRegisterProvider,
+                        addressProvider: addressProvider,
                       );
                     },
               labelText: "CEP",
-              textEditingController: customerRegisterProvider.cepController,
+              textEditingController: addressProvider.cepController,
               limitOfCaracters: 8,
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
@@ -120,7 +116,7 @@ class _CustomerRegisterAdressesPageState
                 return null;
               },
               suffixWidget: TextButton(
-                child: customerRegisterProvider.isLoadingCep
+                child: addressProvider.isLoadingCep
                     ? const FittedBox(
                         child: Row(
                           children: [
@@ -142,25 +138,23 @@ class _CustomerRegisterAdressesPageState
                         ),
                       )
                     : const Text("Pesquisar CEP"),
-                onPressed: customerRegisterProvider.isLoadingCep
+                onPressed: addressProvider.isLoadingCep
                     ? null
                     : () async {
                         await _getAdressByCep(
-                          customerRegisterProvider: customerRegisterProvider,
+                          addressProvider: addressProvider,
                         );
                       },
               ),
             ),
-            if (customerRegisterProvider.triedGetCep)
+            if (addressProvider.triedGetCep)
               Column(
                 children: [
                   CustomerRegisterFormField(
-                    enabled:
-                        customerRegisterProvider.isLoadingCep ? false : true,
+                    enabled: addressProvider.isLoadingCep ? false : true,
                     focusNode: _adressFocusNode,
                     labelText: "Logradouro",
-                    textEditingController:
-                        customerRegisterProvider.adressController,
+                    textEditingController: addressProvider.adressController,
                     limitOfCaracters: 40,
                     onFieldSubmitted: (value) {
                       FocusScope.of(context).requestFocus(_districtFocusNode);
@@ -169,8 +163,7 @@ class _CustomerRegisterAdressesPageState
                       if ((value == null ||
                               value.isEmpty ||
                               value.length < 5) &&
-                          customerRegisterProvider.cepController.text.length ==
-                              8) {
+                          addressProvider.cepController.text.length == 8) {
                         return "Logradouro muito curto";
                       }
                       return null;
@@ -180,28 +173,22 @@ class _CustomerRegisterAdressesPageState
                     children: [
                       Expanded(
                         child: CustomerRegisterFormField(
-                          enabled: customerRegisterProvider.isLoadingCep
-                              ? false
-                              : true,
+                          enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _districtFocusNode,
-                          onFieldSubmitted:
-                              customerRegisterProvider.isLoadingCep
-                                  ? null
-                                  : (String? value) {
-                                      FocusScope.of(context)
-                                          .requestFocus(_cityFocusNode);
-                                    },
+                          onFieldSubmitted: addressProvider.isLoadingCep
+                              ? null
+                              : (String? value) {
+                                  FocusScope.of(context)
+                                      .requestFocus(_cityFocusNode);
+                                },
                           labelText: "Bairro",
-                          textEditingController:
-                              customerRegisterProvider.districtController,
+                          textEditingController: addressProvider.districtController,
                           limitOfCaracters: 30,
                           validator: (String? value) {
                             if ((value == null ||
                                     value.isEmpty ||
                                     value.length < 2) &&
-                                customerRegisterProvider
-                                        .cepController.text.length ==
-                                    8) {
+                                addressProvider.cepController.text.length == 8) {
                               return "Bairro muito curto";
                             }
                             return null;
@@ -210,13 +197,10 @@ class _CustomerRegisterAdressesPageState
                       ),
                       Expanded(
                         child: CustomerRegisterFormField(
-                          enabled: customerRegisterProvider.isLoadingCep
-                              ? false
-                              : true,
+                          enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _cityFocusNode,
                           labelText: "Cidade",
-                          textEditingController:
-                              customerRegisterProvider.cityController,
+                          textEditingController: addressProvider.cityController,
                           limitOfCaracters: 30,
                           onFieldSubmitted: (value) {
                             FocusScope.of(context)
@@ -226,9 +210,7 @@ class _CustomerRegisterAdressesPageState
                             if ((value == null ||
                                     value.isEmpty ||
                                     value.length < 2) &&
-                                customerRegisterProvider
-                                        .cepController.text.length ==
-                                    8) {
+                                addressProvider.cepController.text.length == 8) {
                               return "Cidade muito curta";
                             }
                             return null;
@@ -244,29 +226,6 @@ class _CustomerRegisterAdressesPageState
                         child: DropdownButtonFormField<dynamic>(
                           focusNode: _stateFocusNode,
                           value: _selectedStateDropDown.value,
-                          // disabledHint: transferBetweenPackageProvider
-                          //         .isLoadingTypeStockAndJustifications
-                          //     ? Row(
-                          //         mainAxisAlignment: MainAxisAlignment.center,
-                          //         children: [
-                          //           const FittedBox(
-                          //             child: Text(
-                          //               "Consultando",
-                          //               textAlign: TextAlign.center,
-                          //               style: const TextStyle(
-                          //                 fontSize: 60,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           const SizedBox(width: 15),
-                          //           Container(
-                          //             height: 15,
-                          //             width: 15,
-                          //             child: const CircularProgressIndicator(),
-                          //           ),
-                          //         ],
-                          //       )
-                          //     : const Center(child: Text("Justificativas")),
                           isExpanded: true,
                           hint: Center(
                             child: Text(
@@ -279,20 +238,18 @@ class _CustomerRegisterAdressesPageState
                           ),
                           validator: (value) {
                             if (value == null &&
-                                customerRegisterProvider
-                                        .cepController.text.length ==
-                                    8) {
+                                addressProvider.cepController.text.length == 8) {
                               return 'Selecione um estado!';
                             }
                             return null;
                           },
-                          onChanged: customerRegisterProvider.isLoadingCep
+                          onChanged: addressProvider.isLoadingCep
                               ? null
                               : (value) {
-                                  customerRegisterProvider
-                                      .selectedStateDropDown.value = value;
+                                  addressProvider.selectedStateDropDown.value =
+                                      value;
                                 },
-                          items: customerRegisterProvider.states
+                          items: addressProvider.states
                               .map(
                                 (value) => DropdownMenuItem(
                                   alignment: Alignment.center,
@@ -322,28 +279,22 @@ class _CustomerRegisterAdressesPageState
                         flex: 4,
                         child: CustomerRegisterFormField(
                           keyboardType: TextInputType.number,
-                          enabled: customerRegisterProvider.isLoadingCep
-                              ? false
-                              : true,
+                          enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _numberFocusNode,
-                          onFieldSubmitted:
-                              customerRegisterProvider.isLoadingCep
-                                  ? null
-                                  : (String? value) async {
-                                      FocusScope.of(context)
-                                          .requestFocus(_complementFocusNode);
-                                    },
+                          onFieldSubmitted: addressProvider.isLoadingCep
+                              ? null
+                              : (String? value) async {
+                                  FocusScope.of(context)
+                                      .requestFocus(_complementFocusNode);
+                                },
                           labelText: "Número",
-                          textEditingController:
-                              customerRegisterProvider.numberController,
+                          textEditingController: addressProvider.numberController,
                           limitOfCaracters: 6,
                           validator: (String? value) {
                             if ((value == null ||
                                     value.isEmpty ||
                                     value.length < 1) &&
-                                customerRegisterProvider
-                                        .cepController.text.length ==
-                                    8) {
+                                addressProvider.cepController.text.length == 8) {
                               return "Digite o número!";
                             } else if (value!.contains("\.") ||
                                 value.contains("\,") ||
@@ -361,20 +312,16 @@ class _CustomerRegisterAdressesPageState
                     children: [
                       Expanded(
                         child: CustomerRegisterFormField(
-                          enabled: customerRegisterProvider.isLoadingCep
-                              ? false
-                              : true,
+                          enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _complementFocusNode,
-                          onFieldSubmitted:
-                              customerRegisterProvider.isLoadingCep
-                                  ? null
-                                  : (String? value) {
-                                      FocusScope.of(context)
-                                          .requestFocus(_referenceFocusNode);
-                                    },
+                          onFieldSubmitted: addressProvider.isLoadingCep
+                              ? null
+                              : (String? value) {
+                                  FocusScope.of(context)
+                                      .requestFocus(_referenceFocusNode);
+                                },
                           labelText: "Complemento",
-                          textEditingController:
-                              customerRegisterProvider.complementController,
+                          textEditingController: addressProvider.complementController,
                           limitOfCaracters: 30,
                           validator: (String? value) {
                             return null;
@@ -383,13 +330,10 @@ class _CustomerRegisterAdressesPageState
                       ),
                       Expanded(
                         child: CustomerRegisterFormField(
-                          enabled: customerRegisterProvider.isLoadingCep
-                              ? false
-                              : true,
+                          enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _referenceFocusNode,
                           labelText: "Referência",
-                          textEditingController:
-                              customerRegisterProvider.referenceController,
+                          textEditingController: addressProvider.referenceController,
                           limitOfCaracters: 40,
                           validator: (String? value) {
                             return null;
@@ -413,8 +357,7 @@ class _CustomerRegisterAdressesPageState
                               subtitle:
                                   "Deseja apagar todos os dados preenchidos?",
                               function: () {
-                                customerRegisterProvider
-                                    .clearAdressControllers();
+                                addressProvider.clearAdressControllers(clearCep: true);
                               },
                             );
                           },
@@ -430,20 +373,18 @@ class _CustomerRegisterAdressesPageState
                             backgroundColor:
                                 Theme.of(context).colorScheme.primary,
                           ),
-                          onPressed: customerRegisterProvider.isLoadingCep
+                          onPressed: addressProvider.isLoadingCep
                               ? null
                               : () {
                                   bool isValid = widget.validateAdressFormKey();
 
                                   if (isValid &&
-                                      customerRegisterProvider
-                                          .cepController.text.isNotEmpty) {
-                                    customerRegisterProvider.addAdress();
-                                    if (customerRegisterProvider
-                                            .errorMessageAddAddres !=
+                                      addressProvider.cepController.text.isNotEmpty) {
+                                    addressProvider.addAdress();
+                                    if (addressProvider.errorMessageAddAddres !=
                                         "") {
                                       ShowSnackbarMessage.showMessage(
-                                        message: customerRegisterProvider
+                                        message: addressProvider
                                             .errorMessageAddAddres,
                                         context: context,
                                       );
@@ -469,7 +410,7 @@ class _CustomerRegisterAdressesPageState
                   ),
                 ],
               ),
-            if (customerRegisterProvider.adressesCount > 0)
+            if (addressProvider.adressesCount > 0)
               const CustomerRegisterAdressesInformeds(),
           ],
         ),

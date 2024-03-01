@@ -57,6 +57,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
         ChangeNotifierProvider(
             create: (_) => ResearchPricesProvider()),
+        ChangeNotifierProvider(
+            create: (_) => AddressProvider()),
       ],
       child: MaterialApp(
         localizationsDelegates: [
