@@ -81,25 +81,34 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
             ),
           ],
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            if (researchPricesProvider.isLoadingAddOrUpdateConcurrents)
-              Expanded(
-                child: SearchingWidget(
-                  title: 'Pesquisando concorrentes',
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await _getConcurrents(
+              notifyListenersFromUpdate: true,
+              researchPricesProvider: researchPricesProvider,
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              if (researchPricesProvider.isLoadingAddOrUpdateConcurrents)
+                Expanded(
+                  child: SearchingWidget(
+                    title: 'Pesquisando concorrentes',
+                  ),
                 ),
-              ),
-            if (researchPricesProvider.concurrentsCount > 0)
-              const ConcurrentsItems(),
-            if (researchPricesProvider.errorAddOrUpdateConcurrents != "" &&
-                researchPricesProvider.concurrentsCount == 0)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ErrorMessage(
-                    errorMessage: researchPricesProvider.errorAddOrUpdateConcurrents),
-              ),
-          ],
+              if (researchPricesProvider.concurrentsCount > 0)
+                const ConcurrentsItems(),
+              if (researchPricesProvider.errorAddOrUpdateConcurrents != "" &&
+                  researchPricesProvider.concurrentsCount == 0)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ErrorMessage(
+                      errorMessage:
+                          researchPricesProvider.errorAddOrUpdateConcurrents),
+                ),
+            ],
+          ),
         ),
         floatingActionButton: floatingPersonalizedButton(
             context: context,
