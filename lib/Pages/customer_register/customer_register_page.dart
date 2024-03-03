@@ -138,15 +138,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     required CustomerRegisterProvider customerRegisterProvider,
     required AddressProvider addressProvider,
   }) {
-    if (_selectedIndex == 1 &&
-        _hasAdressInformed(
-          addressProvider,
-        )) {
-      // ShowSnackbarMessage.showMessage(
-      //   message:
-      //       "Termine de adicionar o endereço ou apague os dados para sair da página",
-      //   context: context,
-      // );
+    if (_selectedIndex == 1 && _hasAdressInformed(addressProvider)) {
       return false;
     } else if (customerRegisterProvider.isLoadingInsertCustomer) {
       return false;
@@ -185,6 +177,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         addressProvider: addressProvider,
         customerRegisterProvider: customerRegisterProvider,
       ),
+      onPopInvoked: (_) {
+        addressProvider.clearAddresses();
+        addressProvider.clearAddressControllers(clearCep: true);
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -201,6 +197,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                       addressProvider: addressProvider,
                       customerRegisterProvider: customerRegisterProvider,
                     )) {
+                      addressProvider.clearAddresses();
+                      addressProvider.clearAddressControllers(clearCep: true);
                       Navigator.of(context).pop();
                     }
                   },
@@ -278,23 +276,23 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     padding: const EdgeInsets.only(left: 30.0),
                     child: FloatingActionButton(
                       tooltip: "Limpar todos os dados do pedido",
-                      onPressed:
-                          customerRegisterProvider.isLoadingInsertCustomer ||
+                      onPressed: customerRegisterProvider
+                                  .isLoadingInsertCustomer ||
+                              customerRegisterProvider
+                                  .nameController.text.isEmpty
+                          ? null
+                          : () {
+                              ShowAlertDialog.showAlertDialog(
+                                context: context,
+                                title: "Apagar TODOS dados",
+                                subtitle:
+                                    "Deseja realmente limpar todos os dados do pedido?",
+                                function: () {
                                   customerRegisterProvider
-                                      .nameController.text.isEmpty
-                              ? null
-                              : () {
-                                  ShowAlertDialog.showAlertDialog(
-                                    context: context,
-                                    title: "Apagar TODOS dados",
-                                    subtitle:
-                                        "Deseja realmente limpar todos os dados do pedido?",
-                                    function: () {
-                                      customerRegisterProvider
-                                          .clearAllDataInformed(addressProvider);
-                                    },
-                                  );
+                                      .clearAllDataInformed(addressProvider);
                                 },
+                              );
+                            },
                       child: const Icon(Icons.delete, color: Colors.white),
                       backgroundColor:
                           customerRegisterProvider.isLoadingInsertCustomer ||

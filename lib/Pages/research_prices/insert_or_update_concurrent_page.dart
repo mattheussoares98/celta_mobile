@@ -180,12 +180,8 @@ class _InsertOrUpdateConcurrentPageState
                                     .addOrUpdateConcurrent(
                                   context: context,
                                   address: addressProvider.addresses[0],
-                                  concurrentCode: researchPricesProvider
-                                      .selectedConcurrent?.ConcurrentCode,
                                   concurrentName: nameController.text,
                                   observation: observationController.text,
-                                  researchOfPriceCode: researchPricesProvider
-                                      .selectedResearch?.Code,
                                 );
 
                                 if (researchPricesProvider

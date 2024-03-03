@@ -182,8 +182,6 @@ class ResearchPricesProvider with ChangeNotifier {
     required AddressModel address,
     required String concurrentName,
     required String observation,
-    required int? concurrentCode,
-    required int? researchOfPriceCode,
   }) async {
     _errorAddOrUpdateConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = true;
@@ -194,8 +192,8 @@ class ResearchPricesProvider with ChangeNotifier {
         parameters: {
           "json": json.encode({
             "CrossIdentity": UserData.crossIdentity,
-            "ResearchOfPriceCode": researchOfPriceCode ?? 0,
-            "ConcurrentCode": concurrentCode ?? 0,
+            "ResearchOfPriceCode": _selectedResearch != null ? _selectedResearch!.Code : 0,
+            "ConcurrentCode": _selectedConcurrent != null ? _selectedConcurrent!.ConcurrentCode : 0,
             "Name": concurrentName,
             "Observation": observation,
             "Address": address,
