@@ -410,8 +410,8 @@ class _AddressComponentState extends State<AddressComponent> {
                   ),
                 ],
               ),
-            if (addressProvider.adressesCount > 0)
-              const CustomerRegisterAdressesInformeds(),
+            if (addressProvider.addressesCount > 0)
+              const CustomerRegisterAddressesInformeds(),
           ],
         ),
       ),

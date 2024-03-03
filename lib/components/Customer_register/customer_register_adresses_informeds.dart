@@ -5,25 +5,25 @@ import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 import '../global_widgets/global_widgets.dart';
 
-class CustomerRegisterAdressesInformeds extends StatefulWidget {
-  const CustomerRegisterAdressesInformeds({
+class CustomerRegisterAddressesInformeds extends StatefulWidget {
+  const CustomerRegisterAddressesInformeds({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CustomerRegisterAdressesInformeds> createState() =>
-      _CustomerRegisterAdressesInformedsState();
+  State<CustomerRegisterAddressesInformeds> createState() =>
+      _CustomerRegisterAddressesInformedsState();
 }
 
-class _CustomerRegisterAdressesInformedsState
-    extends State<CustomerRegisterAdressesInformeds> {
+class _CustomerRegisterAddressesInformedsState
+    extends State<CustomerRegisterAddressesInformeds> {
   String _getState({
     required AddressProvider addressProvider,
     required AddressModel addressModel,
   }) {
-    int? index = addressProvider.adresses.indexOf(addressModel);
+    int? index = addressProvider.addresses.indexOf(addressModel);
 
-    return addressProvider.adresses[index].State!;
+    return addressProvider.addresses[index].State!;
   }
 
   @override
@@ -48,9 +48,9 @@ class _CustomerRegisterAdressesInformedsState
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: addressProvider.adressesCount,
+          itemCount: addressProvider.addressesCount,
           itemBuilder: ((context, index) {
-            AddressModel addressModel = addressProvider.adresses[index];
+            AddressModel addressModel = addressProvider.addresses[index];
 
             return Card(
               child: Padding(

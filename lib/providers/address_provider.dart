@@ -17,7 +17,7 @@ class AddressProvider with ChangeNotifier {
 
   List<AddressModel> _addresses = [];
   List<AddressModel> get addresses => [..._addresses];
-  int get addressescount => _addresses.length;
+  int get addressesCount => _addresses.length;
 
   static const Map<String, String> _states = {
     "AC": "Acre",
@@ -93,10 +93,6 @@ class AddressProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<AddressModel> _adresses = [];
-  List<AddressModel> get adresses => [..._adresses];
-  int get adressesCount => _adresses.length;
-
   String _getKeyByValue(String value) {
     for (var entry in _states.entries) {
       if (entry.value == value) {
@@ -108,7 +104,7 @@ class AddressProvider with ChangeNotifier {
 
   void addAdress() {
     _errorMessageAddAddres = "";
-    _adresses.forEach((element) {
+    _addresses.forEach((element) {
       if (element.Zip == cepController.text &&
           element.Number == numberController.text) {
         _errorMessageAddAddres = "Já existe um endereço com esse CEP e número!";
@@ -116,7 +112,7 @@ class AddressProvider with ChangeNotifier {
     });
 
     if (_errorMessageAddAddres == "") {
-      _adresses.add(AddressModel(
+      _addresses.add(AddressModel(
         Address: adressController.text,
         City: cityController.text,
         Complement: complementController.text,
@@ -141,16 +137,15 @@ class AddressProvider with ChangeNotifier {
   }
 
   void removeAdress(int index) {
-    _adresses.removeAt(index);
+    _addresses.removeAt(index);
     notifyListeners();
   }
 
   AddressModel? _addressCustomerModel;
   get addressCustomerModel => _addressCustomerModel;
 
-  void clearAddresses(){
+  void clearAddresses() {
     _addresses.clear();
-    print("x");
   }
 
   Future<void> getAddressByCep({

@@ -178,7 +178,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     _jsonInsertCustomer["Emails"] = _emails;
     _jsonInsertCustomer["Telephones"] = _telephones;
     _jsonInsertCustomer["Addresses"] =
-        addressProvider.adresses.map((address) => address.toJson()).toList();
+        addressProvider.addresses.map((address) => address.toJson()).toList();
     _jsonInsertCustomer["Covenants"] = null;
   }
 

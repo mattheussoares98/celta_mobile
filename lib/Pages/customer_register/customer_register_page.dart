@@ -224,7 +224,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               icon: iconAccordingFormIsValid(
                 icon: Icons.room_outlined,
                 hasDataAndIsValid: addressProvider.adressFormKeyIsValid &&
-                    addressProvider.adressesCount > 0,
+                    addressProvider.addressesCount > 0,
               ),
             ),
             BottomNavigationBarItem(
@@ -251,7 +251,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                 hasDataAndIsValid:
                     customerRegisterProvider.personFormKeyIsValid &&
                         (addressProvider.adressFormKeyIsValid &&
-                            addressProvider.adressesCount > 0),
+                            addressProvider.addressesCount > 0),
               ),
               label: 'Salvar',
             ),
