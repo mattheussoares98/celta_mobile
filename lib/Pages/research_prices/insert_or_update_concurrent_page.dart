@@ -63,7 +63,8 @@ class _InsertOrUpdateConcurrentPageState
               ? null
               : () {
                   researchPricesProvider.updateSelectedConcurrent(null);
-                  researchPricesProvider.updateSelectedResearch(null);
+                  addressProvider.clearAddresses();
+                  addressProvider.clearAddressControllers(clearCep: true);
                   Navigator.of(context).pop();
                 },
           icon: const Icon(
@@ -75,8 +76,8 @@ class _InsertOrUpdateConcurrentPageState
         canPop: true,
         onPopInvoked: ((didPop) {
           researchPricesProvider.updateSelectedConcurrent(null);
-          researchPricesProvider.updateSelectedResearch(null);
           addressProvider.clearAddresses();
+          addressProvider.clearAddressControllers(clearCep: true);
         }),
         child: SingleChildScrollView(
           child: Padding(
@@ -164,9 +165,16 @@ class _InsertOrUpdateConcurrentPageState
                       : () async {
                           ShowAlertDialog.showAlertDialog(
                               context: context,
-                              title: "Cadastrar concorrente",
-                              subtitle:
-                                  "Deseja realmente cadastrar o concorrente com os dados informados?",
+                              title:
+                                  researchPricesProvider.selectedConcurrent ==
+                                          null
+                                      ? "Cadastrar concorrente"
+                                      : "Alterar concorrente",
+                              subtitle: researchPricesProvider
+                                          .selectedConcurrent ==
+                                      null
+                                  ? "Deseja realmente cadastrar o concorrente com os dados informados?"
+                                  : "Deseja realmente alterar o concorrente com os dados informados?",
                               function: () async {
                                 await researchPricesProvider
                                     .addOrUpdateConcurrent(

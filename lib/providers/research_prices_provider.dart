@@ -159,7 +159,7 @@ class ResearchPricesProvider with ChangeNotifier {
         Map resultAsMap =
             json.decode(SoapHelperResponseParameters.responseAsString);
         _researchPrices.add(resultAsMap as ResearchModel);
-        //converter os dados para ResearchPricesModel
+        _selectedResearch = null;
       }
     } catch (e) {
       print(e.toString());
@@ -213,10 +213,11 @@ class ResearchPricesProvider with ChangeNotifier {
     }
     if (_errorAddOrUpdateConcurrents == "") {
       ShowSnackbarMessage.showMessage(
-        message: "Concorrente inserido com sucesso!",
+        message: "Concorrente cadastrado/alterado com sucesso!",
         backgroundColor: Colors.green,
         context: context,
       );
+      _selectedConcurrent = null;
     } else {
       ShowSnackbarMessage.showMessage(
         message: _errorAddOrUpdateConcurrents,
