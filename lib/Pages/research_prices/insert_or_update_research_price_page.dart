@@ -135,8 +135,7 @@ class _InsertOrUpdateResearchPriceState
                     : () async {
                         await researchPricesProvider.addOrUpdateResearch(
                           context: context,
-                          research: researchPricesProvider.selectedResearch,
-                          enterpriseCode: arguments?["enterpriseCode"],
+                          enterpriseCode: arguments?["enterpriseCode"] ?? 0,
                           enterpriseName: enterpriseNameController.text,
                           observation: observationController.text,
                           researchName: researchNameController.text,

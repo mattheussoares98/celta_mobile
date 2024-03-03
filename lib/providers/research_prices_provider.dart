@@ -118,11 +118,10 @@ class ResearchPricesProvider with ChangeNotifier {
 
   Future<void> addOrUpdateResearch({
     required BuildContext context,
-    required int enterpriseCode,
+    required int? enterpriseCode,
     String? enterpriseName,
     String? observation,
     String? researchName,
-    ResearchModel? research,
   }) async {
     _isLoadingAddOrUpdateResearch = true;
     _errorAddOrUpdateResearch = "";
@@ -132,8 +131,8 @@ class ResearchPricesProvider with ChangeNotifier {
       var jsonBody = json.encode(
         {
           "CrossIdentity": UserData.crossIdentity,
-          "Code": research == null ? 0 : research.Code,
-          "EnterpriseCode": enterpriseCode,
+          "Code": _selectedResearch == null ? 0 : _selectedResearch?.Code,
+          "EnterpriseCode": _selectedResearch == null ? 0 : enterpriseCode,
           "EnterpriseName": enterpriseName,
           "CreationDate": DateTime.now().toIso8601String(),
           "Name": researchName,
@@ -209,7 +208,8 @@ class ResearchPricesProvider with ChangeNotifier {
       );
       _errorAddOrUpdateConcurrents = SoapHelperResponseParameters.errorMessage;
     } catch (e) {
-      _errorAddOrUpdateConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorAddOrUpdateConcurrents =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     if (_errorAddOrUpdateConcurrents == "") {
       ShowSnackbarMessage.showMessage(
