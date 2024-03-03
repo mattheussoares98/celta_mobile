@@ -71,10 +71,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       return customerRegisterProvider.personFormKeyIsValid;
     }
     if (_selectedIndex == 1) {
-      addressProvider.adressFormKeyIsValid =
+      addressProvider.addressFormKeyIsValid =
           _adressFormKey.currentState!.validate();
 
-      return addressProvider.adressFormKeyIsValid;
+      return addressProvider.addressFormKeyIsValid;
     }
     if (_selectedIndex == 2) {
       customerRegisterProvider.emailFormKeyIsValid =
@@ -96,7 +96,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   bool _hasAdressInformed(
     AddressProvider addressProvider,
   ) {
-    return addressProvider.adressController.text.isNotEmpty ||
+    return addressProvider.addressController.text.isNotEmpty ||
         addressProvider.cityController.text.isNotEmpty ||
         addressProvider.complementController.text.isNotEmpty ||
         addressProvider.districtController.text.isNotEmpty ||
@@ -115,10 +115,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     bool hasAdressInformed = _hasAdressInformed(addressProvider);
 
     String errorMessage = "Informe os dados necessários!";
-    if (hasAdressInformed && addressProvider.adressFormKeyIsValid) {
+    if (hasAdressInformed && addressProvider.addressFormKeyIsValid) {
       errorMessage =
           "Adicione o endereço ou apague os dados para mudar de tela!";
-    } else if (hasAdressInformed && !addressProvider.adressFormKeyIsValid) {
+    } else if (hasAdressInformed && !addressProvider.addressFormKeyIsValid) {
       errorMessage = "Corrija os dados e salve o endereço para mudar de tela!";
     }
 
@@ -224,7 +224,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               label: 'Endereço',
               icon: iconAccordingFormIsValid(
                 icon: Icons.room_outlined,
-                hasDataAndIsValid: addressProvider.adressFormKeyIsValid &&
+                hasDataAndIsValid: addressProvider.addressFormKeyIsValid &&
                     addressProvider.addressesCount > 0,
               ),
             ),
@@ -251,7 +251,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                 icon: Icons.check,
                 hasDataAndIsValid:
                     customerRegisterProvider.personFormKeyIsValid &&
-                        (addressProvider.adressFormKeyIsValid &&
+                        (addressProvider.addressFormKeyIsValid &&
                             addressProvider.addressesCount > 0),
               ),
               label: 'Salvar',
@@ -313,7 +313,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     changeFormKeysToInvalid: () {
                       setState(() {
                         customerRegisterProvider.personFormKeyIsValid = false;
-                        addressProvider.adressFormKeyIsValid = false;
+                        addressProvider.addressFormKeyIsValid = false;
                         customerRegisterProvider.emailFormKeyIsValid = false;
                         customerRegisterProvider.telephoneFormKeyIsValid =
                             false;

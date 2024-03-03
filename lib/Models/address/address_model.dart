@@ -45,10 +45,10 @@ class AddressModel {
     );
   }
 
-  static resultAsStringAdressCustomerModel({
+  static resultAsStringAddressCustomerModel({
     required Map data,
     required AddressModel? addressModel,
-    required TextEditingController adressController,
+    required TextEditingController addressController,
     required TextEditingController districtController,
     required TextEditingController complementController,
     required TextEditingController cityController,
@@ -64,7 +64,7 @@ class AddressModel {
       addressModel.State = data["uf"];
     }
 
-    adressController.text = data["logradouro"];
+    addressController.text = data["logradouro"];
     complementController.text = data["complemento"];
     districtController.text = data["bairro"];
     cityController.text = data["localidade"];

@@ -8,7 +8,7 @@ import '../models/address/address.dart';
 
 class AddressProvider with ChangeNotifier {
   final TextEditingController cepController = TextEditingController();
-  final TextEditingController adressController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
   final TextEditingController districtController = TextEditingController();
   final TextEditingController complementController = TextEditingController();
   final TextEditingController referenceController = TextEditingController();
@@ -54,16 +54,16 @@ class AddressProvider with ChangeNotifier {
     _selectedStateDropDown.value = newValue.value;
   }
 
-  bool _adressFormKeyIsValid = false;
-  bool get adressFormKeyIsValid => _adressFormKeyIsValid;
-  set adressFormKeyIsValid(bool newValue) {
-    _adressFormKeyIsValid = newValue;
+  bool _addressFormKeyIsValid = false;
+  bool get addressFormKeyIsValid => _addressFormKeyIsValid;
+  set addressFormKeyIsValid(bool newValue) {
+    _addressFormKeyIsValid = newValue;
   }
 
   List<String> get states => [..._states.values];
 
-  String _errorMessageGetAdressByCep = "";
-  String get errorMessageGetAdressByCep => _errorMessageGetAdressByCep;
+  String _errorMessageGetAddressByCep = "";
+  String get errorMessageGetAddressByCep => _errorMessageGetAddressByCep;
 
   final ValueNotifier<String?> _selectedStateDropDown =
       ValueNotifier<String?>(null);
@@ -77,12 +77,12 @@ class AddressProvider with ChangeNotifier {
   String _errorMessageAddAddres = "";
   String get errorMessageAddAddres => _errorMessageAddAddres;
 
-  void clearAdressControllers({required bool clearCep}) {
+  void clearAddressControllers({required bool clearCep}) {
     if (clearCep == true) {
       cepController.text = "";
     }
 
-    adressController.text = "";
+    addressController.text = "";
     cityController.text = "";
     complementController.text = "";
     districtController.text = "";
@@ -102,7 +102,7 @@ class AddressProvider with ChangeNotifier {
     return "null"; // Valor não encontrado
   }
 
-  void addAdress() {
+  void addAddress() {
     _errorMessageAddAddres = "";
     _addresses.forEach((element) {
       if (element.Zip == cepController.text &&
@@ -113,7 +113,7 @@ class AddressProvider with ChangeNotifier {
 
     if (_errorMessageAddAddres == "") {
       _addresses.add(AddressModel(
-        Address: adressController.text,
+        Address: addressController.text,
         City: cityController.text,
         Complement: complementController.text,
         District: districtController.text,
@@ -123,7 +123,7 @@ class AddressProvider with ChangeNotifier {
         State: _getKeyByValue(selectedStateDropDown.value!),
       ));
 
-      adressController.text = "";
+      addressController.text = "";
       cityController.text = "";
       complementController.text = "";
       districtController.text = "";
@@ -136,7 +136,7 @@ class AddressProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeAdress(int index) {
+  void removeAddress(int index) {
     _addresses.removeAt(index);
     notifyListeners();
   }
@@ -151,8 +151,8 @@ class AddressProvider with ChangeNotifier {
   Future<void> getAddressByCep({
     required BuildContext context,
   }) async {
-    clearAdressControllers(clearCep: false);
-    _errorMessageGetAdressByCep = "";
+    clearAddressControllers(clearCep: false);
+    _errorMessageGetAddressByCep = "";
     _isLoadingCep = true;
     notifyListeners();
 
@@ -165,7 +165,7 @@ class AddressProvider with ChangeNotifier {
       notifyListeners();
 
       if (response["error"] != "") {
-        _errorMessageGetAdressByCep = response["error"];
+        _errorMessageGetAddressByCep = response["error"];
 
         ShowSnackbarMessage.showMessage(
           message:
@@ -173,10 +173,10 @@ class AddressProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        AddressModel.resultAsStringAdressCustomerModel(
+        AddressModel.resultAsStringAddressCustomerModel(
           data: json.decode(response["success"]),
           addressModel: _addressCustomerModel,
-          adressController: adressController,
+          addressController: addressController,
           districtController: districtController,
           complementController: complementController,
           cityController: cityController,
@@ -186,7 +186,7 @@ class AddressProvider with ChangeNotifier {
       }
     } catch (e) {
       print("Erro para consultar o CEP: $e");
-      _errorMessageGetAdressByCep =
+      _errorMessageGetAddressByCep =
           "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente";
     }
 

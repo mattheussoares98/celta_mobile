@@ -116,7 +116,7 @@ class _CustomerRegisterAddressesInformedsState
                                     subtitle:
                                         "Deseja realmente remover o endereço?",
                                     function: () {
-                                      addressProvider.removeAdress(index);
+                                      addressProvider.removeAddress(index);
                                     },
                                   );
                                 },

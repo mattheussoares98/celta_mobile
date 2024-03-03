@@ -54,13 +54,13 @@ class _AddressComponentState extends State<AddressComponent> {
       context: context,
     );
 
-    if (addressProvider.errorMessageGetAdressByCep == "") {
+    if (addressProvider.errorMessageGetAddressByCep == "") {
       Future.delayed(const Duration(milliseconds: 100), () {
         FocusScope.of(context).requestFocus(_numberFocusNode);
       });
     } else {
       ShowSnackbarMessage.showMessage(
-        message: addressProvider.errorMessageGetAdressByCep,
+        message: addressProvider.errorMessageGetAddressByCep,
         context: context,
       );
     }
@@ -163,7 +163,7 @@ class _AddressComponentState extends State<AddressComponent> {
                     enabled: addressProvider.isLoadingCep ? false : true,
                     focusNode: _adressFocusNode,
                     labelText: "Logradouro",
-                    textEditingController: addressProvider.adressController,
+                    textEditingController: addressProvider.addressController,
                     limitOfCaracters: 40,
                     onFieldSubmitted: (value) {
                       FocusScope.of(context).requestFocus(_districtFocusNode);
@@ -374,7 +374,7 @@ class _AddressComponentState extends State<AddressComponent> {
                               subtitle:
                                   "Deseja apagar todos os dados preenchidos?",
                               function: () {
-                                addressProvider.clearAdressControllers(
+                                addressProvider.clearAddressControllers(
                                     clearCep: true);
                               },
                             );
@@ -399,7 +399,7 @@ class _AddressComponentState extends State<AddressComponent> {
                                   if (isValid &&
                                       addressProvider
                                           .cepController.text.isNotEmpty) {
-                                    addressProvider.addAdress();
+                                    addressProvider.addAddress();
                                     if (addressProvider.errorMessageAddAddres !=
                                         "") {
                                       ShowSnackbarMessage.showMessage(
