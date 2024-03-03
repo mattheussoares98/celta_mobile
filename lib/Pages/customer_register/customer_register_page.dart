@@ -164,6 +164,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       AddressComponent(
         validateAdressFormKey: _formKeyIsValid,
         adressFormKey: _adressFormKey,
+        canInsertMoreThanOneAddress: true,
       ),
       CustomerRegisterEmailPage(
         emailFormKey: _emailFormKey,

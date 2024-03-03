@@ -141,6 +141,7 @@ class _InsertOrUpdateConcurrentPageState
                       children: [
                         AddressComponent(
                           adressFormKey: _adressFormKey,
+                          canInsertMoreThanOneAddress: false,
                           validateAdressFormKey: () {
                             return _adressFormKey.currentState!.validate();
                           },

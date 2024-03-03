@@ -8,10 +8,12 @@ import '../../providers/providers.dart';
 class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
   final bool Function() validateAdressFormKey;
+  final bool canInsertMoreThanOneAddress;
   const AddressComponent({
     required this.adressFormKey,
-    Key? key,
     required this.validateAdressFormKey,
+    required this.canInsertMoreThanOneAddress,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,15 @@ class _AddressComponentState extends State<AddressComponent> {
   _getAdressByCep({
     required AddressProvider addressProvider,
   }) async {
-    if (addressProvider.cepController.text.length < 8) {
+    if (!widget.canInsertMoreThanOneAddress &&
+        addressProvider.addressesCount > 0) {
+      ShowSnackbarMessage.showMessage(
+        message:
+            "Não é possível inserir mais de um endereço! Remova o endereço informado para conseguir adicionar outro!",
+        context: context,
+      );
+      return;
+    } else if (addressProvider.cepController.text.length < 8) {
       ShowSnackbarMessage.showMessage(
         message: "O CEP deve conter 8 dígitos!",
         context: context,
@@ -62,8 +72,7 @@ class _AddressComponentState extends State<AddressComponent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    AddressProvider addressProvider =
-        Provider.of(context, listen: true);
+    AddressProvider addressProvider = Provider.of(context, listen: true);
     _selectedStateDropDown.value = addressProvider.selectedStateDropDown.value;
   }
 
@@ -182,13 +191,15 @@ class _AddressComponentState extends State<AddressComponent> {
                                       .requestFocus(_cityFocusNode);
                                 },
                           labelText: "Bairro",
-                          textEditingController: addressProvider.districtController,
+                          textEditingController:
+                              addressProvider.districtController,
                           limitOfCaracters: 30,
                           validator: (String? value) {
                             if ((value == null ||
                                     value.isEmpty ||
                                     value.length < 2) &&
-                                addressProvider.cepController.text.length == 8) {
+                                addressProvider.cepController.text.length ==
+                                    8) {
                               return "Bairro muito curto";
                             }
                             return null;
@@ -210,7 +221,8 @@ class _AddressComponentState extends State<AddressComponent> {
                             if ((value == null ||
                                     value.isEmpty ||
                                     value.length < 2) &&
-                                addressProvider.cepController.text.length == 8) {
+                                addressProvider.cepController.text.length ==
+                                    8) {
                               return "Cidade muito curta";
                             }
                             return null;
@@ -238,7 +250,8 @@ class _AddressComponentState extends State<AddressComponent> {
                           ),
                           validator: (value) {
                             if (value == null &&
-                                addressProvider.cepController.text.length == 8) {
+                                addressProvider.cepController.text.length ==
+                                    8) {
                               return 'Selecione um estado!';
                             }
                             return null;
@@ -288,13 +301,15 @@ class _AddressComponentState extends State<AddressComponent> {
                                       .requestFocus(_complementFocusNode);
                                 },
                           labelText: "Número",
-                          textEditingController: addressProvider.numberController,
+                          textEditingController:
+                              addressProvider.numberController,
                           limitOfCaracters: 6,
                           validator: (String? value) {
                             if ((value == null ||
                                     value.isEmpty ||
                                     value.length < 1) &&
-                                addressProvider.cepController.text.length == 8) {
+                                addressProvider.cepController.text.length ==
+                                    8) {
                               return "Digite o número!";
                             } else if (value!.contains("\.") ||
                                 value.contains("\,") ||
@@ -321,7 +336,8 @@ class _AddressComponentState extends State<AddressComponent> {
                                       .requestFocus(_referenceFocusNode);
                                 },
                           labelText: "Complemento",
-                          textEditingController: addressProvider.complementController,
+                          textEditingController:
+                              addressProvider.complementController,
                           limitOfCaracters: 30,
                           validator: (String? value) {
                             return null;
@@ -333,7 +349,8 @@ class _AddressComponentState extends State<AddressComponent> {
                           enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _referenceFocusNode,
                           labelText: "Referência",
-                          textEditingController: addressProvider.referenceController,
+                          textEditingController:
+                              addressProvider.referenceController,
                           limitOfCaracters: 40,
                           validator: (String? value) {
                             return null;
@@ -357,7 +374,8 @@ class _AddressComponentState extends State<AddressComponent> {
                               subtitle:
                                   "Deseja apagar todos os dados preenchidos?",
                               function: () {
-                                addressProvider.clearAdressControllers(clearCep: true);
+                                addressProvider.clearAdressControllers(
+                                    clearCep: true);
                               },
                             );
                           },
@@ -379,7 +397,8 @@ class _AddressComponentState extends State<AddressComponent> {
                                   bool isValid = widget.validateAdressFormKey();
 
                                   if (isValid &&
-                                      addressProvider.cepController.text.isNotEmpty) {
+                                      addressProvider
+                                          .cepController.text.isNotEmpty) {
                                     addressProvider.addAdress();
                                     if (addressProvider.errorMessageAddAddres !=
                                         "") {
