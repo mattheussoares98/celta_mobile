@@ -69,7 +69,7 @@ class _CustomerRegisterTelephonePageState
               children: [
                 Expanded(
                   flex: 3,
-                  child: CustomerRegisterFormField(
+                  child: AddressFormField(
                     keyboardType: TextInputType.number,
                     enabled: true,
                     focusNode: dddFocusNode,
@@ -96,7 +96,7 @@ class _CustomerRegisterTelephonePageState
                 ),
                 Expanded(
                   flex: 10,
-                  child: CustomerRegisterFormField(
+                  child: AddressFormField(
                     keyboardType: TextInputType.number,
                     enabled: true,
                     focusNode: telephoneFocusNode,

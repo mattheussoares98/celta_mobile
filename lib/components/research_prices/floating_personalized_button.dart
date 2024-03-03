@@ -8,17 +8,11 @@ floatingPersonalizedButton({
   required String nextRoute,
   required bool isLoading,
   required String messageButton,
+  required void Function()? onTap,
   Map? arguments,
 }) {
   return GestureDetector(
-    onTap: isLoading
-        ? null
-        : () {
-            Navigator.of(context).pushNamed(
-              nextRoute,
-              arguments: arguments,
-            );
-          },
+    onTap: isLoading ? null : onTap,
     child: Container(
       width: 80,
       height: 80,

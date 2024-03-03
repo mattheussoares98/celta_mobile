@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../global_widgets/global_widgets.dart';
 
-class CustomerRegisterFormField extends StatelessWidget {
+class AddressFormField extends StatelessWidget {
   final int? limitOfCaracters;
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
@@ -15,7 +15,7 @@ class CustomerRegisterFormField extends StatelessWidget {
   final String labelText;
   final TextEditingController textEditingController;
   final bool enabled;
-  const CustomerRegisterFormField({
+  const AddressFormField({
     this.onChanged,
     this.keyboardType,
     this.isDate,

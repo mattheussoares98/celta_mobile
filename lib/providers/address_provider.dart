@@ -150,6 +150,7 @@ class AddressProvider with ChangeNotifier {
 
   void clearAddresses(){
     _addresses.clear();
+    print("x");
   }
 
   Future<void> getAddressByCep({

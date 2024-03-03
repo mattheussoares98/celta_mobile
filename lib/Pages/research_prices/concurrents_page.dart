@@ -67,20 +67,24 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
               Icons.arrow_back_outlined,
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: researchPricesProvider.isLoadingAddOrUpdateConcurrents
+                  ? null
+                  : () async {
+                      await _getConcurrents(
+                        notifyListenersFromUpdate: true,
+                        researchPricesProvider: researchPricesProvider,
+                      );
+                    },
+              icon: const Icon(Icons.refresh),
+            ),
+          ],
         ),
         body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            ElevatedButton(
-              onPressed: () async {
-                await _getConcurrents(
-                  notifyListenersFromUpdate: true,
-                  researchPricesProvider: researchPricesProvider,
-                );
-              },
-              child: const Text("Consultar novamente"),
-            ),
-            if (researchPricesProvider.isLoadingConcurrents)
+            if (researchPricesProvider.isLoadingAddOrUpdateConcurrents)
               Expanded(
                 child: SearchingWidget(
                   title: 'Pesquisando concorrentes',
@@ -98,12 +102,16 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
           ],
         ),
         floatingActionButton: floatingPersonalizedButton(
-          context: context,
-          researchPricesProvider: researchPricesProvider,
-          nextRoute: APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
-          isLoading: researchPricesProvider.isLoadingResearchPrices,
-          messageButton: "criar\nconcorrente".toUpperCase(),
-        ),
+            context: context,
+            researchPricesProvider: researchPricesProvider,
+            nextRoute: APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+            isLoading: researchPricesProvider.isLoadingAddOrUpdateConcurrents,
+            messageButton: "criar\nconcorrente".toUpperCase(),
+            onTap: () {
+              researchPricesProvider.updateSelectedConcurrent(null);
+              Navigator.of(context)
+                  .pushNamed(APPROUTES.INSERT_OR_UPDATE_CONCORRENT);
+            }),
       ),
     );
   }

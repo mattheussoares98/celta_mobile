@@ -61,7 +61,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
         key: widget.emailFormKey,
         child: Column(
           children: [
-            CustomerRegisterFormField(
+            AddressFormField(
               enabled: true,
               focusNode: emailFocusNode,
               onFieldSubmitted: (String? value) {

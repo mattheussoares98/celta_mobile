@@ -22,8 +22,8 @@ class ResearchPricesProvider with ChangeNotifier {
   String _errorAddOrUpdateResearch = "";
   String get errorAddOrUpdateResearch => _errorAddOrUpdateResearch;
 
-  bool _isLoadingConcurrents = false;
-  bool get isLoadingConcurrents => _isLoadingConcurrents;
+  bool _isLoadingAddOrUpdateConcurrents = false;
+  bool get isLoadingAddOrUpdateConcurrents => _isLoadingAddOrUpdateConcurrents;
   String _errorConcurrents = "";
   String get errorConcurrents => _errorConcurrents;
   final List<ConcurrentsModel> _concurrents = [];
@@ -54,9 +54,8 @@ class ResearchPricesProvider with ChangeNotifier {
   void clearConcurrents() {
     _concurrents.clear();
     _errorConcurrents = "";
-    _isLoadingConcurrents = false;
+    _isLoadingAddOrUpdateConcurrents = false;
     updateSelectedConcurrent(null);
-    notifyListeners();
   }
 
   Future<void> _getResearchPrices({
@@ -186,7 +185,7 @@ class ResearchPricesProvider with ChangeNotifier {
     // required String adress,
   }) async {
     _errorConcurrents = "";
-    _isLoadingConcurrents = true;
+    _isLoadingAddOrUpdateConcurrents = true;
     notifyListeners();
 
     try {
@@ -230,7 +229,7 @@ class ResearchPricesProvider with ChangeNotifier {
     //   //     json.decode(SoapHelperResponseParameters.responseAsString);
     // }
 
-    _isLoadingConcurrents = false;
+    _isLoadingAddOrUpdateConcurrents = false;
     notifyListeners();
   }
 
@@ -270,12 +269,12 @@ class ResearchPricesProvider with ChangeNotifier {
     required bool notifyListenersFromUpdate,
   }) async {
     clearConcurrents();
-    _isLoadingConcurrents = true;
+    _isLoadingAddOrUpdateConcurrents = true;
     if (notifyListenersFromUpdate) notifyListeners();
 
     await _getConcurrents(isExactCode: false, context: context);
 
-    _isLoadingConcurrents = false;
+    _isLoadingAddOrUpdateConcurrents = false;
     notifyListeners();
   }
 }

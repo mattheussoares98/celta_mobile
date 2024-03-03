@@ -61,9 +61,7 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
                       researchPricesProvider.updateSelectedResearch(research);
                       Navigator.of(context).pushNamed(
                         APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
-                        arguments: {
-                          "enterpriseCode": widget.enterpriseCode,
-                        },
+                        arguments: {"enterpriseCode": widget.enterpriseCode},
                       );
                     },
                     icon: const Icon(Icons.edit),

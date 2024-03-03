@@ -28,8 +28,6 @@ class _InsertOrUpdateConcurrentPageState
     }
   }
 
-  int? enterpriseCode;
-
   bool _isLoaded = false;
   @override
   void didChangeDependencies() {
@@ -39,15 +37,17 @@ class _InsertOrUpdateConcurrentPageState
       ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
       _isLoaded = true;
-      enterpriseCode = ModalRoute.of(context)!.settings.arguments as int;
 
       _updateControllers(researchPricesProvider.selectedConcurrent);
     }
   }
 
+  GlobalKey<FormState> _adressFormKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
+    AddressProvider addressProvider = Provider.of(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,76 +69,118 @@ class _InsertOrUpdateConcurrentPageState
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              TextFormField(
-                autofocus: true,
-                focusNode: nameFocusNode,
-                enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
-                controller: nameController,
-                decoration: FormFieldHelper.decoration(
-                  isLoading:
-                      researchPricesProvider.isLoadingAddOrUpdateResearch,
-                  context: context,
-                  labelText: 'Nome',
+      body: PopScope(
+        canPop: true,
+        onPopInvoked: ((didPop) {
+          addressProvider.clearAddresses();
+        }),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                TextFormField(
+                  autofocus: true,
+                  focusNode: nameFocusNode,
+                  enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
+                  controller: nameController,
+                  decoration: FormFieldHelper.decoration(
+                    isLoading:
+                        researchPricesProvider.isLoadingAddOrUpdateResearch,
+                    context: context,
+                    labelText: 'Nome',
+                  ),
+                  onFieldSubmitted: (_) async {
+                    FocusScope.of(context).requestFocus(
+                      observationFocusNode,
+                    );
+                  },
+                  style: FormFieldHelper.style(),
                 ),
-                onFieldSubmitted: (_) async {
-                  FocusScope.of(context).requestFocus(
-                    observationFocusNode,
-                  );
-                },
-                style: FormFieldHelper.style(),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                focusNode: observationFocusNode,
-                enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
-                controller: observationController,
-                decoration: FormFieldHelper.decoration(
-                  isLoading:
-                      researchPricesProvider.isLoadingAddOrUpdateResearch,
-                  context: context,
-                  labelText: 'Observação',
+                const SizedBox(height: 8),
+                TextFormField(
+                  focusNode: observationFocusNode,
+                  enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
+                  controller: observationController,
+                  decoration: FormFieldHelper.decoration(
+                    isLoading:
+                        researchPricesProvider.isLoadingAddOrUpdateResearch,
+                    context: context,
+                    labelText: 'Observação',
+                  ),
+                  onFieldSubmitted: (_) async {
+                    FocusScope.of(context).requestFocus();
+                  },
+                  style: FormFieldHelper.style(),
                 ),
-                onFieldSubmitted: (_) async {
-                  FocusScope.of(context).requestFocus();
-                },
-                style: FormFieldHelper.style(),
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(200, 40),
-                ),
-                onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
-                    ? null
-                    : () async {
-                        await researchPricesProvider.addOrUpdateConcurrent(
-                            context: context);
-                      },
-                child: researchPricesProvider.isLoadingAddOrUpdateResearch
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            researchPricesProvider.selectedConcurrent == null
-                                ? "CADASTRANDO..."
-                                : "ALTERARANDO...",
-                          ),
-                          const SizedBox(height: 8),
-                          const LinearProgressIndicator(),
-                        ],
-                      )
-                    : Text(
-                        researchPricesProvider.selectedConcurrent == null
-                            ? "CADASTRAR"
-                            : "ALTERAR",
+                const SizedBox(height: 15),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Endereço",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 126, 126, 126),
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 16,
                       ),
-              ),
-            ],
+                    ),
+                  ],
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: const BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 20),
+                    child: Column(
+                      children: [
+                        AddressComponent(
+                          adressFormKey: _adressFormKey,
+                          validateAdressFormKey: () {
+                            return _adressFormKey.currentState!.validate();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(200, 40),
+                  ),
+                  onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
+                      ? null
+                      : () async {
+                          await researchPricesProvider.addOrUpdateConcurrent(
+                              context: context);
+                        },
+                  child: researchPricesProvider.isLoadingAddOrUpdateResearch
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              researchPricesProvider.selectedConcurrent == null
+                                  ? "CADASTRANDO..."
+                                  : "ALTERARANDO...",
+                            ),
+                            const SizedBox(height: 8),
+                            const LinearProgressIndicator(),
+                          ],
+                        )
+                      : Text(
+                          researchPricesProvider.selectedConcurrent == null
+                              ? "CADASTRAR"
+                              : "ALTERAR",
+                        ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

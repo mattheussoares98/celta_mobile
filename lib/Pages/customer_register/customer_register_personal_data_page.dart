@@ -79,7 +79,7 @@ class _CustomerRegisterPersonalDataPageState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CustomerRegisterFormField(
+            AddressFormField(
               enabled: true,
               focusNode: nameFocusNode,
               onFieldSubmitted: (String? value) {
@@ -116,7 +116,7 @@ class _CustomerRegisterPersonalDataPageState
               textEditingController: customerRegisterProvider.nameController,
               limitOfCaracters: 50,
             ),
-            CustomerRegisterFormField(
+            AddressFormField(
               focusNode: cpfCnpjFocusNode,
               keyboardType: TextInputType.number,
               enabled: true,
@@ -171,7 +171,7 @@ class _CustomerRegisterPersonalDataPageState
               textEditingController: customerRegisterProvider.cpfCnpjController,
               limitOfCaracters: 14,
             ),
-            CustomerRegisterFormField(
+            AddressFormField(
               enabled: true,
               focusNode: reducedNameFocusNode,
               suffixWidget: IconButton(
@@ -192,7 +192,7 @@ class _CustomerRegisterPersonalDataPageState
                   customerRegisterProvider.reducedNameController,
               limitOfCaracters: 25,
             ),
-            CustomerRegisterFormField(
+            AddressFormField(
               keyboardType: TextInputType.number,
               enabled: true,
               focusNode: dateOfBirthFocusNode,

@@ -48,7 +48,7 @@ class _InsertOrUpdateResearchPriceState
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
-    int enterpriseCode = ModalRoute.of(context)!.settings.arguments as int;
+    Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
 
     return Scaffold(
       appBar: AppBar(
@@ -136,7 +136,7 @@ class _InsertOrUpdateResearchPriceState
                         await researchPricesProvider.addOrUpdateResearch(
                           context: context,
                           research: researchPricesProvider.selectedResearch,
-                          enterpriseCode: enterpriseCode,
+                          enterpriseCode: arguments?["enterpriseCode"],
                           enterpriseName: enterpriseNameController.text,
                           observation: observationController.text,
                           researchName: researchNameController.text,

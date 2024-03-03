@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../customer_register/customer_register.dart';
-import './global_widgets.dart';
+import '../global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
 
 class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
-  final Function validateAdressFormKey;
+  final bool Function() validateAdressFormKey;
   const AddressComponent({
     required this.adressFormKey,
     Key? key,
@@ -88,7 +88,7 @@ class _AddressComponentState extends State<AddressComponent> {
         key: widget.adressFormKey,
         child: Column(
           children: [
-            CustomerRegisterFormField(
+            AddressFormField(
               keyboardType: TextInputType.number,
               enabled: addressProvider.isLoadingCep ? false : true,
               focusNode: _cepFocusNode,
@@ -150,7 +150,7 @@ class _AddressComponentState extends State<AddressComponent> {
             if (addressProvider.triedGetCep)
               Column(
                 children: [
-                  CustomerRegisterFormField(
+                  AddressFormField(
                     enabled: addressProvider.isLoadingCep ? false : true,
                     focusNode: _adressFocusNode,
                     labelText: "Logradouro",
@@ -172,7 +172,7 @@ class _AddressComponentState extends State<AddressComponent> {
                   Row(
                     children: [
                       Expanded(
-                        child: CustomerRegisterFormField(
+                        child: AddressFormField(
                           enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _districtFocusNode,
                           onFieldSubmitted: addressProvider.isLoadingCep
@@ -196,7 +196,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
-                        child: CustomerRegisterFormField(
+                        child: AddressFormField(
                           enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _cityFocusNode,
                           labelText: "Cidade",
@@ -277,7 +277,7 @@ class _AddressComponentState extends State<AddressComponent> {
                       ),
                       Expanded(
                         flex: 4,
-                        child: CustomerRegisterFormField(
+                        child: AddressFormField(
                           keyboardType: TextInputType.number,
                           enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _numberFocusNode,
@@ -311,7 +311,7 @@ class _AddressComponentState extends State<AddressComponent> {
                   Row(
                     children: [
                       Expanded(
-                        child: CustomerRegisterFormField(
+                        child: AddressFormField(
                           enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _complementFocusNode,
                           onFieldSubmitted: addressProvider.isLoadingCep
@@ -329,7 +329,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
-                        child: CustomerRegisterFormField(
+                        child: AddressFormField(
                           enabled: addressProvider.isLoadingCep ? false : true,
                           focusNode: _referenceFocusNode,
                           labelText: "Referência",
