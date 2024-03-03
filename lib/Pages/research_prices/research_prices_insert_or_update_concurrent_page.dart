@@ -5,16 +5,16 @@ import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
 import '../../models/research_prices/research_prices.dart';
 
-class InsertOrUpdateConcurrentPage extends StatefulWidget {
-  const InsertOrUpdateConcurrentPage({super.key});
+class ResearchPricesInsertOrUpdateConcurrentPage extends StatefulWidget {
+  const ResearchPricesInsertOrUpdateConcurrentPage({super.key});
 
   @override
-  State<InsertOrUpdateConcurrentPage> createState() =>
-      _InsertOrUpdateConcurrentPageState();
+  State<ResearchPricesInsertOrUpdateConcurrentPage> createState() =>
+      _ResearchPricesInsertOrUpdateConcurrentPageState();
 }
 
-class _InsertOrUpdateConcurrentPageState
-    extends State<InsertOrUpdateConcurrentPage> {
+class _ResearchPricesInsertOrUpdateConcurrentPageState
+    extends State<ResearchPricesInsertOrUpdateConcurrentPage> {
   FocusNode nameFocusNode = FocusNode();
   TextEditingController nameController = TextEditingController();
 

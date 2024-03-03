@@ -6,14 +6,14 @@ import '../../providers/providers.dart';
 import '../../components/research_prices/research_prices.dart';
 import '../../utils/utils.dart';
 
-class ConcurrentsPage extends StatefulWidget {
-  const ConcurrentsPage({Key? key}) : super(key: key);
+class ResearchPricesConcurrentsPage extends StatefulWidget {
+  const ResearchPricesConcurrentsPage({Key? key}) : super(key: key);
 
   @override
-  State<ConcurrentsPage> createState() => _ConcurrentsPageState();
+  State<ResearchPricesConcurrentsPage> createState() => _ResearchPricesConcurrentsPageState();
 }
 
-class _ConcurrentsPageState extends State<ConcurrentsPage> {
+class _ResearchPricesConcurrentsPageState extends State<ResearchPricesConcurrentsPage> {
   Future<void> _getConcurrents({
     required bool notifyListenersFromUpdate,
     required ResearchPricesProvider researchPricesProvider,
@@ -113,13 +113,13 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
         floatingActionButton: floatingPersonalizedButton(
             context: context,
             researchPricesProvider: researchPricesProvider,
-            nextRoute: APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+            nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
             isLoading: researchPricesProvider.isLoadingAddOrUpdateConcurrents,
             messageButton: "criar\nconcorrente".toUpperCase(),
             onTap: () {
               researchPricesProvider.updateSelectedConcurrent(null);
               Navigator.of(context)
-                  .pushNamed(APPROUTES.INSERT_OR_UPDATE_CONCORRENT);
+                  .pushNamed(APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT);
             }),
       ),
     );

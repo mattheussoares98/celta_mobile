@@ -27,6 +27,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
       child: InkWell(
         onTap: () {
           researchPricesProvider.updateSelectedConcurrent(concurrent);
+          Navigator.of(context).pushNamed(APPROUTES.RESEARCH_PRICES_INSERT_PRICE);
         },
         child: Card(
           child: Padding(
@@ -64,7 +65,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                         researchPricesProvider
                             .updateSelectedConcurrent(concurrent);
                         Navigator.of(context).pushNamed(
-                          APPROUTES.INSERT_OR_UPDATE_CONCORRENT,
+                          APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
                           arguments: enterpriseCode,
                         );
                       },

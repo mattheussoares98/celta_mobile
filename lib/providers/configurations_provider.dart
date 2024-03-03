@@ -23,7 +23,7 @@ class ConfigurationsProvider with ChangeNotifier {
     _configurations = [
       ConfigurationsModel(
         showInWeb: false,
-        isConfigurationOfSearch: true,
+        isConfigurationOfSearch: false,
         title: "Auto Scan",
         value: _useAutoScan,
         changeValue: changeUseAutoScan,

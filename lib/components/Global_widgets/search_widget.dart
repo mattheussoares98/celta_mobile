@@ -20,8 +20,10 @@ class SearchWidget extends StatefulWidget {
   final bool useCamera;
   final bool autofocus;
   final bool showConfigurationsIcon;
+  final bool showOnlyConfigurationOfSearch;
   const SearchWidget({
     this.autofocus = true,
+    this.showOnlyConfigurationOfSearch = false,
     this.useCamera = true,
     this.showConfigurationsIcon = true,
     required this.consultProductController,
@@ -274,6 +276,8 @@ class _SearchWidgetState extends State<SearchWidget> {
             _enableConfigurationsDialog(
               isLoading: widget.isLoading,
               configurationsProvider: configurationsProvider,
+              showOnlyConfigurationOfSearch:
+                  widget.showOnlyConfigurationOfSearch,
             ),
         ],
       ),
@@ -283,6 +287,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   _enableConfigurationsDialog({
     required bool isLoading,
     required ConfigurationsProvider configurationsProvider,
+    required bool showOnlyConfigurationOfSearch,
   }) {
     return IconButton(
       icon: Icon(
@@ -309,9 +314,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                             ),
                           ),
                         ),
-                        content: const SingleChildScrollView(
+                        content: SingleChildScrollView(
                           child: ConfigurationsCheckbox(
-                            showOnlyConfigurationOfSearch: true,
+                            showOnlyConfigurationOfSearch:
+                                showOnlyConfigurationOfSearch,
                           ),
                         ),
                         actions: [

@@ -29,7 +29,7 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
       onTap: () {
         researchPricesProvider.updateSelectedResearch(research);
         Navigator.of(context).pushNamed(
-          APPROUTES.CONCURRENTS,
+          APPROUTES.RESEARCH_PRICES_CONCURRENTS,
           arguments: widget.enterpriseCode,
         );
       },
@@ -60,7 +60,7 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
                     onPressed: () {
                       researchPricesProvider.updateSelectedResearch(research);
                       Navigator.of(context).pushNamed(
-                        APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+                        APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
                         arguments: {"enterpriseCode": widget.enterpriseCode},
                       );
                     },

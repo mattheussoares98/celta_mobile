@@ -32,6 +32,23 @@ class ResearchPricesProvider with ChangeNotifier {
   int get concurrentsCount => _concurrents.length;
   FocusNode concurrentsFocusNode = FocusNode();
 
+  List<ResearchPricesProductsModel> _associatedsProducts = [];
+  List<ResearchPricesProductsModel> get associatedsProducts =>
+      [..._associatedsProducts];
+  int get associatedsProductsCount => _associatedsProducts.length;
+  List<ResearchPricesProductsModel> _notAssociatedsProducts = [];
+  List<ResearchPricesProductsModel> get notAssociatedProducts =>
+      [..._notAssociatedsProducts];
+  int get notAssociatedProductsCount => _notAssociatedsProducts.length;
+
+  String _errorGetAssociatedsProducts = "";
+  String get errorGetAssociatedsProducts => _errorGetAssociatedsProducts;
+  String _errorGetNotAssociatedsProducts = "";
+  String get errorGetNotAssociatedsProducts => _errorGetNotAssociatedsProducts;
+
+  bool _isLoadingGetProducts = false;
+  bool get isLoadingGetProducts => _isLoadingGetProducts;
+
   ResearchModel? _selectedResearch;
   ResearchModel? get selectedResearch => _selectedResearch;
   updateSelectedResearch(ResearchModel? research) {
@@ -192,8 +209,11 @@ class ResearchPricesProvider with ChangeNotifier {
         parameters: {
           "json": json.encode({
             "CrossIdentity": UserData.crossIdentity,
-            "ResearchOfPriceCode": _selectedResearch != null ? _selectedResearch!.Code : 0,
-            "ConcurrentCode": _selectedConcurrent != null ? _selectedConcurrent!.ConcurrentCode : 0,
+            "ResearchOfPriceCode":
+                _selectedResearch != null ? _selectedResearch!.Code : 0,
+            "ConcurrentCode": _selectedConcurrent != null
+                ? _selectedConcurrent!.ConcurrentCode
+                : 0,
             "Name": concurrentName,
             "Observation": observation,
             "Address": address,
@@ -269,6 +289,41 @@ class ResearchPricesProvider with ChangeNotifier {
     await _getConcurrents(isExactCode: false, context: context);
 
     _isLoadingAddOrUpdateConcurrents = false;
+    notifyListeners();
+  }
+
+  void clearAssociatedsProducts() {
+    _associatedsProducts.clear();
+  }
+
+  void clearNotAssociatedsProducts() {
+    _notAssociatedsProducts.clear();
+  }
+
+  Future<void> getProduct({
+    required bool getAssociatedsProducts,
+    required String searchProductControllerText,
+  }) async {
+    if (getAssociatedsProducts) {
+      await _getAssociatedsProducts(searchProductControllerText);
+    } else {
+      await _getNotAssociatedsProducts(searchProductControllerText);
+    }
+  }
+
+  Future<void> _getAssociatedsProducts(
+    String searchProductControllerValue,
+  ) async {
+    _errorGetAssociatedsProducts = "";
+    _isLoadingGetProducts = true;
+    notifyListeners();
+  }
+
+  Future<void> _getNotAssociatedsProducts(
+    String searchProductControllerValue,
+  ) async {
+    _errorGetNotAssociatedsProducts = "";
+    _isLoadingGetProducts = true;
     notifyListeners();
   }
 }

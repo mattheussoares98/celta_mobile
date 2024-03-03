@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../providers/research_prices_provider.dart';
+import '../../providers/providers.dart';
 
 floatingPersonalizedButton({
   required BuildContext context,

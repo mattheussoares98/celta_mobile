@@ -211,12 +211,14 @@ class MyApp extends StatelessWidget {
           APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
           APPROUTES.RESEARCH_PRICES: (ctx) =>
               const ResearchPricesPage(),
-          APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE: (ctx) =>
-              const InsertOrUpdateResearchPrice(),
-          APPROUTES.CONCURRENTS: (ctx) =>
-              const ConcurrentsPage(),
-          APPROUTES.INSERT_OR_UPDATE_CONCORRENT: (ctx) =>
-              const InsertOrUpdateConcurrentPage(),
+          APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE: (ctx) =>
+              const ResearchPricesInsertOrUpdateResearchPrice(),
+          APPROUTES.RESEARCH_PRICES_CONCURRENTS: (ctx) =>
+              const ResearchPricesConcurrentsPage(),
+          APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT: (ctx) =>
+              const ResearchPricesInsertOrUpdateConcurrentPage(),
+          APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
+              const ResearchPricesProductsPricesPage(),
         },
       ),
     );

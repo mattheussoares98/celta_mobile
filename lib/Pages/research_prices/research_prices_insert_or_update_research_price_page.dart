@@ -1,20 +1,20 @@
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
 import '../../models/research_prices/research_prices.dart';
+import '../../providers/providers.dart';
 
-class InsertOrUpdateResearchPrice extends StatefulWidget {
-  const InsertOrUpdateResearchPrice({super.key});
+class ResearchPricesInsertOrUpdateResearchPrice extends StatefulWidget {
+  const ResearchPricesInsertOrUpdateResearchPrice({super.key});
 
   @override
-  State<InsertOrUpdateResearchPrice> createState() =>
-      _InsertOrUpdateResearchPriceState();
+  State<ResearchPricesInsertOrUpdateResearchPrice> createState() =>
+      _ResearchPricesInsertOrUpdateResearchPriceState();
 }
 
-class _InsertOrUpdateResearchPriceState
-    extends State<InsertOrUpdateResearchPrice> {
+class _ResearchPricesInsertOrUpdateResearchPriceState
+    extends State<ResearchPricesInsertOrUpdateResearchPrice> {
   FocusNode enterpriseNameFocusNode = FocusNode();
   TextEditingController enterpriseNameController = TextEditingController();
 

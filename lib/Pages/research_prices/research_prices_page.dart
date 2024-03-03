@@ -126,14 +126,14 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
         floatingActionButton: floatingPersonalizedButton(
             context: context,
             researchPricesProvider: researchPricesProvider,
-            nextRoute: APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+            nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
             isLoading: researchPricesProvider.isLoadingResearchPrices,
             messageButton: "criar\npesquisa".toUpperCase(),
             arguments: {"enterpriseCode": enterpriseCode},
             onTap: () {
             researchPricesProvider.updateSelectedResearch(null);
               Navigator.of(context).pushNamed(
-                APPROUTES.INSERT_OR_UPDATE_RESEARCH_PRICE,
+                APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
               );
             }),
       ),
