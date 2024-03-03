@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:celta_inventario/models/address/address.dart';
 import 'package:flutter/material.dart';
 
 import '../models/research_prices/research_prices.dart';
@@ -24,8 +25,8 @@ class ResearchPricesProvider with ChangeNotifier {
 
   bool _isLoadingAddOrUpdateConcurrents = false;
   bool get isLoadingAddOrUpdateConcurrents => _isLoadingAddOrUpdateConcurrents;
-  String _errorConcurrents = "";
-  String get errorConcurrents => _errorConcurrents;
+  String _errorAddOrUpdateConcurrents = "";
+  String get errorAddOrUpdateConcurrents => _errorAddOrUpdateConcurrents;
   final List<ConcurrentsModel> _concurrents = [];
   List<ConcurrentsModel> get concurrents => [..._concurrents];
   int get concurrentsCount => _concurrents.length;
@@ -53,7 +54,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
   void clearConcurrents() {
     _concurrents.clear();
-    _errorConcurrents = "";
+    _errorAddOrUpdateConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = false;
     updateSelectedConcurrent(null);
   }
@@ -179,12 +180,13 @@ class ResearchPricesProvider with ChangeNotifier {
 
   Future<void> addOrUpdateConcurrent({
     required BuildContext context,
-    // required int researchOfPriceCode,
-    // required String concurrentCode,
-    // required String observation,
-    // required String adress,
+    required AddressModel address,
+    required String concurrentName,
+    required String observation,
+    required int? concurrentCode,
+    required int? researchOfPriceCode,
   }) async {
-    _errorConcurrents = "";
+    _errorAddOrUpdateConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = true;
     notifyListeners();
 
@@ -193,41 +195,34 @@ class ResearchPricesProvider with ChangeNotifier {
         parameters: {
           "json": json.encode({
             "CrossIdentity": UserData.crossIdentity,
-            "ResearchOfPriceCode": 0,
-            "ConcurrentCode": 0,
-            "Name": "novo concorrente",
-            "Observation": "nova observação",
+            "ResearchOfPriceCode": researchOfPriceCode ?? 0,
+            "ConcurrentCode": concurrentCode ?? 0,
+            "Name": concurrentName,
+            "Observation": observation,
+            "Address": address,
           })
         },
-        // "Address": "teste",
         typeOfResponse: "InsertUpdateConcurrentJsonResponse",
         SOAPAction: "InsertUpdateConcurrentJson",
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "InsertUpdateConcurrentJsonResult",
       );
-      _errorConcurrents = SoapHelperResponseParameters.errorMessage;
-
-      if (_errorConcurrents == "") {
-        ShowSnackbarMessage.showMessage(
-          message: "Concorrente inserido com sucesso!",
-          backgroundColor: Colors.green,
-          context: context,
-        );
-      }
+      _errorAddOrUpdateConcurrents = SoapHelperResponseParameters.errorMessage;
     } catch (e) {
-      _errorConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorAddOrUpdateConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
-
-    // if (_errorConcurrents != "") {
-    //   ShowSnackbarMessage.showMessage(
-    //     message: _errorConcurrents,
-    //     context: context,
-    //   );
-    // } else {
-    //   //converter os dados para ResearchPricesModel
-    //   // Map resultAsMap =
-    //   //     json.decode(SoapHelperResponseParameters.responseAsString);
-    // }
+    if (_errorAddOrUpdateConcurrents == "") {
+      ShowSnackbarMessage.showMessage(
+        message: "Concorrente inserido com sucesso!",
+        backgroundColor: Colors.green,
+        context: context,
+      );
+    } else {
+      ShowSnackbarMessage.showMessage(
+        message: _errorAddOrUpdateConcurrents,
+        context: context,
+      );
+    }
 
     _isLoadingAddOrUpdateConcurrents = false;
     notifyListeners();
@@ -253,7 +248,7 @@ class ResearchPricesProvider with ChangeNotifier {
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "GetConcurrentJsonResult",
       );
-      _errorConcurrents = SoapHelperResponseParameters.errorMessage;
+      _errorAddOrUpdateConcurrents = SoapHelperResponseParameters.errorMessage;
 
       List resultAsList =
           json.decode(SoapHelperResponseParameters.responseAsString);

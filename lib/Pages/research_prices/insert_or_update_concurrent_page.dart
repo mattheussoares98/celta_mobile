@@ -62,6 +62,8 @@ class _InsertOrUpdateConcurrentPageState
           onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
               ? null
               : () {
+                  researchPricesProvider.updateSelectedConcurrent(null);
+                  researchPricesProvider.updateSelectedResearch(null);
                   Navigator.of(context).pop();
                 },
           icon: const Icon(
@@ -72,6 +74,8 @@ class _InsertOrUpdateConcurrentPageState
       body: PopScope(
         canPop: true,
         onPopInvoked: ((didPop) {
+          researchPricesProvider.updateSelectedConcurrent(null);
+          researchPricesProvider.updateSelectedResearch(null);
           addressProvider.clearAddresses();
         }),
         child: SingleChildScrollView(
@@ -158,8 +162,33 @@ class _InsertOrUpdateConcurrentPageState
                   onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
                       ? null
                       : () async {
-                          await researchPricesProvider.addOrUpdateConcurrent(
-                              context: context);
+                          ShowAlertDialog.showAlertDialog(
+                              context: context,
+                              title: "Cadastrar concorrente",
+                              subtitle:
+                                  "Deseja realmente cadastrar o concorrente com os dados informados?",
+                              function: () async {
+                                await researchPricesProvider
+                                    .addOrUpdateConcurrent(
+                                  context: context,
+                                  address: addressProvider.addresses[0],
+                                  concurrentCode: researchPricesProvider
+                                      .selectedConcurrent?.ConcurrentCode,
+                                  concurrentName: nameController.text,
+                                  observation: observationController.text,
+                                  researchOfPriceCode: researchPricesProvider
+                                      .selectedResearch?.Code,
+                                );
+
+                                if (researchPricesProvider
+                                        .errorAddOrUpdateConcurrents ==
+                                    "") {
+                                  addressProvider.clearAddresses();
+                                  nameController.clear();
+                                  observationController.clear();
+                                  Navigator.of(context).pop();
+                                }
+                              });
                         },
                   child: researchPricesProvider.isLoadingAddOrUpdateResearch
                       ? Column(

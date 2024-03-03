@@ -92,12 +92,12 @@ class _ConcurrentsPageState extends State<ConcurrentsPage> {
               ),
             if (researchPricesProvider.concurrentsCount > 0)
               const ConcurrentsItems(),
-            if (researchPricesProvider.errorConcurrents != "" &&
+            if (researchPricesProvider.errorAddOrUpdateConcurrents != "" &&
                 researchPricesProvider.concurrentsCount == 0)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ErrorMessage(
-                    errorMessage: researchPricesProvider.errorConcurrents),
+                    errorMessage: researchPricesProvider.errorAddOrUpdateConcurrents),
               ),
           ],
         ),

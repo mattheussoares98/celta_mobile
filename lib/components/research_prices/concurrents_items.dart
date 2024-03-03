@@ -52,27 +52,17 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Endereços",
-                  otherWidget: Column(
-                    children: [
-                      Text("Address" + concurrent.Address.Address.toString()),
-                      Text("City" + concurrent.Address.City.toString()),
-                      Text("Complement" +
-                          concurrent.Address.Complement.toString()),
-                      Text("District" + concurrent.Address.District.toString()),
-                      Text("Number" + concurrent.Address.Number.toString()),
-                      Text("Reference" +
-                          concurrent.Address.Reference.toString()),
-                      Text("State" + concurrent.Address.State.toString()),
-                      Text("Zip" + concurrent.Address.Zip.toString()),
-                    ],
-                  ),
+                  value: concurrent.Address.Zip?.isEmpty == true
+                      ? "Nenhum informado"
+                      : "${concurrent.Address.Address.toString()}, ${concurrent.Address.District}, ${concurrent.Address.City}, ${concurrent.Address.Number}. \nCEP: ${concurrent.Address.Zip}",
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton.icon(
                       onPressed: () {
-                        researchPricesProvider.updateSelectedConcurrent(concurrent);
+                        researchPricesProvider
+                            .updateSelectedConcurrent(concurrent);
                         Navigator.of(context).pushNamed(
                           APPROUTES.INSERT_OR_UPDATE_CONCORRENT,
                           arguments: enterpriseCode,
