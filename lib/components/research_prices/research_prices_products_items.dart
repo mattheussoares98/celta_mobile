@@ -2,10 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../global_widgets/global_widgets.dart';
+import '../../models/research_prices/research_prices.dart';
 import '../../models/sale_request/sale_request.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
 
 class ResearchPricesProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
@@ -125,16 +126,28 @@ class _ResearchPricesProductsItemsState
 
   Widget itemOfList({
     required int index,
-    required ConfigurationsProvider configurationsProvider,
+    required ResearchPricesProvider researchPricesProvider,
   }) {
+    ResearchPricesProductsModel product = widget.isAssociatedProducts
+        ? researchPricesProvider.associatedsProducts[index]
+        : researchPricesProvider.notAssociatedProducts[index];
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: () {},
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [],
+            children: [
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Produto",
+                value: product.Name,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "PLU",
+                value: product.PLU.toString(),
+              ),
+            ],
           ),
         ),
       ),
@@ -143,10 +156,6 @@ class _ResearchPricesProductsItemsState
 
   @override
   Widget build(BuildContext context) {
-    ConfigurationsProvider configurationsProvider = Provider.of(
-      context,
-      listen: true,
-    );
     ResearchPricesProvider researchPricesProvider = Provider.of(
       context,
       listen: true,
@@ -183,7 +192,7 @@ class _ResearchPricesProductsItemsState
                       Expanded(
                         child: itemOfList(
                           index: i,
-                          configurationsProvider: configurationsProvider,
+                          researchPricesProvider: researchPricesProvider,
                         ),
                       ),
                   ],

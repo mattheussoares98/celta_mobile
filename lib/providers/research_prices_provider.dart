@@ -1,11 +1,12 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/models/address/address.dart';
 import 'package:flutter/material.dart';
 
-import '../models/research_prices/research_prices.dart';
 import '../api/api.dart';
-import '../components/global_widgets/global_widgets.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../models/address/address.dart';
+import '../../models/research_prices/research_prices.dart';
+import '../../providers/providers.dart';
 import '../utils/utils.dart';
 
 class ResearchPricesProvider with ChangeNotifier {
@@ -253,9 +254,9 @@ class ResearchPricesProvider with ChangeNotifier {
   }) async {
     var jsonBody = json.encode({
       "CrossIdentity": UserData.crossIdentity,
-      "SearchValue":
-          "%", // "SearchTypeInt - ExactCode = 1, ApproximateName = 2"
-      "SearchTypeInt": 2,
+      "SearchValue": "%",
+      "SearchTypeInt":
+          2, // "SearchTypeInt - ExactCode = 1, ApproximateName = 2"
     });
     try {
       await SoapHelper.soapPost(
@@ -294,36 +295,77 @@ class ResearchPricesProvider with ChangeNotifier {
 
   void clearAssociatedsProducts() {
     _associatedsProducts.clear();
+    _errorGetAssociatedsProducts = "";
   }
 
   void clearNotAssociatedsProducts() {
     _notAssociatedsProducts.clear();
+    _errorGetNotAssociatedsProducts = "";
   }
 
   Future<void> getProduct({
     required bool getAssociatedsProducts,
     required String searchProductControllerText,
+    required BuildContext context,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
-    if (getAssociatedsProducts) {
-      await _getAssociatedsProducts(searchProductControllerText);
-    } else {
-      await _getNotAssociatedsProducts(searchProductControllerText);
-    }
-  }
-
-  Future<void> _getAssociatedsProducts(
-    String searchProductControllerValue,
-  ) async {
     _errorGetAssociatedsProducts = "";
     _isLoadingGetProducts = true;
     notifyListeners();
-  }
 
-  Future<void> _getNotAssociatedsProducts(
-    String searchProductControllerValue,
-  ) async {
-    _errorGetNotAssociatedsProducts = "";
-    _isLoadingGetProducts = true;
-    notifyListeners();
+    // Map jsonGetProducts = {
+    //   "CrossIdentity": UserData.crossIdentity,
+    //   "RoutineInt": 7, //ResearchOfPrice
+    //   "ResearchOfPriceCode": _selectedResearch!.Code,
+    //   "AssociateInResearchOfPrice": getAssociatedsProducts, //Seta como true
+    //   "SearchValue": searchProductControllerText,
+    //   // "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+    //   "EnterpriseCodes": [2],
+    // };
+    Map jsonGetProducts = {
+      "CrossIdentity": UserData.crossIdentity,
+      "RoutineInt": 7,
+      "SearchValue": searchProductControllerText,
+      "EnterpriseCodes": [2],
+      // "EnterpriseDestinyCode": 0,
+      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+      // "SearchType": 0,
+      // "Routine": 0,
+    };
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetProducts),
+        },
+        typeOfResponse: "GetProductsJsonResponse",
+        SOAPAction: "GetProductsJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductsJsonResult",
+      );
+
+      _errorGetAssociatedsProducts = SoapHelperResponseParameters.errorMessage;
+
+      SoapHelperResponseParameters.responseAsString;
+
+      if (_errorGetAssociatedsProducts == "") {
+        // BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
+        //   responseAsString: SoapHelperResponseParameters.responseAsString,
+        //   listToAdd: _products,
+        // );
+      } else {
+        ShowSnackbarMessage.showMessage(
+          message: _errorGetAssociatedsProducts,
+          context: context,
+        );
+      }
+    } catch (e) {
+      print("Erro para obter os produtos: $e");
+      _errorGetAssociatedsProducts =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoadingGetProducts = false;
+      notifyListeners();
+    }
   }
 }

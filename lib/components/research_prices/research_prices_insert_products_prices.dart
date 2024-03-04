@@ -37,9 +37,10 @@ class _ResearchPricesInsertProductsPricesState
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return PopScope(
-      canPop: true,
+      canPop: !researchPricesProvider.isLoadingGetProducts,
       onPopInvoked: (_) async {
         if (widget.isAssociatedProducts) {
           researchPricesProvider.clearAssociatedsProducts();
@@ -61,6 +62,8 @@ class _ResearchPricesInsertProductsPricesState
               await researchPricesProvider.getProduct(
                 getAssociatedsProducts: widget.isAssociatedProducts,
                 searchProductControllerText: _searchProductController.text,
+                context: context,
+                configurationsProvider: configurationsProvider,
               );
 
               _clearSearchProductController(researchPricesProvider);
@@ -82,9 +85,10 @@ class _ResearchPricesInsertProductsPricesState
             Expanded(
               child: SearchingWidget(title: "Consultando produto(s)"),
             ),
-          if (true)
+          if (researchPricesProvider.associatedsProductsCount > 0 ||
+              researchPricesProvider.notAssociatedProductsCount > 0)
             ResearchPricesProductsItems(
-              isAssociatedProducts: widget.isAssociatedProducts,
+                isAssociatedProducts: widget.isAssociatedProducts,
                 consultedProductController: _consultedProductController,
                 getProductsWithCamera: () async {
                   FocusScope.of(context).unfocus();
@@ -100,11 +104,17 @@ class _ResearchPricesInsertProductsPricesState
                   await researchPricesProvider.getProduct(
                     getAssociatedsProducts: widget.isAssociatedProducts,
                     searchProductControllerText: _searchProductController.text,
+                    context: context,
+                    configurationsProvider: configurationsProvider,
                   );
 
-                  // if (saleRequestProvider.productsCount > 0) {
-                  _searchProductController.clear();
-                  // }
+                  if (widget.isAssociatedProducts &&
+                      researchPricesProvider.associatedsProductsCount > 0) {
+                    _searchProductController.clear();
+                  } else if (!widget.isAssociatedProducts &&
+                      researchPricesProvider.notAssociatedProductsCount > 0) {
+                    _searchProductController.clear();
+                  }
                 }),
         ],
       ),
