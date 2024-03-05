@@ -53,17 +53,19 @@ class LoginProvider with ChangeNotifier {
     _isLoading = true;
     UserData.userName = user;
     await PrefsInstance.setUserName();
-    await PrefsInstance.setUrlCcsAndEnterpriseName();
     notifyListeners();
 
     if (_changedEnterpriseNameOrUrlCcs) {
       if (ConvertString.isUrl(enterpriseNameOrUrlCCSController.text)) {
         UserData.urlCCS = enterpriseNameOrUrlCCSController.text;
+        UserData.enterpriseName = "";
       }
       _errorMessage =
           await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
         enterpriseNameOrUrlCCSController.text,
       );
+
+      await PrefsInstance.setUrlCcsAndEnterpriseName();
     }
 
     if (_errorMessage != "" &&
