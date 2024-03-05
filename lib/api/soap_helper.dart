@@ -71,7 +71,6 @@ class SoapHelper {
 
       if (response.statusCode == 200) {
         String result = response.body;
-        print("Resposta da chamada SOAP: $result");
 
         final Xml2Json xml2json = Xml2Json();
         xml2json.parse(result);
@@ -119,7 +118,7 @@ class SoapHelper {
       } else {
         SoapHelperResponseParameters.errorMessage =
             DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-            print(response.body);
+        print(response.body);
         throw Exception('Failed to load data');
       }
     } catch (e) {

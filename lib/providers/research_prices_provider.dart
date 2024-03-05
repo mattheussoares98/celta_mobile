@@ -77,10 +77,16 @@ class ResearchPricesProvider with ChangeNotifier {
     updateSelectedConcurrent(null);
   }
 
-  Future<void> _getResearchPrices({
-    required bool isExactCode,
+  Future<void> getResearchPrices({
+    required BuildContext context,
+    required bool notifyListenersFromUpdate,
     required int enterpriseCode,
   }) async {
+    _researchPrices.clear();
+    _errorGetResearchPrices = "";
+    _isLoadingGetResearchPrices = true;
+    if (notifyListenersFromUpdate) notifyListeners();
+
     try {
       await SoapHelper.soapPost(
         parameters: {
@@ -94,36 +100,11 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "GetResearchOfPriceResult",
       );
       _errorGetResearchPrices = SoapHelperResponseParameters.errorMessage;
-    } catch (e) {}
-  }
+    } catch (e) {
+      _errorGetResearchPrices = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    }
 
-  Future<void> getResearchPrices({
-    required BuildContext context,
-    required bool notifyListenersFromUpdate,
-    required int enterpriseCode,
-  }) async {
-    _researchPrices.clear();
-    _errorGetResearchPrices = "";
-    _isLoadingGetResearchPrices = true;
-    if (notifyListenersFromUpdate) notifyListeners();
-
-    await _getResearchPrices(
-      isExactCode: false,
-      enterpriseCode: enterpriseCode,
-    );
-    // if (researchPricesCount == 0) {
-    //   await _getResearchPrices(
-    //     isExactCode: false,
-    //     enterpriseCode: enterpriseCode,
-    //   );
-    // }
-
-    if (_errorGetResearchPrices != "") {
-      ShowSnackbarMessage.showMessage(
-        message: _errorGetResearchPrices,
-        context: context,
-      );
-    } else {
+    if (_errorGetResearchPrices == "") {
       ResearchModel.resultAsStringToResearchModel(
         resultAsString: SoapHelperResponseParameters.responseAsString,
         listToAdd: _researchPrices,
@@ -150,16 +131,16 @@ class ResearchPricesProvider with ChangeNotifier {
         {
           "CrossIdentity": UserData.crossIdentity,
           "Code": _selectedResearch == null ? 0 : _selectedResearch?.Code,
-          "EnterpriseCode": _selectedResearch == null ? 0 : enterpriseCode,
+          "EnterpriseCode": enterpriseCode,
           "EnterpriseName": enterpriseName,
-          "CreationDate": DateTime.now().toIso8601String(),
+          "CreationDate": "2024-03-05T08:53:15.327516",
           "Name": researchName,
           "Observation": observation,
         },
       );
       await SoapHelper.soapPost(
         parameters: {
-          "Json": jsonBody,
+          "json": jsonBody,
         },
         typeOfResponse: "InsertUpdateResearchOfPriceResponse",
         SOAPAction: "InsertUpdateResearchOfPrice",

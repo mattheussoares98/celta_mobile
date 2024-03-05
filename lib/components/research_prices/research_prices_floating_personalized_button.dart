@@ -9,7 +9,6 @@ floatingPersonalizedButton({
   required bool isLoading,
   required String messageButton,
   required void Function()? onTap,
-  Map? arguments,
 }) {
   return GestureDetector(
     onTap: isLoading ? null : onTap,

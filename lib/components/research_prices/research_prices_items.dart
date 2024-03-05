@@ -30,7 +30,7 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
         researchPricesProvider.updateSelectedResearch(research);
         Navigator.of(context).pushNamed(
           APPROUTES.RESEARCH_PRICES_CONCURRENTS,
-          arguments: widget.enterpriseCode,
+          arguments: {"enterpriseCode" : widget.enterpriseCode},
         );
       },
       child: Card(

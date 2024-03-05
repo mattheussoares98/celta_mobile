@@ -118,7 +118,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                       errorMessage:
                           researchPricesProvider.errorGetResearchPrices),
                 ),
-              if (researchPricesProvider.researchPricesCount > 0)
+              if (!researchPricesProvider.isLoadingResearchPrices)
                 ResearchPricesItems(enterpriseCode: enterpriseCode!),
             ],
           ),
@@ -129,11 +129,11 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
             nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
             isLoading: researchPricesProvider.isLoadingResearchPrices,
             messageButton: "criar\npesquisa".toUpperCase(),
-            arguments: {"enterpriseCode": enterpriseCode},
             onTap: () {
-            researchPricesProvider.updateSelectedResearch(null);
+              researchPricesProvider.updateSelectedResearch(null);
               Navigator.of(context).pushNamed(
                 APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+                arguments: {"enterpriseCode": enterpriseCode},
               );
             }),
       ),
