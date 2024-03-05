@@ -118,7 +118,6 @@ class ResearchPricesProvider with ChangeNotifier {
   Future<void> addOrUpdateResearch({
     required BuildContext context,
     required int? enterpriseCode,
-    String? enterpriseName,
     String? observation,
     String? researchName,
   }) async {
@@ -132,8 +131,6 @@ class ResearchPricesProvider with ChangeNotifier {
           "CrossIdentity": UserData.crossIdentity,
           "Code": _selectedResearch == null ? 0 : _selectedResearch?.Code,
           "EnterpriseCode": enterpriseCode,
-          "EnterpriseName": enterpriseName,
-          "CreationDate": "2024-03-05T08:53:15.327516",
           "Name": researchName,
           "Observation": observation,
         },

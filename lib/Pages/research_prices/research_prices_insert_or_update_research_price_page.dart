@@ -15,9 +15,6 @@ class ResearchPricesInsertOrUpdateResearchPrice extends StatefulWidget {
 
 class _ResearchPricesInsertOrUpdateResearchPriceState
     extends State<ResearchPricesInsertOrUpdateResearchPrice> {
-  FocusNode enterpriseNameFocusNode = FocusNode();
-  TextEditingController enterpriseNameController = TextEditingController();
-
   FocusNode nameFocusNode = FocusNode();
   TextEditingController researchNameController = TextEditingController();
 
@@ -27,7 +24,6 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
   void _updateControllers(ResearchModel? research) {
     if (research != null) {
       observationController.text = research.Observation;
-      enterpriseNameController.text = research.EnterpriseName ?? "";
       researchNameController.text = research.Name ?? "";
     }
   }
@@ -111,23 +107,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                     labelText: 'Observação',
                   ),
                   onFieldSubmitted: (_) async {
-                    FocusScope.of(context).requestFocus();
-                  },
-                  style: FormFieldHelper.style(),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  focusNode: enterpriseNameFocusNode,
-                  enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
-                  controller: enterpriseNameController,
-                  decoration: FormFieldHelper.decoration(
-                    isLoading:
-                        researchPricesProvider.isLoadingAddOrUpdateResearch,
-                    context: context,
-                    labelText: 'Nome da empresa',
-                  ),
-                  onFieldSubmitted: (_) async {
-                    FocusScope.of(context).requestFocus();
+                    FocusScope.of(context).unfocus();
                   },
                   style: FormFieldHelper.style(),
                 ),
@@ -139,13 +119,20 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                   onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
                       ? null
                       : () async {
-                          await researchPricesProvider.addOrUpdateResearch(
-                            context: context,
-                            enterpriseCode: arguments?["enterpriseCode"] ?? 0,
-                            enterpriseName: enterpriseNameController.text,
-                            observation: observationController.text,
-                            researchName: researchNameController.text,
-                          );
+                          ShowAlertDialog.showAlertDialog(
+                              context: context,
+                              title: "Confirmar",
+                              subtitle: "Deseja confirmar o cadastro/alteração?",
+                              function: () async {
+                                await researchPricesProvider
+                                    .addOrUpdateResearch(
+                                  context: context,
+                                  enterpriseCode:
+                                      arguments?["enterpriseCode"] ?? 0,
+                                  observation: observationController.text,
+                                  researchName: researchNameController.text,
+                                );
+                              });
                         },
                   child: researchPricesProvider.isLoadingAddOrUpdateResearch
                       ? Column(
