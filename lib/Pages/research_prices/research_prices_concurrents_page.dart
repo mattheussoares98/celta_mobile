@@ -10,36 +10,24 @@ class ResearchPricesConcurrentsPage extends StatefulWidget {
   const ResearchPricesConcurrentsPage({Key? key}) : super(key: key);
 
   @override
-  State<ResearchPricesConcurrentsPage> createState() => _ResearchPricesConcurrentsPageState();
+  State<ResearchPricesConcurrentsPage> createState() =>
+      _ResearchPricesConcurrentsPageState();
 }
 
-class _ResearchPricesConcurrentsPageState extends State<ResearchPricesConcurrentsPage> {
+class _ResearchPricesConcurrentsPageState
+    extends State<ResearchPricesConcurrentsPage> {
+  TextEditingController searchConcurrentControllerText =
+      TextEditingController();
+  FocusNode focusNodeSearch = FocusNode();
+
   Future<void> _getConcurrents({
-    required bool notifyListenersFromUpdate,
     required ResearchPricesProvider researchPricesProvider,
+    required bool getAllConcurrents,
   }) async {
     await researchPricesProvider.getConcurrents(
-      context: context,
-      notifyListenersFromUpdate: notifyListenersFromUpdate,
+      searchConcurrentControllerText:
+          getAllConcurrents ? "%" : searchConcurrentControllerText.text,
     );
-  }
-
-  bool _isLoaded = false;
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-
-    ResearchPricesProvider researchPricesProvider =
-        Provider.of(context, listen: true);
-
-    if (!_isLoaded) {
-      await _getConcurrents(
-        notifyListenersFromUpdate: false,
-        researchPricesProvider: researchPricesProvider,
-      );
-    }
-
-    _isLoaded = true;
   }
 
   @override
@@ -48,7 +36,7 @@ class _ResearchPricesConcurrentsPageState extends State<ResearchPricesConcurrent
         Provider.of(context, listen: true);
 
     return PopScope(
-      canPop: true,
+      canPop: !researchPricesProvider.isLoadingGetConcurrents,
       onPopInvoked: (_) async {
         researchPricesProvider.clearConcurrents();
       },
@@ -67,60 +55,75 @@ class _ResearchPricesConcurrentsPageState extends State<ResearchPricesConcurrent
               Icons.arrow_back_outlined,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: researchPricesProvider.isLoadingAddOrUpdateConcurrents
-                  ? null
-                  : () async {
+        ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: SearchWidget(
+                    consultProductController: searchConcurrentControllerText,
+                    isLoading: researchPricesProvider.isLoadingGetConcurrents,
+                    onPressSearch: () async {
                       await _getConcurrents(
-                        notifyListenersFromUpdate: true,
                         researchPricesProvider: researchPricesProvider,
+                        getAllConcurrents: false,
                       );
                     },
-              icon: const Icon(Icons.refresh),
-            ),
-          ],
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await _getConcurrents(
-              notifyListenersFromUpdate: true,
-              researchPricesProvider: researchPricesProvider,
-            );
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              if (researchPricesProvider.isLoadingAddOrUpdateConcurrents)
-                Expanded(
-                  child: SearchingWidget(
-                    title: 'Pesquisando concorrentes',
+                    hintText: "Nome ou código",
+                    labelText: "Nome ou código",
+                    focusNodeConsultProduct: focusNodeSearch,
+                    useCamera: false,
+                    showConfigurationsIcon: false,
                   ),
                 ),
-              if (researchPricesProvider.concurrentsCount > 0)
-                const ConcurrentsItems(),
-              if (researchPricesProvider.errorAddOrUpdateConcurrents != "" &&
-                  researchPricesProvider.concurrentsCount == 0)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ErrorMessage(
-                      errorMessage:
-                          researchPricesProvider.errorAddOrUpdateConcurrents),
+                FittedBox(
+                  child: TextButton(
+                    onPressed: researchPricesProvider.isLoadingGetConcurrents ? null : () async {
+                      _getConcurrents(
+                        researchPricesProvider: researchPricesProvider,
+                        getAllConcurrents: true,
+                      );
+                    },
+                    child: const Text(
+                      "Consultar\ntodos",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            if (researchPricesProvider.isLoadingGetConcurrents)
+              Expanded(
+                child: SearchingWidget(
+                  title: 'Pesquisando concorrentes',
                 ),
-            ],
-          ),
+              ),
+            if (researchPricesProvider.concurrentsCount > 0)
+              const ConcurrentsItems(),
+            if (researchPricesProvider.errorAddOrUpdateConcurrents != "" &&
+                researchPricesProvider.concurrentsCount == 0)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ErrorMessage(
+                    errorMessage:
+                        researchPricesProvider.errorAddOrUpdateConcurrents),
+              ),
+          ],
         ),
         floatingActionButton: floatingPersonalizedButton(
-            context: context,
-            researchPricesProvider: researchPricesProvider,
-            nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
-            isLoading: researchPricesProvider.isLoadingAddOrUpdateConcurrents,
-            messageButton: "criar\nconcorrente".toUpperCase(),
-            onTap: () {
-              researchPricesProvider.updateSelectedConcurrent(null);
-              Navigator.of(context)
-                  .pushNamed(APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT);
-            }),
+          context: context,
+          researchPricesProvider: researchPricesProvider,
+          nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+          isLoading: researchPricesProvider.isLoadingGetConcurrents,
+          messageButton: "criar\nconcorrente".toUpperCase(),
+          onTap: () {
+            researchPricesProvider.updateSelectedConcurrent(null);
+            Navigator.of(context)
+                .pushNamed(APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT);
+          },
+        ),
       ),
     );
   }

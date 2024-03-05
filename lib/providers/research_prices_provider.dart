@@ -28,6 +28,11 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingAddOrUpdateConcurrents => _isLoadingAddOrUpdateConcurrents;
   String _errorAddOrUpdateConcurrents = "";
   String get errorAddOrUpdateConcurrents => _errorAddOrUpdateConcurrents;
+
+  bool _isLoadingGetConcurrents = false;
+  bool get isLoadingGetConcurrents => _isLoadingGetConcurrents;
+  String _errorGetConcurrents = "";
+  String get errorGetConcurrents => _errorGetConcurrents;
   final List<ConcurrentsModel> _concurrents = [];
   List<ConcurrentsModel> get concurrents => [..._concurrents];
   int get concurrentsCount => _concurrents.length;
@@ -214,6 +219,9 @@ class ResearchPricesProvider with ChangeNotifier {
         backgroundColor: Colors.green,
         context: context,
       );
+      await getConcurrents(
+        searchConcurrentControllerText: "alteraaaaaaaaaaaaaar",
+      );
       _selectedConcurrent = null;
     } else {
       ShowSnackbarMessage.showMessage(
@@ -226,14 +234,20 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getConcurrents({
-    required bool isExactCode,
-    required BuildContext context,
+  Future<void> getConcurrents({
+    required String searchConcurrentControllerText,
   }) async {
+    clearConcurrents();
+    _isLoadingGetConcurrents = true;
+    notifyListeners();
+
     var jsonBody = json.encode({
       "CrossIdentity": UserData.crossIdentity,
-      "SearchValue": "%",
-      "SearchTypeInt":
+      "SearchValue": int.tryParse(searchConcurrentControllerText) != null
+    ? int.parse(searchConcurrentControllerText)
+    : searchConcurrentControllerText,
+
+      "SearchTypeInt": int.tryParse(searchConcurrentControllerText) ??
           2, // "SearchTypeInt - ExactCode = 1, ApproximateName = 2"
     });
     try {
@@ -246,7 +260,7 @@ class ResearchPricesProvider with ChangeNotifier {
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "GetConcurrentJsonResult",
       );
-      _errorAddOrUpdateConcurrents = SoapHelperResponseParameters.errorMessage;
+      _errorGetConcurrents = SoapHelperResponseParameters.errorMessage;
 
       List resultAsList =
           json.decode(SoapHelperResponseParameters.responseAsString);
@@ -255,19 +269,8 @@ class ResearchPricesProvider with ChangeNotifier {
         resultAsList: resultAsList,
       );
     } catch (e) {}
-  }
 
-  Future<void> getConcurrents({
-    required BuildContext context,
-    required bool notifyListenersFromUpdate,
-  }) async {
-    clearConcurrents();
-    _isLoadingAddOrUpdateConcurrents = true;
-    if (notifyListenersFromUpdate) notifyListeners();
-
-    await _getConcurrents(isExactCode: false, context: context);
-
-    _isLoadingAddOrUpdateConcurrents = false;
+    _isLoadingGetConcurrents = false;
     notifyListeners();
   }
 
