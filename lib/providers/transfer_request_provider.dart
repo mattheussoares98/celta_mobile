@@ -19,7 +19,6 @@ class TransferRequestProvider with ChangeNotifier {
 
   void clearRequestModels() {
     _requestModels.clear();
-    notifyListeners();
   }
 
   String _lastSavedTransferRequest = '';
