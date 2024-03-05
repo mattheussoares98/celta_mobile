@@ -432,6 +432,7 @@ class TransferRequestProvider with ChangeNotifier {
     _errorMessageRequestModel = '';
     _isLoadingRequestModel = true;
     _destinyEnterprises.clear();
+    clearRequestModels();
 
     if (isConsultingAgain) notifyListeners();
 
