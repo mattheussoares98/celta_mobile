@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../../components/global_widgets/global_widgets.dart';
-import '../../models/address/address.dart';
 import '../../models/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 import '../utils/utils.dart';
@@ -181,7 +180,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
   Future<void> addOrUpdateConcurrent({
     required BuildContext context,
-    required AddressModel address,
+    required AddressProvider addressProvider,
     required String concurrentName,
     required String observation,
   }) async {
@@ -189,21 +188,25 @@ class ResearchPricesProvider with ChangeNotifier {
     _isLoadingAddOrUpdateConcurrents = true;
     notifyListeners();
 
+    Map jsonBody = {
+      "ConcurrentCode":
+          _selectedConcurrent != null ? _selectedConcurrent!.ConcurrentCode : 0,
+      "CrossIdentity": UserData.crossIdentity,
+      "Name": concurrentName,
+      "Observation": observation,
+    };
+    if (addressProvider.addressesCount > 0) {
+      //significa que adicionou um endereço e por isso precisa enviar o que foi adicionado
+      jsonBody["Address"] = addressProvider.addresses[0].toJson();
+    } else if (_selectedConcurrent?.Address.Zip != null &&
+    //se o usuário tem um endereço, o ideal é mandar o mesmo endereço de novo. Se mandar sem a tag de endereço da erro
+        _selectedConcurrent?.Address.Zip != "") {
+      jsonBody["Address"] = _selectedConcurrent!.Address.toJson();
+    }
+
     try {
       await SoapHelper.soapPost(
-        parameters: {
-          "json": json.encode({
-            "CrossIdentity": UserData.crossIdentity,
-            "ResearchOfPriceCode":
-                _selectedResearch != null ? _selectedResearch!.Code : 0,
-            "ConcurrentCode": _selectedConcurrent != null
-                ? _selectedConcurrent!.ConcurrentCode
-                : 0,
-            "Name": concurrentName,
-            "Observation": observation,
-            "Address": address,
-          })
-        },
+        parameters: {"json": json.encode(jsonBody)},
         typeOfResponse: "InsertUpdateConcurrentJsonResponse",
         SOAPAction: "InsertUpdateConcurrentJson",
         serviceASMX: "CeltaResearchOfPriceService.asmx",

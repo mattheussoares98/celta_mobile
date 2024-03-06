@@ -6,7 +6,9 @@ import '../../providers/providers.dart';
 import '../global_widgets/global_widgets.dart';
 
 class CustomerRegisterAddressesInformeds extends StatefulWidget {
+  final bool isLoading;
   const CustomerRegisterAddressesInformeds({
+    required this.isLoading,
     Key? key,
   }) : super(key: key);
 
@@ -107,7 +109,8 @@ class _CustomerRegisterAddressesInformedsState
                             Size(double.infinity, 30)),
                       ),
                       onPressed:
-                          customerRegisterProvider.isLoadingInsertCustomer
+                          customerRegisterProvider.isLoadingInsertCustomer ||
+                                  widget.isLoading
                               ? null
                               : () {
                                   ShowAlertDialog.showAlertDialog(

@@ -9,8 +9,10 @@ class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
   final bool Function() validateAdressFormKey;
   final bool canInsertMoreThanOneAddress;
+  final bool? isLoading;
   const AddressComponent({
     required this.adressFormKey,
+    this.isLoading = false,
     required this.validateAdressFormKey,
     required this.canInsertMoreThanOneAddress,
     Key? key,
@@ -99,7 +101,8 @@ class _AddressComponentState extends State<AddressComponent> {
           children: [
             AddressFormField(
               keyboardType: TextInputType.number,
-              enabled: addressProvider.isLoadingCep ? false : true,
+              enabled:
+                  widget.isLoading == false && !addressProvider.isLoadingCep,
               focusNode: _cepFocusNode,
               onFieldSubmitted: addressProvider.isLoadingCep
                   ? null
@@ -146,7 +149,15 @@ class _AddressComponentState extends State<AddressComponent> {
                           ],
                         ),
                       )
-                    : const Text("Pesquisar CEP"),
+                    : Text(
+                        "Pesquisar CEP",
+                        style: TextStyle(
+                          color: addressProvider.isLoadingCep ||
+                                  widget.isLoading == true
+                              ? Colors.grey
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                 onPressed: addressProvider.isLoadingCep
                     ? null
                     : () async {
@@ -160,7 +171,8 @@ class _AddressComponentState extends State<AddressComponent> {
               Column(
                 children: [
                   AddressFormField(
-                    enabled: addressProvider.isLoadingCep ? false : true,
+                    enabled: widget.isLoading == false &&
+                        !addressProvider.isLoadingCep,
                     focusNode: _adressFocusNode,
                     labelText: "Logradouro",
                     textEditingController: addressProvider.addressController,
@@ -182,7 +194,8 @@ class _AddressComponentState extends State<AddressComponent> {
                     children: [
                       Expanded(
                         child: AddressFormField(
-                          enabled: addressProvider.isLoadingCep ? false : true,
+                          enabled: widget.isLoading == false &&
+                              !addressProvider.isLoadingCep,
                           focusNode: _districtFocusNode,
                           onFieldSubmitted: addressProvider.isLoadingCep
                               ? null
@@ -208,7 +221,8 @@ class _AddressComponentState extends State<AddressComponent> {
                       ),
                       Expanded(
                         child: AddressFormField(
-                          enabled: addressProvider.isLoadingCep ? false : true,
+                          enabled: widget.isLoading == false &&
+                              !addressProvider.isLoadingCep,
                           focusNode: _cityFocusNode,
                           labelText: "Cidade",
                           textEditingController: addressProvider.cityController,
@@ -292,7 +306,8 @@ class _AddressComponentState extends State<AddressComponent> {
                         flex: 4,
                         child: AddressFormField(
                           keyboardType: TextInputType.number,
-                          enabled: addressProvider.isLoadingCep ? false : true,
+                          enabled: widget.isLoading == false &&
+                              !addressProvider.isLoadingCep,
                           focusNode: _numberFocusNode,
                           onFieldSubmitted: addressProvider.isLoadingCep
                               ? null
@@ -327,7 +342,8 @@ class _AddressComponentState extends State<AddressComponent> {
                     children: [
                       Expanded(
                         child: AddressFormField(
-                          enabled: addressProvider.isLoadingCep ? false : true,
+                          enabled: widget.isLoading == false &&
+                              !addressProvider.isLoadingCep,
                           focusNode: _complementFocusNode,
                           onFieldSubmitted: addressProvider.isLoadingCep
                               ? null
@@ -346,7 +362,8 @@ class _AddressComponentState extends State<AddressComponent> {
                       ),
                       Expanded(
                         child: AddressFormField(
-                          enabled: addressProvider.isLoadingCep ? false : true,
+                          enabled: widget.isLoading == false &&
+                              !addressProvider.isLoadingCep,
                           focusNode: _referenceFocusNode,
                           labelText: "Referência",
                           textEditingController:
@@ -430,7 +447,9 @@ class _AddressComponentState extends State<AddressComponent> {
                 ],
               ),
             if (addressProvider.addressesCount > 0)
-              const CustomerRegisterAddressesInformeds(),
+              CustomerRegisterAddressesInformeds(
+                isLoading: widget.isLoading == true,
+              ),
           ],
         ),
       ),

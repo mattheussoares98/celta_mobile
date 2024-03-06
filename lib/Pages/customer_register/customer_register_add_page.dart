@@ -27,7 +27,7 @@ class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
               customerRegisterProvider: customerRegisterProvider,
             ),
           if (addressProvider.addressesCount > 0)
-            const CustomerRegisterAddressesInformeds(),
+            const CustomerRegisterAddressesInformeds(isLoading: false),
           if (customerRegisterProvider.emailsCount > 0)
             const CustomerRegisterEmailsInformeds(),
           if (customerRegisterProvider.telephonesCount > 0)
