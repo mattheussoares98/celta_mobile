@@ -13,6 +13,7 @@ class ErrorMessage extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Text(
         errorMessage,
+        textAlign: TextAlign.center,
         style: const TextStyle(
           fontFamily: 'OpenSans',
           fontSize: 17,

@@ -21,7 +21,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
     required ResearchPricesProvider researchPricesProvider,
   }) {
     ConcurrentsModel concurrent = researchPricesProvider.concurrents[index];
-    int? enterpriseCode = ModalRoute.of(context)!.settings.arguments as int?;
+    Map? enterpriseCode = ModalRoute.of(context)!.settings.arguments as Map?;
 
     return Container(
       child: InkWell(
@@ -35,12 +35,12 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // TitleAndSubtitle.titleAndSubtitle(
+                //   title: "Código da pesquisa",
+                //   value: concurrent.ResearchOfPriceCode.toString(),
+                // ),
                 TitleAndSubtitle.titleAndSubtitle(
-                  title: "Código da pesquisa",
-                  value: concurrent.ResearchOfPriceCode.toString(),
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Código do concorrente",
+                  title: "Código",
                   value: concurrent.ConcurrentCode.toString(),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
@@ -66,7 +66,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                             .updateSelectedConcurrent(concurrent);
                         Navigator.of(context).pushNamed(
                           APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
-                          arguments: enterpriseCode,
+                          arguments: {enterpriseCode: "enterpriseCode"},
                         );
                       },
                       icon: const Icon(Icons.edit),

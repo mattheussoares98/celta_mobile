@@ -28,6 +28,9 @@ class _ResearchPricesConcurrentsPageState
       searchConcurrentControllerText:
           getAllConcurrents ? "%" : searchConcurrentControllerText.text,
     );
+    if (researchPricesProvider.errorGetConcurrents == "") {
+      searchConcurrentControllerText.text = "";
+    }
   }
 
   @override
@@ -57,7 +60,6 @@ class _ResearchPricesConcurrentsPageState
           ),
         ),
         body: Column(
-          mainAxisSize: MainAxisSize.max,
           children: [
             Row(
               children: [
@@ -80,12 +82,14 @@ class _ResearchPricesConcurrentsPageState
                 ),
                 FittedBox(
                   child: TextButton(
-                    onPressed: researchPricesProvider.isLoadingGetConcurrents ? null : () async {
-                      _getConcurrents(
-                        researchPricesProvider: researchPricesProvider,
-                        getAllConcurrents: true,
-                      );
-                    },
+                    onPressed: researchPricesProvider.isLoadingGetConcurrents
+                        ? null
+                        : () async {
+                            _getConcurrents(
+                              researchPricesProvider: researchPricesProvider,
+                              getAllConcurrents: true,
+                            );
+                          },
                     child: const Text(
                       "Consultar\ntodos",
                       textAlign: TextAlign.center,
@@ -102,13 +106,11 @@ class _ResearchPricesConcurrentsPageState
               ),
             if (researchPricesProvider.concurrentsCount > 0)
               const ConcurrentsItems(),
-            if (researchPricesProvider.errorAddOrUpdateConcurrents != "" &&
-                researchPricesProvider.concurrentsCount == 0)
+            if (researchPricesProvider.errorGetConcurrents != "")
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ErrorMessage(
-                    errorMessage:
-                        researchPricesProvider.errorAddOrUpdateConcurrents),
+                    errorMessage: researchPricesProvider.errorGetConcurrents),
               ),
           ],
         ),

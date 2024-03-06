@@ -33,7 +33,7 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingGetConcurrents => _isLoadingGetConcurrents;
   String _errorGetConcurrents = "";
   String get errorGetConcurrents => _errorGetConcurrents;
-  final List<ConcurrentsModel> _concurrents = [];
+  List<ConcurrentsModel> _concurrents = [];
   List<ConcurrentsModel> get concurrents => [..._concurrents];
   int get concurrentsCount => _concurrents.length;
   FocusNode concurrentsFocusNode = FocusNode();
@@ -78,6 +78,7 @@ class ResearchPricesProvider with ChangeNotifier {
   void clearConcurrents() {
     _concurrents.clear();
     _errorAddOrUpdateConcurrents = "";
+    _errorGetConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = false;
     updateSelectedConcurrent(null);
   }
@@ -220,7 +221,7 @@ class ResearchPricesProvider with ChangeNotifier {
         context: context,
       );
       await getConcurrents(
-        searchConcurrentControllerText: "alteraaaaaaaaaaaaaar",
+        searchConcurrentControllerText: "%",
       );
       _selectedConcurrent = null;
     } else {
@@ -244,11 +245,12 @@ class ResearchPricesProvider with ChangeNotifier {
     var jsonBody = json.encode({
       "CrossIdentity": UserData.crossIdentity,
       "SearchValue": int.tryParse(searchConcurrentControllerText) != null
-    ? int.parse(searchConcurrentControllerText)
-    : searchConcurrentControllerText,
+          ? int.parse(searchConcurrentControllerText)
+          : searchConcurrentControllerText,
 
-      "SearchTypeInt": int.tryParse(searchConcurrentControllerText) ??
-          2, // "SearchTypeInt - ExactCode = 1, ApproximateName = 2"
+      "SearchTypeInt": int.tryParse(searchConcurrentControllerText) != null
+          ? 1
+          : 2, // "SearchTypeInt - ExactCode = 1, ApproximateName = 2"
     });
     try {
       await SoapHelper.soapPost(
@@ -262,13 +264,10 @@ class ResearchPricesProvider with ChangeNotifier {
       );
       _errorGetConcurrents = SoapHelperResponseParameters.errorMessage;
 
-      List resultAsList =
-          json.decode(SoapHelperResponseParameters.responseAsString);
-      ConcurrentsModel.addConcurrentsWithResultAsList(
-        listToAdd: _concurrents,
-        resultAsList: resultAsList,
-      );
-    } catch (e) {}
+      _concurrents = ConcurrentsModel.convertResultToListOfConcurrents();
+    } catch (e) {
+      _errorGetConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    }
 
     _isLoadingGetConcurrents = false;
     notifyListeners();
