@@ -118,42 +118,58 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                   },
                   style: FormFieldHelper.style(),
                 ),
-                const SizedBox(height: 15),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                if(researchPricesProvider.selectedConcurrent?.Address.Zip != null)
+                Column(
                   children: [
-                    Text(
-                      "Endereço",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 126, 126, 126),
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        fontSize: 16,
-                      ),
+                    const SizedBox(height: 15),
+                    TitleAndSubtitle.titleAndSubtitle(
+                      title: "Endereço cadastrado",
+                      value:
+                          "${researchPricesProvider.selectedConcurrent!.Address.Address.toString()}, ${researchPricesProvider.selectedConcurrent!.Address.District}, ${researchPricesProvider.selectedConcurrent!.Address.City}, ${researchPricesProvider.selectedConcurrent!.Address.Number}. \nCEP: ${researchPricesProvider.selectedConcurrent!.Address.Zip}",
                     ),
                   ],
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side: const BorderSide(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 20),
-                    child: Column(
+                const SizedBox(height: 15),
+                Column(
+                  children: [
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        AddressComponent(
-                          adressFormKey: _adressFormKey,
-                          canInsertMoreThanOneAddress: false,
-                          validateAdressFormKey: () {
-                            return _adressFormKey.currentState!.validate();
-                          },
+                        Text(
+                          researchPricesProvider.selectedConcurrent?.Address.Zip != null ?
+                          "Alterar endereço" : "Inserir endereço",
+                          style:const  TextStyle(
+                            color: Color.fromARGB(255, 126, 126, 126),
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        side: const BorderSide(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 20),
+                        child: Column(
+                          children: [
+                            AddressComponent(
+                              adressFormKey: _adressFormKey,
+                              canInsertMoreThanOneAddress: false,
+                              validateAdressFormKey: () {
+                                return _adressFormKey.currentState!.validate();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
