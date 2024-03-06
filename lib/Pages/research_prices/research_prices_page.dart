@@ -129,12 +129,19 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
             nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
             isLoading: researchPricesProvider.isLoadingResearchPrices,
             messageButton: "criar\npesquisa".toUpperCase(),
-            onTap: () {
+            onTap: () async {
               researchPricesProvider.updateSelectedResearch(null);
-              Navigator.of(context).pushNamed(
+              final createdNewResearch = await Navigator.of(context).pushNamed(
                 APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
                 arguments: {"enterpriseCode": enterpriseCode},
               );
+
+              if (createdNewResearch == true) {
+                await _getResearchPrices(
+                  notityListenersFromUpdate: true,
+                  researchPricesProvider: researchPricesProvider,
+                );
+              }
             }),
       ),
     );

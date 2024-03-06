@@ -122,7 +122,8 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                           ShowAlertDialog.showAlertDialog(
                               context: context,
                               title: "Confirmar",
-                              subtitle: "Deseja confirmar o cadastro/alteração?",
+                              subtitle:
+                                  "Deseja confirmar o cadastro/alteração?",
                               function: () async {
                                 await researchPricesProvider
                                     .addOrUpdateResearch(
@@ -131,7 +132,22 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                                       arguments?["enterpriseCode"] ?? 0,
                                   observation: observationController.text,
                                   researchName: researchNameController.text,
+                                  isAssociatingConcurrents: false,
                                 );
+
+                                if (researchPricesProvider
+                                        .errorAddOrUpdateResearch ==
+                                    "") {
+                                  ShowSnackbarMessage.showMessage(
+                                    message:
+                                        "Cadastro/alteração realizado com sucesso!",
+                                    context: context,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
+                                  );
+
+                                  Navigator.of(context).pop(true);
+                                }
                               });
                         },
                   child: researchPricesProvider.isLoadingAddOrUpdateResearch

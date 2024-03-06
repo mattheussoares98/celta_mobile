@@ -13,7 +13,7 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingResearchPrices => _isLoadingGetResearchPrices;
   String _errorGetResearchPrices = "";
   String get errorGetResearchPrices => _errorGetResearchPrices;
-  final List<ResearchModel> _researchPrices = [];
+  List<ResearchModel> _researchPrices = [];
   List<ResearchModel> get researchPrices => [..._researchPrices];
   int get researchPricesCount => _researchPrices.length;
   FocusNode researchPricesFocusNode = FocusNode();
@@ -110,20 +110,55 @@ class ResearchPricesProvider with ChangeNotifier {
     }
 
     if (_errorGetResearchPrices == "") {
-      ResearchModel.resultAsStringToResearchModel(
-        resultAsString: SoapHelperResponseParameters.responseAsString,
-        listToAdd: _researchPrices,
-      );
+      _researchPrices = ResearchModel.convertResultToResearchModel();
     }
 
     _isLoadingGetResearchPrices = false;
     notifyListeners();
   }
 
-  Future<void> addOrUpdateResearch({
-    required BuildContext context,
+  Map _jsonBodyAddOrUpdateResearch({
+    required bool isAssociatingConcurrents,
     required int? enterpriseCode,
     String? observation,
+    String? researchName,
+  }) {
+    if (isAssociatingConcurrents) {
+      return {
+        "CrossIdentity": UserData.crossIdentity,
+        "Code": _selectedResearch == null
+            ? 0 //0 pra cadastrar um novo
+            : _selectedResearch?.Code,
+        "EnterpriseCode": enterpriseCode,
+        "Name": researchName,
+        "Observation": observation,
+        "IsAssociatingConcurrents": true,
+        "Concurrents": [
+          {
+            "ResearchOfPriceCode": _selectedResearch!.Code,
+            "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+            "Observation": _selectedConcurrent?.Observation,
+          }
+        ]
+      };
+    } else {
+      return {
+        "CrossIdentity": UserData.crossIdentity,
+        "Code": _selectedResearch == null
+            ? 0 //0 pra cadastrar um novo
+            : _selectedResearch?.Code,
+        "EnterpriseCode": enterpriseCode,
+        "Name": researchName,
+        "Observation": observation,
+      };
+    }
+  }
+
+  Future<void> addOrUpdateResearch({
+    required bool isAssociatingConcurrents,
+    required BuildContext context,
+    required int? enterpriseCode,
+    required String? observation,
     String? researchName,
   }) async {
     _isLoadingAddOrUpdateResearch = true;
@@ -131,18 +166,16 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      var jsonBody = json.encode(
-        {
-          "CrossIdentity": UserData.crossIdentity,
-          "Code": _selectedResearch == null ? 0 : _selectedResearch?.Code,
-          "EnterpriseCode": enterpriseCode,
-          "Name": researchName,
-          "Observation": observation,
-        },
-      );
       await SoapHelper.soapPost(
         parameters: {
-          "json": jsonBody,
+          "json": json.encode(
+            _jsonBodyAddOrUpdateResearch(
+              enterpriseCode: enterpriseCode,
+              isAssociatingConcurrents: isAssociatingConcurrents,
+              observation: observation,
+              researchName: researchName,
+            ),
+          ),
         },
         typeOfResponse: "InsertUpdateResearchOfPriceResponse",
         SOAPAction: "InsertUpdateResearchOfPrice",
@@ -156,12 +189,9 @@ class ResearchPricesProvider with ChangeNotifier {
           message: _errorAddOrUpdateResearch,
           context: context,
         );
-      } else {
-        Map resultAsMap =
-            json.decode(SoapHelperResponseParameters.responseAsString);
-        _researchPrices.add(resultAsMap as ResearchModel);
-        _selectedResearch = null;
       }
+
+      _selectedResearch = null;
     } catch (e) {
       print(e.toString());
       _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
@@ -199,7 +229,7 @@ class ResearchPricesProvider with ChangeNotifier {
       //significa que adicionou um endereço e por isso precisa enviar o que foi adicionado
       jsonBody["Address"] = addressProvider.addresses[0].toJson();
     } else if (_selectedConcurrent?.Address.Zip != null &&
-    //se o usuário tem um endereço, o ideal é mandar o mesmo endereço de novo. Se mandar sem a tag de endereço da erro
+        //se o usuário tem um endereço, o ideal é mandar o mesmo endereço de novo. Se mandar sem a tag de endereço da erro
         _selectedConcurrent?.Address.Zip != "") {
       jsonBody["Address"] = _selectedConcurrent!.Address.toJson();
     }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../../api/api.dart';
 import '../../models/research_prices/research_prices.dart';
 
 class ResearchModel {
@@ -21,25 +22,22 @@ class ResearchModel {
     required this.Products,
   });
 
-  static resultAsStringToResearchModel({
-    required String resultAsString,
-    required List listToAdd,
-  }) {
-    List resultAsList = json.decode(resultAsString);
-    resultAsList.forEach((element) {
-      listToAdd.add(
-        ResearchModel(
-          EnterpriseName: element["EnterpriseName"],
-          Name: element["Name"],
-          Code: element["Code"],
-          CreationDate: DateTime.parse(element["CreationDate"]),
-          Observation: element["Observation"],
-          Concurrents: ConcurrentsModel.convertToConcurrents(element["Concurrents"]),
-          Products: element["Products"],
-        ),
-      );
-    });
+  static List<ResearchModel> convertResultToResearchModel() {
+    List resultAsList =
+        json.decode(SoapHelperResponseParameters.responseAsString);
+
+    return resultAsList.map((e) => ResearchModel.fromJson(e)).toList();
   }
 
-
+  factory ResearchModel.fromJson(Map<String, dynamic> json) {
+    return ResearchModel(
+      Code: json["Code"],
+      CreationDate: DateTime.parse(json["CreationDate"]),
+      Observation: json["Observation"],
+      Concurrents: ConcurrentsModel.convertToConcurrents(
+        json["Concurrents"],
+      ),
+      Products: json["Products"],
+    );
+  }
 }
