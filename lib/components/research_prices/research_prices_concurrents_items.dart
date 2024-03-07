@@ -20,7 +20,8 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
     required int index,
     required ResearchPricesProvider researchPricesProvider,
   }) {
-    ResearchPricesConcurrentsModel concurrent = researchPricesProvider.concurrents[index];
+    ResearchPricesConcurrentsModel concurrent =
+        researchPricesProvider.concurrents[index];
     Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
 
     return Container(
@@ -55,7 +56,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // TitleAndSubtitle.titleAndSubtitle(
                 //   title: "Código da pesquisa",
@@ -79,42 +80,43 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                       ? "Nenhum informado"
                       : "${concurrent.Address.Address.toString()}, ${concurrent.Address.District}, ${concurrent.Address.City}, ${concurrent.Address.Number}. \nCEP: ${concurrent.Address.Zip}",
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    TextButton.icon(
-                      onPressed: researchPricesProvider
-                              .isLoadingAddOrUpdateConcurrents
-                          ? null
-                          : () {
-                              researchPricesProvider
-                                  .updateSelectedConcurrent(concurrent);
-                              Navigator.of(context).pushNamed(
-                                APPROUTES
-                                    .RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
-                                arguments: {
-                                  "enterpriseCode": arguments?["enterpriseCode"]
-                                },
-                              );
+                TextButton.icon(
+                  onPressed: researchPricesProvider
+                          .isLoadingAddOrUpdateConcurrents
+                      ? null
+                      : () {
+                          researchPricesProvider
+                              .updateSelectedConcurrent(concurrent);
+                          Navigator.of(context).pushNamed(
+                            APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
+                            arguments: {
+                              "enterpriseCode": arguments?["enterpriseCode"]
                             },
-                      icon: researchPricesProvider
-                                  .isLoadingAddOrUpdateConcurrents ||
-                              researchPricesProvider
-                                  .isLoadingAddOrUpdateResearch
-                          ? Container(
-                              height: 20,
-                              width: 20,
-                              child: const CircularProgressIndicator(),
-                            )
-                          : const Icon(Icons.edit),
-                      label: Text(researchPricesProvider
-                                  .isLoadingAddOrUpdateConcurrents ||
-                              researchPricesProvider
-                                  .isLoadingAddOrUpdateResearch
-                          ? "Aguarde..."
-                          : "Alterar concorrente"),
+                          );
+                        },
+                  icon: researchPricesProvider.isLoadingAddOrUpdateResearch
+                      ? Container(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: researchPricesProvider
+                                    .isLoadingAddOrUpdateResearch
+                                ? Colors.grey
+                                : Theme.of(context).colorScheme.primary,
+                          ),
+                        )
+                      : const Icon(Icons.edit),
+                  label: Text(
+                    researchPricesProvider.isLoadingAddOrUpdateResearch
+                        ? "Vinculando concorrente à pesquisa..."
+                        : "Alterar concorrente",
+                    style: TextStyle(
+                      color:
+                          researchPricesProvider.isLoadingAddOrUpdateResearch
+                              ? Colors.grey
+                              : Theme.of(context).colorScheme.primary,
                     ),
-                  ],
+                  ),
                 )
               ],
             ),
