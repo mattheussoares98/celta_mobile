@@ -49,7 +49,6 @@ class _ResearchPricesInsertProductsPricesState
         }
       },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SearchWidget(
             showOnlyConfigurationOfSearch: true,
