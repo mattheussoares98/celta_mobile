@@ -39,7 +39,7 @@ class _ResearchPricesConcurrentsPageState
         Provider.of(context, listen: true);
 
     return PopScope(
-      canPop: !researchPricesProvider.isLoadingGetConcurrents,
+      canPop: !researchPricesProvider.isLoadingGetConcurrents && !researchPricesProvider.isLoadingAddOrUpdateResearch,
       onPopInvoked: (_) async {
         researchPricesProvider.clearConcurrents();
       },
@@ -68,7 +68,7 @@ class _ResearchPricesConcurrentsPageState
                   child: SearchWidget(
                     consultProductController: searchConcurrentControllerText,
                     isLoading: researchPricesProvider.isLoadingGetConcurrents ||
-                        researchPricesProvider.isLoadingAddOrUpdateConcurrents,
+                        researchPricesProvider.isLoadingAddOrUpdateResearch,
                     onPressSearch: () async {
                       await _getConcurrents(
                         researchPricesProvider: researchPricesProvider,
@@ -86,7 +86,7 @@ class _ResearchPricesConcurrentsPageState
                   child: TextButton(
                     onPressed: researchPricesProvider.isLoadingGetConcurrents ||
                             researchPricesProvider
-                                .isLoadingAddOrUpdateConcurrents
+                                .isLoadingAddOrUpdateResearch
                         ? null
                         : () async {
                             _getConcurrents(
