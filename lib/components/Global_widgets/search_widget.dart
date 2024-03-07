@@ -147,7 +147,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               key: _formKey,
               child: TextFormField(
                 focusNode: focusNode,
-                enabled: widget.isLoading ? false : true,
+                enabled: !widget.isLoading,
                 autofocus: widget.autofocus,
                 controller: widget.consultProductController,
                 // focusNode: _consultedProductFocusNode,
@@ -169,14 +169,16 @@ class _SearchWidgetState extends State<SearchWidget> {
                   context: context,
                   labelText: widget.labelText,
                   prefixIcon: IconButton(
-                    onPressed: () {
-                      widget.consultProductController.clear();
+                    onPressed: widget.isLoading
+                        ? null
+                        : () {
+                            widget.consultProductController.clear();
 
-                      Future.delayed(const Duration(), () {
-                        FocusScope.of(context).unfocus();
-                        FocusScope.of(context).requestFocus(focusNode);
-                      });
-                    },
+                            Future.delayed(const Duration(), () {
+                              FocusScope.of(context).unfocus();
+                              FocusScope.of(context).requestFocus(focusNode);
+                            });
+                          },
                     icon: Icon(
                       Icons.delete,
                       color: widget.isLoading ? Colors.grey : Colors.red,
