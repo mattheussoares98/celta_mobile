@@ -39,7 +39,8 @@ class _ResearchPricesConcurrentsPageState
         Provider.of(context, listen: true);
 
     return PopScope(
-      canPop: !researchPricesProvider.isLoadingGetConcurrents && !researchPricesProvider.isLoadingAddOrUpdateResearch,
+      canPop: !researchPricesProvider.isLoadingGetConcurrents &&
+          !researchPricesProvider.isLoadingAddOrUpdateResearch,
       onPopInvoked: (_) async {
         researchPricesProvider.clearConcurrents();
       },
@@ -49,11 +50,14 @@ class _ResearchPricesConcurrentsPageState
             'CONCORRENTES',
           ),
           leading: IconButton(
-            onPressed: () {
-              researchPricesProvider.updateSelectedConcurrent(null);
-              researchPricesProvider.clearConcurrents();
-              Navigator.of(context).pop();
-            },
+            onPressed: researchPricesProvider.isLoadingGetConcurrents ||
+                    researchPricesProvider.isLoadingAddOrUpdateResearch
+                ? null
+                : () {
+                    researchPricesProvider.updateSelectedConcurrent(null);
+                    researchPricesProvider.clearConcurrents();
+                    Navigator.of(context).pop();
+                  },
             icon: const Icon(
               Icons.arrow_back_outlined,
             ),
@@ -85,8 +89,7 @@ class _ResearchPricesConcurrentsPageState
                 FittedBox(
                   child: TextButton(
                     onPressed: researchPricesProvider.isLoadingGetConcurrents ||
-                            researchPricesProvider
-                                .isLoadingAddOrUpdateResearch
+                            researchPricesProvider.isLoadingAddOrUpdateResearch
                         ? null
                         : () async {
                             _getConcurrents(

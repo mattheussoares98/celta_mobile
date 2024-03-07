@@ -59,7 +59,8 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
         Provider.of(context, listen: true);
 
     return PopScope(
-      canPop: true,
+      canPop: !researchPricesProvider.isLoadingResearchPrices &&
+          !researchPricesProvider.isLoadingAddOrUpdateConcurrents,
       onPopInvoked: (_) async {
         researchPricesProvider.clearResearchPrices();
       },
@@ -71,17 +72,21 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
             ),
           ),
           leading: IconButton(
-            onPressed: () {
-              researchPricesProvider.clearResearchPrices();
-              Navigator.of(context).pop();
-            },
+            onPressed: researchPricesProvider.isLoadingResearchPrices ||
+                    researchPricesProvider.isLoadingAddOrUpdateConcurrents
+                ? null
+                : () {
+                    researchPricesProvider.clearResearchPrices();
+                    Navigator.of(context).pop();
+                  },
             icon: const Icon(
               Icons.arrow_back_outlined,
             ),
           ),
           actions: [
             IconButton(
-              onPressed: researchPricesProvider.isLoadingResearchPrices
+              onPressed: researchPricesProvider.isLoadingResearchPrices ||
+                      researchPricesProvider.isLoadingAddOrUpdateConcurrents
                   ? null
                   : () async {
                       await _getResearchPrices(
