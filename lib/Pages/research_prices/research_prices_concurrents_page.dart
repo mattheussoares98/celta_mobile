@@ -60,13 +60,15 @@ class _ResearchPricesConcurrentsPageState
           ),
         ),
         body: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             Row(
               children: [
                 Expanded(
                   child: SearchWidget(
                     consultProductController: searchConcurrentControllerText,
-                    isLoading: researchPricesProvider.isLoadingGetConcurrents,
+                    isLoading: researchPricesProvider.isLoadingGetConcurrents ||
+                        researchPricesProvider.isLoadingAddOrUpdateConcurrents,
                     onPressSearch: () async {
                       await _getConcurrents(
                         researchPricesProvider: researchPricesProvider,
@@ -82,7 +84,9 @@ class _ResearchPricesConcurrentsPageState
                 ),
                 FittedBox(
                   child: TextButton(
-                    onPressed: researchPricesProvider.isLoadingGetConcurrents
+                    onPressed: researchPricesProvider.isLoadingGetConcurrents ||
+                            researchPricesProvider
+                                .isLoadingAddOrUpdateConcurrents
                         ? null
                         : () async {
                             _getConcurrents(
@@ -90,35 +94,41 @@ class _ResearchPricesConcurrentsPageState
                               getAllConcurrents: true,
                             );
                           },
-                    child: const Text(
+                    child: Text(
                       "Consultar\ntodos",
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: researchPricesProvider.isLoadingGetConcurrents ||
+                                researchPricesProvider
+                                    .isLoadingAddOrUpdateResearch
+                            ? Colors.grey
+                            : Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                 )
               ],
             ),
             if (researchPricesProvider.isLoadingGetConcurrents)
-              Expanded(
-                child: SearchingWidget(
-                  title: 'Pesquisando concorrentes',
-                ),
+              SearchingWidget(
+                title: 'Pesquisando concorrentes',
               ),
-            if (researchPricesProvider.concurrentsCount > 0)
-              const ConcurrentsItems(),
             if (researchPricesProvider.errorGetConcurrents != "")
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ErrorMessage(
                     errorMessage: researchPricesProvider.errorGetConcurrents),
               ),
+            if (researchPricesProvider.concurrentsCount > 0)
+              const ConcurrentsItems(),
           ],
         ),
         floatingActionButton: floatingPersonalizedButton(
           context: context,
           researchPricesProvider: researchPricesProvider,
           nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
-          isLoading: researchPricesProvider.isLoadingGetConcurrents,
+          isLoading: researchPricesProvider.isLoadingGetConcurrents ||
+              researchPricesProvider.isLoadingAddOrUpdateResearch,
           messageButton: "criar\nconcorrente".toUpperCase(),
           onTap: () {
             researchPricesProvider.updateSelectedConcurrent(null);

@@ -129,9 +129,6 @@ class ResearchPricesProvider with ChangeNotifier {
         "Code": _selectedResearch == null
             ? 0 //0 pra cadastrar um novo
             : _selectedResearch?.Code,
-        "EnterpriseCode": enterpriseCode,
-        "Name": researchName,
-        "Observation": observation,
         "IsAssociatingConcurrents": true,
         "Concurrents": [
           {
@@ -139,7 +136,7 @@ class ResearchPricesProvider with ChangeNotifier {
             "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
             "Observation": _selectedConcurrent?.Observation,
           }
-        ]
+        ],
       };
     } else {
       return {
@@ -191,7 +188,6 @@ class ResearchPricesProvider with ChangeNotifier {
         );
       }
 
-      _selectedResearch = null;
     } catch (e) {
       print(e.toString());
       _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;

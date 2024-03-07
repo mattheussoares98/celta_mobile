@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../api/api.dart';
-import '../../models/research_prices/research_prices.dart';
+// import '../../models/research_prices/research_prices.dart';
 
 class ResearchModel {
   final int Code;
@@ -9,7 +9,7 @@ class ResearchModel {
   final String Observation;
   final String? EnterpriseName;
   final String? Name;
-  final List<ConcurrentsModel> Concurrents;
+  // final List<ConcurrentsModel> Concurrents;
   final List? Products;
 
   ResearchModel({
@@ -18,7 +18,7 @@ class ResearchModel {
     this.Name,
     required this.CreationDate,
     required this.Observation,
-    required this.Concurrents,
+    // required this.Concurrents,
     required this.Products,
   });
 
@@ -34,9 +34,9 @@ class ResearchModel {
       Code: json["Code"],
       CreationDate: DateTime.parse(json["CreationDate"]),
       Observation: json["Observation"],
-      Concurrents: ConcurrentsModel.convertToConcurrents(
-        json["Concurrents"],
-      ),
+      // Concurrents: ConcurrentsModel.convertToConcurrents(
+      //   json["Concurrents"],
+      // ),
       Products: json["Products"],
     );
   }

@@ -21,14 +21,36 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
     required ResearchPricesProvider researchPricesProvider,
   }) {
     ConcurrentsModel concurrent = researchPricesProvider.concurrents[index];
-    Map? enterpriseCode = ModalRoute.of(context)!.settings.arguments as Map?;
+    Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
 
     return Container(
       child: InkWell(
-        onTap: () {
-          researchPricesProvider.updateSelectedConcurrent(concurrent);
-          Navigator.of(context).pushNamed(APPROUTES.RESEARCH_PRICES_INSERT_PRICE);
-        },
+        onTap: researchPricesProvider.isLoadingAddOrUpdateConcurrents
+            ? null
+            : () async {
+                researchPricesProvider.updateSelectedConcurrent(concurrent);
+                await researchPricesProvider.addOrUpdateResearch(
+                  isAssociatingConcurrents: true,
+                  context: context,
+                  enterpriseCode: null,
+                  observation: null,
+                );
+
+                if (researchPricesProvider.errorAddOrUpdateResearch == "") {
+                  ShowSnackbarMessage.showMessage(
+                    message: "O concorrente foi associado à pesquisa",
+                    context: context,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  );
+                  Navigator.of(context)
+                      .pushNamed(APPROUTES.RESEARCH_PRICES_INSERT_PRICE);
+                } else {
+                  ShowSnackbarMessage.showMessage(
+                    message: researchPricesProvider.errorAddOrUpdateResearch,
+                    context: context,
+                  );
+                }
+              },
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -58,19 +80,39 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                       : "${concurrent.Address.Address.toString()}, ${concurrent.Address.District}, ${concurrent.Address.City}, ${concurrent.Address.Number}. \nCEP: ${concurrent.Address.Zip}",
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     TextButton.icon(
-                      onPressed: () {
-                        researchPricesProvider
-                            .updateSelectedConcurrent(concurrent);
-                        Navigator.of(context).pushNamed(
-                          APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
-                          arguments: {enterpriseCode: "enterpriseCode"},
-                        );
-                      },
-                      icon: const Icon(Icons.edit),
-                      label: const Text("Alterar concorrente"),
+                      onPressed: researchPricesProvider
+                              .isLoadingAddOrUpdateConcurrents
+                          ? null
+                          : () {
+                              researchPricesProvider
+                                  .updateSelectedConcurrent(concurrent);
+                              Navigator.of(context).pushNamed(
+                                APPROUTES
+                                    .RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
+                                arguments: {
+                                  "enterpriseCode": arguments?["enterpriseCode"]
+                                },
+                              );
+                            },
+                      icon: researchPricesProvider
+                                  .isLoadingAddOrUpdateConcurrents ||
+                              researchPricesProvider
+                                  .isLoadingAddOrUpdateResearch
+                          ? Container(
+                              height: 20,
+                              width: 20,
+                              child: const CircularProgressIndicator(),
+                            )
+                          : const Icon(Icons.edit),
+                      label: Text(researchPricesProvider
+                                  .isLoadingAddOrUpdateConcurrents ||
+                              researchPricesProvider
+                                  .isLoadingAddOrUpdateResearch
+                          ? "Aguarde..."
+                          : "Alterar concorrente"),
                     ),
                   ],
                 )
