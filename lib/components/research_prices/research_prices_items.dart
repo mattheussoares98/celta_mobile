@@ -24,7 +24,7 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
     required int index,
     required ResearchPricesProvider researchPricesProvider,
   }) {
-    ResearchModel research = researchPricesProvider.researchPrices[index];
+    ResearchPricesResearchModel research = researchPricesProvider.researchPrices[index];
     return InkWell(
       onTap: () {
         researchPricesProvider.updateSelectedResearch(research);

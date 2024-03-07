@@ -21,7 +21,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   FocusNode observationFocusNode = FocusNode();
   TextEditingController observationController = TextEditingController();
 
-  void _updateControllers(ConcurrentsModel? concurrent) {
+  void _updateControllers(ResearchPricesConcurrentsModel? concurrent) {
     if (concurrent != null) {
       observationController.text = concurrent.Observation;
       nameController.text = concurrent.Name;

@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../api/api.dart';
 // import '../../models/research_prices/research_prices.dart';
 
-class ResearchModel {
+class ResearchPricesResearchModel {
   final int Code;
   final DateTime CreationDate;
   final String Observation;
@@ -12,7 +12,7 @@ class ResearchModel {
   // final List<ConcurrentsModel> Concurrents;
   final List? Products;
 
-  ResearchModel({
+  ResearchPricesResearchModel({
     required this.Code,
     this.EnterpriseName,
     this.Name,
@@ -22,15 +22,15 @@ class ResearchModel {
     required this.Products,
   });
 
-  static List<ResearchModel> convertResultToResearchModel() {
+  static List<ResearchPricesResearchModel> convertResultToResearchModel() {
     List resultAsList =
         json.decode(SoapHelperResponseParameters.responseAsString);
 
-    return resultAsList.map((e) => ResearchModel.fromJson(e)).toList();
+    return resultAsList.map((e) => ResearchPricesResearchModel.fromJson(e)).toList();
   }
 
-  factory ResearchModel.fromJson(Map<String, dynamic> json) {
-    return ResearchModel(
+  factory ResearchPricesResearchModel.fromJson(Map<String, dynamic> json) {
+    return ResearchPricesResearchModel(
       Code: json["Code"],
       CreationDate: DateTime.parse(json["CreationDate"]),
       Observation: json["Observation"],

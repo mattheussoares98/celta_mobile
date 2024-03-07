@@ -13,8 +13,8 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingResearchPrices => _isLoadingGetResearchPrices;
   String _errorGetResearchPrices = "";
   String get errorGetResearchPrices => _errorGetResearchPrices;
-  List<ResearchModel> _researchPrices = [];
-  List<ResearchModel> get researchPrices => [..._researchPrices];
+  List<ResearchPricesResearchModel> _researchPrices = [];
+  List<ResearchPricesResearchModel> get researchPrices => [..._researchPrices];
   int get researchPricesCount => _researchPrices.length;
   FocusNode researchPricesFocusNode = FocusNode();
 
@@ -32,8 +32,8 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingGetConcurrents => _isLoadingGetConcurrents;
   String _errorGetConcurrents = "";
   String get errorGetConcurrents => _errorGetConcurrents;
-  List<ConcurrentsModel> _concurrents = [];
-  List<ConcurrentsModel> get concurrents => [..._concurrents];
+  List<ResearchPricesConcurrentsModel> _concurrents = [];
+  List<ResearchPricesConcurrentsModel> get concurrents => [..._concurrents];
   int get concurrentsCount => _concurrents.length;
   FocusNode concurrentsFocusNode = FocusNode();
 
@@ -54,15 +54,15 @@ class ResearchPricesProvider with ChangeNotifier {
   bool _isLoadingGetProducts = false;
   bool get isLoadingGetProducts => _isLoadingGetProducts;
 
-  ResearchModel? _selectedResearch;
-  ResearchModel? get selectedResearch => _selectedResearch;
-  updateSelectedResearch(ResearchModel? research) {
+  ResearchPricesResearchModel? _selectedResearch;
+  ResearchPricesResearchModel? get selectedResearch => _selectedResearch;
+  updateSelectedResearch(ResearchPricesResearchModel? research) {
     _selectedResearch = research;
   }
 
-  ConcurrentsModel? _selectedConcurrent;
-  ConcurrentsModel? get selectedConcurrent => _selectedConcurrent;
-  updateSelectedConcurrent(ConcurrentsModel? concurrent) {
+  ResearchPricesConcurrentsModel? _selectedConcurrent;
+  ResearchPricesConcurrentsModel? get selectedConcurrent => _selectedConcurrent;
+  updateSelectedConcurrent(ResearchPricesConcurrentsModel? concurrent) {
     _selectedConcurrent = concurrent;
   }
 
@@ -110,7 +110,7 @@ class ResearchPricesProvider with ChangeNotifier {
     }
 
     if (_errorGetResearchPrices == "") {
-      _researchPrices = ResearchModel.convertResultToResearchModel();
+      _researchPrices = ResearchPricesResearchModel.convertResultToResearchModel();
     }
 
     _isLoadingGetResearchPrices = false;
@@ -293,7 +293,7 @@ class ResearchPricesProvider with ChangeNotifier {
       );
       _errorGetConcurrents = SoapHelperResponseParameters.errorMessage;
 
-      _concurrents = ConcurrentsModel.convertResultToListOfConcurrents();
+      _concurrents = ResearchPricesConcurrentsModel.convertResultToListOfConcurrents();
     } catch (e) {
       _errorGetConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }

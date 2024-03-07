@@ -21,7 +21,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
   FocusNode observationFocusNode = FocusNode();
   TextEditingController observationController = TextEditingController();
 
-  void _updateControllers(ResearchModel? research) {
+  void _updateControllers(ResearchPricesResearchModel? research) {
     if (research != null) {
       observationController.text = research.Observation;
       researchNameController.text = research.Name ?? "";

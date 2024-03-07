@@ -3,14 +3,14 @@ import 'dart:convert';
 import '../../api/api.dart';
 import '../../models/address/address.dart';
 
-class ConcurrentsModel {
+class ResearchPricesConcurrentsModel {
   // final int ResearchOfPriceCode;
   final int ConcurrentCode;
   final String Name;
   final String Observation;
   final AddressModel Address;
 
-  ConcurrentsModel({
+  ResearchPricesConcurrentsModel({
     // required this.ResearchOfPriceCode,
     required this.ConcurrentCode,
     required this.Name,
@@ -18,8 +18,8 @@ class ConcurrentsModel {
     required this.Address,
   });
 
-  factory ConcurrentsModel.fromJson(Map<String, dynamic> json) {
-    return ConcurrentsModel(
+  factory ResearchPricesConcurrentsModel.fromJson(Map<String, dynamic> json) {
+    return ResearchPricesConcurrentsModel(
       // // ResearchOfPriceCode: json["ResearchOfPriceCode"],
       ConcurrentCode: json["ConcurrentCode"],
       Name: json["Name"],
@@ -28,19 +28,19 @@ class ConcurrentsModel {
     );
   }
 
-  static List<ConcurrentsModel> convertToConcurrents(
+  static List<ResearchPricesConcurrentsModel> convertToConcurrents(
     List concurrents,
   ) {
-    List<ConcurrentsModel> list = [];
+    List<ResearchPricesConcurrentsModel> list = [];
     concurrents.forEach((element) {
-      list.add(ConcurrentsModel.fromJson(element));
+      list.add(ResearchPricesConcurrentsModel.fromJson(element));
     });
 
     return list;
   }
 
-  static List<ConcurrentsModel> convertResultToListOfConcurrents() {
-    List<ConcurrentsModel> concurrents = [];
+  static List<ResearchPricesConcurrentsModel> convertResultToListOfConcurrents() {
+    List<ResearchPricesConcurrentsModel> concurrents = [];
     if (SoapHelperResponseParameters.errorMessage != "") {
       return concurrents;
     }
@@ -48,7 +48,7 @@ class ConcurrentsModel {
         json.decode(SoapHelperResponseParameters.responseAsString);
 
     resultAsList.forEach((element) {
-      concurrents.add(ConcurrentsModel.fromJson(element));
+      concurrents.add(ResearchPricesConcurrentsModel.fromJson(element));
     });
     return concurrents;
   }

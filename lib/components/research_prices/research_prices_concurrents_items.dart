@@ -20,7 +20,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
     required int index,
     required ResearchPricesProvider researchPricesProvider,
   }) {
-    ConcurrentsModel concurrent = researchPricesProvider.concurrents[index];
+    ResearchPricesConcurrentsModel concurrent = researchPricesProvider.concurrents[index];
     Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
 
     return Container(
