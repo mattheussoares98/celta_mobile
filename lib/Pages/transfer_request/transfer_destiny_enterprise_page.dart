@@ -39,82 +39,85 @@ class _TransferDestinyEnterprisePageState
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (_) async {
-        transferRequestProvider.clearDestinyEnterprise();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'EMPRESA DE DESTINO  ',
-          ),
-          leading: IconButton(
-            onPressed: () {
-              transferRequestProvider.clearDestinyEnterprise();
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: transferRequestProvider.isLoadingDestinyEnterprise
-                  ? null
-                  : () async {
-                      await transferRequestProvider.getDestinyEnterprises(
-                        enterpriseOriginCode: arguments["enterpriseOriginCode"],
-                        requestTypeCode: arguments["requestTypeCode"],
-                        isConsultingAgain: true,
-                      );
-                    },
-              tooltip: "Consultar inventários",
-              icon: const Icon(Icons.refresh),
-            ),
-          ],
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await transferRequestProvider.getDestinyEnterprises(
-              enterpriseOriginCode: arguments["enterpriseOriginCode"],
-              requestTypeCode: arguments["requestTypeCode"],
-              isConsultingAgain: true,
-            );
+    return Stack(
+      children: [
+        PopScope(
+          onPopInvoked: (_) async {
+            transferRequestProvider.clearDestinyEnterprise();
           },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (transferRequestProvider.isLoadingDestinyEnterprise)
-                Expanded(
-                  child: SearchingWidget(
-                    title: 'Consultando empresas de destino',
-                  ),
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'EMPRESA DE DESTINO  ',
+              ),
+              leading: IconButton(
+                onPressed: () {
+                  transferRequestProvider.clearDestinyEnterprise();
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
                 ),
-              if (!transferRequestProvider.isLoadingDestinyEnterprise &&
-                  transferRequestProvider.errorMessageDestinyEnterprise == "")
-                const TransferDestinyEnterpriseItems(),
-              if (transferRequestProvider.errorMessageDestinyEnterprise != '' &&
-                  !transferRequestProvider.isLoadingDestinyEnterprise)
-                Expanded(
-                  child: searchAgain(
-                      errorMessage:
-                          transferRequestProvider.errorMessageDestinyEnterprise,
-                      request: () async {
-                        setState(() {});
-                        await transferRequestProvider.getDestinyEnterprises(
-                          enterpriseOriginCode:
-                              arguments["enterpriseOriginCode"],
-                          requestTypeCode: arguments["requestTypeCode"],
-                        );
-                      }),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: transferRequestProvider.isLoadingDestinyEnterprise
+                      ? null
+                      : () async {
+                          await transferRequestProvider.getDestinyEnterprises(
+                            enterpriseOriginCode:
+                                arguments["enterpriseOriginCode"],
+                            requestTypeCode: arguments["requestTypeCode"],
+                            isConsultingAgain: true,
+                          );
+                        },
+                  tooltip: "Consultar inventários",
+                  icon: const Icon(Icons.refresh),
                 ),
-            ],
+              ],
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await transferRequestProvider.getDestinyEnterprises(
+                  enterpriseOriginCode: arguments["enterpriseOriginCode"],
+                  requestTypeCode: arguments["requestTypeCode"],
+                  isConsultingAgain: true,
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (!transferRequestProvider.isLoadingDestinyEnterprise &&
+                      transferRequestProvider.errorMessageDestinyEnterprise ==
+                          "")
+                    const TransferDestinyEnterpriseItems(),
+                  if (transferRequestProvider.errorMessageDestinyEnterprise !=
+                          '' &&
+                      !transferRequestProvider.isLoadingDestinyEnterprise)
+                    Expanded(
+                      child: searchAgain(
+                          errorMessage: transferRequestProvider
+                              .errorMessageDestinyEnterprise,
+                          request: () async {
+                            setState(() {});
+                            await transferRequestProvider.getDestinyEnterprises(
+                              enterpriseOriginCode:
+                                  arguments["enterpriseOriginCode"],
+                              requestTypeCode: arguments["requestTypeCode"],
+                            );
+                          }),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+        loadingWidget(
+            message: 'Consultando empresas de destino...',
+            isLoading: transferRequestProvider.isLoadingDestinyEnterprise),
+      ],
     );
   }
 }

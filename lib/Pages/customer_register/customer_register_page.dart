@@ -173,155 +173,168 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     AddressProvider addressProvider = Provider.of(context);
     // customerRegisterProvider.changeIsLoadingInsertCustomer();
     return PopScope(
-      canPop: canExitPage(
-        addressProvider: addressProvider,
-        customerRegisterProvider: customerRegisterProvider,
-      ),
+      canPop: !customerRegisterProvider.isLoadingInsertCustomer,
       onPopInvoked: (_) {
         addressProvider.clearAddresses();
         addressProvider.clearAddressControllers(clearCep: true);
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            appBarTitles[_selectedIndex],
-          ),
-          leading: IconButton(
-            onPressed: !canExitPage(
-              addressProvider: addressProvider,
-              customerRegisterProvider: customerRegisterProvider,
-            )
-                ? null
-                : () {
-                    if (canExitPage(
-                      addressProvider: addressProvider,
-                      customerRegisterProvider: customerRegisterProvider,
-                    )) {
-                      addressProvider.clearAddresses();
-                      addressProvider.clearAddressControllers(clearCep: true);
-                      Navigator.of(context).pop();
-                    }
-                  },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-            ),
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: iconAccordingFormIsValid(
-                icon: Icons.person,
-                hasDataAndIsValid:
-                    customerRegisterProvider.personFormKeyIsValid,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text(
+                appBarTitles[_selectedIndex],
               ),
-              label: 'Dados',
-            ),
-            BottomNavigationBarItem(
-              label: 'Endereço',
-              icon: iconAccordingFormIsValid(
-                icon: Icons.room_outlined,
-                hasDataAndIsValid: addressProvider.addressFormKeyIsValid &&
-                    addressProvider.addressesCount > 0,
+              leading: IconButton(
+                onPressed: !canExitPage(
+                  addressProvider: addressProvider,
+                  customerRegisterProvider: customerRegisterProvider,
+                )
+                    ? null
+                    : () {
+                        if (canExitPage(
+                          addressProvider: addressProvider,
+                          customerRegisterProvider: customerRegisterProvider,
+                        )) {
+                          addressProvider.clearAddresses();
+                          addressProvider.clearAddressControllers(
+                              clearCep: true);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
+                ),
               ),
             ),
-            BottomNavigationBarItem(
-              icon: iconAccordingFormIsValid(
-                icon: Icons.email_rounded,
-                hasDataAndIsValid:
-                    customerRegisterProvider.emailFormKeyIsValid &&
-                        customerRegisterProvider.emailsCount > 0,
-              ),
-              label: 'E-mail',
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: iconAccordingFormIsValid(
+                    icon: Icons.person,
+                    hasDataAndIsValid:
+                        customerRegisterProvider.personFormKeyIsValid,
+                  ),
+                  label: 'Dados',
+                ),
+                BottomNavigationBarItem(
+                  label: 'Endereço',
+                  icon: iconAccordingFormIsValid(
+                    icon: Icons.room_outlined,
+                    hasDataAndIsValid: addressProvider.addressFormKeyIsValid &&
+                        addressProvider.addressesCount > 0,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  icon: iconAccordingFormIsValid(
+                    icon: Icons.email_rounded,
+                    hasDataAndIsValid:
+                        customerRegisterProvider.emailFormKeyIsValid &&
+                            customerRegisterProvider.emailsCount > 0,
+                  ),
+                  label: 'E-mail',
+                ),
+                BottomNavigationBarItem(
+                  icon: iconAccordingFormIsValid(
+                    icon: Icons.phone,
+                    hasDataAndIsValid:
+                        customerRegisterProvider.telephoneFormKeyIsValid &&
+                            customerRegisterProvider.telephonesCount > 0,
+                  ),
+                  label: 'Telefone',
+                ),
+                BottomNavigationBarItem(
+                  icon: iconAccordingFormIsValid(
+                    icon: Icons.check,
+                    hasDataAndIsValid:
+                        customerRegisterProvider.personFormKeyIsValid &&
+                            (addressProvider.addressFormKeyIsValid &&
+                                addressProvider.addressesCount > 0),
+                  ),
+                  label: 'Salvar',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              unselectedItemColor: Colors.grey,
+              onTap: customerRegisterProvider.isLoadingInsertCustomer
+                  ? null
+                  : (index) {
+                      _onItemTapped(
+                        index: index,
+                        // saleRequestProvider: saleRequestProvider,
+                      );
+                    },
             ),
-            BottomNavigationBarItem(
-              icon: iconAccordingFormIsValid(
-                icon: Icons.phone,
-                hasDataAndIsValid:
-                    customerRegisterProvider.telephoneFormKeyIsValid &&
-                        customerRegisterProvider.telephonesCount > 0,
-              ),
-              label: 'Telefone',
-            ),
-            BottomNavigationBarItem(
-              icon: iconAccordingFormIsValid(
-                icon: Icons.check,
-                hasDataAndIsValid:
-                    customerRegisterProvider.personFormKeyIsValid &&
-                        (addressProvider.addressFormKeyIsValid &&
-                            addressProvider.addressesCount > 0),
-              ),
-              label: 'Salvar',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Colors.grey,
-          onTap: customerRegisterProvider.isLoadingInsertCustomer
-              ? null
-              : (index) {
-                  _onItemTapped(
-                    index: index,
-                    // saleRequestProvider: saleRequestProvider,
-                  );
-                },
-        ),
-        body: _pages.elementAt(_selectedIndex),
-        floatingActionButton: _selectedIndex == 4
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
-                    child: FloatingActionButton(
-                      tooltip: "Limpar todos os dados do pedido",
-                      onPressed: customerRegisterProvider
-                                  .isLoadingInsertCustomer ||
-                              customerRegisterProvider
-                                  .nameController.text.isEmpty
-                          ? null
-                          : () {
-                              ShowAlertDialog.showAlertDialog(
-                                context: context,
-                                title: "Apagar TODOS dados",
-                                subtitle:
-                                    "Deseja realmente limpar todos os dados do pedido?",
-                                function: () {
+            body: _pages.elementAt(_selectedIndex),
+            floatingActionButton: _selectedIndex == 4
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30.0),
+                        child: FloatingActionButton(
+                          tooltip: "Limpar todos os dados do pedido",
+                          onPressed: customerRegisterProvider
+                                      .isLoadingInsertCustomer ||
                                   customerRegisterProvider
-                                      .clearAllDataInformed(addressProvider);
+                                      .nameController.text.isEmpty
+                              ? null
+                              : () {
+                                  ShowAlertDialog.showAlertDialog(
+                                    context: context,
+                                    title: "Apagar TODOS dados",
+                                    subtitle:
+                                        "Deseja realmente limpar todos os dados do pedido?",
+                                    function: () {
+                                      customerRegisterProvider
+                                          .clearAllDataInformed(
+                                              addressProvider);
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                      child: const Icon(Icons.delete, color: Colors.white),
-                      backgroundColor:
-                          customerRegisterProvider.isLoadingInsertCustomer ||
+                          child: const Icon(Icons.delete, color: Colors.white),
+                          backgroundColor: customerRegisterProvider
+                                      .isLoadingInsertCustomer ||
                                   customerRegisterProvider
                                       .nameController.text.isEmpty
                               ? Colors.grey.withOpacity(0.75)
                               : Colors.red.withOpacity(0.75),
-                    ),
-                  ),
-                  CustomerRegisterFloatingActionButton(
-                    changeSelectedIndexToAddAddres: () {
-                      setState(() {
-                        _selectedIndex = 1;
-                      });
-                    },
-                    changeFormKeysToInvalid: () {
-                      setState(() {
-                        customerRegisterProvider.personFormKeyIsValid = false;
-                        addressProvider.addressFormKeyIsValid = false;
-                        customerRegisterProvider.emailFormKeyIsValid = false;
-                        customerRegisterProvider.telephoneFormKeyIsValid =
-                            false;
-                        _selectedIndex = 0;
-                      });
-                    },
-                  ),
-                ],
-              )
-            : null,
+                        ),
+                      ),
+                      CustomerRegisterFloatingActionButton(
+                        changeSelectedIndexToAddAddres: () {
+                          setState(() {
+                            _selectedIndex = 1;
+                          });
+                        },
+                        changeFormKeysToInvalid: () {
+                          setState(() {
+                            customerRegisterProvider.personFormKeyIsValid =
+                                false;
+                            addressProvider.addressFormKeyIsValid = false;
+                            customerRegisterProvider.emailFormKeyIsValid =
+                                false;
+                            customerRegisterProvider.telephoneFormKeyIsValid =
+                                false;
+                            _selectedIndex = 0;
+                          });
+                        },
+                      ),
+                    ],
+                  )
+                : null,
+          ),
+          loadingWidget(
+            message: "Consultando CEP...",
+            isLoading: addressProvider.isLoadingCep,
+          ),
+          loadingWidget(
+            message: "Cadastrando cliente...",
+            isLoading: customerRegisterProvider.isLoadingInsertCustomer,
+          ),
+        ],
       ),
     );
   }

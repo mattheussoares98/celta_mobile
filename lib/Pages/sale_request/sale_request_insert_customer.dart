@@ -79,10 +79,6 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageCustomer,
           ),
-        if (saleRequestProvider.isLoadingCustomer)
-          Expanded(
-            child: SearchingWidget(title: "Consultando clientes"),
-          ),
       ],
     );
   }

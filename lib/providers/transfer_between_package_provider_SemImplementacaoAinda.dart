@@ -23,9 +23,6 @@ class TransferBetweenPackageProvider with ChangeNotifier {
   List<TransferBetweenPackageJustificationsModel> get justifications =>
       _justifications;
 
-  static bool _isLoadingConfirmTransferPackage = false;
-  bool get isLoadingConfirmTransferPackage => _isLoadingConfirmTransferPackage;
-
   String _errorMessageTypeStockAndJustifications = '';
   String get errorMessageTypeStockAndJustifications =>
       _errorMessageTypeStockAndJustifications;

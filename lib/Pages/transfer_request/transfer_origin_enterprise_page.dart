@@ -38,78 +38,82 @@ class _TransferOriginEnterprisePageState
 
     int requestTypeCode = ModalRoute.of(context)!.settings.arguments as int;
 
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (_) async {
-        transferRequestProvider.clearOriginEnterprise();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'EMPRESA DE ORIGEM  ',
-          ),
-          leading: IconButton(
-            onPressed: () {
-              // transferRequestProvider.clearTransferRequestModels();
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: transferRequestProvider.isLoadingOriginEnterprise
-                  ? null
-                  : () async {
-                      await transferRequestProvider.getOriginEnterprises(
-                        requestTypeCode: requestTypeCode,
-                        isConsultingAgain: true,
-                      );
-                    },
-              tooltip: "Consultar inventários",
-              icon: const Icon(Icons.refresh),
-            ),
-          ],
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await transferRequestProvider.getOriginEnterprises(
-              requestTypeCode: requestTypeCode,
-              isConsultingAgain: true,
-            );
+    return Stack(
+      children: [
+        PopScope(
+        
+          onPopInvoked: (_) async {
+            transferRequestProvider.clearOriginEnterprise();
           },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (transferRequestProvider.isLoadingOriginEnterprise)
-                Expanded(
-                  child: SearchingWidget(
-                    title: 'Consultando empresas de origem',
-                  ),
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'EMPRESA DE ORIGEM  ',
+              ),
+              leading: IconButton(
+                onPressed: () {
+                  // transferRequestProvider.clearTransferRequestModels();
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
                 ),
-              if (!transferRequestProvider.isLoadingOriginEnterprise &&
-                  transferRequestProvider.errorMessageOriginEnterprise == "")
-                const TransferOriginEnterpriseItems(),
-              if (transferRequestProvider.errorMessageOriginEnterprise != '' &&
-                  !transferRequestProvider.isLoadingOriginEnterprise)
-                Expanded(
-                  child: searchAgain(
-                      errorMessage:
-                          transferRequestProvider.errorMessageOriginEnterprise,
-                      request: () async {
-                        setState(() {});
-                        await transferRequestProvider.getOriginEnterprises(
-                          requestTypeCode: requestTypeCode,
-                        );
-                      }),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: transferRequestProvider.isLoadingOriginEnterprise
+                      ? null
+                      : () async {
+                          await transferRequestProvider.getOriginEnterprises(
+                            requestTypeCode: requestTypeCode,
+                            isConsultingAgain: true,
+                          );
+                        },
+                  tooltip: "Consultar inventários",
+                  icon: const Icon(Icons.refresh),
                 ),
-            ],
+              ],
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await transferRequestProvider.getOriginEnterprises(
+                  requestTypeCode: requestTypeCode,
+                  isConsultingAgain: true,
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (!transferRequestProvider.isLoadingOriginEnterprise &&
+                      transferRequestProvider.errorMessageOriginEnterprise ==
+                          "")
+                    const TransferOriginEnterpriseItems(),
+                  if (transferRequestProvider.errorMessageOriginEnterprise !=
+                          '' &&
+                      !transferRequestProvider.isLoadingOriginEnterprise)
+                    Expanded(
+                      child: searchAgain(
+                          errorMessage: transferRequestProvider
+                              .errorMessageOriginEnterprise,
+                          request: () async {
+                            setState(() {});
+                            await transferRequestProvider.getOriginEnterprises(
+                              requestTypeCode: requestTypeCode,
+                            );
+                          }),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+        loadingWidget(
+          message: 'Consultando empresas de origem...',
+          isLoading: transferRequestProvider.isLoadingOriginEnterprise,
+        ),
+      ],
     );
   }
 }

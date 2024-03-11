@@ -48,7 +48,6 @@ class _ResearchPricesProductsPricesPageState
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
     return PopScope(
-      canPop: true,
       onPopInvoked: (_) async {
         researchPricesProvider.clearAssociatedsProducts();
         researchPricesProvider.clearNotAssociatedsProducts();

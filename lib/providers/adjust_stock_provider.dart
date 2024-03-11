@@ -57,6 +57,9 @@ class AdjustStockProvider with ChangeNotifier {
 
   bool get isLoadingAdjustStock => _isLoadingAdjustStock;
   static bool _isLoadingTypeStockAndJustifications = false;
+  set isLoadingAdjustStock(bool newValue){
+    _isLoadingAdjustStock = newValue;
+  }
 
   bool get isLoadingTypeStockAndJustifications =>
       _isLoadingTypeStockAndJustifications;

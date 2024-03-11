@@ -107,8 +107,6 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
               errorMessage: buyRequestProvider.errorMessageEnterprises,
               request: () async => _getEnterprises(buyRequestProvider),
             ),
-          if (buyRequestProvider.isLoadingEnterprises)
-            SearchingWidget(title: "Consultando empresas"),
         ],
       ),
     );

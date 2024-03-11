@@ -83,161 +83,165 @@ class _TransferPageState extends State<TransferPage> {
       ),
     ];
 
-    return PopScope(
-      canPop: !(transferRequestProvider.isLoadingSaveTransferRequest),
-      onPopInvoked: (_) async {
-        if (transferRequestProvider.isLoadingSaveTransferRequest) {
-          ShowSnackbarMessage.showMessage(
-            message: "Aguarde salvar o pedido",
-            context: context,
-          );
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: kIsWeb ? false : true,
-        appBar: AppBar(
-          title: FittedBox(
-            child: Text(
-              appBarTitles[_selectedIndex],
-            ),
-          ),
-          leading: IconButton(
-            onPressed: transferRequestProvider.isLoadingSaveTransferRequest
-                ? null
-                : () {
-                    transferRequestProvider.clearProducts();
-                    Navigator.of(context).pop();
-                  },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-            ),
-          ),
-          actions: [
-            FittedBox(
-              child: Column(
-                children: [
-                  Stack(
+    return Stack(
+      children: [
+        PopScope(
+          canPop: !transferRequestProvider.isLoadingSaveTransferRequest,
+          child: Scaffold(
+            resizeToAvoidBottomInset: kIsWeb ? false : true,
+            appBar: AppBar(
+              title: FittedBox(
+                child: Text(
+                  appBarTitles[_selectedIndex],
+                ),
+              ),
+              leading: IconButton(
+                onPressed: transferRequestProvider.isLoadingSaveTransferRequest
+                    ? null
+                    : () {
+                        transferRequestProvider.clearProducts();
+                        Navigator.of(context).pop();
+                      },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
+                ),
+              ),
+              actions: [
+                FittedBox(
+                  child: Column(
                     children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.shopping_cart,
-                          color: Colors.white,
-                          size: 33,
-                          shadows: [
-                            Shadow(
-                              offset: Offset(1, 1),
-                              blurRadius: 3.0,
-                              color: Colors.black,
+                      Stack(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.shopping_cart,
+                              color: Colors.white,
+                              size: 33,
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(1, 1),
+                                  blurRadius: 3.0,
+                                  color: Colors.black,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        //se não houver um modelo de pedido padrão informado,
-                        //desativa o botão pra ir até o carrinho
-                        onPressed: () {
-                          setState(() {
-                            _selectedIndex = 1;
-                          });
-                          // saleRequestProvider.clearProducts();
-                        },
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.red,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: FittedBox(
-                              child: Text(
-                                cartProductsCount.toString(),
-                                style: const TextStyle(color: Colors.white),
+                            //se não houver um modelo de pedido padrão informado,
+                            //desativa o botão pra ir até o carrinho
+                            onPressed: () {
+                              setState(() {
+                                _selectedIndex = 1;
+                              });
+                              // saleRequestProvider.clearProducts();
+                            },
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.red,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: FittedBox(
+                                  child: Text(
+                                    cartProductsCount.toString(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
                               ),
+                              maxRadius: 11,
                             ),
                           ),
-                          maxRadius: 11,
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: Text(
+                          ConvertString.convertToBRL(
+                            transferRequestProvider.getTotalCartPrice(
+                              enterpriseOriginCode:
+                                  arguments["enterpriseOriginCode"].toString(),
+                              enterpriseDestinyCode:
+                                  arguments["enterpriseDestinyCode"].toString(),
+                              requestTypeCode:
+                                  arguments["requestTypeCode"].toString(),
+                            ),
+                          ),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Text(
-                      ConvertString.convertToBRL(
-                        transferRequestProvider.getTotalCartPrice(
-                          enterpriseOriginCode:
-                              arguments["enterpriseOriginCode"].toString(),
-                          enterpriseDestinyCode:
-                              arguments["enterpriseDestinyCode"].toString(),
-                          requestTypeCode:
-                              arguments["requestTypeCode"].toString(),
-                        ),
-                      ),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-        body: Center(
-          child: _pages.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.add_shopping_cart_sharp,
-                size: 35,
-              ),
-              label: 'Inserir produtos',
+            body: Center(
+              child: _pages.elementAt(_selectedIndex),
             ),
-            BottomNavigationBarItem(
-              label: 'Carrinho',
-              icon: Stack(
-                children: [
-                  const Icon(
-                    Icons.shopping_cart,
+            bottomNavigationBar: BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                const BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.add_shopping_cart_sharp,
                     size: 35,
                   ),
-                  if (cartProductsCount > 0)
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: FittedBox(
-                            child: Text(
-                              cartProductsCount.toString(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                  label: 'Inserir produtos',
+                ),
+                BottomNavigationBarItem(
+                  label: 'Carrinho',
+                  icon: Stack(
+                    children: [
+                      const Icon(
+                        Icons.shopping_cart,
+                        size: 35,
+                      ),
+                      if (cartProductsCount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.red,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: FittedBox(
+                                child: Text(
+                                  cartProductsCount.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
+                            maxRadius: 9,
                           ),
                         ),
-                        maxRadius: 9,
-                      ),
-                    ),
-                ],
-              ),
+                    ],
+                  ),
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              onTap: (index) {
+                _onItemTapped(
+                  index: index,
+                  transferRequestProvider: transferRequestProvider,
+                );
+              },
             ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          onTap: (index) {
-            _onItemTapped(
-              index: index,
-              transferRequestProvider: transferRequestProvider,
-            );
-          },
+          ),
         ),
-      ),
+        loadingWidget(
+          message: "Consultando produtos...",
+          isLoading: transferRequestProvider.isLoadingProducts,
+        ),
+        loadingWidget(
+          message: "Salvando pedido...",
+          isLoading: transferRequestProvider.isLoadingSaveTransferRequest,
+        ),
+      ],
     );
   }
 }

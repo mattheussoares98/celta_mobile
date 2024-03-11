@@ -44,101 +44,116 @@ class _ResearchPricesConcurrentsPageState
       onPopInvoked: (_) async {
         researchPricesProvider.clearConcurrents();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'CONCORRENTES',
-          ),
-          leading: IconButton(
-            onPressed: researchPricesProvider.isLoadingGetConcurrents ||
-                    researchPricesProvider.isLoadingAddOrUpdateResearch
-                ? null
-                : () {
-                    researchPricesProvider.updateSelectedConcurrent(null);
-                    researchPricesProvider.clearConcurrents();
-                    Navigator.of(context).pop();
-                  },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-            ),
-          ),
-        ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: SearchWidget(
-                    consultProductController: searchConcurrentControllerText,
-                    isLoading: researchPricesProvider.isLoadingGetConcurrents ||
-                        researchPricesProvider.isLoadingAddOrUpdateResearch,
-                    onPressSearch: () async {
-                      await _getConcurrents(
-                        researchPricesProvider: researchPricesProvider,
-                        getAllConcurrents: false,
-                      );
-                    },
-                    hintText: "Nome ou código",
-                    labelText: "Nome ou código",
-                    focusNodeConsultProduct: focusNodeSearch,
-                    useCamera: false,
-                    showConfigurationsIcon: false,
-                  ),
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'CONCORRENTES',
+              ),
+              leading: IconButton(
+                onPressed: researchPricesProvider.isLoadingGetConcurrents ||
+                        researchPricesProvider.isLoadingAddOrUpdateResearch
+                    ? null
+                    : () {
+                        researchPricesProvider.updateSelectedConcurrent(null);
+                        researchPricesProvider.clearConcurrents();
+                        Navigator.of(context).pop();
+                      },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
                 ),
-                FittedBox(
-                  child: TextButton(
-                    onPressed: researchPricesProvider.isLoadingGetConcurrents ||
-                            researchPricesProvider.isLoadingAddOrUpdateResearch
-                        ? null
-                        : () async {
-                            _getConcurrents(
-                              researchPricesProvider: researchPricesProvider,
-                              getAllConcurrents: true,
-                            );
-                          },
-                    child: Text(
-                      "Consultar\ntodos",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: researchPricesProvider.isLoadingGetConcurrents ||
-                                researchPricesProvider
-                                    .isLoadingAddOrUpdateResearch
-                            ? Colors.grey
-                            : Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: SearchWidget(
+                        consultProductController:
+                            searchConcurrentControllerText,
+                        isLoading: researchPricesProvider
+                                .isLoadingGetConcurrents ||
+                            researchPricesProvider.isLoadingAddOrUpdateResearch,
+                        onPressSearch: () async {
+                          await _getConcurrents(
+                            researchPricesProvider: researchPricesProvider,
+                            getAllConcurrents: false,
+                          );
+                        },
+                        hintText: "Nome ou código",
+                        labelText: "Nome ou código",
+                        focusNodeConsultProduct: focusNodeSearch,
+                        useCamera: false,
+                        showConfigurationsIcon: false,
                       ),
                     ),
+                    FittedBox(
+                      child: TextButton(
+                        onPressed:
+                            researchPricesProvider.isLoadingGetConcurrents ||
+                                    researchPricesProvider
+                                        .isLoadingAddOrUpdateResearch
+                                ? null
+                                : () async {
+                                    _getConcurrents(
+                                      researchPricesProvider:
+                                          researchPricesProvider,
+                                      getAllConcurrents: true,
+                                    );
+                                  },
+                        child: Text(
+                          "Consultar\ntodos",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: researchPricesProvider
+                                        .isLoadingGetConcurrents ||
+                                    researchPricesProvider
+                                        .isLoadingAddOrUpdateResearch
+                                ? Colors.grey
+                                : Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                if (researchPricesProvider.errorGetConcurrents != "")
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ErrorMessage(
+                        errorMessage:
+                            researchPricesProvider.errorGetConcurrents),
                   ),
-                )
+                if (researchPricesProvider.concurrentsCount > 0)
+                  const ConcurrentsItems(),
               ],
             ),
-            if (researchPricesProvider.isLoadingGetConcurrents)
-              SearchingWidget(
-                title: 'Pesquisando concorrentes',
-              ),
-            if (researchPricesProvider.errorGetConcurrents != "")
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ErrorMessage(
-                    errorMessage: researchPricesProvider.errorGetConcurrents),
-              ),
-            if (researchPricesProvider.concurrentsCount > 0)
-              const ConcurrentsItems(),
-          ],
-        ),
-        floatingActionButton: floatingPersonalizedButton(
-          context: context,
-          researchPricesProvider: researchPricesProvider,
-          nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
-          isLoading: researchPricesProvider.isLoadingGetConcurrents ||
-              researchPricesProvider.isLoadingAddOrUpdateResearch,
-          messageButton: "criar\nconcorrente".toUpperCase(),
-          onTap: () {
-            researchPricesProvider.updateSelectedConcurrent(null);
-            Navigator.of(context)
-                .pushNamed(APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT);
-          },
-        ),
+            floatingActionButton: floatingPersonalizedButton(
+              context: context,
+              researchPricesProvider: researchPricesProvider,
+              nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+              isLoading: researchPricesProvider.isLoadingGetConcurrents ||
+                  researchPricesProvider.isLoadingAddOrUpdateResearch,
+              messageButton: "criar\nconcorrente".toUpperCase(),
+              onTap: () {
+                researchPricesProvider.updateSelectedConcurrent(null);
+                Navigator.of(context).pushNamed(
+                    APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT);
+              },
+            ),
+          ),
+          loadingWidget(
+            message: 'Pesquisando concorrentes...',
+            isLoading: researchPricesProvider.isLoadingGetConcurrents,
+          ),
+          loadingWidget(
+            message: 'Adicionando/alterando pesquisa',
+            isLoading: researchPricesProvider.isLoadingAddOrUpdateResearch,
+          ),
+        ],
       ),
     );
   }

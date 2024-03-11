@@ -37,90 +37,102 @@ class _TransferBetweenPackagePageState
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (_) async {
-        transferBetweenPackageProvider
-            .clearProductsJustificationsPackageAndJsonAdjustStock();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const FittedBox(
-            child: Text(
-              'TRANSFERÊNCIA ENTRE ESTOQUES',
+    return Stack(
+      children: [
+        PopScope(
+          canPop: !transferBetweenPackageProvider.isLoadingAdjustStock,
+          onPopInvoked: (_) async {
+            transferBetweenPackageProvider
+                .clearProductsJustificationsPackageAndJsonAdjustStock();
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const FittedBox(
+                child: Text(
+                  'TRANSFERÊNCIA ENTRE ESTOQUES',
+                ),
+              ),
+              leading: IconButton(
+                onPressed: () {
+                  transferBetweenPackageProvider
+                      .clearProductsJustificationsPackageAndJsonAdjustStock();
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
+                ),
+              ),
             ),
-          ),
-          leading: IconButton(
-            onPressed: () {
-              transferBetweenPackageProvider
-                  .clearProductsJustificationsPackageAndJsonAdjustStock();
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-            ),
-          ),
-        ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Column(
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SearchWidget(
-                  focusNodeConsultProduct:
-                      transferBetweenPackageProvider.consultProductFocusNode,
-                  isLoading: transferBetweenPackageProvider.isLoadingProducts ||
-                      transferBetweenPackageProvider
-                          .isLoadingConfirmTransferPackage,
-                  onPressSearch: () async {
-                    await transferBetweenPackageProvider.getProducts(
-                      enterpriseCode: arguments["CodigoInterno_Empresa"],
-                      controllerText: _consultProductController.text,
-                      context: context,
-                      configurationsProvider: configurationsProvider,
-                    );
+                Column(
+                  children: [
+                    SearchWidget(
+                      focusNodeConsultProduct: transferBetweenPackageProvider
+                          .consultProductFocusNode,
+                      isLoading: transferBetweenPackageProvider
+                              .isLoadingProducts ||
+                          transferBetweenPackageProvider.isLoadingAdjustStock,
+                      onPressSearch: () async {
+                        await transferBetweenPackageProvider.getProducts(
+                          enterpriseCode: arguments["CodigoInterno_Empresa"],
+                          controllerText: _consultProductController.text,
+                          context: context,
+                          configurationsProvider: configurationsProvider,
+                        );
 
-                    //não estava funcionando passar o productsCount como parâmetro
-                    //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                    //textEditingController após a consulta dos produtos se encontrar
-                    //algum produto
-                    if (transferBetweenPackageProvider.productsCount > 0) {
-                      //se for maior que 0 significa que deu certo a consulta e
-                      //por isso pode apagar o que foi escrito no campo de
-                      //consulta
-                      _consultProductController.clear();
-                    }
-                  },
-                  consultProductController: _consultProductController,
+                        //não estava funcionando passar o productsCount como parâmetro
+                        //para o "SearchProductWithEanPluOrNameWidget" para apagar o
+                        //textEditingController após a consulta dos produtos se encontrar
+                        //algum produto
+                        if (transferBetweenPackageProvider.productsCount > 0) {
+                          //se for maior que 0 significa que deu certo a consulta e
+                          //por isso pode apagar o que foi escrito no campo de
+                          //consulta
+                          _consultProductController.clear();
+                        }
+                      },
+                      consultProductController: _consultProductController,
+                    ),
+                    TransferBetweenPackageJustificationsAndStocksDropwdownWidget(
+                      dropDownFormKey: _dropDownFormKey,
+                    ),
+                  ],
                 ),
-                TransferBetweenPackageJustificationsAndStocksDropwdownWidget(
-                  dropDownFormKey: _dropDownFormKey,
-                ),
+                if (transferBetweenPackageProvider.errorMessageGetProducts !=
+                    "")
+                  ErrorMessage(
+                    errorMessage:
+                        transferBetweenPackageProvider.errorMessageGetProducts,
+                  ),
+                if (!transferBetweenPackageProvider.isLoadingProducts)
+                  TransferBetweenPackageProductsItems(
+                    internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
+                    consultedProductController: _consultedProductController,
+                    dropDownFormKey: _dropDownFormKey,
+                    insertQuantityFormKey: _insertQuantityFormKey,
+                  ),
               ],
             ),
-            if (transferBetweenPackageProvider.isLoadingProducts)
-              Expanded(
-                child: SearchingWidget(
-                  title: 'Consultando produtos',
-                ),
-              ),
-            if (transferBetweenPackageProvider.errorMessageGetProducts != "")
-              ErrorMessage(
-                errorMessage:
-                    transferBetweenPackageProvider.errorMessageGetProducts,
-              ),
-            if (!transferBetweenPackageProvider.isLoadingProducts)
-              TransferBetweenPackageProductsItems(
-                internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
-                consultedProductController: _consultedProductController,
-                dropDownFormKey: _dropDownFormKey,
-                insertQuantityFormKey: _insertQuantityFormKey,
-              ),
-          ],
+          ),
         ),
-      ),
+        loadingWidget(
+          message: 'Consultando produtos',
+          isLoading: transferBetweenPackageProvider.isLoadingProducts,
+        ),
+        loadingWidget(
+          isLoading: transferBetweenPackageProvider.isLoadingAdjustStock,
+          message: "Confirmando transferência...",
+        ),
+        loadingWidget(
+          isLoading: transferBetweenPackageProvider
+              .isLoadingTypeStockAndJustifications,
+          message: "Consultando estoques e justificativas...",
+        ),
+      ],
     );
   }
 }

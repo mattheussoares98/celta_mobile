@@ -32,54 +32,58 @@ class EnterprisePageState extends State<EnterprisePage> {
         ModalRoute.of(context)!.settings.arguments as String;
     //essa rota vem para essa página através de um parâmetro do ImageComponent
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'EMPRESAS',
-        ),
-        actions: [
-          IconButton(
-            onPressed: enterpriseProvider.isLoadingEnterprises
-                ? null
-                : () async {
-                    await enterpriseProvider.getEnterprises(
-                      isConsultingAgain: true,
-                    );
-                  },
-            tooltip: "Consultar empresas",
-            icon: const Icon(Icons.refresh),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'EMPRESAS',
+            ),
+            actions: [
+              IconButton(
+                onPressed: enterpriseProvider.isLoadingEnterprises
+                    ? null
+                    : () async {
+                        await enterpriseProvider.getEnterprises(
+                          isConsultingAgain: true,
+                        );
+                      },
+                tooltip: "Consultar empresas",
+                icon: const Icon(Icons.refresh),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await enterpriseProvider.getEnterprises(
-            isConsultingAgain: true,
-          );
-        },
-        child: Column(
-          children: [
-            if (enterpriseProvider.isLoadingEnterprises)
-              Expanded(
-                child: SearchingWidget(title: 'Consultando empresas'),
-              ),
-            if (enterpriseProvider.errorMessage != '' &&
-                !enterpriseProvider.isLoadingEnterprises)
-              Expanded(
-                child: searchAgain(
-                  errorMessage: enterpriseProvider.errorMessage,
-                  request: () async {
-                    setState(() {});
-                    await getEnterprises(enterpriseProvider);
-                  },
-                ),
-              ),
-            if (enterpriseProvider.errorMessage == "" &&
-                !enterpriseProvider.isLoadingEnterprises)
-              Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
-          ],
+          body: RefreshIndicator(
+            onRefresh: () async {
+              await enterpriseProvider.getEnterprises(
+                isConsultingAgain: true,
+              );
+            },
+            child: Column(
+              children: [
+                if (enterpriseProvider.errorMessage != '' &&
+                    !enterpriseProvider.isLoadingEnterprises)
+                  Expanded(
+                    child: searchAgain(
+                      errorMessage: enterpriseProvider.errorMessage,
+                      request: () async {
+                        setState(() {});
+                        await getEnterprises(enterpriseProvider);
+                      },
+                    ),
+                  ),
+                if (enterpriseProvider.errorMessage == "" &&
+                    !enterpriseProvider.isLoadingEnterprises)
+                  Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
+              ],
+            ),
+          ),
         ),
-      ),
+        loadingWidget(
+          message: "Consultando empresas...",
+          isLoading: enterpriseProvider.isLoadingEnterprises,
+        )
+      ],
     );
   }
 }

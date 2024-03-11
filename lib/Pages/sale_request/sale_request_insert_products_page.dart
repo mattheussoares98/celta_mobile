@@ -33,72 +33,64 @@ class _SaleRequestInsertProductsPageState
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
 
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (_) async {
-        saleRequestProvider.clearProducts();
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SearchWidget(
-            consultProductController: _searchProductTextEditingController,
-            isLoading: saleRequestProvider.isLoadingProducts,
-            autofocus: false,
-            onPressSearch: () async {
-              _consultedProductController.clear();
-
-              await saleRequestProvider.getProducts(
-                context: context,
-                configurationsProvider: configurationsProvider,
-                enterpriseCode: widget.enterpriseCode,
-                controllerText: _searchProductTextEditingController.text,
-                requestTypeCode: widget.requestTypeCode,
-              );
-
-              if (saleRequestProvider.productsCount > 0) {
-                _searchProductTextEditingController.clear();
-              }
-            },
-            focusNodeConsultProduct: saleRequestProvider.searchProductFocusNode,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SearchWidget(
+          consultProductController: _searchProductTextEditingController,
+          isLoading: saleRequestProvider.isLoadingProducts,
+          autofocus: false,
+          onPressSearch: () async {
+            _consultedProductController.clear();
+    
+            await saleRequestProvider.getProducts(
+              context: context,
+              configurationsProvider: configurationsProvider,
+              enterpriseCode: widget.enterpriseCode,
+              controllerText: _searchProductTextEditingController.text,
+              requestTypeCode: widget.requestTypeCode,
+            );
+    
+            if (saleRequestProvider.productsCount > 0) {
+              _searchProductTextEditingController.clear();
+            }
+          },
+          focusNodeConsultProduct:
+              saleRequestProvider.searchProductFocusNode,
+        ),
+        if (saleRequestProvider.errorMessageProducts != "")
+          ErrorMessage(
+            errorMessage: saleRequestProvider.errorMessageProducts,
           ),
-          if (saleRequestProvider.errorMessageProducts != "")
-            ErrorMessage(
-              errorMessage: saleRequestProvider.errorMessageProducts,
-            ),
-          if (saleRequestProvider.isLoadingProducts)
-            Expanded(
-              child: SearchingWidget(title: "Consultando produtos"),
-            ),
-          if (saleRequestProvider.productsCount > 0)
-            SaleRequestProductsItems(
-                consultedProductController: _consultedProductController,
-                enterpriseCode: widget.enterpriseCode,
-                getProductsWithCamera: () async {
-                  FocusScope.of(context).unfocus();
+        if (saleRequestProvider.productsCount > 0)
+          SaleRequestProductsItems(
+              consultedProductController: _consultedProductController,
+              enterpriseCode: widget.enterpriseCode,
+              getProductsWithCamera: () async {
+                FocusScope.of(context).unfocus();
+                _searchProductTextEditingController.clear();
+    
+                _searchProductTextEditingController.text =
+                    await ScanBarCode.scanBarcode(context);
+    
+                if (_searchProductTextEditingController.text == "") {
+                  return;
+                }
+    
+                await saleRequestProvider.getProducts(
+                  configurationsProvider: configurationsProvider,
+                  context: context,
+                  enterpriseCode: widget.enterpriseCode,
+                  controllerText:
+                      _searchProductTextEditingController.text,
+                  requestTypeCode: widget.requestTypeCode,
+                );
+    
+                if (saleRequestProvider.productsCount > 0) {
                   _searchProductTextEditingController.clear();
-
-                  _searchProductTextEditingController.text =
-                      await ScanBarCode.scanBarcode(context);
-
-                  if (_searchProductTextEditingController.text == "") {
-                    return;
-                  }
-
-                  await saleRequestProvider.getProducts(
-                    configurationsProvider: configurationsProvider,
-                    context: context,
-                    enterpriseCode: widget.enterpriseCode,
-                    controllerText: _searchProductTextEditingController.text,
-                    requestTypeCode: widget.requestTypeCode,
-                  );
-
-                  if (saleRequestProvider.productsCount > 0) {
-                    _searchProductTextEditingController.clear();
-                  }
-                }),
-        ],
-      ),
+                }
+              }),
+      ],
     );
   }
 }

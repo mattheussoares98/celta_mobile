@@ -32,66 +32,78 @@ class _ReceiptPageState extends State<ReceiptPage> {
     ReceiptProvider receiptProvider = Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'RECEBIMENTOS',
-        ),
-        actions: [
-          IconButton(
-            onPressed: receiptProvider.isLoadingReceipt
-                ? null
-                : () async {
-                    await receiptProvider.getReceipt(
-                      enterpriseCode: arguments["CodigoInterno_Empresa"],
-                      context: context,
-                      isSearchingAgain: true,
-                    );
-                  },
-            tooltip: "Consultar recebimentos",
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await receiptProvider.getReceipt(
-            enterpriseCode: arguments["CodigoInterno_Empresa"],
-            context: context,
-            isSearchingAgain: true,
-          );
-        },
-        child: Column(
-          children: [
-            if (receiptProvider.isLoadingReceipt)
-              Expanded(
-                child: SearchingWidget(title: 'Consultando recebimentos'),
+    return Stack(
+      children: [
+        PopScope(
+          canPop: !receiptProvider.isLoadingLiberateCheck,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'RECEBIMENTOS',
               ),
-            if (receiptProvider.errorMessage != '' &&
-                receiptProvider.receiptCount == 0 &&
-                !receiptProvider.isLoadingReceipt)
-              Expanded(
-                child: searchAgain(
-                    errorMessage: receiptProvider.errorMessage,
-                    request: () async {
-                      setState(() {});
-                      await receiptProvider.getReceipt(
-                        enterpriseCode: arguments["CodigoInterno_Empresa"],
-                        context: context,
-                      );
-                    }),
-              ),
-            if (!receiptProvider.isLoadingReceipt &&
-                receiptProvider.errorMessage == '')
-              Expanded(
-                child: ReceiptItems(
-                  enterpriseCode: arguments["CodigoInterno_Empresa"],
-                  receiptProvider: receiptProvider,
+              actions: [
+                IconButton(
+                  onPressed: receiptProvider.isLoadingReceipt
+                      ? null
+                      : () async {
+                          await receiptProvider.getReceipt(
+                            enterpriseCode: arguments["CodigoInterno_Empresa"],
+                            context: context,
+                            isSearchingAgain: true,
+                          );
+                        },
+                  tooltip: "Consultar recebimentos",
+                  icon: const Icon(Icons.refresh),
                 ),
+              ],
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await receiptProvider.getReceipt(
+                  enterpriseCode: arguments["CodigoInterno_Empresa"],
+                  context: context,
+                  isSearchingAgain: true,
+                );
+              },
+              child: Column(
+                children: [
+                  if (receiptProvider.errorMessage != '' &&
+                      receiptProvider.receiptCount == 0 &&
+                      !receiptProvider.isLoadingReceipt)
+                    Expanded(
+                      child: searchAgain(
+                          errorMessage: receiptProvider.errorMessage,
+                          request: () async {
+                            setState(() {});
+                            await receiptProvider.getReceipt(
+                              enterpriseCode:
+                                  arguments["CodigoInterno_Empresa"],
+                              context: context,
+                            );
+                          }),
+                    ),
+                  if (!receiptProvider.isLoadingReceipt &&
+                      receiptProvider.errorMessage == '')
+                    Expanded(
+                      child: ReceiptItems(
+                        enterpriseCode: arguments["CodigoInterno_Empresa"],
+                        receiptProvider: receiptProvider,
+                      ),
+                    ),
+                ],
               ),
-          ],
+            ),
+          ),
         ),
-      ),
+        loadingWidget(
+          message: 'Consultando recebimentos...',
+          isLoading: receiptProvider.isLoadingReceipt,
+        ),
+        loadingWidget(
+          message: 'Liberando documento...',
+          isLoading: receiptProvider.isLoadingLiberateCheck,
+        ),
+      ],
     );
   }
 }

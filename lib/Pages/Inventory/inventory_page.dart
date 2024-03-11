@@ -35,58 +35,63 @@ class _InventoryPageState extends State<InventoryPage> {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'INVENTÁRIOS',
-        ),
-        actions: [
-          IconButton(
-            onPressed: inventoryProvider.isLoadingInventorys
-                ? null
-                : () async {
-                    await inventoryProvider.getInventory(
-                      enterpriseCode: arguments["CodigoInterno_Empresa"],
-                      userIdentity: UserData.crossIdentity,
-                      isConsultingAgain: true,
-                    );
-                  },
-            tooltip: "Consultar inventários",
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await inventoryProvider.getInventory(
-            enterpriseCode: arguments["CodigoInterno_Empresa"],
-            userIdentity: UserData.crossIdentity,
-            isConsultingAgain: true,
-          );
-        },
-        child: Column(
-          children: [
-            if (inventoryProvider.isLoadingInventorys)
-              Expanded(
-                  child: SearchingWidget(title: 'Consultando inventários')),
-            if (inventoryProvider.errorMessage != '')
-              Expanded(
-                child: searchAgain(
-                  errorMessage: inventoryProvider.errorMessage,
-                  request: () async => setState(() {
-                    inventoryProvider.getInventory(
-                      enterpriseCode: arguments["CodigoInterno_Empresa"],
-                      userIdentity: UserData.crossIdentity,
-                    );
-                  }),
-                ),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'INVENTÁRIOS',
+            ),
+            actions: [
+              IconButton(
+                onPressed: inventoryProvider.isLoadingInventorys
+                    ? null
+                    : () async {
+                        await inventoryProvider.getInventory(
+                          enterpriseCode: arguments["CodigoInterno_Empresa"],
+                          userIdentity: UserData.crossIdentity,
+                          isConsultingAgain: true,
+                        );
+                      },
+                tooltip: "Consultar inventários",
+                icon: const Icon(Icons.refresh),
               ),
-            if (inventoryProvider.errorMessage == "" &&
-                !inventoryProvider.isLoadingInventorys)
-              const Expanded(child: const InventoryItems()),
-          ],
+            ],
+          ),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              await inventoryProvider.getInventory(
+                enterpriseCode: arguments["CodigoInterno_Empresa"],
+                userIdentity: UserData.crossIdentity,
+                isConsultingAgain: true,
+              );
+            },
+            child: Column(
+              children: [
+                if (inventoryProvider.errorMessage != '')
+                  Expanded(
+                    child: searchAgain(
+                      errorMessage: inventoryProvider.errorMessage,
+                      request: () async => setState(() {
+                        inventoryProvider.getInventory(
+                          enterpriseCode: arguments["CodigoInterno_Empresa"],
+                          userIdentity: UserData.crossIdentity,
+                        );
+                      }),
+                    ),
+                  ),
+                if (inventoryProvider.errorMessage == "" &&
+                    !inventoryProvider.isLoadingInventorys)
+                  const Expanded(child: const InventoryItems()),
+              ],
+            ),
+          ),
         ),
-      ),
+        loadingWidget(
+          message: 'Consultando inventários',
+          isLoading: inventoryProvider.isLoadingInventorys,
+        ),
+      ],
     );
   }
 }

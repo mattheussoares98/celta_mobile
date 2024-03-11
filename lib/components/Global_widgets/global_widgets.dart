@@ -7,7 +7,7 @@ export './image_component.dart';
 export './insert_quantity_textformfield.dart';
 export './searchAgain.dart';
 export './search_widget.dart';
-export './searching_widget.dart';
+export 'loading_widget.dart';
 export './show_alert_dialog.dart';
 export './show_all_stocks.dart';
 export './show_snackbar_message.dart';

@@ -68,7 +68,6 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
         ),
       ),
       body: PopScope(
-        canPop: true,
         onPopInvoked: ((didPop) {
           researchPricesProvider.updateSelectedResearch(null);
         }),

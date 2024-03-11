@@ -40,7 +40,6 @@ class _ResearchPricesInsertProductsPricesState
     ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return PopScope(
-      canPop: !researchPricesProvider.isLoadingGetProducts,
       onPopInvoked: (_) async {
         if (widget.isAssociatedProducts) {
           researchPricesProvider.clearAssociatedsProducts();
@@ -79,10 +78,6 @@ class _ResearchPricesInsertProductsPricesState
             ErrorMessage(
               errorMessage:
                   researchPricesProvider.errorGetNotAssociatedsProducts,
-            ),
-          if (researchPricesProvider.isLoadingGetProducts)
-            Expanded(
-              child: SearchingWidget(title: "Consultando produto(s)"),
             ),
           if (researchPricesProvider.associatedsProductsCount > 0 ||
               researchPricesProvider.notAssociatedProductsCount > 0)

@@ -31,69 +31,71 @@ class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);
 
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (_) async {},
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'MODELOS DE PEDIDO  ',
-          ),
-          leading: IconButton(
-            onPressed: () {
-              transferRequestProvider.clearRequestModels();
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
+    return Stack(
+      children: [
+        PopScope(
+          onPopInvoked: (_) async {},
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'MODELOS DE PEDIDO  ',
+              ),
+              leading: IconButton(
+                onPressed: () {
+                  transferRequestProvider.clearRequestModels();
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: transferRequestProvider.isLoadingRequestModel
+                      ? null
+                      : () async {
+                          transferRequestProvider.getRequestModels(
+                              isConsultingAgain: true);
+                        },
+                  tooltip: "Consultar modelos de pedido",
+                  icon: const Icon(Icons.refresh),
+                ),
+              ],
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                transferRequestProvider.getRequestModels(
+                    isConsultingAgain: true);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (!transferRequestProvider.isLoadingRequestModel &&
+                      transferRequestProvider.errorMessageRequestModel == "")
+                    const TransferRequestItems(),
+                  if (transferRequestProvider.errorMessageRequestModel != '' &&
+                      !transferRequestProvider.isLoadingRequestModel)
+                    Expanded(
+                      child: searchAgain(
+                          errorMessage:
+                              transferRequestProvider.errorMessageRequestModel,
+                          request: () async {
+                            setState(() {});
+                            await transferRequestProvider.getRequestModels();
+                          }),
+                    ),
+                ],
+              ),
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: transferRequestProvider.isLoadingRequestModel
-                  ? null
-                  : () async {
-                      transferRequestProvider.getRequestModels(
-                          isConsultingAgain: true);
-                    },
-              tooltip: "Consultar modelos de pedido",
-              icon: const Icon(Icons.refresh),
-            ),
-          ],
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            transferRequestProvider.getRequestModels(isConsultingAgain: true);
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (transferRequestProvider.isLoadingRequestModel)
-                Expanded(
-                  child: SearchingWidget(
-                    title: 'Consultando modelos de pedido',
-                  ),
-                ),
-              if (!transferRequestProvider.isLoadingRequestModel &&
-                  transferRequestProvider.errorMessageRequestModel == "")
-                const TransferRequestItems(),
-              if (transferRequestProvider.errorMessageRequestModel != '' &&
-                  !transferRequestProvider.isLoadingRequestModel)
-                Expanded(
-                  child: searchAgain(
-                      errorMessage:
-                          transferRequestProvider.errorMessageRequestModel,
-                      request: () async {
-                        setState(() {});
-                        await transferRequestProvider.getRequestModels();
-                      }),
-                ),
-            ],
-          ),
+        loadingWidget(
+          message: 'Consultando modelos de pedido...',
+          isLoading: transferRequestProvider.isLoadingRequestModel,
         ),
-      ),
+      ],
     );
   }
 }

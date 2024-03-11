@@ -59,95 +59,102 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
         Provider.of(context, listen: true);
 
     return PopScope(
-      canPop: !researchPricesProvider.isLoadingResearchPrices &&
-          !researchPricesProvider.isLoadingAddOrUpdateConcurrents,
+      canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents,
       onPopInvoked: (_) async {
         researchPricesProvider.clearResearchPrices();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const FittedBox(
-            child: Text(
-              'PESQUISAS CADASTRADAS',
-            ),
-          ),
-          leading: IconButton(
-            onPressed: researchPricesProvider.isLoadingResearchPrices ||
-                    researchPricesProvider.isLoadingAddOrUpdateConcurrents
-                ? null
-                : () {
-                    researchPricesProvider.clearResearchPrices();
-                    Navigator.of(context).pop();
-                  },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: researchPricesProvider.isLoadingResearchPrices ||
-                      researchPricesProvider.isLoadingAddOrUpdateConcurrents
-                  ? null
-                  : () async {
-                      await _getResearchPrices(
-                        notityListenersFromUpdate: true,
-                        researchPricesProvider: researchPricesProvider,
-                      );
-                    },
-              tooltip: "Consultar recebimentos",
-              icon: const Icon(Icons.refresh),
-            ),
-          ],
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await _getResearchPrices(
-              notityListenersFromUpdate: true,
-              researchPricesProvider: researchPricesProvider,
-            );
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              if (researchPricesProvider.isLoadingResearchPrices)
-                Expanded(
-                  child: SearchingWidget(
-                    title: 'Consultando pesquisas de preço',
-                  ),
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: const FittedBox(
+                child: Text(
+                  'PESQUISAS CADASTRADAS',
                 ),
-              if (researchPricesProvider.errorGetResearchPrices != "" &&
-                  researchPricesProvider.researchPricesCount == 0)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ErrorMessage(
-                      errorMessage:
-                          researchPricesProvider.errorGetResearchPrices),
+              ),
+              leading: IconButton(
+                onPressed: researchPricesProvider.isLoadingResearchPrices ||
+                        researchPricesProvider.isLoadingAddOrUpdateConcurrents
+                    ? null
+                    : () {
+                        researchPricesProvider.clearResearchPrices();
+                        Navigator.of(context).pop();
+                      },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
                 ),
-              if (!researchPricesProvider.isLoadingResearchPrices)
-                ResearchPricesItems(enterpriseCode: enterpriseCode!),
-            ],
-          ),
-        ),
-        floatingActionButton: floatingPersonalizedButton(
-            context: context,
-            researchPricesProvider: researchPricesProvider,
-            nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
-            isLoading: researchPricesProvider.isLoadingResearchPrices,
-            messageButton: "criar\npesquisa".toUpperCase(),
-            onTap: () async {
-              researchPricesProvider.updateSelectedResearch(null);
-              final createdNewResearch = await Navigator.of(context).pushNamed(
-                APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
-                arguments: {"enterpriseCode": enterpriseCode},
-              );
-
-              if (createdNewResearch == true) {
+              ),
+              actions: [
+                IconButton(
+                  onPressed: researchPricesProvider.isLoadingResearchPrices ||
+                          researchPricesProvider.isLoadingAddOrUpdateConcurrents
+                      ? null
+                      : () async {
+                          await _getResearchPrices(
+                            notityListenersFromUpdate: true,
+                            researchPricesProvider: researchPricesProvider,
+                          );
+                        },
+                  tooltip: "Consultar recebimentos",
+                  icon: const Icon(Icons.refresh),
+                ),
+              ],
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
                 await _getResearchPrices(
                   notityListenersFromUpdate: true,
                   researchPricesProvider: researchPricesProvider,
                 );
-              }
-            }),
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  if (researchPricesProvider.errorGetResearchPrices != "" &&
+                      researchPricesProvider.researchPricesCount == 0)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ErrorMessage(
+                          errorMessage:
+                              researchPricesProvider.errorGetResearchPrices),
+                    ),
+                  if (!researchPricesProvider.isLoadingResearchPrices)
+                    ResearchPricesItems(enterpriseCode: enterpriseCode!),
+                ],
+              ),
+            ),
+            floatingActionButton: floatingPersonalizedButton(
+                context: context,
+                researchPricesProvider: researchPricesProvider,
+                nextRoute:
+                    APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+                isLoading: researchPricesProvider.isLoadingResearchPrices,
+                messageButton: "criar\npesquisa".toUpperCase(),
+                onTap: () async {
+                  researchPricesProvider.updateSelectedResearch(null);
+                  final createdNewResearch =
+                      await Navigator.of(context).pushNamed(
+                    APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+                    arguments: {"enterpriseCode": enterpriseCode},
+                  );
+
+                  if (createdNewResearch == true) {
+                    await _getResearchPrices(
+                      notityListenersFromUpdate: true,
+                      researchPricesProvider: researchPricesProvider,
+                    );
+                  }
+                }),
+          ),
+          loadingWidget(
+            message: 'Consultando pesquisas de preço...',
+            isLoading: researchPricesProvider.isLoadingResearchPrices,
+          ),
+          loadingWidget(
+            message: 'Adicionando/alterando concorrente...',
+            isLoading: researchPricesProvider.isLoadingAddOrUpdateConcurrents,
+          ),
+        ],
       ),
     );
   }

@@ -131,7 +131,7 @@ class _ReceiptConferenceProductsItemsState
     widget.consultedProductController.text = "";
 
     if (receiptProvider.consultingProducts ||
-        receiptProvider.isLoadingValidityDate) {
+        receiptProvider.isLoadingUpdateQuantity) {
       return;
     }
 
@@ -191,7 +191,7 @@ class _ReceiptConferenceProductsItemsState
   }) {
     ReceiptProductsModel product = receiptProvider.products[index];
     return InkWell(
-      onTap: receiptProvider.isUpdatingQuantity ||
+      onTap: receiptProvider.isLoadingUpdateQuantity ||
               receiptProvider.consultingProducts
           ? null
           : () {
@@ -232,9 +232,8 @@ class _ReceiptConferenceProductsItemsState
                     : product.DataValidade_ProcRecebDocProEmb.toString()
                         .replaceRange(10, null, ""),
                 otherWidget: InkWell(
-                  onTap: receiptProvider.isUpdatingQuantity ||
-                          receiptProvider.consultingProducts ||
-                          receiptProvider.isLoadingValidityDate
+                  onTap: receiptProvider.isLoadingUpdateQuantity ||
+                          receiptProvider.consultingProducts
                       ? null
                       : () async {
                           DateTime? validityDate = await showDatePicker(
@@ -254,7 +253,7 @@ class _ReceiptConferenceProductsItemsState
                             });
                           }
                         },
-                  child: receiptProvider.isLoadingValidityDate
+                  child: receiptProvider.isLoadingUpdateQuantity
                       ? Row(
                           children: [
                             const Text("Alterando...  "),
@@ -271,9 +270,8 @@ class _ReceiptConferenceProductsItemsState
                       : Text(
                           "Alterar validade",
                           style: TextStyle(
-                            color: receiptProvider.isUpdatingQuantity ||
-                                    receiptProvider.consultingProducts ||
-                                    receiptProvider.isLoadingValidityDate
+                            color: receiptProvider.isLoadingUpdateQuantity ||
+                                    receiptProvider.consultingProducts
                                 ? Colors.black
                                 : Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
@@ -318,10 +316,9 @@ class _ReceiptConferenceProductsItemsState
                           widget.consultedProductController,
                       consultedProductFocusNode:
                           receiptProvider.consultedProductFocusNode,
-                      isUpdatingQuantity: receiptProvider.isUpdatingQuantity,
-                      isLoading: receiptProvider.isUpdatingQuantity ||
-                          receiptProvider.consultingProducts ||
-                          receiptProvider.isLoadingValidityDate,
+                      isUpdatingQuantity: receiptProvider.isLoadingUpdateQuantity,
+                      isLoading: receiptProvider.isLoadingUpdateQuantity ||
+                          receiptProvider.consultingProducts,
                       addQuantityFunction: () async {
                         await updateQuantity(
                           isSubtract: false,

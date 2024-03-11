@@ -73,7 +73,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
         ),
       ),
       body: PopScope(
-        canPop: true,
         onPopInvoked: ((didPop) {
           researchPricesProvider.updateSelectedConcurrent(null);
           addressProvider.clearAddresses();
@@ -189,47 +188,47 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(200, 40),
                   ),
-                  onPressed:
-                      researchPricesProvider.isLoadingAddOrUpdateConcurrents
-                          ? null
-                          : () async {
-                              ShowAlertDialog.showAlertDialog(
-                                  context: context,
-                                  title: researchPricesProvider
-                                              .selectedConcurrent ==
+                  onPressed: researchPricesProvider
+                          .isLoadingAddOrUpdateConcurrents
+                      ? null
+                      : () async {
+                          ShowAlertDialog.showAlertDialog(
+                              context: context,
+                              title:
+                                  researchPricesProvider.selectedConcurrent ==
                                           null
                                       ? "Cadastrar concorrente"
                                       : "Alterar concorrente",
-                                  subtitle: researchPricesProvider
-                                              .selectedConcurrent ==
-                                          null
-                                      ? "Deseja realmente cadastrar o concorrente com os dados informados?"
-                                      : "Deseja realmente alterar o concorrente com os dados informados?",
-                                  function: () async {
-                                    await researchPricesProvider
-                                        .addOrUpdateConcurrent(
-                                      context: context,
-                                      addressProvider: addressProvider,
-                                      concurrentName: nameController.text,
-                                      observation: observationController.text,
-                                    );
+                              subtitle: researchPricesProvider
+                                          .selectedConcurrent ==
+                                      null
+                                  ? "Deseja realmente cadastrar o concorrente com os dados informados?"
+                                  : "Deseja realmente alterar o concorrente com os dados informados?",
+                              function: () async {
+                                await researchPricesProvider
+                                    .addOrUpdateConcurrent(
+                                  context: context,
+                                  addressProvider: addressProvider,
+                                  concurrentName: nameController.text,
+                                  observation: observationController.text,
+                                );
 
-                                    if (researchPricesProvider
-                                            .errorAddOrUpdateConcurrents ==
-                                        "") {
-                                      addressProvider.clearAddresses();
-                                      nameController.clear();
-                                      observationController.clear();
-                                      Navigator.of(context).pop();
-                                    } else {
-                                      ShowSnackbarMessage.showMessage(
-                                        message: researchPricesProvider
-                                            .errorAddOrUpdateConcurrents,
-                                        context: context,
-                                      );
-                                    }
-                                  });
-                            },
+                                if (researchPricesProvider
+                                        .errorAddOrUpdateConcurrents ==
+                                    "") {
+                                  addressProvider.clearAddresses();
+                                  nameController.clear();
+                                  observationController.clear();
+                                  Navigator.of(context).pop();
+                                } else {
+                                  ShowSnackbarMessage.showMessage(
+                                    message: researchPricesProvider
+                                        .errorAddOrUpdateConcurrents,
+                                    context: context,
+                                  );
+                                }
+                              });
+                        },
                   child: researchPricesProvider.isLoadingAddOrUpdateConcurrents
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,

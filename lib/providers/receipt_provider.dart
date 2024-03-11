@@ -33,8 +33,6 @@ class ReceiptProvider with ChangeNotifier {
   String _errorMessageUpdateQuantity = "";
 
   get errorMessageUpdateQuantity => _errorMessageUpdateQuantity;
-  bool _isLoadingValidityDate = false;
-  get isLoadingValidityDate => _isLoadingValidityDate;
 
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
@@ -69,9 +67,9 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isUpdatingQuantity = false;
+  bool _isLoadingUpdateQuantity = false;
 
-  get isUpdatingQuantity => _isUpdatingQuantity;
+  get isLoadingUpdateQuantity => _isLoadingUpdateQuantity;
   updateQuantity({
     required int docCode,
     required int productgCode,
@@ -87,7 +85,7 @@ class ReceiptProvider with ChangeNotifier {
     var quantity = double.parse(quantityText);
 
     if (isSubtract && _products[index].Quantidade_ProcRecebDocProEmb == -1) {
-      _isUpdatingQuantity = false;
+      _isLoadingUpdateQuantity = false;
       _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
       ShowSnackbarMessage.showMessage(
         message: _errorMessageUpdateQuantity,
@@ -98,7 +96,7 @@ class ReceiptProvider with ChangeNotifier {
     } else if (isSubtract &&
         quantity > _products[index].Quantidade_ProcRecebDocProEmb &&
         _products[index].Quantidade_ProcRecebDocProEmb != -1) {
-      _isUpdatingQuantity = false;
+      _isLoadingUpdateQuantity = false;
       _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
       ShowSnackbarMessage.showMessage(
         message: _errorMessageUpdateQuantity,
@@ -111,9 +109,8 @@ class ReceiptProvider with ChangeNotifier {
       quantity = quantity - quantity * 2;
     }
 
-    _isLoadingValidityDate = true;
     _errorMessageUpdateQuantity = "";
-    _isUpdatingQuantity = true;
+    _isLoadingUpdateQuantity = true;
 
     notifyListeners();
 
@@ -169,8 +166,7 @@ class ReceiptProvider with ChangeNotifier {
         context: context,
       );
     } finally {
-      _isLoadingValidityDate = false;
-      _isUpdatingQuantity = false;
+      _isLoadingUpdateQuantity = false;
       notifyListeners();
     }
   }
@@ -194,7 +190,7 @@ class ReceiptProvider with ChangeNotifier {
       return;
     }
     _errorMessageUpdateQuantity = "";
-    _isUpdatingQuantity = true;
+    _isLoadingUpdateQuantity = true;
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
@@ -240,7 +236,7 @@ class ReceiptProvider with ChangeNotifier {
       );
     }
 
-    _isUpdatingQuantity = false;
+    _isLoadingUpdateQuantity = false;
     notifyListeners();
   }
 

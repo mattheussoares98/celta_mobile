@@ -67,8 +67,6 @@ class _BuyRequestInsertProductsPageState
             },
             focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
           ),
-          if (buyRequestProvider.isLoadingProducts)
-            SearchingWidget(title: "Consultando produtos"),
           const BuyRequestProductsItems(),
         ],
       ),
