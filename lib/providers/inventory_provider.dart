@@ -74,6 +74,8 @@ class InventoryProvider with ChangeNotifier {
     required String? userIdentity,
     bool? isConsultingAgain = false,
   }) async {
+    if(_isLoadingInventorys) return;
+    
     _isLoadingInventorys = true;
     _inventorys.clear();
     _errorMessageInventorys = '';

@@ -473,6 +473,7 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     bool? isConsultingAgain = false,
   }) async {
+    if(_isLoadingRequests) return;
     _isLoadingRequests = true;
     _errorMessageRequests = "";
     _requests.clear();

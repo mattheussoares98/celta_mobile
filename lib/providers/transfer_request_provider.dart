@@ -428,6 +428,8 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   Future<void> getRequestModels({bool isConsultingAgain = false}) async {
+    if(_isLoadingRequestModel) return;
+
     _errorMessageRequestModel = '';
     _isLoadingRequestModel = true;
     _destinyEnterprises.clear();
@@ -471,6 +473,8 @@ class TransferRequestProvider with ChangeNotifier {
     required int requestTypeCode,
     bool isConsultingAgain = false,
   }) async {
+    if(_isLoadingOriginEnterprise) return;
+    
     _errorMessageOriginEnterprise = '';
     _isLoadingOriginEnterprise = true;
     _originEnterprises.clear();
@@ -553,6 +557,7 @@ class TransferRequestProvider with ChangeNotifier {
     required int enterpriseOriginCode,
     bool isConsultingAgain = false,
   }) async {
+    if(_isLoadingDestinyEnterprise) return;
     _errorMessageDestinyEnterprise = '';
     _isLoadingDestinyEnterprise = true;
     _destinyEnterprises.clear();

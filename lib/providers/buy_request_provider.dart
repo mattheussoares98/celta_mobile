@@ -570,6 +570,8 @@ class BuyRequestProvider with ChangeNotifier {
     bool? isSearchingAgain = false,
     required BuildContext context,
   }) async {
+    if(_isLoadingBuyer) return;
+
     _errorMessageBuyer = "";
     _isLoadingBuyer = true;
     _clearBuyers();
@@ -629,6 +631,8 @@ class BuyRequestProvider with ChangeNotifier {
     bool? isSearchingAgain = false,
     required BuildContext context,
   }) async {
+    if(_isLoadingRequestsType) return;
+    
     _errorMessageRequestsType = "";
     _isLoadingRequestsType = true;
     _clearRequestsType();
@@ -730,6 +734,8 @@ class BuyRequestProvider with ChangeNotifier {
     required BuildContext context,
     bool isSearchingAgain = true,
   }) async {
+    if(_isLoadingEnterprises) return;
+
     _errorMessageEnterprises = "";
     _isLoadingEnterprises = true;
     _clearEnterprisesAndSelectedEnterprises();

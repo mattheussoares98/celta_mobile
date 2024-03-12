@@ -298,6 +298,8 @@ class ReceiptProvider with ChangeNotifier {
     required BuildContext context,
     bool isSearchingAgain = false,
   }) async {
+    if(_isLoadingReceipt) return;
+    
     _receipts.clear();
     _isLoadingReceipt = true;
     _errorMessage = '';
