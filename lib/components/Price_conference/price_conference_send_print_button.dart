@@ -53,34 +53,19 @@ class _PriceConferenceSendPrintButtonState
                     );
                   }
                 },
-          child: priceConferenceProvider.isSendingToPrint ||
-                  priceConferenceProvider.isLoading
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text("Aguarde...    "),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      child: const CircularProgressIndicator(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(widget.etiquetaPendente == true
-                        ? "Desmarcar para impressão  "
-                        : "Marcar para impressão  "),
-                    Icon(
-                      widget.etiquetaPendente == true
-                          ? Icons.print_disabled
-                          : Icons.print,
-                    )
-                  ],
-                ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(widget.etiquetaPendente == true
+                  ? "Desmarcar para impressão  "
+                  : "Marcar para impressão  "),
+              Icon(
+                widget.etiquetaPendente == true
+                    ? Icons.print_disabled
+                    : Icons.print,
+              )
+            ],
+          ),
         ),
       ],
     );
