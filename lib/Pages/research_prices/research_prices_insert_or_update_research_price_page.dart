@@ -46,133 +46,136 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
     Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: FittedBox(
-          child: Text(
-            researchPricesProvider.selectedResearch == null
-                ? "Cadastrar pesquisa"
-                : "Alterar pesquisa",
-          ),
-        ),
-        leading: IconButton(
-          onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
-              ? null
-              : () {
-                  researchPricesProvider.updateSelectedResearch(null);
-                  Navigator.of(context).pop();
-                },
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
-      ),
-      body: PopScope(
-        onPopInvoked: ((didPop) {
-          researchPricesProvider.updateSelectedResearch(null);
-        }),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                TextFormField(
-                  autofocus: true,
-                  focusNode: nameFocusNode,
-                  enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
-                  controller: researchNameController,
-                  decoration: FormFieldHelper.decoration(
-                    isLoading:
-                        researchPricesProvider.isLoadingAddOrUpdateResearch,
-                    context: context,
-                    labelText: 'Nome',
-                  ),
-                  onFieldSubmitted: (_) async {
-                    FocusScope.of(context).requestFocus(
-                      observationFocusNode,
-                    );
-                  },
-                  style: FormFieldHelper.style(),
+    return Stack(
+      children: [
+        PopScope(
+          onPopInvoked: ((didPop) {
+            researchPricesProvider.updateSelectedResearch(null);
+          }),
+          child: Scaffold(
+            appBar: AppBar(
+              title: FittedBox(
+                child: Text(
+                  researchPricesProvider.selectedResearch == null
+                      ? "Cadastrar pesquisa"
+                      : "Alterar pesquisa",
                 ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  focusNode: observationFocusNode,
-                  enabled: !researchPricesProvider.isLoadingAddOrUpdateResearch,
-                  controller: observationController,
-                  decoration: FormFieldHelper.decoration(
-                    isLoading:
-                        researchPricesProvider.isLoadingAddOrUpdateResearch,
-                    context: context,
-                    labelText: 'Observação',
-                  ),
-                  onFieldSubmitted: (_) async {
-                    FocusScope.of(context).unfocus();
-                  },
-                  style: FormFieldHelper.style(),
+              ),
+              leading: IconButton(
+                onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
+                    ? null
+                    : () {
+                        researchPricesProvider.updateSelectedResearch(null);
+                        Navigator.of(context).pop();
+                      },
+                icon: const Icon(
+                  Icons.arrow_back,
                 ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(200, 40),
-                  ),
-                  onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
-                      ? null
-                      : () async {
-                          ShowAlertDialog.showAlertDialog(
-                              context: context,
-                              title: "Confirmar",
-                              subtitle:
-                                  "Deseja confirmar o cadastro/alteração?",
-                              function: () async {
-                                await researchPricesProvider
-                                    .addOrUpdateResearch(
+              ),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      autofocus: true,
+                      focusNode: nameFocusNode,
+                      enabled:
+                          !researchPricesProvider.isLoadingAddOrUpdateResearch,
+                      controller: researchNameController,
+                      decoration: FormFieldHelper.decoration(
+                        isLoading:
+                            researchPricesProvider.isLoadingAddOrUpdateResearch,
+                        context: context,
+                        labelText: 'Nome',
+                      ),
+                      onFieldSubmitted: (_) async {
+                        FocusScope.of(context).requestFocus(
+                          observationFocusNode,
+                        );
+                      },
+                      style: FormFieldHelper.style(),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      focusNode: observationFocusNode,
+                      enabled:
+                          !researchPricesProvider.isLoadingAddOrUpdateResearch,
+                      controller: observationController,
+                      decoration: FormFieldHelper.decoration(
+                        isLoading:
+                            researchPricesProvider.isLoadingAddOrUpdateResearch,
+                        context: context,
+                        labelText: 'Observação',
+                      ),
+                      onFieldSubmitted: (_) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      style: FormFieldHelper.style(),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(200, 40),
+                      ),
+                      onPressed: researchPricesProvider
+                              .isLoadingAddOrUpdateResearch
+                          ? null
+                          : () async {
+                              ShowAlertDialog.showAlertDialog(
                                   context: context,
-                                  enterpriseCode:
-                                      arguments?["enterpriseCode"] ?? 0,
-                                  observation: observationController.text,
-                                  researchName: researchNameController.text,
-                                  isAssociatingConcurrents: false,
-                                );
+                                  title: "Confirmar",
+                                  subtitle:
+                                      "Deseja confirmar o cadastro/alteração?",
+                                  function: () async {
+                                    await researchPricesProvider
+                                        .addOrUpdateResearch(
+                                      context: context,
+                                      enterpriseCode:
+                                          arguments?["enterpriseCode"] ?? 0,
+                                      observation: observationController.text,
+                                      researchName: researchNameController.text,
+                                      isAssociatingConcurrents: false,
+                                    );
 
-                                if (researchPricesProvider
-                                        .errorAddOrUpdateResearch ==
-                                    "") {
-                                  ShowSnackbarMessage.showMessage(
-                                    message:
-                                        "Cadastro/alteração realizado com sucesso!",
-                                    context: context,
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
-                                  );
+                                    if (researchPricesProvider
+                                            .errorAddOrUpdateResearch ==
+                                        "") {
+                                      ShowSnackbarMessage.showMessage(
+                                        message:
+                                            "${researchPricesProvider.selectedResearch == null ? "Cadastro" : "Alteração"}"
+                                            "${researchPricesProvider.selectedResearch == null ? " realizado" : " realizada"}"
+                                            " com sucesso!",
+                                        context: context,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      );
 
-                                  Navigator.of(context).pop(true);
-                                }
-                              });
-                        },
-                  child: researchPricesProvider.isLoadingAddOrUpdateResearch
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              researchPricesProvider.selectedResearch == null
-                                  ? "CADASTRANDO..."
-                                  : "ALTERARANDO...",
-                            ),
-                            const SizedBox(height: 8),
-                            const LinearProgressIndicator(),
-                          ],
-                        )
-                      : Text(
-                          researchPricesProvider.selectedResearch == null
-                              ? "CADASTRAR"
-                              : "ALTERAR",
-                        ),
+                                      Navigator.of(context).pop(true);
+                                    }
+                                  });
+                            },
+                      child: Text(
+                        researchPricesProvider.selectedResearch == null
+                            ? "CADASTRAR"
+                            : "ALTERAR",
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+        loadingWidget(
+          message: researchPricesProvider.selectedResearch == null
+              ? "Cadastrando pesquisa..."
+              : "Alterando pesquisa...",
+          isLoading: researchPricesProvider.isLoadingAddOrUpdateResearch,
+        )
+      ],
     );
   }
 }
