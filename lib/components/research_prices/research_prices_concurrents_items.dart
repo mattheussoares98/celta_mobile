@@ -94,27 +94,13 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                             },
                           );
                         },
-                  icon: researchPricesProvider.isLoadingAddOrUpdateResearch
-                      ? Container(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: researchPricesProvider
-                                    .isLoadingAddOrUpdateResearch
-                                ? Colors.grey
-                                : Theme.of(context).colorScheme.primary,
-                          ),
-                        )
-                      : const Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   label: Text(
-                    researchPricesProvider.isLoadingAddOrUpdateResearch
-                        ? "Vinculando concorrente à pesquisa..."
-                        : "Alterar concorrente",
+                    "Alterar concorrente",
                     style: TextStyle(
-                      color:
-                          researchPricesProvider.isLoadingAddOrUpdateResearch
-                              ? Colors.grey
-                              : Theme.of(context).colorScheme.primary,
+                      color: researchPricesProvider.isLoadingAddOrUpdateResearch
+                          ? Colors.grey
+                          : Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 )

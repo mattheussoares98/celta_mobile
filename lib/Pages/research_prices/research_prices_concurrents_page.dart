@@ -39,7 +39,7 @@ class _ResearchPricesConcurrentsPageState
         Provider.of(context, listen: true);
 
     return PopScope(
-      canPop: !researchPricesProvider.isLoadingGetConcurrents &&
+      canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents &&
           !researchPricesProvider.isLoadingAddOrUpdateResearch,
       onPopInvoked: (_) async {
         researchPricesProvider.clearConcurrents();
@@ -127,7 +127,7 @@ class _ResearchPricesConcurrentsPageState
                         errorMessage:
                             researchPricesProvider.errorGetConcurrents),
                   ),
-                if (researchPricesProvider.concurrentsCount > 0)
+                if (!researchPricesProvider.isLoadingGetConcurrents)
                   const ConcurrentsItems(),
               ],
             ),
@@ -150,7 +150,7 @@ class _ResearchPricesConcurrentsPageState
             isLoading: researchPricesProvider.isLoadingGetConcurrents,
           ),
           loadingWidget(
-            message: 'Adicionando/alterando pesquisa',
+            message: 'Vinculando concorrente à pesquisa',
             isLoading: researchPricesProvider.isLoadingAddOrUpdateResearch,
           ),
         ],
