@@ -157,29 +157,23 @@ class CustomerRegisterProvider with ChangeNotifier {
 
   void _updateJsonInsertCustomer(AddressProvider addressProvider) {
     _jsonInsertCustomer.clear();
-    _jsonInsertCustomer["Name"] = nameController.text;
-    _jsonInsertCustomer["ReducedName"] = reducedNameController.text;
-    _jsonInsertCustomer["CpfCnpjNumber"] = cpfCnpjController.text;
-    _jsonInsertCustomer["PersonType"] =
-        cpfCnpjController.text.length == 11 ? "F" : "J";
-    _jsonInsertCustomer["RegistrationNumber"] = "";
+    _jsonInsertCustomer = {
+      "Name": nameController.text,
+      "ReducedName": reducedNameController.text,
+      "CpfCnpjNumber": cpfCnpjController.text,
+      "PersonType": cpfCnpjController.text.length == 11 ? "F" : "J",
+      "RegistrationNumber": "",
+      "SexType": selectedSexDropDown.value != null
+          ? selectedSexDropDown.value!.substring(0, 1).toUpperCase()
+          : "M",
+      "Emails": _emails,
+      "Telephones": _telephones,
+      "Addresses": addressProvider.addresses.map((e) => e.toJson()).toList(),
+      "Covenants": null,
+    };
     if (dateOfBirthController.text != "") {
-      String formatedDate = _formatDate();
-
-      _jsonInsertCustomer["DateOfBirth"] = formatedDate;
+      _jsonInsertCustomer["DateOfBirth"] = _formatDate();
     }
-
-    if (selectedSexDropDown.value != null) {
-      _jsonInsertCustomer["SexType"] =
-          selectedSexDropDown.value!.substring(0, 1).toUpperCase();
-    } else {
-      _jsonInsertCustomer["SexType"] = "M";
-    }
-    _jsonInsertCustomer["Emails"] = _emails;
-    _jsonInsertCustomer["Telephones"] = _telephones;
-    _jsonInsertCustomer["Addresses"] =
-        addressProvider.addresses.map((address) => address.toJson()).toList();
-    _jsonInsertCustomer["Covenants"] = null;
   }
 
   changeIsLoadingInsertCustomer() {
