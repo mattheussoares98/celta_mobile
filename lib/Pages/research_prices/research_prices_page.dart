@@ -78,22 +78,6 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                   Icons.arrow_back_outlined,
                 ),
               ),
-              actions: [
-                IconButton(
-                  onPressed: researchPricesProvider.isLoadingResearchPrices ||
-                          researchPricesProvider.isLoadingAddOrUpdateConcurrents
-                      ? null
-                      : () async {
-                          await _getResearchPrices(
-                            notityListenersFromUpdate: true,
-                            researchPricesProvider: researchPricesProvider,
-                            searchText: searchController.text,
-                          );
-                        },
-                  tooltip: "Consultar pesquisas",
-                  icon: const Icon(Icons.refresh),
-                ),
-              ],
             ),
             body: Column(
               mainAxisSize: MainAxisSize.max,
@@ -103,9 +87,10 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                     Expanded(
                       child: SearchWidget(
                         consultProductController: searchController,
-                        isLoading: researchPricesProvider
-                                .isLoadingResearchPrices ||
-                            researchPricesProvider.isLoadingAddOrUpdateOfResearch,
+                        isLoading:
+                            researchPricesProvider.isLoadingResearchPrices ||
+                                researchPricesProvider
+                                    .isLoadingAddOrUpdateOfResearch,
                         onPressSearch: () async {
                           await _getResearchPrices(
                             notityListenersFromUpdate: true,
