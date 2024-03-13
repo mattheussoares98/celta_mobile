@@ -37,7 +37,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
       searchText: searchText,
     );
 
-    if(researchPricesProvider.errorGetResearchPrices.isEmpty){
+    if (researchPricesProvider.errorGetResearchPrices.isEmpty) {
       searchController.text = "";
     }
   }
@@ -171,8 +171,8 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                 messageButton: "criar\npesquisa".toUpperCase(),
                 onTap: () async {
                   researchPricesProvider.updateSelectedResearch(null);
-                  final createdNewResearch =
-                      await Navigator.of(context).pushNamed(
+
+                  await Navigator.of(context).pushNamed(
                     APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
                     arguments: {
                       "enterpriseCode": arguments["CodigoInterno_Empresa"],
@@ -183,7 +183,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                   //   await _getResearchPrices(
                   //     notityListenersFromUpdate: true,
                   //     researchPricesProvider: researchPricesProvider,
-                  //     searchControllerText: 
+                  //     searchControllerText:
                   //   );
                   // }
                 }),

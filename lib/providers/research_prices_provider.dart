@@ -190,22 +190,30 @@ class ResearchPricesProvider with ChangeNotifier {
       );
 
       _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
-      if (_errorAddOrUpdateResearch != "") {
+      SoapHelperResponseParameters.errorMessage;
+      SoapHelperResponseParameters.responseAsMap;
+      SoapHelperResponseParameters.responseAsString;
+      if (_errorAddOrUpdateResearch.isNotEmpty) {
         ShowSnackbarMessage.showMessage(
           message: _errorAddOrUpdateResearch,
           context: context,
+        );
+      } else if (_errorAddOrUpdateResearch.isEmpty &&
+          !isAssociatingConcurrents) {
+        //significa que acabou de cadastrar uma pesquisa nova
+        final newResearch =
+            json.decode(SoapHelperResponseParameters.responseAsString);
+
+        getResearchPrices(
+          context: context,
+          notifyListenersFromUpdate: true,
+          enterpriseCode: enterpriseCode!,
+          searchText: newResearch["Code"].toString(),
         );
       }
     } catch (e) {
       print(e.toString());
       _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
-    }
-
-    if (_errorAddOrUpdateResearch != "") {
-      ShowSnackbarMessage.showMessage(
-        message: _errorAddOrUpdateResearch,
-        context: context,
-      );
     }
 
     _isLoadingAddOrUpdateResearch = false;
