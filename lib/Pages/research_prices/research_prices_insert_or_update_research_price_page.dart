@@ -140,7 +140,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                                     );
 
                                     if (researchPricesProvider
-                                            .errorAddOrUpdateResearch ==
+                                            .errorAddResearch ==
                                         "") {
                                       ShowSnackbarMessage.showMessage(
                                         message:

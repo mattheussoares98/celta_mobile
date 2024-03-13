@@ -20,8 +20,8 @@ class ResearchPricesProvider with ChangeNotifier {
 
   bool _isLoadingAddOrUpdateResearch = false;
   bool get isLoadingAddOrUpdateResearch => _isLoadingAddOrUpdateResearch;
-  String _errorAddOrUpdateResearch = "";
-  String get errorAddOrUpdateResearch => _errorAddOrUpdateResearch;
+  String _errorAddResearch = "";
+  String get errorAddResearch => _errorAddResearch;
 
   bool _isLoadingAddOrUpdateConcurrents = false;
   bool get isLoadingAddOrUpdateConcurrents => _isLoadingAddOrUpdateConcurrents;
@@ -81,6 +81,14 @@ class ResearchPricesProvider with ChangeNotifier {
     _isLoadingAddOrUpdateConcurrents = false;
     updateSelectedConcurrent(null);
   }
+
+  Future<void> associateConcurrentToResearchPrice({
+    required bool isAssociatingConcurrents,
+    required BuildContext context,
+    required int? enterpriseCode,
+    required String? observation,
+    String? researchName,
+  }) async {}
 
   Future<void> getResearchPrices({
     required BuildContext context,
@@ -160,6 +168,62 @@ class ResearchPricesProvider with ChangeNotifier {
     }
   }
 
+  Future<void> addResearchPrice({
+    required BuildContext context,
+    required int enterpriseCode,
+    String? observation,
+    String? name,
+  }) async {
+    _isLoadingAddOrUpdateResearch = true;
+    _errorAddResearch = "";
+    notifyListeners();
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "json": json.encode(
+            {
+              "CrossIdentity": UserData.crossIdentity,
+              "Code": 0,
+              "EnterpriseCode": enterpriseCode,
+              "Name": name,
+              "Observation": observation,
+            },
+          ),
+        },
+        typeOfResponse: "InsertUpdateResearchOfPriceResponse",
+        SOAPAction: "InsertUpdateResearchOfPrice",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+        typeOfResult: "InsertUpdateResearchOfPriceResult",
+      );
+
+      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorAddResearch.isNotEmpty) {
+        ShowSnackbarMessage.showMessage(
+          message: _errorAddResearch,
+          context: context,
+        );
+      } else {
+        final newResearch =
+            json.decode(SoapHelperResponseParameters.responseAsString);
+
+        await getResearchPrices(
+          context: context,
+          notifyListenersFromUpdate: true,
+          enterpriseCode: enterpriseCode,
+          searchText: newResearch["Code"].toString(),
+        );
+      }
+    } catch (e) {
+      print(e.toString());
+      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
+    }
+
+    _isLoadingAddOrUpdateResearch = false;
+    notifyListeners();
+  }
+
   Future<void> addOrUpdateResearch({
     required bool isAssociatingConcurrents,
     required BuildContext context,
@@ -168,7 +232,7 @@ class ResearchPricesProvider with ChangeNotifier {
     String? researchName,
   }) async {
     _isLoadingAddOrUpdateResearch = true;
-    _errorAddOrUpdateResearch = "";
+    _errorAddResearch = "";
     notifyListeners();
 
     try {
@@ -189,17 +253,16 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "InsertUpdateResearchOfPriceResult",
       );
 
-      _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
+      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
       SoapHelperResponseParameters.errorMessage;
       SoapHelperResponseParameters.responseAsMap;
       SoapHelperResponseParameters.responseAsString;
-      if (_errorAddOrUpdateResearch.isNotEmpty) {
+      if (_errorAddResearch.isNotEmpty) {
         ShowSnackbarMessage.showMessage(
-          message: _errorAddOrUpdateResearch,
+          message: _errorAddResearch,
           context: context,
         );
-      } else if (_errorAddOrUpdateResearch.isEmpty &&
-          !isAssociatingConcurrents) {
+      } else if (_errorAddResearch.isEmpty && !isAssociatingConcurrents) {
         //significa que acabou de cadastrar uma pesquisa nova
         final newResearch =
             json.decode(SoapHelperResponseParameters.responseAsString);
@@ -213,7 +276,7 @@ class ResearchPricesProvider with ChangeNotifier {
       }
     } catch (e) {
       print(e.toString());
-      _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
+      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
     }
 
     _isLoadingAddOrUpdateResearch = false;

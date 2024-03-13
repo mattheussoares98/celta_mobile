@@ -37,7 +37,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                   observation: null,
                 );
 
-                if (researchPricesProvider.errorAddOrUpdateResearch == "") {
+                if (researchPricesProvider.errorAddResearch == "") {
                   ShowSnackbarMessage.showMessage(
                     message: "O concorrente foi associado à pesquisa",
                     context: context,
@@ -47,7 +47,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                       .pushNamed(APPROUTES.RESEARCH_PRICES_INSERT_PRICE);
                 } else {
                   ShowSnackbarMessage.showMessage(
-                    message: researchPricesProvider.errorAddOrUpdateResearch,
+                    message: researchPricesProvider.errorAddResearch,
                     context: context,
                   );
                 }
