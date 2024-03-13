@@ -86,23 +86,31 @@ class ResearchPricesProvider with ChangeNotifier {
     required BuildContext context,
     required bool notifyListenersFromUpdate,
     required int enterpriseCode,
+    required String searchText,
   }) async {
     _researchPrices.clear();
     _errorGetResearchPrices = "";
     _isLoadingGetResearchPrices = true;
     if (notifyListenersFromUpdate) notifyListeners();
 
+    final jsonRequest = {
+      "CrossIdentity": UserData.crossIdentity,
+      "EnterpriseCode": enterpriseCode,
+      // "InitialCreationDate": "0001-01-01T00:00:00",
+      // "FinalCreationDate": DateTime.now().toIso8601String(),
+      "SearchValue":
+          int.tryParse(searchText) != null ? int.parse(searchText) : searchText,
+
+      "SearchTypeInt": int.tryParse(searchText) != null ? 1 : 2,
+    };
+
     try {
       await SoapHelper.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          // "creationDate" : "",
-        },
-        typeOfResponse: "GetResearchOfPriceResponse",
-        SOAPAction: "GetResearchOfPrice",
+        parameters: {"json": json.encode(jsonRequest)},
+        typeOfResponse: "GetResearchOfPriceJsonResponse",
+        SOAPAction: "GetResearchOfPriceJson",
         serviceASMX: "CeltaResearchOfPriceService.asmx",
-        typeOfResult: "GetResearchOfPriceResult",
+        typeOfResult: "GetResearchOfPriceJsonResult",
       );
       _errorGetResearchPrices = SoapHelperResponseParameters.errorMessage;
     } catch (e) {
@@ -110,7 +118,8 @@ class ResearchPricesProvider with ChangeNotifier {
     }
 
     if (_errorGetResearchPrices == "") {
-      _researchPrices = ResearchPricesResearchModel.convertResultToResearchModel();
+      _researchPrices =
+          ResearchPricesResearchModel.convertResultToResearchModel();
     }
 
     _isLoadingGetResearchPrices = false;
@@ -187,7 +196,6 @@ class ResearchPricesProvider with ChangeNotifier {
           context: context,
         );
       }
-
     } catch (e) {
       print(e.toString());
       _errorAddOrUpdateResearch = SoapHelperResponseParameters.errorMessage;
@@ -293,7 +301,8 @@ class ResearchPricesProvider with ChangeNotifier {
       );
       _errorGetConcurrents = SoapHelperResponseParameters.errorMessage;
 
-      _concurrents = ResearchPricesConcurrentsModel.convertResultToListOfConcurrents();
+      _concurrents =
+          ResearchPricesConcurrentsModel.convertResultToListOfConcurrents();
     } catch (e) {
       _errorGetConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }

@@ -24,13 +24,14 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
     required int index,
     required ResearchPricesProvider researchPricesProvider,
   }) {
-    ResearchPricesResearchModel research = researchPricesProvider.researchPrices[index];
+    ResearchPricesResearchModel research =
+        researchPricesProvider.researchPrices[index];
     return InkWell(
       onTap: () {
         researchPricesProvider.updateSelectedResearch(research);
         Navigator.of(context).pushNamed(
           APPROUTES.RESEARCH_PRICES_CONCURRENTS,
-          arguments: {"enterpriseCode" : widget.enterpriseCode},
+          arguments: {"enterpriseCode": widget.enterpriseCode},
         );
       },
       child: Card(
@@ -43,15 +44,26 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
                 title: "Código",
                 value: research.Code.toString(),
               ),
+              if (research.Name?.isEmpty != true)
+                TitleAndSubtitle.titleAndSubtitle(
+                  title: "Nome",
+                  value: research.Name,
+                ),
               TitleAndSubtitle.titleAndSubtitle(
-                title: "Data de criação",
-                value: research.CreationDate.toString(),
+                title: "Produtos restringidos",
+                value: research.RestrictProducts
+                    ? "Sim"
+                    : "Não",
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Observação",
                 value: research.Observation.isEmpty
                     ? "Não há"
                     : research.Observation,
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Data de criação",
+                value: research.CreationDate.toString(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
