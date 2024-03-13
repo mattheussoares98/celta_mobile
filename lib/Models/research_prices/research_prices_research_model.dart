@@ -8,10 +8,10 @@ import '../../api/api.dart';
 class ResearchPricesResearchModel {
   final int Code;
   final DateTime CreationDate;
-  final String Observation;
   final String EnterpriseName;
   final int EnterpriseCode;
-  final String? Name;
+  String? Observation;
+  String? Name;
   final bool RestrictProducts;
   final bool IsAssociatingConcurrents;
   final List<ResearchPricesConcurrentsModel> Concurrents;
@@ -24,7 +24,7 @@ class ResearchPricesResearchModel {
     required this.EnterpriseCode,
     this.Name,
     required this.CreationDate,
-    required this.Observation,
+    this.Observation,
     required this.Concurrents,
     required this.Products,
     required this.RestrictProducts,

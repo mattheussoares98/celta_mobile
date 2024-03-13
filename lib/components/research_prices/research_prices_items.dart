@@ -47,19 +47,15 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
               if (research.Name?.isEmpty != true)
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Nome",
-                  value: research.Name,
+                  value: research.Name ?? "Não há",
                 ),
               TitleAndSubtitle.titleAndSubtitle(
-                title: "Produtos restringidos",
-                value: research.RestrictProducts
-                    ? "Sim"
-                    : "Não",
+                title: "Observação",
+                value: research.Observation ?? "Não há",
               ),
               TitleAndSubtitle.titleAndSubtitle(
-                title: "Observação",
-                value: research.Observation.isEmpty
-                    ? "Não há"
-                    : research.Observation,
+                title: "Produtos restringidos",
+                value: research.RestrictProducts ? "Sim" : "Não",
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Data de criação",

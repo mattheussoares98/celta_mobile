@@ -27,7 +27,8 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingAssociateConcurrentToResearch =>
       _isLoadingAssociateConcurrentToResearch;
   String _errorAssociateConcurrentToResearch = "";
-  String get errorAssociateConcurrentToResearch => _errorAssociateConcurrentToResearch;
+  String get errorAssociateConcurrentToResearch =>
+      _errorAssociateConcurrentToResearch;
 
   bool _isLoadingAddOrUpdateConcurrents = false;
   bool get isLoadingAddOrUpdateConcurrents => _isLoadingAddOrUpdateConcurrents;
@@ -169,6 +170,8 @@ class ResearchPricesProvider with ChangeNotifier {
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "GetResearchOfPriceJsonResult",
       );
+      SoapHelperResponseParameters.responseAsMap;
+      SoapHelperResponseParameters.responseAsString;
       _errorGetResearchPrices = SoapHelperResponseParameters.errorMessage;
     } catch (e) {
       _errorGetResearchPrices = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -221,16 +224,16 @@ class ResearchPricesProvider with ChangeNotifier {
           message: _errorAddOrUpdateOfResearch,
           context: context,
         );
-      } else {
-        final newResearch =
-            json.decode(SoapHelperResponseParameters.responseAsString);
+      } else if (_selectedResearch != null) {
+        //só precisa alterar a pesquisa se houver alguma selecionada. Se não
+        //houver uma pesquisa selecionada, significa que está cadastrando uma
+        //nova e por isso não precisa alterar
+        int index = _researchPrices.indexOf(_selectedResearch!);
 
-        await getResearchPrices(
-          context: context,
-          notifyListenersFromUpdate: true,
-          enterpriseCode: enterpriseCode,
-          searchText: newResearch["Code"].toString(),
-        );
+        if (index != -1) {
+          _researchPrices[index].Name = name;
+          _researchPrices[index].Observation = observation;
+        }
       }
     } catch (e) {
       print(e.toString());

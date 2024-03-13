@@ -23,7 +23,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
 
   void _updateControllers(ResearchPricesResearchModel? research) {
     if (research != null) {
-      observationController.text = research.Observation;
+      observationController.text = research.Observation ?? "";
       researchNameController.text = research.Name ?? "";
     }
   }
