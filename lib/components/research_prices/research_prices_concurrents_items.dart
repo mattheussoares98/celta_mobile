@@ -26,32 +26,29 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
 
     return Container(
       child: InkWell(
-        onTap: researchPricesProvider.isLoadingAddOrUpdateConcurrents
-            ? null
-            : () async {
-                researchPricesProvider.updateSelectedConcurrent(concurrent);
-                await researchPricesProvider.addOrUpdateResearch(
-                  isAssociatingConcurrents: true,
-                  context: context,
-                  enterpriseCode: null,
-                  observation: null,
-                );
+        onTap: () async {
+          researchPricesProvider.updateSelectedConcurrent(concurrent);
+          await researchPricesProvider.associateConcurrentToResearchPrice(
+            context: context,
+            enterpriseCode: arguments?["enterpriseCode"],
+          );
 
-                if (researchPricesProvider.errorAddResearch == "") {
-                  ShowSnackbarMessage.showMessage(
-                    message: "O concorrente foi associado à pesquisa",
-                    context: context,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                  );
-                  Navigator.of(context)
-                      .pushNamed(APPROUTES.RESEARCH_PRICES_INSERT_PRICE);
-                } else {
-                  ShowSnackbarMessage.showMessage(
-                    message: researchPricesProvider.errorAddResearch,
-                    context: context,
-                  );
-                }
-              },
+          if (researchPricesProvider.errorAssociateConcurrentToResearch == "") {
+            ShowSnackbarMessage.showMessage(
+              message: "O concorrente foi associado à pesquisa",
+              context: context,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            );
+            Navigator.of(context)
+                .pushNamed(APPROUTES.RESEARCH_PRICES_INSERT_PRICE);
+          } else {
+            ShowSnackbarMessage.showMessage(
+              message:
+                  researchPricesProvider.errorAssociateConcurrentToResearch,
+              context: context,
+            );
+          }
+        },
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -81,26 +78,20 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                       : "${concurrent.Address.Address.toString()}, ${concurrent.Address.District}, ${concurrent.Address.City}, ${concurrent.Address.Number}. \nCEP: ${concurrent.Address.Zip}",
                 ),
                 TextButton.icon(
-                  onPressed: researchPricesProvider
-                          .isLoadingAddOrUpdateConcurrents
-                      ? null
-                      : () {
-                          researchPricesProvider
-                              .updateSelectedConcurrent(concurrent);
-                          Navigator.of(context).pushNamed(
-                            APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
-                            arguments: {
-                              "enterpriseCode": arguments?["enterpriseCode"]
-                            },
-                          );
-                        },
+                  onPressed: () {
+                    researchPricesProvider.updateSelectedConcurrent(concurrent);
+                    Navigator.of(context).pushNamed(
+                      APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
+                      arguments: {
+                        "enterpriseCode": arguments?["enterpriseCode"]
+                      },
+                    );
+                  },
                   icon: const Icon(Icons.edit),
                   label: Text(
                     "Alterar concorrente",
                     style: TextStyle(
-                      color: researchPricesProvider.isLoadingAddOrUpdateResearch
-                          ? Colors.grey
-                          : Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 )

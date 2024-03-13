@@ -40,7 +40,7 @@ class _ResearchPricesConcurrentsPageState
 
     return PopScope(
       canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents &&
-          !researchPricesProvider.isLoadingAddOrUpdateResearch,
+          !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
       onPopInvoked: (_) async {
         researchPricesProvider.clearConcurrents();
       },
@@ -53,7 +53,7 @@ class _ResearchPricesConcurrentsPageState
               ),
               leading: IconButton(
                 onPressed: researchPricesProvider.isLoadingGetConcurrents ||
-                        researchPricesProvider.isLoadingAddOrUpdateResearch
+                        researchPricesProvider.isLoadingAddOrUpdateOfResearch
                     ? null
                     : () {
                         researchPricesProvider.updateSelectedConcurrent(null);
@@ -76,7 +76,7 @@ class _ResearchPricesConcurrentsPageState
                             searchConcurrentControllerText,
                         isLoading: researchPricesProvider
                                 .isLoadingGetConcurrents ||
-                            researchPricesProvider.isLoadingAddOrUpdateResearch,
+                            researchPricesProvider.isLoadingAddOrUpdateOfResearch,
                         onPressSearch: () async {
                           await _getConcurrents(
                             researchPricesProvider: researchPricesProvider,
@@ -95,7 +95,7 @@ class _ResearchPricesConcurrentsPageState
                         onPressed:
                             researchPricesProvider.isLoadingGetConcurrents ||
                                     researchPricesProvider
-                                        .isLoadingAddOrUpdateResearch
+                                        .isLoadingAddOrUpdateOfResearch
                                 ? null
                                 : () async {
                                     _getConcurrents(
@@ -111,7 +111,7 @@ class _ResearchPricesConcurrentsPageState
                             color: researchPricesProvider
                                         .isLoadingGetConcurrents ||
                                     researchPricesProvider
-                                        .isLoadingAddOrUpdateResearch
+                                        .isLoadingAddOrUpdateOfResearch
                                 ? Colors.grey
                                 : Theme.of(context).colorScheme.primary,
                           ),
@@ -136,7 +136,7 @@ class _ResearchPricesConcurrentsPageState
               researchPricesProvider: researchPricesProvider,
               nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
               isLoading: researchPricesProvider.isLoadingGetConcurrents ||
-                  researchPricesProvider.isLoadingAddOrUpdateResearch,
+                  researchPricesProvider.isLoadingAddOrUpdateOfResearch,
               messageButton: "criar\nconcorrente".toUpperCase(),
               onTap: () {
                 researchPricesProvider.updateSelectedConcurrent(null);
@@ -151,7 +151,7 @@ class _ResearchPricesConcurrentsPageState
           ),
           loadingWidget(
             message: 'Vinculando concorrente à pesquisa',
-            isLoading: researchPricesProvider.isLoadingAddOrUpdateResearch,
+            isLoading: researchPricesProvider.isLoadingAddOrUpdateOfResearch,
           ),
         ],
       ),

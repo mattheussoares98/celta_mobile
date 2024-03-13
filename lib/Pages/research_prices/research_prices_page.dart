@@ -105,7 +105,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                         consultProductController: searchController,
                         isLoading: researchPricesProvider
                                 .isLoadingResearchPrices ||
-                            researchPricesProvider.isLoadingAddOrUpdateResearch,
+                            researchPricesProvider.isLoadingAddOrUpdateOfResearch,
                         onPressSearch: () async {
                           await _getResearchPrices(
                             notityListenersFromUpdate: true,
@@ -125,7 +125,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                         onPressed:
                             researchPricesProvider.isLoadingGetConcurrents ||
                                     researchPricesProvider
-                                        .isLoadingAddOrUpdateResearch
+                                        .isLoadingAddOrUpdateOfResearch
                                 ? null
                                 : () async {
                                     await _getResearchPrices(
@@ -142,7 +142,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                             color: researchPricesProvider
                                         .isLoadingGetConcurrents ||
                                     researchPricesProvider
-                                        .isLoadingAddOrUpdateResearch
+                                        .isLoadingAddOrUpdateOfResearch
                                 ? Colors.grey
                                 : Theme.of(context).colorScheme.primary,
                           ),

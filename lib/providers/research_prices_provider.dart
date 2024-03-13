@@ -18,10 +18,16 @@ class ResearchPricesProvider with ChangeNotifier {
   int get researchPricesCount => _researchPrices.length;
   FocusNode researchPricesFocusNode = FocusNode();
 
-  bool _isLoadingAddOrUpdateResearch = false;
-  bool get isLoadingAddOrUpdateResearch => _isLoadingAddOrUpdateResearch;
-  String _errorAddResearch = "";
-  String get errorAddResearch => _errorAddResearch;
+  bool _isLoadingAddOrUpdateOfResearch = false;
+  bool get isLoadingAddOrUpdateOfResearch => _isLoadingAddOrUpdateOfResearch;
+  String _errorAddOrUpdateOfResearch = "";
+  String get errorAddOrUpdateOfResearch => _errorAddOrUpdateOfResearch;
+
+  bool _isLoadingAssociateConcurrentToResearch = false;
+  bool get isLoadingAssociateConcurrentToResearch =>
+      _isLoadingAssociateConcurrentToResearch;
+  String _errorAssociateConcurrentToResearch = "";
+  String get errorAssociateConcurrentToResearch => _errorAssociateConcurrentToResearch;
 
   bool _isLoadingAddOrUpdateConcurrents = false;
   bool get isLoadingAddOrUpdateConcurrents => _isLoadingAddOrUpdateConcurrents;
@@ -83,12 +89,55 @@ class ResearchPricesProvider with ChangeNotifier {
   }
 
   Future<void> associateConcurrentToResearchPrice({
-    required bool isAssociatingConcurrents,
     required BuildContext context,
     required int? enterpriseCode,
-    required String? observation,
-    String? researchName,
-  }) async {}
+  }) async {
+    _isLoadingAssociateConcurrentToResearch = true;
+    _errorAssociateConcurrentToResearch = "";
+    notifyListeners();
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "json": json.encode(
+            {
+              "CrossIdentity": UserData.crossIdentity,
+              "Code": _selectedResearch!.Code,
+              "IsAssociatingConcurrents": true,
+              "Concurrents": [
+                {
+                  "ResearchOfPriceCode": _selectedResearch!.Code,
+                  "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+                  "Observation": _selectedConcurrent?.Observation,
+                }
+              ],
+            },
+          ),
+        },
+        typeOfResponse: "InsertUpdateResearchOfPriceResponse",
+        SOAPAction: "InsertUpdateResearchOfPrice",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+        typeOfResult: "InsertUpdateResearchOfPriceResult",
+      );
+
+      _errorAssociateConcurrentToResearch =
+          SoapHelperResponseParameters.errorMessage;
+
+      if (_errorAssociateConcurrentToResearch.isNotEmpty) {
+        ShowSnackbarMessage.showMessage(
+          message: _errorAssociateConcurrentToResearch,
+          context: context,
+        );
+      }
+    } catch (e) {
+      print(e.toString());
+      _errorAssociateConcurrentToResearch =
+          SoapHelperResponseParameters.errorMessage;
+    }
+
+    _isLoadingAssociateConcurrentToResearch = false;
+    notifyListeners();
+  }
 
   Future<void> getResearchPrices({
     required BuildContext context,
@@ -134,48 +183,14 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Map _jsonBodyAddOrUpdateResearch({
-    required bool isAssociatingConcurrents,
-    required int? enterpriseCode,
-    String? observation,
-    String? researchName,
-  }) {
-    if (isAssociatingConcurrents) {
-      return {
-        "CrossIdentity": UserData.crossIdentity,
-        "Code": _selectedResearch == null
-            ? 0 //0 pra cadastrar um novo
-            : _selectedResearch?.Code,
-        "IsAssociatingConcurrents": true,
-        "Concurrents": [
-          {
-            "ResearchOfPriceCode": _selectedResearch!.Code,
-            "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
-            "Observation": _selectedConcurrent?.Observation,
-          }
-        ],
-      };
-    } else {
-      return {
-        "CrossIdentity": UserData.crossIdentity,
-        "Code": _selectedResearch == null
-            ? 0 //0 pra cadastrar um novo
-            : _selectedResearch?.Code,
-        "EnterpriseCode": enterpriseCode,
-        "Name": researchName,
-        "Observation": observation,
-      };
-    }
-  }
-
-  Future<void> addResearchPrice({
+  Future<void> addOrUpdateResearchOfPrice({
     required BuildContext context,
     required int enterpriseCode,
     String? observation,
     String? name,
   }) async {
-    _isLoadingAddOrUpdateResearch = true;
-    _errorAddResearch = "";
+    _isLoadingAddOrUpdateOfResearch = true;
+    _errorAddOrUpdateOfResearch = "";
     notifyListeners();
 
     try {
@@ -184,7 +199,9 @@ class ResearchPricesProvider with ChangeNotifier {
           "json": json.encode(
             {
               "CrossIdentity": UserData.crossIdentity,
-              "Code": 0,
+              "Code": _selectedResearch == null
+                  ? 0 //0 pra cadastrar um novo
+                  : _selectedResearch?.Code,
               "EnterpriseCode": enterpriseCode,
               "Name": name,
               "Observation": observation,
@@ -197,11 +214,11 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "InsertUpdateResearchOfPriceResult",
       );
 
-      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
+      _errorAddOrUpdateOfResearch = SoapHelperResponseParameters.errorMessage;
 
-      if (_errorAddResearch.isNotEmpty) {
+      if (_errorAddOrUpdateOfResearch.isNotEmpty) {
         ShowSnackbarMessage.showMessage(
-          message: _errorAddResearch,
+          message: _errorAddOrUpdateOfResearch,
           context: context,
         );
       } else {
@@ -217,69 +234,10 @@ class ResearchPricesProvider with ChangeNotifier {
       }
     } catch (e) {
       print(e.toString());
-      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
+      _errorAddOrUpdateOfResearch = SoapHelperResponseParameters.errorMessage;
     }
 
-    _isLoadingAddOrUpdateResearch = false;
-    notifyListeners();
-  }
-
-  Future<void> addOrUpdateResearch({
-    required bool isAssociatingConcurrents,
-    required BuildContext context,
-    required int? enterpriseCode,
-    required String? observation,
-    String? researchName,
-  }) async {
-    _isLoadingAddOrUpdateResearch = true;
-    _errorAddResearch = "";
-    notifyListeners();
-
-    try {
-      await SoapHelper.soapPost(
-        parameters: {
-          "json": json.encode(
-            _jsonBodyAddOrUpdateResearch(
-              enterpriseCode: enterpriseCode,
-              isAssociatingConcurrents: isAssociatingConcurrents,
-              observation: observation,
-              researchName: researchName,
-            ),
-          ),
-        },
-        typeOfResponse: "InsertUpdateResearchOfPriceResponse",
-        SOAPAction: "InsertUpdateResearchOfPrice",
-        serviceASMX: "CeltaResearchOfPriceService.asmx",
-        typeOfResult: "InsertUpdateResearchOfPriceResult",
-      );
-
-      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
-      SoapHelperResponseParameters.errorMessage;
-      SoapHelperResponseParameters.responseAsMap;
-      SoapHelperResponseParameters.responseAsString;
-      if (_errorAddResearch.isNotEmpty) {
-        ShowSnackbarMessage.showMessage(
-          message: _errorAddResearch,
-          context: context,
-        );
-      } else if (_errorAddResearch.isEmpty && !isAssociatingConcurrents) {
-        //significa que acabou de cadastrar uma pesquisa nova
-        final newResearch =
-            json.decode(SoapHelperResponseParameters.responseAsString);
-
-        getResearchPrices(
-          context: context,
-          notifyListenersFromUpdate: true,
-          enterpriseCode: enterpriseCode!,
-          searchText: newResearch["Code"].toString(),
-        );
-      }
-    } catch (e) {
-      print(e.toString());
-      _errorAddResearch = SoapHelperResponseParameters.errorMessage;
-    }
-
-    _isLoadingAddOrUpdateResearch = false;
+    _isLoadingAddOrUpdateOfResearch = false;
     notifyListeners();
   }
 

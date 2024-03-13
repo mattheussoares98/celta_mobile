@@ -62,7 +62,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                 ),
               ),
               leading: IconButton(
-                onPressed: researchPricesProvider.isLoadingAddOrUpdateResearch
+                onPressed: researchPricesProvider.isLoadingAddOrUpdateOfResearch
                     ? null
                     : () {
                         researchPricesProvider.updateSelectedResearch(null);
@@ -81,12 +81,12 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                     TextFormField(
                       autofocus: true,
                       focusNode: nameFocusNode,
-                      enabled:
-                          !researchPricesProvider.isLoadingAddOrUpdateResearch,
+                      enabled: !researchPricesProvider
+                          .isLoadingAddOrUpdateOfResearch,
                       controller: researchNameController,
                       decoration: FormFieldHelper.decoration(
-                        isLoading:
-                            researchPricesProvider.isLoadingAddOrUpdateResearch,
+                        isLoading: researchPricesProvider
+                            .isLoadingAddOrUpdateOfResearch,
                         context: context,
                         labelText: 'Nome',
                       ),
@@ -100,12 +100,12 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                     const SizedBox(height: 8),
                     TextFormField(
                       focusNode: observationFocusNode,
-                      enabled:
-                          !researchPricesProvider.isLoadingAddOrUpdateResearch,
+                      enabled: !researchPricesProvider
+                          .isLoadingAddOrUpdateOfResearch,
                       controller: observationController,
                       decoration: FormFieldHelper.decoration(
-                        isLoading:
-                            researchPricesProvider.isLoadingAddOrUpdateResearch,
+                        isLoading: researchPricesProvider
+                            .isLoadingAddOrUpdateOfResearch,
                         context: context,
                         labelText: 'Observação',
                       ),
@@ -120,7 +120,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                         fixedSize: const Size(200, 40),
                       ),
                       onPressed: researchPricesProvider
-                              .isLoadingAddOrUpdateResearch
+                              .isLoadingAddOrUpdateOfResearch
                           ? null
                           : () async {
                               ShowAlertDialog.showAlertDialog(
@@ -130,17 +130,16 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                                       "Deseja confirmar o cadastro/alteração?",
                                   function: () async {
                                     await researchPricesProvider
-                                        .addOrUpdateResearch(
+                                        .addOrUpdateResearchOfPrice(
                                       context: context,
                                       enterpriseCode:
                                           arguments?["enterpriseCode"] ?? 0,
                                       observation: observationController.text,
-                                      researchName: researchNameController.text,
-                                      isAssociatingConcurrents: false,
+                                      name: researchNameController.text,
                                     );
 
                                     if (researchPricesProvider
-                                            .errorAddResearch ==
+                                            .errorAddOrUpdateOfResearch ==
                                         "") {
                                       ShowSnackbarMessage.showMessage(
                                         message:
@@ -173,7 +172,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
           message: researchPricesProvider.selectedResearch == null
               ? "Cadastrando pesquisa..."
               : "Alterando pesquisa...",
-          isLoading: researchPricesProvider.isLoadingAddOrUpdateResearch,
+          isLoading: researchPricesProvider.isLoadingAddOrUpdateOfResearch,
         )
       ],
     );
