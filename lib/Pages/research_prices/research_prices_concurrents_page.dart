@@ -48,8 +48,10 @@ class _ResearchPricesConcurrentsPageState
         children: [
           Scaffold(
             appBar: AppBar(
-              title: const Text(
-                'CONCORRENTES',
+              title:  FittedBox(
+                child: Text(
+                  'CONCORRENTES pesquisa(${researchPricesProvider.selectedResearch!.Code})',
+                ),
               ),
               leading: IconButton(
                 onPressed: researchPricesProvider.isLoadingGetConcurrents ||
@@ -128,7 +130,7 @@ class _ResearchPricesConcurrentsPageState
                     researchPricesProvider.loadAssociatedsConcurrents();
                   },
                   child: const FittedBox(
-                      child: Text("Listar concorrentes associados à pesquisa")),
+                      child: Text("Exibir somente concorrentes associados à pesquisa")),
                 ),
                 if (researchPricesProvider.errorGetConcurrents != "")
                   Padding(
