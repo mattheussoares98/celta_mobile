@@ -13,10 +13,9 @@ class ResearchPricesProvider with ChangeNotifier {
   bool get isLoadingResearchPrices => _isLoadingGetResearchPrices;
   String _errorGetResearchPrices = "";
   String get errorGetResearchPrices => _errorGetResearchPrices;
-  List<ResearchPricesResearchModel> _researchPrices = [];
+  final List<ResearchPricesResearchModel> _researchPrices = [];
   List<ResearchPricesResearchModel> get researchPrices => [..._researchPrices];
   int get researchPricesCount => _researchPrices.length;
-  FocusNode researchPricesFocusNode = FocusNode();
 
   bool _isLoadingAddOrUpdateOfResearch = false;
   bool get isLoadingAddOrUpdateOfResearch => _isLoadingAddOrUpdateOfResearch;
@@ -89,10 +88,22 @@ class ResearchPricesProvider with ChangeNotifier {
     updateSelectedConcurrent(null);
   }
 
+  bool _concurrentAlreadyIsAssociated() {
+    return _selectedResearch!.Concurrents.contains(_selectedConcurrent);
+  }
+
+  void _addConcurrentInResearchs() {
+    int index = _researchPrices.indexOf(_selectedResearch!);
+    if (index != -1) {
+      _researchPrices[index].Concurrents.add(_selectedConcurrent!);
+    }
+  }
+
   Future<void> associateConcurrentToResearchPrice({
     required BuildContext context,
     required int? enterpriseCode,
   }) async {
+    if (_concurrentAlreadyIsAssociated()) return;
     _isLoadingAssociateConcurrentToResearch = true;
     _errorAssociateConcurrentToResearch = "";
     notifyListeners();
@@ -129,6 +140,8 @@ class ResearchPricesProvider with ChangeNotifier {
           message: _errorAssociateConcurrentToResearch,
           context: context,
         );
+      } else {
+       _addConcurrentInResearchs();
       }
     } catch (e) {
       print(e.toString());
@@ -178,8 +191,9 @@ class ResearchPricesProvider with ChangeNotifier {
     }
 
     if (_errorGetResearchPrices == "") {
-      _researchPrices =
-          ResearchPricesResearchModel.convertResultToResearchModel();
+      _researchPrices.addAll(
+        ResearchPricesResearchModel.convertResultToResearchModel(),
+      );
     }
 
     _isLoadingGetResearchPrices = false;
@@ -417,5 +431,15 @@ class ResearchPricesProvider with ChangeNotifier {
       _isLoadingGetProducts = false;
       notifyListeners();
     }
+  }
+
+  void loadAssociatedsConcurrents() {
+    _researchPrices.forEach((research) {
+      if (research.Code == _selectedResearch!.Code) {
+        _concurrents.clear();
+        _concurrents.addAll(research.Concurrents);
+      }
+    });
+    notifyListeners();
   }
 }

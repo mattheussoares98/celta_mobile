@@ -35,7 +35,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
 
           if (researchPricesProvider.errorAssociateConcurrentToResearch == "") {
             ShowSnackbarMessage.showMessage(
-              message: "O concorrente foi associado à pesquisa",
+              message: "O concorrente está associado à pesquisa",
               context: context,
               backgroundColor: Theme.of(context).colorScheme.primary,
             );

@@ -72,11 +72,13 @@ class _ResearchPricesConcurrentsPageState
                   children: [
                     Expanded(
                       child: SearchWidget(
+                        autofocus: false,
                         consultProductController:
                             searchConcurrentControllerText,
-                        isLoading: researchPricesProvider
-                                .isLoadingGetConcurrents ||
-                            researchPricesProvider.isLoadingAddOrUpdateOfResearch,
+                        isLoading:
+                            researchPricesProvider.isLoadingGetConcurrents ||
+                                researchPricesProvider
+                                    .isLoadingAddOrUpdateOfResearch,
                         onPressSearch: () async {
                           await _getConcurrents(
                             researchPricesProvider: researchPricesProvider,
@@ -119,6 +121,14 @@ class _ResearchPricesConcurrentsPageState
                       ),
                     )
                   ],
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(),
+                  onPressed: () {
+                    researchPricesProvider.loadAssociatedsConcurrents();
+                  },
+                  child: const FittedBox(
+                      child: Text("Listar concorrentes associados à pesquisa")),
                 ),
                 if (researchPricesProvider.errorGetConcurrents != "")
                   Padding(

@@ -71,7 +71,6 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                         researchPricesProvider.isLoadingAddOrUpdateConcurrents
                     ? null
                     : () {
-                        researchPricesProvider.clearResearchPrices();
                         Navigator.of(context).pop();
                       },
                 icon: const Icon(

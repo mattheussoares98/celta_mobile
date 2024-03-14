@@ -29,6 +29,7 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
     return InkWell(
       onTap: () {
         researchPricesProvider.updateSelectedResearch(research);
+        researchPricesProvider.loadAssociatedsConcurrents();
         Navigator.of(context).pushNamed(
           APPROUTES.RESEARCH_PRICES_CONCURRENTS,
           arguments: {"enterpriseCode": widget.enterpriseCode},
