@@ -64,6 +64,17 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                   value: concurrent.ConcurrentCode.toString(),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
+                  value: researchPricesProvider.selectedResearch!.Concurrents
+                          .contains(concurrent)
+                      ? "Associado à pesquisa"
+                      : "Não associado à pesquisa",
+                  subtitleColor: researchPricesProvider
+                          .selectedResearch!.Concurrents
+                          .contains(concurrent)
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.red,
+                ),
+                TitleAndSubtitle.titleAndSubtitle(
                   title: "Nome",
                   value: concurrent.Name,
                 ),

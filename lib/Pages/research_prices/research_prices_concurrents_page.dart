@@ -50,7 +50,7 @@ class _ResearchPricesConcurrentsPageState
             appBar: AppBar(
               title:  FittedBox(
                 child: Text(
-                  'CONCORRENTES pesquisa(${researchPricesProvider.selectedResearch!.Code})',
+                  'CONCORRENTES - pesquisa(${researchPricesProvider.selectedResearch!.Code})',
                 ),
               ),
               leading: IconButton(
@@ -162,8 +162,8 @@ class _ResearchPricesConcurrentsPageState
             isLoading: researchPricesProvider.isLoadingGetConcurrents,
           ),
           loadingWidget(
-            message: 'Vinculando concorrente à pesquisa',
-            isLoading: researchPricesProvider.isLoadingAddOrUpdateOfResearch,
+            message: 'Associando concorrente à pesquisa',
+            isLoading: researchPricesProvider.isLoadingAssociateConcurrentToResearch,
           ),
         ],
       ),
