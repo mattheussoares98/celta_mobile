@@ -142,7 +142,6 @@ class _SearchWidgetState extends State<SearchWidget> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Expanded(
-            flex: 85,
             child: Form(
               key: _formKey,
               child: TextFormField(
