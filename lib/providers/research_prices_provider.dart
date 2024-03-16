@@ -373,40 +373,27 @@ class ResearchPricesProvider with ChangeNotifier {
     _errorGetNotAssociatedsProducts = "";
   }
 
-  Future<void> getProduct({
-    required bool getAssociatedsProducts,
+  Future<void> getAssociatedProducts({
     required String searchProductControllerText,
     required BuildContext context,
-    required ConfigurationsProvider configurationsProvider,
+    required bool? withPrices,
   }) async {
     _errorGetAssociatedsProducts = "";
     _isLoadingGetProducts = true;
     notifyListeners();
 
-    // Map jsonGetProducts = {
-    //   "CrossIdentity": UserData.crossIdentity,
-    //   "RoutineInt": 7, //ResearchOfPrice
-    //   "ResearchOfPriceCode": _selectedResearch!.Code,
-    //   "AssociateInResearchOfPrice": getAssociatedsProducts, //Seta como true
-    //   "SearchValue": searchProductControllerText,
-    //   // "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
-    //   "EnterpriseCodes": [2],
-    // };
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
-      "RoutineInt": 7,
-      "SearchValue": searchProductControllerText,
-      "EnterpriseCodes": [2],
-      // "EnterpriseDestinyCode": 0,
-      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
-      // "SearchType": 0,
-      // "Routine": 0,
+      "ResearchOfPriceCode": _selectedResearch!.Code,
+      "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+      "WithPrices": withPrices,
+      //Null (Todos os produtos) | True (Somente com preços informados) | False (Somente sem preços informados)
     };
 
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "filters": json.encode(jsonGetProducts),
+          "json": json.encode(jsonGetProducts),
         },
         typeOfResponse: "GetProductsJsonResponse",
         SOAPAction: "GetProductsJson",

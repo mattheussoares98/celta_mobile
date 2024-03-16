@@ -33,10 +33,50 @@ class _ResearchPricesInsertProductsPricesState
     }
   }
 
+  bool? _isAll = true;
+  bool? _withoutCounts = false;
+  bool? _withCounts = false;
+
+  _clearCheckValues() {
+    _isAll = false;
+    _withoutCounts = false;
+    _withCounts = false;
+  }
+  
+
+  void _changeIsAll(_) {
+    setState(() {
+      _clearCheckValues();
+      _isAll = true;
+    });
+  }
+
+  void _changeWithCounts(_) {
+    setState(() {
+      _clearCheckValues();
+      _withCounts = true;
+    });
+  }
+
+  void _changeWithoutCounts(_) {
+    setState(() {
+      _clearCheckValues();
+      _withoutCounts = true;
+    });
+  }
+
+  bool? _withPricesOption() {
+    //Null (Todos os produtos)
+    if (_isAll == true) return null;
+    //True (Somente com preços informados)
+    if (_withCounts == true) return true;
+    //False (Somente sem preços informados)
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
-    ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return PopScope(
       onPopInvoked: (_) async {
@@ -56,17 +96,25 @@ class _ResearchPricesInsertProductsPricesState
             onPressSearch: () async {
               _consultedProductController.clear();
 
-              await researchPricesProvider.getProduct(
-                getAssociatedsProducts: widget.isAssociatedProducts,
+              await researchPricesProvider.getAssociatedProducts(
                 searchProductControllerText: _searchProductController.text,
                 context: context,
-                configurationsProvider: configurationsProvider,
+                withPrices: _withPricesOption(),
               );
 
               _clearSearchProductController(researchPricesProvider);
             },
             focusNodeConsultProduct: FocusNode(),
           ),
+          if (widget.isAssociatedProducts)
+            ResearchPricesFilterAssociatedsProducts(
+              changeIsAll: _changeIsAll,
+              changeWithCounts: _changeWithCounts,
+              changeWithoutCounts: _changeWithoutCounts,
+              isAll: _isAll,
+              withCounts: _withCounts,
+              withoutCounts: _withoutCounts,
+            ),
           if (widget.isAssociatedProducts &&
               researchPricesProvider.errorGetAssociatedsProducts != "")
             ErrorMessage(
@@ -94,11 +142,10 @@ class _ResearchPricesInsertProductsPricesState
                     return;
                   }
 
-                  await researchPricesProvider.getProduct(
-                    getAssociatedsProducts: widget.isAssociatedProducts,
+                  await researchPricesProvider.getAssociatedProducts(
                     searchProductControllerText: _searchProductController.text,
                     context: context,
-                    configurationsProvider: configurationsProvider,
+                    withPrices: _withPricesOption(),
                   );
 
                   if (widget.isAssociatedProducts &&
