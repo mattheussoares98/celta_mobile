@@ -433,8 +433,8 @@ class ResearchPricesProvider with ChangeNotifier {
 
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
-      "RoutineInt": 7, //ResearchOfPrice
-      "SearchValue": searchProductControllerText,
+      "RoutineInt": 7,
+      // "SearchValue": searchProductControllerText,
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
@@ -444,7 +444,7 @@ class ResearchPricesProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "json": json.encode(jsonGetProducts),
+          "filters": json.encode(jsonGetProducts),
         },
         typeOfResponse: "GetProductsJsonResponse",
         SOAPAction: "GetProductsJson",
