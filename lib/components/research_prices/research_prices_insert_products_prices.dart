@@ -1,3 +1,4 @@
+import 'package:celta_inventario/providers/research_prices_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class _ResearchPricesInsertProductsPricesState
   void _clearSearchProductController(
     ResearchPricesProvider researchPricesProvider,
   ) {
-    if (widget.isAssociatedProducts) {
+    if (errorMessage(researchPricesProvider) == "") {
       widget.searchProductController.clear();
     }
   }
@@ -70,17 +71,42 @@ class _ResearchPricesInsertProductsPricesState
     return false;
   }
 
+  String errorMessage(
+    ResearchPricesProvider researchPricesProvider,
+  ) {
+    if (widget.isAssociatedProducts) {
+      return researchPricesProvider.errorGetAssociatedsProducts;
+    } else {
+      return researchPricesProvider.errorGetNotAssociatedsProducts;
+    }
+  }
+
+  Future<void> _getProducts(
+    ResearchPricesProvider researchPricesProvider,
+  ) async {
+    if (widget.isAssociatedProducts) {
+      await researchPricesProvider.getAssociatedProducts(
+        searchProductControllerText: widget.searchProductController.text,
+        context: context,
+        withPrices: _withPricesOption(),
+      );
+    } else {
+      await researchPricesProvider.getNotAssociatedProducts(
+        searchProductControllerText: widget.searchProductController.text,
+      );
+    }
+
+    _clearSearchProductController(researchPricesProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
     return PopScope(
       onPopInvoked: (_) async {
-        if (widget.isAssociatedProducts) {
-          researchPricesProvider.clearAssociatedsProducts();
-        } else {
-          researchPricesProvider.clearNotAssociatedsProducts();
-        }
+        researchPricesProvider.clearAssociatedsProducts();
+        researchPricesProvider.clearNotAssociatedsProducts();
       },
       child: Column(
         children: [
@@ -90,15 +116,7 @@ class _ResearchPricesInsertProductsPricesState
             isLoading: false,
             autofocus: false,
             onPressSearch: () async {
-              widget.searchProductController.clear();
-
-              await researchPricesProvider.getAssociatedProducts(
-                searchProductControllerText: widget.searchProductController.text,
-                context: context,
-                withPrices: _withPricesOption(),
-              );
-
-              _clearSearchProductController(researchPricesProvider);
+              await _getProducts(researchPricesProvider);
             },
             focusNodeConsultProduct: FocusNode(),
           ),
@@ -111,25 +129,17 @@ class _ResearchPricesInsertProductsPricesState
               withCounts: _withCounts,
               withoutCounts: _withoutCounts,
             ),
-          if (widget.isAssociatedProducts &&
-              researchPricesProvider.errorGetAssociatedsProducts != "")
+          if (errorMessage(researchPricesProvider) != "")
             ErrorMessage(
-              errorMessage: researchPricesProvider.errorGetAssociatedsProducts,
+              errorMessage: errorMessage(researchPricesProvider),
             ),
-          if (!widget.isAssociatedProducts &&
-              researchPricesProvider.errorGetNotAssociatedsProducts != "")
-            ErrorMessage(
-              errorMessage:
-                  researchPricesProvider.errorGetNotAssociatedsProducts,
-            ),
-          if (researchPricesProvider.associatedsProductsCount > 0 ||
-              researchPricesProvider.notAssociatedProductsCount > 0)
+          if (!researchPricesProvider.isLoadingGetProducts)
             ResearchPricesProductsItems(
                 isAssociatedProducts: widget.isAssociatedProducts,
                 consultedProductController: widget.searchProductController,
                 getProductsWithCamera: () async {
                   FocusScope.of(context).unfocus();
-                  widget.searchProductController.clear();
+                  _clearSearchProductController(researchPricesProvider);
 
                   widget.searchProductController.text =
                       await ScanBarCode.scanBarcode(context);
@@ -139,17 +149,18 @@ class _ResearchPricesInsertProductsPricesState
                   }
 
                   await researchPricesProvider.getAssociatedProducts(
-                    searchProductControllerText: widget.searchProductController.text,
+                    searchProductControllerText:
+                        widget.searchProductController.text,
                     context: context,
                     withPrices: _withPricesOption(),
                   );
 
                   if (widget.isAssociatedProducts &&
                       researchPricesProvider.associatedsProductsCount > 0) {
-                    widget.searchProductController.clear();
+                    _clearSearchProductController(researchPricesProvider);
                   } else if (!widget.isAssociatedProducts &&
                       researchPricesProvider.notAssociatedProductsCount > 0) {
-                    widget.searchProductController.clear();
+                    _clearSearchProductController(researchPricesProvider);
                   }
                 }),
         ],

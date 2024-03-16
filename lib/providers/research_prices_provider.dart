@@ -43,22 +43,19 @@ class ResearchPricesProvider with ChangeNotifier {
   int get concurrentsCount => _concurrents.length;
   FocusNode concurrentsFocusNode = FocusNode();
 
-  List<ResearchPricesProductsModel> _associatedsProducts = [];
-  List<ResearchPricesProductsModel> get associatedsProducts =>
-      [..._associatedsProducts];
+  List<dynamic> _associatedsProducts = [];
+  List<dynamic> get associatedsProducts => [..._associatedsProducts];
   int get associatedsProductsCount => _associatedsProducts.length;
-  List<ResearchPricesProductsModel> _notAssociatedsProducts = [];
-  List<ResearchPricesProductsModel> get notAssociatedProducts =>
-      [..._notAssociatedsProducts];
+  List<dynamic> _notAssociatedsProducts = [];
+  List<dynamic> get notAssociatedProducts => [..._notAssociatedsProducts];
   int get notAssociatedProductsCount => _notAssociatedsProducts.length;
+  bool _isLoadingGetProducts = false;
+  bool get isLoadingGetProducts => _isLoadingGetProducts;
 
   String _errorGetAssociatedsProducts = "";
   String get errorGetAssociatedsProducts => _errorGetAssociatedsProducts;
   String _errorGetNotAssociatedsProducts = "";
   String get errorGetNotAssociatedsProducts => _errorGetNotAssociatedsProducts;
-
-  bool _isLoadingGetProducts = false;
-  bool get isLoadingGetProducts => _isLoadingGetProducts;
 
   ResearchPricesResearchModel? _selectedResearch;
   ResearchPricesResearchModel? get selectedResearch => _selectedResearch;
@@ -419,6 +416,54 @@ class ResearchPricesProvider with ChangeNotifier {
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorGetAssociatedsProducts =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoadingGetProducts = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getNotAssociatedProducts({
+    required String searchProductControllerText,
+  }) async {
+    _errorGetNotAssociatedsProducts = "";
+    _isLoadingGetProducts = true;
+    _notAssociatedsProducts.clear();
+    notifyListeners();
+
+    Map jsonGetProducts = {
+      "CrossIdentity": UserData.crossIdentity,
+      "RoutineInt": 7, //ResearchOfPrice
+      "SearchValue": searchProductControllerText,
+      "ResearchOfPriceFilters": {
+        "ResearchOfPriceCode": _selectedResearch!.Code,
+        "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+      },
+    };
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "json": json.encode(jsonGetProducts),
+        },
+        typeOfResponse: "GetProductsJsonResponse",
+        SOAPAction: "GetProductsJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductsJsonResult",
+      );
+
+      _errorGetNotAssociatedsProducts =
+          SoapHelperResponseParameters.errorMessage;
+
+      if (_errorGetNotAssociatedsProducts == "") {
+        // BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
+        //   responseAsString: SoapHelperResponseParameters.responseAsString,
+        //   listToAdd: _products,
+        // );
+      }
+    } catch (e) {
+      print("Erro para obter os produtos: $e");
+      _errorGetNotAssociatedsProducts =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingGetProducts = false;
