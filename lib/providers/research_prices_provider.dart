@@ -383,8 +383,8 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "ResearchOfPriceCode": _selectedResearch!.Code,
       "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
-      "WithPrices": withPrices,
-      //Null (Todos os produtos) | True (Somente com preços informados) | False (Somente sem preços informados)
+      "WithPrices":
+          withPrices, //Null (Todos) | True (preços informados) | False (sem preços informados)
     };
 
     try {
@@ -392,10 +392,10 @@ class ResearchPricesProvider with ChangeNotifier {
         parameters: {
           "json": json.encode(jsonGetProducts),
         },
-        typeOfResponse: "GetProductsJsonResponse",
-        SOAPAction: "GetProductsJson",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductsJsonResult",
+        typeOfResponse: "GetConcurrentProductsJsonResponse",
+        SOAPAction: "GetConcurrentProductsJson",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+        typeOfResult: "GetConcurrentProductsJsonResult",
       );
 
       _errorGetAssociatedsProducts = SoapHelperResponseParameters.errorMessage;
