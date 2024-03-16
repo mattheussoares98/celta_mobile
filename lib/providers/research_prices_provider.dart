@@ -141,7 +141,7 @@ class ResearchPricesProvider with ChangeNotifier {
           context: context,
         );
       } else {
-       _addConcurrentInResearchs();
+        _addConcurrentInResearchs();
       }
     } catch (e) {
       print(e.toString());
@@ -305,6 +305,7 @@ class ResearchPricesProvider with ChangeNotifier {
       );
       await getConcurrents(
         searchConcurrentControllerText: "%",
+        getAllConcurrents: true,
       );
       _selectedConcurrent = null;
     } else {
@@ -320,8 +321,10 @@ class ResearchPricesProvider with ChangeNotifier {
 
   Future<void> getConcurrents({
     required String searchConcurrentControllerText,
+    required bool getAllConcurrents,
   }) async {
-    clearConcurrents();
+    if (!getAllConcurrents) clearConcurrents();
+
     _isLoadingGetConcurrents = true;
     notifyListeners();
 
@@ -347,8 +350,11 @@ class ResearchPricesProvider with ChangeNotifier {
       );
       _errorGetConcurrents = SoapHelperResponseParameters.errorMessage;
 
-      _concurrents =
-          ResearchPricesConcurrentsModel.convertResultToListOfConcurrents();
+      if (_errorGetConcurrents == "") {
+        _concurrents.addAll(
+          ResearchPricesConcurrentsModel.convertResultToListOfConcurrents(),
+        );
+      }
     } catch (e) {
       _errorGetConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }

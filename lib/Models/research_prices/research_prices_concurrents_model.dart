@@ -31,25 +31,20 @@ class ResearchPricesConcurrentsModel {
   static List<ResearchPricesConcurrentsModel> convertToConcurrents(
     List concurrents,
   ) {
-    List<ResearchPricesConcurrentsModel> list = [];
-    concurrents.forEach((element) {
-      list.add(ResearchPricesConcurrentsModel.fromJson(element));
-    });
-
-    return list;
+    return concurrents
+        .map(
+          (concurrent) => ResearchPricesConcurrentsModel.fromJson(concurrent),
+        )
+        .toList();
   }
 
-  static List<ResearchPricesConcurrentsModel> convertResultToListOfConcurrents() {
-    List<ResearchPricesConcurrentsModel> concurrents = [];
-    if (SoapHelperResponseParameters.errorMessage != "") {
-      return concurrents;
-    }
+  static List<ResearchPricesConcurrentsModel>
+      convertResultToListOfConcurrents() {
     List resultAsList =
         json.decode(SoapHelperResponseParameters.responseAsString);
 
-    resultAsList.forEach((element) {
-      concurrents.add(ResearchPricesConcurrentsModel.fromJson(element));
-    });
-    return concurrents;
+    return resultAsList
+        .map((e) => ResearchPricesConcurrentsModel.fromJson(e))
+        .toList();
   }
 }

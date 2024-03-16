@@ -24,12 +24,11 @@ class _ResearchPricesInsertProductsPricesState
   TextEditingController _consultedProductController = TextEditingController();
 
   void _clearSearchProductController(
-      ResearchPricesProvider researchPricesProvider) {
-    if (widget.isAssociatedProducts &&
-        researchPricesProvider.associatedsProductsCount > 0) {
+    ResearchPricesProvider researchPricesProvider,
+  ) {
+    if (widget.isAssociatedProducts) {
       _searchProductController.clear();
-    } else if (!widget.isAssociatedProducts &&
-        researchPricesProvider.notAssociatedProductsCount > 0) {
+    } else {
       _searchProductController.clear();
     }
   }

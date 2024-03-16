@@ -27,6 +27,7 @@ class _ResearchPricesConcurrentsPageState
     await researchPricesProvider.getConcurrents(
       searchConcurrentControllerText:
           getAllConcurrents ? "%" : searchConcurrentControllerText.text,
+      getAllConcurrents: true,
     );
     if (researchPricesProvider.errorGetConcurrents == "") {
       searchConcurrentControllerText.text = "";
@@ -48,7 +49,7 @@ class _ResearchPricesConcurrentsPageState
         children: [
           Scaffold(
             appBar: AppBar(
-              title:  FittedBox(
+              title: FittedBox(
                 child: Text(
                   'CONCORRENTES - pesquisa(${researchPricesProvider.selectedResearch!.Code})',
                 ),
@@ -130,7 +131,8 @@ class _ResearchPricesConcurrentsPageState
                     researchPricesProvider.loadAssociatedsConcurrents();
                   },
                   child: const FittedBox(
-                      child: Text("Exibir somente concorrentes associados à pesquisa")),
+                      child: Text(
+                          "Exibir somente concorrentes associados à pesquisa")),
                 ),
                 if (researchPricesProvider.errorGetConcurrents != "")
                   Padding(
@@ -163,7 +165,8 @@ class _ResearchPricesConcurrentsPageState
           ),
           loadingWidget(
             message: 'Associando concorrente à pesquisa',
-            isLoading: researchPricesProvider.isLoadingAssociateConcurrentToResearch,
+            isLoading:
+                researchPricesProvider.isLoadingAssociateConcurrentToResearch,
           ),
         ],
       ),
