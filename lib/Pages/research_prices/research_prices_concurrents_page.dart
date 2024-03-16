@@ -125,15 +125,6 @@ class _ResearchPricesConcurrentsPageState
                     )
                   ],
                 ),
-                TextButton(
-                  style: TextButton.styleFrom(),
-                  onPressed: () {
-                    researchPricesProvider.loadAssociatedsConcurrents();
-                  },
-                  child: const FittedBox(
-                      child: Text(
-                          "Exibir somente concorrentes associados à pesquisa")),
-                ),
                 if (researchPricesProvider.errorGetConcurrents != "")
                   Padding(
                     padding: const EdgeInsets.all(8.0),
