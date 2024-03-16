@@ -8,8 +8,10 @@ import '../../utils/utils.dart';
 
 class ResearchPricesInsertProductsPrices extends StatefulWidget {
   final bool isAssociatedProducts;
+  final TextEditingController searchProductController;
   const ResearchPricesInsertProductsPrices({
     required this.isAssociatedProducts,
+    required this.searchProductController,
     Key? key,
   }) : super(key: key);
 
@@ -20,16 +22,11 @@ class ResearchPricesInsertProductsPrices extends StatefulWidget {
 
 class _ResearchPricesInsertProductsPricesState
     extends State<ResearchPricesInsertProductsPrices> {
-  TextEditingController _searchProductController = TextEditingController();
-  TextEditingController _consultedProductController = TextEditingController();
-
   void _clearSearchProductController(
     ResearchPricesProvider researchPricesProvider,
   ) {
     if (widget.isAssociatedProducts) {
-      _searchProductController.clear();
-    } else {
-      _searchProductController.clear();
+      widget.searchProductController.clear();
     }
   }
 
@@ -42,7 +39,6 @@ class _ResearchPricesInsertProductsPricesState
     _withoutCounts = false;
     _withCounts = false;
   }
-  
 
   void _changeIsAll(_) {
     setState(() {
@@ -90,14 +86,14 @@ class _ResearchPricesInsertProductsPricesState
         children: [
           SearchWidget(
             showOnlyConfigurationOfSearch: true,
-            consultProductController: _searchProductController,
+            consultProductController: widget.searchProductController,
             isLoading: false,
             autofocus: false,
             onPressSearch: () async {
-              _consultedProductController.clear();
+              widget.searchProductController.clear();
 
               await researchPricesProvider.getAssociatedProducts(
-                searchProductControllerText: _searchProductController.text,
+                searchProductControllerText: widget.searchProductController.text,
                 context: context,
                 withPrices: _withPricesOption(),
               );
@@ -130,30 +126,30 @@ class _ResearchPricesInsertProductsPricesState
               researchPricesProvider.notAssociatedProductsCount > 0)
             ResearchPricesProductsItems(
                 isAssociatedProducts: widget.isAssociatedProducts,
-                consultedProductController: _consultedProductController,
+                consultedProductController: widget.searchProductController,
                 getProductsWithCamera: () async {
                   FocusScope.of(context).unfocus();
-                  _searchProductController.clear();
+                  widget.searchProductController.clear();
 
-                  _searchProductController.text =
+                  widget.searchProductController.text =
                       await ScanBarCode.scanBarcode(context);
 
-                  if (_searchProductController.text == "") {
+                  if (widget.searchProductController.text == "") {
                     return;
                   }
 
                   await researchPricesProvider.getAssociatedProducts(
-                    searchProductControllerText: _searchProductController.text,
+                    searchProductControllerText: widget.searchProductController.text,
                     context: context,
                     withPrices: _withPricesOption(),
                   );
 
                   if (widget.isAssociatedProducts &&
                       researchPricesProvider.associatedsProductsCount > 0) {
-                    _searchProductController.clear();
+                    widget.searchProductController.clear();
                   } else if (!widget.isAssociatedProducts &&
                       researchPricesProvider.notAssociatedProductsCount > 0) {
-                    _searchProductController.clear();
+                    widget.searchProductController.clear();
                   }
                 }),
         ],

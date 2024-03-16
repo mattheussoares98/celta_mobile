@@ -33,14 +33,32 @@ class _ResearchPricesProductsPricesPageState
     });
   }
 
-  List<Widget> _pages = <Widget>[
-    const ResearchPricesInsertProductsPrices(isAssociatedProducts: true),
-    const ResearchPricesInsertProductsPrices(isAssociatedProducts: false),
-  ];
+  @override
+  void dispose() {
+    super.dispose();
+    _searchAssociatedsProductsController.dispose();
+    _searchNotAssociatedsProductsController.dispose();
+  }
+
+  TextEditingController _searchAssociatedsProductsController =
+      TextEditingController();
+  TextEditingController _searchNotAssociatedsProductsController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
+
+    List<Widget> _pages = <Widget>[
+      ResearchPricesInsertProductsPrices(
+        isAssociatedProducts: true,
+        searchProductController: _searchAssociatedsProductsController,
+      ),
+      ResearchPricesInsertProductsPrices(
+        isAssociatedProducts: false,
+        searchProductController: _searchNotAssociatedsProductsController,
+      ),
+    ];
 
     return PopScope(
       onPopInvoked: (_) async {
