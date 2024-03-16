@@ -27,15 +27,19 @@ class _ResearchPricesFilterAssociatedsProducts
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+      padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Filtrar produtos",
-            style: TextStyle(
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.w400,
+          const Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(
+              "Filtrar produtos",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+              ),
             ),
           ),
           Card(

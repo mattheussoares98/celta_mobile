@@ -27,7 +27,7 @@ class _ResearchPricesConcurrentsPageState
     await researchPricesProvider.getConcurrents(
       searchConcurrentControllerText:
           getAllConcurrents ? "%" : searchConcurrentControllerText.text,
-      getAllConcurrents: true,
+      getAllConcurrents: getAllConcurrents,
     );
     if (researchPricesProvider.errorGetConcurrents == "") {
       searchConcurrentControllerText.text = "";

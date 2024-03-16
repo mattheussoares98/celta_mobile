@@ -21,11 +21,6 @@ class _ResearchPricesProductsPricesPageState
 
   int _selectedIndex = 0;
 
-  static const List appBarTitles = [
-    "Produtos associados",
-    "Produtos não associados",
-  ];
-
   void _onItemTapped({
     required int index,
     // required SaleRequestProvider saleRequestProvider,
@@ -57,8 +52,8 @@ class _ResearchPricesProductsPricesPageState
         appBar: AppBar(
           title: FittedBox(
             child: Text(
-              appBarTitles[_selectedIndex],
-            ),
+                "Pesquisa ${researchPricesProvider.selectedResearch!.Code}"
+                " - Concorrente ${researchPricesProvider.selectedConcurrent!.ConcurrentCode}"),
           ),
           leading: IconButton(
             onPressed: researchPricesProvider.isLoadingGetProducts
@@ -81,17 +76,17 @@ class _ResearchPricesProductsPricesPageState
           items: <BottomNavigationBarItem>[
             const BottomNavigationBarItem(
               icon: Icon(
-                Icons.list_sharp,
+                Icons.manage_search,
                 size: 35,
               ),
-              label: 'Produtos associados',
+              label: 'Associados',
             ),
             const BottomNavigationBarItem(
               icon: Icon(
                 Icons.search,
                 size: 35,
               ),
-              label: 'Produtos sem associação',
+              label: 'Não associados',
             ),
           ],
           currentIndex: _selectedIndex,
