@@ -1,21 +1,21 @@
-import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/research_prices/research_prices.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../pages/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 
-class ResearchPricesProductsPricesPage extends StatefulWidget {
-  const ResearchPricesProductsPricesPage({Key? key}) : super(key: key);
+class ResearchPricesProductsPage extends StatefulWidget {
+  const ResearchPricesProductsPage({Key? key}) : super(key: key);
 
   @override
-  State<ResearchPricesProductsPricesPage> createState() =>
-      _ResearchPricesProductsPricesPageState();
+  State<ResearchPricesProductsPage> createState() =>
+      _ResearchPricesProductsPageState();
 }
 
-class _ResearchPricesProductsPricesPageState
-    extends State<ResearchPricesProductsPricesPage> {
+class _ResearchPricesProductsPageState
+    extends State<ResearchPricesProductsPage> {
   // TextEditingController _searchProductTextEditingController =
   //     TextEditingController();
   // TextEditingController _consultedProductController = TextEditingController();
@@ -51,11 +51,11 @@ class _ResearchPricesProductsPricesPageState
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
     List<Widget> _pages = <Widget>[
-      ResearchPricesInsertProductsPrices(
+      ResearchPricesInsertPricesPage(
         isAssociatedProducts: true,
         searchProductController: _searchAssociatedsProductsController,
       ),
-      ResearchPricesInsertProductsPrices(
+      ResearchPricesInsertPricesPage(
         isAssociatedProducts: false,
         searchProductController: _searchNotAssociatedsProductsController,
       ),

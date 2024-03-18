@@ -218,7 +218,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT: (ctx) =>
               const ResearchPricesInsertOrUpdateConcurrentPage(),
           APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
-              const ResearchPricesProductsPricesPage(),
+              const ResearchPricesProductsPage(),
         },
       ),
     );

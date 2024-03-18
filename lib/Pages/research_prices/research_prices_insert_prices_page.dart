@@ -1,4 +1,3 @@
-import 'package:celta_inventario/providers/research_prices_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,22 +6,22 @@ import '../../providers/providers.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import '../../utils/utils.dart';
 
-class ResearchPricesInsertProductsPrices extends StatefulWidget {
+class ResearchPricesInsertPricesPage extends StatefulWidget {
   final bool isAssociatedProducts;
   final TextEditingController searchProductController;
-  const ResearchPricesInsertProductsPrices({
+  const ResearchPricesInsertPricesPage({
     required this.isAssociatedProducts,
     required this.searchProductController,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ResearchPricesInsertProductsPrices> createState() =>
-      _ResearchPricesInsertProductsPricesState();
+  State<ResearchPricesInsertPricesPage> createState() =>
+      _ResearchPricesInsertPricesPageState();
 }
 
-class _ResearchPricesInsertProductsPricesState
-    extends State<ResearchPricesInsertProductsPrices> {
+class _ResearchPricesInsertPricesPageState
+    extends State<ResearchPricesInsertPricesPage> {
   void _clearSearchProductController(
     ResearchPricesProvider researchPricesProvider,
   ) {
