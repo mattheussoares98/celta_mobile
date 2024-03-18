@@ -31,14 +31,15 @@ class _ResearchPricesFilterAssociatedsProducts
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
             child: Text(
-              "Filtrar produtos",
+              "Filtrar produtos associados à pesquisa",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.bold,
                 fontSize: 12,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
