@@ -141,11 +141,11 @@ class _ResearchPricesProductsItemsState
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produto",
-                value: product.Name,
+                value: product.ProductName,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                value: product.PLU.toString(),
+                value: product.PriceLookUp.toString(),
               ),
             ],
           ),

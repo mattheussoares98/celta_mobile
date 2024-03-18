@@ -377,6 +377,7 @@ class ResearchPricesProvider with ChangeNotifier {
   }) async {
     _errorGetAssociatedsProducts = "";
     _isLoadingGetProducts = true;
+    _associatedsProducts.clear();
     notifyListeners();
 
     Map jsonGetProducts = {
@@ -400,13 +401,10 @@ class ResearchPricesProvider with ChangeNotifier {
 
       _errorGetAssociatedsProducts = SoapHelperResponseParameters.errorMessage;
 
-      SoapHelperResponseParameters.responseAsString;
-
       if (_errorGetAssociatedsProducts == "") {
-        // BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
-        //   responseAsString: SoapHelperResponseParameters.responseAsString,
-        //   listToAdd: _products,
-        // );
+        _associatedsProducts.addAll(
+          ResearchPricesProductsModel.resultAsStringToProductsModel(),
+        );
       } else {
         ShowSnackbarMessage.showMessage(
           message: _errorGetAssociatedsProducts,
