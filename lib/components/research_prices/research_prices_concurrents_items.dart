@@ -82,6 +82,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                   title: "Nome",
                   value: concurrent.Name,
                 ),
+                if(concurrent.Observation.isNotEmpty)
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Observação",
                   value: concurrent.Observation,
