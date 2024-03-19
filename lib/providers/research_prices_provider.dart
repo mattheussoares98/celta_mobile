@@ -437,7 +437,7 @@ class ResearchPricesProvider with ChangeNotifier {
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
-      // "SearchValue": searchProductControllerText,
+      "SearchValue": searchProductControllerText,
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
@@ -459,10 +459,9 @@ class ResearchPricesProvider with ChangeNotifier {
           SoapHelperResponseParameters.errorMessage;
 
       if (_errorGetNotAssociatedsProducts == "") {
-        // BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
-        //   responseAsString: SoapHelperResponseParameters.responseAsString,
-        //   listToAdd: _products,
-        // );
+        _notAssociatedsProducts.addAll(
+          ResearchPricesProductsModel.resultAsStringToProductsModel(),
+        );
       }
     } catch (e) {
       print("Erro para obter os produtos: $e");
