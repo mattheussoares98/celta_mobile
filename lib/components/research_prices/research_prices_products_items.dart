@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/research_prices/research_prices_insert_prices.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -124,6 +125,8 @@ class _ResearchPricesProductsItemsState
     }
   }
 
+  final researchPricesInsertPrices = const ResearchPricesInsertPrices();
+
   Widget itemOfList({
     required int index,
     required ResearchPricesProvider researchPricesProvider,
@@ -135,7 +138,19 @@ class _ResearchPricesProductsItemsState
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-          onTap: () {},
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
+          onTap: () {
+            if (_selectedIndex == index) {
+              setState(() {
+                _selectedIndex = -1;
+              });
+            } else {
+              setState(() {
+                _selectedIndex = index;
+              });
+            }
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -146,7 +161,14 @@ class _ResearchPricesProductsItemsState
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 value: product.PriceLookUp.toString(),
+                otherWidget: Icon(
+                  _selectedIndex == index
+                      ? Icons.arrow_drop_up_sharp
+                      : Icons.arrow_drop_down,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
+              if (_selectedIndex == index) researchPricesInsertPrices,
             ],
           ),
         ),
@@ -162,23 +184,23 @@ class _ResearchPricesProductsItemsState
     );
 
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
-    int productsCount = 5;
+    int productsCount = widget.isAssociatedProducts
+        ? researchPricesProvider.associatedsProductsCount
+        : researchPricesProvider.notAssociatedProductsCount;
 
     return Expanded(
       child: Column(
-        // mainAxisAlignment: saleRequestProvider.productsCount > 1
-        //     ? MainAxisAlignment.center
-        //     : MainAxisAlignment.start,
+        mainAxisAlignment: productsCount > 1
+            ? MainAxisAlignment.center
+            : MainAxisAlignment.start,
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: widget.isAssociatedProducts
-                  ? researchPricesProvider.associatedsProductsCount
-                  : researchPricesProvider.notAssociatedProductsCount,
+              itemCount: productsCount,
               itemBuilder: (context, index) {
-                // if (saleRequestProvider.productsCount == 1) {
-                _selectedIndex = index;
-                // }
+                if (productsCount == 1) {
+                  _selectedIndex = index;
+                }
 
                 final startIndex = index * itensPerLine;
                 final endIndex = (startIndex + itensPerLine <= productsCount)
