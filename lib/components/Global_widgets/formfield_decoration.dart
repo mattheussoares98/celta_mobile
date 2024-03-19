@@ -87,9 +87,9 @@ class FormFieldHelper {
   }
 
   static String? Function(String?)? validatorOfNumber(
-      {int maxDecimalPlaces = 3}) {
+      {int maxDecimalPlaces = 3, bool valueCanIsEmpty = false}) {
     return (value) {
-      if (value!.isEmpty) {
+      if (value!.isEmpty && !valueCanIsEmpty) {
         return 'Digite uma quantidade';
       } else if (value == '0' || value == '0.' || value == '0,') {
         return 'Digite uma quantidade';
@@ -111,8 +111,11 @@ class FormFieldHelper {
           1) {
         // verifica se tem mais de uma vírgula
         return 'Carácter inválido';
-      } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == 0 ||
-          double.tryParse(value.replaceAll(RegExp(r','), '.')) == null) {
+      } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == 0.0 &&
+          value.isNotEmpty && !valueCanIsEmpty) {
+        return "Digite uma quantidade";
+      } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
+          value.isNotEmpty && !valueCanIsEmpty) {
         return "Digite uma quantidade";
       }
 
