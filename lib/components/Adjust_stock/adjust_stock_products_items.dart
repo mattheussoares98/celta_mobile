@@ -111,6 +111,10 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
     AdjustStockProductModel product = adjustStockProvider.products[index];
 
     return InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
       onTap: adjustStockProvider.isLoadingTypeStockAndJustifications ||
               adjustStockProvider.isLoadingAdjustStock
           ? null

@@ -26,6 +26,10 @@ class _CustomerRegisterFloatingActionButtonState
     AddressProvider addressProvider = Provider.of(context);
 
     return InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
       onTap: customerRegisterProvider.isLoadingInsertCustomer
           ? null
           : () async {

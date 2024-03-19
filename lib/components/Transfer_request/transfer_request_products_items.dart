@@ -54,6 +54,10 @@ class _TransferRequestProductsItemsState
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
           onTap: transferRequestProvider.isLoadingProducts
               ? null
               : () {

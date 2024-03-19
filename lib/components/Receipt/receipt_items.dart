@@ -31,6 +31,10 @@ class _ReceiptItemsState extends State<ReceiptItems> {
             itemBuilder: (context, index) {
               ReceiptModel receipt = widget.receiptProvider.receipts[index];
               return InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
                 onTap: () {
                   if (widget.receiptProvider.isLoadingLiberateCheck) {
                     //não permite mudar o recebimento enquanto está carregando uma liberação

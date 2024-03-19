@@ -176,6 +176,10 @@ class InventoryProductsItemsState extends State<InventoryProductsItems> {
     required ConfigurationsProvider configurationsProvider,
   }) {
     return InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
       onTap: () {
         selectIndexAndFocus(
           inventoryProvider: inventoryProvider,

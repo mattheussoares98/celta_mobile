@@ -36,6 +36,10 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
                 TransferRequestModel transfer =
                     transferRequestProvider.requestModels[index];
                 return InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,

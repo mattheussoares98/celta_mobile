@@ -67,6 +67,10 @@ class BuyRequestProductsInformations extends StatelessWidget {
           title: "Embalagem",
           value: product.PackingQuantity,
           otherWidget: InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
             child: Icon(
               Icons.delete,
               color: product.quantity > 0 &&

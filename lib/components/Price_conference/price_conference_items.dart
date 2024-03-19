@@ -29,6 +29,10 @@ class _PriceConferenceItemsState extends State<PriceConferenceItems> {
         widget.priceConferenceProvider.products[index];
     return Container(
       child: InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
         onTap: () {
           FocusScope.of(context).unfocus();
           if (widget.priceConferenceProvider.isLoading ||

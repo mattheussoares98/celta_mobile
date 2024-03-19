@@ -4,7 +4,7 @@ class FormFieldHelper {
   static InputDecoration decoration({
     required bool isLoading,
     required BuildContext context,
-    required String labelText,
+    String? labelText,
     double? hintSize = 12,
     double? labelSize = 12,
     double? errorSize = 12,
@@ -77,9 +77,10 @@ class FormFieldHelper {
     );
   }
 
-  static TextStyle style() {
-    return const TextStyle(
-      fontSize: 18,
+  static TextStyle style({double? fontSize}) {
+    return TextStyle(
+      height: 1,
+      fontSize: fontSize ?? 18,
       color: Colors.black,
       fontWeight: FontWeight.normal,
     );

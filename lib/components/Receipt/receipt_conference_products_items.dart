@@ -191,6 +191,10 @@ class _ReceiptConferenceProductsItemsState
   }) {
     ReceiptProductsModel product = receiptProvider.products[index];
     return InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
       onTap: receiptProvider.isLoadingUpdateQuantity ||
               receiptProvider.consultingProducts
           ? null
@@ -232,6 +236,10 @@ class _ReceiptConferenceProductsItemsState
                     : product.DataValidade_ProcRecebDocProEmb.toString()
                         .replaceRange(10, null, ""),
                 otherWidget: InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
                   onTap: receiptProvider.isLoadingUpdateQuantity ||
                           receiptProvider.consultingProducts
                       ? null

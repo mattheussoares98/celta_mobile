@@ -212,6 +212,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                             ),
                           ),
                         InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
                           onTap: widget.isLoading
                               ? null
                               : () async {
@@ -234,6 +238,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
                               onTap: widget.isLoading
                                   ? null
                                   : () async {

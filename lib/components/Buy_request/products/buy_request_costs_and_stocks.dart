@@ -26,6 +26,10 @@ class _BuyRequestCostsAndStocksState extends State<BuyRequestCostsAndStocks> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+          focusColor: Colors.white.withOpacity(0),
+          hoverColor: Colors.white.withOpacity(0),
+          splashColor: Colors.white.withOpacity(0),
+          highlightColor: Colors.white.withOpacity(0),
       child: Row(
         children: [
           Text(
