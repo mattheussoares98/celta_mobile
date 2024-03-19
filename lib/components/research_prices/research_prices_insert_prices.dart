@@ -1,3 +1,4 @@
+import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,9 +72,37 @@ class _ResearchPricesInsertPricesState
             _formKey.currentState!.validate();
   }
 
+  void _updateControllers() {
+    if (widget.product.PriceRetail > 0)
+      _priceRetailController.text = ConvertString.convertToBrazilianNumber(
+        widget.product.PriceRetail,
+      );
+    if (widget.product.OfferRetail > 0)
+      _offerRetailController.text = ConvertString.convertToBrazilianNumber(
+        widget.product.OfferRetail,
+      );
+    if (widget.product.PriceWhole > 0)
+      _priceWholeController.text = ConvertString.convertToBrazilianNumber(
+        widget.product.PriceWhole,
+      );
+    if (widget.product.OfferWhole > 0)
+      _offerWholeController.text = ConvertString.convertToBrazilianNumber(
+        widget.product.OfferWhole,
+      );
+    if (widget.product.PriceECommerce > 0)
+      _priceEcommerceController.text = ConvertString.convertToBrazilianNumber(
+        widget.product.PriceECommerce,
+      );
+    if (widget.product.OfferECommerce > 0)
+      _offerEcommerceController.text = ConvertString.convertToBrazilianNumber(
+        widget.product.OfferECommerce,
+      );
+  }
+
   @override
   void initState() {
     super.initState();
+    _updateControllers();
   }
 
   @override
