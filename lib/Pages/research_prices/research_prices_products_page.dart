@@ -126,6 +126,10 @@ class _ResearchPricesProductsPageState
           message: "Consultando produto(s)...",
           isLoading: researchPricesProvider.isLoadingGetProducts,
         ),
+        loadingWidget(
+          message: "Confirmando preço(s)...",
+          isLoading: researchPricesProvider.isLoadingInsertConcurrentPrices,
+        ),
       ],
     );
   }

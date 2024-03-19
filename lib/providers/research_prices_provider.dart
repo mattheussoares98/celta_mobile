@@ -57,6 +57,11 @@ class ResearchPricesProvider with ChangeNotifier {
   String _errorGetNotAssociatedsProducts = "";
   String get errorGetNotAssociatedsProducts => _errorGetNotAssociatedsProducts;
 
+  bool _isLoadingInsertConcurrentPrices = false;
+  bool get isLoadingInsertConcurrentPrices => _isLoadingInsertConcurrentPrices;
+  String _errorInsertConcurrentPrices = "";
+  String get errorInsertConcurrentPrices => _errorInsertConcurrentPrices;
+
   ResearchPricesResearchModel? _selectedResearch;
   ResearchPricesResearchModel? get selectedResearch => _selectedResearch;
   updateSelectedResearch(ResearchPricesResearchModel? research) {
@@ -477,5 +482,110 @@ class ResearchPricesProvider with ChangeNotifier {
       }
     });
     notifyListeners();
+  }
+
+  Map _jsonInsertConcurrentPrices({
+    required int productCode,
+    required String priceLookUp,
+    required String productName,
+    required double? priceRetail,
+    required double? offerRetail,
+    required double? priceWhole,
+    required double? offerWhole,
+    required double? priceECommerce,
+    required double? offerECommerce,
+  }) {
+    Map jsonInsertConcurrentPrices = {
+      "CrossIdentity": UserData.crossIdentity,
+      "ResearchOfPriceCode": _selectedResearch!.Code,
+      "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+      "ProductPackingCode": productCode,
+      "PriceLookUp": priceLookUp,
+      "ProductName": productName,
+      // "PriceRetail": 1, //somente para teste
+      // "OfferRetail": 2, //somente para teste
+      // "PriceWhole": 3, //somente para teste
+      // "OfferWhole": 4, //somente para teste
+      // "PriceECommerce": 5, //somente para teste
+      // "OfferECommerce": 6, //somente para teste
+    };
+
+    if (priceRetail != null) {
+      jsonInsertConcurrentPrices.putIfAbsent("PriceRetail", () => priceRetail);
+    }
+    if (offerRetail != null) {
+      jsonInsertConcurrentPrices.putIfAbsent("OfferRetail", () => offerRetail);
+    }
+    if (priceWhole != null) {
+      jsonInsertConcurrentPrices.putIfAbsent("PriceWhole", () => priceWhole);
+    }
+    if (offerWhole != null) {
+      jsonInsertConcurrentPrices.putIfAbsent("OfferWhole", () => offerWhole);
+    }
+    if (priceECommerce != null) {
+      jsonInsertConcurrentPrices.putIfAbsent(
+          "PriceECommerce", () => priceECommerce);
+    }
+    if (offerECommerce != null) {
+      jsonInsertConcurrentPrices.putIfAbsent(
+          "OfferECommerce", () => offerECommerce);
+    }
+
+    return jsonInsertConcurrentPrices;
+  }
+
+  Future<void> insertConcurrentPrices({
+    required int productCode,
+    required String priceLookUp,
+    required String productName,
+    required double? priceRetail,
+    required double? offerRetail,
+    required double? priceWhole,
+    required double? offerWhole,
+    required double? priceECommerce,
+    required double? offerECommerce,
+  }) async {
+    _errorInsertConcurrentPrices = "";
+    _isLoadingInsertConcurrentPrices = false;
+    notifyListeners();
+
+    Map jsonInsertConcurrentPrices = _jsonInsertConcurrentPrices(
+      productCode: productCode,
+      priceLookUp: priceLookUp,
+      productName: productName,
+      priceRetail: priceRetail,
+      offerRetail: offerRetail,
+      priceWhole: priceWhole,
+      offerWhole: offerWhole,
+      priceECommerce: priceECommerce,
+      offerECommerce: offerECommerce,
+    );
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "json": json.encode(jsonInsertConcurrentPrices),
+        },
+        typeOfResponse: "InsertConcurrentProductResponse",
+        SOAPAction: "InsertConcurrentProduct",
+        serviceASMX: "CeltaResearchOfPriceService.asmx",
+      );
+
+      _errorInsertConcurrentPrices = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorInsertConcurrentPrices == "") {
+        // BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
+        //   responseAsString: SoapHelperResponseParameters.responseAsString,
+        //   listToAdd: _products,
+        // );
+      }
+    } catch (e) {
+      print("Erro para obter os produtos: $e");
+      _errorInsertConcurrentPrices =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoadingInsertConcurrentPrices = false;
+      notifyListeners();
+    }
   }
 }

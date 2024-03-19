@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../models/research_prices/research_prices.dart';
+import '../../providers/providers.dart';
 
 class ResearchPricesInsertPrices extends StatefulWidget {
-  const ResearchPricesInsertPrices({super.key});
+  final ResearchPricesProductsModel product;
+  const ResearchPricesInsertPrices({
+    required this.product,
+    super.key,
+  });
 
   @override
   State<ResearchPricesInsertPrices> createState() =>
@@ -65,7 +72,14 @@ class _ResearchPricesInsertPricesState
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ResearchPricesProvider researchPricesProvider = Provider.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Form(
@@ -120,6 +134,7 @@ class _ResearchPricesInsertPricesState
                 ),
               ],
             ),
+            const SizedBox(height: 10),
             ElevatedButton.icon(
               onPressed: () async {
                 bool isValid = _validateCanConfirmChanges();
@@ -128,11 +143,35 @@ class _ResearchPricesInsertPricesState
                     message: "Insira ao menos um preço para alterar",
                     context: context,
                   );
+                } else {
+                  ShowAlertDialog.showAlertDialog(
+                    context: context,
+                    title: "Confirmar preços",
+                    subtitle:
+                        "Deseja realmente confirmar os preços do concorrente?",
+                    function: () async {
+                      await researchPricesProvider.insertConcurrentPrices(
+                        productCode: widget.product.ProductPackingCode,
+                        priceLookUp: widget.product.PriceLookUp,
+                        productName: widget.product.ProductName,
+                        priceRetail:
+                            double.tryParse(_priceRetailController.text),
+                        offerRetail:
+                            double.tryParse(_offerRetailController.text),
+                        priceWhole: double.tryParse(_priceWholeController.text),
+                        offerWhole: double.tryParse(_offerWholeController.text),
+                        priceECommerce:
+                            double.tryParse(_priceEcommerceController.text),
+                        offerECommerce:
+                            double.tryParse(_offerEcommerceController.text),
+                      );
+                    },
+                  );
                 }
               },
               icon: const Icon(Icons.check),
               label: const Text(
-                "Confirmar preços",
+                "Confirmar preços do concorrente",
               ),
             ),
           ],

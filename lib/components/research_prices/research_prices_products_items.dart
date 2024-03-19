@@ -125,8 +125,6 @@ class _ResearchPricesProductsItemsState
     }
   }
 
-  final researchPricesInsertPrices = const ResearchPricesInsertPrices();
-
   Widget itemOfList({
     required int index,
     required ResearchPricesProvider researchPricesProvider,
@@ -134,6 +132,9 @@ class _ResearchPricesProductsItemsState
     ResearchPricesProductsModel product = widget.isAssociatedProducts
         ? researchPricesProvider.associatedsProducts[index]
         : researchPricesProvider.notAssociatedProducts[index];
+    final researchPricesInsertPrices =
+        ResearchPricesInsertPrices(product: product);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
