@@ -45,6 +45,7 @@ class _BuyRequestEnterprisesState extends State<BuyRequestEnterprises> {
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
     return SingleChildScrollView(
+    primary: false, 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: buyRequestProvider.enterprisesCount > 0

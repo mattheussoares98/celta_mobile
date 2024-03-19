@@ -20,6 +20,7 @@ class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
     AddressProvider addressProvider = Provider.of(context, listen: true);
 
     return SingleChildScrollView(
+    primary: false, 
       child: Column(
         children: [
           if (customerRegisterProvider.nameController.text.isNotEmpty)

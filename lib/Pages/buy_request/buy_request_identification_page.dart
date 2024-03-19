@@ -52,6 +52,7 @@ class _BuyRequestIdentificationPageState
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+    primary: false, 
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

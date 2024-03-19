@@ -17,6 +17,7 @@ class _ConfigurationsPageState extends State<ConfigurationsPage> {
         title: const Text("Configurações"),
       ),
       body: const SingleChildScrollView(
+    primary: false, 
         child: ConfigurationsCheckbox(
           showOnlyConfigurationOfSearch: false,
         ),

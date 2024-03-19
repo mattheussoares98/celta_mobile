@@ -61,6 +61,7 @@ class _CustomerRegisterTelephonePageState
         Provider.of(context, listen: true);
 
     return SingleChildScrollView(
+    primary: false, 
       child: Form(
         key: widget.telephoneFormKey,
         child: Column(

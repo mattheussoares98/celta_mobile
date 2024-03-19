@@ -95,6 +95,7 @@ class _AddressComponentState extends State<AddressComponent> {
   Widget build(BuildContext context) {
     AddressProvider addressProvider = Provider.of(context);
     return SingleChildScrollView(
+    primary: false, 
       child: Form(
         key: widget.adressFormKey,
         child: Column(

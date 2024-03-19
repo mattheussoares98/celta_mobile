@@ -57,6 +57,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
     return SingleChildScrollView(
+    primary: false, 
       child: Form(
         key: widget.emailFormKey,
         child: Column(

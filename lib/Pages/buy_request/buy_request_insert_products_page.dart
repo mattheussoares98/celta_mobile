@@ -47,6 +47,7 @@ class _BuyRequestInsertProductsPageState
     BuyRequestProvider buyRequestProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
     return SingleChildScrollView(
+    primary: false, 
       child: Column(
         children: [
           SearchWidget(

@@ -324,6 +324,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                           ),
                         ),
                         content: SingleChildScrollView(
+    primary: false, 
                           child: ConfigurationsCheckbox(
                             showOnlyConfigurationOfSearch:
                                 showOnlyConfigurationOfSearch,

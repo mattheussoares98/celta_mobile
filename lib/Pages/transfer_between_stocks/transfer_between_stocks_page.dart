@@ -85,6 +85,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
               ),
             ),
             body: SingleChildScrollView(
+    primary: false, 
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

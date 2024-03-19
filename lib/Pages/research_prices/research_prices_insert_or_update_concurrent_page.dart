@@ -82,6 +82,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
               ),
             ),
             body: SingleChildScrollView(
+    primary: false, 
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

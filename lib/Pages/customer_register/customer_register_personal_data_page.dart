@@ -74,6 +74,7 @@ class _CustomerRegisterPersonalDataPageState
     updateCpfCnpjEnabled();
 
     return SingleChildScrollView(
+    primary: false, 
       child: Form(
         key: widget.personFormKey,
         child: Column(

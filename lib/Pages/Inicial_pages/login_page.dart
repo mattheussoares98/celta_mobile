@@ -91,6 +91,7 @@ class _LoginPageState extends State<LoginPage>
           ),
           Center(
             child: SingleChildScrollView(
+    primary: false, 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

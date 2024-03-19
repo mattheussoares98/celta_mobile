@@ -164,6 +164,7 @@ class TechnicalSupportPage extends StatelessWidget {
         title: const Text("Entrar em contato"),
       ),
       body: SingleChildScrollView(
+    primary: false, 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

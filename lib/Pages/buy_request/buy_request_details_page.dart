@@ -95,6 +95,7 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
       children: [
         Expanded(
           child: SingleChildScrollView(
+    primary: false, 
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
