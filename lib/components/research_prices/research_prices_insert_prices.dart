@@ -20,11 +20,6 @@ class _ResearchPricesInsertPricesState
     return Flexible(
       child: TextFormField(
         key: key,
-        onChanged: (_) {
-          setState(() {
-            _canConfirmChanges = _validateCanConfirmChanges();
-          });
-        },
         controller: textEditingController,
         decoration: FormFieldHelper.decoration(
           isLoading: false,
@@ -58,8 +53,6 @@ class _ResearchPricesInsertPricesState
   final _offerWholeController = TextEditingController();
   final _priceEcommerceController = TextEditingController();
   final _offerEcommerceController = TextEditingController();
-
-  bool _canConfirmChanges = false;
 
   bool _validateCanConfirmChanges() {
     return _priceRetailController.text.isNotEmpty ||
@@ -128,14 +121,18 @@ class _ResearchPricesInsertPricesState
               ],
             ),
             ElevatedButton.icon(
-              onPressed: _canConfirmChanges
-                  ? () async {
-                      _formKey.currentState!.validate();
-                    }
-                  : null,
+              onPressed: () async {
+                bool isValid = _validateCanConfirmChanges();
+                if (!isValid) {
+                  ShowSnackbarMessage.showMessage(
+                    message: "Insira ao menos um preço para alterar",
+                    context: context,
+                  );
+                }
+              },
               icon: const Icon(Icons.check),
-              label: Text(
-                _canConfirmChanges ? "Confirmar preços" : "Insira algum preço",
+              label: const Text(
+                "Confirmar preços",
               ),
             ),
           ],
