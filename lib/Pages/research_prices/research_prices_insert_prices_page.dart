@@ -110,7 +110,7 @@ class _ResearchPricesInsertPricesPageState
       child: Column(
         children: [
           SearchWidget(
-            showOnlyConfigurationOfSearch: true,
+            showConfigurationsIcon: false,
             consultProductController: widget.searchProductController,
             isLoading: false,
             autofocus: false,
