@@ -138,42 +138,49 @@ class _ResearchPricesProductsItemsState
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
-          onTap: () {
-            if (_selectedIndex == index) {
-              setState(() {
-                _selectedIndex = -1;
-              });
-            } else {
-              setState(() {
-                _selectedIndex = index;
-              });
-            }
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Produto",
-                value: product.ProductName,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "PLU",
-                value: product.PriceLookUp.toString(),
-                otherWidget: Icon(
-                  _selectedIndex == index
-                      ? Icons.arrow_drop_up_sharp
-                      : Icons.arrow_drop_down,
-                  color: Theme.of(context).colorScheme.primary,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TitleAndSubtitle.titleAndSubtitle(
+              title: "Produto",
+              value: product.ProductName,
+            ),
+            TitleAndSubtitle.titleAndSubtitle(
+              title: "PLU",
+              value: product.PriceLookUp.toString(),
+              otherWidget: TextButton(
+                onPressed: () {
+                  if (_selectedIndex == index) {
+                    setState(() {
+                      _selectedIndex = -1;
+                    });
+                  } else {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  }
+                },
+                child: Row(
+                  children: [
+                    Text(
+                     _selectedIndex != index ? "Inserir preços" : "Minimizar preços",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    Icon(
+                      _selectedIndex == index
+                          ? Icons.arrow_drop_up_sharp
+                          : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ],
                 ),
               ),
-              if (_selectedIndex == index) researchPricesInsertPrices,
-            ],
-          ),
+            ),
+            if (_selectedIndex == index) researchPricesInsertPrices,
+          ],
         ),
       ),
     );

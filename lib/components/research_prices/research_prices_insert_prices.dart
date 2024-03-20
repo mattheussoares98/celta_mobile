@@ -119,7 +119,7 @@ class _ResearchPricesInsertPricesState
             Row(
               children: [
                 personalizedField(
-                  label: "Preço venda",
+                  label: "Venda",
                   textEditingController: _priceRetailController,
                   key: _priceRetailKey,
                 ),
@@ -135,13 +135,13 @@ class _ResearchPricesInsertPricesState
             Row(
               children: [
                 personalizedField(
-                  label: "Preço atacado",
+                  label: "Atacado",
                   textEditingController: _priceWholeController,
                   key: _priceWholeKey,
                 ),
                 const SizedBox(width: 10),
                 personalizedField(
-                  label: "Atacado oferta",
+                  label: "Atacado (oferta)",
                   textEditingController: _offerWholeController,
                   key: _offerWholeKey,
                 ),
