@@ -354,7 +354,15 @@ class ResearchPricesProvider with ChangeNotifier {
 
       if (_errorGetConcurrents == "") {
         _concurrents.addAll(
-          ResearchPricesConcurrentsModel.convertResultToListOfConcurrents(),
+          ResearchPricesConcurrentsModel.convertResultToListOfConcurrents()
+              .where(
+            (newConcurrent) => !_concurrents.any(
+              (concurrent) =>
+                  //adiciona o concorrente somente se não houver um com o mesmo
+                  //código
+                  concurrent.ConcurrentCode == newConcurrent.ConcurrentCode,
+            ),
+          ),
         );
       }
     } catch (e) {
