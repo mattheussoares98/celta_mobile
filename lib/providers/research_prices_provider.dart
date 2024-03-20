@@ -545,6 +545,7 @@ class ResearchPricesProvider with ChangeNotifier {
     required int productCode,
     required String priceLookUp,
     required String productName,
+    required BuildContext context,
     required double? priceRetail,
     required double? offerRetail,
     required double? priceWhole,
@@ -553,7 +554,7 @@ class ResearchPricesProvider with ChangeNotifier {
     required double? offerECommerce,
   }) async {
     _errorInsertConcurrentPrices = "";
-    _isLoadingInsertConcurrentPrices = false;
+    _isLoadingInsertConcurrentPrices = true;
     notifyListeners();
 
     Map jsonInsertConcurrentPrices = _jsonInsertConcurrentPrices(
@@ -571,7 +572,7 @@ class ResearchPricesProvider with ChangeNotifier {
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "json": json.encode(jsonInsertConcurrentPrices),
+          "json": [json.encode(jsonInsertConcurrentPrices)],
         },
         typeOfResponse: "InsertConcurrentProductResponse",
         SOAPAction: "InsertConcurrentProduct",
@@ -579,13 +580,6 @@ class ResearchPricesProvider with ChangeNotifier {
       );
 
       _errorInsertConcurrentPrices = SoapHelperResponseParameters.errorMessage;
-
-      if (_errorInsertConcurrentPrices == "") {
-        // BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
-        //   responseAsString: SoapHelperResponseParameters.responseAsString,
-        //   listToAdd: _products,
-        // );
-      }
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorInsertConcurrentPrices =

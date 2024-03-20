@@ -63,13 +63,13 @@ class _ResearchPricesInsertPricesState
   final _offerEcommerceController = TextEditingController();
 
   bool _validateCanConfirmChanges() {
-    return _priceRetailController.text.isNotEmpty ||
-        _offerRetailController.text.isNotEmpty ||
-        _priceWholeController.text.isNotEmpty ||
-        _offerWholeController.text.isNotEmpty ||
-        _priceEcommerceController.text.isNotEmpty ||
-        _offerEcommerceController.text.isNotEmpty &&
-            _formKey.currentState!.validate();
+    return (_priceRetailController.text.isNotEmpty ||
+            _offerRetailController.text.isNotEmpty ||
+            _priceWholeController.text.isNotEmpty ||
+            _offerWholeController.text.isNotEmpty ||
+            _priceEcommerceController.text.isNotEmpty ||
+            _offerEcommerceController.text.isNotEmpty) &&
+        _formKey.currentState!.validate();
   }
 
   void _updateControllers() {
@@ -169,7 +169,7 @@ class _ResearchPricesInsertPricesState
                 bool isValid = _validateCanConfirmChanges();
                 if (!isValid) {
                   ShowSnackbarMessage.showMessage(
-                    message: "Insira ao menos um preço para alterar",
+                    message: "Insira os preços corretamente!",
                     context: context,
                   );
                 } else {
@@ -180,6 +180,7 @@ class _ResearchPricesInsertPricesState
                         "Deseja realmente confirmar os preços do concorrente?",
                     function: () async {
                       await researchPricesProvider.insertConcurrentPrices(
+                        context: context,
                         productCode: widget.product.ProductPackingCode,
                         priceLookUp: widget.product.PriceLookUp,
                         productName: widget.product.ProductName,
@@ -194,6 +195,16 @@ class _ResearchPricesInsertPricesState
                         offerECommerce:
                             double.tryParse(_offerEcommerceController.text),
                       );
+
+                      if (researchPricesProvider.errorInsertConcurrentPrices ==
+                          "") {
+                        ShowSnackbarMessage.showMessage(
+                          message: "Preços inseridos com sucesso!",
+                          context: context,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                        );
+                      }
                     },
                   );
                 }
