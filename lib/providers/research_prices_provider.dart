@@ -488,6 +488,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
   Future<void> getNotAssociatedProducts({
     required String searchProductControllerText,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _errorGetNotAssociatedsProducts = "";
     _isLoadingGetProducts = true;
@@ -498,6 +499,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
       "SearchValue": searchProductControllerText,
+      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,

@@ -163,7 +163,9 @@ class _ResearchPricesProductsItemsState
                 child: Row(
                   children: [
                     Text(
-                     _selectedIndex != index ? "Inserir preços" : "Minimizar preços",
+                      _selectedIndex != index
+                          ? "Inserir preços"
+                          : "Minimizar preços",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontStyle: FontStyle.italic,
@@ -209,7 +211,9 @@ class _ResearchPricesProductsItemsState
               itemCount: productsCount,
               itemBuilder: (context, index) {
                 if (productsCount == 1) {
-                  _selectedIndex = index;
+                  setState(() {
+                    _selectedIndex = index;
+                  });
                 }
 
                 final startIndex = index * itensPerLine;

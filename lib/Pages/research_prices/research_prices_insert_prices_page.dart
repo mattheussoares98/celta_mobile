@@ -109,6 +109,7 @@ class _ResearchPricesInsertPricesPageState
     } else {
       await researchPricesProvider.getNotAssociatedProducts(
         searchProductControllerText: searchValue,
+        configurationsProvider: configurationsProvider,
       );
     }
 
