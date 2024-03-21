@@ -50,7 +50,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     required AddressProvider addressProvider,
   }) async {
     bool? isValid = _formKey.currentState?.validate();
-    if(isValid == false) return;
+    if (isValid == false) return;
 
     ShowAlertDialog.showAlertDialog(
         context: context,
@@ -100,7 +100,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
       children: [
         PopScope(
           onPopInvoked: ((didPop) {
-            researchPricesProvider.updateSelectedConcurrent(null);
+            researchPricesProvider.updateSelectedConcurrent(concurrent: null);
             addressProvider.clearAddresses();
             addressProvider.clearAddressControllers(clearCep: true);
           }),
@@ -113,20 +113,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                       : "Alterar concorrente (${researchPricesProvider.selectedConcurrent!.ConcurrentCode})",
                 ),
               ),
-              leading: IconButton(
-                onPressed: researchPricesProvider
-                        .isLoadingAddOrUpdateConcurrents
-                    ? null
-                    : () {
-                        researchPricesProvider.updateSelectedConcurrent(null);
-                        addressProvider.clearAddresses();
-                        addressProvider.clearAddressControllers(clearCep: true);
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back,
-                ),
-              ),
             ),
             body: SingleChildScrollView(
               primary: false,
@@ -137,7 +123,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                   child: Column(
                     children: [
                       TextFormField(
-                        autofocus: true,
+                        autofocus: false,
                         focusNode: _nameFocusNode,
                         enabled: !researchPricesProvider
                             .isLoadingAddOrUpdateConcurrents,
@@ -182,22 +168,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                         },
                         style: FormFieldHelper.style(),
                       ),
-                      if (researchPricesProvider
-                                  .selectedConcurrent?.Address!.Zip !=
-                              "" &&
-                          researchPricesProvider
-                                  .selectedConcurrent?.Address!.Zip !=
-                              null)
-                        Column(
-                          children: [
-                            const SizedBox(height: 15),
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "Endereço cadastrado",
-                              value:
-                                  "${researchPricesProvider.selectedConcurrent?.Address!.Address.toString()}, ${researchPricesProvider.selectedConcurrent?.Address!.District}, ${researchPricesProvider.selectedConcurrent?.Address!.City}, ${researchPricesProvider.selectedConcurrent?.Address!.Number}. \nCEP: ${researchPricesProvider.selectedConcurrent?.Address!.Zip}",
-                            ),
-                          ],
-                        ),
                       const SizedBox(height: 15),
                       Column(
                         children: [

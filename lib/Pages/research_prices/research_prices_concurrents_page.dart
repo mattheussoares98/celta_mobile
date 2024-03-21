@@ -43,6 +43,7 @@ class _ResearchPricesConcurrentsPageState
       canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents &&
           !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
       onPopInvoked: (_) async {
+        researchPricesProvider.updateSelectedConcurrent(concurrent: null);
         researchPricesProvider.clearConcurrents();
       },
       child: Stack(
@@ -52,19 +53,6 @@ class _ResearchPricesConcurrentsPageState
               title: FittedBox(
                 child: Text(
                   'CONCORRENTES - pesquisa(${researchPricesProvider.selectedResearch!.Code})',
-                ),
-              ),
-              leading: IconButton(
-                onPressed: researchPricesProvider.isLoadingGetConcurrents ||
-                        researchPricesProvider.isLoadingAddOrUpdateOfResearch
-                    ? null
-                    : () {
-                        researchPricesProvider.updateSelectedConcurrent(null);
-                        researchPricesProvider.clearConcurrents();
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
                 ),
               ),
             ),
@@ -132,7 +120,7 @@ class _ResearchPricesConcurrentsPageState
                         errorMessage:
                             researchPricesProvider.errorGetConcurrents),
                   ),
-                if (!researchPricesProvider.isLoadingGetConcurrents)
+if (!researchPricesProvider.isLoadingGetConcurrents)
                   const ConcurrentsItems(),
               ],
             ),
@@ -144,7 +132,9 @@ class _ResearchPricesConcurrentsPageState
                   researchPricesProvider.isLoadingAddOrUpdateOfResearch,
               messageButton: "criar\nconcorrente".toUpperCase(),
               onTap: () {
-                researchPricesProvider.updateSelectedConcurrent(null);
+                researchPricesProvider.updateSelectedConcurrent(
+                  concurrent: null,
+                );
                 Navigator.of(context).pushNamed(
                     APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT);
               },

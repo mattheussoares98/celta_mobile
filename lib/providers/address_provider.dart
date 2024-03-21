@@ -102,7 +102,7 @@ class AddressProvider with ChangeNotifier {
     return "null"; // Valor não encontrado
   }
 
-  void addAddress() {
+  void addAddress({AddressModel? addressModel}) {
     _errorMessageAddAddres = "";
     _addresses.forEach((element) {
       if (element.Zip == cepController.text &&
@@ -112,16 +112,20 @@ class AddressProvider with ChangeNotifier {
     });
 
     if (_errorMessageAddAddres == "") {
-      _addresses.add(AddressModel(
-        Address: addressController.text,
-        City: cityController.text,
-        Complement: complementController.text,
-        District: districtController.text,
-        Number: numberController.text,
-        Reference: referenceController.text,
-        Zip: cepController.text,
-        State: _getKeyByValue(selectedStateDropDown.value!),
-      ));
+      if (addressModel != null) {
+        _addresses.add(addressModel);
+      } else {
+        _addresses.add(AddressModel(
+          Address: addressController.text,
+          City: cityController.text,
+          Complement: complementController.text,
+          District: districtController.text,
+          Number: numberController.text,
+          Reference: referenceController.text,
+          Zip: cepController.text,
+          State: _getKeyByValue(selectedStateDropDown.value!),
+        ));
+      }
 
       addressController.text = "";
       cityController.text = "";

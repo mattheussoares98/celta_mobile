@@ -19,6 +19,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
   Widget itemOfList({
     required int index,
     required ResearchPricesProvider researchPricesProvider,
+    required AddressProvider addressProvider,
   }) {
     ResearchPricesConcurrentsModel concurrent =
         researchPricesProvider.concurrents[index];
@@ -31,7 +32,10 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
         splashColor: Colors.white.withOpacity(0),
         highlightColor: Colors.white.withOpacity(0),
         onTap: () async {
-          researchPricesProvider.updateSelectedConcurrent(concurrent);
+          researchPricesProvider.updateSelectedConcurrent(
+            concurrent: concurrent,
+            addressProvider: addressProvider,
+          );
           await researchPricesProvider.associateConcurrentToResearchPrice(
             context: context,
             enterpriseCode: arguments?["enterpriseCode"],
@@ -99,7 +103,10 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                 ),
                 TextButton.icon(
                   onPressed: () {
-                    researchPricesProvider.updateSelectedConcurrent(concurrent);
+                    researchPricesProvider.updateSelectedConcurrent(
+                      concurrent: concurrent,
+                      addressProvider: addressProvider,
+                    );
                     Navigator.of(context).pushNamed(
                       APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT,
                       arguments: {
@@ -127,6 +134,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider =
         Provider.of(context, listen: true);
+    AddressProvider addressProvider = Provider.of(context, listen: true);
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
     int concurrentsCount = researchPricesProvider.concurrentsCount;
 
@@ -151,6 +159,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                     child: itemOfList(
                       index: i,
                       researchPricesProvider: researchPricesProvider,
+                      addressProvider: addressProvider,
                     ),
                   ),
               ],

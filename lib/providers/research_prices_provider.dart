@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:celta_inventario/models/address/address.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
@@ -70,8 +71,13 @@ class ResearchPricesProvider with ChangeNotifier {
 
   ResearchPricesConcurrentsModel? _selectedConcurrent;
   ResearchPricesConcurrentsModel? get selectedConcurrent => _selectedConcurrent;
-  updateSelectedConcurrent(ResearchPricesConcurrentsModel? concurrent) {
+  updateSelectedConcurrent({
+    required ResearchPricesConcurrentsModel? concurrent,
+    AddressProvider? addressProvider,
+  }) {
     _selectedConcurrent = concurrent;
+
+    _addConcurrentAddressInAddressProvider(addressProvider);
   }
 
   void clearResearchPrices() {
@@ -87,7 +93,7 @@ class ResearchPricesProvider with ChangeNotifier {
     _errorAddOrUpdateConcurrents = "";
     _errorGetConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = false;
-    updateSelectedConcurrent(null);
+    updateSelectedConcurrent(concurrent: null);
   }
 
   bool _concurrentAlreadyIsAssociated() {
@@ -267,28 +273,28 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // void _addConcurrentAddressInAddressProvider(AddressProvider addressProvider) {
-  //   if (_selectedConcurrent?.Address != null) {
-  //     addressProvider.addressController.text =
-  //         _selectedConcurrent!.Address!.Address ?? "";
-  //     addressProvider.cityController.text =
-  //         _selectedConcurrent!.Address!.City ?? "";
-  //     addressProvider.complementController.text =
-  //         _selectedConcurrent!.Address!.Complement ?? "";
-  //     addressProvider.districtController.text =
-  //         _selectedConcurrent!.Address!.District ?? "";
-  //     addressProvider.numberController.text =
-  //         _selectedConcurrent!.Address!.Number ?? "";
-  //     addressProvider.referenceController.text =
-  //         _selectedConcurrent!.Address!.Reference ?? "";
-  //     addressProvider.cepController.text =
-  //         _selectedConcurrent!.Address!.Zip ?? "";
-  //     addressProvider.selectedStateDropDown =
-  //         ValueNotifier<String?>(_selectedConcurrent!.Address!.State);
+  void _addConcurrentAddressInAddressProvider(
+    AddressProvider? addressProvider,
+  ) {
+    if (_selectedConcurrent?.Address == null) return;
+    if (_selectedConcurrent?.Address?.Zip?.isEmpty == true) return;
+    //todo endereço precisa de um CEP. Se estiver vazio, não tem endereço no
+    //concorrente
 
-  //     addressProvider.addAddress();
-  //   }
-  // }
+    final addressModel = AddressModel(
+      Zip: _selectedConcurrent!.Address?.Zip,
+      Address: _selectedConcurrent!.Address?.Address,
+      Number: _selectedConcurrent!.Address?.Number,
+      District: _selectedConcurrent!.Address?.District,
+      City: _selectedConcurrent!.Address?.City,
+      State: _selectedConcurrent!.Address?.State,
+      Complement: _selectedConcurrent!.Address?.Complement,
+      Reference: _selectedConcurrent!.Address?.Reference,
+    );
+
+    addressProvider?.clearAddresses();
+    addressProvider?.addAddress(addressModel: addressModel);
+  }
 
   void _updateLocalSelectedConcurrent({
     String? name,
