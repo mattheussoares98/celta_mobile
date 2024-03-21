@@ -9,9 +9,11 @@ import '../../utils/utils.dart';
 class ResearchPricesInsertPricesPage extends StatefulWidget {
   final bool isAssociatedProducts;
   final TextEditingController searchProductController;
+  final bool keyboardIsClosed;
   const ResearchPricesInsertPricesPage({
     required this.isAssociatedProducts,
     required this.searchProductController,
+    required this.keyboardIsClosed,
     Key? key,
   }) : super(key: key);
 
@@ -70,6 +72,16 @@ class _ResearchPricesInsertPricesPageState
     return false;
   }
 
+  String _withPricesDescription() {
+    if (!widget.isAssociatedProducts) return "Consultar todos";
+    //Null (Todos os produtos)
+    if (_isAll == true) return "Consultar todos";
+    //True (Somente com preços informados)
+    if (_withCounts == true) return "Consultar todos COM preços informados";
+    //False (Somente sem preços informados)
+    return "Consultar todos SEM preços informados";
+  }
+
   String errorMessage(
     ResearchPricesProvider researchPricesProvider,
   ) {
@@ -80,18 +92,19 @@ class _ResearchPricesInsertPricesPageState
     }
   }
 
-  Future<void> _getProducts(
-    ResearchPricesProvider researchPricesProvider,
-  ) async {
+  Future<void> _getProducts({
+    required ResearchPricesProvider researchPricesProvider,
+    required String searchValue,
+  }) async {
     if (widget.isAssociatedProducts) {
       await researchPricesProvider.getAssociatedProducts(
-        searchProductControllerText: widget.searchProductController.text,
+        searchProductControllerText: searchValue,
         context: context,
         withPrices: _withPricesOption(),
       );
     } else {
       await researchPricesProvider.getNotAssociatedProducts(
-        searchProductControllerText: widget.searchProductController.text,
+        searchProductControllerText: searchValue,
       );
     }
 
@@ -115,7 +128,10 @@ class _ResearchPricesInsertPricesPageState
             isLoading: false,
             autofocus: false,
             onPressSearch: () async {
-              await _getProducts(researchPricesProvider);
+              await _getProducts(
+                researchPricesProvider: researchPricesProvider,
+                searchValue: widget.searchProductController.text,
+              );
             },
             focusNodeConsultProduct: FocusNode(),
           ),
@@ -132,36 +148,36 @@ class _ResearchPricesInsertPricesPageState
             ErrorMessage(
               errorMessage: errorMessage(researchPricesProvider),
             ),
-          if (!researchPricesProvider.isLoadingGetProducts)
-            ResearchPricesProductsItems(
-                isAssociatedProducts: widget.isAssociatedProducts,
-                consultedProductController: widget.searchProductController,
-                getProductsWithCamera: () async {
-                  FocusScope.of(context).unfocus();
-                  _clearSearchProductController(researchPricesProvider);
+          ResearchPricesProductsItems(
+              isAssociatedProducts: widget.isAssociatedProducts,
+              consultedProductController: widget.searchProductController,
+              getProductsWithCamera: () async {
+                FocusScope.of(context).unfocus();
+                _clearSearchProductController(researchPricesProvider);
 
-                  widget.searchProductController.text =
-                      await ScanBarCode.scanBarcode(context);
+                widget.searchProductController.text =
+                    await ScanBarCode.scanBarcode(context);
 
-                  if (widget.searchProductController.text == "") {
-                    return;
-                  }
+                if (widget.searchProductController.text == "") {
+                  return;
+                }
 
-                  await researchPricesProvider.getAssociatedProducts(
-                    searchProductControllerText:
-                        widget.searchProductController.text,
-                    context: context,
-                    withPrices: _withPricesOption(),
-                  );
-
-                  if (widget.isAssociatedProducts &&
-                      researchPricesProvider.associatedsProductsCount > 0) {
-                    _clearSearchProductController(researchPricesProvider);
-                  } else if (!widget.isAssociatedProducts &&
-                      researchPricesProvider.notAssociatedProductsCount > 0) {
-                    _clearSearchProductController(researchPricesProvider);
-                  }
-                }),
+                await _getProducts(
+                  researchPricesProvider: researchPricesProvider,
+                  searchValue: widget.searchProductController.text,
+                );
+              }),
+          if (widget.keyboardIsClosed)
+            //usando o mediaquery nessa página aqui não funciona
+            getAllProductsButton(
+              typeOfFilterSearch: _withPricesDescription(),
+              getProducts: () async {
+                await _getProducts(
+                  researchPricesProvider: researchPricesProvider,
+                  searchValue: "%",
+                );
+              },
+            ),
         ],
       ),
     );

@@ -54,10 +54,12 @@ class _ResearchPricesProductsPageState
       ResearchPricesInsertPricesPage(
         isAssociatedProducts: true,
         searchProductController: _searchAssociatedsProductsController,
+        keyboardIsClosed: MediaQuery.of(context).viewInsets.bottom == 0,
       ),
       ResearchPricesInsertPricesPage(
         isAssociatedProducts: false,
         searchProductController: _searchNotAssociatedsProductsController,
+         keyboardIsClosed: MediaQuery.of(context).viewInsets.bottom == 0,
       ),
     ];
 
@@ -100,14 +102,14 @@ class _ResearchPricesProductsPageState
                     Icons.manage_search,
                     size: 35,
                   ),
-                  label: 'Associados',
+                  label: 'Associados à pesquisa',
                 ),
                 const BottomNavigationBarItem(
                   icon: Icon(
                     Icons.search,
                     size: 35,
                   ),
-                  label: 'Não associados',
+                  label: 'Não associados à pesquisa',
                 ),
               ],
               currentIndex: _selectedIndex,
