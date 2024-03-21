@@ -202,6 +202,18 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void _updateLocalSelectedResearch({
+    String? name,
+    String? observation,
+  }) {
+    int index = _researchPrices.indexOf(_selectedResearch!);
+
+    if (index != -1) {
+      _researchPrices[index].Name = name;
+      _researchPrices[index].Observation = observation;
+    }
+  }
+
   Future<void> addOrUpdateResearchOfPrice({
     required BuildContext context,
     required int enterpriseCode,
@@ -244,12 +256,7 @@ class ResearchPricesProvider with ChangeNotifier {
         //só precisa alterar a pesquisa se houver alguma selecionada. Se não
         //houver uma pesquisa selecionada, significa que está cadastrando uma
         //nova e por isso não precisa alterar
-        int index = _researchPrices.indexOf(_selectedResearch!);
-
-        if (index != -1) {
-          _researchPrices[index].Name = name;
-          _researchPrices[index].Observation = observation;
-        }
+        _updateLocalSelectedResearch(name: name, observation: observation);
       }
     } catch (e) {
       print(e.toString());
@@ -260,11 +267,49 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // void _addConcurrentAddressInAddressProvider(AddressProvider addressProvider) {
+  //   if (_selectedConcurrent?.Address != null) {
+  //     addressProvider.addressController.text =
+  //         _selectedConcurrent!.Address!.Address ?? "";
+  //     addressProvider.cityController.text =
+  //         _selectedConcurrent!.Address!.City ?? "";
+  //     addressProvider.complementController.text =
+  //         _selectedConcurrent!.Address!.Complement ?? "";
+  //     addressProvider.districtController.text =
+  //         _selectedConcurrent!.Address!.District ?? "";
+  //     addressProvider.numberController.text =
+  //         _selectedConcurrent!.Address!.Number ?? "";
+  //     addressProvider.referenceController.text =
+  //         _selectedConcurrent!.Address!.Reference ?? "";
+  //     addressProvider.cepController.text =
+  //         _selectedConcurrent!.Address!.Zip ?? "";
+  //     addressProvider.selectedStateDropDown =
+  //         ValueNotifier<String?>(_selectedConcurrent!.Address!.State);
+
+  //     addressProvider.addAddress();
+  //   }
+  // }
+
+  void _updateLocalSelectedConcurrent({
+    String? name,
+    String? observation,
+    required AddressProvider addressProvider,
+  }) {
+    int index = _concurrents.indexOf(_selectedConcurrent!);
+    if (index == -1) return;
+
+    _concurrents[index].Name = name;
+    _concurrents[index].Observation = observation;
+    if (addressProvider.addresses.isNotEmpty) {
+      _concurrents[index].Address = addressProvider.addresses[0];
+    }
+  }
+
   Future<void> addOrUpdateConcurrent({
     required BuildContext context,
     required AddressProvider addressProvider,
     required String concurrentName,
-    required String observation,
+    String? observation,
   }) async {
     _errorAddOrUpdateConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = true;
@@ -277,14 +322,6 @@ class ResearchPricesProvider with ChangeNotifier {
       "Name": concurrentName,
       "Observation": observation,
     };
-    if (addressProvider.addressesCount > 0) {
-      //significa que adicionou um endereço e por isso precisa enviar o que foi adicionado
-      jsonBody["Address"] = addressProvider.addresses[0].toJson();
-    } else if (_selectedConcurrent?.Address.Zip != null &&
-        //se o usuário tem um endereço, o ideal é mandar o mesmo endereço de novo. Se mandar sem a tag de endereço da erro
-        _selectedConcurrent?.Address.Zip != "") {
-      jsonBody["Address"] = _selectedConcurrent!.Address.toJson();
-    }
 
     try {
       await SoapHelper.soapPost(
@@ -295,6 +332,14 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "InsertUpdateConcurrentJsonResult",
       );
       _errorAddOrUpdateConcurrents = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorAddOrUpdateConcurrents == "") {
+        _updateLocalSelectedConcurrent(
+          addressProvider: addressProvider,
+          name: concurrentName,
+          observation: observation,
+        );
+      }
     } catch (e) {
       _errorAddOrUpdateConcurrents =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -305,10 +350,7 @@ class ResearchPricesProvider with ChangeNotifier {
         backgroundColor: Colors.green,
         context: context,
       );
-      await getConcurrents(
-        searchConcurrentControllerText: "%",
-        getAllConcurrents: true,
-      );
+
       _selectedConcurrent = null;
     } else {
       ShowSnackbarMessage.showMessage(

@@ -26,10 +26,10 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
 
     return Container(
       child: InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+        focusColor: Colors.white.withOpacity(0),
+        hoverColor: Colors.white.withOpacity(0),
+        splashColor: Colors.white.withOpacity(0),
+        highlightColor: Colors.white.withOpacity(0),
         onTap: () async {
           researchPricesProvider.updateSelectedConcurrent(concurrent);
           await researchPricesProvider.associateConcurrentToResearchPrice(
@@ -80,18 +80,22 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Nome",
-                  value: concurrent.Name,
+                  value: concurrent.Name?.isEmpty == false
+                      ? concurrent.Name
+                      : "Não há",
                 ),
-                if(concurrent.Observation.isNotEmpty)
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Observação",
-                  value: concurrent.Observation,
+                  value: concurrent.Observation?.isNotEmpty == true
+                      ? concurrent.Observation
+                      : "Não há",
                 ),
+
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Endereços",
-                  value: concurrent.Address.Zip?.isEmpty == true
+                  value: concurrent.Address?.Zip?.isEmpty == true
                       ? "Nenhum informado"
-                      : "${concurrent.Address.Address.toString()}, ${concurrent.Address.District}, ${concurrent.Address.City}, ${concurrent.Address.Number}. \nCEP: ${concurrent.Address.Zip}",
+                      : "${concurrent.Address!.Address.toString()}, ${concurrent.Address!.District}, ${concurrent.Address!.City}, ${concurrent.Address!.Number}. \nCEP: ${concurrent.Address!.Zip}",
                 ),
                 TextButton.icon(
                   onPressed: () {

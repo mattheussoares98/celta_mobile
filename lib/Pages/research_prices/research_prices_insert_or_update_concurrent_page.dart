@@ -15,16 +15,16 @@ class ResearchPricesInsertOrUpdateConcurrentPage extends StatefulWidget {
 
 class _ResearchPricesInsertOrUpdateConcurrentPageState
     extends State<ResearchPricesInsertOrUpdateConcurrentPage> {
-  FocusNode nameFocusNode = FocusNode();
-  TextEditingController nameController = TextEditingController();
+  FocusNode _nameFocusNode = FocusNode();
+  TextEditingController _nameController = TextEditingController();
 
-  FocusNode observationFocusNode = FocusNode();
-  TextEditingController observationController = TextEditingController();
+  FocusNode _observationFocusNode = FocusNode();
+  TextEditingController _observationController = TextEditingController();
 
   void _updateControllers(ResearchPricesConcurrentsModel? concurrent) {
     if (concurrent != null) {
-      observationController.text = concurrent.Observation;
-      nameController.text = concurrent.Name;
+      _observationController.text = concurrent.Observation ?? "";
+      _nameController.text = concurrent.Name ?? "";
     }
   }
 
@@ -43,6 +43,53 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   }
 
   GlobalKey<FormState> _adressFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<void> _addOrUpdateConcurrent({
+    required ResearchPricesProvider researchPricesProvider,
+    required AddressProvider addressProvider,
+  }) async {
+    bool? isValid = _formKey.currentState?.validate();
+    if(isValid == false) return;
+
+    ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: researchPricesProvider.selectedConcurrent == null
+            ? "Cadastrar concorrente"
+            : "Alterar concorrente",
+        subtitle: researchPricesProvider.selectedConcurrent == null
+            ? "Deseja realmente cadastrar o concorrente com os dados informados?"
+            : "Deseja realmente alterar o concorrente com os dados informados?",
+        function: () async {
+          await researchPricesProvider.addOrUpdateConcurrent(
+            context: context,
+            addressProvider: addressProvider,
+            concurrentName: _nameController.text,
+            observation: _observationController.text,
+          );
+
+          if (researchPricesProvider.errorAddOrUpdateConcurrents == "") {
+            addressProvider.clearAddresses();
+            _nameController.clear();
+            _observationController.clear();
+            Navigator.of(context).pop();
+          } else {
+            ShowSnackbarMessage.showMessage(
+              message: researchPricesProvider.errorAddOrUpdateConcurrents,
+              context: context,
+            );
+          }
+        });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameFocusNode.dispose();
+    _nameController.dispose();
+    _observationFocusNode.dispose();
+    _observationController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,167 +129,152 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
               ),
             ),
             body: SingleChildScrollView(
-    primary: false, 
+              primary: false,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      autofocus: true,
-                      focusNode: nameFocusNode,
-                      enabled: !researchPricesProvider
-                          .isLoadingAddOrUpdateConcurrents,
-                      controller: nameController,
-                      decoration: FormFieldHelper.decoration(
-                        isLoading: researchPricesProvider
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        autofocus: true,
+                        focusNode: _nameFocusNode,
+                        enabled: !researchPricesProvider
                             .isLoadingAddOrUpdateConcurrents,
-                        context: context,
-                        labelText: 'Nome',
+                        controller: _nameController,
+                        decoration: FormFieldHelper.decoration(
+                          isLoading: researchPricesProvider
+                              .isLoadingAddOrUpdateConcurrents,
+                          context: context,
+                          labelText: 'Nome',
+                        ),
+                        validator: (value) {
+                          if (value == null) {
+                            return "Digite o nome!";
+                          } else if (value.isEmpty) {
+                            return "Digite o nome!";
+                          } else if (value.length < 3) {
+                            return "Mínimo de 3 caracteres";
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).requestFocus(
+                            _observationFocusNode,
+                          );
+                        },
+                        style: FormFieldHelper.style(),
                       ),
-                      onFieldSubmitted: (_) async {
-                        FocusScope.of(context).requestFocus(
-                          observationFocusNode,
-                        );
-                      },
-                      style: FormFieldHelper.style(),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      focusNode: observationFocusNode,
-                      enabled: !researchPricesProvider
-                          .isLoadingAddOrUpdateConcurrents,
-                      controller: observationController,
-                      decoration: FormFieldHelper.decoration(
-                        isLoading: researchPricesProvider
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        focusNode: _observationFocusNode,
+                        enabled: !researchPricesProvider
                             .isLoadingAddOrUpdateConcurrents,
-                        context: context,
-                        labelText: 'Observação',
+                        controller: _observationController,
+                        decoration: FormFieldHelper.decoration(
+                          isLoading: researchPricesProvider
+                              .isLoadingAddOrUpdateConcurrents,
+                          context: context,
+                          labelText: 'Observação',
+                        ),
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).requestFocus();
+                        },
+                        style: FormFieldHelper.style(),
                       ),
-                      onFieldSubmitted: (_) async {
-                        FocusScope.of(context).requestFocus();
-                      },
-                      style: FormFieldHelper.style(),
-                    ),
-                    if (researchPricesProvider
-                                .selectedConcurrent?.Address.Zip !=
-                            "" &&
-                        researchPricesProvider
-                                .selectedConcurrent?.Address.Zip !=
-                            null)
-                      Column(
-                        children: [
-                          const SizedBox(height: 15),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Endereço cadastrado",
-                            value:
-                                "${researchPricesProvider.selectedConcurrent?.Address.Address.toString()}, ${researchPricesProvider.selectedConcurrent?.Address.District}, ${researchPricesProvider.selectedConcurrent?.Address.City}, ${researchPricesProvider.selectedConcurrent?.Address.Number}. \nCEP: ${researchPricesProvider.selectedConcurrent?.Address.Zip}",
-                          ),
-                        ],
-                      ),
-                    const SizedBox(height: 15),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                      if (researchPricesProvider
+                                  .selectedConcurrent?.Address!.Zip !=
+                              "" &&
+                          researchPricesProvider
+                                  .selectedConcurrent?.Address!.Zip !=
+                              null)
+                        Column(
                           children: [
-                            Text(
-                              researchPricesProvider.selectedConcurrent?.Address
-                                              .Zip !=
-                                          "" &&
-                                      researchPricesProvider.selectedConcurrent
-                                              ?.Address.Zip !=
-                                          null
-                                  ? "Alterar endereço"
-                                  : "Inserir endereço",
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 126, 126, 126),
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 16,
-                              ),
+                            const SizedBox(height: 15),
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Endereço cadastrado",
+                              value:
+                                  "${researchPricesProvider.selectedConcurrent?.Address!.Address.toString()}, ${researchPricesProvider.selectedConcurrent?.Address!.District}, ${researchPricesProvider.selectedConcurrent?.Address!.City}, ${researchPricesProvider.selectedConcurrent?.Address!.Number}. \nCEP: ${researchPricesProvider.selectedConcurrent?.Address!.Zip}",
                             ),
                           ],
                         ),
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: const BorderSide(
-                              color: Colors.grey,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8, bottom: 20),
-                            child: Column(
-                              children: [
-                                AddressComponent(
-                                  adressFormKey: _adressFormKey,
-                                  canInsertMoreThanOneAddress: false,
-                                  isLoading: researchPricesProvider
-                                      .isLoadingAddOrUpdateConcurrents,
-                                  validateAdressFormKey: () {
-                                    return _adressFormKey.currentState!
-                                        .validate();
-                                  },
+                      const SizedBox(height: 15),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                researchPricesProvider.selectedConcurrent
+                                                ?.Address!.Zip !=
+                                            "" &&
+                                        researchPricesProvider
+                                                .selectedConcurrent
+                                                ?.Address!
+                                                .Zip !=
+                                            null
+                                    ? "Alterar endereço"
+                                    : "Inserir endereço",
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 126, 126, 126),
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 16,
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              side: const BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 20),
+                              child: Column(
+                                children: [
+                                  AddressComponent(
+                                    adressFormKey: _adressFormKey,
+                                    canInsertMoreThanOneAddress: false,
+                                    isLoading: researchPricesProvider
+                                        .isLoadingAddOrUpdateConcurrents,
+                                    validateAdressFormKey: () {
+                                      return _adressFormKey.currentState!
+                                          .validate();
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: const Size(200, 40),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(200, 40),
+                        onPressed: researchPricesProvider
+                                .isLoadingAddOrUpdateConcurrents
+                            ? null
+                            : () async {
+                                await _addOrUpdateConcurrent(
+                                  researchPricesProvider:
+                                      researchPricesProvider,
+                                  addressProvider: addressProvider,
+                                );
+                              },
+                        child: Text(
+                          researchPricesProvider.selectedConcurrent == null
+                              ? "CADASTRAR"
+                              : "ALTERAR",
+                        ),
                       ),
-                      onPressed: researchPricesProvider
-                              .isLoadingAddOrUpdateConcurrents
-                          ? null
-                          : () async {
-                              ShowAlertDialog.showAlertDialog(
-                                  context: context,
-                                  title: researchPricesProvider
-                                              .selectedConcurrent ==
-                                          null
-                                      ? "Cadastrar concorrente"
-                                      : "Alterar concorrente",
-                                  subtitle: researchPricesProvider
-                                              .selectedConcurrent ==
-                                          null
-                                      ? "Deseja realmente cadastrar o concorrente com os dados informados?"
-                                      : "Deseja realmente alterar o concorrente com os dados informados?",
-                                  function: () async {
-                                    await researchPricesProvider
-                                        .addOrUpdateConcurrent(
-                                      context: context,
-                                      addressProvider: addressProvider,
-                                      concurrentName: nameController.text,
-                                      observation: observationController.text,
-                                    );
-
-                                    if (researchPricesProvider
-                                            .errorAddOrUpdateConcurrents ==
-                                        "") {
-                                      addressProvider.clearAddresses();
-                                      nameController.clear();
-                                      observationController.clear();
-                                      Navigator.of(context).pop();
-                                    } else {
-                                      ShowSnackbarMessage.showMessage(
-                                        message: researchPricesProvider
-                                            .errorAddOrUpdateConcurrents,
-                                        context: context,
-                                      );
-                                    }
-                                  });
-                            },
-                      child: Text(
-                        researchPricesProvider.selectedConcurrent == null
-                            ? "CADASTRAR"
-                            : "ALTERAR",
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
