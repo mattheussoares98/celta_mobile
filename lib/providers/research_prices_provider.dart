@@ -387,6 +387,7 @@ class ResearchPricesProvider with ChangeNotifier {
     required String searchProductControllerText,
     required BuildContext context,
     required bool? withPrices,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _errorGetAssociatedsProducts = "";
     _isLoadingGetProducts = true;
@@ -397,6 +398,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "ResearchOfPriceCode": _selectedResearch!.Code,
       "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
       "WithPrices":
           withPrices, //Null (Todos) | True (preços informados) | False (sem preços informados)
     };

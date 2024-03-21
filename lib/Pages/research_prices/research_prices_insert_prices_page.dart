@@ -94,11 +94,15 @@ class _ResearchPricesInsertPricesPageState
 
   Future<void> _getProducts({
     required ResearchPricesProvider researchPricesProvider,
+    required ConfigurationsProvider configurationsProvider,
     required String searchValue,
   }) async {
+    FocusScope.of(context).unfocus();
+
     if (widget.isAssociatedProducts) {
       await researchPricesProvider.getAssociatedProducts(
         searchProductControllerText: searchValue,
+        configurationsProvider: configurationsProvider,
         context: context,
         withPrices: _withPricesOption(),
       );
@@ -111,9 +115,12 @@ class _ResearchPricesInsertPricesPageState
     _clearSearchProductController(researchPricesProvider);
   }
 
+  FocusNode _searchFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return PopScope(
       onPopInvoked: (_) async {
@@ -123,7 +130,8 @@ class _ResearchPricesInsertPricesPageState
       child: Column(
         children: [
           SearchWidget(
-            showConfigurationsIcon: false,
+            showConfigurationsIcon: true,
+            showOnlyConfigurationOfSearch: true,
             consultProductController: widget.searchProductController,
             isLoading: false,
             autofocus: false,
@@ -131,9 +139,10 @@ class _ResearchPricesInsertPricesPageState
               await _getProducts(
                 researchPricesProvider: researchPricesProvider,
                 searchValue: widget.searchProductController.text,
+                configurationsProvider: configurationsProvider,
               );
             },
-            focusNodeConsultProduct: FocusNode(),
+            focusNodeConsultProduct: _searchFocus,
           ),
           if (widget.isAssociatedProducts)
             ResearchPricesFilterAssociatedsProducts(
@@ -165,6 +174,7 @@ class _ResearchPricesInsertPricesPageState
                 await _getProducts(
                   researchPricesProvider: researchPricesProvider,
                   searchValue: widget.searchProductController.text,
+                  configurationsProvider: configurationsProvider,
                 );
               }),
           if (widget.keyboardIsClosed)
@@ -175,6 +185,7 @@ class _ResearchPricesInsertPricesPageState
                 await _getProducts(
                   researchPricesProvider: researchPricesProvider,
                   searchValue: "%",
+                  configurationsProvider: configurationsProvider,
                 );
               },
             ),

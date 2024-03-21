@@ -27,10 +27,10 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
     ResearchPricesResearchModel research =
         researchPricesProvider.researchPrices[index];
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       onTap: () {
         researchPricesProvider.updateSelectedResearch(research);
         researchPricesProvider.loadAssociatedsConcurrents();
@@ -49,14 +49,16 @@ class _ResearchPricesItemsState extends State<ResearchPricesItems> {
                 title: "Código",
                 value: research.Code.toString(),
               ),
-              if (research.Name?.isEmpty != true)
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Nome",
-                  value: research.Name ?? "Não há",
-                ),
+              TitleAndSubtitle.titleAndSubtitle(
+                title: "Nome",
+                value:
+                    research.Name?.isEmpty == true ? "Não há" : research.Name,
+              ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Observação",
-                value: research.Observation ?? "Não há",
+                value: research.Observation?.isEmpty == true
+                    ? "Não há"
+                    : research.Observation,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produtos restringidos",
