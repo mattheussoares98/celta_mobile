@@ -306,7 +306,9 @@ class ResearchPricesProvider with ChangeNotifier {
 
     _concurrents[index].Name = name;
     _concurrents[index].Observation = observation;
-    if (addressProvider.addresses.isNotEmpty) {
+    if (addressProvider.addresses.isEmpty) {
+      _concurrents[index].Address = null;
+    } else {
       _concurrents[index].Address = addressProvider.addresses[0];
     }
   }

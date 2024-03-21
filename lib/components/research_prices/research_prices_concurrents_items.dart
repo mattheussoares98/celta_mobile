@@ -16,6 +16,18 @@ class ConcurrentsItems extends StatefulWidget {
 class _ConcurrentsItemsState extends State<ConcurrentsItems> {
   int selectedIndex = -1;
 
+  String addressString(ResearchPricesConcurrentsModel concurrent) {
+    String value =
+        "${concurrent.Address?.Address}, ${concurrent.Address?.District}, ${concurrent.Address?.City}, ${concurrent.Address?.Number}. \nCEP: ${concurrent.Address?.Zip}";
+    if (concurrent.Address?.Complement?.isEmpty == false) {
+      value += "\nComplemento: ${concurrent.Address!.Complement!}";
+    }
+    if (concurrent.Address?.Reference?.isEmpty == false) {
+      value += "\nReferência: ${concurrent.Address!.Reference!}";
+    }
+    return value;
+  }
+
   Widget itemOfList({
     required int index,
     required ResearchPricesProvider researchPricesProvider,
@@ -99,7 +111,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                   title: "Endereços",
                   value: concurrent.Address?.Zip?.isEmpty == true
                       ? "Nenhum informado"
-                      : "${concurrent.Address!.Address.toString()}, ${concurrent.Address!.District}, ${concurrent.Address!.City}, ${concurrent.Address!.Number}. \nCEP: ${concurrent.Address!.Zip}",
+                      : addressString(concurrent),
                 ),
                 TextButton.icon(
                   onPressed: () {
