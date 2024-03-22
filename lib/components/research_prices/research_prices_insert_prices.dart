@@ -8,6 +8,7 @@ import '../../providers/providers.dart';
 
 class ResearchPricesInsertPrices extends StatefulWidget {
   final ResearchPricesProductsModel product;
+  final bool isAssociatedProducts;
   final Function showErrorMessage;
   //só funcionou dessa forma porque quando tentava chamar o contexto após dar
   //certo ou erro, ele já não existia mais
@@ -15,6 +16,7 @@ class ResearchPricesInsertPrices extends StatefulWidget {
   //só funcionou dessa forma porque quando tentava chamar o contexto após dar
   //certo ou erro, ele já não existia mais
   const ResearchPricesInsertPrices({
+    required this.isAssociatedProducts,
     required this.product,
     required this.showErrorMessage,
     required this.showSuccessMessage,
@@ -194,20 +196,24 @@ class _ResearchPricesInsertPricesState
                         "Deseja realmente confirmar os preços do concorrente?",
                     function: () async {
                       await researchPricesProvider.insertConcurrentPrices(
-                        context: context,
+                        isAssociatedProducts: widget.isAssociatedProducts,
                         productCode: widget.product.ProductPackingCode,
                         priceLookUp: widget.product.PriceLookUp,
                         productName: widget.product.ProductName,
-                        priceRetail:
-                            double.tryParse(_priceRetailController.text),
-                        offerRetail:
-                            double.tryParse(_offerRetailController.text),
-                        priceWhole: double.tryParse(_priceWholeController.text),
-                        offerWhole: double.tryParse(_offerWholeController.text),
-                        priceECommerce:
-                            double.tryParse(_priceEcommerceController.text),
-                        offerECommerce:
-                            double.tryParse(_offerEcommerceController.text),
+                        priceRetail: double.tryParse(_priceRetailController.text
+                            .replaceAll(RegExp(','), '.')),
+                        offerRetail: double.tryParse(_offerRetailController.text
+                            .replaceAll(RegExp(','), '.')),
+                        priceWhole: double.tryParse(_priceWholeController.text
+                            .replaceAll(RegExp(','), '.')),
+                        offerWhole: double.tryParse(_offerWholeController.text
+                            .replaceAll(RegExp(','), '.')),
+                        priceECommerce: double.tryParse(
+                            _priceEcommerceController.text
+                                .replaceAll(RegExp(','), '.')),
+                        offerECommerce: double.tryParse(
+                            _offerEcommerceController.text
+                                .replaceAll(RegExp(','), '.')),
                       );
 
                       if (researchPricesProvider.errorInsertConcurrentPrices ==

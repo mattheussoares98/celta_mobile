@@ -596,17 +596,53 @@ class ResearchPricesProvider with ChangeNotifier {
     return jsonInsertConcurrentPrices;
   }
 
-  Future<void> insertConcurrentPrices({
-    required int productCode,
-    required String priceLookUp,
-    required String productName,
-    required BuildContext context,
+  void _updateLocalProductPrices({
+    required bool isAssociatedProducts,
+    required String PriceLookUp,
     required double? priceRetail,
     required double? offerRetail,
     required double? priceWhole,
     required double? offerWhole,
     required double? priceECommerce,
     required double? offerECommerce,
+  }) {
+    List<ResearchPricesProductsModel> listToModify =
+        isAssociatedProducts ? _associatedsProducts : _notAssociatedsProducts;
+
+    int index = listToModify
+        .indexWhere((element) => element.PriceLookUp == PriceLookUp);
+
+    if (priceRetail != null) {
+      listToModify[index].PriceRetail = priceRetail;
+    }
+    if (offerRetail != null) {
+      listToModify[index].OfferRetail = offerRetail;
+    }
+    if (priceWhole != null) {
+      listToModify[index].PriceWhole = priceWhole;
+    }
+    if (offerWhole != null) {
+      listToModify[index].OfferWhole = offerWhole;
+    }
+    if (priceECommerce != null) {
+      listToModify[index].PriceECommerce = priceECommerce;
+    }
+    if (offerECommerce != null) {
+      listToModify[index].OfferECommerce = offerECommerce;
+    }
+  }
+
+  Future<void> insertConcurrentPrices({
+    required int productCode,
+    required String priceLookUp,
+    required String productName,
+    required double? priceRetail,
+    required double? offerRetail,
+    required double? priceWhole,
+    required double? offerWhole,
+    required double? priceECommerce,
+    required double? offerECommerce,
+    required bool isAssociatedProducts,
   }) async {
     _errorInsertConcurrentPrices = "";
     _isLoadingInsertConcurrentPrices = true;
@@ -635,6 +671,19 @@ class ResearchPricesProvider with ChangeNotifier {
       );
 
       _errorInsertConcurrentPrices = SoapHelperResponseParameters.errorMessage;
+
+      if (_errorInsertConcurrentPrices == "") {
+        _updateLocalProductPrices(
+          isAssociatedProducts: isAssociatedProducts,
+          PriceLookUp: priceLookUp,
+          priceRetail: priceRetail,
+          offerRetail: offerRetail,
+          priceWhole: priceWhole,
+          offerWhole: offerWhole,
+          priceECommerce: priceECommerce,
+          offerECommerce: offerECommerce,
+        );
+      }
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorInsertConcurrentPrices =

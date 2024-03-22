@@ -8,12 +8,12 @@ class ResearchPricesProductsModel {
   final int ProductPackingCode; /* 82 */
   final String PriceLookUp; /* "0 0017-8" */
   final String ProductName; /* "Teste Estoque (UN 0.500)" */
-  final double PriceRetail; /* 0.00 */
-  final double OfferRetail; /* 0.00 */
-  final double PriceWhole; /* 0.00 */
-  final double OfferWhole; /* 0.00 */
-  final double PriceECommerce; /* 0.00 */
-  final double OfferECommerce; /* 0.0 */
+  double PriceRetail; /* 0.00 */
+  double OfferRetail; /* 0.00 */
+  double PriceWhole; /* 0.00 */
+  double OfferWhole; /* 0.00 */
+  double PriceECommerce; /* 0.00 */
+  double OfferECommerce; /* 0.0 */
 
   ResearchPricesProductsModel({
     required this.ResearchOfPriceCode,

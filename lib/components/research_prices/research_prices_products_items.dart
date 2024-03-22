@@ -90,6 +90,7 @@ class _ResearchPricesProductsItemsState
         ? researchPricesProvider.associatedsProducts[index]
         : researchPricesProvider.notAssociatedProducts[index];
     final researchPricesInsertPrices = ResearchPricesInsertPrices(
+      isAssociatedProducts: widget.isAssociatedProducts,
       product: product,
       showErrorMessage: () {
         ShowSnackbarMessage.showMessage(
