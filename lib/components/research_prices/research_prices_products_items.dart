@@ -1,21 +1,17 @@
-import 'package:celta_inventario/components/research_prices/research_prices_insert_prices.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../global_widgets/global_widgets.dart';
+import '../../components/research_prices/research_prices.dart';
 import '../../models/research_prices/research_prices.dart';
-import '../../models/sale_request/sale_request.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
 class ResearchPricesProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
-  final Function getProductsWithCamera;
   final bool isAssociatedProducts;
 
   const ResearchPricesProductsItems({
-    required this.getProductsWithCamera,
     required this.consultedProductController,
     required this.isAssociatedProducts,
     Key? key,
@@ -28,101 +24,62 @@ class ResearchPricesProductsItems extends StatefulWidget {
 
 class _ResearchPricesProductsItemsState
     extends State<ResearchPricesProductsItems> {
-  int _selectedIndex = -1;
+  int _selectedIndexAssociatedProducts = -1;
+  int _selectedIndexNotAssociatedProducts = -1;
 
-  changeCursorToLastIndex() {
-    widget.consultedProductController.selection = TextSelection.collapsed(
-      offset: widget.consultedProductController.text.length,
-    );
-  }
-
-  changeFocusToConsultedProductFocusNode({
-    required SaleRequestProvider saleRequestProvider,
-  }) {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      FocusScope.of(context).requestFocus(
-        saleRequestProvider.consultedProductFocusNode,
-      );
-    });
-  }
-
-  selectIndexAndFocus({
-    required SaleRequestProvider saleRequestProvider,
-    required int index,
-    required SaleRequestProductsModel product,
-  }) {
-    widget.consultedProductController.text = "";
-
-    if (product.RetailPracticedPrice == 0 && product.WholePracticedPrice == 0) {
-      ShowSnackbarMessage.showMessage(
-        message:
-            "O preço de venda e atacado estão zerados! Utilize esse produto somente caso esteja utilizando modelo de pedido de vendas que utiliza o custo como preço!",
-        context: context,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        secondsDuration: 7,
-      );
-      setState(() {
-        _selectedIndex = index;
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
-      });
-
-      return;
-    }
-
-    if (saleRequestProvider.productsCount == 1 ||
-        saleRequestProvider.isLoadingProducts) {
-      return;
-    }
-
-    if (kIsWeb) {
-      if (_selectedIndex != index) {
+  _updateSelectedIndex(int index) {
+    if (widget.isAssociatedProducts) {
+      if (_selectedIndexAssociatedProducts == index) {
         setState(() {
-          _selectedIndex = index;
-          changeFocusToConsultedProductFocusNode(
-            saleRequestProvider: saleRequestProvider,
-          );
+          _selectedIndexAssociatedProducts = -1;
         });
       } else {
         setState(() {
-          _selectedIndex = -1;
+          _selectedIndexAssociatedProducts = index;
         });
       }
-      return;
-    }
-
-    if (_selectedIndex != index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-
-      if (saleRequestProvider.consultedProductFocusNode.hasFocus &&
-          MediaQuery.of(context).viewInsets.bottom == 0) {
-        FocusScope.of(context).unfocus();
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
-      }
-      if (!saleRequestProvider.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
-      }
-      return;
-    }
-
-    if (_selectedIndex == index) {
-      if (!saleRequestProvider.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
+    } else {
+      if (_selectedIndexNotAssociatedProducts == index) {
+        setState(() {
+          _selectedIndexNotAssociatedProducts = -1;
+        });
       } else {
         setState(() {
-          _selectedIndex = -1;
+          _selectedIndexNotAssociatedProducts = index;
         });
       }
     }
+  }
+
+  String textButtonMessage(int index) {
+    if (widget.isAssociatedProducts) {
+      return _selectedIndexAssociatedProducts != index
+          ? "Inserir preços"
+          : "Minimizar preços";
+    } else {
+      return _selectedIndexNotAssociatedProducts != index
+          ? "Inserir preços"
+          : "Minimizar preços";
+    }
+  }
+
+  IconData iconType(int index) {
+    if (widget.isAssociatedProducts) {
+      return _selectedIndexAssociatedProducts == index
+          ? Icons.arrow_drop_up_sharp
+          : Icons.arrow_drop_down;
+    } else {
+      return _selectedIndexNotAssociatedProducts == index
+          ? Icons.arrow_drop_up_sharp
+          : Icons.arrow_drop_down;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _selectedIndexAssociatedProducts = -1;
+    _selectedIndexNotAssociatedProducts = -1;
   }
 
   Widget itemOfList({
@@ -150,29 +107,19 @@ class _ResearchPricesProductsItemsState
               value: product.PriceLookUp.toString(),
               otherWidget: TextButton(
                 onPressed: () {
-                  if (_selectedIndex == index) {
-                    setState(() {
-                      _selectedIndex = -1;
-                    });
-                  } else {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  }
+                  _updateSelectedIndex(index);
                 },
                 child: Row(
                   children: [
                     Text(
-                      _selectedIndex != index
-                          ? "Inserir preços"
-                          : "Minimizar preços",
+                      textButtonMessage(index),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontStyle: FontStyle.italic,
                       ),
                     ),
                     Icon(
-                      _selectedIndex == index
+                      _selectedIndexAssociatedProducts == index
                           ? Icons.arrow_drop_up_sharp
                           : Icons.arrow_drop_down,
                       color: Theme.of(context).colorScheme.primary,
@@ -181,7 +128,12 @@ class _ResearchPricesProductsItemsState
                 ),
               ),
             ),
-            if (_selectedIndex == index) researchPricesInsertPrices,
+            if (widget.isAssociatedProducts &&
+                _selectedIndexAssociatedProducts == index)
+              researchPricesInsertPrices,
+            if (!widget.isAssociatedProducts &&
+                _selectedIndexNotAssociatedProducts == index)
+              researchPricesInsertPrices,
           ],
         ),
       ),
@@ -210,10 +162,10 @@ class _ResearchPricesProductsItemsState
             child: ListView.builder(
               itemCount: productsCount,
               itemBuilder: (context, index) {
-                if (productsCount == 1) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
+                if (productsCount == 1 && widget.isAssociatedProducts) {
+                  _selectedIndexAssociatedProducts = index;
+                } else if (productsCount == 1 && !widget.isAssociatedProducts) {
+                  _selectedIndexNotAssociatedProducts = index;
                 }
 
                 final startIndex = index * itensPerLine;

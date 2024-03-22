@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../components/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 import '../../components/global_widgets/global_widgets.dart';
-import '../../utils/utils.dart';
 
 class ResearchPricesInsertPricesPage extends StatefulWidget {
   final bool isAssociatedProducts;
@@ -159,25 +158,10 @@ class _ResearchPricesInsertPricesPageState
               errorMessage: errorMessage(researchPricesProvider),
             ),
           ResearchPricesProductsItems(
-              isAssociatedProducts: widget.isAssociatedProducts,
-              consultedProductController: widget.searchProductController,
-              getProductsWithCamera: () async {
-                FocusScope.of(context).unfocus();
-                _clearSearchProductController(researchPricesProvider);
-
-                widget.searchProductController.text =
-                    await ScanBarCode.scanBarcode(context);
-
-                if (widget.searchProductController.text == "") {
-                  return;
-                }
-
-                await _getProducts(
-                  researchPricesProvider: researchPricesProvider,
-                  searchValue: widget.searchProductController.text,
-                  configurationsProvider: configurationsProvider,
-                );
-              }),
+            isAssociatedProducts: widget.isAssociatedProducts,
+            consultedProductController: widget.searchProductController,
+            
+          ),
           if (widget.keyboardIsClosed)
             //usando o mediaquery nessa página aqui não funciona
             getAllProductsButton(
