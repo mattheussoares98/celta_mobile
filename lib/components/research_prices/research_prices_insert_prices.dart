@@ -8,8 +8,16 @@ import '../../providers/providers.dart';
 
 class ResearchPricesInsertPrices extends StatefulWidget {
   final ResearchPricesProductsModel product;
+  final Function showErrorMessage;
+  //só funcionou dessa forma porque quando tentava chamar o contexto após dar
+  //certo ou erro, ele já não existia mais
+  final Function showSuccessMessage;
+  //só funcionou dessa forma porque quando tentava chamar o contexto após dar
+  //certo ou erro, ele já não existia mais
   const ResearchPricesInsertPrices({
     required this.product,
+    required this.showErrorMessage,
+    required this.showSuccessMessage,
     super.key,
   });
 
@@ -76,26 +84,32 @@ class _ResearchPricesInsertPricesState
     if (widget.product.PriceRetail > 0)
       _priceRetailController.text = ConvertString.convertToBrazilianNumber(
         widget.product.PriceRetail,
+        decimalHouses: 2,
       );
     if (widget.product.OfferRetail > 0)
       _offerRetailController.text = ConvertString.convertToBrazilianNumber(
         widget.product.OfferRetail,
+        decimalHouses: 2,
       );
     if (widget.product.PriceWhole > 0)
       _priceWholeController.text = ConvertString.convertToBrazilianNumber(
         widget.product.PriceWhole,
+        decimalHouses: 2,
       );
     if (widget.product.OfferWhole > 0)
       _offerWholeController.text = ConvertString.convertToBrazilianNumber(
         widget.product.OfferWhole,
+        decimalHouses: 2,
       );
     if (widget.product.PriceECommerce > 0)
       _priceEcommerceController.text = ConvertString.convertToBrazilianNumber(
         widget.product.PriceECommerce,
+        decimalHouses: 2,
       );
     if (widget.product.OfferECommerce > 0)
       _offerEcommerceController.text = ConvertString.convertToBrazilianNumber(
         widget.product.OfferECommerce,
+        decimalHouses: 2,
       );
   }
 
@@ -198,12 +212,15 @@ class _ResearchPricesInsertPricesState
 
                       if (researchPricesProvider.errorInsertConcurrentPrices ==
                           "") {
-                        ShowSnackbarMessage.showMessage(
-                          message: "Preços inseridos com sucesso!",
-                          context: context,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                        );
+                        widget.showSuccessMessage();
+                        //só funcionou dessa forma porque quando tentava chamar
+                        //o contexto após dar certo ou erro, ele já não existia
+                        //mais
+                      } else {
+                        widget.showErrorMessage();
+                        //só funcionou dessa forma porque quando tentava chamar
+                        //o contexto após dar certo ou erro, ele já não existia
+                        //mais
                       }
                     },
                   );

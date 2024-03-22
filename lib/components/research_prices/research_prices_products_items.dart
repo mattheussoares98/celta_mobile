@@ -89,8 +89,22 @@ class _ResearchPricesProductsItemsState
     ResearchPricesProductsModel product = widget.isAssociatedProducts
         ? researchPricesProvider.associatedsProducts[index]
         : researchPricesProvider.notAssociatedProducts[index];
-    final researchPricesInsertPrices =
-        ResearchPricesInsertPrices(product: product);
+    final researchPricesInsertPrices = ResearchPricesInsertPrices(
+      product: product,
+      showErrorMessage: () {
+        ShowSnackbarMessage.showMessage(
+          message: researchPricesProvider.errorInsertConcurrentPrices,
+          context: context,
+        );
+      },
+      showSuccessMessage: () {
+        ShowSnackbarMessage.showMessage(
+          message: "Preços inseridos com sucesso!",
+          context: context,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
+      },
+    );
 
     return Card(
       child: Padding(

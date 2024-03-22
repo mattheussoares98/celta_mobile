@@ -44,11 +44,13 @@ class ResearchPricesProvider with ChangeNotifier {
   int get concurrentsCount => _concurrents.length;
   FocusNode concurrentsFocusNode = FocusNode();
 
-  List<dynamic> _associatedsProducts = [];
-  List<dynamic> get associatedsProducts => [..._associatedsProducts];
+  List<ResearchPricesProductsModel> _associatedsProducts = [];
+  List<ResearchPricesProductsModel> get associatedsProducts =>
+      [..._associatedsProducts];
   int get associatedsProductsCount => _associatedsProducts.length;
-  List<dynamic> _notAssociatedsProducts = [];
-  List<dynamic> get notAssociatedProducts => [..._notAssociatedsProducts];
+  List<ResearchPricesProductsModel> _notAssociatedsProducts = [];
+  List<ResearchPricesProductsModel> get notAssociatedProducts =>
+      [..._notAssociatedsProducts];
   int get notAssociatedProductsCount => _notAssociatedsProducts.length;
   bool _isLoadingGetProducts = false;
   bool get isLoadingGetProducts => _isLoadingGetProducts;
