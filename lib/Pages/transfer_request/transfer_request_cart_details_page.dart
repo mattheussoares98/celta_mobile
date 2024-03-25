@@ -78,6 +78,12 @@ class _TransferRequestCartDetailsPageState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _textEditingController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);

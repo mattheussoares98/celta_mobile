@@ -35,6 +35,14 @@ class _ResearchPricesConcurrentsPageState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    focusNodeSearch.dispose();
+    searchConcurrentControllerText.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider =
         Provider.of(context, listen: true);
@@ -120,7 +128,7 @@ class _ResearchPricesConcurrentsPageState
                         errorMessage:
                             researchPricesProvider.errorGetConcurrents),
                   ),
-if (!researchPricesProvider.isLoadingGetConcurrents)
+                if (!researchPricesProvider.isLoadingGetConcurrents)
                   const ConcurrentsItems(),
               ],
             ),

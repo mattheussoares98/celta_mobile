@@ -22,6 +22,8 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
   FocusNode observationFocusNode = FocusNode();
   TextEditingController observationController = TextEditingController();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   void _updateControllers(ResearchPricesResearchModel? research) {
     if (research != null) {
       observationController.text = research.Observation ?? "";
@@ -41,8 +43,6 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
       _updateControllers(researchPricesProvider.selectedResearch);
     }
   }
-
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> _insertOrUpdateResearch(
     ResearchPricesProvider researchPricesProvider,
@@ -83,6 +83,15 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    nameFocusNode.dispose();
+    researchNameController.dispose();
+    observationFocusNode.dispose();
+    observationController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
@@ -93,7 +102,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
           onPopInvoked: (value) {
             if (value == true) {
               researchPricesProvider.updateSelectedResearch(null);
-            }  
+            }
           },
           child: Scaffold(
             appBar: AppBar(

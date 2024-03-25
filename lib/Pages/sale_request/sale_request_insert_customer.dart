@@ -23,6 +23,13 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
   final FocusNode searchCustomerFocusNode = FocusNode();
 
   @override
+  void dispose() {
+    super.dispose();
+    searchCustomerController.dispose();
+    searchCustomerFocusNode.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);

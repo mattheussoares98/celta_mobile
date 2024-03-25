@@ -118,6 +118,12 @@ class _ResearchPricesInsertPricesPageState
   FocusNode _searchFocus = FocusNode();
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchFocus.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
@@ -160,7 +166,6 @@ class _ResearchPricesInsertPricesPageState
           ResearchPricesProductsItems(
             isAssociatedProducts: widget.isAssociatedProducts,
             consultedProductController: widget.searchProductController,
-            
           ),
           if (widget.keyboardIsClosed)
             //usando o mediaquery nessa página aqui não funciona

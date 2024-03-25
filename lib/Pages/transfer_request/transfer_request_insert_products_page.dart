@@ -29,6 +29,13 @@ class _TransferRequestInsertProductsPageState
   TextEditingController _consultedProductController = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchProductTextEditingController.dispose();
+    _consultedProductController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);
@@ -44,7 +51,7 @@ class _TransferRequestInsertProductsPageState
           autofocus: false,
           onPressSearch: () async {
             _consultedProductController.clear();
-    
+
             await transferRequestProvider.getProducts(
               requestTypeCode: widget.requestTypeCode.toString(),
               enterpriseOriginCode: widget.enterpriseOriginCode,
@@ -52,7 +59,7 @@ class _TransferRequestInsertProductsPageState
               value: _searchProductTextEditingController.text,
               configurationsProvider: configurationsProvider,
             );
-    
+
             if (transferRequestProvider.productsCount > 0) {
               _searchProductTextEditingController.clear();
             }
@@ -70,14 +77,14 @@ class _TransferRequestInsertProductsPageState
             getProductsWithCamera: () async {
               FocusScope.of(context).unfocus();
               _searchProductTextEditingController.clear();
-    
+
               _searchProductTextEditingController.text =
                   await ScanBarCode.scanBarcode(context);
-    
+
               if (_searchProductTextEditingController.text == "") {
                 return;
               }
-    
+
               await transferRequestProvider.getProducts(
                 requestTypeCode: widget.requestTypeCode.toString(),
                 enterpriseOriginCode: widget.enterpriseOriginCode,
@@ -85,7 +92,7 @@ class _TransferRequestInsertProductsPageState
                 value: _searchProductTextEditingController.text,
                 configurationsProvider: configurationsProvider,
               );
-    
+
               if (transferRequestProvider.productsCount > 0) {
                 _searchProductTextEditingController.clear();
               }

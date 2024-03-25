@@ -43,11 +43,18 @@ class _BuyRequestInsertProductsPageState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    consultProductController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
     return SingleChildScrollView(
-    primary: false, 
+      primary: false,
       child: Column(
         children: [
           SearchWidget(

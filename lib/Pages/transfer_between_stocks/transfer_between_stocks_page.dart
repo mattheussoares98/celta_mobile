@@ -31,6 +31,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
   void dispose() {
     super.dispose();
     _consultProductController.dispose();
+    _consultedProductController.dispose();
   }
 
   @override

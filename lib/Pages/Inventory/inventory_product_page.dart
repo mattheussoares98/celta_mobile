@@ -26,6 +26,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
   @override
   void dispose() {
     super.dispose();
+    _consultProductController.dispose();
+    _consultedProductController.dispose();
   }
 
   Future<void> _searchProduct({

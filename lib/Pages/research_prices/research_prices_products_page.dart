@@ -16,19 +16,11 @@ class ResearchPricesProductsPage extends StatefulWidget {
 
 class _ResearchPricesProductsPageState
     extends State<ResearchPricesProductsPage> {
-  // TextEditingController _searchProductTextEditingController =
-  //     TextEditingController();
-  // TextEditingController _consultedProductController = TextEditingController();
-
   int _selectedIndex = 0;
 
   void _onItemTapped({
     required int index,
-    // required SaleRequestProvider saleRequestProvider,
   }) {
-    // if (saleRequestProvider.isLoadingSaveSaleRequest ||
-    //     saleRequestProvider.isLoadingProcessCart) return;
-
     setState(() {
       _selectedIndex = index;
     });
@@ -72,7 +64,7 @@ class _ResearchPricesProductsPageState
             if (value == true) {
               researchPricesProvider.clearAssociatedsProducts();
               researchPricesProvider.clearNotAssociatedsProducts();
-            }  
+            }
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,

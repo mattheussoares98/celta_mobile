@@ -27,6 +27,7 @@ class _TransferBetweenPackagePageState
   void dispose() {
     super.dispose();
     _consultProductController.dispose();
+    _consultedProductController.dispose();
   }
 
   @override

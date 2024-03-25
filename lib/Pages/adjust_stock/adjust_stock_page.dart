@@ -27,6 +27,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
   void dispose() {
     super.dispose();
     _consultProductController.dispose();
+    _consultedProductController.dispose();
   }
 
   @override

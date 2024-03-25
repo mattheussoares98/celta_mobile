@@ -27,6 +27,13 @@ class _SaleRequestInsertProductsPageState
   TextEditingController _consultedProductController = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchProductTextEditingController.dispose();
+    _consultedProductController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
@@ -42,7 +49,7 @@ class _SaleRequestInsertProductsPageState
           autofocus: false,
           onPressSearch: () async {
             _consultedProductController.clear();
-    
+
             await saleRequestProvider.getProducts(
               context: context,
               configurationsProvider: configurationsProvider,
@@ -50,13 +57,12 @@ class _SaleRequestInsertProductsPageState
               controllerText: _searchProductTextEditingController.text,
               requestTypeCode: widget.requestTypeCode,
             );
-    
+
             if (saleRequestProvider.productsCount > 0) {
               _searchProductTextEditingController.clear();
             }
           },
-          focusNodeConsultProduct:
-              saleRequestProvider.searchProductFocusNode,
+          focusNodeConsultProduct: saleRequestProvider.searchProductFocusNode,
         ),
         if (saleRequestProvider.errorMessageProducts != "")
           ErrorMessage(
@@ -69,23 +75,22 @@ class _SaleRequestInsertProductsPageState
               getProductsWithCamera: () async {
                 FocusScope.of(context).unfocus();
                 _searchProductTextEditingController.clear();
-    
+
                 _searchProductTextEditingController.text =
                     await ScanBarCode.scanBarcode(context);
-    
+
                 if (_searchProductTextEditingController.text == "") {
                   return;
                 }
-    
+
                 await saleRequestProvider.getProducts(
                   configurationsProvider: configurationsProvider,
                   context: context,
                   enterpriseCode: widget.enterpriseCode,
-                  controllerText:
-                      _searchProductTextEditingController.text,
+                  controllerText: _searchProductTextEditingController.text,
                   requestTypeCode: widget.requestTypeCode,
                 );
-    
+
                 if (saleRequestProvider.productsCount > 0) {
                   _searchProductTextEditingController.clear();
                 }

@@ -84,6 +84,13 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _focusNode.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
 
@@ -95,7 +102,7 @@ class _BuyRequestDetailsPageState extends State<BuyRequestDetailsPage> {
       children: [
         Expanded(
           child: SingleChildScrollView(
-    primary: false, 
+            primary: false,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(

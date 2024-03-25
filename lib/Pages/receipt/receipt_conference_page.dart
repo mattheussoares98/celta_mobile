@@ -16,14 +16,15 @@ class ReceiptConferencePage extends StatefulWidget {
 
 class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
   TextEditingController _consultProductController = TextEditingController();
+  TextEditingController _consultedProductController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     _consultProductController.dispose();
+    _consultedProductController.dispose();
   }
 
-  TextEditingController _consultedProductController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

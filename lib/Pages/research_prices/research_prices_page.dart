@@ -14,13 +14,14 @@ class ResearchPricesPage extends StatefulWidget {
 }
 
 class _ResearchPricesPageState extends State<ResearchPricesPage> {
-  final TextEditingController _searchResearchsController =
-      TextEditingController();
+  FocusNode _focusNode = FocusNode();
+  TextEditingController searchController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    _searchResearchsController.dispose();
+    _focusNode.dispose();
+    searchController.dispose();
   }
 
   Future<void> _getResearchPrices({
@@ -41,9 +42,6 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
       searchController.text = "";
     }
   }
-
-  FocusNode _focusNode = FocusNode();
-  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
