@@ -47,6 +47,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
     required int index,
     required BuyRequestProvider buyRequestProvider,
   }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     if (buyRequestProvider.isLoadingInsertBuyRequest) return;
 
     if (_selectedIndex == 0) {

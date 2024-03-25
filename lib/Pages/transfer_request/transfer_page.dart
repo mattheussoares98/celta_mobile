@@ -26,6 +26,7 @@ class _TransferPageState extends State<TransferPage> {
     required int index,
     required TransferRequestProvider transferRequestProvider,
   }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     if (transferRequestProvider.isLoadingSaveTransferRequest) return;
 
     setState(() {

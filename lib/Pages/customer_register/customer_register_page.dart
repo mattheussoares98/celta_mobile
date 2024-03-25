@@ -108,8 +108,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
   void _onItemTapped({
     required int index,
-    // required SaleRequestProvider saleRequestProvider,
   }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     AddressProvider addressProvider = Provider.of(context, listen: false);
 
     bool hasAdressInformed = _hasAdressInformed(addressProvider);

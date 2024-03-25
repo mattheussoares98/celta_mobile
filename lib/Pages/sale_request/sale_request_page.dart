@@ -27,6 +27,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     required int index,
     required SaleRequestProvider saleRequestProvider,
   }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     if (saleRequestProvider.isLoadingSaveSaleRequest ||
         saleRequestProvider.isLoadingProcessCart) return;
 
