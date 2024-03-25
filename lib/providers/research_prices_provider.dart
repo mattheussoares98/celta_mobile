@@ -331,6 +331,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "Name": concurrentName,
       "Observation": observation,
+      "Address": addressProvider.addresses[0].toJson(),
     };
 
     try {
