@@ -34,9 +34,12 @@ class _ResearchPricesInsertPricesState
     required String label,
     required GlobalKey<FormState> key,
     required TextEditingController textEditingController,
+    required FocusNode focusNode,
+    required FocusNode? nextFocusOnSubmit,
   }) {
     return Flexible(
       child: TextFormField(
+        focusNode: focusNode,
         key: key,
         controller: textEditingController,
         decoration: FormFieldHelper.decoration(
@@ -45,7 +48,17 @@ class _ResearchPricesInsertPricesState
           labelText: label,
           hintText: label,
           errorSize: 10,
+          suffixIcon: IconButton(
+            onPressed: () {
+              textEditingController.clear();
+              FocusScope.of(context).requestFocus(focusNode);
+            },
+            icon: const Icon(Icons.delete, color: Colors.red),
+          ),
         ),
+        onFieldSubmitted: (_) {
+          FocusScope.of(context).requestFocus(nextFocusOnSubmit);
+        },
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: FormFieldHelper.validatorOfNumber(
           maxDecimalPlaces: 2,
@@ -72,14 +85,20 @@ class _ResearchPricesInsertPricesState
   final _priceEcommerceController = TextEditingController();
   final _offerEcommerceController = TextEditingController();
 
-  bool _validateCanConfirmChanges() {
-    return (_priceRetailController.text.isNotEmpty ||
-            _offerRetailController.text.isNotEmpty ||
-            _priceWholeController.text.isNotEmpty ||
-            _offerWholeController.text.isNotEmpty ||
-            _priceEcommerceController.text.isNotEmpty ||
-            _offerEcommerceController.text.isNotEmpty) &&
-        _formKey.currentState!.validate();
+  final _priceRetailFocusNode = FocusNode();
+  final _offerRetailFocusNode = FocusNode();
+  final _priceWholeFocusNode = FocusNode();
+  final _offerWholeFocusNode = FocusNode();
+  final _priceEcommerceFocusNode = FocusNode();
+  final _offerEcommerceFocusNode = FocusNode();
+
+  bool _allFieldsAreEmpty() {
+    return _priceRetailController.text.isEmpty &&
+        _offerRetailController.text.isEmpty &&
+        _priceWholeController.text.isEmpty &&
+        _offerWholeController.text.isEmpty &&
+        _priceEcommerceController.text.isEmpty &&
+        _offerEcommerceController.text.isEmpty;
   }
 
   void _updateControllers() {
@@ -122,6 +141,24 @@ class _ResearchPricesInsertPricesState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _priceRetailFocusNode.dispose();
+    _offerRetailFocusNode.dispose();
+    _priceWholeFocusNode.dispose();
+    _offerWholeFocusNode.dispose();
+    _priceEcommerceFocusNode.dispose();
+    _offerEcommerceFocusNode.dispose();
+
+    _priceRetailController.dispose();
+    _offerRetailController.dispose();
+    _priceWholeController.dispose();
+    _offerWholeController.dispose();
+    _priceEcommerceController.dispose();
+    _offerEcommerceController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
@@ -137,13 +174,17 @@ class _ResearchPricesInsertPricesState
                 personalizedField(
                   label: "Venda",
                   textEditingController: _priceRetailController,
+                  focusNode: _priceRetailFocusNode,
                   key: _priceRetailKey,
+                  nextFocusOnSubmit: _offerRetailFocusNode,
                 ),
                 const SizedBox(width: 10),
                 personalizedField(
                   label: "Venda (oferta)",
                   textEditingController: _offerRetailController,
+                  focusNode: _offerRetailFocusNode,
                   key: _offerRetailKey,
+                  nextFocusOnSubmit: _priceWholeFocusNode,
                 ),
               ],
             ),
@@ -153,13 +194,17 @@ class _ResearchPricesInsertPricesState
                 personalizedField(
                   label: "Atacado",
                   textEditingController: _priceWholeController,
+                  focusNode: _priceWholeFocusNode,
                   key: _priceWholeKey,
+                  nextFocusOnSubmit: _offerWholeFocusNode,
                 ),
                 const SizedBox(width: 10),
                 personalizedField(
                   label: "Atacado (oferta)",
                   textEditingController: _offerWholeController,
+                  focusNode: _offerWholeFocusNode,
                   key: _offerWholeKey,
+                  nextFocusOnSubmit: _priceEcommerceFocusNode,
                 ),
               ],
             ),
@@ -169,31 +214,41 @@ class _ResearchPricesInsertPricesState
                 personalizedField(
                   label: "Ecommerce",
                   textEditingController: _priceEcommerceController,
+                  focusNode: _priceEcommerceFocusNode,
                   key: _priceEcommerceKey,
+                  nextFocusOnSubmit: _offerEcommerceFocusNode,
                 ),
                 const SizedBox(width: 10),
                 personalizedField(
                   label: "Ecommerce (oferta)",
                   textEditingController: _offerEcommerceController,
+                  focusNode: _offerEcommerceFocusNode,
                   key: _offerEcommerceKey,
+                  nextFocusOnSubmit: null,
                 ),
               ],
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
               onPressed: () async {
-                bool isValid = _validateCanConfirmChanges();
+                bool isValid = _formKey.currentState!.validate();
+
                 if (!isValid) {
                   ShowSnackbarMessage.showMessage(
                     message: "Insira os preços corretamente!",
                     context: context,
                   );
                 } else {
+                  if (_allFieldsAreEmpty()) {}
+
                   ShowAlertDialog.showAlertDialog(
                     context: context,
-                    title: "Confirmar preços",
-                    subtitle:
-                        "Deseja realmente confirmar os preços do concorrente?",
+                    title: _allFieldsAreEmpty()
+                        ? "Zerar preços informados"
+                        : "Confirmar preços",
+                    subtitle: _allFieldsAreEmpty()
+                        ? "Deseja realmente zerar os preços informados"
+                        : "Deseja realmente confirmar os preços do concorrente?",
                     function: () async {
                       await researchPricesProvider.insertConcurrentPrices(
                         isAssociatedProducts: widget.isAssociatedProducts,

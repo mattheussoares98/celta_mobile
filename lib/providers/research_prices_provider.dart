@@ -613,24 +613,12 @@ class ResearchPricesProvider with ChangeNotifier {
     int index = listToModify
         .indexWhere((element) => element.PriceLookUp == PriceLookUp);
 
-    if (priceRetail != null) {
-      listToModify[index].PriceRetail = priceRetail;
-    }
-    if (offerRetail != null) {
-      listToModify[index].OfferRetail = offerRetail;
-    }
-    if (priceWhole != null) {
-      listToModify[index].PriceWhole = priceWhole;
-    }
-    if (offerWhole != null) {
-      listToModify[index].OfferWhole = offerWhole;
-    }
-    if (priceECommerce != null) {
-      listToModify[index].PriceECommerce = priceECommerce;
-    }
-    if (offerECommerce != null) {
-      listToModify[index].OfferECommerce = offerECommerce;
-    }
+    listToModify[index].PriceRetail = priceRetail ?? 0;
+    listToModify[index].OfferRetail = offerRetail ?? 0;
+    listToModify[index].PriceWhole = priceWhole ?? 0;
+    listToModify[index].OfferWhole = offerWhole ?? 0;
+    listToModify[index].PriceECommerce = priceECommerce ?? 0;
+    listToModify[index].OfferECommerce = offerECommerce ?? 0;
   }
 
   Future<void> insertConcurrentPrices({
