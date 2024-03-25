@@ -24,9 +24,9 @@ class ReceiptProvider with ChangeNotifier {
   List<ReceiptProductsModel> _products = [];
   get products => _products;
   get productsCount => _products.length;
-  bool _consultingProducts = false;
+  bool _isLoadingProducts = false;
 
-  get consultingProducts => _consultingProducts;
+  get isLoadingProducts => _isLoadingProducts;
   String _errorMessageGetProducts = "";
 
   get errorMessageGetProducts => _errorMessageGetProducts;
@@ -249,7 +249,7 @@ class ReceiptProvider with ChangeNotifier {
   }) async {
     _products.clear();
     _errorMessageGetProducts = "";
-    _consultingProducts = true;
+    _isLoadingProducts = true;
     notifyListeners();
 
     int searchTypeInt = 0;
@@ -288,7 +288,7 @@ class ReceiptProvider with ChangeNotifier {
       print("Erro para efetuar a requisição: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
-    _consultingProducts = false;
+    _isLoadingProducts = false;
     notifyListeners();
   }
 

@@ -28,7 +28,7 @@ class _ConferenceConsultProductWithoutEanButtonState
         style: TextButton.styleFrom(
           foregroundColor: Colors.white,
         ),
-        onPressed: receiptProvider.consultingProducts ||
+        onPressed: receiptProvider.isLoadingProducts ||
                 receiptProvider.isLoadingUpdateQuantity
             ? null
             : () async {
@@ -41,7 +41,7 @@ class _ConferenceConsultProductWithoutEanButtonState
                 );
               },
         child: Text(
-          receiptProvider.consultingProducts ||
+          receiptProvider.isLoadingProducts ||
                   receiptProvider.isLoadingUpdateQuantity
               ? "Aguarde o término da consulta/alteração"
               : "Consultar todos produtos do recebimento",

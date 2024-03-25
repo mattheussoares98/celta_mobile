@@ -130,7 +130,7 @@ class _ReceiptConferenceProductsItemsState
   }) {
     widget.consultedProductController.text = "";
 
-    if (receiptProvider.consultingProducts ||
+    if (receiptProvider.isLoadingProducts ||
         receiptProvider.isLoadingUpdateQuantity) {
       return;
     }
@@ -196,7 +196,7 @@ class _ReceiptConferenceProductsItemsState
           splashColor: Colors.white.withOpacity(0),
           highlightColor: Colors.white.withOpacity(0),
       onTap: receiptProvider.isLoadingUpdateQuantity ||
-              receiptProvider.consultingProducts
+              receiptProvider.isLoadingProducts
           ? null
           : () {
               selectIndexAndFocus(
@@ -241,7 +241,7 @@ class _ReceiptConferenceProductsItemsState
           splashColor: Colors.white.withOpacity(0),
           highlightColor: Colors.white.withOpacity(0),
                   onTap: receiptProvider.isLoadingUpdateQuantity ||
-                          receiptProvider.consultingProducts
+                          receiptProvider.isLoadingProducts
                       ? null
                       : () async {
                           DateTime? validityDate = await showDatePicker(
@@ -279,7 +279,7 @@ class _ReceiptConferenceProductsItemsState
                           "Alterar validade",
                           style: TextStyle(
                             color: receiptProvider.isLoadingUpdateQuantity ||
-                                    receiptProvider.consultingProducts
+                                    receiptProvider.isLoadingProducts
                                 ? Colors.black
                                 : Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
@@ -326,7 +326,7 @@ class _ReceiptConferenceProductsItemsState
                           receiptProvider.consultedProductFocusNode,
                       isUpdatingQuantity: receiptProvider.isLoadingUpdateQuantity,
                       isLoading: receiptProvider.isLoadingUpdateQuantity ||
-                          receiptProvider.consultingProducts,
+                          receiptProvider.isLoadingProducts,
                       addQuantityFunction: () async {
                         await updateQuantity(
                           isSubtract: false,

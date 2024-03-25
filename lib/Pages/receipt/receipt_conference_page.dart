@@ -37,7 +37,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
       children: [
         PopScope(
           canPop: !receiptProvider.isLoadingUpdateQuantity &&
-              !receiptProvider.consultingProducts,
+              !receiptProvider.isLoadingProducts,
           onPopInvoked: (value) {
             if (value == true) {
               receiptProvider.clearProducts();
@@ -61,7 +61,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 SearchWidget(
                   focusNodeConsultProduct:
                       receiptProvider.consultProductFocusNode,
-                  isLoading: receiptProvider.consultingProducts ||
+                  isLoading: receiptProvider.isLoadingProducts ||
                       receiptProvider.isLoadingUpdateQuantity,
                   onPressSearch: () async {
                     await receiptProvider.getProducts(
@@ -125,7 +125,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
         ),
         loadingWidget(
           message: 'Consultando produtos',
-          isLoading: receiptProvider.consultingProducts,
+          isLoading: receiptProvider.isLoadingProducts,
         ),
         loadingWidget(
           message: 'Atualizando quantidade',
