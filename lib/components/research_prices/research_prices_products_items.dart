@@ -1,3 +1,4 @@
+import 'package:celta_inventario/providers/research_prices_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,62 +25,61 @@ class ResearchPricesProductsItems extends StatefulWidget {
 
 class _ResearchPricesProductsItemsState
     extends State<ResearchPricesProductsItems> {
-  int _selectedIndexAssociatedProducts = -1;
-  int _selectedIndexNotAssociatedProducts = -1;
-
-  _updateSelectedIndex(int index) {
+  _updateSelectedIndex({
+    required int index,
+    required ResearchPricesProvider researchPricesProvider,
+  }) {
     if (widget.isAssociatedProducts) {
-      if (_selectedIndexAssociatedProducts == index) {
+      if (researchPricesProvider.selectedIndexAssociatedProducts == index) {
         setState(() {
-          _selectedIndexAssociatedProducts = -1;
+          researchPricesProvider.selectedIndexAssociatedProducts = -1;
         });
       } else {
         setState(() {
-          _selectedIndexAssociatedProducts = index;
+          researchPricesProvider.selectedIndexAssociatedProducts = index;
         });
       }
     } else {
-      if (_selectedIndexNotAssociatedProducts == index) {
+      if (researchPricesProvider.selectedIndexNotAssociatedProducts == index) {
         setState(() {
-          _selectedIndexNotAssociatedProducts = -1;
+          researchPricesProvider.selectedIndexNotAssociatedProducts = -1;
         });
       } else {
         setState(() {
-          _selectedIndexNotAssociatedProducts = index;
+          researchPricesProvider.selectedIndexNotAssociatedProducts = index;
         });
       }
     }
   }
 
-  String textButtonMessage(int index) {
+  String textButtonMessage({
+    required int index,
+    required ResearchPricesProvider researchPricesProvider,
+  }) {
     if (widget.isAssociatedProducts) {
-      return _selectedIndexAssociatedProducts != index
+      return researchPricesProvider.selectedIndexAssociatedProducts != index
           ? "Inserir preços"
           : "Minimizar preços";
     } else {
-      return _selectedIndexNotAssociatedProducts != index
+      return researchPricesProvider.selectedIndexNotAssociatedProducts != index
           ? "Inserir preços"
           : "Minimizar preços";
     }
   }
 
-  IconData iconType(int index) {
+  IconData iconType({
+    required int index,
+    required ResearchPricesProvider researchPricesProvider,
+  }) {
     if (widget.isAssociatedProducts) {
-      return _selectedIndexAssociatedProducts == index
+      return researchPricesProvider.selectedIndexAssociatedProducts == index
           ? Icons.arrow_drop_up_sharp
           : Icons.arrow_drop_down;
     } else {
-      return _selectedIndexNotAssociatedProducts == index
+      return researchPricesProvider.selectedIndexNotAssociatedProducts == index
           ? Icons.arrow_drop_up_sharp
           : Icons.arrow_drop_down;
     }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _selectedIndexAssociatedProducts = -1;
-    _selectedIndexNotAssociatedProducts = -1;
   }
 
   Widget itemOfList({
@@ -99,6 +99,12 @@ class _ResearchPricesProductsItemsState
         );
       },
       showSuccessMessage: () {
+        setState(() {
+          widget.isAssociatedProducts
+              ? researchPricesProvider.selectedIndexAssociatedProducts = -1
+              : researchPricesProvider.selectedIndexNotAssociatedProducts = -1;
+        });
+
         ShowSnackbarMessage.showMessage(
           message: "Preços inseridos com sucesso!",
           context: context,
@@ -122,19 +128,26 @@ class _ResearchPricesProductsItemsState
               value: product.PriceLookUp.toString(),
               otherWidget: TextButton(
                 onPressed: () {
-                  _updateSelectedIndex(index);
+                  _updateSelectedIndex(
+                    index: index,
+                    researchPricesProvider: researchPricesProvider,
+                  );
                 },
                 child: Row(
                   children: [
                     Text(
-                      textButtonMessage(index),
+                      textButtonMessage(
+                        index: index,
+                        researchPricesProvider: researchPricesProvider,
+                      ),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontStyle: FontStyle.italic,
                       ),
                     ),
                     Icon(
-                      _selectedIndexAssociatedProducts == index
+                      researchPricesProvider.selectedIndexAssociatedProducts ==
+                              index
                           ? Icons.arrow_drop_up_sharp
                           : Icons.arrow_drop_down,
                       color: Theme.of(context).colorScheme.primary,
@@ -144,10 +157,11 @@ class _ResearchPricesProductsItemsState
               ),
             ),
             if (widget.isAssociatedProducts &&
-                _selectedIndexAssociatedProducts == index)
+                researchPricesProvider.selectedIndexAssociatedProducts == index)
               researchPricesInsertPrices,
             if (!widget.isAssociatedProducts &&
-                _selectedIndexNotAssociatedProducts == index)
+                researchPricesProvider.selectedIndexNotAssociatedProducts ==
+                    index)
               researchPricesInsertPrices,
           ],
         ),
@@ -178,9 +192,11 @@ class _ResearchPricesProductsItemsState
               itemCount: productsCount,
               itemBuilder: (context, index) {
                 if (productsCount == 1 && widget.isAssociatedProducts) {
-                  _selectedIndexAssociatedProducts = index;
+                  researchPricesProvider.selectedIndexAssociatedProducts =
+                      index;
                 } else if (productsCount == 1 && !widget.isAssociatedProducts) {
-                  _selectedIndexNotAssociatedProducts = index;
+                  researchPricesProvider.selectedIndexNotAssociatedProducts =
+                      index;
                 }
 
                 final startIndex = index * itensPerLine;

@@ -82,6 +82,9 @@ class ResearchPricesProvider with ChangeNotifier {
     _addConcurrentAddressInAddressProvider(addressProvider);
   }
 
+  int selectedIndexAssociatedProducts = -1;
+  int selectedIndexNotAssociatedProducts = -1;
+
   void clearResearchPrices() {
     _researchPrices.clear();
     _errorGetResearchPrices = "";
@@ -445,6 +448,7 @@ class ResearchPricesProvider with ChangeNotifier {
     _errorGetAssociatedsProducts = "";
     _isLoadingGetProducts = true;
     _associatedsProducts.clear();
+    selectedIndexAssociatedProducts = -1;
     notifyListeners();
 
     Map jsonGetProducts = {
@@ -496,6 +500,7 @@ class ResearchPricesProvider with ChangeNotifier {
     _errorGetNotAssociatedsProducts = "";
     _isLoadingGetProducts = true;
     _notAssociatedsProducts.clear();
+    selectedIndexNotAssociatedProducts = -1;
     notifyListeners();
 
     Map jsonGetProducts = {
