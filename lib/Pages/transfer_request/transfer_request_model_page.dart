@@ -34,20 +34,13 @@ class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_) async {},
+          onPopInvoked: (value) {
+            transferRequestProvider.clearRequestModels();
+          },
           child: Scaffold(
             appBar: AppBar(
               title: const Text(
                 'MODELOS DE PEDIDO  ',
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  transferRequestProvider.clearRequestModels();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
               ),
               actions: [
                 IconButton(

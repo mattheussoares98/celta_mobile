@@ -74,8 +74,8 @@ class InventoryProvider with ChangeNotifier {
     required String? userIdentity,
     bool? isConsultingAgain = false,
   }) async {
-    if(_isLoadingInventorys) return;
-    
+    if (_isLoadingInventorys) return;
+
     _isLoadingInventorys = true;
     _inventorys.clear();
     _errorMessageInventorys = '';
@@ -169,12 +169,6 @@ class InventoryProvider with ChangeNotifier {
           data: SoapHelperResponseParameters.responseAsMap["Produtos"],
           listToAdd: _products,
         );
-
-        Future.delayed(const Duration(milliseconds: 100), () {
-          //se não colocar em um future pra mudar o foco, não funciona corretamente
-          FocusScope.of(context).requestFocus(consultedProductFocusNode);
-          //altera o foco para o campo de pesquisa novamente
-        });
       }
     } catch (e) {
       print("Erro para efetuar a requisição : $e");

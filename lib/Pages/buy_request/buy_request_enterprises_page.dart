@@ -17,14 +17,15 @@ class _BuyRequestEnterprisesPageState extends State<BuyRequestEnterprisesPage> {
   void initState() {
     super.initState();
 
-    _getEnterprises();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getEnterprises();
+    });
   }
 
   Future<void> _getEnterprises() async {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     if (buyRequestProvider.enterprisesCount > 0) return;
-    await buyRequestProvider.getEnterprises(
-        context: context, isSearchingAgain: false);
+    await buyRequestProvider.getEnterprises(context: context);
   }
 
   @override

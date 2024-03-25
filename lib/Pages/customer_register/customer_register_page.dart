@@ -171,12 +171,16 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
     AddressProvider addressProvider = Provider.of(context);
-    // customerRegisterProvider.changeIsLoadingInsertCustomer();
     return PopScope(
-      canPop: !customerRegisterProvider.isLoadingInsertCustomer,
-      onPopInvoked: (_) {
-        addressProvider.clearAddresses();
-        addressProvider.clearAddressControllers(clearCep: true);
+      canPop: canExitPage(
+        customerRegisterProvider: customerRegisterProvider,
+        addressProvider: addressProvider,
+      ),
+      onPopInvoked: (value) {
+        if (value == true) {
+          addressProvider.clearAddresses();
+          addressProvider.clearAddressControllers(clearCep: true);
+        }
       },
       child: Stack(
         children: [
@@ -184,27 +188,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
             appBar: AppBar(
               title: Text(
                 appBarTitles[_selectedIndex],
-              ),
-              leading: IconButton(
-                onPressed: !canExitPage(
-                  addressProvider: addressProvider,
-                  customerRegisterProvider: customerRegisterProvider,
-                )
-                    ? null
-                    : () {
-                        if (canExitPage(
-                          addressProvider: addressProvider,
-                          customerRegisterProvider: customerRegisterProvider,
-                        )) {
-                          addressProvider.clearAddresses();
-                          addressProvider.clearAddressControllers(
-                              clearCep: true);
-                          Navigator.of(context).pop();
-                        }
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
               ),
             ),
             bottomNavigationBar: BottomNavigationBar(

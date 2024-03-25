@@ -35,11 +35,12 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
     return Stack(
       children: [
         PopScope(
-          canPop: !receiptProvider.isLoadingUpdateQuantity,
-          onPopInvoked: (_) async {
-            Future.delayed(const Duration(milliseconds: 300), () {
+          canPop: !receiptProvider.isLoadingUpdateQuantity &&
+              !receiptProvider.consultingProducts,
+          onPopInvoked: (value) {
+            if (value == true) {
               receiptProvider.clearProducts();
-            });
+            }
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
@@ -51,13 +52,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                     fontSize: 50,
                   ),
                 ),
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  receiptProvider.clearProducts();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.arrow_back_outlined),
               ),
             ),
             body: Column(

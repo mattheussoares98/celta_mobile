@@ -86,24 +86,19 @@ class _TransferPageState extends State<TransferPage> {
     return Stack(
       children: [
         PopScope(
-          canPop: !transferRequestProvider.isLoadingSaveTransferRequest,
+          canPop: !transferRequestProvider.isLoadingSaveTransferRequest &&
+              !transferRequestProvider.isLoadingProducts,
+          onPopInvoked: (value) {
+            if (value == true) {
+              transferRequestProvider.clearProducts();
+            }
+          },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
             appBar: AppBar(
               title: FittedBox(
                 child: Text(
                   appBarTitles[_selectedIndex],
-                ),
-              ),
-              leading: IconButton(
-                onPressed: transferRequestProvider.isLoadingSaveTransferRequest
-                    ? null
-                    : () {
-                        transferRequestProvider.clearProducts();
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
                 ),
               ),
               actions: [

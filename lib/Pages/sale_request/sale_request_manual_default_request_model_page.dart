@@ -20,14 +20,6 @@ class SaleRequestManualDefaultRequestModelPage extends StatelessWidget {
             'CADASTRAR MODELO DE PEDIDOS PADRÃO',
           ),
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back_outlined,
-          ),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

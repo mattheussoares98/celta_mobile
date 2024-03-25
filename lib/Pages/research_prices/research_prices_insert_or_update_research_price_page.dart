@@ -89,9 +89,12 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: ((didPop) {
-            researchPricesProvider.updateSelectedResearch(null);
-          }),
+          canPop: !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
+          onPopInvoked: (value) {
+            if (value == true) {
+              researchPricesProvider.updateSelectedResearch(null);
+            }  
+          },
           child: Scaffold(
             appBar: AppBar(
               title: FittedBox(
@@ -99,17 +102,6 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                   researchPricesProvider.selectedResearch == null
                       ? "Cadastrar pesquisa"
                       : "Alterar pesquisa",
-                ),
-              ),
-              leading: IconButton(
-                onPressed: researchPricesProvider.isLoadingAddOrUpdateOfResearch
-                    ? null
-                    : () {
-                        researchPricesProvider.updateSelectedResearch(null);
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back,
                 ),
               ),
             ),

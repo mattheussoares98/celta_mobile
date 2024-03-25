@@ -40,25 +40,20 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_) async {
-            adjustStockProvider
-                .clearProductsJustificationsStockTypesAndJsonAdjustStock();
+          canPop: !adjustStockProvider.isLoadingProducts &&
+              !adjustStockProvider.isLoadingAdjustStock &&
+              !adjustStockProvider.isLoadingTypeStockAndJustifications,
+          onPopInvoked: (value) async {
+            if (value == true) {
+              adjustStockProvider
+                  .clearProductsJustificationsStockTypesAndJsonAdjustStock();
+            }
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
             appBar: AppBar(
               title: const Text(
                 'AJUSTE DE ESTOQUE  ',
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  adjustStockProvider
-                      .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
               ),
             ),
             body: Column(

@@ -42,22 +42,13 @@ class _TransferDestinyEnterprisePageState
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_) async {
+          onPopInvoked: (_) {
             transferRequestProvider.clearDestinyEnterprise();
           },
           child: Scaffold(
             appBar: AppBar(
               title: const Text(
                 'EMPRESA DE DESTINO  ',
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  transferRequestProvider.clearDestinyEnterprise();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
               ),
               actions: [
                 IconButton(

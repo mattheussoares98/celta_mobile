@@ -59,16 +59,20 @@ class _ResearchPricesProductsPageState
       ResearchPricesInsertPricesPage(
         isAssociatedProducts: false,
         searchProductController: _searchNotAssociatedsProductsController,
-         keyboardIsClosed: MediaQuery.of(context).viewInsets.bottom == 0,
+        keyboardIsClosed: MediaQuery.of(context).viewInsets.bottom == 0,
       ),
     ];
 
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_) async {
-            researchPricesProvider.clearAssociatedsProducts();
-            researchPricesProvider.clearNotAssociatedsProducts();
+          canPop: !researchPricesProvider.isLoadingGetProducts &&
+              !researchPricesProvider.isLoadingInsertConcurrentPrices,
+          onPopInvoked: (value) {
+            if (value == true) {
+              researchPricesProvider.clearAssociatedsProducts();
+              researchPricesProvider.clearNotAssociatedsProducts();
+            }  
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
@@ -78,19 +82,6 @@ class _ResearchPricesProductsPageState
                     "Pesquisa ${researchPricesProvider.selectedResearch!.Code}"
                     " - Concorrente ${researchPricesProvider.selectedConcurrent!.ConcurrentCode}"),
               ),
-              leading: IconButton(
-                onPressed: researchPricesProvider.isLoadingGetProducts
-                    ? null
-                    : () {
-                        researchPricesProvider.clearAssociatedsProducts();
-                        researchPricesProvider.clearNotAssociatedsProducts();
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
-              ),
-              actions: [],
             ),
             body: Center(
               child: _pages.elementAt(_selectedIndex),

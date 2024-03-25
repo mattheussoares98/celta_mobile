@@ -53,9 +53,11 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
         Provider.of(context, listen: true);
 
     return PopScope(
-      canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents,
-      onPopInvoked: (_) async {
-        researchPricesProvider.clearResearchPrices();
+      canPop: !researchPricesProvider.isLoadingResearchPrices,
+      onPopInvoked: (value) {
+        if (value == true) {
+          researchPricesProvider.clearResearchPrices();
+        }
       },
       child: Stack(
         children: [
@@ -64,17 +66,6 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
               title: const FittedBox(
                 child: Text(
                   'PESQUISAS CADASTRADAS',
-                ),
-              ),
-              leading: IconButton(
-                onPressed: researchPricesProvider.isLoadingResearchPrices ||
-                        researchPricesProvider.isLoadingAddOrUpdateConcurrents
-                    ? null
-                    : () {
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
                 ),
               ),
             ),

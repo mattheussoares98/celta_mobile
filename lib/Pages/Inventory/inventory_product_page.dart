@@ -189,24 +189,18 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     return Stack(
       children: [
         PopScope(
-          canPop: !inventoryProvider.isLoadingQuantity,
-          onPopInvoked: (_) async {
-            inventoryProvider.clearProducts();
+          canPop: !inventoryProvider.isLoadingQuantity &&
+              !inventoryProvider.isLoadingProducts,
+          onPopInvoked: (value) {
+            if (value == true) {
+              inventoryProvider.clearProducts();
+            }
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
             appBar: AppBar(
               title: const Text(
                 'PRODUTOS',
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  inventoryProvider.clearProducts();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
               ),
             ),
             body: Column(

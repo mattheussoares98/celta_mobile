@@ -41,25 +41,17 @@ class _TransferBetweenPackagePageState
       children: [
         PopScope(
           canPop: !transferBetweenPackageProvider.isLoadingAdjustStock,
-          onPopInvoked: (_) async {
-            transferBetweenPackageProvider
-                .clearProductsJustificationsPackageAndJsonAdjustStock();
+          onPopInvoked: (value) {
+            if (value == true) {
+              transferBetweenPackageProvider
+                  .clearProductsJustificationsPackageAndJsonAdjustStock();
+            }  
           },
           child: Scaffold(
             appBar: AppBar(
               title: const FittedBox(
                 child: Text(
                   'TRANSFERÊNCIA ENTRE ESTOQUES',
-                ),
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  transferBetweenPackageProvider
-                      .clearProductsJustificationsPackageAndJsonAdjustStock();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
                 ),
               ),
             ),

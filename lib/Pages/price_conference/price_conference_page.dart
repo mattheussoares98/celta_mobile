@@ -30,25 +30,20 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return Stack(
-      children: [
-        PopScope(
-          onPopInvoked: (_) async {
-            priceConferenceProvider.clearProducts();
-          },
-          child: Scaffold(
+    return PopScope(
+      canPop: !priceConferenceProvider.isLoading &&
+          !priceConferenceProvider.isSendingToPrint,
+      onPopInvoked: (value) async {
+        if (value == true) {
+          priceConferenceProvider.clearProducts();
+        }
+      },
+      child: Stack(
+        children: [
+          Scaffold(
             appBar: AppBar(
               title: const Text(
                 'CONSULTA DE PREÇOS',
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  priceConferenceProvider.clearProducts();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
               ),
             ),
             body: Column(
@@ -100,16 +95,16 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
               ],
             ),
           ),
-        ),
-        loadingWidget(
-          message: 'Consultando produtos...',
-          isLoading: priceConferenceProvider.isLoading,
-        ),
-        loadingWidget(
-          message: 'Marcando/desmarcando para impressão...',
-          isLoading: priceConferenceProvider.isSendingToPrint,
-        ),
-      ],
+          loadingWidget(
+            message: 'Consultando produtos...',
+            isLoading: priceConferenceProvider.isLoading,
+          ),
+          loadingWidget(
+            message: 'Marcando/desmarcando para impressão...',
+            isLoading: priceConferenceProvider.isSendingToPrint,
+          ),
+        ],
+      ),
     );
   }
 }

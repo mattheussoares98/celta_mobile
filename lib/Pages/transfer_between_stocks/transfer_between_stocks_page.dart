@@ -44,21 +44,15 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
     return Stack(
       children: [
         PopScope(
-          canPop: !transferBetweenStocksProvider.isLoadingAdjustStock ,
-          onPopInvoked: (_) async {
-            if (transferBetweenStocksProvider.isLoadingAdjustStock ||
-                transferBetweenStocksProvider.isLoadingProducts ||
-                transferBetweenStocksProvider
-                    .isLoadingTypeStockAndJustifications) {
-              ShowSnackbarMessage.showMessage(
-                message: "Aguarde o término do processamento",
-                context: context,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              );
-              return;
-            }
-            transferBetweenStocksProvider
-                .clearProductsJustificationsStockTypesAndJsonAdjustStock();
+          canPop: !transferBetweenStocksProvider.isLoadingAdjustStock &&
+              !transferBetweenStocksProvider.isLoadingProducts &&
+              !transferBetweenStocksProvider
+                  .isLoadingTypeStockAndJustifications,
+          onPopInvoked: (value) {
+            if (value == true) {
+              transferBetweenStocksProvider
+                  .clearProductsJustificationsStockTypesAndJsonAdjustStock();
+            }  
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
@@ -68,24 +62,9 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                   'TRANSFERÊNCIA ENTRE ESTOQUES',
                 ),
               ),
-              leading: IconButton(
-                onPressed: transferBetweenStocksProvider.isLoadingAdjustStock ||
-                        transferBetweenStocksProvider.isLoadingProducts ||
-                        transferBetweenStocksProvider
-                            .isLoadingTypeStockAndJustifications
-                    ? null
-                    : () {
-                        transferBetweenStocksProvider
-                            .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
-              ),
             ),
             body: SingleChildScrollView(
-    primary: false, 
+              primary: false,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

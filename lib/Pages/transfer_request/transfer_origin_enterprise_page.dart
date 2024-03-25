@@ -41,23 +41,13 @@ class _TransferOriginEnterprisePageState
     return Stack(
       children: [
         PopScope(
-        
-          onPopInvoked: (_) async {
+          onPopInvoked: (_) {
             transferRequestProvider.clearOriginEnterprise();
           },
           child: Scaffold(
             appBar: AppBar(
               title: const Text(
                 'EMPRESA DE ORIGEM  ',
-              ),
-              leading: IconButton(
-                onPressed: () {
-                  // transferRequestProvider.clearTransferRequestModels();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
               ),
               actions: [
                 IconButton(

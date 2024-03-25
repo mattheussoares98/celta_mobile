@@ -146,9 +146,13 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     return Stack(
       children: [
         PopScope(
-          canPop: !saleRequestProvider.isLoadingSaveSaleRequest,
-          onPopInvoked: (_) async {
-            saleRequestProvider.clearProducts();
+          canPop: !saleRequestProvider.isLoadingSaveSaleRequest &&
+              !saleRequestProvider.isLoadingProcessCart &&
+              !saleRequestProvider.isLoadingProducts,
+          onPopInvoked: (value) {
+            if (value == true) {
+              saleRequestProvider.clearProducts();
+            }
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
@@ -156,18 +160,6 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
               title: FittedBox(
                 child: Text(
                   appBarTitles[_selectedIndex],
-                ),
-              ),
-              leading: IconButton(
-                onPressed: saleRequestProvider.isLoadingSaveSaleRequest ||
-                        saleRequestProvider.isLoadingProcessCart
-                    ? null
-                    : () {
-                        saleRequestProvider.clearProducts();
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
                 ),
               ),
               actions: [
@@ -300,7 +292,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           ),
         ),
         loadingWidget(
-          message: "Processando carrinho...",
+          message: "Calculando preços...",
           isLoading: saleRequestProvider.isLoadingProcessCart,
         ),
         loadingWidget(

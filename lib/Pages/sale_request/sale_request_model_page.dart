@@ -54,9 +54,8 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
     return Stack(
       children: [
         PopScope(
-          
-          onPopInvoked: (_) async {
-            saleRequestProvider.clearProducts();
+          onPopInvoked: (_){
+            saleRequestProvider.clearRequests();
           },
           child: Scaffold(
             // resizeToAvoidBottomInset: false,
@@ -81,17 +80,6 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
                   icon: const Icon(Icons.refresh),
                 ),
               ],
-              leading: IconButton(
-                onPressed: saleRequestProvider.isLoadingRequests
-                    ? null
-                    : () {
-                        saleRequestProvider.clearRequests();
-                        Navigator.of(context).pop();
-                      },
-                icon: const Icon(
-                  Icons.arrow_back_outlined,
-                ),
-              ),
             ),
             body: RefreshIndicator(
               onRefresh: () => saleRequestProvider.getRequests(
