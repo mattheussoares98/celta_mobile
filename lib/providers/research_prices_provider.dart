@@ -678,6 +678,10 @@ class ResearchPricesProvider with ChangeNotifier {
           offerECommerce: offerECommerce,
         );
       }
+
+      FirebaseHelper.addSoapCallInFirebase(
+        firebaseCallEnum: FirebaseCallEnum.researchPricesInsertPrice,
+      );
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorInsertConcurrentPrices =
