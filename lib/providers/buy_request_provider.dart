@@ -498,7 +498,6 @@ class BuyRequestProvider with ChangeNotifier {
 
   Future<void> getProducts({
     required String searchValue,
-    required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
   }) async {
     _errorMessageGetProducts = "";
@@ -547,19 +546,10 @@ class BuyRequestProvider with ChangeNotifier {
         _updateProductWithProductCart();
 
         _orderProductsUpByPlu();
-      } else {
-        ShowSnackbarMessage.showMessage(
-          message: _errorMessageGetProducts,
-          context: context,
-        );
       }
     } catch (e) {
       print("Erro para obter os produtos: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
-        message: _errorMessageGetProducts,
-        context: context,
-      );
     } finally {
       _isLoadingProducts = false;
       notifyListeners();
@@ -570,7 +560,7 @@ class BuyRequestProvider with ChangeNotifier {
     bool? isSearchingAgain = false,
     required BuildContext context,
   }) async {
-    if(_isLoadingBuyer) return;
+    if (_isLoadingBuyer) return;
 
     _errorMessageBuyer = "";
     _isLoadingBuyer = true;
@@ -631,8 +621,8 @@ class BuyRequestProvider with ChangeNotifier {
     bool? isSearchingAgain = false,
     required BuildContext context,
   }) async {
-    if(_isLoadingRequestsType) return;
-    
+    if (_isLoadingRequestsType) return;
+
     _errorMessageRequestsType = "";
     _isLoadingRequestsType = true;
     _clearRequestsType();
@@ -734,7 +724,7 @@ class BuyRequestProvider with ChangeNotifier {
     required BuildContext context,
     bool isSearchingAgain = true,
   }) async {
-    if(_isLoadingEnterprises) return;
+    if (_isLoadingEnterprises) return;
 
     _errorMessageEnterprises = "";
     _isLoadingEnterprises = true;

@@ -222,7 +222,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço de venda",
                 value: ConvertString.convertToBRL(
-                  _totalItemValue,
+                  product.Value,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,
               ),

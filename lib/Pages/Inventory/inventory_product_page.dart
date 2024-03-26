@@ -236,27 +236,25 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                     ),
                   ],
                 ),
-                if (inventoryProvider.productsCount == 0 &&
-                    inventoryProvider.errorMessageGetProducts != "")
+                if (inventoryProvider.errorMessageGetProducts != "")
                   ErrorMessage(
                     errorMessage: inventoryProvider.errorMessageGetProducts,
                   ),
-                if (inventoryProvider.products.isNotEmpty)
-                  InventoryProductsItems(
-                    getProducts: () async {
-                      await _searchProduct(
-                        inventoryProvider: inventoryProvider,
-                        arguments: arguments,
-                        configurationsProvider: configurationsProvider,
-                      );
-                    },
-                    isIndividual: _isIndividual,
-                    inventoryCountingCode: arguments["InventoryCountingsModel"]
-                        .codigoInternoInvCont,
-                    productPackingCode: arguments["InventoryCountingsModel"]
-                        .numeroContagemInvCont,
-                    consultedProductController: _consultedProductController,
-                  ),
+                InventoryProductsItems(
+                  getProducts: () async {
+                    await _searchProduct(
+                      inventoryProvider: inventoryProvider,
+                      arguments: arguments,
+                      configurationsProvider: configurationsProvider,
+                    );
+                  },
+                  isIndividual: _isIndividual,
+                  inventoryCountingCode:
+                      arguments["InventoryCountingsModel"].codigoInternoInvCont,
+                  productPackingCode: arguments["InventoryCountingsModel"]
+                      .numeroContagemInvCont,
+                  consultedProductController: _consultedProductController,
+                ),
                 Container()
               ],
             ),

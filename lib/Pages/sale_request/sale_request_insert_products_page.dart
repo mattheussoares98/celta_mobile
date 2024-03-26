@@ -68,33 +68,32 @@ class _SaleRequestInsertProductsPageState
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageProducts,
           ),
-        if (saleRequestProvider.productsCount > 0)
-          SaleRequestProductsItems(
-              consultedProductController: _consultedProductController,
-              enterpriseCode: widget.enterpriseCode,
-              getProductsWithCamera: () async {
-                FocusScope.of(context).unfocus();
+        SaleRequestProductsItems(
+            consultedProductController: _consultedProductController,
+            enterpriseCode: widget.enterpriseCode,
+            getProductsWithCamera: () async {
+              FocusScope.of(context).unfocus();
+              _searchProductTextEditingController.clear();
+
+              _searchProductTextEditingController.text =
+                  await ScanBarCode.scanBarcode(context);
+
+              if (_searchProductTextEditingController.text == "") {
+                return;
+              }
+
+              await saleRequestProvider.getProducts(
+                configurationsProvider: configurationsProvider,
+                context: context,
+                enterpriseCode: widget.enterpriseCode,
+                controllerText: _searchProductTextEditingController.text,
+                requestTypeCode: widget.requestTypeCode,
+              );
+
+              if (saleRequestProvider.productsCount > 0) {
                 _searchProductTextEditingController.clear();
-
-                _searchProductTextEditingController.text =
-                    await ScanBarCode.scanBarcode(context);
-
-                if (_searchProductTextEditingController.text == "") {
-                  return;
-                }
-
-                await saleRequestProvider.getProducts(
-                  configurationsProvider: configurationsProvider,
-                  context: context,
-                  enterpriseCode: widget.enterpriseCode,
-                  controllerText: _searchProductTextEditingController.text,
-                  requestTypeCode: widget.requestTypeCode,
-                );
-
-                if (saleRequestProvider.productsCount > 0) {
-                  _searchProductTextEditingController.clear();
-                }
-              }),
+              }
+            }),
       ],
     );
   }

@@ -33,7 +33,6 @@ class _BuyRequestInsertProductsPageState
 
     buyRequestProvider.getProducts(
       searchValue: consultProductController.text,
-      context: context,
       configurationsProvider: configurationsProvider,
     );
 
@@ -66,7 +65,6 @@ class _BuyRequestInsertProductsPageState
               await buyRequestProvider.getProducts(
                 configurationsProvider: configurationsProvider,
                 searchValue: consultProductController.text,
-                context: context,
               );
 
               if (buyRequestProvider.errorMessageGetProducts == "") {
@@ -75,6 +73,10 @@ class _BuyRequestInsertProductsPageState
             },
             focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
           ),
+          if (buyRequestProvider.errorMessageGetProducts != "")
+            ErrorMessage(
+              errorMessage: buyRequestProvider.errorMessageGetProducts,
+            ),
           const BuyRequestProductsItems(),
         ],
       ),

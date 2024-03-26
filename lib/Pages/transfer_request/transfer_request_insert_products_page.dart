@@ -71,33 +71,32 @@ class _TransferRequestInsertProductsPageState
           ErrorMessage(
             errorMessage: transferRequestProvider.errorMessageProducts,
           ),
-        if (transferRequestProvider.productsCount > 0)
-          TransferRequestProductsItems(
-            consultedProductController: _consultedProductController,
-            getProductsWithCamera: () async {
-              FocusScope.of(context).unfocus();
+        TransferRequestProductsItems(
+          consultedProductController: _consultedProductController,
+          getProductsWithCamera: () async {
+            FocusScope.of(context).unfocus();
+            _searchProductTextEditingController.clear();
+
+            _searchProductTextEditingController.text =
+                await ScanBarCode.scanBarcode(context);
+
+            if (_searchProductTextEditingController.text == "") {
+              return;
+            }
+
+            await transferRequestProvider.getProducts(
+              requestTypeCode: widget.requestTypeCode.toString(),
+              enterpriseOriginCode: widget.enterpriseOriginCode,
+              enterpriseDestinyCode: widget.enterpriseDestinyCode,
+              value: _searchProductTextEditingController.text,
+              configurationsProvider: configurationsProvider,
+            );
+
+            if (transferRequestProvider.productsCount > 0) {
               _searchProductTextEditingController.clear();
-
-              _searchProductTextEditingController.text =
-                  await ScanBarCode.scanBarcode(context);
-
-              if (_searchProductTextEditingController.text == "") {
-                return;
-              }
-
-              await transferRequestProvider.getProducts(
-                requestTypeCode: widget.requestTypeCode.toString(),
-                enterpriseOriginCode: widget.enterpriseOriginCode,
-                enterpriseDestinyCode: widget.enterpriseDestinyCode,
-                value: _searchProductTextEditingController.text,
-                configurationsProvider: configurationsProvider,
-              );
-
-              if (transferRequestProvider.productsCount > 0) {
-                _searchProductTextEditingController.clear();
-              }
-            },
-          ),
+            }
+          },
+        ),
       ],
     );
   }
