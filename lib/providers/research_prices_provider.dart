@@ -268,6 +268,10 @@ class ResearchPricesProvider with ChangeNotifier {
         //houver uma pesquisa selecionada, significa que está cadastrando uma
         //nova e por isso não precisa alterar
         _updateLocalSelectedResearch(name: name, observation: observation);
+      } else if (_selectedResearch == null) {
+        _researchPrices.add(ResearchPricesResearchModel.fromJson(
+          json.decode(SoapHelperResponseParameters.responseAsString),
+        ));
       }
     } catch (e) {
       print(e.toString());
@@ -334,8 +338,10 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "Name": concurrentName,
       "Observation": observation,
-      "Address": addressProvider.addresses[0].toJson(),
     };
+    if(addressProvider.addresses.isNotEmpty) {
+      jsonBody["Address"] = addressProvider.addresses[0].toJson();
+    }
 
     try {
       await SoapHelper.soapPost(
@@ -347,11 +353,17 @@ class ResearchPricesProvider with ChangeNotifier {
       );
       _errorAddOrUpdateConcurrents = SoapHelperResponseParameters.errorMessage;
 
-      if (_errorAddOrUpdateConcurrents == "") {
+      if (_errorAddOrUpdateConcurrents == "" && _selectedConcurrent != null) {
         _updateLocalSelectedConcurrent(
           addressProvider: addressProvider,
           name: concurrentName,
           observation: observation,
+        );
+      } else if (_selectedConcurrent == null) {
+        _concurrents.add(
+          ResearchPricesConcurrentsModel.fromJson(
+            json.decode(SoapHelperResponseParameters.responseAsString),
+          ),
         );
       }
     } catch (e) {
