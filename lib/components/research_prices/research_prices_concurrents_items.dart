@@ -58,6 +58,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
               message: "O concorrente está associado à pesquisa",
               context: context,
               backgroundColor: Theme.of(context).colorScheme.primary,
+              secondsDuration: 1,
             );
             Navigator.of(context)
                 .pushNamed(APPROUTES.RESEARCH_PRICES_INSERT_PRICE);
