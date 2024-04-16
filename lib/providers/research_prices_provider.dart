@@ -465,23 +465,24 @@ class ResearchPricesProvider with ChangeNotifier {
 
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
-      "ResearchOfPriceCode": _selectedResearch!.Code,
-      "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
-      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+      "RoutineInt": 7,
       "SearchValue": searchProductControllerText,
-      "WithPrices":
-          withPrices, //Null (Todos) | True (preços informados) | False (sem preços informados)
+      "ResearchOfPriceFilters": {
+        "ResearchOfPriceCode": _selectedResearch!.Code,
+        "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+        "OnlyAssociated": true,
+      },
     };
 
     try {
       await SoapHelper.soapPost(
         parameters: {
-          "json": json.encode(jsonGetProducts),
+          "filters": json.encode(jsonGetProducts),
         },
-        typeOfResponse: "GetConcurrentProductsJsonResponse",
-        SOAPAction: "GetConcurrentProductsJson",
-        serviceASMX: "CeltaResearchOfPriceService.asmx",
-        typeOfResult: "GetConcurrentProductsJsonResult",
+        typeOfResponse: "GetProductsJsonResponse",
+        SOAPAction: "GetProductsJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductsJsonResult",
       );
 
       _errorGetAssociatedsProducts = SoapHelperResponseParameters.errorMessage;
@@ -523,7 +524,6 @@ class ResearchPricesProvider with ChangeNotifier {
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
-      "SearchValue": searchProductControllerText,
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
