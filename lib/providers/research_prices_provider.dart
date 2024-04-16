@@ -339,7 +339,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "Name": concurrentName,
       "Observation": observation,
     };
-    if(addressProvider.addresses.isNotEmpty) {
+    if (addressProvider.addresses.isNotEmpty) {
       jsonBody["Address"] = addressProvider.addresses[0].toJson();
     }
 
@@ -468,6 +468,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "ResearchOfPriceCode": _selectedResearch!.Code,
       "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
       "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+      "SearchValue": searchProductControllerText,
       "WithPrices":
           withPrices, //Null (Todos) | True (preços informados) | False (sem preços informados)
     };
@@ -488,6 +489,10 @@ class ResearchPricesProvider with ChangeNotifier {
       if (_errorGetAssociatedsProducts == "") {
         _associatedsProducts.addAll(
           ResearchPricesProductsModel.resultAsStringToProductsModel(),
+        );
+
+        _associatedsProducts.sort(
+          (a, b) => a.ProductName.compareTo(b.ProductName),
         );
       } else {
         ShowSnackbarMessage.showMessage(
@@ -542,6 +547,9 @@ class ResearchPricesProvider with ChangeNotifier {
       if (_errorGetNotAssociatedsProducts == "") {
         _notAssociatedsProducts.addAll(
           ResearchPricesProductsModel.resultAsStringToProductsModel(),
+        );
+        _associatedsProducts.sort(
+          (a, b) => a.ProductName.compareTo(b.ProductName),
         );
       }
     } catch (e) {
