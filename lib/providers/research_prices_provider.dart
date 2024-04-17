@@ -524,9 +524,11 @@ class ResearchPricesProvider with ChangeNotifier {
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
+      "SearchValue": searchProductControllerText,
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
+        "OnlyAssociated": false,
       },
     };
 
