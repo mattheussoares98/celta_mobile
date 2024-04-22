@@ -142,7 +142,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição na nova forma de consulta: $e");
+      //print("Erro para efetuar a requisição na nova forma de consulta: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoadingProducts = false;
@@ -224,7 +224,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
       _errorMessageTypeStockAndJustifications =
           SoapHelperResponseParameters.errorMessage;
     } catch (e) {
-      print("Erro para efetuar a requisição justifications: $e");
+      //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
@@ -272,7 +272,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para confirmar o ajuste: $e");
+      //print("Erro para confirmar o ajuste: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageAdjustStock,
@@ -344,7 +344,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição stockTypes: $e");
+      //print("Erro para efetuar a requisição stockTypes: $e");
     }
     notifyListeners();
   }

@@ -169,7 +169,7 @@ class AdjustStockProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição na nova forma de consulta: $e");
+      //print("Erro para efetuar a requisição na nova forma de consulta: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoadingProducts = false;
@@ -241,7 +241,7 @@ class AdjustStockProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição stockTypes: $e");
+      //print("Erro para efetuar a requisição stockTypes: $e");
       _errorMessageTypeStockAndJustifications =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
@@ -277,7 +277,7 @@ class AdjustStockProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição justifications: $e");
+      //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
@@ -353,7 +353,7 @@ class AdjustStockProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição justifications: $e");
+      //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
 
       ShowSnackbarMessage.showMessage(

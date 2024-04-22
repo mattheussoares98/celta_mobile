@@ -91,7 +91,7 @@ class PriceConferenceProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição : $e");
+      //print("Erro para efetuar a requisição : $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoading = false;
@@ -169,7 +169,7 @@ class PriceConferenceProvider with ChangeNotifier {
       }
       //como deu certo a marcação/desmarcação, precisa atualizar na lista local se está marcado ou não
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorSendToPrint = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isSendingToPrint = false;

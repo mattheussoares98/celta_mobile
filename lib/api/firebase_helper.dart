@@ -155,13 +155,13 @@ class FirebaseHelper {
         batch.commit().then(
           (value) async {
             await PrefsInstance.clearSoaps();
-            //print("soapInformation adicionada");
+            ////print("soapInformation adicionada");
           },
         ).catchError((error) {
-          //print("Erro para adicionar a soapInformation: $error");
+          ////print("Erro para adicionar a soapInformation: $error");
         });
       } catch (e) {
-        print(e);
+        //print(e);
       }
     }
   }
@@ -195,10 +195,10 @@ class FirebaseHelper {
   }
 
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    print('Got a message whilst in the background!');
-    print("title: ${message.notification?.title}");
-    print("body: ${message.notification?.body}");
-    print("data: ${message.data}");
+    //print('Got a message whilst in the background!');
+    //print("title: ${message.notification?.title}");
+    //print("body: ${message.notification?.body}");
+    //print("data: ${message.data}");
   }
 
   static Future<void> initFirebase() async {
@@ -217,8 +217,8 @@ class FirebaseHelper {
       return;
     }
     await _firebaseMessaging.requestPermission();
-    final fcmToken = await _firebaseMessaging.getToken();
-    print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
+    // final fcmToken = await _firebaseMessaging.getToken();
+    //print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
     // mensagens pelo site do firebase
 
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
@@ -228,13 +228,13 @@ class FirebaseHelper {
 
     //abaixo recebe a notificação em primeiro plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      //print('Got a message whilst in the foreground!');
+      //print('Message data: ${message.data}');
 
       if (message.notification != null) {
-        print(
-            'Título da notificação: ${message.notification!.title.toString()}');
-        print('Texto da notificação: ${message.notification!.body}');
+        // print(
+        //     'Título da notificação: ${message.notification!.title.toString()}');
+        //print('Texto da notificação: ${message.notification!.body}');
       }
     });
   }

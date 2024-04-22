@@ -158,7 +158,7 @@ class ReceiptProvider with ChangeNotifier {
 
       _products[index].DataValidade_ProcRecebDocProEmb = validityDate;
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
@@ -227,7 +227,7 @@ class ReceiptProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
@@ -285,7 +285,7 @@ class ReceiptProvider with ChangeNotifier {
         });
       }
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoadingProducts = false;
@@ -332,7 +332,7 @@ class ReceiptProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessage,
@@ -413,7 +413,7 @@ class ReceiptProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageLiberate = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageLiberate,

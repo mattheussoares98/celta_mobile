@@ -48,7 +48,7 @@ class EnterpriseProvider with ChangeNotifier {
 
       _errorMessage = SoapHelperResponseParameters.errorMessage;
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingEnterprises = false;

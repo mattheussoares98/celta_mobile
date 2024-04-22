@@ -548,7 +548,7 @@ class BuyRequestProvider with ChangeNotifier {
         _orderProductsUpByPlu();
       }
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      //print("Erro para obter os produtos: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingProducts = false;
@@ -606,7 +606,7 @@ class BuyRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os compradores: $e");
+      //print("Erro para obter os compradores: $e");
       _errorMessageBuyer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageBuyer,
@@ -661,7 +661,7 @@ class BuyRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os modelos de pedido: $e");
+      //print("Erro para obter os modelos de pedido: $e");
       _errorMessageRequestsType = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageRequestsType,
@@ -709,7 +709,7 @@ class BuyRequestProvider with ChangeNotifier {
         await _updateDataInDatabase();
       }
     } catch (e) {
-      print("Erro para obter os fornecedores: $e");
+      //print("Erro para obter os fornecedores: $e");
       _errorMessageSupplier = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageSupplier,
@@ -765,7 +765,7 @@ class BuyRequestProvider with ChangeNotifier {
         await _updateDataInDatabase();
       }
     } catch (e) {
-      print("Erro para obter as empresas: $e");
+      //print("Erro para obter as empresas: $e");
       _errorMessageEnterprises = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageEnterprises,
@@ -927,7 +927,7 @@ class BuyRequestProvider with ChangeNotifier {
             firebaseCallEnum: FirebaseCallEnum.buyRequestSave);
       }
     } catch (e) {
-      print("Erro para salvar o pedido: $e");
+      //print("Erro para salvar o pedido: $e");
       _errorMessageInsertBuyRequest =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(

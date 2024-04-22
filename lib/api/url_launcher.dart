@@ -14,7 +14,7 @@ class UrlLauncher {
         throw Exception('Could not launch $_url');
       }
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     }
   }
 }

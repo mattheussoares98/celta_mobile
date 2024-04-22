@@ -118,7 +118,7 @@ class LoginProvider with ChangeNotifier {
       }
     } catch (e) {
       // _updateErrorMessage(e.toString());
-      print('deu erro no login: $e');
+      //print('deu erro no login: $e');
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessage,

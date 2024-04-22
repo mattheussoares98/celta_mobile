@@ -111,7 +111,7 @@ class InventoryProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageInventorys = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingInventorys = false;
@@ -171,7 +171,7 @@ class InventoryProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição : $e");
+      //print("Erro para efetuar a requisição : $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoadingProducts = false;
@@ -300,7 +300,7 @@ class InventoryProvider with ChangeNotifier {
         }
       }
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageQuantity,
@@ -351,7 +351,7 @@ class InventoryProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageQuantity,
@@ -417,7 +417,7 @@ class InventoryProvider with ChangeNotifier {
 
       consultedProductController.text = "";
     } catch (e) {
-      print("Erro para efetuar a requisição: $e");
+      //print("Erro para efetuar a requisição: $e");
       _errorMessageQuantity = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(
         message: _errorMessageQuantity,

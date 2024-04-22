@@ -76,7 +76,7 @@ class SoapHelper {
         xml2json.parse(result);
         final getJustificationsResult = xml2json.toParker();
         Map parsedJson = json.decode(getJustificationsResult.toString());
-        print("parsedJson: $parsedJson");
+        //print("parsedJson: $parsedJson");
 
         if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
                 ["status"] ==
@@ -118,11 +118,11 @@ class SoapHelper {
       } else {
         SoapHelperResponseParameters.errorMessage =
             DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-        print(response.body);
+        // print(response.body);
         throw Exception('Failed to load data');
       }
     } catch (e) {
-      print("erro para fazer a requisição http: $e");
+      //print("erro para fazer a requisição http: $e");
       SoapHelperResponseParameters.errorMessage =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }

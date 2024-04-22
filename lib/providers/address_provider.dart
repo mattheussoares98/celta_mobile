@@ -189,7 +189,7 @@ class AddressProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para consultar o CEP: $e");
+      //print("Erro para consultar o CEP: $e");
       _errorMessageGetAddressByCep =
           "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente";
     }

@@ -97,7 +97,7 @@ class _TransferBetweenPackageJustificationsAndStocksDropwdownWidgetState
                       transferBetweenPackageProvider.products.isEmpty
                   ? null
                   : (value) {
-                      print(value);
+                      // print(value);
                     },
               items: transferBetweenPackageProvider.justifications
                   .map(
@@ -304,7 +304,7 @@ class _TransferBetweenPackageJustificationsAndStocksDropwdownWidgetState
                       transferBetweenPackageProvider.products.isEmpty
                   ? null
                   : (value) {
-                      print("mudou o value $value");
+                      //print("mudou o value $value");
                     },
               items: transferBetweenPackageProvider.destinyStockTypes
                   .map(

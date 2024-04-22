@@ -462,7 +462,7 @@ class TransferRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print('deu erro para consultar os pedidos: $e');
+      //print('deu erro para consultar os pedidos: $e');
       _errorMessageRequestModel = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoadingRequestModel = false;
@@ -503,7 +503,7 @@ class TransferRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print('deu erro para consultar as empresas de origem: $e');
+      //print('deu erro para consultar as empresas de origem: $e');
       _errorMessageOriginEnterprise =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
@@ -588,7 +588,7 @@ class TransferRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print('deu erro para consultar as empresas de destino: $e');
+      //print('deu erro para consultar as empresas de destino: $e');
       _errorMessageDestinyEnterprise =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
@@ -635,7 +635,7 @@ class TransferRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print('deu erro para consultar os produtos: $e');
+      //print('deu erro para consultar os produtos: $e');
       _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
     _isLoadingProducts = false;
@@ -703,7 +703,7 @@ class TransferRequestProvider with ChangeNotifier {
         if (match != null) {
           _lastSavedTransferRequest = "Último pedido salvo: " + match.group(1)!;
         } else {
-          print("Nenhum conteúdo entre parênteses encontrado.");
+          //print("Nenhum conteúdo entre parênteses encontrado.");
         }
       } else {
         _isLoadingSaveTransferRequest = false;
@@ -714,7 +714,7 @@ class TransferRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para salvar a transferência: $e");
+      //print("Erro para salvar a transferência: $e");
       _errorMessageSaveTransferRequest =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(

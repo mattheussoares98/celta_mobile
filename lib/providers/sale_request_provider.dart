@@ -505,7 +505,7 @@ class SaleRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os modelos de pedido: $e");
+      //print("Erro para obter os modelos de pedido: $e");
       _errorMessageRequests = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
 
@@ -570,7 +570,7 @@ class SaleRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os preços do carrinho: $e");
+      //print("Erro para obter os preços do carrinho: $e");
       ShowSnackbarMessage.showMessage(
         message: _errorMessageProcessCart,
         context: context,
@@ -709,7 +709,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       await _updateCustomerInDatabase();
     } catch (e) {
-      print("Erro para obter os clientes: $e");
+      //print("Erro para obter os clientes: $e");
       _errorMessageCustomer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingCustomer = false;
@@ -761,7 +761,7 @@ class SaleRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      //print("Erro para obter os produtos: $e");
       _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingProducts = false;
@@ -815,7 +815,7 @@ class SaleRequestProvider with ChangeNotifier {
         if (match != null) {
           _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
         } else {
-          print("Nenhum conteúdo entre parênteses encontrado.");
+          //print("Nenhum conteúdo entre parênteses encontrado.");
         }
 
         await clearCart(enterpriseCode);
@@ -835,7 +835,7 @@ class SaleRequestProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para salvar o pedido: $e");
+      //print("Erro para salvar o pedido: $e");
       _errorMessageSaveSaleRequest =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
       ShowSnackbarMessage.showMessage(

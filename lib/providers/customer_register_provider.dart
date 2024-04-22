@@ -207,7 +207,7 @@ class CustomerRegisterProvider with ChangeNotifier {
             firebaseCallEnum: FirebaseCallEnum.customerRegister);
       }
     } catch (e) {
-      print('Erro para cadastrar o cliente: $e');
+      //print('Erro para cadastrar o cliente: $e');
       _errorMessageInsertCustomer =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {}

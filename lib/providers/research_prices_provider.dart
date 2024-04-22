@@ -157,7 +157,7 @@ class ResearchPricesProvider with ChangeNotifier {
         _addConcurrentInResearchs();
       }
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       _errorAssociateConcurrentToResearch =
           SoapHelperResponseParameters.errorMessage;
     }
@@ -274,7 +274,7 @@ class ResearchPricesProvider with ChangeNotifier {
         ));
       }
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       _errorAddOrUpdateOfResearch = SoapHelperResponseParameters.errorMessage;
     }
 
@@ -502,7 +502,7 @@ class ResearchPricesProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      //print("Erro para obter os produtos: $e");
       _errorGetAssociatedsProducts =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
@@ -555,7 +555,7 @@ class ResearchPricesProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      //print("Erro para obter os produtos: $e");
       _errorGetNotAssociatedsProducts =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
@@ -705,7 +705,7 @@ class ResearchPricesProvider with ChangeNotifier {
         firebaseCallEnum: FirebaseCallEnum.researchPricesInsertPrice,
       );
     } catch (e) {
-      print("Erro para obter os produtos: $e");
+      //print("Erro para obter os produtos: $e");
       _errorInsertConcurrentPrices =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
