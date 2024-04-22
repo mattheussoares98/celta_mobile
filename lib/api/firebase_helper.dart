@@ -61,20 +61,9 @@ class FirebaseHelper {
   }) async {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
-    if (data.containsKey('urlCCS') && !kIsWeb) {
+    if (data.containsKey('urlCCS')) {
       enterpriseNameOrurlCCSControllerText = data['urlCCS'];
       UserData.urlCCS = data['urlCCS'];
-    } else if (data.containsKey("urlCCSWeb") && kIsWeb) {
-      enterpriseNameOrurlCCSControllerText = data['urlCCSWeb'];
-      UserData.urlCCS = data['urlCCSWeb'];
-    } else if (data.containsKey('urlCCS') && kIsWeb) {
-      enterpriseNameOrurlCCSControllerText = data['urlCCS'];
-      UserData.urlCCS = data['urlCCS'];
-
-      if (!UserData.urlCCS.contains("https")) {
-        UserData.urlCCS = UserData.urlCCS.replaceAll("http", "https");
-        UserData.urlCCS = UserData.urlCCS.replaceAll("9092", "9093");
-      }
     }
 
     if (data.containsKey('enterpriseName') &&
@@ -93,16 +82,8 @@ class FirebaseHelper {
         .replaceAll(RegExp(r'\s+'), ''); //remove espaços em branco
 
     QuerySnapshot? querySnapshot;
-    if (kIsWeb && ConvertString.isUrl(enterpriseNameOrurlCCSControllerText)) {
-      querySnapshot = await _getQuerySnapshot(
-        collection: _clientsCollection,
-        fieldToSearch: 'urlCCSWeb',
-        isEqualTo: enterpriseNameOrurlCCSControllerText,
-      );
-    }
 
-    if (querySnapshot == null &&
-        ConvertString.isUrl(enterpriseNameOrurlCCSControllerText)) {
+    if (ConvertString.isUrl(enterpriseNameOrurlCCSControllerText)) {
       querySnapshot = await _getQuerySnapshot(
         collection: _clientsCollection,
         fieldToSearch: 'urlCCS',
@@ -191,7 +172,6 @@ class FirebaseHelper {
     );
 
     QuerySnapshot? querySnapshotCcs;
-    QuerySnapshot? querySnapshotCcsWeb;
     QuerySnapshot? querySnapshotEnterpriseName;
 
     querySnapshotEnterpriseName = await _getQuerySnapshot(
@@ -206,28 +186,7 @@ class FirebaseHelper {
       isEqualTo: UserData.urlCCS,
     );
 
-    if (kIsWeb) {
-      querySnapshotCcsWeb = await _getQuerySnapshot(
-        collection: _clientsCollection,
-        fieldToSearch: 'urlCCSWeb',
-        isEqualTo: UserData.urlCCS,
-      );
-
-      if (querySnapshotCcsWeb.size > 0) {
-        return;
-      } else if (querySnapshotCcsWeb.size == 0 &&
-          querySnapshotEnterpriseName.size > 0) {
-        await _addUrlCCSWeb(querySnapshot: querySnapshotEnterpriseName);
-      } else if (querySnapshotCcsWeb.size == 0 && querySnapshotCcs.size > 0) {
-        await _addUrlCCSWeb(querySnapshot: querySnapshotCcs);
-      }
-    }
-
-    if (querySnapshotCcs.size == 0 &&
-        querySnapshotCcsWeb?.size == 0 &&
-        querySnapshotEnterpriseName.size == 0) {
-      //só adiciona o cliente se não encontrar urlCCS com a que está sendo
-      //utilizada
+    if (querySnapshotCcs.size == 0 && querySnapshotEnterpriseName.size == 0) {
       _clientsCollection
           .add(firebaseClientModel.toJson())
           .then((value) => value)
@@ -315,18 +274,5 @@ class FirebaseHelper {
               .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
         )
         .get();
-  }
-
-  static _addUrlCCSWeb({required QuerySnapshot querySnapshot}) async {
-    _clientsCollection
-        .doc(querySnapshot.docs[0].id)
-        .set(
-          {
-            "urlCCSWeb": UserData.urlCCS,
-          },
-          SetOptions(merge: true),
-        )
-        .then((value) => value)
-        .catchError((error) => error);
   }
 }
