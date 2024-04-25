@@ -463,6 +463,16 @@ class ResearchPricesProvider with ChangeNotifier {
     selectedIndexAssociatedProducts = -1;
     notifyListeners();
 
+    int withPriceFilter() {
+      if (withPrices == null) {
+        return 0;
+      } else if (withPrices == true) {
+        return 1;
+      } else {
+        return 2;
+      }
+    }
+
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
@@ -471,6 +481,7 @@ class ResearchPricesProvider with ChangeNotifier {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
         "OnlyAssociated": true,
+        "InformedPrices": withPriceFilter(),
       },
     };
 
