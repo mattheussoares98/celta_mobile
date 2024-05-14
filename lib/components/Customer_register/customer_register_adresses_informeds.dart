@@ -98,14 +98,14 @@ class _CustomerRegisterAddressesInformedsState
                       ),
                     ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                           customerRegisterProvider.isLoadingInsertCustomer
                               ? Colors.grey
                               : Colors.red,
                         ),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(100, 30)),
-                        maximumSize: const MaterialStatePropertyAll(
+                            const WidgetStatePropertyAll(Size(100, 30)),
+                        maximumSize: const WidgetStatePropertyAll(
                             Size(double.infinity, 30)),
                       ),
                       onPressed:
