@@ -1,3 +1,4 @@
+import 'package:celta_inventario/pages/notifications/notifications_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -220,6 +221,8 @@ class MyApp extends StatelessWidget {
               const ResearchPricesInsertOrUpdateConcurrentPage(),
           APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
               const ResearchPricesProductsPage(),
+          APPROUTES.NOTIFICATIONS: (ctx) =>
+              const NotificationsPage(),
         },
       ),
     );
