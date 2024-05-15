@@ -52,6 +52,14 @@ class _HomePageState extends State<HomePage> {
             UserData.userName,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(APPROUTES.NOTIFICATIONS);
+            },
+            icon: const Icon(Icons.notifications_active),
+          ),
+        ],
       ),
       drawer: const MyDrawer(),
       body: PopScope(
