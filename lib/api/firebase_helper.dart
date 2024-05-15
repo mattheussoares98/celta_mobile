@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
@@ -201,15 +202,19 @@ class FirebaseHelper {
     //print("data: ${message.data}");
   }
 
-  static Future<void> initFirebase() async {
+  static Future<void> initFirebase(
+    GlobalKey<NavigatorState> navigatorKey,
+  ) async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    await _initNotifications();
+    await _initNotifications(navigatorKey);
   }
 
-  static Future<void> _initNotifications() async {
+  static Future<void> _initNotifications(
+    GlobalKey<NavigatorState> navigatorKey,
+  ) async {
     if (PlatformPlus.platform.isWindowsWeb ||
         PlatformPlus.platform.isAndroidWeb ||
         PlatformPlus.platform.isAndroidWeb ||
@@ -221,22 +226,37 @@ class FirebaseHelper {
     //print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
     // mensagens pelo site do firebase
 
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      print("Mensagem inicial: ${initialMessage}");
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _handleMessage(message: message, navigatorKey: navigatorKey);
+    });
+
+    //mensagens em segundo plano
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-    //sempre que chegar uma mensagem e o aplicativo estiver EM SEGUNDO PLANO,
-    //vai aparecer a notificação pro cliente. Quando o aplicativo estiver em
-    //primeiro plano, vai executar a função abaixo
 
     //abaixo recebe a notificação em primeiro plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      //print('Got a message whilst in the foreground!');
-      //print('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        // print(
-        //     'Título da notificação: ${message.notification!.title.toString()}');
-        //print('Texto da notificação: ${message.notification!.body}');
-      }
+      _handleMessage(message: message, navigatorKey: navigatorKey);
     });
+  }
+
+  static void _handleMessage({
+    required RemoteMessage message,
+    required GlobalKey<NavigatorState> navigatorKey,
+  }) {
+    print("opa, olha a mensagem aí $message");
+    if (message.data['Rota'] == '/ENTERPRISE') {
+      Navigator.pushNamed(
+        navigatorKey.currentState!.context,
+        '/ENTERPRISE',
+        arguments: message,
+      );
+    }
   }
 
   static Future<void> addClickedInLink({

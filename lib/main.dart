@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
+import 'api/firebase_helper.dart';
 import 'pages/adjust_stock/adjust_stock.dart';
 import 'pages/buy_request/buy_request.dart';
 import 'pages/customer_register/customer_register.dart';
@@ -17,19 +18,23 @@ import 'pages/sale_request/sale_request.dart';
 import 'pages/transfer_between_package/transfer_between_package.dart';
 import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
 import 'pages/transfer_request/transfer_request.dart';
-import 'api/api.dart';
 import 'providers/providers.dart';
 import 'utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PlatformPlus.platform.init();
-  await FirebaseHelper.initFirebase();
+  await initFirebaseMessage();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     runApp(MyApp());
   });
+}
+
+GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+Future<void> initFirebaseMessage() async {
+  await FirebaseHelper.initFirebase(_navigatorKey);
 }
 
 class MyApp extends StatelessWidget {
@@ -55,12 +60,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
         ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
-        ChangeNotifierProvider(
-            create: (_) => ResearchPricesProvider()),
-        ChangeNotifierProvider(
-            create: (_) => AddressProvider()),
+        ChangeNotifierProvider(create: (_) => ResearchPricesProvider()),
+        ChangeNotifierProvider(create: (_) => AddressProvider()),
       ],
       child: MaterialApp(
+        navigatorKey: _navigatorKey,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -207,8 +211,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
           APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
           APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
-          APPROUTES.RESEARCH_PRICES: (ctx) =>
-              const ResearchPricesPage(),
+          APPROUTES.RESEARCH_PRICES: (ctx) => const ResearchPricesPage(),
           APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE: (ctx) =>
               const ResearchPricesInsertOrUpdateResearchPrice(),
           APPROUTES.RESEARCH_PRICES_CONCURRENTS: (ctx) =>
