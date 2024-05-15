@@ -250,6 +250,7 @@ class FirebaseHelper {
     required RemoteMessage message,
     required GlobalKey<NavigatorState> navigatorKey,
   }) async {
+    print("mensagem chegando hein");
     await PrefsInstance.setNewNotification(
       NotificationsModel(
         title: message.notification?.title,
