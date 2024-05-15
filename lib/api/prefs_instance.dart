@@ -1,3 +1,4 @@
+import 'package:celta_inventario/models/notifications/notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
@@ -17,6 +18,7 @@ enum _PrefsKeys {
   useLegacyCode,
   showMessageToUseCameraInWebVersion,
   buyRequest,
+  notifications,
 }
 
 class PrefsInstance {
@@ -222,5 +224,53 @@ class PrefsInstance {
 
   static Future<String> getBuyRequest() async {
     return await _getString(prefsKeys: _PrefsKeys.buyRequest);
+  }
+
+  static Future<void> setNewNotification(
+    NotificationsModel newNotification,
+  ) async {
+    _prefs = await SharedPreferences.getInstance();
+
+    try {
+      List<NotificationsModel> notifications = await getNotifications();
+      notifications.add(newNotification);
+
+      final notificationsJson =
+          notifications.map((notification) => notification.toJson()).toList();
+
+      await _prefs.setString(
+          _PrefsKeys.notifications.name, jsonEncode(notificationsJson));
+    } catch (e) {
+      // print(e);
+    }
+  }
+
+  static Future<void> clearAllNotifications() async {
+    _prefs = await SharedPreferences.getInstance();
+
+    await _prefs.remove(_PrefsKeys.notifications.name);
+  }
+
+  static Future<List<NotificationsModel>> getNotifications() async {
+    _prefs = await SharedPreferences.getInstance();
+    List<NotificationsModel> myNotifications = [];
+
+    try {
+      final notificationsString =
+          _prefs.getString(_PrefsKeys.notifications.name);
+
+      if (notificationsString != null) {
+        final notificationsJson = jsonDecode(notificationsString) as List;
+
+        myNotifications = notificationsJson
+            .map((notificationJson) =>
+                NotificationsModel.fromJson(notificationJson))
+            .toList();
+      }
+    } catch (e) {
+      // print(e);
+    }
+
+    return myNotifications;
   }
 }

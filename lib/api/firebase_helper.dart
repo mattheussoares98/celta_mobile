@@ -1,3 +1,4 @@
+import 'package:celta_inventario/models/notifications/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -248,15 +249,15 @@ class FirebaseHelper {
   static void _handleMessage({
     required RemoteMessage message,
     required GlobalKey<NavigatorState> navigatorKey,
-  }) {
-    print("opa, olha a mensagem aí $message");
-    if (message.data['Rota'] == '/ENTERPRISE') {
-      Navigator.pushNamed(
-        navigatorKey.currentState!.context,
-        '/ENTERPRISE',
-        arguments: message,
-      );
-    }
+  }) async {
+    await PrefsInstance.setNewNotification(
+      NotificationsModel(
+        title: message.notification?.title,
+        subtitle: message.notification?.body,
+        imageUrl: message.notification?.android?.imageUrl,
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+      ),
+    );
   }
 
   static Future<void> addClickedInLink({
