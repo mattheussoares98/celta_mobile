@@ -35,7 +35,7 @@ void main() async {
 
 GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 Future<void> initFirebaseMessage() async {
-  await FirebaseHelper.initFirebase(_navigatorKey);
+  await FirebaseHelper.initFirebase();
 }
 
 class MyApp extends StatelessWidget {
@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
         ChangeNotifierProvider(create: (_) => ResearchPricesProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationsProvider()),
       ],
       child: MaterialApp(
         navigatorKey: _navigatorKey,
@@ -221,8 +222,7 @@ class MyApp extends StatelessWidget {
               const ResearchPricesInsertOrUpdateConcurrentPage(),
           APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
               const ResearchPricesProductsPage(),
-          APPROUTES.NOTIFICATIONS: (ctx) =>
-              const NotificationsPage(),
+          APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
         },
       ),
     );

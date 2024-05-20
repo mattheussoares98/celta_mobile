@@ -13,6 +13,7 @@ enum _PrefsKeys {
   enterpriseName,
   customers,
   cart,
+  hasUnreadNotifications,
   mySoaps,
   useAutoScan,
   useLegacyCode,
@@ -272,5 +273,14 @@ class PrefsInstance {
     }
 
     return myNotifications;
+  }
+
+  static Future<void> setHasUnreadNotifications(bool newValue) async {
+    await _setBool(
+        prefsKeys: _PrefsKeys.hasUnreadNotifications, value: newValue);
+  }
+
+  static Future<bool> getHasUnreadNotifications() async {
+    return await _getBool(prefsKeys: _PrefsKeys.hasUnreadNotifications);
   }
 }

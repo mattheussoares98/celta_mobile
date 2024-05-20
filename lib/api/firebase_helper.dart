@@ -9,6 +9,7 @@ import 'package:platform_plus/platform_plus.dart';
 
 import '../firebase_options.dart';
 import '../models/firebase/firebase.dart';
+import '../providers/providers.dart';
 import '../utils/utils.dart';
 import './api.dart';
 
@@ -203,19 +204,14 @@ class FirebaseHelper {
     //print("data: ${message.data}");
   }
 
-  static Future<void> initFirebase(
-    GlobalKey<NavigatorState> navigatorKey,
-  ) async {
+  static Future<void> initFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-
-    await _initNotifications(navigatorKey);
   }
 
-  static Future<void> _initNotifications(
-    GlobalKey<NavigatorState> navigatorKey,
-  ) async {
+  static Future<void> initNotifications(
+      NotificationsProvider notificationsProvider) async {
     if (PlatformPlus.platform.isWindowsWeb ||
         PlatformPlus.platform.isAndroidWeb ||
         PlatformPlus.platform.isAndroidWeb ||
@@ -223,8 +219,8 @@ class FirebaseHelper {
       return;
     }
     await _firebaseMessaging.requestPermission();
-    // final fcmToken = await _firebaseMessaging.getToken();
-    //print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
+    final fcmToken = await _firebaseMessaging.getToken();
+    print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
     // mensagens pelo site do firebase
 
     RemoteMessage? initialMessage =
@@ -233,8 +229,10 @@ class FirebaseHelper {
       print("Mensagem inicial: ${initialMessage}");
     }
 
+    //quando clica na notificação pra abrir o aplicativo
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      _handleMessage(message: message, navigatorKey: navigatorKey);
+      Navigator.of(NavigatorKey.navigatorKey.currentState!.context)
+          .pushNamed(APPROUTES.NOTIFICATIONS);
     });
 
     //mensagens em segundo plano
@@ -242,23 +240,16 @@ class FirebaseHelper {
 
     //abaixo recebe a notificação em primeiro plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _handleMessage(message: message, navigatorKey: navigatorKey);
-    });
-  }
-
-  static void _handleMessage({
-    required RemoteMessage message,
-    required GlobalKey<NavigatorState> navigatorKey,
-  }) async {
-    print("mensagem chegando hein");
-    await PrefsInstance.setNewNotification(
-      NotificationsModel(
+      print("mensagem chegando hein");
+      final newNotification = NotificationsModel(
         title: message.notification?.title,
         subtitle: message.notification?.body,
         imageUrl: message.notification?.android?.imageUrl,
         id: DateTime.now().microsecondsSinceEpoch.toString(),
-      ),
-    );
+      );
+      PrefsInstance.setNewNotification(newNotification);
+      notificationsProvider.addNewNotification(newNotification);
+    });
   }
 
   static Future<void> addClickedInLink({

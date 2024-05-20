@@ -1,7 +1,9 @@
-import 'package:celta_inventario/api/api.dart';
+import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
+import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
 
-import '../../models/notifications/notifications.dart';
+import '../../providers/notifications_provider.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -11,91 +13,131 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  bool _isLoadingLocalNotifications = false;
-  List<NotificationsModel> notifications = [];
-
-  Future<List<NotificationsModel>> _getNotificationsModel() async {
-    return await PrefsInstance.getNotifications();
-  }
-
   bool _isLoaded = false;
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     super.didChangeDependencies();
 
     if (!_isLoaded) {
-      setState(() {
-        _isLoadingLocalNotifications = true;
-      });
-      notifications = await _getNotificationsModel();
-      setState(() {
-        _isLoadingLocalNotifications = false;
-      });
+      _isLoaded = true;
+      NotificationsProvider notificationsProvider =
+          Provider.of(context, listen: false);
+      notificationsProvider.setHasUnreadNotifications(
+          newValue: false, notify: false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    NotificationsProvider notificationsProvider = Provider.of(context);
+
+    return PopScope(
+      onPopInvoked: (_) {
+        notificationsProvider.setHasUnreadNotifications(
+            newValue: false, notify: true);
+      },
+      child: Scaffold(
         appBar: AppBar(
           title: const Text("Notificações"),
-        ),
-        body: _isLoadingLocalNotifications
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                reverse: true,
-                itemCount: notifications.length,
-                itemBuilder: (context, index) {
-                  final notification = notifications[index];
-
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(
-                        color: Colors.grey,
-                        width: 0.3,
-                      ),
-                    ),
-                    shadowColor: Colors.black,
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          if (notification.title != null)
-                            Text(
-                              notification.title! +
-                                  "um pouco grande pra ver como fica aqui",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              if (notification.subtitle != null)
-                                Expanded(child: Text(notification.subtitle!)),
-                              if (notification.imageUrl != null)
-                                Container(
-                                  height: 100,
-                                  width: 150,
-                                  child: Image.network(
-                                    notification.imageUrl!,
-                                    // height: double.infinity,
-                                    width:
-                                        150, // Defina a largura desejada aqui
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                            ],
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 35,
+                width: 35,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    child: Text(
+                      notificationsProvider.notificationsLength.toString(),
+                      style: const TextStyle(
+                          // color: Colors.white,
                           ),
-                        ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: notificationsProvider.notifications.length + 1,
+          itemBuilder: (context, index) {
+            if (index == notificationsProvider.notifications.length) {
+              if (notificationsProvider.notifications.isEmpty) {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(
+                    child: Text(
+                      "Não há notificações",
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 17,
                       ),
                     ),
-                  );
+                  ),
+                );
+              }
+              return TextButton(
+                onPressed: () async {
+                  ShowAlertDialog.showAlertDialog(
+                      context: context,
+                      title: "Excluir notificações",
+                      subtitle: "Deseja realmente excluir todas notificações?",
+                      function: () async {
+                        await notificationsProvider.clearAllNotifications();
+                      });
                 },
-              ));
+                child: const Text("Excluir notificações"),
+              );
+            }
+
+            final notification =
+                notificationsProvider.notifications.reversed.toList()[index];
+
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(
+                  color: Colors.grey,
+                  width: 0.3,
+                ),
+              ),
+              shadowColor: Colors.black,
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    if (notification.title != null)
+                      Text(
+                        notification.title!,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    if (notification.subtitle != null)
+                      Text(notification.subtitle!),
+                    if (notification.imageUrl != null)
+                      Container(
+                        width: double.infinity,
+                        child: Image.network(
+                          notification.imageUrl!,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

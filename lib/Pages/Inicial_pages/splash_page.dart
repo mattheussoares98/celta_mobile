@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../api/api.dart';
+import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
 class SplashPage extends StatefulWidget {
@@ -12,8 +15,17 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   Animation<double>? _animationOpacity;
   Animation? _animationScale;
 
+  Future<void> initFirebaseMessageAndGetLocalNotifications() async {
+    NotificationsProvider notificationsProvider =
+        Provider.of(context, listen: false);
+    await FirebaseHelper.initNotifications(notificationsProvider);
+    await notificationsProvider.getLocalNotifications();
+  }
+
   @override
   void initState() {
+    initFirebaseMessageAndGetLocalNotifications();
+
     super.initState();
 
     _animationController = AnimationController(

@@ -44,6 +44,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    NotificationsProvider notificationsProvider = Provider.of(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -53,11 +55,40 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(APPROUTES.NOTIFICATIONS);
-            },
-            icon: const Icon(Icons.notifications_active),
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.notifications_active,
+                  color: Colors.white,
+                  size: 33,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(1, 1),
+                      blurRadius: 3.0,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+                //se não houver um modelo de pedido padrão informado,
+                //desativa o botão pra ir até o carrinho
+                onPressed: () {
+                  setState(() {
+                    Navigator.of(context).pushNamed(APPROUTES.NOTIFICATIONS);
+                  });
+                },
+              ),
+              if (notificationsProvider.hasUnreadNotifications)
+                Positioned(
+                  top: 0,
+                  right: 6,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    child: Container(),
+                    maxRadius: 9,
+                  ),
+                ),
+            ],
           ),
         ],
       ),

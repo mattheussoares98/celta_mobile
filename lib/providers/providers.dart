@@ -5,6 +5,7 @@ export './customer_register_provider.dart';
 export './enterprise_provider.dart';
 export './inventory_provider.dart';
 export './login_provider.dart';
+export './notifications_provider.dart';
 export './price_conference_provider.dart';
 export './receipt_provider.dart';
 export './sale_request_provider.dart';
