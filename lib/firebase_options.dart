@@ -48,13 +48,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAJiAUy_uU4Oiii6ZXNnfRoLtwZoNtzSY0',
-    appId: '1:386752507656:web:610a4de8d00e96a414c6bd',
+    appId: '1:386752507656:web:d926d413ee41166b14c6bd',
     messagingSenderId: '386752507656',
     projectId: 'celtamobile-7d69a',
     authDomain: 'celtamobile-7d69a.firebaseapp.com',
     databaseURL: 'https://celtamobile-7d69a-default-rtdb.firebaseio.com',
     storageBucket: 'celtamobile-7d69a.appspot.com',
-    measurementId: 'G-R3XBFP992L',
+    measurementId: 'G-TH7TPB9HBR',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -68,11 +68,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB9_eAoH_dVzoo3CqZ4ZqRQssyUHRNj2QM',
-    appId: '1:386752507656:ios:6453d9b0304d1cd414c6bd',
+    appId: '1:386752507656:ios:669a772b9702d2e114c6bd',
     messagingSenderId: '386752507656',
     projectId: 'celtamobile-7d69a',
     databaseURL: 'https://celtamobile-7d69a-default-rtdb.firebaseio.com',
     storageBucket: 'celtamobile-7d69a.appspot.com',
-    iosBundleId: 'com.example.celtaInventario',
+    iosBundleId: 'br.com.celtaware.inventario',
   );
+
 }

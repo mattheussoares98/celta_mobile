@@ -1,10 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  }
-}
+{"hosting":{"public":"build/web","ignore":["firebase.json","**/.*","**/node_modules/**"]},"flutter":{"platforms":{"android":{"default":{"projectId":"celtamobile-7d69a","appId":"1:386752507656:android:a6e4e81749987ca914c6bd","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"celtamobile-7d69a","appId":"1:386752507656:ios:669a772b9702d2e114c6bd","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"celtamobile-7d69a","configurations":{"android":"1:386752507656:android:a6e4e81749987ca914c6bd","ios":"1:386752507656:ios:669a772b9702d2e114c6bd","web":"1:386752507656:web:d926d413ee41166b14c6bd"}}}}}}
