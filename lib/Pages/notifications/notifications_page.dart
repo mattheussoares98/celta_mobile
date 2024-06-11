@@ -92,7 +92,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         await notificationsProvider.clearAllNotifications();
                       });
                 },
-                child: const Text("Excluir notificações"),
+                child: const Text(
+                  "Excluir notificações",
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
               );
             }
 
@@ -128,22 +133,27 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          TextButton(
-                            onPressed: () async {
-                              await UrlLauncher.searchAndLaunchUrl(
-                                url: notification.urlToLaunch!,
-                                context: context,
-                              );
-                            },
-                            child: const Text("Ir para o site"),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () async {
+                                await UrlLauncher.searchAndLaunchUrl(
+                                  url: notification.urlToLaunch!,
+                                  context: context,
+                                );
+                              },
+                              child: const Text("Ir para o site"),
+                            ),
                           ),
-                          TextButton(
-                            onPressed: () async {
-                              await Clipboard.setData(
-                                ClipboardData(text: notification.urlToLaunch!),
-                              );
-                            },
-                            child: const Text("Copiar URL"),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () async {
+                                await Clipboard.setData(
+                                  ClipboardData(
+                                      text: notification.urlToLaunch!),
+                                );
+                              },
+                              child: const Text("Copiar URL"),
+                            ),
                           ),
                         ],
                       ),
