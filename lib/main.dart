@@ -1,4 +1,6 @@
 import 'package:celta_inventario/pages/notifications/notifications_page.dart';
+import 'package:celta_inventario/pages/web/web_home_page.dart';
+import 'package:celta_inventario/pages/web/web_login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -180,7 +182,7 @@ class MyApp extends StatelessWidget {
               ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: APPROUTES.SPLASHPAGE,
+        initialRoute: APPROUTES.WEB_LOGIN,
         routes: {
           APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
           APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
@@ -223,6 +225,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
               const ResearchPricesProductsPage(),
           APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
+          APPROUTES.WEB_LOGIN: (ctx) => const WebLoginPage(),
+          APPROUTES.WEB_HOME: (ctx) => const WebHomePage(),
         },
       ),
     );

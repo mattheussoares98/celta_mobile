@@ -50,6 +50,7 @@ dependencies:
   cpf_cnpj_validator: ^2.0.0
   url_launcher: ^6.1.14
   platform_plus: ^4.4.0
+  firebase_auth: ^4.20.0
 
 dev_dependencies:
   flutter_test:

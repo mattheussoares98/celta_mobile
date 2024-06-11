@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
@@ -47,6 +48,8 @@ class FirebaseHelper {
   }
 
   FirebaseHelper._internal();
+
+  static FirebaseAuth _firebaseauth = FirebaseAuth.instance;
 
   static FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   static CollectionReference _clientsCollection =
@@ -301,5 +304,27 @@ class FirebaseHelper {
               .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
         )
         .get();
+  }
+
+  static Future<void> signIn(
+      {required String email, required String password}) async {
+    try {
+      await _firebaseauth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  static Future<QuerySnapshot<Object?>> getAllClients() async {
+    try {
+      final value = await _clientsCollection.get();
+
+      return value;
+    } catch (e) {
+      throw Exception();
+    }
   }
 }
