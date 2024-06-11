@@ -1,4 +1,6 @@
+import 'package:celta_inventario/api/api.dart';
 import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -122,6 +124,29 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       ),
                     if (notification.subtitle != null)
                       Text(notification.subtitle!),
+                    if (notification.urlToLaunch != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          TextButton(
+                            onPressed: () async {
+                              await UrlLauncher.searchAndLaunchUrl(
+                                url: notification.urlToLaunch!,
+                                context: context,
+                              );
+                            },
+                            child: const Text("Ir para o site"),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await Clipboard.setData(
+                                ClipboardData(text: notification.urlToLaunch!),
+                              );
+                            },
+                            child: const Text("Copiar URL"),
+                          ),
+                        ],
+                      ),
                     if (notification.imageUrl != null)
                       Container(
                         width: double.infinity,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -243,15 +245,24 @@ class FirebaseHelper {
 
     //abaixo recebe a notificação em primeiro plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("mensagem chegando hein");
-      final newNotification = NotificationsModel(
-        title: message.notification?.title,
-        subtitle: message.notification?.body,
-        imageUrl: message.notification?.android?.imageUrl,
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
-      );
-      PrefsInstance.setNewNotification(newNotification);
-      notificationsProvider.addNewNotification(newNotification);
+      try {
+        final encoded = json.encode(message.data);
+        final decoded = json.decode(encoded);
+        //message.data == dados personalizados no firebase
+
+        final newNotification = NotificationsModel(
+          title: message.notification?.title,
+          subtitle: message.notification?.body,
+          imageUrl: message.notification?.android?.imageUrl,
+          id: DateTime.now().microsecondsSinceEpoch.toString(),
+          urlToLaunch: decoded["urlToLaunch"],
+        );
+
+        PrefsInstance.setNewNotification(newNotification);
+        notificationsProvider.addNewNotification(newNotification);
+      } catch (e) {
+        print(e);
+      }
     });
   }
 
