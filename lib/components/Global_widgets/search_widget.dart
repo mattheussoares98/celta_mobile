@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/api.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import '../configurations/configurations.dart';
@@ -47,87 +45,14 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   Future<void> _openCamera() async {
-    if (PlatformPlus.platform.isAndroidWeb) {
-      ShowAlertDialog.showAlertDialog(
-        context: context,
-        title: "Instalar aplicativo?",
-        subtitle:
-            "Você está usando um dispositivo android. O ideal é utilizar o aplicativo\n\nDeseja instalar o aplicativo?",
-        function: () async {
-          await UrlLauncher.searchAndLaunchUrl(
-            url:
-                "https://play.google.com/store/apps/details?id=br.com.celtaware.inventario",
-            context: context,
-          );
-        },
-      );
-    } else if (PlatformPlus.platform.isWindowsWeb) {
-      ShowSnackbarMessage.showMessage(
-        message: "A câmera não funciona na versão web",
-        context: context,
-      );
-    } else if (PlatformPlus.platform.isIOSWeb) {
-      _showMessageToOpenIosApp(context);
-    } else {
-      FocusScope.of(context).unfocus();
-      widget.consultProductController.clear();
+    FocusScope.of(context).unfocus();
+    widget.consultProductController.clear();
 
-      widget.consultProductController.text =
-          await ScanBarCode.scanBarcode(context);
+    widget.consultProductController.text =
+        await ScanBarCode.scanBarcode(context);
 
-      if (widget.consultProductController.text != "") {
-        await widget.onPressSearch();
-      }
-    }
-  }
-
-  static Future<void> _showMessageToOpenIosApp(BuildContext context) async {
-    bool showMessageAgain =
-        await PrefsInstance.getShowMessageToUseCameraInWebVersion();
-
-    if (!showMessageAgain) {
-      await UrlLauncher.searchAndLaunchUrl(
-        url: "https://apps.apple.com/pt/app/quick-barcode-scanner/id1237149717",
-        context: context,
-      );
-    } else {
-      ShowAlertDialog.showAlertDialog(
-        context: context,
-        subtitleSize: 15,
-        title: "LEIA COM ATENÇÃO!",
-        titleSize: 35,
-        subtitle:
-            "Como você está usando um dispositivo iOS, não conseguimos acessar a câmera do celular para ler o código de barras.\n\nVocê pode instalar QUALQUER aplicativo de leitura de código de barras, fazer a leitura do código de barras pelo aplicativo, copiar esse código de barras, retornar para o site e colar o código de barras copiado.\n\nDeseja abrir um aplicativo de leitura de código de barras?",
-        function: () async {
-          await UrlLauncher.searchAndLaunchUrl(
-            url:
-                "https://apps.apple.com/pt/app/quick-barcode-scanner/id1237149717",
-            context: context,
-          );
-        },
-        otherWidgetAction: FittedBox(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50.0, bottom: 20),
-                child: TextButton(
-                  onPressed: () async {
-                    await PrefsInstance
-                        .setToNoShowAgainMessageToUseCameraInWebVersion();
-
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    "Fechar mensagem e não exibir novamente",
-                    style: TextStyle(fontSize: 35),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+    if (widget.consultProductController.text != "") {
+      await widget.onPressSearch();
     }
   }
 
@@ -212,10 +137,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                             ),
                           ),
                         InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+                          focusColor: Colors.white.withOpacity(0),
+                          hoverColor: Colors.white.withOpacity(0),
+                          splashColor: Colors.white.withOpacity(0),
+                          highlightColor: Colors.white.withOpacity(0),
                           onTap: widget.isLoading
                               ? null
                               : () async {
@@ -238,10 +163,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                           Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+                              focusColor: Colors.white.withOpacity(0),
+                              hoverColor: Colors.white.withOpacity(0),
+                              splashColor: Colors.white.withOpacity(0),
+                              highlightColor: Colors.white.withOpacity(0),
                               onTap: widget.isLoading
                                   ? null
                                   : () async {
@@ -324,7 +249,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                           ),
                         ),
                         content: SingleChildScrollView(
-    primary: false, 
+                          primary: false,
                           child: ConfigurationsCheckbox(
                             showOnlyConfigurationOfSearch:
                                 showOnlyConfigurationOfSearch,
