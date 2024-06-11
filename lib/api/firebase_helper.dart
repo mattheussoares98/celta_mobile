@@ -1,12 +1,12 @@
-import 'package:celta_inventario/models/notifications/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
+import 'package:flutter/material.dart';
+
+import '../models/notifications/notifications.dart';
 import '../firebase_options.dart';
 import '../models/firebase/firebase.dart';
 import '../providers/providers.dart';
@@ -145,7 +145,10 @@ class FirebaseHelper {
             docRef,
             {
               firebaseCallEnum.name: {
-                kIsWeb ? "webTimesUsed" : "timesUsed": FieldValue.increment(1),
+                PlatformPlus.platform.isIOSNative ||
+                        PlatformPlus.platform.isIOSWeb
+                    ? "iOS"
+                    : "android": FieldValue.increment(1),
               },
               'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
               'datesUsed': FieldValue.arrayUnion(
