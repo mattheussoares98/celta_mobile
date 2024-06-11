@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ResearchPricesProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
         ChangeNotifierProvider(create: (_) => NotificationsProvider()),
+        ChangeNotifierProvider(create: (_) => WebProvider()),
       ],
       child: MaterialApp(
         navigatorKey: _navigatorKey,

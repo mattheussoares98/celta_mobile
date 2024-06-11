@@ -318,11 +318,11 @@ class FirebaseHelper {
     }
   }
 
-  static Future<QuerySnapshot<Object?>> getAllClients() async {
+  static Future<List<QueryDocumentSnapshot<Object?>>> getAllClients() async {
     try {
       final value = await _clientsCollection.get();
 
-      return value;
+      return value.docs;
     } catch (e) {
       throw Exception();
     }

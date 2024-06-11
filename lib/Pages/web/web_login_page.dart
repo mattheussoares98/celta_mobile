@@ -1,10 +1,12 @@
-import 'package:celta_inventario/api/firebase_helper.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter/material.dart';
+
+import 'package:celta_inventario/api/api.dart';
 import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
 import 'package:celta_inventario/pages/web/web_home_page.dart';
-import 'package:celta_inventario/utils/app_routes.dart';
-import 'package:celta_inventario/utils/default_error_message_to_find_server.dart';
+import 'package:celta_inventario/providers/providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class WebLoginPage extends StatefulWidget {
   const WebLoginPage({super.key});
@@ -14,13 +16,14 @@ class WebLoginPage extends StatefulWidget {
 }
 
 class _WebLoginPageState extends State<WebLoginPage> {
-  bool _isLoading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    WebProvider webProvider = Provider.of(context);
+
     return FutureBuilder<User?>(
         future: FirebaseAuth.instance.authStateChanges().first,
         builder: (context, snapshot) {
@@ -32,7 +35,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
           } else if (snapshot.hasData) {
             return const WebHomePage();
           }
-          
+
           return Stack(
             children: [
               Scaffold(
@@ -87,28 +90,18 @@ class _WebLoginPageState extends State<WebLoginPage> {
                         TextButton(
                           onPressed: () async {
                             bool isValid = key.currentState!.validate();
-                            if (isValid) {
-                              setState(() {
-                                _isLoading = true;
-                              });
-                              try {
-                                await FirebaseHelper.signIn(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                );
 
-                                Navigator.of(context)
-                                    .pushNamed(APPROUTES.WEB_HOME);
-                              } catch (e) {
+                            if (isValid) {
+                              await FirebaseHelper.signIn(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                              if (webProvider.errorMessage != "") {
                                 ShowSnackbarMessage.showMessage(
-                                  message: DefaultErrorMessageToFindServer
-                                      .ERROR_MESSAGE,
+                                  message: webProvider.errorMessage,
                                   context: context,
                                 );
                               }
-                              setState(() {
-                                _isLoading = false;
-                              });
                             }
                           },
                           child: const Text("Efetuar login"),
@@ -120,7 +113,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
               ),
               loadingWidget(
                 message: "Efetuando login...",
-                isLoading: _isLoading,
+                isLoading: webProvider.isLoading,
               ),
             ],
           );

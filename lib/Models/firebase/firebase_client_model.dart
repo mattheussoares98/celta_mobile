@@ -23,4 +23,9 @@ class FirebaseClientModel {
       };
     }
   }
+
+  factory FirebaseClientModel.fromJson(Map json) => FirebaseClientModel(
+        urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
+        enterpriseName: json["enterpriseName"],
+      );
 }
