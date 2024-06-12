@@ -45,7 +45,12 @@ class WebProvider with ChangeNotifier {
       final clients = await FirebaseHelper.getAllClients();
 
       _clients = clients
-          .map((element) => FirebaseClientModel.fromJson(element.data() as Map))
+          .map(
+            (element) => FirebaseClientModel.fromJson(
+              json: element.data() as Map,
+              id: element.id,
+            ),
+          )
           .toList();
 
       _clients.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));
