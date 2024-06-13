@@ -92,34 +92,36 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             },
           );
         },
-        icon: Row(
-          children: [
-            Icon(
-              Icons.delete,
-              color: Colors.red[600],
-              size: 35,
-              shadows: [
-                const Shadow(
-                  color: Colors.white70,
-                  offset: Offset(1, 1),
-                ),
-              ],
-            ),
-            const SizedBox(width: 5),
-            Text(
-              "LIMPAR\nPEDIDO",
-              style: TextStyle(
-                color: Colors.red[800],
-                fontWeight: FontWeight.bold,
+        icon: FittedBox(
+          child: Row(
+            children: [
+              Icon(
+                Icons.delete,
+                color: Colors.red[600],
+                size: 30,
                 shadows: [
                   const Shadow(
-                    color: Colors.white38,
+                    color: Colors.white70,
                     offset: Offset(1, 1),
-                  )
+                  ),
                 ],
               ),
-            ),
-          ],
+              Text(
+                "LIMPAR\nPEDIDO",
+                style: TextStyle(
+                  color: Colors.red[800],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                  shadows: [
+                    const Shadow(
+                      color: Colors.white38,
+                      offset: Offset(1, 1),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
