@@ -18,6 +18,7 @@ enum _PrefsKeys {
   useAutoScan,
   useLegacyCode,
   showMessageToUseCameraInWebVersion,
+  searchCustomerByPersonalizedCode,
   buyRequest,
   notifications,
 }
@@ -177,6 +178,13 @@ class PrefsInstance {
     await _setBool(prefsKeys: _PrefsKeys.useLegacyCode, value: newValue);
   }
 
+  static Future<void> setSearchCustomerByPersonalizedCode(bool newValue) async {
+    await _setBool(
+      prefsKeys: _PrefsKeys.searchCustomerByPersonalizedCode,
+      value: newValue,
+    );
+  }
+
   static Future<void> restoreUserAndEnterpriseNameOrUrlCCS({
     required TextEditingController enterpriseNameOrUrlCCSController,
     required TextEditingController userController,
@@ -199,6 +207,12 @@ class PrefsInstance {
 
   static Future<bool> getUseLegacyCode() async {
     return await _getBool(prefsKeys: _PrefsKeys.useLegacyCode);
+  }
+
+  static Future<bool> getSearchCustomerByPersonalizedCode() async {
+    return await _getBool(
+      prefsKeys: _PrefsKeys.searchCustomerByPersonalizedCode,
+    );
   }
 
   static Future<void> setToNoShowAgainMessageToUseCameraInWebVersion() async {

@@ -34,6 +34,8 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: false);
 
     return Scaffold(
       body: Column(
@@ -47,6 +49,7 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
                 context: context,
                 controllerText: searchCustomerController.text,
                 enterpriseCode: widget.enterpriseCode.toString(),
+                configurationsProvider: configurationsProvider,
               );
 
               if (saleRequestProvider
@@ -77,6 +80,7 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
                     context: context,
                     controllerText: "-1",
                     enterpriseCode: widget.enterpriseCode.toString(),
+                    configurationsProvider: configurationsProvider,
                   );
                 },
               ),
@@ -85,8 +89,13 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
               saleRequestProvider
                       .customersCount(widget.enterpriseCode.toString()) >
                   0)
-            ErrorMessage(
-              errorMessage: saleRequestProvider.errorMessageCustomer,
+            Expanded(
+              flex: 2,
+              child: SingleChildScrollView(
+                child: ErrorMessage(
+                  errorMessage: saleRequestProvider.errorMessageCustomer,
+                ),
+              ),
             ),
         ],
       ),

@@ -46,6 +46,11 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       listen: false,
     );
 
+    ConfigurationsProvider configurationsProvider = Provider.of(
+      context,
+      listen: false,
+    );
+
     if (!_isLoaded) {
       _isLoaded = true;
       Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
@@ -65,6 +70,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           controllerText: "-1",
           enterpriseCode: arguments["Code"].toString(),
           searchOnlyDefaultCustomer: true,
+          configurationsProvider: configurationsProvider,
         );
       }
     }

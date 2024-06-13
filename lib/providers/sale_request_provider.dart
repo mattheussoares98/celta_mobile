@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
@@ -626,11 +627,13 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required String controllerText,
     required String enterpriseCode,
+    required ConfigurationsProvider configurationsProvider,
     bool? searchOnlyDefaultCustomer = false,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
+// 4=PersonalizedCode
 
     await _clearcustomers(enterpriseCode);
 
@@ -651,15 +654,21 @@ class SaleRequestProvider with ChangeNotifier {
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
-    } else if (codeValue < 12) /* tamanho de mínimo de um CPFF */ {
+    } else if (configurationsProvider.searchCustomerByPersonalizedCode) {
       await _getCustomers(
-        searchTypeInt: 2, //exactCode
+        searchTypeInt: 4, //PersonalizedCode
+        controllerText: controllerText,
+        enterpriseCode: enterpriseCode,
+      );
+    } else if (CPFValidator.isValid(codeValue.toString())) {
+      await _getCustomers(
+        searchTypeInt: 1, //ExactCnpjCpfNumber
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else {
       await _getCustomers(
-        searchTypeInt: 1, //exactCnpjCpfNumber
+        searchTypeInt: 2, //exactCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
