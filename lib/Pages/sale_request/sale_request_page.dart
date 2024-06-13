@@ -36,57 +36,6 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     });
   }
 
-  Widget? _floatingActionButton(SaleRequestProvider saleRequestProvider) {
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
-
-    if (_selectedIndex == 1) {
-      return FloatingActionButton(
-        tooltip: "Cadastrar cliente",
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(Icons.person_add, color: Colors.white),
-        onPressed: () {
-          Navigator.of(context).pushNamed(
-            APPROUTES.CUSTOMER_REGISTER,
-          );
-        },
-      );
-    } else if (_selectedIndex == 2) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 50.0),
-        child: FloatingActionButton(
-          tooltip: "Limpar todos os dados do pedido",
-          onPressed: (saleRequestProvider
-                          .cartProductsCount(arguments["Code"].toString()) ==
-                      0) ||
-                  saleRequestProvider.isLoadingSaveSaleRequest ||
-                  saleRequestProvider.isLoadingProcessCart
-              ? null
-              : () {
-                  ShowAlertDialog.showAlertDialog(
-                    context: context,
-                    title: "Apagar TODOS dados",
-                    subtitle:
-                        "Deseja realmente limpar todos os dados do pedido?",
-                    function: () {
-                      saleRequestProvider
-                          .clearCart(arguments["Code"].toString());
-                    },
-                  );
-                },
-          child: const Icon(Icons.delete, color: Colors.white),
-          backgroundColor: (saleRequestProvider
-                          .cartProductsCount(arguments["Code"].toString()) ==
-                      0) ||
-                  saleRequestProvider.isLoadingSaveSaleRequest ||
-                  saleRequestProvider.isLoadingProcessCart
-              ? Colors.grey.withOpacity(0.75)
-              : Colors.red.withOpacity(0.75),
-        ),
-      );
-    }
-    return null;
-  }
-
   bool _isLoaded = false;
   @override
   void didChangeDependencies() async {
@@ -121,6 +70,55 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     }
   }
 
+  Widget _clearAllDataIcon(SaleRequestProvider saleRequestProvider) {
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: IconButton(
+        onPressed: () {
+          ShowAlertDialog.showAlertDialog(
+            context: context,
+            title: "Apagar TODOS dados",
+            subtitle: "Deseja realmente limpar todos os dados do pedido?",
+            function: () {
+              saleRequestProvider.clearCart(arguments["Code"].toString());
+            },
+          );
+        },
+        icon: Row(
+          children: [
+            Icon(
+              Icons.delete,
+              color: Colors.red[600],
+              size: 35,
+              shadows: [
+                const Shadow(
+                  color: Colors.white70,
+                  offset: Offset(1, 1),
+                ),
+              ],
+            ),
+            const SizedBox(width: 5),
+            Text(
+              "LIMPAR\nPEDIDO",
+              style: TextStyle(
+                color: Colors.red[800],
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  const Shadow(
+                    color: Colors.white38,
+                    offset: Offset(1, 1),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
@@ -143,7 +141,6 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,
       ),
     ];
-
     return Stack(
       children: [
         PopScope(
@@ -164,68 +161,73 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                 ),
               ),
               actions: [
-                FittedBox(
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
-                              size: 33,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(1, 1),
-                                  blurRadius: 3.0,
-                                  color: Colors.black,
-                                ),
-                              ],
+                if (_selectedIndex == _pages.length - 1)
+                  _clearAllDataIcon(saleRequestProvider),
+                if (_selectedIndex < (_pages.length - 1))
+                  FittedBox(
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                                size: 33,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(1, 1),
+                                    blurRadius: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                              //se não houver um modelo de pedido padrão informado,
+                              //desativa o botão pra ir até o carrinho
+                              onPressed: () {
+                                setState(() {
+                                  _selectedIndex = 2;
+                                });
+                              },
                             ),
-                            //se não houver um modelo de pedido padrão informado,
-                            //desativa o botão pra ir até o carrinho
-                            onPressed: () {
-                              setState(() {
-                                _selectedIndex = 2;
-                              });
-                            },
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.red,
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: FittedBox(
-                                  child: Text(
-                                    cartProductsCount.toString(),
-                                    style: const TextStyle(color: Colors.white),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.red,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: FittedBox(
+                                    child: Text(
+                                      cartProductsCount.toString(),
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ),
+                                maxRadius: 11,
                               ),
-                              maxRadius: 11,
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Text(
+                            ConvertString.convertToBRL(
+                              saleRequestProvider
+                                  .getTotalCartPrice(
+                                      arguments["Code"].toString())
+                                  .toString(),
+                            ),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: Text(
-                          ConvertString.convertToBRL(
-                            saleRequestProvider
-                                .getTotalCartPrice(arguments["Code"].toString())
-                                .toString(),
-                          ),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
               ],
             ),
             body: Center(
@@ -289,7 +291,6 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                 );
               },
             ),
-            floatingActionButton: _floatingActionButton(saleRequestProvider),
           ),
         ),
         loadingWidget(

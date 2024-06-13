@@ -473,7 +473,7 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     bool? isConsultingAgain = false,
   }) async {
-    if(_isLoadingRequests) return;
+    if (_isLoadingRequests) return;
     _isLoadingRequests = true;
     _errorMessageRequests = "";
     _requests.clear();
@@ -651,15 +651,13 @@ class SaleRequestProvider with ChangeNotifier {
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
-    } else {
+    } else if (codeValue < 12) /* tamanho de mínimo de um CPFF */ {
       await _getCustomers(
         searchTypeInt: 2, //exactCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
-
-      if (customersCount(enterpriseCode) > 1) return;
-
+    } else {
       await _getCustomers(
         searchTypeInt: 1, //exactCnpjCpfNumber
         controllerText: controllerText,
@@ -676,6 +674,7 @@ class SaleRequestProvider with ChangeNotifier {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
+// 4=PersonalizedCode
 
     _errorMessageCustomer = "";
     _isLoadingCustomer = true;

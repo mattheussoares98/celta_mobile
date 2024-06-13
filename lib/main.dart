@@ -183,7 +183,7 @@ class MyApp extends StatelessWidget {
               ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: APPROUTES.WEB_LOGIN,
+        initialRoute: APPROUTES.SPLASHPAGE,
         routes: {
           APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
           APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
