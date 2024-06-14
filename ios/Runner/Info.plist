@@ -26,8 +26,14 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Libere o acesso à câmera para conseguir ler códigos de barras</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -45,7 +51,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Libere o acesso à câmera para conseguir ler códigos de barras</string>
 </dict>
 </plist>

@@ -958,6 +958,9 @@ PODS:
     - Flutter
   - device_info_plus (0.0.1):
     - Flutter
+  - Firebase/Auth (10.25.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 10.25.0)
   - Firebase/CoreOnly (10.25.0):
     - FirebaseCore (= 10.25.0)
   - Firebase/Firestore (10.25.0):
@@ -966,7 +969,11 @@ PODS:
   - Firebase/Messaging (10.25.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.25.0)
-  - firebase_core (2.31.0):
+  - firebase_auth (4.20.0):
+    - Firebase/Auth (= 10.25.0)
+    - firebase_core
+    - Flutter
+  - firebase_core (2.32.0):
     - Firebase/CoreOnly (= 10.25.0)
     - Flutter
   - firebase_messaging (14.9.2):
@@ -974,6 +981,13 @@ PODS:
     - firebase_core
     - Flutter
   - FirebaseAppCheckInterop (10.25.0)
+  - FirebaseAuth (10.25.0):
+    - FirebaseAppCheckInterop (~> 10.17)
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+    - RecaptchaInterop (~> 100.0)
   - FirebaseCore (10.25.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.12)
@@ -1127,6 +1141,7 @@ PODS:
     - gRPC-Core/Privacy (= 1.62.5)
   - gRPC-Core/Interface (1.62.5)
   - gRPC-Core/Privacy (1.62.5)
+  - GTMSessionFetcher/Core (3.4.1)
   - leveldb-library (1.22.5)
   - nanopb (2.30910.0):
     - nanopb/decode (= 2.30910.0)
@@ -1136,6 +1151,7 @@ PODS:
   - package_info_plus (0.4.5):
     - Flutter
   - PromisesObjC (2.4.0)
+  - RecaptchaInterop (100.0.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -1148,6 +1164,7 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
@@ -1163,6 +1180,7 @@ SPEC REPOS:
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAppCheckInterop
+    - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
@@ -1175,15 +1193,19 @@ SPEC REPOS:
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
+    - GTMSessionFetcher
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - RecaptchaInterop
 
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
+  firebase_auth:
+    :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -1207,9 +1229,11 @@ SPEC CHECKSUMS:
   cloud_firestore: 792f773e5e8c080ffcbadd49f9fb397927f29af6
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06
-  firebase_core: 0b39f4f424e02eecabb2356ddf331fa07b772af8
+  firebase_auth: 5719ddc9f654b813405899480e84971bd8e61235
+  firebase_core: a626d00494efa398e7c54f25f1454a64c8abf197
   firebase_messaging: 8999827b6efc9c3ab4b1f9dc246deaa7f13dbf88
   FirebaseAppCheckInterop: 5da5ce93e8797a215e3f677fb0654b74e736c8b8
+  FirebaseAuth: c0f93dcc570c9da2bffb576969d793e95c344fbb
   FirebaseCore: 7ec4d0484817f12c3373955bc87762d96842d483
   FirebaseCoreExtension: 8a47811d0b155501559ef05d089518152a0a1677
   FirebaseCoreInternal: 910a81992c33715fec9263ca7381d59ab3a750b7
@@ -1224,10 +1248,12 @@ SPEC CHECKSUMS:
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   "gRPC-C++": e725ef63c4475d7cdb7e2cf16eb0fde84bd9ee51
   gRPC-Core: eee4be35df218649fe66d721a05a7f27a28f069b
+  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
   leveldb-library: e8eadf9008a61f9e1dde3978c086d2b6d9b9dc28
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe

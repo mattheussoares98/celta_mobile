@@ -26,6 +26,8 @@ enum _PrefsKeys {
 class PrefsInstance {
   static late SharedPreferences _prefs;
   static Future<void> removeNotUsedPrefsKeys() async {
+    _prefs = await SharedPreferences.getInstance();
+
     await _prefs.remove(_PrefsKeys.notifications.name);
   }
 
