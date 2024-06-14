@@ -19,7 +19,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     NotificationsProvider notificationsProvider =
         Provider.of(context, listen: false);
     await FirebaseHelper.initNotifications(notificationsProvider);
-    await notificationsProvider.getLocalNotifications();
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/models/notifications/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -250,20 +249,8 @@ class FirebaseHelper {
     //abaixo recebe a notificação em primeiro plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       try {
-        final encoded = json.encode(message.data);
-        final decoded = json.decode(encoded);
-        //message.data == dados personalizados no firebase
-
-        final newNotification = NotificationsModel(
-          title: message.notification?.title,
-          subtitle: message.notification?.body,
-          imageUrl: message.notification?.android?.imageUrl,
-          id: DateTime.now().microsecondsSinceEpoch.toString(),
-          urlToLaunch: decoded["urlToLaunch"],
-        );
-
-        PrefsInstance.setNewNotification(newNotification);
-        notificationsProvider.addNewNotification(newNotification);
+        notificationsProvider.setHasUnreadNotifications(
+            newValue: true, notify: false);
       } catch (e) {
         print(e);
       }

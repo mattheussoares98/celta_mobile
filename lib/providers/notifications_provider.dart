@@ -26,27 +26,4 @@ class NotificationsProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  Future<void> getLocalNotifications() async {
-    try {
-      _hasUnreadNotifications = await PrefsInstance.getHasUnreadNotifications();
-      _notifications = await PrefsInstance.getNotifications();
-      notifyListeners();
-    } catch (e) {}
-  }
-
-  Future<void> clearAllNotifications() async {
-    try {
-      await PrefsInstance.clearAllNotifications();
-      _notifications.clear();
-      notifyListeners();
-    } catch (e) {}
-  }
-
-  Future<void> addNewNotification(NotificationsModel newNotification) async {
-    try {
-      _notifications.add(newNotification);
-      setHasUnreadNotifications(newValue: true, notify: true);
-    } catch (e) {}
-  }
 }

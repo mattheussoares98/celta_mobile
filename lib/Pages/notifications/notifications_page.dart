@@ -1,11 +1,10 @@
-import 'package:celta_inventario/api/api.dart';
-import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../providers/notifications_provider.dart';
+import '../../api/api.dart';
+import '../../providers/providers.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -65,37 +64,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ],
         ),
         body: ListView.builder(
-          itemCount: notificationsProvider.notifications.length + 1,
+          itemCount: notificationsProvider.notifications.length,
           itemBuilder: (context, index) {
-            if (index == notificationsProvider.notifications.length) {
-              if (notificationsProvider.notifications.isEmpty) {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: const Center(
-                    child: Text(
-                      "Não há notificações",
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontSize: 17,
-                      ),
+            if (notificationsProvider.notifications.isEmpty) {
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                child: const Center(
+                  child: Text(
+                    "Não há notificações",
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 17,
                     ),
-                  ),
-                );
-              }
-              return TextButton(
-                onPressed: () async {
-                  ShowAlertDialog.showAlertDialog(
-                      context: context,
-                      title: "Excluir notificações",
-                      subtitle: "Deseja realmente excluir todas notificações?",
-                      function: () async {
-                        await notificationsProvider.clearAllNotifications();
-                      });
-                },
-                child: const Text(
-                  "Excluir notificações",
-                  style: TextStyle(
-                    color: Colors.red,
                   ),
                 ),
               );
