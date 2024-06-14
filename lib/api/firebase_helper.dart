@@ -1,14 +1,16 @@
-import 'package:celta_inventario/models/notifications/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import '../Models/firebase/firebase.dart';
+import '../models/notifications/notifications.dart';
 import '../firebase_options.dart';
-import '../models/firebase/firebase.dart';
 import '../providers/providers.dart';
 import '../utils/utils.dart';
 import './api.dart';
@@ -133,6 +135,7 @@ class FirebaseHelper {
       await PrefsInstance.setSoaps(mySoaps);
     } else {
       try {
+        await _addUserInformations();
         WriteBatch batch = firestore.batch();
 
         mySoaps.forEach((soapAction) {
@@ -222,6 +225,7 @@ class FirebaseHelper {
     final fcmToken = await _firebaseMessaging.getToken();
     print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
     // mensagens pelo site do firebase
+    UserData.fcmToken = fcmToken;
 
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
@@ -287,5 +291,59 @@ class FirebaseHelper {
               .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
         )
         .get();
+  }
+
+  static Future<void> _addUserInformations() async {
+    if (UserData.alreadyInsertedUsersInformations) return;
+
+    try {
+      final value = await PrefsInstance.getUsersInformations();
+
+      if (value.isNotEmpty) {
+        UserData.alreadyInsertedUsersInformations = true;
+
+        final userInformations = UserInformations.fromJson(
+          json.decode(value),
+        );
+        int diferenceBetweenAtualDateAndLastUpdated = userInformations
+            .dateOfLastUpdatedInFirebase
+            .difference(DateTime.now())
+            .inDays;
+        if (diferenceBetweenAtualDateAndLastUpdated <= 7) {
+          return;
+        }
+      }
+
+      final result = await _clientsCollection
+          .where(
+            "enterpriseName",
+            isEqualTo: UserData.enterpriseName,
+          )
+          .get();
+
+      if (result.docs.isNotEmpty) {
+        final userInformations = UserInformations(
+          fcmToken: UserData.fcmToken,
+          userName: UserData.userName,
+          deviceType: PlatformPlus.platform.isIOSNative ? "iOS" : "android",
+          dateOfLastUpdatedInFirebase: DateTime.now(),
+        );
+
+        await _clientsCollection.doc(result.docs.first.id).set(
+          {
+            "usersInformations": [
+              userInformations.toJson(),
+            ],
+          },
+          SetOptions(merge: true),
+        );
+
+        UserData.alreadyInsertedUsersInformations = true;
+
+        await PrefsInstance.setUsersInformations(json.encode(userInformations));
+      }
+    } catch (e) {
+      print("erro para adicionar as informações do usuário ==== $e");
+    }
   }
 }

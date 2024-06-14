@@ -20,6 +20,7 @@ enum _PrefsKeys {
   showMessageToUseCameraInWebVersion,
   buyRequest,
   notifications,
+  usersInformations,
 }
 
 class PrefsInstance {
@@ -282,5 +283,18 @@ class PrefsInstance {
 
   static Future<bool> getHasUnreadNotifications() async {
     return await _getBool(prefsKeys: _PrefsKeys.hasUnreadNotifications);
+  }
+
+  static Future<void> setUsersInformations(String newValue) async {
+    await _setString(
+      prefsKeys: _PrefsKeys.usersInformations,
+      value: newValue,
+    );
+  }
+
+  static Future<String> getUsersInformations() async {
+    return await _getString(
+      prefsKeys: _PrefsKeys.usersInformations,
+    );
   }
 }
