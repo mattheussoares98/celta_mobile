@@ -2,10 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_plus/platform_plus.dart';
 
-import '../../api/api.dart';
-import '../../components/global_widgets/global_widgets.dart';
 import '../../components/inicial_pages/inicial_pages.dart';
 import '../../utils/utils.dart';
 
@@ -42,25 +39,6 @@ class _LoginPageState extends State<LoginPage>
     );
 
     super.initState();
-    showMessageToInstallApp();
-  }
-
-  Future<void> showMessageToInstallApp() async {
-    if (PlatformPlus.platform.isAndroidWeb) {
-      ShowAlertDialog.showAlertDialog(
-        context: context,
-        title: "Instalar aplicativo?",
-        subtitle:
-            "Você está usando o site por um android, por isso o ideal é utilizar o aplicativo\n\nDeseja instalar o aplicativo?",
-        function: () {
-          UrlLauncher.searchAndLaunchUrl(
-            url:
-                "https://play.google.com/store/apps/details?id=br.com.celtaware.inventario",
-            context: context,
-          );
-        },
-      );
-    }
   }
 
   @override
@@ -91,7 +69,7 @@ class _LoginPageState extends State<LoginPage>
           ),
           Center(
             child: SingleChildScrollView(
-    primary: false, 
+              primary: false,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

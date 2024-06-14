@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
@@ -473,7 +474,7 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     bool? isConsultingAgain = false,
   }) async {
-    if(_isLoadingRequests) return;
+    if (_isLoadingRequests) return;
     _isLoadingRequests = true;
     _errorMessageRequests = "";
     _requests.clear();
@@ -626,11 +627,13 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required String controllerText,
     required String enterpriseCode,
+    required ConfigurationsProvider configurationsProvider,
     bool? searchOnlyDefaultCustomer = false,
   }) async {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
+// 4=PersonalizedCode
 
     await _clearcustomers(enterpriseCode);
 
@@ -651,17 +654,21 @@ class SaleRequestProvider with ChangeNotifier {
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
-    } else {
+    } else if (configurationsProvider.searchCustomerByPersonalizedCode) {
       await _getCustomers(
-        searchTypeInt: 2, //exactCode
+        searchTypeInt: 4, //PersonalizedCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
-
-      if (customersCount(enterpriseCode) > 1) return;
-
+    } else if (CPFValidator.isValid(codeValue.toString())) {
       await _getCustomers(
-        searchTypeInt: 1, //exactCnpjCpfNumber
+        searchTypeInt: 1, //ExactCnpjCpfNumber
+        controllerText: controllerText,
+        enterpriseCode: enterpriseCode,
+      );
+    } else {
+      await _getCustomers(
+        searchTypeInt: 2, //exactCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
@@ -676,6 +683,7 @@ class SaleRequestProvider with ChangeNotifier {
 // 1=ExactCnpjCpfNumber
 // 2=ExactCode
 // 3=ApproximateName
+// 4=PersonalizedCode
 
     _errorMessageCustomer = "";
     _isLoadingCustomer = true;

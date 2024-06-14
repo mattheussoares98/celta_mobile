@@ -6,9 +6,12 @@ import '../models/configurations/configurations.dart';
 class ConfigurationsProvider with ChangeNotifier {
   bool _useAutoScan = false;
   bool _useLegacyCode = false;
+  bool _searchCustomerByPersonalizedCode = false;
 
   bool get useAutoScan => _useAutoScan;
   bool get useLegacyCode => _useLegacyCode;
+  bool get searchCustomerByPersonalizedCode =>
+      _searchCustomerByPersonalizedCode;
 
   List<ConfigurationsModel> _configurations = [];
 
@@ -38,6 +41,14 @@ class ConfigurationsProvider with ChangeNotifier {
         changeValue: changeUseLegacyCode,
         subtitle: "Consultar os produtos somente pelo código legado",
       ),
+      ConfigurationsModel(
+        showInWeb: true,
+        isConfigurationOfSearch: true,
+        title: "Código personalizado",
+        value: _searchCustomerByPersonalizedCode,
+        changeValue: changeSearchCustomerByPersonalizedCode,
+        subtitle: "Consultar clientes somente pelo código personalizado",
+      ),
     ];
   }
 
@@ -46,8 +57,11 @@ class ConfigurationsProvider with ChangeNotifier {
   Future<void> restoreConfigurations() async {
     _useAutoScan = await PrefsInstance.getUseAutoScan();
     _useLegacyCode = await PrefsInstance.getUseLegacyCode();
+    _searchCustomerByPersonalizedCode =
+        await PrefsInstance.getSearchCustomerByPersonalizedCode();
     _configurations[0].value = _useAutoScan;
     _configurations[1].value = _useLegacyCode;
+    _configurations[2].value = _searchCustomerByPersonalizedCode;
 
     notifyListeners();
   }
@@ -64,5 +78,14 @@ class ConfigurationsProvider with ChangeNotifier {
     _useLegacyCode = !_useLegacyCode;
     notifyListeners();
     await PrefsInstance.setUseLegacyCodeValue(_useLegacyCode);
+  }
+
+  void changeSearchCustomerByPersonalizedCode() async {
+    _configurations[2].value = !_configurations[2].value;
+    _searchCustomerByPersonalizedCode = !_searchCustomerByPersonalizedCode;
+    notifyListeners();
+    await PrefsInstance.setSearchCustomerByPersonalizedCode(
+      _searchCustomerByPersonalizedCode,
+    );
   }
 }

@@ -14,3 +14,4 @@ export './transfer_between_package_provider_SemImplementacaoAinda.dart';
 export './transfer_between_stocks_provider.dart';
 export './transfer_request_provider.dart';
 export './address_provider.dart';
+export './web_provider.dart';

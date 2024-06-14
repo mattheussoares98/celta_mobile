@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import '../../components/sale_request/sale_request.dart';
 import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class SaleRequestInsertCustomer extends StatefulWidget {
   final int enterpriseCode;
@@ -33,60 +34,81 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
+    ConfigurationsProvider configurationsProvider =
+        Provider.of(context, listen: false);
 
-    return Column(
-      children: [
-        SearchWidget(
-          consultProductController: searchCustomerController,
-          isLoading: saleRequestProvider.isLoadingCustomer,
-          autofocus: false,
-          onPressSearch: () async {
-            await saleRequestProvider.getCustomers(
-              context: context,
-              controllerText: searchCustomerController.text,
-              enterpriseCode: widget.enterpriseCode.toString(),
-            );
+    return Scaffold(
+      body: Column(
+        children: [
+          SearchWidget(
+            consultProductController: searchCustomerController,
+            isLoading: saleRequestProvider.isLoadingCustomer,
+            autofocus: false,
+            onPressSearch: () async {
+              await saleRequestProvider.getCustomers(
+                context: context,
+                controllerText: searchCustomerController.text,
+                enterpriseCode: widget.enterpriseCode.toString(),
+                configurationsProvider: configurationsProvider,
+              );
 
-            if (saleRequestProvider
-                    .customersCount(widget.enterpriseCode.toString()) >
-                0) {
-              searchCustomerController.clear();
-            }
-          },
-          focusNodeConsultProduct: searchCustomerFocusNode,
-          hintText: "Código, nome, CPF ou CNPJ",
-          labelText: "Consultar cliente",
-          useCamera: false,
-        ),
-        if (saleRequestProvider
-                .customersCount(widget.enterpriseCode.toString()) >
-            0)
-          SaleRequestCustomersItems(enterpriseCode: widget.enterpriseCode),
-        if (saleRequestProvider.errorMessageCustomer != "" &&
-            saleRequestProvider
-                    .customersCount(widget.enterpriseCode.toString()) ==
-                0)
-          Expanded(
-            child: searchAgain(
-              errorMessage:
-                  'Ocorreu um erro para consultar o cliente "consumidor"',
-              request: () async {
-                await saleRequestProvider.getCustomers(
-                  context: context,
-                  controllerText: "-1",
-                  enterpriseCode: widget.enterpriseCode.toString(),
-                );
-              },
+              if (saleRequestProvider
+                      .customersCount(widget.enterpriseCode.toString()) >
+                  0) {
+                searchCustomerController.clear();
+              }
+            },
+            focusNodeConsultProduct: searchCustomerFocusNode,
+            hintText: "Código, nome, CPF ou CNPJ",
+            labelText: "Consultar cliente",
+            useCamera: false,
+          ),
+          if (saleRequestProvider
+                  .customersCount(widget.enterpriseCode.toString()) >
+              0)
+            SaleRequestCustomersItems(enterpriseCode: widget.enterpriseCode),
+          if (saleRequestProvider.errorMessageCustomer != "" &&
+              saleRequestProvider
+                      .customersCount(widget.enterpriseCode.toString()) ==
+                  0)
+            Expanded(
+              child: searchAgain(
+                errorMessage:
+                    'Ocorreu um erro para consultar o cliente "consumidor"',
+                request: () async {
+                  await saleRequestProvider.getCustomers(
+                    context: context,
+                    controllerText: "-1",
+                    enterpriseCode: widget.enterpriseCode.toString(),
+                    configurationsProvider: configurationsProvider,
+                  );
+                },
+              ),
             ),
-          ),
-        if (saleRequestProvider.errorMessageCustomer != "" &&
-            saleRequestProvider
-                    .customersCount(widget.enterpriseCode.toString()) >
-                0)
-          ErrorMessage(
-            errorMessage: saleRequestProvider.errorMessageCustomer,
-          ),
-      ],
+          if (saleRequestProvider.errorMessageCustomer != "" &&
+              saleRequestProvider
+                      .customersCount(widget.enterpriseCode.toString()) >
+                  0)
+            Expanded(
+              flex: 2,
+              child: SingleChildScrollView(
+                child: ErrorMessage(
+                  errorMessage: saleRequestProvider.errorMessageCustomer,
+                ),
+              ),
+            ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: "Cadastrar cliente",
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: const Icon(Icons.person_add, color: Colors.white),
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            APPROUTES.CUSTOMER_REGISTER,
+          );
+        },
+      ),
     );
   }
 }

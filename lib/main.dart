@@ -1,4 +1,6 @@
 import 'package:celta_inventario/pages/notifications/notifications_page.dart';
+import 'package:celta_inventario/pages/web/web_home_page.dart';
+import 'package:celta_inventario/pages/web/web_login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ResearchPricesProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
         ChangeNotifierProvider(create: (_) => NotificationsProvider()),
+        ChangeNotifierProvider(create: (_) => WebProvider()),
       ],
       child: MaterialApp(
         navigatorKey: _navigatorKey,
@@ -223,6 +226,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
               const ResearchPricesProductsPage(),
           APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
+          APPROUTES.WEB_LOGIN: (ctx) => const WebLoginPage(),
+          APPROUTES.WEB_HOME: (ctx) => const WebHomePage(),
         },
       ),
     );

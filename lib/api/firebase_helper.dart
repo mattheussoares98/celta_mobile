@@ -1,15 +1,15 @@
+import 'dart:convert';
+
+import 'package:celta_inventario/models/notifications/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import '../Models/firebase/firebase.dart';
-import '../models/notifications/notifications.dart';
 import '../firebase_options.dart';
 import '../providers/providers.dart';
 import '../utils/utils.dart';
@@ -47,6 +47,8 @@ class FirebaseHelper {
   }
 
   FirebaseHelper._internal();
+
+  static FirebaseAuth _firebaseauth = FirebaseAuth.instance;
 
   static FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   static CollectionReference _clientsCollection =
@@ -148,7 +150,10 @@ class FirebaseHelper {
             docRef,
             {
               firebaseCallEnum.name: {
-                kIsWeb ? "webTimesUsed" : "timesUsed": FieldValue.increment(1),
+                PlatformPlus.platform.isIOSNative ||
+                        PlatformPlus.platform.isIOSWeb
+                    ? "iOS"
+                    : "android": FieldValue.increment(1),
               },
               'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
               'datesUsed': FieldValue.arrayUnion(
@@ -244,15 +249,24 @@ class FirebaseHelper {
 
     //abaixo recebe a notificação em primeiro plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("mensagem chegando hein");
-      final newNotification = NotificationsModel(
-        title: message.notification?.title,
-        subtitle: message.notification?.body,
-        imageUrl: message.notification?.android?.imageUrl,
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
-      );
-      PrefsInstance.setNewNotification(newNotification);
-      notificationsProvider.addNewNotification(newNotification);
+      try {
+        final encoded = json.encode(message.data);
+        final decoded = json.decode(encoded);
+        //message.data == dados personalizados no firebase
+
+        final newNotification = NotificationsModel(
+          title: message.notification?.title,
+          subtitle: message.notification?.body,
+          imageUrl: message.notification?.android?.imageUrl,
+          id: DateTime.now().microsecondsSinceEpoch.toString(),
+          urlToLaunch: decoded["urlToLaunch"],
+        );
+
+        PrefsInstance.setNewNotification(newNotification);
+        notificationsProvider.addNewNotification(newNotification);
+      } catch (e) {
+        print(e);
+      }
     });
   }
 
@@ -291,6 +305,28 @@ class FirebaseHelper {
               .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
         )
         .get();
+  }
+
+  static Future<void> signIn(
+      {required String email, required String password}) async {
+    try {
+      await _firebaseauth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  static Future<List<QueryDocumentSnapshot<Object?>>> getAllClients() async {
+    try {
+      final value = await _clientsCollection.get();
+
+      return value.docs;
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   static Future<void> _addUserInformations() async {
