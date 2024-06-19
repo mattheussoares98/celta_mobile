@@ -354,9 +354,9 @@ class FirebaseHelper {
 
         await _clientsCollection.doc(result.docs.first.id).set(
           {
-            "usersInformations": [
+            "usersInformations": FieldValue.arrayUnion([
               userInformations.toJson(),
-            ],
+            ]),
           },
           SetOptions(merge: true),
         );
