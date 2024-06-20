@@ -378,7 +378,7 @@ class SaleRequestProvider with ChangeNotifier {
     await PrefsInstance.clearCartSaleRequest();
     _updatedCart = true;
 
-    await _getCustomers(
+    await _getCustomersOldSearch(
       searchTypeInt: 2, //exactCode
       controllerText: "-1", //consumidor
       enterpriseCode: enterpriseCode,
@@ -637,11 +637,16 @@ class SaleRequestProvider with ChangeNotifier {
 
     await _clearcustomers(enterpriseCode);
 
-    await _getCustomers(
+    await _getCustomersOldSearch(
       searchTypeInt: 2, //exactCode
       controllerText: "-1", //consumidor
       enterpriseCode: enterpriseCode,
     );
+
+    if (_customers.isNotEmpty && controllerText == "-1") {
+      //como está consultando o cliente consumidor, não precisa continuar pois já foi pesquisado
+      return;
+    }
 
     if (searchOnlyDefaultCustomer!) {
       return;
@@ -649,25 +654,25 @@ class SaleRequestProvider with ChangeNotifier {
 
     int? codeValue = int.tryParse(controllerText);
     if (codeValue == null) {
-      await _getCustomers(
+      await _getCustomersOldSearch(
         searchTypeInt: 3, //ApproximateName
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else if (configurationsProvider.searchCustomerByPersonalizedCode) {
-      await _getCustomers(
+      await _getCustomersOldSearch(
         searchTypeInt: 4, //PersonalizedCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else if (CPFValidator.isValid(codeValue.toString())) {
-      await _getCustomers(
+      await _getCustomersOldSearch(
         searchTypeInt: 1, //ExactCnpjCpfNumber
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else {
-      await _getCustomers(
+      await _getCustomersOldSearch(
         searchTypeInt: 2, //exactCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
@@ -675,7 +680,7 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _getCustomers({
+  Future<void> _getCustomersOldSearch({
     required int searchTypeInt,
     required String controllerText,
     required String enterpriseCode,
@@ -703,7 +708,14 @@ class SaleRequestProvider with ChangeNotifier {
       );
 
       _errorMessageCustomer = SoapHelperResponseParameters.errorMessage;
-
+      if (_errorMessageCustomer ==
+          "O formato dos filtros informado está inválido") {
+        await _getCustomersNewSearch(
+          searchTypeInt: searchTypeInt,
+          controllerText: controllerText,
+          enterpriseCode: enterpriseCode,
+        );
+      }
       if (_errorMessageCustomer == "") {
         if (_customers[enterpriseCode] == null) {
           _customers[enterpriseCode] = [];
@@ -722,6 +734,40 @@ class SaleRequestProvider with ChangeNotifier {
     } finally {
       _isLoadingCustomer = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> _getCustomersNewSearch({
+    required int searchTypeInt,
+    required String controllerText,
+    required String enterpriseCode,
+  }) async {
+// 1=ExactCnpjCpfNumber
+// 2=ExactCode
+// 3=ApproximateName
+// 4=PersonalizedCode
+
+    _errorMessageCustomer = "";
+
+    try {
+      await SoapHelper.soapPost(
+        parameters: {
+          "filters": json.encode({
+            "crossIdentity": UserData.crossIdentity,
+            "customerData": controllerText,
+            "customerDataType": searchTypeInt,
+            "enterpriseCode": enterpriseCode,
+          }),
+        },
+        typeOfResponse: "GetCustomerJsonResponse",
+        SOAPAction: "GetCustomerJson",
+        serviceASMX: "CeltaCustomerService.asmx",
+        typeOfResult: "GetCustomerJsonResult",
+      );
+
+      _errorMessageCustomer = SoapHelperResponseParameters.errorMessage;
+    } catch (e) {
+      throw Exception();
     }
   }
 
@@ -829,7 +875,7 @@ class SaleRequestProvider with ChangeNotifier {
         await clearCart(enterpriseCode);
 
         await _clearcustomers(enterpriseCode);
-        await _getCustomers(
+        await _getCustomersOldSearch(
           searchTypeInt: 2, //exactCode
           controllerText: "-1", //consumidor
           enterpriseCode: enterpriseCode,
