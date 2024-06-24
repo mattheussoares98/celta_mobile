@@ -30,10 +30,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -74,6 +71,17 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://celtamobile-7d69a-default-rtdb.firebaseio.com',
     storageBucket: 'celtamobile-7d69a.appspot.com',
     iosBundleId: 'br.com.celtaware.inventario',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAJiAUy_uU4Oiii6ZXNnfRoLtwZoNtzSY0',
+    appId: '1:386752507656:web:5d680b552c80dc5914c6bd',
+    messagingSenderId: '386752507656',
+    projectId: 'celtamobile-7d69a',
+    authDomain: 'celtamobile-7d69a.firebaseapp.com',
+    databaseURL: 'https://celtamobile-7d69a-default-rtdb.firebaseio.com',
+    storageBucket: 'celtamobile-7d69a.appspot.com',
+    measurementId: 'G-ERDST5N6XE',
   );
 
 }
