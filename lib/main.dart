@@ -27,7 +27,7 @@ import 'utils/utils.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PlatformPlus.platform.init();
-  await initFirebaseMessage();
+  await FirebaseHelper.initFirebase();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
@@ -36,9 +36,6 @@ void main() async {
 }
 
 GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-Future<void> initFirebaseMessage() async {
-  await FirebaseHelper.initFirebase();
-}
 
 class MyApp extends StatelessWidget {
   @override

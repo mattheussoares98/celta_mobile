@@ -8,6 +8,8 @@ import 'package:celta_inventario/pages/web/web_home_page.dart';
 import 'package:celta_inventario/providers/providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../utils/utils.dart';
+
 class WebLoginPage extends StatefulWidget {
   const WebLoginPage({super.key});
 
@@ -91,17 +93,16 @@ class _WebLoginPageState extends State<WebLoginPage> {
                           onPressed: () async {
                             bool isValid = key.currentState!.validate();
 
-                            if (isValid) {
-                              await FirebaseHelper.signIn(
-                                email: emailController.text,
-                                password: passwordController.text,
-                              );
-                              if (webProvider.errorMessage != "") {
-                                ShowSnackbarMessage.showMessage(
-                                  message: webProvider.errorMessage,
-                                  context: context,
-                                );
-                              }
+                            if (!isValid) return;
+
+                            final userCredential = await FirebaseHelper.signIn(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+
+                            if (userCredential != null) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  APPROUTES.WEB_HOME, (route) => false);
                             }
                           },
                           child: const Text("Efetuar login"),

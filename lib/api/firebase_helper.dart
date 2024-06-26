@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
@@ -219,10 +220,7 @@ class FirebaseHelper {
 
   static Future<void> initNotifications(
       NotificationsProvider notificationsProvider) async {
-    if (PlatformPlus.platform.isWindowsWeb ||
-        PlatformPlus.platform.isAndroidWeb ||
-        PlatformPlus.platform.isAndroidWeb ||
-        PlatformPlus.platform.isIOSWeb) {
+    if (kIsWeb) {
       return;
     }
     await _firebaseMessaging.requestPermission();
@@ -294,15 +292,17 @@ class FirebaseHelper {
         .get();
   }
 
-  static Future<void> signIn(
-      {required String email, required String password}) async {
+  static Future<UserCredential?> signIn({
+    required String email,
+    required String password,
+  }) async {
     try {
-      await _firebaseauth.signInWithEmailAndPassword(
+      return await _firebaseauth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
     } catch (e) {
-      throw Exception();
+      return null;
     }
   }
 
