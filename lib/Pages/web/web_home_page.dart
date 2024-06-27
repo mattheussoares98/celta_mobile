@@ -22,6 +22,14 @@ class _WebHomePageState extends State<WebHomePage> {
       children: [
         Scaffold(
           appBar: AppBar(
+            title: webProvider.clients.isEmpty
+                ? null
+                : Text(
+                    "${webProvider.clients.length} clientes",
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
             actions: [
               IconButton(
                   onPressed: () async {
