@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/Global_widgets/global_widgets.dart';
-import '../../../models/firebase/firebase.dart';
+import '../../../../../components/Global_widgets/global_widgets.dart';
+import '../../../../../models/firebase/firebase.dart';
 
 appBarPersonalized({
   required BuildContext context,
