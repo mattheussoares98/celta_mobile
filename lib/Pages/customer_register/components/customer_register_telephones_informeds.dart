@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class CustomerRegisterEmailsInformeds extends StatefulWidget {
-  const CustomerRegisterEmailsInformeds({Key? key}) : super(key: key);
+class CustomerRegisterTelephonesInformeds extends StatefulWidget {
+  const CustomerRegisterTelephonesInformeds({Key? key}) : super(key: key);
 
   @override
-  State<CustomerRegisterEmailsInformeds> createState() =>
-      _CustomerRegisterEmailsInformedsState();
+  State<CustomerRegisterTelephonesInformeds> createState() =>
+      _CustomerRegisterTelephonesInformedsState();
 }
 
-class _CustomerRegisterEmailsInformedsState
-    extends State<CustomerRegisterEmailsInformeds> {
+class _CustomerRegisterTelephonesInformedsState
+    extends State<CustomerRegisterTelephonesInformeds> {
+  String formatPhoneNumber({
+    required String AreaCode,
+    required String PhoneNumber,
+  }) {
+    return "($AreaCode) $PhoneNumber";
+  }
+
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider =
         Provider.of(context, listen: true);
-    ;
     return Column(
       children: [
         const Divider(
           height: 20,
         ),
         const Text(
-          "E-mails informados",
+          "Telefones informados",
           style: TextStyle(
             fontFamily: "BebasNeue",
             fontSize: 30,
@@ -36,9 +42,10 @@ class _CustomerRegisterEmailsInformedsState
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: customerRegisterProvider.emailsCount,
+          itemCount: customerRegisterProvider.telephonesCount,
           itemBuilder: (context, index) {
-            String email = customerRegisterProvider.emails[index];
+            Map<String, String> telephone =
+                customerRegisterProvider.telephones[index];
             return Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +53,9 @@ class _CustomerRegisterEmailsInformedsState
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      email,
+                      formatPhoneNumber(
+                          AreaCode: telephone["AreaCode"]!,
+                          PhoneNumber: telephone["PhoneNumber"]!),
                     ),
                   ),
                   IconButton(
@@ -55,10 +64,10 @@ class _CustomerRegisterEmailsInformedsState
                         : () {
                             ShowAlertDialog.showAlertDialog(
                               context: context,
-                              title: "Excluir e-mail",
-                              subtitle: "Deseja realmente excluir o e-mail?",
+                              title: "Excluir telefone",
+                              subtitle: "Deseja realmente excluir o telefone?",
                               function: () {
-                                customerRegisterProvider.removeEmail(index);
+                                customerRegisterProvider.removeTelephone(index);
                               },
                             );
                           },

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../customer_register/customer_register.dart';
+import '../../pages/customer_register/components/components.dart';
 import '../global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
+import 'address_form_field.dart';
 
 class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
@@ -95,7 +96,7 @@ class _AddressComponentState extends State<AddressComponent> {
   Widget build(BuildContext context) {
     AddressProvider addressProvider = Provider.of(context);
     return SingleChildScrollView(
-    primary: false, 
+      primary: false,
       child: Form(
         key: widget.adressFormKey,
         child: Column(

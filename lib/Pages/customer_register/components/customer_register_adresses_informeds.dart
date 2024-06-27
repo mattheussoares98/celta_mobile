@@ -1,9 +1,9 @@
-import 'package:celta_inventario/models/address/address.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../models/address/address.dart';
+import '../../../providers/providers.dart';
 
 class CustomerRegisterAddressesInformeds extends StatefulWidget {
   final bool isLoading;

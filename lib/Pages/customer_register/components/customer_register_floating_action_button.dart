@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
 class CustomerRegisterFloatingActionButton extends StatefulWidget {
   final Function changeSelectedIndexToAddAddres;

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/customer_register/customer_register.dart';
+
 import '../../providers/providers.dart';
+import 'components/components.dart';
 
 class CustomerRegisterAddPage extends StatefulWidget {
   const CustomerRegisterAddPage({Key? key}) : super(key: key);
