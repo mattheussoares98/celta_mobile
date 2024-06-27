@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../Models/firebase/firebase.dart';
+import '../../utils/utils.dart';
 
 class FirebaseClientModel {
   final String enterpriseName;
@@ -17,15 +18,13 @@ class FirebaseClientModel {
   Map<String, dynamic> toJson() {
     if (kIsWeb) {
       return {
-        'enterpriseName':
-            enterpriseName.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
-        'urlCCSWeb': urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+        'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
+        'urlCCSWeb': urlCCS.toLowerCase().removeWhiteSpaces(),
       };
     } else {
       return {
-        'enterpriseName':
-            enterpriseName.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
-        'urlCCS': urlCCS.toLowerCase().replaceAll(RegExp(r'\s+'), ''),
+        'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
+        'urlCCS': urlCCS.toLowerCase().removeWhiteSpaces(),
       };
     }
   }

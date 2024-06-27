@@ -1,3 +1,5 @@
+import '../../utils/utils.dart';
+
 class UserInformationsModel {
   final String? fcmToken;
   final String userName;
@@ -13,7 +15,7 @@ class UserInformationsModel {
 
   Map<String, dynamic> toJson() => {
         "fcmToken": fcmToken,
-        "userName": userName,
+        "userName": userName.toLowerCase().removeWhiteSpaces(),
         "deviceType": deviceType,
         "dateOfLastUpdatedInFirebase":
             dateOfLastUpdatedInFirebase.toIso8601String(),
