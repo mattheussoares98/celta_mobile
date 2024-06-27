@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ResearchPricesFilterAssociatedsProducts extends StatefulWidget {
+class FilterAssociatedsProducts extends StatefulWidget {
   final bool? isAll;
   final bool? withoutCounts;
   final bool? withCounts;
   final void Function(bool?)? changeIsAll;
   final void Function(bool?)? changeWithoutCounts;
   final void Function(bool?)? changeWithCounts;
-  const ResearchPricesFilterAssociatedsProducts({
+  const FilterAssociatedsProducts({
     super.key,
     required this.isAll,
     required this.withoutCounts,
@@ -18,12 +18,12 @@ class ResearchPricesFilterAssociatedsProducts extends StatefulWidget {
   });
 
   @override
-  State<ResearchPricesFilterAssociatedsProducts> createState() =>
+  State<FilterAssociatedsProducts> createState() =>
       _ResearchPricesFilterAssociatedsProducts();
 }
 
 class _ResearchPricesFilterAssociatedsProducts
-    extends State<ResearchPricesFilterAssociatedsProducts> {
+    extends State<FilterAssociatedsProducts> {
   @override
   Widget build(BuildContext context) {
     return Padding(

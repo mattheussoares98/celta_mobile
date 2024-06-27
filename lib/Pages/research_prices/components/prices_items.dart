@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../global_widgets/global_widgets.dart';
-import '../../models/research_prices/research_prices.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../models/research_prices/research_prices.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
-class ResearchPricesItems extends StatefulWidget {
+class PricesItems extends StatefulWidget {
   final int enterpriseCode;
-  const ResearchPricesItems({
+  const PricesItems({
     required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ResearchPricesItems> createState() => _ResearchPricesItemsState();
+  State<PricesItems> createState() => _PricesItemsState();
 }
 
-class _ResearchPricesItemsState extends State<ResearchPricesItems> {
+class _PricesItemsState extends State<PricesItems> {
   int selectedIndex = -1;
 
   Widget itemOfList({

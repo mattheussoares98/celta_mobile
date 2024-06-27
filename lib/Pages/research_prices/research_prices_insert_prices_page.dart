@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/research_prices/research_prices.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../components/global_widgets/global_widgets.dart';
 
@@ -151,7 +151,7 @@ class _ResearchPricesInsertPricesPageState
             focusNodeConsultProduct: _searchFocus,
           ),
           if (widget.isAssociatedProducts)
-            ResearchPricesFilterAssociatedsProducts(
+            FilterAssociatedsProducts(
               changeIsAll: _changeIsAll,
               changeWithCounts: _changeWithCounts,
               changeWithoutCounts: _changeWithoutCounts,
@@ -163,7 +163,7 @@ class _ResearchPricesInsertPricesPageState
             ErrorMessage(
               errorMessage: errorMessage(researchPricesProvider),
             ),
-          ResearchPricesProductsItems(
+          ProductsItems(
             isAssociatedProducts: widget.isAssociatedProducts,
             consultedProductController: widget.searchProductController,
           ),

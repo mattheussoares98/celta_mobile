@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
-import '../../components/research_prices/research_prices.dart';
+import 'components/components.dart';
 import '../../utils/utils.dart';
 
 class ResearchPricesConcurrentsPage extends StatefulWidget {

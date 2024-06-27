@@ -2,11 +2,11 @@ import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
-import '../../models/research_prices/research_prices.dart';
-import '../../providers/providers.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../models/research_prices/research_prices.dart';
+import '../../../providers/providers.dart';
 
-class ResearchPricesInsertPrices extends StatefulWidget {
+class InsertPrices extends StatefulWidget {
   final ResearchPricesProductsModel product;
   final bool isAssociatedProducts;
   final Function showErrorMessage;
@@ -15,7 +15,7 @@ class ResearchPricesInsertPrices extends StatefulWidget {
   final Function showSuccessMessage;
   //só funcionou dessa forma porque quando tentava chamar o contexto após dar
   //certo ou erro, ele já não existia mais
-  const ResearchPricesInsertPrices({
+  const InsertPrices({
     required this.isAssociatedProducts,
     required this.product,
     required this.showErrorMessage,
@@ -24,12 +24,12 @@ class ResearchPricesInsertPrices extends StatefulWidget {
   });
 
   @override
-  State<ResearchPricesInsertPrices> createState() =>
-      _ResearchPricesInsertPricesState();
+  State<InsertPrices> createState() =>
+      _InsertPricesState();
 }
 
-class _ResearchPricesInsertPricesState
-    extends State<ResearchPricesInsertPrices> {
+class _InsertPricesState
+    extends State<InsertPrices> {
   Flexible personalizedField({
     required String label,
     required GlobalKey<FormState> key,
