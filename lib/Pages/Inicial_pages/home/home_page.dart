@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/api.dart';
-import '../../components/global_widgets/global_widgets.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
+import '../../../api/api.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 import 'my_drawer.dart';
 
 class HomePage extends StatefulWidget {

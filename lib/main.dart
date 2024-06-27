@@ -11,7 +11,6 @@ import './pages/adjust_stock/adjust_stock.dart';
 import './pages/buy_request/buy_request.dart';
 import './pages/customer_register/customer_register.dart';
 import './pages/drawer/drawer.dart';
-import './pages/home/home.dart';
 import './pages/inicial_pages/inicial_pages.dart';
 import './pages/inventory/inventory.dart';
 import './pages/price_conference/price_conference.dart';
@@ -23,7 +22,6 @@ import './pages/transfer_between_stocks/transfer_between_stocks.dart';
 import './pages/transfer_request/transfer_request.dart';
 import './providers/providers.dart';
 import './utils/utils.dart';
-import 'pages/login/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

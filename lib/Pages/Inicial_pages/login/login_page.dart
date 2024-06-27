@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/utils.dart';
+import '../../../utils/utils.dart';
 import 'auth_form.dart';
 
 class LoginPage extends StatefulWidget {
