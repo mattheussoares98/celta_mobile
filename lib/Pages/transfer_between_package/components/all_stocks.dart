@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../models/transfer_between_package/transfer_between_package.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../models/transfer_between_package/transfer_between_package.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class TransferBetweenPackageAllStocks {
-  static transferBetweenPackageAllStocks({
+class AllStocks {
+  static allStocks({
     required BuildContext context,
     required bool hasStocks,
     required TransferBetweenPackageProductModel product,

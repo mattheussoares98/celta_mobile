@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/transfer_between_package/transfer_between_package.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import 'transfer_between_package.dart';
+import '../../../models/transfer_between_package/transfer_between_package.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'components.dart';
 
-class TransferBetweenPackageProductsItems extends StatefulWidget {
+class ProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
-  const TransferBetweenPackageProductsItems({
+  const ProductsItems({
     required this.internalEnterpriseCode,
     required this.consultedProductController,
     required this.dropDownFormKey,
@@ -21,12 +21,12 @@ class TransferBetweenPackageProductsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TransferBetweenPackageProductsItems> createState() =>
-      _TransferBetweenPackageProductsItemsState();
+  State<ProductsItems> createState() =>
+      _ProductsItemsState();
 }
 
-class _TransferBetweenPackageProductsItemsState
-    extends State<TransferBetweenPackageProductsItems> {
+class _ProductsItemsState
+    extends State<ProductsItems> {
   int selectedIndex = -1;
 
   @override
@@ -123,8 +123,8 @@ class _TransferBetweenPackageProductsItemsState
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "PLU",
                             value: product.PriceLookUp,
-                            otherWidget: TransferBetweenPackageAllStocks
-                                .transferBetweenPackageAllStocks(
+                            otherWidget: AllStocks
+                                .allStocks(
                               context: context,
                               hasStocks: product.Stocks.length > 0,
                               product: product,
@@ -156,7 +156,7 @@ class _TransferBetweenPackageProductsItemsState
                             ),
                           ),
                           if (selectedIndex == index)
-                            TransferBetweenPackageInsertQuantity(
+                            InsertQuantity(
                               consultedProductController:
                                   widget.consultedProductController,
                               dropDownFormKey: widget.dropDownFormKey,

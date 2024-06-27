@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
+import '../../../providers/providers.dart';
 
-class TransferBetweenPackageJustificationsAndStocksDropwdownWidget
+class JustificationsAndStocksDropwdownWidget
     extends StatefulWidget {
   final GlobalKey<FormState> dropDownFormKey;
 
-  const TransferBetweenPackageJustificationsAndStocksDropwdownWidget({
+  const JustificationsAndStocksDropwdownWidget({
     required this.dropDownFormKey,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<TransferBetweenPackageJustificationsAndStocksDropwdownWidget>
+  State<JustificationsAndStocksDropwdownWidget>
       createState() =>
-          _TransferBetweenPackageJustificationsAndStocksDropwdownWidgetState();
+          _JustificationsAndStocksDropwdownWidgetState();
 }
 
-class _TransferBetweenPackageJustificationsAndStocksDropwdownWidgetState
+class _JustificationsAndStocksDropwdownWidgetState
     extends State<
-        TransferBetweenPackageJustificationsAndStocksDropwdownWidget> {
+        JustificationsAndStocksDropwdownWidget> {
   final GlobalKey<FormFieldState> _keyJustifications = GlobalKey();
   final GlobalKey<FormFieldState> _keyOriginStockType = GlobalKey();
   final GlobalKey<FormFieldState> _keyDestinyStockType = GlobalKey();
