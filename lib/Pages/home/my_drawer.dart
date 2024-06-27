@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../api/api.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../components/global_widgets/global_widgets.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);

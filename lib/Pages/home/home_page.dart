@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../api/api.dart';
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/inicial_pages/inicial_pages.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
+import 'my_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

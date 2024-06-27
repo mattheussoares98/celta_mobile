@@ -1,28 +1,28 @@
-import 'package:celta_inventario/pages/notifications/notifications_page.dart';
-import 'package:celta_inventario/pages/web/web_home_page.dart';
-import 'package:celta_inventario/pages/web/web_login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
-import 'api/firebase_helper.dart';
-import 'pages/adjust_stock/adjust_stock.dart';
-import 'pages/buy_request/buy_request.dart';
-import 'pages/customer_register/customer_register.dart';
-import 'pages/drawer/drawer.dart';
-import 'pages/inicial_pages/inicial_pages.dart';
-import 'pages/inventory/inventory.dart';
-import 'pages/price_conference/price_conference.dart';
-import 'pages/receipt/receipt.dart';
-import 'pages/research_prices/research_prices.dart';
-import 'pages/sale_request/sale_request.dart';
-import 'pages/transfer_between_package/transfer_between_package.dart';
-import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
-import 'pages/transfer_request/transfer_request.dart';
-import 'providers/providers.dart';
-import 'utils/utils.dart';
+import './api/api.dart';
+import './pages/notifications/notifications_page.dart';
+import './pages/web/web.dart';
+import './pages/adjust_stock/adjust_stock.dart';
+import './pages/buy_request/buy_request.dart';
+import './pages/customer_register/customer_register.dart';
+import './pages/drawer/drawer.dart';
+import './pages/home/home.dart';
+import './pages/inicial_pages/inicial_pages.dart';
+import './pages/inventory/inventory.dart';
+import './pages/price_conference/price_conference.dart';
+import './pages/receipt/receipt.dart';
+import './pages/research_prices/research_prices.dart';
+import './pages/sale_request/sale_request.dart';
+import './pages/transfer_between_package/transfer_between_package.dart';
+import './pages/transfer_between_stocks/transfer_between_stocks.dart';
+import './pages/transfer_request/transfer_request.dart';
+import './providers/providers.dart';
+import './utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
