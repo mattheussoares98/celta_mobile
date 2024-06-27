@@ -2,11 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/adjust_stock/adjust_stock.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import './adjust_stock.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../models/adjust_stock/adjust_stock.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import 'components.dart';
+
 
 class AdjustStockProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;

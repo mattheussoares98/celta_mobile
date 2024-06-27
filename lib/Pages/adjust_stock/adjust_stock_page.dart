@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/adjust_stock/adjust_stock.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
+import 'components/components.dart';
 
 class AdjustStockPage extends StatefulWidget {
   const AdjustStockPage({Key? key}) : super(key: key);

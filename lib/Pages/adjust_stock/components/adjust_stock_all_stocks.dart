@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/adjust_stock/adjust_stock.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../models/adjust_stock/adjust_stock.dart';
+import '../../../utils/utils.dart';
 
 class AdjustStockAllStocks {
   static adjustStockAllStocks({
@@ -12,10 +12,10 @@ class AdjustStockAllStocks {
     required bool isLoading,
   }) {
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       child: Row(
         children: [
           Text(
