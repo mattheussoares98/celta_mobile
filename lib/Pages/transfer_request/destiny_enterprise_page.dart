@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/transfer_request/transfer_destiny_enterprise_items.dart';
+import 'components/destiny_enterprise_items.dart';
 import '../../providers/providers.dart';
 
-class TransferDestinyEnterprisePage extends StatefulWidget {
-  const TransferDestinyEnterprisePage({Key? key}) : super(key: key);
+class DestinyEnterprisePage extends StatefulWidget {
+  const DestinyEnterprisePage({Key? key}) : super(key: key);
 
   @override
-  State<TransferDestinyEnterprisePage> createState() =>
-      _TransferDestinyEnterprisePageState();
+  State<DestinyEnterprisePage> createState() =>
+      _DestinyEnterprisePageState();
 }
 
-class _TransferDestinyEnterprisePageState
-    extends State<TransferDestinyEnterprisePage> {
+class _DestinyEnterprisePageState
+    extends State<DestinyEnterprisePage> {
   bool isLoaded = false;
   @override
   void didChangeDependencies() async {
@@ -83,7 +83,7 @@ class _TransferDestinyEnterprisePageState
                   if (!transferRequestProvider.isLoadingDestinyEnterprise &&
                       transferRequestProvider.errorMessageDestinyEnterprise ==
                           "")
-                    const TransferDestinyEnterpriseItems(),
+                    const DestinyEnterpriseItems(),
                   if (transferRequestProvider.errorMessageDestinyEnterprise !=
                           '' &&
                       !transferRequestProvider.isLoadingDestinyEnterprise)

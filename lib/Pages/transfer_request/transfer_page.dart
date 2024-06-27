@@ -70,13 +70,13 @@ class _TransferPageState extends State<TransferPage> {
     );
 
     List<Widget> _pages = <Widget>[
-      TransferRequestInsertProductsPage(
+      InsertProductsPage(
         requestTypeCode: arguments["requestTypeCode"].toString(),
         enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
         enterpriseDestinyCode: arguments["enterpriseDestinyCode"].toString(),
       ),
       // SaleRequestInsertCostumer(enterpriseCode: 2),
-      TransferRequestCartDetailsPage(
+      CartDetailsPage(
         requestTypeCode: arguments["requestTypeCode"].toString(),
         enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
         enterpriseDestinyCode: arguments["enterpriseDestinyCode"].toString(),

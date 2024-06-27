@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/transfer_request/transfer_request.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
-class TransferRequestInsertProductsPage extends StatefulWidget {
+class InsertProductsPage extends StatefulWidget {
   final String requestTypeCode;
   final String enterpriseOriginCode;
   final String enterpriseDestinyCode;
-  const TransferRequestInsertProductsPage({
+  const InsertProductsPage({
     required this.requestTypeCode,
     required this.enterpriseOriginCode,
     required this.enterpriseDestinyCode,
@@ -18,12 +18,12 @@ class TransferRequestInsertProductsPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TransferRequestInsertProductsPage> createState() =>
-      _TransferRequestInsertProductsPageState();
+  State<InsertProductsPage> createState() =>
+      _InsertProductsPageState();
 }
 
-class _TransferRequestInsertProductsPageState
-    extends State<TransferRequestInsertProductsPage> {
+class _InsertProductsPageState
+    extends State<InsertProductsPage> {
   TextEditingController _searchProductTextEditingController =
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
@@ -71,7 +71,7 @@ class _TransferRequestInsertProductsPageState
           ErrorMessage(
             errorMessage: transferRequestProvider.errorMessageProducts,
           ),
-        TransferRequestProductsItems(
+        ProductsItems(
           consultedProductController: _consultedProductController,
           getProductsWithCamera: () async {
             FocusScope.of(context).unfocus();

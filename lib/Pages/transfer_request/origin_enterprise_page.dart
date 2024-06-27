@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/transfer_request/transfer_request.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 
-class TransferOriginEnterprisePage extends StatefulWidget {
-  const TransferOriginEnterprisePage({Key? key}) : super(key: key);
+class OriginEnterprisePage extends StatefulWidget {
+  const OriginEnterprisePage({Key? key}) : super(key: key);
 
   @override
-  State<TransferOriginEnterprisePage> createState() =>
-      _TransferOriginEnterprisePageState();
+  State<OriginEnterprisePage> createState() =>
+      _OriginEnterprisePageState();
 }
 
-class _TransferOriginEnterprisePageState
-    extends State<TransferOriginEnterprisePage> {
+class _OriginEnterprisePageState
+    extends State<OriginEnterprisePage> {
   bool isLoaded = false;
   @override
   void didChangeDependencies() async {
@@ -79,7 +79,7 @@ class _TransferOriginEnterprisePageState
                   if (!transferRequestProvider.isLoadingOriginEnterprise &&
                       transferRequestProvider.errorMessageOriginEnterprise ==
                           "")
-                    const TransferOriginEnterpriseItems(),
+                    const OriginEnterpriseItems(),
                   if (transferRequestProvider.errorMessageOriginEnterprise !=
                           '' &&
                       !transferRequestProvider.isLoadingOriginEnterprise)

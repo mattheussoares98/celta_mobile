@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../models/transfer_request/transfer_request.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../models/transfer_request/transfer_request.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class TransferRequestAllStocks {
-  static transferRequestAllStocks({
+class AllStocks {
+  static allStocks({
     required BuildContext context,
     required bool hasStocks,
     required TransferRequestProductsModel product,

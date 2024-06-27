@@ -201,11 +201,11 @@ class MyApp extends StatelessWidget {
           APPROUTES.SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL: (ctx) =>
               const ManualDefaultRequestModelPage(),
           APPROUTES.TRANSFER_REQUEST_MODEL: (ctx) =>
-              const TransferRequestModelPage(),
+              const RequestsModelPage(),
           APPROUTES.TRANSFER_ORIGIN_ENTERPRISE: (ctx) =>
-              const TransferOriginEnterprisePage(),
+              const OriginEnterprisePage(),
           APPROUTES.TRANSFER_DESTINY_ENTERPRISE: (ctx) =>
-              const TransferDestinyEnterprisePage(),
+              const DestinyEnterprisePage(),
           APPROUTES.TRANSFER: (ctx) => const TransferPage(),
           APPROUTES.TRANSFER_BETWEEN_STOCK: (ctx) =>
               const TransferBetweenStockPage(),

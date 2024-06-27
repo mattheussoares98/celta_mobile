@@ -2,22 +2,22 @@ import 'package:celta_inventario/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/transfer_request/transfer_request.dart';
-import '../../providers/providers.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../models/transfer_request/transfer_request.dart';
+import '../../../providers/providers.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class TransferDestinyEnterpriseItems extends StatefulWidget {
-  const TransferDestinyEnterpriseItems({
+class DestinyEnterpriseItems extends StatefulWidget {
+  const DestinyEnterpriseItems({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<TransferDestinyEnterpriseItems> createState() =>
-      _TransferDestinyEnterpriseItemsState();
+  State<DestinyEnterpriseItems> createState() =>
+      _DestinyEnterpriseItemsState();
 }
 
-class _TransferDestinyEnterpriseItemsState
-    extends State<TransferDestinyEnterpriseItems> {
+class _DestinyEnterpriseItemsState
+    extends State<DestinyEnterpriseItems> {
   int selectedIndex = -1;
 
   @override

@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/transfer_request/transfer_request.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import 'transfer_request.dart';
+import '../../../models/transfer_request/transfer_request.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'components.dart';
 
-class TransferRequestProductsItems extends StatefulWidget {
+class ProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final Function getProductsWithCamera;
 
-  const TransferRequestProductsItems({
+  const ProductsItems({
     required this.getProductsWithCamera,
     required this.consultedProductController,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<TransferRequestProductsItems> createState() =>
-      _TransferRequestProductsItemsState();
+  State<ProductsItems> createState() =>
+      _ProductsItemsState();
 }
 
-class _TransferRequestProductsItemsState
-    extends State<TransferRequestProductsItems> {
+class _ProductsItemsState
+    extends State<ProductsItems> {
   int selectedIndex = -1;
 
   GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
@@ -109,7 +109,7 @@ class _TransferRequestProductsItemsState
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 value: product.PLU.toString(),
-                otherWidget: TransferRequestAllStocks.transferRequestAllStocks(
+                otherWidget: AllStocks.allStocks(
                   context: context,
                   hasStocks: product.Stocks.length > 0,
                   product: product,
@@ -233,7 +233,7 @@ class _TransferRequestProductsItemsState
                   ],
                 ),
               if (selectedIndex == index)
-                TransferRequestInsertProductQuantityForm(
+                InsertProductQuantityForm(
                   consultedProductController: widget.consultedProductController,
                   consultedProductFormKey: _consultedProductFormKey,
                   totalItemValue: _totalItemValue,

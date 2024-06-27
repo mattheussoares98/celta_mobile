@@ -2,18 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/transfer_request/transfer_request.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import 'transfer_request.dart';
+import '../../../models/transfer_request/transfer_request.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'components.dart';
 
-class TransferRequestCartItems extends StatefulWidget {
+class CartItems extends StatefulWidget {
   final TextEditingController textEditingController;
   final String enterpriseOriginCode;
   final String enterpriseDestinyCode;
   final String requestTypeCode;
-  const TransferRequestCartItems({
+  const CartItems({
     required this.textEditingController,
     required this.enterpriseOriginCode,
     required this.enterpriseDestinyCode,
@@ -22,12 +22,12 @@ class TransferRequestCartItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TransferRequestCartItems> createState() => _SaleRequestCartItemsState();
+  State<CartItems> createState() => _SaleRequestCartItemsState();
 }
 
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
+class _SaleRequestCartItemsState extends State<CartItems> {
   int _selectedIndex = -1;
 
   FocusNode _focusNode = FocusNode();
@@ -157,7 +157,7 @@ class _SaleRequestCartItemsState extends State<TransferRequestCartItems> {
         ),
         child: Column(
           children: [
-            TransferRequestCartProductsItems.transferRequestCartProductsItems(
+            CartProductsItems.transferRequestCartProductsItems(
               updateSelectedIndex: () {
                 setState(() {
                   _selectedIndex = -1;

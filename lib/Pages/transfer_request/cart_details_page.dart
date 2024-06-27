@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/transfer_request/transfer_request.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
-class TransferRequestCartDetailsPage extends StatefulWidget {
+class CartDetailsPage extends StatefulWidget {
   final String enterpriseOriginCode;
   final String enterpriseDestinyCode;
   final String requestTypeCode;
   final bool keyboardIsOpen;
-  const TransferRequestCartDetailsPage({
+  const CartDetailsPage({
     required this.enterpriseOriginCode,
     required this.enterpriseDestinyCode,
     required this.requestTypeCode,
@@ -20,12 +20,12 @@ class TransferRequestCartDetailsPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TransferRequestCartDetailsPage> createState() =>
-      _TransferRequestCartDetailsPageState();
+  State<CartDetailsPage> createState() =>
+      _CartDetailsPageState();
 }
 
-class _TransferRequestCartDetailsPageState
-    extends State<TransferRequestCartDetailsPage> {
+class _CartDetailsPageState
+    extends State<CartDetailsPage> {
   TextEditingController _textEditingController = TextEditingController();
 
   String textButtonMessage({
@@ -102,7 +102,7 @@ class _TransferRequestCartDetailsPageState
 
     return Column(
       children: [
-        TransferRequestCartItems(
+        CartItems(
           enterpriseOriginCode: widget.enterpriseOriginCode,
           enterpriseDestinyCode: widget.enterpriseDestinyCode,
           requestTypeCode: widget.requestTypeCode,

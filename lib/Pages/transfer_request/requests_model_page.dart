@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/transfer_request/transfer_request.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 
-class TransferRequestModelPage extends StatefulWidget {
-  const TransferRequestModelPage({Key? key}) : super(key: key);
+class RequestsModelPage extends StatefulWidget {
+  const RequestsModelPage({Key? key}) : super(key: key);
 
   @override
-  State<TransferRequestModelPage> createState() =>
-      _TransferRequestModelPageState();
+  State<RequestsModelPage> createState() =>
+      _RequestsModelPageState();
 }
 
-class _TransferRequestModelPageState extends State<TransferRequestModelPage> {
+class _RequestsModelPageState extends State<RequestsModelPage> {
   bool isLoaded = false;
   @override
   void didChangeDependencies() async {

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/transfer_request/transfer_request.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../models/transfer_request/transfer_request.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class TransferOriginEnterpriseItems extends StatefulWidget {
-  const TransferOriginEnterpriseItems({
+class OriginEnterpriseItems extends StatefulWidget {
+  const OriginEnterpriseItems({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<TransferOriginEnterpriseItems> createState() =>
-      _TransferOriginEnterpriseItemsState();
+  State<OriginEnterpriseItems> createState() =>
+      _OriginEnterpriseItemsState();
 }
 
-class _TransferOriginEnterpriseItemsState
-    extends State<TransferOriginEnterpriseItems> {
+class _OriginEnterpriseItemsState
+    extends State<OriginEnterpriseItems> {
   @override
   Widget build(BuildContext context) {
     int requestTypeCode = ModalRoute.of(context)!.settings.arguments as int;
