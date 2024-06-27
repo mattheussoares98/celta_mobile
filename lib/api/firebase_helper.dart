@@ -86,7 +86,7 @@ class FirebaseHelper {
     String errorMessage = "";
     enterpriseNameOrurlCCSControllerText = enterpriseNameOrurlCCSControllerText
         .toLowerCase()
-        .removeWhiteSpaces(); //remove espaços em branco
+        .replaceAll(RegExp(r'\s+'), ''); //remove espaços em branco
 
     QuerySnapshot? querySnapshot;
 
@@ -289,7 +289,7 @@ class FirebaseHelper {
           fieldToSearch,
           isEqualTo: isEqualTo
               .toLowerCase()
-              .removeWhiteSpaces(), //remove espaços em branco
+              .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
         )
         .get();
   }

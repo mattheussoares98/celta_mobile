@@ -43,7 +43,7 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
-  login({
+  Future<void> login({
     required String user,
     required String password,
     required TextEditingController enterpriseNameOrUrlCCSController,
@@ -57,6 +57,11 @@ class LoginProvider with ChangeNotifier {
 
     if (_changedEnterpriseNameOrUrlCcs) {
       if (ConvertString.isUrl(enterpriseNameOrUrlCCSController.text)) {
+        if (enterpriseNameOrUrlCCSController.text.endsWith('/')) {
+          enterpriseNameOrUrlCCSController.text =
+              enterpriseNameOrUrlCCSController.text.substring(
+                  0, enterpriseNameOrUrlCCSController.text.length - 1);
+        }
         UserData.urlCCS = enterpriseNameOrUrlCCSController.text;
         UserData.enterpriseName = "";
       }
