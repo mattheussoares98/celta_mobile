@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './global_widgets.dart';
+import 'global_widgets.dart';
 
 class AddSubtractOrAnullWidget extends StatefulWidget {
   final bool isLoading;

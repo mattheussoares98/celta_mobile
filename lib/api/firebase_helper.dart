@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
-import '../Models/firebase/firebase.dart';
+import '../models/firebase/firebase.dart';
 import '../firebase_options.dart';
 import '../providers/providers.dart';
 import '../utils/utils.dart';

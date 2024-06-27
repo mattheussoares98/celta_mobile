@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../pages/research_prices/research_prices.dart';
+import 'research_prices.dart';
 import '../../providers/providers.dart';
 
 class ResearchPricesProductsPage extends StatefulWidget {

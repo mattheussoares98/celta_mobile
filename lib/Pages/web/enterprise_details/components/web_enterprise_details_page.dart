@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/firebase/firebase.dart';
-import './components.dart';
+import 'components.dart';
 
 class WebEnterpriseDetailsPage extends StatefulWidget {
   const WebEnterpriseDetailsPage({super.key});

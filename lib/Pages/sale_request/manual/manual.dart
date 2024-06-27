@@ -1,1 +1,1 @@
-export './manual_default_request_model_page.dart';
+export 'manual_default_request_model_page.dart';

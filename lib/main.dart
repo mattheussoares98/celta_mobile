@@ -5,24 +5,24 @@ import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
 import './api/api.dart';
-import './Pages/web/web.dart';
-import './Pages/adjust_stock/adjust_stock.dart';
-import './Pages/buy_request/buy_request.dart';
-import './Pages/customer_register/customer_register.dart';
-import './Pages/drawer/drawer.dart';
+import 'pages/web/web.dart';
+import 'pages/adjust_stock/adjust_stock.dart';
+import 'pages/buy_request/buy_request.dart';
+import 'pages/customer_register/customer_register.dart';
+import 'pages/drawer/drawer.dart';
 import './Pages/inicial_pages/inicial_pages.dart';
 import './Pages/inventory/inventory.dart';
-import './Pages/price_conference/price_conference.dart';
-import './Pages/receipt/receipt.dart';
-import './Pages/research_prices/research_prices.dart';
-import './Pages/notifications/notifications_page.dart';
-import './Pages/transfer_between_package/transfer_between_package.dart';
-import './Pages/transfer_between_stocks/transfer_between_stocks.dart';
-import './Pages/transfer_request/transfer_request.dart';
+import 'pages/price_conference/price_conference.dart';
+import 'pages/receipt/receipt.dart';
+import 'pages/research_prices/research_prices.dart';
+import 'pages/notifications/notifications_page.dart';
+import 'pages/transfer_between_package/transfer_between_package.dart';
+import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
+import 'pages/transfer_request/transfer_request.dart';
 import './providers/providers.dart';
 import './utils/utils.dart';
-import './Pages/web/enterprise_details/enterprise_details.dart';
-import './Pages/sale_request/sale_request.dart';
+import 'pages/web/enterprise_details/enterprise_details.dart';
+import 'pages/sale_request/sale_request.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
