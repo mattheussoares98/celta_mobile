@@ -22,6 +22,22 @@ class _WebLoginPageState extends State<WebLoginPage> {
   final passwordController = TextEditingController();
   final key = GlobalKey<FormState>();
 
+  Future<void> login() async {
+    bool isValid = key.currentState!.validate();
+
+    if (!isValid) return;
+
+    final userCredential = await FirebaseHelper.signIn(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    if (userCredential != null) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(APPROUTES.WEB_HOME, (route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
@@ -75,6 +91,9 @@ class _WebLoginPageState extends State<WebLoginPage> {
                         TextFormField(
                           controller: passwordController,
                           obscureText: true,
+                          onFieldSubmitted: (_) async {
+                            await login();
+                          },
                           decoration: FormFieldHelper.decoration(
                             isLoading: false,
                             context: context,
@@ -91,19 +110,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                         ),
                         TextButton(
                           onPressed: () async {
-                            bool isValid = key.currentState!.validate();
-
-                            if (!isValid) return;
-
-                            final userCredential = await FirebaseHelper.signIn(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-
-                            if (userCredential != null) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  APPROUTES.WEB_HOME, (route) => false);
-                            }
+                            await login();
                           },
                           child: const Text("Efetuar login"),
                         ),

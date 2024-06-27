@@ -180,6 +180,8 @@ class FirebaseHelper {
   static addCcsClientInFirebase() async {
     FirebaseClientModel firebaseClientModel = FirebaseClientModel(
       urlCCS: UserData.urlCCS,
+      id: null,
+      usersInformations: null,
     );
 
     QuerySnapshot? querySnapshotCcs;

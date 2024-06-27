@@ -4,10 +4,12 @@ class FirebaseClientModel {
   final String enterpriseName;
   final String urlCCS;
   final String? id;
+  final List? usersInformations;
   FirebaseClientModel({
     this.enterpriseName = "undefined",
-    this.id,
+    required this.id,
     required this.urlCCS,
+    required this.usersInformations,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,9 +28,12 @@ class FirebaseClientModel {
     }
   }
 
-  factory FirebaseClientModel.fromJson({required Map json, required String id}) => FirebaseClientModel(
+  factory FirebaseClientModel.fromJson(
+          {required Map json, required String id}) =>
+      FirebaseClientModel(
         urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
         enterpriseName: json["enterpriseName"],
         id: id,
+        usersInformations: json["usersInformations"],
       );
 }

@@ -21,37 +21,76 @@ class _WebHomePageState extends State<WebHomePage> {
     return Stack(
       children: [
         Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: webProvider.clients.length,
-                  itemBuilder: (context, index) {
-                    FirebaseClientModel client = webProvider.clients[index];
-                    return ListTile(
-                      title: Text(client.enterpriseName),
-                      subtitle: Text(client.urlCCS),
-                    );
-                  },
-                ),
-              ),
-              Center(
-                child: TextButton(
+          appBar: AppBar(
+            actions: [
+              IconButton(
                   onPressed: () async {
                     await webProvider.getAllClients();
-
-                    if (webProvider.errorMessage != "") {
-                      ShowSnackbarMessage.showMessage(
-                        message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
-                        context: context,
-                      );
-                    }
                   },
-                  child: const Text(
-                    "Consultar clientes",
+                  icon: const Icon(
+                    Icons.refresh,
+                  )),
+            ],
+          ),
+          body: Column(
+            children: [
+              if (webProvider.clients.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: webProvider.clients.length,
+                    itemBuilder: (context, index) {
+                      FirebaseClientModel client = webProvider.clients[index];
+                      return ListTile(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            APPROUTES.ADJUST_STOCK,
+                          );
+                        },
+                        trailing: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                APPROUTES.ADJUST_STOCK,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.remove_red_eye_rounded,
+                              color: Theme.of(context).colorScheme.primary,
+                            )),
+                        title: Text(client.enterpriseName),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(client.urlCCS),
+                            if (client.usersInformations != null)
+                              Text(
+                                  "Quantidade de usuários: ${client.usersInformations!.length}"),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ),
+              if (webProvider.clients.isEmpty)
+                Expanded(
+                  child: Center(
+                    child: TextButton(
+                      onPressed: () async {
+                        await webProvider.getAllClients();
+
+                        if (webProvider.errorMessage != "") {
+                          ShowSnackbarMessage.showMessage(
+                            message:
+                                DefaultErrorMessageToFindServer.ERROR_MESSAGE,
+                            context: context,
+                          );
+                        }
+                      },
+                      child: const Text(
+                        "Consultar clientes",
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
