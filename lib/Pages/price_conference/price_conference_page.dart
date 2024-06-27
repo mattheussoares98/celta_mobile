@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/price_conference/price_conference.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 
 class PriceConferencePage extends StatefulWidget {
@@ -83,7 +83,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                         errorMessage: priceConferenceProvider.errorMessage),
                   ),
                 if (!priceConferenceProvider.isLoading)
-                  PriceConferenceItems(
+                  ProductItems(
                     priceConferenceProvider: priceConferenceProvider,
                     internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
                   ),

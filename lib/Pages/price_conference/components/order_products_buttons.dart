@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../providers/providers.dart';
+import '../../../providers/providers.dart';
 
 class PriceConferenceOrderProductsButtons extends StatefulWidget {
   final PriceConferenceProvider priceConferenceProvider;

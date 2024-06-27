@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../models/price_conference/price_conference.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../models/price_conference/price_conference.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-Widget priceConferenteCosts({
+Widget costs({
   required BuildContext context,
   required PriceConferenceProductsModel product,
 }) =>
