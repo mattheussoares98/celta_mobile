@@ -1,10 +1,10 @@
-class UserInformations {
+class UserInformationsModel {
   final String? fcmToken;
   final String userName;
   final String deviceType;
   final DateTime dateOfLastUpdatedInFirebase;
 
-  UserInformations({
+  UserInformationsModel({
     required this.fcmToken,
     required this.userName,
     required this.deviceType,
@@ -19,7 +19,7 @@ class UserInformations {
             dateOfLastUpdatedInFirebase.toIso8601String(),
       };
 
-  factory UserInformations.fromJson(Map json) => UserInformations(
+  factory UserInformationsModel.fromJson(Map json) => UserInformationsModel(
         fcmToken: json["fcmToken"],
         userName: json["userName"],
         deviceType: json["deviceType"],

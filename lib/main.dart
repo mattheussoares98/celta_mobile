@@ -1,3 +1,4 @@
+import 'package:celta_inventario/Pages/web/enterprise_details/web_enterprise_details_page.dart';
 import 'package:celta_inventario/pages/notifications/notifications_page.dart';
 import 'package:celta_inventario/pages/web/web_home_page.dart';
 import 'package:celta_inventario/pages/web/web_login_page.dart';
@@ -225,6 +226,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
           APPROUTES.WEB_LOGIN: (ctx) => const WebLoginPage(),
           APPROUTES.WEB_HOME: (ctx) => const WebHomePage(),
+          APPROUTES.WEB_ENTERPRISE_DETAILS: (ctx) => const WebEnterpriseDetailsPage(),
         },
       ),
     );

@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 
+import '../../Models/firebase/firebase.dart';
+
 class FirebaseClientModel {
   final String enterpriseName;
   final String urlCCS;
   final String? id;
-  final List? usersInformations;
+  final List<UserInformationsModel>? usersInformations;
   FirebaseClientModel({
     this.enterpriseName = "undefined",
     required this.id,
@@ -34,6 +36,11 @@ class FirebaseClientModel {
         urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
         enterpriseName: json["enterpriseName"],
         id: id,
-        usersInformations: json["usersInformations"],
+        usersInformations: json["usersInformations"] == null
+            ? json["usersInformations"]
+            : json["usersInformations"]
+                .map<UserInformationsModel>(
+                    (element) => UserInformationsModel.fromJson(element))
+                .toList(),
       );
 }

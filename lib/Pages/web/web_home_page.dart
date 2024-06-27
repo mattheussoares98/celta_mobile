@@ -43,13 +43,15 @@ class _WebHomePageState extends State<WebHomePage> {
                       return ListTile(
                         onTap: () {
                           Navigator.of(context).pushNamed(
-                            APPROUTES.ADJUST_STOCK,
+                            APPROUTES.WEB_ENTERPRISE_DETAILS,
+                            arguments: client,
                           );
                         },
                         trailing: IconButton(
                             onPressed: () {
                               Navigator.of(context).pushNamed(
-                                APPROUTES.ADJUST_STOCK,
+                                APPROUTES.WEB_ENTERPRISE_DETAILS,
+                                arguments: client,
                               );
                             },
                             icon: Icon(

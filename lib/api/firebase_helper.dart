@@ -327,7 +327,7 @@ class FirebaseHelper {
       if (value.isNotEmpty) {
         UserData.alreadyInsertedUsersInformations = true;
 
-        final userInformations = UserInformations.fromJson(
+        final userInformations = UserInformationsModel.fromJson(
           json.decode(value),
         );
         int diferenceBetweenAtualDateAndLastUpdated = userInformations
@@ -347,7 +347,7 @@ class FirebaseHelper {
           .get();
 
       if (result.docs.isNotEmpty) {
-        final userInformations = UserInformations(
+        final userInformations = UserInformationsModel(
           fcmToken: UserData.fcmToken,
           userName: UserData.userName,
           deviceType: PlatformPlus.platform.isIOSNative ? "iOS" : "android",
