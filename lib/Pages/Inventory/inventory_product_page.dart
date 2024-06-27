@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/inventory/inventory.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
@@ -133,7 +133,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                 },
               ),
               const SizedBox(height: 8),
-              InventoryInsertIndividualProductSwitch(
+              InsertIndividualProductSwitch(
                 isIndividual: _isIndividual,
                 isLoading: inventoryProvider.isLoadingProducts ||
                     inventoryProvider.isLoadingQuantity,
@@ -148,7 +148,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
         : Row(
             children: [
               Expanded(
-                child: InventoryInsertIndividualProductSwitch(
+                child: InsertIndividualProductSwitch(
                   isIndividual: _isIndividual,
                   isLoading: inventoryProvider.isLoadingProducts ||
                       inventoryProvider.isLoadingQuantity,
@@ -240,7 +240,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                   ErrorMessage(
                     errorMessage: inventoryProvider.errorMessageGetProducts,
                   ),
-                InventoryProductsItems(
+                ProductsItems(
                   getProducts: () async {
                     await _searchProduct(
                       inventoryProvider: inventoryProvider,

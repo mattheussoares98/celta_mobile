@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../components/configurations/configurations.dart';
+import 'configurations_checkbox.dart';
 
 class ConfigurationsPage extends StatefulWidget {
   const ConfigurationsPage({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class _ConfigurationsPageState extends State<ConfigurationsPage> {
         title: const Text("Configurações"),
       ),
       body: const SingleChildScrollView(
-    primary: false, 
+        primary: false,
         child: ConfigurationsCheckbox(
           showOnlyConfigurationOfSearch: false,
         ),

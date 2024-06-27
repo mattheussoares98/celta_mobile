@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/customer_register/customer_register.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
 import 'customer_register.dart';

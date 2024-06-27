@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/receipt/receipt.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
@@ -89,7 +89,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   ErrorMessage(
                     errorMessage: receiptProvider.errorMessageGetProducts,
                   ),
-                ReceiptConferenceProductsItems(
+                ConferenceProductsItems(
                   getProductsWithCamera: () async {
                     FocusScope.of(context).unfocus();
                     _consultProductController.clear();
@@ -116,7 +116,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   consultProductController: _consultProductController,
                 ),
                 if (MediaQuery.of(context).viewInsets.bottom == 0)
-                  ConferenceConsultProductWithoutEanButton(
+                  ConsultProductWithoutEanButton(
                     docCode: arguments["grDocCode"],
                   ),
               ],

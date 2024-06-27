@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../Pages/drawer/drawer.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
-import '../configurations/configurations.dart';
 import './global_widgets.dart';
 
 class SearchWidget extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../utils/utils.dart';
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/research_prices/research_prices.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 
 class ResearchPricesPage extends StatefulWidget {
@@ -130,7 +130,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                     errorMessage: researchPricesProvider.errorGetResearchPrices,
                   ),
                 if (!researchPricesProvider.isLoadingResearchPrices)
-                  ResearchPricesItems(
+                  PricesItems(
                     enterpriseCode: arguments["CodigoInterno_Empresa"],
                   ),
               ],

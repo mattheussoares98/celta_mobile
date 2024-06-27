@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/customer_register/customer_register.dart';
+import '../../components/address/address.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
+import 'components/components.dart';
 
 class CustomerRegisterEmailPage extends StatefulWidget {
   final GlobalKey<FormState> emailFormKey;
@@ -57,7 +58,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
     return SingleChildScrollView(
-    primary: false, 
+      primary: false,
       child: Form(
         key: widget.emailFormKey,
         child: Column(

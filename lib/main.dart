@@ -1,29 +1,28 @@
-import 'package:celta_inventario/Pages/web/enterprise_details/web_enterprise_details_page.dart';
-import 'package:celta_inventario/pages/notifications/notifications_page.dart';
-import 'package:celta_inventario/pages/web/web_home_page.dart';
-import 'package:celta_inventario/pages/web/web_login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
-import 'api/firebase_helper.dart';
-import 'pages/adjust_stock/adjust_stock.dart';
-import 'pages/buy_request/buy_request.dart';
-import 'pages/customer_register/customer_register.dart';
-import 'pages/drawer/drawer.dart';
-import 'pages/inicial_pages/inicial_pages.dart';
-import 'pages/inventory/inventory.dart';
-import 'pages/price_conference/price_conference.dart';
-import 'pages/receipt/receipt.dart';
-import 'pages/research_prices/research_prices.dart';
-import 'pages/sale_request/sale_request.dart';
-import 'pages/transfer_between_package/transfer_between_package.dart';
-import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
-import 'pages/transfer_request/transfer_request.dart';
-import 'providers/providers.dart';
-import 'utils/utils.dart';
+import './api/api.dart';
+import './Pages/web/web.dart';
+import './Pages/adjust_stock/adjust_stock.dart';
+import './Pages/buy_request/buy_request.dart';
+import './Pages/customer_register/customer_register.dart';
+import './Pages/drawer/drawer.dart';
+import './Pages/inicial_pages/inicial_pages.dart';
+import './Pages/inventory/inventory.dart';
+import './Pages/price_conference/price_conference.dart';
+import './Pages/receipt/receipt.dart';
+import './Pages/research_prices/research_prices.dart';
+import './Pages/notifications/notifications_page.dart';
+import './Pages/transfer_between_package/transfer_between_package.dart';
+import './Pages/transfer_between_stocks/transfer_between_stocks.dart';
+import './Pages/transfer_request/transfer_request.dart';
+import './providers/providers.dart';
+import './utils/utils.dart';
+import './Pages/web/enterprise_details/enterprise_details.dart';
+import './Pages/sale_request/sale_request.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -196,15 +195,14 @@ class MyApp extends StatelessWidget {
           APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
           APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
           APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
-          APPROUTES.SALE_REQUEST_MODEL: (ctx) => const SaleRequestModelPage(),
+          APPROUTES.SALE_REQUEST_MODEL: (ctx) => const RequestsPage(),
           APPROUTES.SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL: (ctx) =>
-              const SaleRequestManualDefaultRequestModelPage(),
-          APPROUTES.TRANSFER_REQUEST_MODEL: (ctx) =>
-              const TransferRequestModelPage(),
+              const ManualDefaultRequestModelPage(),
+          APPROUTES.TRANSFER_REQUEST_MODEL: (ctx) => const RequestsModelPage(),
           APPROUTES.TRANSFER_ORIGIN_ENTERPRISE: (ctx) =>
-              const TransferOriginEnterprisePage(),
+              const OriginEnterprisePage(),
           APPROUTES.TRANSFER_DESTINY_ENTERPRISE: (ctx) =>
-              const TransferDestinyEnterprisePage(),
+              const DestinyEnterprisePage(),
           APPROUTES.TRANSFER: (ctx) => const TransferPage(),
           APPROUTES.TRANSFER_BETWEEN_STOCK: (ctx) =>
               const TransferBetweenStockPage(),
@@ -226,7 +224,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
           APPROUTES.WEB_LOGIN: (ctx) => const WebLoginPage(),
           APPROUTES.WEB_HOME: (ctx) => const WebHomePage(),
-          APPROUTES.WEB_ENTERPRISE_DETAILS: (ctx) => const WebEnterpriseDetailsPage(),
+          APPROUTES.WEB_ENTERPRISE_DETAILS: (ctx) =>
+              const WebEnterpriseDetailsPage(),
         },
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/transfer_between_package/transfer_between_package.dart';
+import 'components/components.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
 
@@ -90,7 +90,7 @@ class _TransferBetweenPackagePageState
                       },
                       consultProductController: _consultProductController,
                     ),
-                    TransferBetweenPackageJustificationsAndStocksDropwdownWidget(
+                    JustificationsAndStocksDropwdownWidget(
                       dropDownFormKey: _dropDownFormKey,
                     ),
                   ],
@@ -102,7 +102,7 @@ class _TransferBetweenPackagePageState
                         transferBetweenPackageProvider.errorMessageGetProducts,
                   ),
                 if (!transferBetweenPackageProvider.isLoadingProducts)
-                  TransferBetweenPackageProductsItems(
+                  ProductsItems(
                     internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
                     consultedProductController: _consultedProductController,
                     dropDownFormKey: _dropDownFormKey,

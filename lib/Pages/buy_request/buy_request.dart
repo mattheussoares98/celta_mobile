@@ -1,5 +1,6 @@
-export 'buy_request_details_page.dart';
-export 'buy_request_enterprises_page.dart';
-export 'buy_request_identification_page.dart';
-export 'buy_request_insert_products_page.dart';
+export 'components/components.dart';
+export 'details/details.dart';
+export 'enterprises/enterprises.dart';
+export 'identification/identification.dart';
+export 'products/products.dart';
 export 'buy_request_page.dart';

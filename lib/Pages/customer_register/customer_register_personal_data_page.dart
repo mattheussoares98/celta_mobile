@@ -5,7 +5,7 @@ import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/customer_register/customer_register.dart';
+import '../../components/address/address.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
 
@@ -74,7 +74,7 @@ class _CustomerRegisterPersonalDataPageState
     updateCpfCnpjEnabled();
 
     return SingleChildScrollView(
-    primary: false, 
+      primary: false,
       child: Form(
         key: widget.personFormKey,
         child: Column(

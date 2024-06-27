@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/transfer_between_stocks/transfer_between_stocks.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
@@ -97,7 +97,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                         children: [
                           Expanded(
                             child:
-                                TransferBetweenStocksJustificationsAndStocksDropwdownWidget(
+                                JustificationsAndStocksDropwdownWidget(
                               dropDownFormKey: _dropDownFormKey,
                               keyJustifications: _keyJustifications,
                               keyOriginStockType: _keyOriginStockType,
@@ -158,7 +158,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                           transferBetweenStocksProvider.errorMessageGetProducts,
                     ),
                   if (!transferBetweenStocksProvider.isLoadingProducts)
-                    TransferBetweenStocksProductsItems(
+                    ProductsItems(
                       internalEnterpriseCode:
                           arguments["CodigoInterno_Empresa"],
                       consultedProductController: _consultedProductController,
