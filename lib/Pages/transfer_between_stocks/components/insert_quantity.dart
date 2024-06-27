@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class TransferBetweenStocksInsertQuantity extends StatefulWidget {
+class InsertQuantity extends StatefulWidget {
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
@@ -13,7 +13,7 @@ class TransferBetweenStocksInsertQuantity extends StatefulWidget {
   final int index;
   final Function getProductsWithCamera;
 
-  const TransferBetweenStocksInsertQuantity({
+  const InsertQuantity({
     required this.internalEnterpriseCode,
     required this.getProductsWithCamera,
     required this.dropDownFormKey,
@@ -24,12 +24,12 @@ class TransferBetweenStocksInsertQuantity extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TransferBetweenStocksInsertQuantity> createState() =>
-      _TransferBetweenStocksInsertQuantityState();
+  State<InsertQuantity> createState() =>
+      _InsertQuantityState();
 }
 
-class _TransferBetweenStocksInsertQuantityState
-    extends State<TransferBetweenStocksInsertQuantity> {
+class _InsertQuantityState
+    extends State<InsertQuantity> {
   bool _isValid() {
     widget.dropDownFormKey.currentState!.validate();
     widget.insertQuantityFormKey.currentState!.validate();

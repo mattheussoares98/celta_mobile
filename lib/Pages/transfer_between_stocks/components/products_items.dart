@@ -2,19 +2,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/transfer_between_stocks/transfer_between_stocks.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import 'transfer_between_stocks.dart';
+import '../../../models/transfer_between_stocks/transfer_between_stocks.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'components.dart';
 
-class TransferBetweenStocksProductsItems extends StatefulWidget {
+class ProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductsWithCamera;
-  const TransferBetweenStocksProductsItems({
+  const ProductsItems({
     required this.getProductsWithCamera,
     required this.internalEnterpriseCode,
     required this.consultedProductController,
@@ -24,12 +24,12 @@ class TransferBetweenStocksProductsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TransferBetweenStocksProductsItems> createState() =>
-      _TransferBetweenStocksProductsItemsState();
+  State<ProductsItems> createState() =>
+      _ProductsItemsState();
 }
 
-class _TransferBetweenStocksProductsItemsState
-    extends State<TransferBetweenStocksProductsItems> {
+class _ProductsItemsState
+    extends State<ProductsItems> {
   int _selectedIndex = -1;
 
   changeFocusToConsultedProductFocusNode({
@@ -144,8 +144,8 @@ class _TransferBetweenStocksProductsItemsState
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 value: product.PriceLookUp,
-                otherWidget: TransferBetweenStocksAllStocks
-                    .transferBetweenStocksAllStocks(
+                otherWidget: AllStocks
+                    .allStocks(
                   context: context,
                   hasStocks: product.Stocks.length > 0,
                   product: product,
@@ -200,7 +200,7 @@ class _TransferBetweenStocksProductsItemsState
                   ),
                 ),
               if (_selectedIndex == index)
-                TransferBetweenStocksInsertQuantity(
+                InsertQuantity(
                   consultedProductController: widget.consultedProductController,
                   dropDownFormKey: widget.dropDownFormKey,
                   insertQuantityFormKey: widget.insertQuantityFormKey,
