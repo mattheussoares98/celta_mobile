@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class InventoryCountingItems extends StatelessWidget {
+class CountingItems extends StatelessWidget {
   final int codigoInternoEmpresa;
-  const InventoryCountingItems({
+  const CountingItems({
     required this.codigoInternoEmpresa,
     Key? key,
   }) : super(key: key);

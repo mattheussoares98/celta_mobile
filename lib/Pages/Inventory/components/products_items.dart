@@ -2,18 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import './inventory.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'components.dart';
 
-class InventoryProductsItems extends StatefulWidget {
+class ProductsItems extends StatefulWidget {
   final int inventoryCountingCode;
   final int productPackingCode;
   final bool isIndividual;
   final TextEditingController consultedProductController;
   final Function getProducts;
-  InventoryProductsItems({
+  ProductsItems({
     Key? key,
     required this.inventoryCountingCode,
     required this.getProducts,
@@ -23,10 +23,10 @@ class InventoryProductsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<InventoryProductsItems> createState() => InventoryProductsItemsState();
+  State<ProductsItems> createState() => ProductsItemsState();
 }
 
-class InventoryProductsItemsState extends State<InventoryProductsItems> {
+class ProductsItemsState extends State<ProductsItems> {
   addQuantity({
     bool? isSubtract = false,
     required InventoryProvider inventoryProvider,

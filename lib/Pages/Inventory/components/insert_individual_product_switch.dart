@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
+import '../../../providers/providers.dart';
 
-class InventoryInsertIndividualProductSwitch extends StatefulWidget {
+class InsertIndividualProductSwitch extends StatefulWidget {
   final bool isIndividual;
   final bool isLoading;
   final Function changeValue;
-  const InventoryInsertIndividualProductSwitch({
+  const InsertIndividualProductSwitch({
     required this.isIndividual,
     required this.isLoading,
     required this.changeValue,
@@ -15,12 +15,12 @@ class InventoryInsertIndividualProductSwitch extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<InventoryInsertIndividualProductSwitch> createState() =>
-      _InventoryInsertIndividualProductSwitchState();
+  State<InsertIndividualProductSwitch> createState() =>
+      _InsertIndividualProductSwitchState();
 }
 
-class _InventoryInsertIndividualProductSwitchState
-    extends State<InventoryInsertIndividualProductSwitch> {
+class _InsertIndividualProductSwitchState
+    extends State<InsertIndividualProductSwitch> {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context);

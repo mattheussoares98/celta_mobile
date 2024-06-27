@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
-import '../../components/inventory/inventory.dart';
+import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 

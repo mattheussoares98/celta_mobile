@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../components/inventory/inventory.dart';
+import 'components/components.dart';
 
 class CountingPage extends StatefulWidget {
   const CountingPage({Key? key}) : super(key: key);
@@ -23,7 +23,7 @@ class _CountingPageState extends State<CountingPage> {
       body: Column(
         children: [
           Expanded(
-            child: InventoryCountingItems(
+            child: CountingItems(
               codigoInternoEmpresa: arguments["codigoInternoEmpresa"],
             ),
           ),
