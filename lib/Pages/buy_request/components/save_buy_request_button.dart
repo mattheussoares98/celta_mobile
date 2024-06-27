@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class BuyRequestSave extends StatefulWidget {
-  const BuyRequestSave({
+class SaveBuyRequestButton extends StatefulWidget {
+  const SaveBuyRequestButton({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BuyRequestSave> createState() => _BuyRequestSaveState();
+  State<SaveBuyRequestButton> createState() => _SaveBuyRequestButtonState();
 }
 
-class _BuyRequestSaveState extends State<BuyRequestSave> {
+class _SaveBuyRequestButtonState extends State<SaveBuyRequestButton> {
   String textButtonMessage(BuyRequestProvider buyRequestProvider) {
     if (buyRequestProvider.selectedBuyer == null) {
       return "Informe o comprador";

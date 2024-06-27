@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class BuyRequestObservations extends StatefulWidget {
+class Observations extends StatefulWidget {
   final FocusNode focusNode;
-  const BuyRequestObservations({
+  const Observations({
     required this.focusNode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BuyRequestObservations> createState() => _BuyRequestObservationsState();
+  State<Observations> createState() => _ObservationsState();
 }
 
-class _BuyRequestObservationsState extends State<BuyRequestObservations> {
+class _ObservationsState extends State<Observations> {
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);

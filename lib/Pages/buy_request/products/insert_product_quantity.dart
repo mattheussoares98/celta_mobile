@@ -4,23 +4,23 @@ import 'package:provider/provider.dart';
 
 import '../../../models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
-import '../../global_widgets/global_widgets.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class BuyRequestInsertProductQuantity extends StatefulWidget {
+class InsertProductQuantity extends StatefulWidget {
   final BuyRequestProductsModel product;
 
-  const BuyRequestInsertProductQuantity({
+  const InsertProductQuantity({
     required this.product,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BuyRequestInsertProductQuantity> createState() =>
+  State<InsertProductQuantity> createState() =>
       _BuyRequestInsertProductQuantity();
 }
 
 class _BuyRequestInsertProductQuantity
-    extends State<BuyRequestInsertProductQuantity> {
+    extends State<InsertProductQuantity> {
   bool _isValid() {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     buyRequestProvider.insertQuantityFormKey.currentState!.validate();

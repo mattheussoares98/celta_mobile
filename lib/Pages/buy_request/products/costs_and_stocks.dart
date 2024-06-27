@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../models/buy_request/buy_request.dart';
 import '../../../utils/utils.dart';
-import '../../global_widgets/global_widgets.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class BuyRequestCostsAndStocks extends StatefulWidget {
+class CostsAndStocks extends StatefulWidget {
   final BuyRequestProductsModel product;
   final BuildContext context;
   final bool isLoading;
 
-  const BuyRequestCostsAndStocks({
+  const CostsAndStocks({
     required this.product,
     required this.context,
     required this.isLoading,
@@ -17,11 +17,11 @@ class BuyRequestCostsAndStocks extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BuyRequestCostsAndStocks> createState() =>
-      _BuyRequestCostsAndStocksState();
+  State<CostsAndStocks> createState() =>
+      _CostsAndStocksState();
 }
 
-class _BuyRequestCostsAndStocksState extends State<BuyRequestCostsAndStocks> {
+class _CostsAndStocksState extends State<CostsAndStocks> {
   final PageController _pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {

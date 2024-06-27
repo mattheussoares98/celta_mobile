@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
-import '../buy_request.dart';
+import 'identification.dart';
 
-class BuyRequestBuyersDropwodn extends StatefulWidget {
+class BuyersDropwodn extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;
   final bool enabledChangeBuyer;
   final bool showRefreshIcon;
-  const BuyRequestBuyersDropwodn({
+  const BuyersDropwodn({
     required this.buyersKey,
     this.enabledChangeBuyer = true,
     this.showRefreshIcon = true,
@@ -16,11 +16,11 @@ class BuyRequestBuyersDropwodn extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BuyRequestBuyersDropwodn> createState() =>
-      _BuyRequestBuyersDropwodnState();
+  State<BuyersDropwodn> createState() =>
+      _BuyersDropwodnState();
 }
 
-class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
+class _BuyersDropwodnState extends State<BuyersDropwodn> {
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
@@ -29,7 +29,7 @@ class _BuyRequestBuyersDropwodnState extends State<BuyRequestBuyersDropwodn> {
         Expanded(
           child: Card(
             shape: const RoundedRectangleBorder(),
-            child: BuyRequestDropdownFormfield(
+            child: PersonalizedDropdownFormfield(
               onChanged: widget.enabledChangeBuyer == false ? null : (value) {},
               value: buyRequestProvider.selectedBuyer?.Name,
               dropdownKey: widget.buyersKey,

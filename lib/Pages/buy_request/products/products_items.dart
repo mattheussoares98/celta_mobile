@@ -5,22 +5,22 @@ import 'package:provider/provider.dart';
 import '../../../models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
-import '../buy_request.dart';
+import 'products.dart';
 
-class BuyRequestProductsItems extends StatefulWidget {
+class ProductsItems extends StatefulWidget {
   final bool showOnlyCartProducts;
-  const BuyRequestProductsItems({
+  const ProductsItems({
     this.showOnlyCartProducts = false,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BuyRequestProductsItems> createState() =>
-      _BuyRequestProductsItemsState();
+  State<ProductsItems> createState() =>
+      _ProductsItemsState();
 }
 
-class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
-  _updatePriceControllerText(BuyRequestProvider buyRequestProvider) {
+class _ProductsItemsState extends State<ProductsItems> {
+  void _updatePriceControllerText(BuyRequestProvider buyRequestProvider) {
     BuyRequestProductsModel product;
     if (widget.showOnlyCartProducts) {
       product = buyRequestProvider
@@ -128,10 +128,10 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
     }
 
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       onTap: buyRequestProvider.isLoadingProducts ||
               buyRequestProvider.isLoadingInsertBuyRequest
           ? null
@@ -151,14 +151,14 @@ class _BuyRequestProductsItemsState extends State<BuyRequestProductsItems> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  BuyRequestProductsInformations(
+                  ProductsInformations(
                     buyRequestProvider: buyRequestProvider,
                     index: index,
                     product: product,
                     practicedValue: practicedValue(product),
                   ),
                   if (buyRequestProvider.indexOfSelectedProduct == index)
-                    BuyRequestInsertProductQuantity(
+                    InsertProductQuantity(
                       product: product,
                     ),
                 ],

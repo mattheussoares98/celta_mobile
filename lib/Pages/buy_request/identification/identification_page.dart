@@ -1,26 +1,28 @@
-import 'package:flutter/material.dart';
+import 'package:celta_inventario/pages/buy_request/components/title_component.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/buy_request/buy_request.dart';
-import '../../providers/providers.dart';
+import 'package:flutter/material.dart';
 
-class BuyRequestIdentificationPage extends StatefulWidget {
+import '../../../providers/providers.dart';
+import 'identification.dart';
+
+class IdentificationPage extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;
   final GlobalKey<FormFieldState> requestsKey;
 
-  const BuyRequestIdentificationPage({
+  const IdentificationPage({
     required this.buyersKey,
     required this.requestsKey,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BuyRequestIdentificationPage> createState() =>
-      _BuyRequestIdentificationPageState();
+  State<IdentificationPage> createState() =>
+      _IdentificationPageState();
 }
 
-class _BuyRequestIdentificationPageState
-    extends State<BuyRequestIdentificationPage> {
+class _IdentificationPageState
+    extends State<IdentificationPage> {
   bool _isLoaded = false;
   @override
   void didChangeDependencies() async {
@@ -33,48 +35,51 @@ class _BuyRequestIdentificationPageState
   }
 
   Future<void> restoreDataAndGetRequestsAndBuyers() async {
-    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
+    BuyRequestProvider buyRequestProvider = Provider.of(context);
 
     await buyRequestProvider.restoreDataByDatabase();
 
     if (buyRequestProvider.requestsTypeCount == 0 &&
         buyRequestProvider.selectedRequestModel == null &&
         !buyRequestProvider.isLoadingRequestsType) {
-      buyRequestProvider.getRequestsType(context: context);
+      await buyRequestProvider.getRequestsType(context: context);
     }
     if (buyRequestProvider.buyersCount == 0 &&
         buyRequestProvider.selectedBuyer == null &&
         !buyRequestProvider.isLoadingBuyer) {
-      buyRequestProvider.getBuyers(context: context);
+      await buyRequestProvider.getBuyers(context: context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-    primary: false, 
+      primary: false,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buyRequestTitleComponent(
+            const TitleComponent(
               title: "Comprador",
-              context: context,
+              isError: false,
+              errorTitle: null,
             ),
-            BuyRequestBuyersDropwodn(buyersKey: widget.buyersKey),
+            BuyersDropwodn(buyersKey: widget.buyersKey),
             const SizedBox(height: 20),
-            buyRequestTitleComponent(
+            const TitleComponent(
               title: "Modelo de pedido de compra",
-              context: context,
+              isError: false,
+              errorTitle: null,
             ),
-            BuyRequestRequestsTypeDropdown(requestsKey: widget.requestsKey),
+            RequestsTypeDropdown(requestsKey: widget.requestsKey),
             const SizedBox(height: 20),
-            buyRequestTitleComponent(
+            const TitleComponent(
               title: "Fornecedores",
-              context: context,
+              isError: false,
+              errorTitle: null,
             ),
-            const BuyRequestSuplliers(),
+            const Suplliers(),
           ],
         ),
       ),

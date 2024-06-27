@@ -3,15 +3,15 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
 
-class BuyRequestOrderProducts extends StatefulWidget {
-  const BuyRequestOrderProducts({Key? key}) : super(key: key);
+class OrderProducts extends StatefulWidget {
+  const OrderProducts({Key? key}) : super(key: key);
 
   @override
-  State<BuyRequestOrderProducts> createState() =>
-      _BuyRequestOrderProductsState();
+  State<OrderProducts> createState() =>
+      _OrderProductsState();
 }
 
-class _BuyRequestOrderProductsState extends State<BuyRequestOrderProducts> {
+class _OrderProductsState extends State<OrderProducts> {
   int? _groupValue = -1;
   bool _expanded = false;
 

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 import '../../../models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
-import '../../global_widgets/global_widgets.dart';
-import '../buy_request.dart';
+import 'identification.dart';
 
-class BuyRequestRequestsTypeDropdown extends StatefulWidget {
+class RequestsTypeDropdown extends StatefulWidget {
   final GlobalKey<FormFieldState> requestsKey;
   final bool enabledChangeRequestsType;
   final bool showRefreshIcon;
 
-  const BuyRequestRequestsTypeDropdown({
+  const RequestsTypeDropdown({
     required this.requestsKey,
     this.enabledChangeRequestsType = true,
     this.showRefreshIcon = true,
@@ -18,12 +18,12 @@ class BuyRequestRequestsTypeDropdown extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BuyRequestRequestsTypeDropdown> createState() =>
-      _BuyRequestRequestsTypeDropdownState();
+  State<RequestsTypeDropdown> createState() =>
+      _RequestsTypeDropdownState();
 }
 
-class _BuyRequestRequestsTypeDropdownState
-    extends State<BuyRequestRequestsTypeDropdown> {
+class _RequestsTypeDropdownState
+    extends State<RequestsTypeDropdown> {
   String? previousValue;
   String? atualValue;
 
@@ -110,7 +110,7 @@ class _BuyRequestRequestsTypeDropdownState
         Expanded(
           child: Card(
             shape: const RoundedRectangleBorder(),
-            child: BuyRequestDropdownFormfield(
+            child: PersonalizedDropdownFormfield(
               onChanged: widget.enabledChangeRequestsType == false
                   ? null
                   : (value) {

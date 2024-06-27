@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/buy_request/buy_request.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import '../../providers/providers.dart';
 import 'buy_request.dart';
@@ -18,13 +17,13 @@ final GlobalKey<FormFieldState> _requestsKey = GlobalKey();
 
 class _BuyRequestPageState extends State<BuyRequestPage> {
   List<Widget> _pages = <Widget>[
-    BuyRequestIdentificationPage(
+    IdentificationPage(
       buyersKey: _buyersKey,
       requestsKey: _requestsKey,
     ),
-    const BuyRequestEnterprisesPage(),
-    const BuyRequestInsertProductsPage(),
-    const BuyRequestDetailsPage(),
+    const EnterprisesPage(),
+    const ProductsPage(),
+    const DetailsPage(),
   ];
 
   static const List appBarTitles = [
@@ -121,7 +120,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
               title: Text(
                 appBarTitles.elementAt(_selectedIndex),
               ),
-              actions: [const BuyRequestCartAppbarAction()],
+              actions: [const AppbarActions()],
             ),
             body: _pages.elementAt(_selectedIndex),
             bottomNavigationBar: BottomNavigationBar(

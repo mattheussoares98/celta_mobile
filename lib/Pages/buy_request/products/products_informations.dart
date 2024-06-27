@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
-import '../../global_widgets/global_widgets.dart';
-import '../buy_request.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'products.dart';
 
-class BuyRequestProductsInformations extends StatelessWidget {
+class ProductsInformations extends StatelessWidget {
   final BuyRequestProvider buyRequestProvider;
   final BuyRequestProductsModel product;
   final String practicedValue;
   final int index;
-  const BuyRequestProductsInformations({
+  const ProductsInformations({
     required this.buyRequestProvider,
     required this.index,
     required this.product,
@@ -49,7 +49,7 @@ class BuyRequestProductsInformations extends StatelessWidget {
           otherWidget: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              BuyRequestCostsAndStocks(
+              CostsAndStocks(
                 product: product,
                 context: context,
                 isLoading: buyRequestProvider.isLoadingInsertBuyRequest,
@@ -67,10 +67,10 @@ class BuyRequestProductsInformations extends StatelessWidget {
           title: "Embalagem",
           value: product.PackingQuantity,
           otherWidget: InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+            focusColor: Colors.white.withOpacity(0),
+            hoverColor: Colors.white.withOpacity(0),
+            splashColor: Colors.white.withOpacity(0),
+            highlightColor: Colors.white.withOpacity(0),
             child: Icon(
               Icons.delete,
               color: product.quantity > 0 &&

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/buy_request/buy_request.dart';
-import '../../providers/providers.dart';
+import '../../../providers/providers.dart';
+import 'enterprise_items.dart';
 
-class BuyRequestEnterprisesPage extends StatefulWidget {
-  const BuyRequestEnterprisesPage({Key? key}) : super(key: key);
+class EnterprisesPage extends StatefulWidget {
+  const EnterprisesPage({Key? key}) : super(key: key);
 
   @override
-  State<BuyRequestEnterprisesPage> createState() =>
-      _BuyRequestEnterprisesPageState();
+  State<EnterprisesPage> createState() => _EnterprisesPageState();
 }
 
-class _BuyRequestEnterprisesPageState extends State<BuyRequestEnterprisesPage> {
+class _EnterprisesPageState extends State<EnterprisesPage> {
   @override
   void initState() {
     super.initState();
@@ -32,7 +31,7 @@ class _BuyRequestEnterprisesPageState extends State<BuyRequestEnterprisesPage> {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.all(8.0),
-      child: BuyRequestEnterprises(),
+      child: EnterpriseItems(checkBoxEnabled: true),
     );
   }
 }

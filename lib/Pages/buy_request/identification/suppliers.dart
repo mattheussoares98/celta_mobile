@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../components/global_widgets/global_widgets.dart';
 import '../../../models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
-import '../../global_widgets/global_widgets.dart';
 
-class BuyRequestSuplliers extends StatefulWidget {
-  const BuyRequestSuplliers({Key? key}) : super(key: key);
+class Suplliers extends StatefulWidget {
+  const Suplliers({Key? key}) : super(key: key);
 
   @override
-  State<BuyRequestSuplliers> createState() => _BuyRequestSuplliersState();
+  State<Suplliers> createState() => _SuplliersState();
 }
 
-class _BuyRequestSuplliersState extends State<BuyRequestSuplliers> {
+class _SuplliersState extends State<Suplliers> {
   TextEditingController searchValueController = TextEditingController();
   FocusNode focusNodeConsultProduct = FocusNode();
   int _groupValue = -1;

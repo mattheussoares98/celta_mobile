@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BuyRequestDropdownFormfield extends StatefulWidget {
+class PersonalizedDropdownFormfield extends StatefulWidget {
   final GlobalKey<FormFieldState> dropdownKey;
   final bool isLoading;
   final String isLoadingMessage;
@@ -10,7 +10,7 @@ class BuyRequestDropdownFormfield extends StatefulWidget {
   final void Function(dynamic)? onChanged;
   final dynamic value;
 
-  const BuyRequestDropdownFormfield({
+  const PersonalizedDropdownFormfield({
     required this.value,
     required this.dropdownKey,
     required this.isLoading,
@@ -23,12 +23,12 @@ class BuyRequestDropdownFormfield extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BuyRequestDropdownFormfield> createState() =>
-      _BuyRequestDropdownFormfieldState();
+  State<PersonalizedDropdownFormfield> createState() =>
+      _PersonalizedDropdownFormfieldState();
 }
 
-class _BuyRequestDropdownFormfieldState
-    extends State<BuyRequestDropdownFormfield> {
+class _PersonalizedDropdownFormfieldState
+    extends State<PersonalizedDropdownFormfield> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<dynamic>(

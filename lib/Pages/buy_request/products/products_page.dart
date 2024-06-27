@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
-import '../../components/buy_request/products/products.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'products.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
-class BuyRequestInsertProductsPage extends StatefulWidget {
-  const BuyRequestInsertProductsPage({Key? key}) : super(key: key);
+class ProductsPage extends StatefulWidget {
+  const ProductsPage({Key? key}) : super(key: key);
 
   @override
-  State<BuyRequestInsertProductsPage> createState() =>
-      _BuyRequestInsertProductsPageState();
+  State<ProductsPage> createState() =>
+      _ProductsPageState();
 }
 
-class _BuyRequestInsertProductsPageState
-    extends State<BuyRequestInsertProductsPage> {
+class _ProductsPageState
+    extends State<ProductsPage> {
   TextEditingController consultProductController = TextEditingController();
 
-  getProductWithCamera({
+  Future<void> getProductWithCamera({
     required BuyRequestProvider buyRequestProvider,
     required ConfigurationsProvider configurationsProvider,
   }) async {
@@ -31,7 +31,7 @@ class _BuyRequestInsertProductsPageState
       return;
     }
 
-    buyRequestProvider.getProducts(
+    await buyRequestProvider.getProducts(
       searchValue: consultProductController.text,
       configurationsProvider: configurationsProvider,
     );
@@ -77,7 +77,7 @@ class _BuyRequestInsertProductsPageState
             ErrorMessage(
               errorMessage: buyRequestProvider.errorMessageGetProducts,
             ),
-          const BuyRequestProductsItems(),
+          const ProductsItems(),
         ],
       ),
     );

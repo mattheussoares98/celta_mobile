@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
-class BuyRequestCartAppbarAction extends StatefulWidget {
-  const BuyRequestCartAppbarAction({Key? key}) : super(key: key);
+class AppbarActions extends StatefulWidget {
+  const AppbarActions({Key? key}) : super(key: key);
 
   @override
-  State<BuyRequestCartAppbarAction> createState() =>
-      _BuyRequestCartAppbarActionState();
+  State<AppbarActions> createState() =>
+      _AppbarActionsState();
 }
 
-class _BuyRequestCartAppbarActionState
-    extends State<BuyRequestCartAppbarAction> {
+class _AppbarActionsState
+    extends State<AppbarActions> {
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
