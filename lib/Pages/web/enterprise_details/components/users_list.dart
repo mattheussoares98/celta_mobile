@@ -19,13 +19,14 @@ class UsersList extends StatelessWidget {
           itemCount: client.usersInformations!.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
-              return const Text("Usuários");
+              return const Text(
+                  "Usuários que já utilizaram o APP");
             }
 
             final clientInformation = client.usersInformations![index - 1];
 
             return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,

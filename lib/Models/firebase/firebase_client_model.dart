@@ -31,16 +31,24 @@ class FirebaseClientModel {
   }
 
   factory FirebaseClientModel.fromJson(
-          {required Map json, required String id}) =>
-      FirebaseClientModel(
-        urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
-        enterpriseName: json["enterpriseName"],
-        id: id,
-        usersInformations: json["usersInformations"] == null
-            ? json["usersInformations"]
-            : json["usersInformations"]
-                .map<UserInformationsModel>(
-                    (element) => UserInformationsModel.fromJson(element))
-                .toList(),
-      );
+      {required Map json, required String id}) {
+    var newClient = FirebaseClientModel(
+      urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
+      enterpriseName: json["enterpriseName"],
+      id: id,
+      usersInformations: json["usersInformations"] == null
+          ? json["usersInformations"]
+          : json["usersInformations"]
+              .map<UserInformationsModel>(
+                  (element) => UserInformationsModel.fromJson(element))
+              .toList(),
+    );
+
+    if (newClient.usersInformations != null) {
+      newClient.usersInformations!.sort((a, b) => a.dateOfLastUpdatedInFirebase
+          .compareTo(b.dateOfLastUpdatedInFirebase));
+    }
+
+    return newClient;
+  }
 }
