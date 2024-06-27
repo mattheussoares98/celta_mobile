@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
-import '../../components/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import 'insert_products.dart';
 
-class SaleRequestInsertProductsPage extends StatefulWidget {
+class InsertProductsPage extends StatefulWidget {
   final int enterpriseCode;
   final int requestTypeCode;
-  const SaleRequestInsertProductsPage({
+  const InsertProductsPage({
     required this.enterpriseCode,
     required this.requestTypeCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SaleRequestInsertProductsPage> createState() =>
-      _SaleRequestInsertProductsPageState();
+  State<InsertProductsPage> createState() => _InsertProductsPageState();
 }
 
-class _SaleRequestInsertProductsPageState
-    extends State<SaleRequestInsertProductsPage> {
+class _InsertProductsPageState extends State<InsertProductsPage> {
   TextEditingController _searchProductTextEditingController =
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
@@ -68,7 +66,7 @@ class _SaleRequestInsertProductsPageState
           ErrorMessage(
             errorMessage: saleRequestProvider.errorMessageProducts,
           ),
-        SaleRequestProductsItems(
+        ProductsItems(
             consultedProductController: _consultedProductController,
             enterpriseCode: widget.enterpriseCode,
             getProductsWithCamera: () async {

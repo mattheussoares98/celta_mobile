@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SaleRequestManualDefaultRequestModelPage extends StatelessWidget {
-  const SaleRequestManualDefaultRequestModelPage({Key? key}) : super(key: key);
+class ManualDefaultRequestModelPage extends StatelessWidget {
+  const ManualDefaultRequestModelPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

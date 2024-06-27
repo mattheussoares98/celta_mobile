@@ -1,16 +1,16 @@
-import '../../models/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
+import '../../../models/sale_request/sale_request.dart';
+import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class SaleRequestModelsItems extends StatefulWidget {
+class ModelsItems extends StatefulWidget {
   final bool hasDefaultRequestModel;
   final int enterpriseCode;
   final int saleRequestTypeCode;
-  const SaleRequestModelsItems({
+  const ModelsItems({
     required this.hasDefaultRequestModel,
     required this.enterpriseCode,
     required this.saleRequestTypeCode,
@@ -18,10 +18,10 @@ class SaleRequestModelsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SaleRequestModelsItems> createState() => _SaleRequestModelsItemsState();
+  State<ModelsItems> createState() => _ModelsItemsState();
 }
 
-class _SaleRequestModelsItemsState extends State<SaleRequestModelsItems> {
+class _ModelsItemsState extends State<ModelsItems> {
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);

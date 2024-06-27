@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
-import '../../components/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import 'requests.dart';
 
-class SaleRequestModelPage extends StatefulWidget {
-  const SaleRequestModelPage({
+class RequestsPage extends StatefulWidget {
+  const RequestsPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SaleRequestModelPage> createState() => _SaleRequestModelPageState();
+  State<RequestsPage> createState() => _RequestsPageState();
 }
 
-class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
+class _RequestsPageState extends State<RequestsPage> {
   bool _hasDefaultRequestModel = false;
 
   bool _isLoaded = false;
@@ -92,7 +92,7 @@ class _SaleRequestModelPageState extends State<SaleRequestModelPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   if (!saleRequestProvider.isLoadingRequests)
-                    SaleRequestModelsItems(
+                    ModelsItems(
                       hasDefaultRequestModel: _hasDefaultRequestModel,
                       enterpriseCode: arguments["CodigoInterno_Empresa"],
                       saleRequestTypeCode:

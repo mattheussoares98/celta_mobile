@@ -138,12 +138,12 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         saleRequestProvider.cartProductsCount(arguments["Code"].toString());
 
     List<Widget> _pages = <Widget>[
-      SaleRequestInsertProductsPage(
+      InsertProductsPage(
         enterpriseCode: arguments["Code"],
         requestTypeCode: arguments["SaleRequestTypeCode"],
       ),
-      SaleRequestInsertCustomer(enterpriseCode: arguments["Code"]),
-      SaleRequestCartDetailsPage(
+      InsertCustomerPage(enterpriseCode: arguments["Code"]),
+      CartDetailsPage(
         enterpriseCode: arguments["Code"],
         requestTypeCode: arguments["SaleRequestTypeCode"],
         keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,

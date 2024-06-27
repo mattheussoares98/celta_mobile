@@ -2,18 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import 'sale_request.dart';
+import '../../../models/sale_request/sale_request.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'insert_products.dart';
 
-class SaleRequestProductsItems extends StatefulWidget {
+class ProductsItems extends StatefulWidget {
   final TextEditingController consultedProductController;
   final int enterpriseCode;
   final Function getProductsWithCamera;
 
-  const SaleRequestProductsItems({
+  const ProductsItems({
     required this.getProductsWithCamera,
     required this.consultedProductController,
     required this.enterpriseCode,
@@ -21,11 +21,10 @@ class SaleRequestProductsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SaleRequestProductsItems> createState() =>
-      _SaleRequestProductsItemsState();
+  State<ProductsItems> createState() => _ProductsItemsState();
 }
 
-class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
+class _ProductsItemsState extends State<ProductsItems> {
   int _selectedIndex = -1;
 
   GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
@@ -315,7 +314,7 @@ class _SaleRequestProductsItemsState extends State<SaleRequestProductsItems> {
                   ],
                 ),
               if (_selectedIndex == index)
-                SaleRequestInsertProductQuantityForm(
+                InsertProductQuantityForm(
                   enterpriseCode: widget.enterpriseCode,
                   consultedProductController: widget.consultedProductController,
                   consultedProductFormKey: _consultedProductFormKey,

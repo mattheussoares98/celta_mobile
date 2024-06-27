@@ -2,28 +2,28 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
-import 'sale_request.dart';
+import '../../../models/sale_request/sale_request.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'cart_details.dart';
 
-class SaleRequestCartItems extends StatefulWidget {
+class CartItems extends StatefulWidget {
   final TextEditingController textEditingController;
   final int enterpriseCode;
-  const SaleRequestCartItems({
+  const CartItems({
     required this.textEditingController,
     required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SaleRequestCartItems> createState() => _SaleRequestCartItemsState();
+  State<CartItems> createState() => _CartItemsState();
 }
 
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
+class _CartItemsState extends State<CartItems> {
   int _selectedIndex = -1;
 
   FocusNode _focusNode = FocusNode();
@@ -137,7 +137,7 @@ class _SaleRequestCartItemsState extends State<SaleRequestCartItems> {
     return Card(
       child: Column(
         children: [
-          SaleRequestCartProductsItems.saleRequestCartProductsItems(
+          CartProductsItems.saleRequestCartProductsItems(
             updateSelectedIndex: () {
               setState(() {
                 _selectedIndex = -1;

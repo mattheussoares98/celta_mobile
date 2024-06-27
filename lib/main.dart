@@ -197,9 +197,9 @@ class MyApp extends StatelessWidget {
           APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
           APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
           APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
-          APPROUTES.SALE_REQUEST_MODEL: (ctx) => const SaleRequestModelPage(),
+          APPROUTES.SALE_REQUEST_MODEL: (ctx) => const RequestsPage(),
           APPROUTES.SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL: (ctx) =>
-              const SaleRequestManualDefaultRequestModelPage(),
+              const ManualDefaultRequestModelPage(),
           APPROUTES.TRANSFER_REQUEST_MODEL: (ctx) =>
               const TransferRequestModelPage(),
           APPROUTES.TRANSFER_ORIGIN_ENTERPRISE: (ctx) =>

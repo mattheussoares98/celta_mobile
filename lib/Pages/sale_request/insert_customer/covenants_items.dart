@@ -1,14 +1,14 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
+import '../../../models/sale_request/sale_request.dart';
+import '../../../providers/providers.dart';
 
-class SaleRequestCovenantsItems extends StatefulWidget {
+class CovenantsItems extends StatefulWidget {
   final List<SaleRequestCovenantsModel> covenants;
   final int indexOfCustomer;
   final String enterpriseCode;
-  const SaleRequestCovenantsItems({
+  const CovenantsItems({
     required this.covenants,
     required this.indexOfCustomer,
     required this.enterpriseCode,
@@ -16,11 +16,11 @@ class SaleRequestCovenantsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SaleRequestCovenantsItems> createState() =>
-      _SaleRequestCovenantsItemsState();
+  State<CovenantsItems> createState() =>
+      _CovenantsItemsState();
 }
 
-class _SaleRequestCovenantsItemsState extends State<SaleRequestCovenantsItems> {
+class _CovenantsItemsState extends State<CovenantsItems> {
   // bool updatedCovenantInFirstLoadPage =
   //     false; //variável usada para não ficar atualizando direto no itembuilder da lista
   @override

@@ -1,12 +1,12 @@
-import '../../models/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
+import '../../../models/sale_request/sale_request.dart';
+import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class SaleRequestInsertProductQuantityForm extends StatefulWidget {
+class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
   final TextEditingController consultedProductController;
   final double totalItensInCart;
@@ -15,7 +15,7 @@ class SaleRequestInsertProductQuantityForm extends StatefulWidget {
   final Function addProductInCart;
   final Function updateTotalItemValue;
   final int enterpriseCode;
-  const SaleRequestInsertProductQuantityForm({
+  const InsertProductQuantityForm({
     required this.consultedProductController,
     required this.enterpriseCode,
     required this.consultedProductFormKey,
@@ -28,12 +28,12 @@ class SaleRequestInsertProductQuantityForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SaleRequestInsertProductQuantityForm> createState() =>
-      _SaleRequestInsertProductQuantityFormState();
+  State<InsertProductQuantityForm> createState() =>
+      _InsertProductQuantityFormState();
 }
 
-class _SaleRequestInsertProductQuantityFormState
-    extends State<SaleRequestInsertProductQuantityForm> {
+class _InsertProductQuantityFormState
+    extends State<InsertProductQuantityForm> {
   addItemInCart() {
     if (widget.consultedProductController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade

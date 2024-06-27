@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
-import '../../components/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import 'insert_customer.dart';
 
-class SaleRequestInsertCustomer extends StatefulWidget {
+class InsertCustomerPage extends StatefulWidget {
   final int enterpriseCode;
-  const SaleRequestInsertCustomer({
+  const InsertCustomerPage({
     required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SaleRequestInsertCustomer> createState() =>
-      _SaleRequestInsertCustomerState();
+  State<InsertCustomerPage> createState() =>
+      _InsertCustomerPageState();
 }
 
-class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
+class _InsertCustomerPageState extends State<InsertCustomerPage> {
   final TextEditingController searchCustomerController =
       TextEditingController();
   final FocusNode searchCustomerFocusNode = FocusNode();
@@ -66,7 +66,7 @@ class _SaleRequestInsertCustomerState extends State<SaleRequestInsertCustomer> {
           if (saleRequestProvider
                   .customersCount(widget.enterpriseCode.toString()) >
               0)
-            SaleRequestCustomersItems(enterpriseCode: widget.enterpriseCode),
+            CustomersItems(enterpriseCode: widget.enterpriseCode),
           if (saleRequestProvider.errorMessageCustomer != "" &&
               saleRequestProvider
                       .customersCount(widget.enterpriseCode.toString()) ==

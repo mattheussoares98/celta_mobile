@@ -1,24 +1,23 @@
-import '../../models/sale_request/sale_request.dart';
-import '../../providers/providers.dart';
+import '../../../models/sale_request/sale_request.dart';
+import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../global_widgets/global_widgets.dart';
-import 'sale_request.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import 'insert_customer.dart';
 
-class SaleRequestCustomersItems extends StatefulWidget {
+class CustomersItems extends StatefulWidget {
   final int enterpriseCode;
-  const SaleRequestCustomersItems({
+  const CustomersItems({
     required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SaleRequestCustomersItems> createState() =>
-      _SaleRequestCustomersItemsState();
+  State<CustomersItems> createState() => _CustomersItemsState();
 }
 
-class _SaleRequestCustomersItemsState extends State<SaleRequestCustomersItems> {
+class _CustomersItemsState extends State<CustomersItems> {
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
@@ -108,7 +107,7 @@ class _SaleRequestCustomersItemsState extends State<SaleRequestCustomersItems> {
                         ),
                       ),
                       if (customer.selected)
-                        SaleRequestCovenantsItems(
+                        CovenantsItems(
                           covenants: customer.Covenants,
                           indexOfCustomer: index,
                           enterpriseCode: widget.enterpriseCode.toString(),
