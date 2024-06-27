@@ -23,6 +23,7 @@ import './pages/transfer_between_stocks/transfer_between_stocks.dart';
 import './pages/transfer_request/transfer_request.dart';
 import './providers/providers.dart';
 import './utils/utils.dart';
+import 'pages/login/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
