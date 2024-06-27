@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
+import '../../../providers/providers.dart';
 
-class ConferenceConsultProductWithoutEanButton extends StatefulWidget {
+class ConsultProductWithoutEanButton extends StatefulWidget {
   final int docCode;
-  const ConferenceConsultProductWithoutEanButton({
+  const ConsultProductWithoutEanButton({
     required this.docCode,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConferenceConsultProductWithoutEanButton> createState() =>
-      _ConferenceConsultProductWithoutEanButtonState();
+  State<ConsultProductWithoutEanButton> createState() =>
+      _ConsultProductWithoutEanButtonState();
 }
 
-class _ConferenceConsultProductWithoutEanButtonState
-    extends State<ConferenceConsultProductWithoutEanButton> {
+class _ConsultProductWithoutEanButtonState
+    extends State<ConsultProductWithoutEanButton> {
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);

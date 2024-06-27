@@ -2,18 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/receipt/receipt.dart';
-import '../../providers/providers.dart';
-import '../../utils/utils.dart';
-import '../global_widgets/global_widgets.dart';
+import '../../../models/receipt/receipt.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
+import '../../../components/global_widgets/global_widgets.dart';
 
-class ReceiptConferenceProductsItems extends StatefulWidget {
+class ConferenceProductsItems extends StatefulWidget {
   final int docCode;
   final TextEditingController consultedProductController;
   final TextEditingController consultProductController;
   final Function getProductsWithCamera;
 
-  const ReceiptConferenceProductsItems({
+  const ConferenceProductsItems({
     required this.getProductsWithCamera,
     required this.consultedProductController,
     required this.consultProductController,
@@ -22,12 +22,12 @@ class ReceiptConferenceProductsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ReceiptConferenceProductsItems> createState() =>
-      _ReceiptConferenceProductsItemsState();
+  State<ConferenceProductsItems> createState() =>
+      _ConferenceProductsItemsState();
 }
 
-class _ReceiptConferenceProductsItemsState
-    extends State<ReceiptConferenceProductsItems> {
+class _ConferenceProductsItemsState
+    extends State<ConferenceProductsItems> {
   int _selectedIndex = -1;
 
   updateQuantity({
