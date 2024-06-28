@@ -17,6 +17,8 @@ class WebProvider with ChangeNotifier {
   String _errorMessageSoapActions = "";
   String get errorMessageSoapActions => _errorMessageSoapActions;
 
+  int selectedBottomNavigationBarIndex = 0;
+
   List<FirebaseClientModel> _clients = [];
   List<FirebaseClientModel> get clients => [..._clients];
 
@@ -73,6 +75,7 @@ class WebProvider with ChangeNotifier {
     _errorMessageSoapActions = "";
     notifyListeners();
     try {
+      await Future.delayed(const Duration(seconds: 3));
       final soapActions = await FirebaseHelper.getAllSoapActions();
       print(soapActions);
 

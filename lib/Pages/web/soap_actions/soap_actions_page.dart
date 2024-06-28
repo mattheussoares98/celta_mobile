@@ -16,7 +16,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
-    // handleLoading(context, webProvider.isLoadingSoapActions);
+    handleLoading(context, webProvider.isLoadingSoapActions);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +29,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
           onPressed: () async {
             await webProvider.getAllSoapActions();
           },
-          child: const Text("Carregar dados"),
+          child: const Text("Carregar requisições"),
         ),
       ),
     );

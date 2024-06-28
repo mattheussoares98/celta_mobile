@@ -15,14 +15,6 @@ class WebHomePage extends StatefulWidget {
 }
 
 class _WebHomePageState extends State<WebHomePage> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   List _pages = [
     const ClientsPage(),
     const SoapActionsPage(),
@@ -35,11 +27,13 @@ class _WebHomePageState extends State<WebHomePage> {
     return Stack(
       children: [
         Scaffold(
-          body: _pages.elementAt(_selectedIndex),
+          body: _pages.elementAt(webProvider.selectedBottomNavigationBarIndex),
           bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _selectedIndex,
+            currentIndex: webProvider.selectedBottomNavigationBarIndex,
             onTap: (index) {
-              _onItemTapped(index);
+              setState(() {
+                webProvider.selectedBottomNavigationBarIndex = index;
+              });
             },
             items: [
               const BottomNavigationBarItem(
@@ -47,9 +41,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 label: "Clientes",
               ),
               const BottomNavigationBarItem(
-                icon: Icon(Icons.show_chart),
-                label: "Requisições"
-              ),
+                  icon: Icon(Icons.show_chart), label: "Requisições"),
             ],
           ),
         ),
