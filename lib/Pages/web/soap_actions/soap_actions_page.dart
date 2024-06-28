@@ -16,7 +16,9 @@ class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
-    handleLoading(context, webProvider.isLoadingSoapActions);
+    Future.delayed(Duration.zero, () {
+      handleLoading(context, webProvider.isLoadingSoapActions);
+    });
 
     return Scaffold(
       appBar: AppBar(
