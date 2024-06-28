@@ -39,6 +39,7 @@ class WebProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
     _clients.clear();
+    notifyListeners();
 
     try {
       final clients = await FirebaseHelper.getAllClients();

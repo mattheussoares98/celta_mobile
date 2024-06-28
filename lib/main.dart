@@ -21,7 +21,6 @@ import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
 import 'pages/transfer_request/transfer_request.dart';
 import './providers/providers.dart';
 import './utils/utils.dart';
-import 'pages/web/enterprise_details/enterprise_details.dart';
 import 'pages/sale_request/sale_request.dart';
 
 void main() async {
