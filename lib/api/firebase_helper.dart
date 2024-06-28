@@ -372,11 +372,11 @@ class FirebaseHelper {
     }
   }
 
-  static Future<List<QueryDocumentSnapshot>?> getAllSoapActions() async {
+  static Future<List<QueryDocumentSnapshot>?> getAllSoapActions(yearAndMonth) async {
     try {
       final soapActions = await _firebaseFirestore
           .collection("soapActions")
-          .doc("2024-06")
+          .doc(yearAndMonth)
           .collection("soapInformations")
           .get();
 

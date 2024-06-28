@@ -2,18 +2,18 @@ class SoapActionsModel {
   final String documentId;
   final List<dynamic>? datesUsed;
   final List<dynamic>? users;
-  final Map<String, dynamic>? adjustStockConfirmQuantity;
-  final Map<String, dynamic>? priceConferenceGetProductOrSendToPrint;
-  final Map<String, dynamic>? inventoryEntryQuantity;
-  final Map<String, dynamic>? receiptEntryQuantity;
-  final Map<String, dynamic>? receiptLiberate;
-  final Map<String, dynamic>? saleRequestSave;
-  final Map<String, dynamic>? transferBetweenStocksConfirmAdjust;
-  final Map<String, dynamic>? transferBetweenPackageConfirmAdjust;
-  final Map<String, dynamic>? transferRequestSave;
-  final Map<String, dynamic>? customerRegister;
-  final Map<String, dynamic>? buyRequestSave;
-  final Map<String, dynamic>? researchPricesInsertPrice;
+  final int? adjustStockConfirmQuantity;
+  final int? priceConferenceGetProductOrSendToPrint;
+  final int? inventoryEntryQuantity;
+  final int? receiptEntryQuantity;
+  final int? receiptLiberate;
+  final int? saleRequestSave;
+  final int? transferBetweenStocksConfirmAdjust;
+  final int? transferBetweenPackageConfirmAdjust;
+  final int? transferRequestSave;
+  final int? customerRegister;
+  final int? buyRequestSave;
+  final int? researchPricesInsertPrice;
 
   SoapActionsModel({
     required this.documentId,
@@ -54,6 +54,26 @@ class SoapActionsModel {
         "researchPricesInsertPrice": researchPricesInsertPrice,
       };
 
+  static int? _sumValueIfHas(Map<String, dynamic>? request) {
+    int counter = 0;
+
+    if (request == null) {
+      return null;
+    } else {
+      if (request.containsKey("iOS")) {
+        counter += request["iOS"] as int;
+      }
+      if (request.containsKey("timesUsed")) {
+        counter += request["timesUsed"] as int;
+      }
+      if (request.containsKey("android")) {
+        counter += request["android"] as int;
+      }
+    }
+
+    return counter;
+  }
+
   factory SoapActionsModel.fromJson({
     required String documentId,
     required Map json,
@@ -62,20 +82,22 @@ class SoapActionsModel {
         documentId: documentId,
         datesUsed: json["datesUsed"],
         users: json["users"],
-        adjustStockConfirmQuantity: json["adjustStockConfirmQuantity"],
+        adjustStockConfirmQuantity:
+            _sumValueIfHas(json["adjustStockConfirmQuantity"]),
         priceConferenceGetProductOrSendToPrint:
-            json["priceConferenceGetProductOrSendToPrint"],
-        inventoryEntryQuantity: json["inventoryEntryQuantity"],
-        receiptEntryQuantity: json["receiptEntryQuantity"],
-        receiptLiberate: json["receiptLiberate"],
-        saleRequestSave: json["saleRequestSave"],
+            _sumValueIfHas(json["priceConferenceGetProductOrSendToPrint"]),
+        inventoryEntryQuantity: _sumValueIfHas(json["inventoryEntryQuantity"]),
+        receiptEntryQuantity: _sumValueIfHas(json["receiptEntryQuantity"]),
+        receiptLiberate: _sumValueIfHas(json["receiptLiberate"]),
+        saleRequestSave: _sumValueIfHas(json["saleRequestSave"]),
         transferBetweenStocksConfirmAdjust:
-            json["transferBetweenStocksConfirmAdjust"],
+            _sumValueIfHas(json["transferBetweenStocksConfirmAdjust"]),
         transferBetweenPackageConfirmAdjust:
-            json["transferBetweenPackageConfirmAdjust"],
-        transferRequestSave: json["transferRequestSave"],
-        customerRegister: json["customerRegister"],
-        buyRequestSave: json["buyRequestSave"],
-        researchPricesInsertPrice: json["researchPricesInsertPrice"],
+            _sumValueIfHas(json["transferBetweenPackageConfirmAdjust"]),
+        transferRequestSave: _sumValueIfHas(json["transferRequestSave"]),
+        customerRegister: _sumValueIfHas(json["customerRegister"]),
+        buyRequestSave: _sumValueIfHas(json["buyRequestSave"]),
+        researchPricesInsertPrice:
+            _sumValueIfHas(json["researchPricesInsertPrice"]),
       );
 }

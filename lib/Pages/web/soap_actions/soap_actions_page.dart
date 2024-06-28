@@ -22,18 +22,51 @@ class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Requisições",
-        ),
+        title: Text("Total clientes: ${webProvider.clientsNames.length}"),
       ),
-      body: Center(
-        child: TextButton(
-          onPressed: () async {
-            await webProvider.getAllSoapActions();
-          },
-          child: const Text("Carregar requisições"),
-        ),
-      ),
+      body: webProvider.clientsNames.isEmpty
+          ? Center(
+              child: TextButton(
+                onPressed: () async {
+                  await webProvider.getLastThreeMonthsSoapActions();
+                },
+                child: const Text("Carregar requisições"),
+              ),
+            )
+          : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
+              itemCount: webProvider.clientsNames.length,
+              itemBuilder: (context, index) {
+                final clientName = webProvider.clientsNames[index];
+
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text((index + 1).toString()),
+                            Text(clientName),
+                            // Text(webProvider.getTotalRequests(index).toString()),
+                          ],
+                        ),
+                        Text(
+                            "Mês atual: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.atualMonth)}"),
+                        Text(
+                            "Mês passado: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.penultimateMonth)}"),
+                        Text(
+                            "Mês retrasado: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.antiPenultimateMonth)}"),
+                        Text(
+                            "Últimos 3 meses: ${webProvider.getTotalRequestsByLastThreeMonths(clientName)}")
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
