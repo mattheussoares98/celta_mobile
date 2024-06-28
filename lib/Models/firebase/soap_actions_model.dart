@@ -1,19 +1,19 @@
 class SoapActionsModel {
   final String documentId;
-  final List<String>? datesUsed;
-  final List<String>? users;
-  final String? adjustStockConfirmQuantity;
-  final String? priceConferenceGetProductOrSendToPrint;
-  final String? inventoryEntryQuantity;
-  final String? receiptEntryQuantity;
-  final String? receiptLiberate;
-  final String? saleRequestSave;
-  final String? transferBetweenStocksConfirmAdjust;
-  final String? transferBetweenPackageConfirmAdjust;
-  final String? transferRequestSave;
-  final String? customerRegister;
-  final String? buyRequestSave;
-  final String? researchPricesInsertPrice;
+  final List<dynamic>? datesUsed;
+  final List<dynamic>? users;
+  final Map<String, dynamic>? adjustStockConfirmQuantity;
+  final Map<String, dynamic>? priceConferenceGetProductOrSendToPrint;
+  final Map<String, dynamic>? inventoryEntryQuantity;
+  final Map<String, dynamic>? receiptEntryQuantity;
+  final Map<String, dynamic>? receiptLiberate;
+  final Map<String, dynamic>? saleRequestSave;
+  final Map<String, dynamic>? transferBetweenStocksConfirmAdjust;
+  final Map<String, dynamic>? transferBetweenPackageConfirmAdjust;
+  final Map<String, dynamic>? transferRequestSave;
+  final Map<String, dynamic>? customerRegister;
+  final Map<String, dynamic>? buyRequestSave;
+  final Map<String, dynamic>? researchPricesInsertPrice;
 
   SoapActionsModel({
     required this.documentId,
@@ -54,8 +54,12 @@ class SoapActionsModel {
         "researchPricesInsertPrice": researchPricesInsertPrice,
       };
 
-  factory SoapActionsModel.fromJson(Map json) => SoapActionsModel(
-        documentId: json["documentId"],
+  factory SoapActionsModel.fromJson({
+    required String documentId,
+    required Map json,
+  }) =>
+      SoapActionsModel(
+        documentId: documentId,
         datesUsed: json["datesUsed"],
         users: json["users"],
         adjustStockConfirmQuantity: json["adjustStockConfirmQuantity"],

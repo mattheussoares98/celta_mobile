@@ -22,6 +22,9 @@ class WebProvider with ChangeNotifier {
   List<FirebaseClientModel> _clients = [];
   List<FirebaseClientModel> get clients => [..._clients];
 
+  List<SoapActionsModel> _soapActions = [];
+  List<SoapActionsModel> get soapActions => [..._soapActions];
+
   Future<void> signIn({
     required String email,
     required String password,
@@ -73,18 +76,21 @@ class WebProvider with ChangeNotifier {
   Future<dynamic> getAllSoapActions() async {
     _isLoadingSoapActions = true;
     _errorMessageSoapActions = "";
+    _soapActions.clear();
+
     notifyListeners();
     try {
-      await Future.delayed(const Duration(seconds: 3));
       final soapActions = await FirebaseHelper.getAllSoapActions();
-      print(soapActions);
 
       if (soapActions != null) {
-        for (var client in soapActions) {
-          
-          final clientData = client.data();
-          print("${client.id} == $clientData");
-        }
+        _soapActions = soapActions
+            .map((element) => SoapActionsModel.fromJson(
+                  documentId: element.id,
+                  json: element.data() as Map<String, dynamic>,
+                ))
+            .toList();
+
+        print(_soapActions);
       }
     } catch (e) {
       _errorMessageSoapActions = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
