@@ -5,11 +5,17 @@ import 'package:flutter/material.dart';
 import '../api/api.dart';
 
 class WebProvider with ChangeNotifier {
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool _isLoadingClients = false;
+  bool get isLoadingClients => _isLoadingClients;
 
-  String _errorMessage = "";
-  String get errorMessage => _errorMessage;
+  String _errorMessageClients = "";
+  String get errorMessageClients => _errorMessageClients;
+
+  bool _isLoadingSoapActions = false;
+  bool get isLoadingSoapActions => _isLoadingSoapActions;
+
+  String _errorMessageSoapActions = "";
+  String get errorMessageSoapActions => _errorMessageSoapActions;
 
   List<FirebaseClientModel> _clients = [];
   List<FirebaseClientModel> get clients => [..._clients];
@@ -18,8 +24,8 @@ class WebProvider with ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    _isLoading = true;
-    _errorMessage = "";
+    _isLoadingClients = true;
+    _errorMessageClients = "";
     notifyListeners();
 
     try {
@@ -28,16 +34,16 @@ class WebProvider with ChangeNotifier {
         password: password,
       );
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
-      _isLoading = false;
+      _isLoadingClients = false;
       notifyListeners();
     }
   }
 
   Future<void> getAllClients() async {
-    _isLoading = true;
-    _errorMessage = "";
+    _isLoadingClients = true;
+    _errorMessageClients = "";
     _clients.clear();
     notifyListeners();
 
@@ -55,9 +61,32 @@ class WebProvider with ChangeNotifier {
 
       _clients.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
-      _isLoading = false;
+      _isLoadingClients = false;
+      notifyListeners();
+    }
+  }
+
+  Future<dynamic> getAllSoapActions() async {
+    _isLoadingSoapActions = true;
+    _errorMessageSoapActions = "";
+    notifyListeners();
+    try {
+      final soapActions = await FirebaseHelper.getAllSoapActions();
+      print(soapActions);
+
+      if (soapActions != null) {
+        for (var client in soapActions) {
+          
+          final clientData = client.data();
+          print("${client.id} == $clientData");
+        }
+      }
+    } catch (e) {
+      _errorMessageSoapActions = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoadingSoapActions = false;
       notifyListeners();
     }
   }

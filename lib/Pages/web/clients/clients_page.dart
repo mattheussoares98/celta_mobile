@@ -80,7 +80,7 @@ class ClientsPage extends StatelessWidget {
                   onPressed: () async {
                     await webProvider.getAllClients();
 
-                    if (webProvider.errorMessage != "") {
+                    if (webProvider.errorMessageClients != "") {
                       ShowSnackbarMessage.showMessage(
                         message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
                         context: context,

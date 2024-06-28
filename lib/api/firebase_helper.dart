@@ -371,4 +371,21 @@ class FirebaseHelper {
       print("erro para adicionar as informações do usuário ==== $e");
     }
   }
+
+  static Future<List<QueryDocumentSnapshot>?> getAllSoapActions() async {
+    try {
+      final soapActions = await _firebaseFirestore
+          .collection("soapActions")
+          .doc("2024-06")
+          .collection("soapInformations")
+          .get();
+
+      if (soapActions.docs.isNotEmpty) {
+        return soapActions.docs;
+      }
+    } catch (e) {
+      debugPrint("Erro para obter as requisições: $e");
+    }
+    return null;
+  }
 }

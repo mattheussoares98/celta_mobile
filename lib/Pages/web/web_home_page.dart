@@ -35,10 +35,9 @@ class _WebHomePageState extends State<WebHomePage> {
     return Stack(
       children: [
         Scaffold(
+          body: _pages.elementAt(_selectedIndex),
           bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
             currentIndex: _selectedIndex,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
             onTap: (index) {
               _onItemTapped(index);
             },
@@ -53,11 +52,10 @@ class _WebHomePageState extends State<WebHomePage> {
               ),
             ],
           ),
-          body: _pages.elementAt(_selectedIndex),
         ),
         loadingWidget(
           message: "Consultando clientes...",
-          isLoading: webProvider.isLoading,
+          isLoading: webProvider.isLoadingClients,
         ),
       ],
     );
