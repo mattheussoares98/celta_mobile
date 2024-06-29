@@ -1,3 +1,4 @@
+import 'package:celta_inventario/pages/web/soap_actions/soap_actions.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -33,69 +34,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
                 child: const Text("Carregar requisições"),
               ),
             )
-          : Column(
-              children: [
-                Text(
-                  "Total de clientes: ${webProvider.clientsNames.length}",
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  )
-                ),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      // childAspectRatio: 0.7,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: webProvider.clientsNames.length,
-                    itemBuilder: (context, index) {
-                      final clientName = webProvider.clientsNames[index];
-
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FittedBox(
-                            child: Column(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  // mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      clientName.toUpperCase(),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                    "Mês atual: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.atualMonth)}"),
-                                Text(
-                                    "Mês passado: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.penultimateMonth)}"),
-                                Text(
-                                    "Mês retrasado: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.antiPenultimateMonth)}"),
-                                Text(
-                                    "Últimos 3 meses: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.lastThreeMonths)}"),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text("Visualizar detalhes"),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+          : const SoapActionsItems(),
     );
   }
 }
