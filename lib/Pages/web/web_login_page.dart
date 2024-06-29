@@ -1,12 +1,10 @@
-import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:celta_inventario/api/api.dart';
-import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
-import 'package:celta_inventario/pages/web/web_home_page.dart';
-import 'package:celta_inventario/providers/providers.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../../api/api.dart';
+import '../../components/global_widgets/global_widgets.dart';
+import '../../pages/web/web.dart';
 
 import '../../utils/utils.dart';
 
@@ -21,12 +19,16 @@ class _WebLoginPageState extends State<WebLoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final key = GlobalKey<FormState>();
+  bool isLoading = false;
 
   Future<void> login() async {
     bool isValid = key.currentState!.validate();
 
     if (!isValid) return;
 
+    setState(() {
+      isLoading = true;
+    });
     final userCredential = await FirebaseHelper.signIn(
       email: emailController.text,
       password: passwordController.text,
@@ -36,12 +38,13 @@ class _WebLoginPageState extends State<WebLoginPage> {
       Navigator.of(context)
           .pushNamedAndRemoveUntil(APPROUTES.WEB_HOME, (route) => false);
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    WebProvider webProvider = Provider.of(context);
-
     return FutureBuilder<User?>(
         future: FirebaseAuth.instance.authStateChanges().first,
         builder: (context, snapshot) {
@@ -121,7 +124,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
               ),
               loadingWidget(
                 message: "Efetuando login...",
-                isLoading: webProvider.isLoading,
+                isLoading: isLoading,
               ),
             ],
           );
