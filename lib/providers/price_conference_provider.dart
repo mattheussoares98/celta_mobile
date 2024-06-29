@@ -86,7 +86,7 @@ class PriceConferenceProvider with ChangeNotifier {
       _errorMessage = SoapHelperResponseParameters.errorMessage;
       if (_errorMessage == "") {
         PriceConferenceProductsModel.resultAsStringToConsultPriceModel(
-          data: SoapHelperResponseParameters.responseAsMap["Produtos"],
+          data: SoapHelperResponseParameters.responseAsMap,
           listToAdd: _products,
         );
       }

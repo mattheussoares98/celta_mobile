@@ -1,3 +1,5 @@
+import 'price_conference_stock_model.dart';
+
 class PriceConferenceProductsModel {
   final String PriceLookUp;
   final String ProductName;
@@ -27,6 +29,7 @@ class PriceConferenceProductsModel {
       CurrentStock; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
   bool
       EtiquetaPendente; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
+  final List<PriceConferenceStockModel> stocks;
 
   PriceConferenceProductsModel({
     required this.PriceLookUp,
@@ -54,35 +57,42 @@ class PriceConferenceProductsModel {
     required this.CurrentStock,
     required this.SaldoEstoqueVenda,
     required this.EtiquetaPendente,
+    required this.stocks,
   });
 
   factory PriceConferenceProductsModel.fromJson(Map map) =>
       PriceConferenceProductsModel(
-        PriceLookUp: map["PriceLookUp"],
-        ProductName: map["ProductName"],
-        Packing: map["Packing"],
-        PackingQuantity: map["PackingQuantity"],
-        Name: map["Name"],
-        ReducedName: map["ReducedName"],
-        ProductPackingCode: int.parse(map["ProductPackingCode"]),
-        AllowTransfer: map["AllowTransfer"] == "1" ? true : false,
-        AllowSale: map["AllowSale"] == "1" ? true : false,
-        AllowBuy: map["AllowBuy"] == "1" ? true : false,
-        MinimumWholeQuantity: double.parse(map["MinimumWholeQuantity"]),
-        SalePracticedRetail: map["SalePracticedRetail"],
-        SalePracticedWholeSale: map["SalePracticedWholeSale"],
-        OperationalCost: map["OperationalCost"],
-        ReplacementCost: map["ReplacementCost"],
-        ReplacementCostMidle: map["ReplacementCostMidle"],
-        LiquidCost: map["LiquidCost"],
-        LiquidCostMidle: map["LiquidCostMidle"],
-        RealCost: map["RealCost"],
-        RealLiquidCost: map["RealLiquidCost"],
-        FiscalCost: map["FiscalCost"],
-        FiscalLiquidCost: map["FiscalLiquidCost"],
-        CurrentStock: map["CurrentStock"],
-        SaldoEstoqueVenda: map["SaldoEstoqueVenda"],
-        EtiquetaPendente: map["EtiquetaPendente"] == "true" ? true : false,
+        PriceLookUp: map["Produtos"]["PriceLookUp"],
+        ProductName: map["Produtos"]["ProductName"],
+        Packing: map["Produtos"]["Packing"],
+        PackingQuantity: map["Produtos"]["PackingQuantity"],
+        Name: map["Produtos"]["Name"],
+        ReducedName: map["Produtos"]["ReducedName"],
+        ProductPackingCode: int.parse(map["Produtos"]["ProductPackingCode"]),
+        AllowTransfer: map["Produtos"]["AllowTransfer"] == "1" ? true : false,
+        AllowSale: map["Produtos"]["AllowSale"] == "1" ? true : false,
+        AllowBuy: map["Produtos"]["AllowBuy"] == "1" ? true : false,
+        MinimumWholeQuantity:
+            double.parse(map["Produtos"]["MinimumWholeQuantity"]),
+        SalePracticedRetail: map["Produtos"]["SalePracticedRetail"],
+        SalePracticedWholeSale: map["Produtos"]["SalePracticedWholeSale"],
+        OperationalCost: map["Produtos"]["OperationalCost"],
+        ReplacementCost: map["Produtos"]["ReplacementCost"],
+        ReplacementCostMidle: map["Produtos"]["ReplacementCostMidle"],
+        LiquidCost: map["Produtos"]["LiquidCost"],
+        LiquidCostMidle: map["Produtos"]["LiquidCostMidle"],
+        RealCost: map["Produtos"]["RealCost"],
+        RealLiquidCost: map["Produtos"]["RealLiquidCost"],
+        FiscalCost: map["Produtos"]["FiscalCost"],
+        FiscalLiquidCost: map["Produtos"]["FiscalLiquidCost"],
+        CurrentStock: map["Produtos"]["CurrentStock"],
+        SaldoEstoqueVenda: map["Produtos"]["SaldoEstoqueVenda"],
+        EtiquetaPendente:
+            map["Produtos"]["EtiquetaPendente"] == "true" ? true : false,
+        stocks: map["Stocks"]
+            .map<PriceConferenceStockModel>(
+                (element) => PriceConferenceStockModel.fromJson(element))
+            .toList(),
       );
 
   static resultAsStringToConsultPriceModel({
