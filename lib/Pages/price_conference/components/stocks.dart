@@ -25,56 +25,36 @@ Widget stocks({
   required BuildContext context,
   required PriceConferenceProductsModel product,
 }) =>
-    InkWell(
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("Fechar"),
-                  )
-                ],
-                content: ListView.builder(
-                  itemCount: product.stocks.length,
-                  itemBuilder: (context, index) {
-                    final stock = product.stocks[index];
+    product.stocks == null || product.stocks?.isEmpty == true
+        ? const Center(
+            child: Text("Não há estoques para esse produto"),
+          )
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: product.stocks!.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: 30.0),
+                  child: Text(
+                    "ESTOQUES",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
+              }
+              final stock = product.stocks![index - 1];
 
-                    return Column(
-                      children: [
-                        TitleAndSubtitle.titleAndSubtitle(
-                          title: stock.StockName,
-                          value: stock.StockQuantity.toBrazilianNumber(3),
-                          subtitleColor: _stockColor(
-                            stockQuantity: stock.StockQuantity,
-                            context: context,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+              return TitleAndSubtitle.titleAndSubtitle(
+                title: stock.StockName,
+                value: stock.StockQuantity.toBrazilianNumber(3),
+                subtitleColor: _stockColor(
+                  stockQuantity: stock.StockQuantity,
+                  context: context,
                 ),
               );
-            });
-      },
-      child: Row(
-        children: [
-          Icon(
-            Icons.info,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            "Estoques",
-            style: TextStyle(
-              fontSize: 18,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ],
-      ),
-    );
+            },
+          );

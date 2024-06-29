@@ -66,7 +66,7 @@ class _ProductItemState extends State<ProductItem> {
             TitleAndSubtitle.titleAndSubtitle(
               title: "PLU",
               value: widget.product.PriceLookUp,
-              otherWidget: costs(
+              otherWidget: _costsAndStocks(
                 context: context,
                 product: widget.product,
               ),
@@ -74,7 +74,6 @@ class _ProductItemState extends State<ProductItem> {
             TitleAndSubtitle.titleAndSubtitle(
               title: "Embalagem",
               value: widget.product.PackingQuantity,
-              otherWidget: stocks(context: context, product: widget.product),
             ),
             getTitleAndSubtitle(
               value: widget.product.SalePracticedRetail,
@@ -129,4 +128,82 @@ class _ProductItemState extends State<ProductItem> {
       ),
     );
   }
+}
+
+Widget _costsAndStocks({
+  required BuildContext context,
+  required PriceConferenceProductsModel product,
+}) {
+  final PageController _pageController = PageController(initialPage: 0);
+  return InkWell(
+    child: Row(
+      children: [
+        Icon(
+          Icons.info,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        const SizedBox(width: 5),
+        Text(
+          "Custos e estoques",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+    onTap: () {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(20),
+              insetPadding: const EdgeInsets.symmetric(vertical: 70, horizontal: 20),
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                width: MediaQuery.of(context).size.height * 0.95,
+                child: PageView(
+                  controller: _pageController,
+                  children: [
+                    costs(context: context, product: product),
+                    stocks(context: context, product: product),
+                  ],
+                ),
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _pageController.animateToPage(
+                            0,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease,
+                          );
+                        },
+                        child: const Text('Custos'),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _pageController.animateToPage(
+                            1,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease,
+                          );
+                        },
+                        child: const Text('Estoques'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          });
+    },
+  );
 }

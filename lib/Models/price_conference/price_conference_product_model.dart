@@ -1,4 +1,4 @@
-import 'price_conference_stock_model.dart';
+import 'package:celta_inventario/models/price_conference/price_conference.dart';
 
 class PriceConferenceProductsModel {
   final String PriceLookUp;
@@ -23,13 +23,14 @@ class PriceConferenceProductsModel {
   final String FiscalCost;
   final String FiscalLiquidCost;
   final String SaldoEstoqueVenda;
+  final String CodigoInterno_ProEmpEmb;
   dynamic //quando filtra os produtos por preço, precisa converter para double para conseguir ordenar corretamente. Como estava por string, não estava organizando corretamente
       SalePracticedRetail; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
   String
       CurrentStock; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
   bool
       EtiquetaPendente; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
-  final List<PriceConferenceStockModel> stocks;
+  List<PriceConferenceStockModel>? stocks;
 
   PriceConferenceProductsModel({
     required this.PriceLookUp,
@@ -57,60 +58,78 @@ class PriceConferenceProductsModel {
     required this.CurrentStock,
     required this.SaldoEstoqueVenda,
     required this.EtiquetaPendente,
-    required this.stocks,
+    required this.CodigoInterno_ProEmpEmb,
+    this.stocks,
   });
 
-  factory PriceConferenceProductsModel.fromJson(Map map) =>
+  factory PriceConferenceProductsModel.fromJson(Map element) =>
       PriceConferenceProductsModel(
-        PriceLookUp: map["Produtos"]["PriceLookUp"],
-        ProductName: map["Produtos"]["ProductName"],
-        Packing: map["Produtos"]["Packing"],
-        PackingQuantity: map["Produtos"]["PackingQuantity"],
-        Name: map["Produtos"]["Name"],
-        ReducedName: map["Produtos"]["ReducedName"],
-        ProductPackingCode: int.parse(map["Produtos"]["ProductPackingCode"]),
-        AllowTransfer: map["Produtos"]["AllowTransfer"] == "1" ? true : false,
-        AllowSale: map["Produtos"]["AllowSale"] == "1" ? true : false,
-        AllowBuy: map["Produtos"]["AllowBuy"] == "1" ? true : false,
-        MinimumWholeQuantity:
-            double.parse(map["Produtos"]["MinimumWholeQuantity"]),
-        SalePracticedRetail: map["Produtos"]["SalePracticedRetail"],
-        SalePracticedWholeSale: map["Produtos"]["SalePracticedWholeSale"],
-        OperationalCost: map["Produtos"]["OperationalCost"],
-        ReplacementCost: map["Produtos"]["ReplacementCost"],
-        ReplacementCostMidle: map["Produtos"]["ReplacementCostMidle"],
-        LiquidCost: map["Produtos"]["LiquidCost"],
-        LiquidCostMidle: map["Produtos"]["LiquidCostMidle"],
-        RealCost: map["Produtos"]["RealCost"],
-        RealLiquidCost: map["Produtos"]["RealLiquidCost"],
-        FiscalCost: map["Produtos"]["FiscalCost"],
-        FiscalLiquidCost: map["Produtos"]["FiscalLiquidCost"],
-        CurrentStock: map["Produtos"]["CurrentStock"],
-        SaldoEstoqueVenda: map["Produtos"]["SaldoEstoqueVenda"],
-        EtiquetaPendente:
-            map["Produtos"]["EtiquetaPendente"] == "true" ? true : false,
-        stocks: map["Stocks"]
-            .map<PriceConferenceStockModel>(
-                (element) => PriceConferenceStockModel.fromJson(element))
-            .toList(),
+        CodigoInterno_ProEmpEmb: element["CodigoInterno_ProEmpEmb"],
+        PriceLookUp: element["PriceLookUp"],
+        ProductName: element["ProductName"],
+        Packing: element["Packing"],
+        PackingQuantity: element["PackingQuantity"],
+        Name: element["Name"],
+        ReducedName: element["ReducedName"],
+        ProductPackingCode: int.parse(element["ProductPackingCode"]),
+        AllowTransfer: element["AllowTransfer"] == "1" ? true : false,
+        AllowSale: element["AllowSale"] == "1" ? true : false,
+        AllowBuy: element["AllowBuy"] == "1" ? true : false,
+        MinimumWholeQuantity: double.parse(element["MinimumWholeQuantity"]),
+        SalePracticedRetail: element["SalePracticedRetail"],
+        SalePracticedWholeSale: element["SalePracticedWholeSale"],
+        OperationalCost: element["OperationalCost"],
+        ReplacementCost: element["ReplacementCost"],
+        ReplacementCostMidle: element["ReplacementCostMidle"],
+        LiquidCost: element["LiquidCost"],
+        LiquidCostMidle: element["LiquidCostMidle"],
+        RealCost: element["RealCost"],
+        RealLiquidCost: element["RealLiquidCost"],
+        FiscalCost: element["FiscalCost"],
+        FiscalLiquidCost: element["FiscalLiquidCost"],
+        CurrentStock: element["CurrentStock"],
+        SaldoEstoqueVenda: element["SaldoEstoqueVenda"],
+        EtiquetaPendente: element["EtiquetaPendente"] == "true" ? true : false,
       );
 
   static resultAsStringToConsultPriceModel({
     required dynamic data,
-    required List listToAdd,
+    required List<PriceConferenceProductsModel> listToAdd,
   }) {
     if (data == null) {
       return;
     }
-    List dataList = [];
-    if (data is Map) {
-      dataList.add(data);
+    List products = [];
+    if (data["Produtos"] is Map) {
+      products.add(data["Produtos"]);
     } else {
-      dataList = data;
+      products = data["Produtos"];
     }
 
-    listToAdd.addAll(dataList
+    listToAdd.addAll(products
         .map((element) => PriceConferenceProductsModel.fromJson(element))
         .toList());
+
+    List stocks = [];
+    if (data["Stocks"] is Map) {
+      stocks.add(data["Stocks"]);
+    } else {
+      stocks = data["Stocks"];
+    }
+
+    for (var stock in stocks) {
+      final stockModel = PriceConferenceStockModel.fromJson(stock);
+
+      int index = listToAdd.indexWhere((product) =>
+          stockModel.CodigoInterno_ProEmpEmb ==
+          product.CodigoInterno_ProEmpEmb);
+
+      if (index != -1) {
+        listToAdd[index].stocks = [
+          stockModel,
+          ...listToAdd[index].stocks ?? [],
+        ];
+      }
+    }
   }
 }
