@@ -121,7 +121,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
               ),
               loadingWidget(
                 message: "Efetuando login...",
-                isLoading: webProvider.isLoadingClients,
+                isLoading: webProvider.isLoading,
               ),
             ],
           );

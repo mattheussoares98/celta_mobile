@@ -1,11 +1,11 @@
-import 'package:celta_inventario/pages/web/clients/clients_page.dart';
-import 'package:celta_inventario/pages/web/soap_actions/soap_actions_page.dart';
-import 'package:provider/provider.dart';
-
 import 'package:flutter/material.dart';
 
-import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
-import 'package:celta_inventario/providers/providers.dart';
+import 'package:provider/provider.dart';
+
+import '../../components/global_widgets/global_widgets.dart';
+import '../../pages/web/clients/clients_page.dart';
+import '../../pages/web/soap_actions/soap_actions_page.dart';
+import '../../providers/providers.dart';
 
 class WebHomePage extends StatefulWidget {
   const WebHomePage({super.key});
@@ -46,8 +46,8 @@ class _WebHomePageState extends State<WebHomePage> {
           ),
         ),
         loadingWidget(
-          message: "Consultando clientes...",
-          isLoading: webProvider.isLoadingClients,
+          message: 'Aguarde...',
+          isLoading: webProvider.isLoading,
         ),
       ],
     );

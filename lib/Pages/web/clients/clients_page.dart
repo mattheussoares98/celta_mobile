@@ -79,10 +79,11 @@ class ClientsPage extends StatelessWidget {
                 child: TextButton(
                   onPressed: () async {
                     await webProvider.getAllClients();
-
+    
                     if (webProvider.errorMessageClients != "") {
                       ShowSnackbarMessage.showMessage(
-                        message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
+                        message:
+                            DefaultErrorMessageToFindServer.ERROR_MESSAGE,
                         context: context,
                       );
                     }

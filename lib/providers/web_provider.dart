@@ -6,14 +6,11 @@ import 'package:intl/intl.dart';
 import '../api/api.dart';
 
 class WebProvider with ChangeNotifier {
-  bool _isLoadingClients = false;
-  bool get isLoadingClients => _isLoadingClients;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   String _errorMessageClients = "";
   String get errorMessageClients => _errorMessageClients;
-
-  bool _isLoadingSoapActions = false;
-  bool get isLoadingSoapActions => _isLoadingSoapActions;
 
   String _errorMessageSoapActions = "";
   String get errorMessageSoapActions => _errorMessageSoapActions;
@@ -176,7 +173,7 @@ class WebProvider with ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    _isLoadingClients = true;
+    _isLoading = true;
     _errorMessageClients = "";
     notifyListeners();
 
@@ -188,13 +185,13 @@ class WebProvider with ChangeNotifier {
     } catch (e) {
       _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
-      _isLoadingClients = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> getAllClients() async {
-    _isLoadingClients = true;
+    _isLoading = true;
     _errorMessageClients = "";
     _clients.clear();
     notifyListeners();
@@ -215,7 +212,7 @@ class WebProvider with ChangeNotifier {
     } catch (e) {
       _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
-      _isLoadingClients = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -309,7 +306,7 @@ class WebProvider with ChangeNotifier {
   }
 
   Future<dynamic> getLastThreeMonthsSoapActions() async {
-    _isLoadingSoapActions = true;
+    _isLoading = true;
     _errorMessageSoapActions = "";
     _lastThreeMonths.clear();
 
@@ -362,7 +359,7 @@ class WebProvider with ChangeNotifier {
     } catch (e) {
       _errorMessageSoapActions = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
-      _isLoadingSoapActions = false;
+      _isLoading = false;
       notifyListeners();
     }
   }

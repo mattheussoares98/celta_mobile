@@ -1,9 +1,8 @@
-import 'package:celta_inventario/pages/web/soap_actions/soap_actions.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../components/mixins/mixins.dart';
+import '../../../pages/web/web.dart';
 import '../../../providers/providers.dart';
 
 class SoapActionsPage extends StatefulWidget {
@@ -13,13 +12,10 @@ class SoapActionsPage extends StatefulWidget {
   State<SoapActionsPage> createState() => _SoapActionsPageState();
 }
 
-class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
+class _SoapActionsPageState extends State<SoapActionsPage> {
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
-    Future.delayed(Duration.zero, () {
-      handleLoading(context, webProvider.isLoadingSoapActions);
-    });
 
     return Scaffold(
       appBar: AppBar(
