@@ -74,6 +74,7 @@ class _ProductItemState extends State<ProductItem> {
             TitleAndSubtitle.titleAndSubtitle(
               title: "Embalagem",
               value: widget.product.PackingQuantity,
+              otherWidget: stocks(context: context, product: widget.product),
             ),
             getTitleAndSubtitle(
               value: widget.product.SalePracticedRetail,
