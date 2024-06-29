@@ -34,7 +34,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
                 child: const Text("Carregar requisições"),
               ),
             )
-          : const SoapActionsItems(),
+          : SoapActionsItems(pageContext: context),
     );
   }
 }

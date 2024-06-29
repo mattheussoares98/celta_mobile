@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import '../../../providers/providers.dart';
 
 class SoapActionsItems extends StatelessWidget {
-  const SoapActionsItems({super.key});
+  final BuildContext pageContext;
+  const SoapActionsItems({
+    required this.pageContext,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class SoapActionsItems extends StatelessWidget {
             ),
             shrinkWrap: true,
             itemCount: webProvider.clientsNames.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (_, index) {
               final clientName = webProvider.clientsNames[index];
 
               return Card(
@@ -57,7 +61,26 @@ class SoapActionsItems extends StatelessWidget {
                         Text(
                             "Últimos 3 meses: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.lastThreeMonths)}"),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                                context: pageContext,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: const Text("Detalhes"),
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .adjustStockConfirmQuantity !=
+                                              null)
+                                            Text(
+                                                "adjustStockConfirmQuantity ${webProvider.lastThreeMonths[index].adjustStockConfirmQuantity}"),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
                           child: const Text("Visualizar detalhes"),
                         ),
                       ],
