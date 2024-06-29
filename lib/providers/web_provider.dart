@@ -36,6 +36,142 @@ class WebProvider with ChangeNotifier {
   List<SoapActionsModel> _antiPenultimateMonth = [];
   List<SoapActionsModel> get antiPenultimateMonth => [..._antiPenultimateMonth];
 
+  int? _sumRequests(
+    int? totalLastThree,
+    int? totalEqualSoapClientName,
+  ) {
+    int total = 0;
+
+    if (totalLastThree != null) {
+      total += totalLastThree;
+    }
+
+    if (totalEqualSoapClientName != null) {
+      total += totalEqualSoapClientName;
+    }
+
+    if (total > 0) {
+      return total;
+    } else {
+      return null;
+    }
+  }
+
+  List _mergeDates({
+    required int indexOfEqualSoap,
+    required SoapActionsModel soapAction,
+  }) {
+    var newDates = [];
+
+    for (var date in _lastThreeMonths[indexOfEqualSoap].datesUsed!) {
+      if (soapAction.datesUsed!.contains(date)) {
+        continue;
+      } else {
+        newDates.add(date);
+      }
+    }
+    return newDates;
+  }
+
+  List _mergeUsers({
+    required int indexOfEqualSoap,
+    required SoapActionsModel soapAction,
+  }) {
+    var newUsers = [];
+
+    for (var user in _lastThreeMonths[indexOfEqualSoap].users!) {
+      if (soapAction.users!.contains(user)) {
+        continue;
+      } else {
+        newUsers.add(user);
+      }
+    }
+    return newUsers;
+  }
+
+  void _mergeMonthInLastTrheeMonths(List<SoapActionsModel> listToMerge) {
+    for (var soapAction in listToMerge) {
+      int indexOfEqualSoap = _lastThreeMonths
+          .indexWhere((element) => element.documentId == soapAction.documentId);
+
+      if (indexOfEqualSoap != -1) {
+        final mergedAction = SoapActionsModel(
+          documentId: soapAction.documentId,
+          datesUsed: _mergeDates(
+            indexOfEqualSoap: indexOfEqualSoap,
+            soapAction: soapAction,
+          ),
+          users: _mergeUsers(
+            indexOfEqualSoap: indexOfEqualSoap,
+            soapAction: soapAction,
+          ),
+          adjustStockConfirmQuantity: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].adjustStockConfirmQuantity,
+            soapAction.adjustStockConfirmQuantity,
+          ),
+          priceConferenceGetProductOrSendToPrint: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap]
+                .priceConferenceGetProductOrSendToPrint,
+            soapAction.priceConferenceGetProductOrSendToPrint,
+          ),
+          inventoryEntryQuantity: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].inventoryEntryQuantity,
+            soapAction.inventoryEntryQuantity,
+          ),
+          receiptEntryQuantity: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].receiptEntryQuantity,
+            soapAction.receiptEntryQuantity,
+          ),
+          receiptLiberate: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].receiptLiberate,
+            soapAction.receiptLiberate,
+          ),
+          saleRequestSave: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].saleRequestSave,
+            soapAction.saleRequestSave,
+          ),
+          transferBetweenStocksConfirmAdjust: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap]
+                .transferBetweenStocksConfirmAdjust,
+            soapAction.transferBetweenStocksConfirmAdjust,
+          ),
+          transferBetweenPackageConfirmAdjust: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap]
+                .transferBetweenPackageConfirmAdjust,
+            soapAction.transferBetweenPackageConfirmAdjust,
+          ),
+          transferRequestSave: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].transferRequestSave,
+            soapAction.transferRequestSave,
+          ),
+          customerRegister: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].customerRegister,
+            soapAction.customerRegister,
+          ),
+          buyRequestSave: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].buyRequestSave,
+            soapAction.buyRequestSave,
+          ),
+          researchPricesInsertPrice: _sumRequests(
+            _lastThreeMonths[indexOfEqualSoap].researchPricesInsertPrice,
+            soapAction.researchPricesInsertPrice,
+          ),
+        );
+        _lastThreeMonths[indexOfEqualSoap] = mergedAction;
+      } else {
+        _lastThreeMonths.add(soapAction);
+      }
+    }
+  }
+
+  void _mergeLastThreeMonths() {
+    _lastThreeMonths.clear();
+
+    _mergeMonthInLastTrheeMonths(_atualMonth);
+    _mergeMonthInLastTrheeMonths(_penultimateMonth);
+    _mergeMonthInLastTrheeMonths(_antiPenultimateMonth);
+  }
+
   Future<void> signIn({
     required String email,
     required String password,
@@ -135,7 +271,7 @@ class WebProvider with ChangeNotifier {
 
     if (soap.isEmpty) {
       return 0;
-    } else {}
+    }
 
     sumValueIfHas(int? request) {
       if (request != null) {
@@ -222,6 +358,7 @@ class WebProvider with ChangeNotifier {
       }
 
       _updateAllClientsNames();
+      _mergeLastThreeMonths();
     } catch (e) {
       _errorMessageSoapActions = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {

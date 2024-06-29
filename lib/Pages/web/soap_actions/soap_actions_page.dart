@@ -60,7 +60,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> with LoadingManager {
                         Text(
                             "Mês retrasado: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.antiPenultimateMonth)}"),
                         Text(
-                            "Últimos 3 meses: ${webProvider.getTotalRequestsByLastThreeMonths(clientName)}")
+                            "Últimos 3 meses: ${webProvider.getTotalRequestsByMonth(clientName: clientName, monthSoapActions: webProvider.lastThreeMonths)}"),
                       ],
                     ),
                   ),
