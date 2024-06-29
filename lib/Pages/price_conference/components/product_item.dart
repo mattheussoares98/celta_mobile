@@ -33,7 +33,7 @@ class _ProductItemState extends State<ProductItem> {
       title: hasValue ? successMessage : null,
       value: hasValue ? ConvertString.convertToBRL(value) : errorMessage,
       subtitleColor:
-          hasValue ? Theme.of(context).colorScheme.primary : Colors.red[400],
+          hasValue ? Theme.of(context).colorScheme.primary : Colors.black,
     );
   }
 

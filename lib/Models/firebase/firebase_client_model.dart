@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../Models/firebase/firebase.dart';
+import '../../models/firebase/firebase.dart';
 import '../../utils/utils.dart';
 
 class FirebaseClientModel {
