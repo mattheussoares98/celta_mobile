@@ -74,7 +74,117 @@ class SoapActionsItems extends StatelessWidget {
                                                   .adjustStockConfirmQuantity !=
                                               null)
                                             Text(
-                                                "adjustStockConfirmQuantity ${webProvider.lastThreeMonths[index].adjustStockConfirmQuantity}"),
+                                                "Ajuste de estoque ${webProvider.lastThreeMonths[index].adjustStockConfirmQuantity}"),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .priceConferenceGetProductOrSendToPrint !=
+                                              null)
+                                            Text(
+                                              "Consulta de preços: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .priceConferenceGetProductOrSendToPrint
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .inventoryEntryQuantity !=
+                                              null)
+                                            Text(
+                                              "Processo de inventário: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .inventoryEntryQuantity
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .receiptEntryQuantity !=
+                                              null)
+                                            Text(
+                                              "Qtd produto recebimento: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .receiptEntryQuantity
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .receiptLiberate !=
+                                              null)
+                                            Text(
+                                              "Liberação doc recebimento: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .receiptLiberate
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .saleRequestSave !=
+                                              null)
+                                            Text(
+                                              "Pedido de vendas: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .saleRequestSave
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .transferBetweenStocksConfirmAdjust !=
+                                              null)
+                                            Text(
+                                              "Transferência entre estoques: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .transferBetweenStocksConfirmAdjust
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .transferBetweenPackageConfirmAdjust !=
+                                              null)
+                                            Text(
+                                              "Transferência entre embalagens: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .transferBetweenPackageConfirmAdjust
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .transferRequestSave !=
+                                              null)
+                                            Text(
+                                              "Pedido de transferência: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .transferRequestSave
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .customerRegister !=
+                                              null)
+                                            Text(
+                                              "Cadastro de cliente: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .customerRegister
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .buyRequestSave !=
+                                              null)
+                                            Text(
+                                              "Pedido de compras: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .buyRequestSave
+                                                      .toString(),
+                                            ),
+                                          if (webProvider.lastThreeMonths[index]
+                                                  .researchPricesInsertPrice !=
+                                              null)
+                                            Text(
+                                              "Preço concorrente: " +
+                                                  webProvider
+                                                      .lastThreeMonths[index]
+                                                      .researchPricesInsertPrice
+                                                      .toString(),
+                                            ),
                                         ],
                                       ),
                                     ),
