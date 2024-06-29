@@ -67,6 +67,8 @@ class SoapActionsItems extends StatelessWidget {
                                 builder: (_) {
                                   return AlertDialog(
                                     title: const Text("Detalhes"),
+                                    contentPadding: const EdgeInsets.all(0),
+                                    insetPadding: const EdgeInsets.all(10),
                                     content: SingleChildScrollView(
                                       child: Column(
                                         children: [

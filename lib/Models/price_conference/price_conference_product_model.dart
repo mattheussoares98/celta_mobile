@@ -56,6 +56,35 @@ class PriceConferenceProductsModel {
     required this.EtiquetaPendente,
   });
 
+  factory PriceConferenceProductsModel.fromJson(Map map) =>
+      PriceConferenceProductsModel(
+        PriceLookUp: map["PriceLookUp"],
+        ProductName: map["ProductName"],
+        Packing: map["Packing"],
+        PackingQuantity: map["PackingQuantity"],
+        Name: map["Name"],
+        ReducedName: map["ReducedName"],
+        ProductPackingCode: int.parse(map["ProductPackingCode"]),
+        AllowTransfer: map["AllowTransfer"] == "1" ? true : false,
+        AllowSale: map["AllowSale"] == "1" ? true : false,
+        AllowBuy: map["AllowBuy"] == "1" ? true : false,
+        MinimumWholeQuantity: double.parse(map["MinimumWholeQuantity"]),
+        SalePracticedRetail: map["SalePracticedRetail"],
+        SalePracticedWholeSale: map["SalePracticedWholeSale"],
+        OperationalCost: map["OperationalCost"],
+        ReplacementCost: map["ReplacementCost"],
+        ReplacementCostMidle: map["ReplacementCostMidle"],
+        LiquidCost: map["LiquidCost"],
+        LiquidCostMidle: map["LiquidCostMidle"],
+        RealCost: map["RealCost"],
+        RealLiquidCost: map["RealLiquidCost"],
+        FiscalCost: map["FiscalCost"],
+        FiscalLiquidCost: map["FiscalLiquidCost"],
+        CurrentStock: map["CurrentStock"],
+        SaldoEstoqueVenda: map["SaldoEstoqueVenda"],
+        EtiquetaPendente: map["EtiquetaPendente"] == "true" ? true : false,
+      );
+
   static resultAsStringToConsultPriceModel({
     required dynamic data,
     required List listToAdd,
@@ -70,37 +99,8 @@ class PriceConferenceProductsModel {
       dataList = data;
     }
 
-    dataList.forEach((element) {
-      listToAdd.add(
-        PriceConferenceProductsModel(
-          PriceLookUp: element["PriceLookUp"],
-          ProductName: element["ProductName"],
-          Packing: element["Packing"],
-          PackingQuantity: element["PackingQuantity"],
-          Name: element["Name"],
-          ReducedName: element["ReducedName"],
-          ProductPackingCode: int.parse(element["ProductPackingCode"]),
-          AllowTransfer: element["AllowTransfer"] == "1" ? true : false,
-          AllowSale: element["AllowSale"] == "1" ? true : false,
-          AllowBuy: element["AllowBuy"] == "1" ? true : false,
-          MinimumWholeQuantity: double.parse(element["MinimumWholeQuantity"]),
-          SalePracticedRetail: element["SalePracticedRetail"],
-          SalePracticedWholeSale: element["SalePracticedWholeSale"],
-          OperationalCost: element["OperationalCost"],
-          ReplacementCost: element["ReplacementCost"],
-          ReplacementCostMidle: element["ReplacementCostMidle"],
-          LiquidCost: element["LiquidCost"],
-          LiquidCostMidle: element["LiquidCostMidle"],
-          RealCost: element["RealCost"],
-          RealLiquidCost: element["RealLiquidCost"],
-          FiscalCost: element["FiscalCost"],
-          FiscalLiquidCost: element["FiscalLiquidCost"],
-          CurrentStock: element["CurrentStock"],
-          SaldoEstoqueVenda: element["SaldoEstoqueVenda"],
-          EtiquetaPendente:
-              element["EtiquetaPendente"] == "true" ? true : false,
-        ),
-      );
-    });
+    listToAdd.addAll(dataList
+        .map((element) => PriceConferenceProductsModel.fromJson(element))
+        .toList());
   }
 }
