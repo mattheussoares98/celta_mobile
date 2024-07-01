@@ -6,7 +6,7 @@ class GetProductJsonModel {
   int? enterpriseCode;
   int? productCode;
   int? productPackingCode;
-  String? pLU;
+  String? plu;
   String? name;
   String? packingQuantity;
   double? value;
@@ -24,7 +24,7 @@ class GetProductJsonModel {
   String? storageAreaAddress;
   String? balanceLabelType;
   double? balanceLabelQuantity;
-  bool? pendantPrintLabel;
+  late bool pendantPrintLabel;
   double? operationalCost;
   double? replacementCost;
   double? replacementCostMidle;
@@ -39,47 +39,47 @@ class GetProductJsonModel {
   dynamic lastBuyEntrance;
 
   GetProductJsonModel({
-    this.enterpriseCode,
-    this.productCode,
-    this.productPackingCode,
-    this.pLU,
-    this.name,
-    this.packingQuantity,
-    this.value,
-    this.retailPracticedPrice,
-    this.retailSalePrice,
-    this.retailOfferPrice,
-    this.wholePracticedPrice,
-    this.wholeSalePrice,
-    this.wholeOfferPrice,
-    this.eCommercePracticedPrice,
-    this.eCommerceSalePrice,
-    this.eCommerceOfferPrice,
-    this.minimumWholeQuantity,
-    this.balanceStockSale,
-    this.storageAreaAddress,
-    this.balanceLabelType,
-    this.balanceLabelQuantity,
-    this.pendantPrintLabel,
-    this.operationalCost,
-    this.replacementCost,
-    this.replacementCostMidle,
-    this.liquidCost,
-    this.liquidCostMidle,
-    this.realCost,
-    this.realLiquidCost,
-    this.fiscalCost,
-    this.fiscalLiquidCost,
-    this.stockByEnterpriseAssociateds,
-    this.stocks,
-    this.lastBuyEntrance,
+    required this.enterpriseCode,
+    required this.productCode,
+    required this.productPackingCode,
+    required this.plu,
+    required this.name,
+    required this.packingQuantity,
+    required this.value,
+    required this.retailPracticedPrice,
+    required this.retailSalePrice,
+    required this.retailOfferPrice,
+    required this.wholePracticedPrice,
+    required this.wholeSalePrice,
+    required this.wholeOfferPrice,
+    required this.eCommercePracticedPrice,
+    required this.eCommerceSalePrice,
+    required this.eCommerceOfferPrice,
+    required this.minimumWholeQuantity,
+    required this.balanceStockSale,
+    required this.storageAreaAddress,
+    required this.balanceLabelType,
+    required this.balanceLabelQuantity,
+    required this.pendantPrintLabel,
+    required this.operationalCost,
+    required this.replacementCost,
+    required this.replacementCostMidle,
+    required this.liquidCost,
+    required this.liquidCostMidle,
+    required this.realCost,
+    required this.realLiquidCost,
+    required this.fiscalCost,
+    required this.fiscalLiquidCost,
+    required this.stockByEnterpriseAssociateds,
+    required this.stocks,
+    required this.lastBuyEntrance,
   });
 
   GetProductJsonModel.fromJson(Map<String, dynamic> json) {
     enterpriseCode = json['EnterpriseCode'];
     productCode = json['ProductCode'];
     productPackingCode = json['ProductPackingCode'];
-    pLU = json['PLU'];
+    plu = json['PLU'];
     name = json['Name'];
     packingQuantity = json['PackingQuantity'];
     value = json['Value'];
@@ -97,7 +97,7 @@ class GetProductJsonModel {
     storageAreaAddress = json['StorageAreaAddress'];
     balanceLabelType = json['BalanceLabelType'];
     balanceLabelQuantity = json['BalanceLabelQuantity'];
-    pendantPrintLabel = json['PendantPrintLabel'];
+    pendantPrintLabel = json['PendantPrintLabel'] ?? false;
     operationalCost = json['OperationalCost'];
     replacementCost = json['ReplacementCost'];
     replacementCostMidle = json['ReplacementCostMidle'];
@@ -128,7 +128,7 @@ class GetProductJsonModel {
     data['EnterpriseCode'] = this.enterpriseCode;
     data['ProductCode'] = this.productCode;
     data['ProductPackingCode'] = this.productPackingCode;
-    data['PLU'] = this.pLU;
+    data['PLU'] = this.plu;
     data['Name'] = this.name;
     data['PackingQuantity'] = this.packingQuantity;
     data['Value'] = this.value;

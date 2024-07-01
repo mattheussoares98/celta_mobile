@@ -6,7 +6,7 @@ import '../../../components/global_widgets/global_widgets.dart';
 
 Widget costs({
   required BuildContext context,
-  required GetProductCmxJson product,
+  required GetProductJsonModel product,
 }) =>
     Column(
       children: [
@@ -22,63 +22,63 @@ Widget costs({
         ),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.FiscalCost,
+            product.fiscalCost,
           ),
           title: "Fiscal",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.FiscalLiquidCost,
+            product.fiscalLiquidCost,
           ),
           title: "Fiscal líquido",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.LiquidCost,
+            product.liquidCost,
           ),
           title: "Líquido",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.LiquidCostMidle,
+            product.liquidCostMidle,
           ),
           title: "Líquido médio",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.OperationalCost,
+            product.operationalCost,
           ),
           title: "Operacional",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.RealCost,
+            product.realCost,
           ),
           title: "Real",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.RealLiquidCost,
+            product.realLiquidCost,
           ),
           title: "Real líquido",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.ReplacementCost,
+            product.replacementCost,
           ),
           title: "Reposição",
         ),
         const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
-            product.ReplacementCostMidle,
+            product.replacementCostMidle,
           ),
           title: "Reposição médio",
         ),

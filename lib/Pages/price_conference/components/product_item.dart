@@ -6,7 +6,7 @@ import '../../../utils/utils.dart';
 import 'components.dart';
 
 class ProductItem extends StatefulWidget {
-  final GetProductCmxJson product;
+  final GetProductJsonModel product;
   final int internalEnterpriseCode;
   final int index;
   const ProductItem({
@@ -37,20 +37,6 @@ class _ProductItemState extends State<ProductItem> {
     );
   }
 
-  String getStockValueMessage() {
-    if (double.tryParse(widget.product.CurrentStock) == null ||
-        double.tryParse(widget.product.CurrentStock) == 0) {
-      return "Sem estoque atual";
-    } else if (double.parse(widget.product.CurrentStock) > 0) {
-      return ConvertString.convertToBrazilianNumber(
-        double.parse(widget.product.CurrentStock).toString(),
-      );
-    } else {
-      return "Estoque negativo: " +
-          ConvertString.convertToBrazilianNumber(widget.product.CurrentStock);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -61,11 +47,11 @@ class _ProductItemState extends State<ProductItem> {
           children: [
             TitleAndSubtitle.titleAndSubtitle(
               title: "Nome",
-              value: widget.product.Name,
+              value: widget.product.name,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "PLU",
-              value: widget.product.PriceLookUp,
+              value: widget.product.plu,
               otherWidget: _costsAndStocks(
                 context: context,
                 product: widget.product,
@@ -73,55 +59,35 @@ class _ProductItemState extends State<ProductItem> {
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "Embalagem",
-              value: widget.product.PackingQuantity,
+              value: widget.product.packingQuantity,
             ),
             getTitleAndSubtitle(
-              value: widget.product.SalePracticedRetail,
+              value: widget.product.retailSalePrice.toString(),
               successMessage: "Preço de venda",
               errorMessage: "Sem preço de venda",
             ),
-            TitleAndSubtitle.titleAndSubtitle(
-              value: widget.product.AllowSale
-                  ? "Permite venda"
-                  : "Não permite venda",
-              subtitleColor: widget.product.AllowSale
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.red,
-            ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: double.tryParse(widget.product.CurrentStock) != null &&
-                      double.tryParse(widget.product.CurrentStock)! > 0
-                  ? "Estoque atual"
-                  : null,
-              value: getStockValueMessage(),
-              subtitleColor:
-                  double.tryParse(widget.product.CurrentStock) != null &&
-                          double.tryParse(widget.product.CurrentStock)! > 0
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.red,
-            ),
             getTitleAndSubtitle(
-              value: widget.product.SalePracticedWholeSale,
+              value: widget.product.wholeOfferPrice.toString(),
               successMessage: "Preço de atacado",
               errorMessage: "Sem preço de atacado",
             ),
             getTitleAndSubtitle(
-              value: widget.product.MinimumWholeQuantity.toString(),
+              value: widget.product.minimumWholeQuantity.toString(),
               successMessage: "Qtd mín atacado",
               errorMessage: "Sem qtd mín p/ atacado",
             ),
-            if (!widget.product.LiquidCost.toString().contains("-1"))
+            if (!widget.product.liquidCost.toString().contains("-1"))
               //quando o usuário não possui permissão para consultar o estoque, a API retorna "-1.0"
               getTitleAndSubtitle(
-                value: widget.product.LiquidCost,
+                value: widget.product.liquidCost.toString(),
                 successMessage: "Custo líquido",
                 errorMessage: "Sem custo líquido",
               ),
             SendToPrintButton(
               internalEnterpriseCode: widget.internalEnterpriseCode,
               index: widget.index,
-              productPackingCode: widget.product.ProductPackingCode,
-              etiquetaPendente: widget.product.EtiquetaPendente,
+              productPackingCode: widget.product.productPackingCode!,
+              etiquetaPendente: widget.product.pendantPrintLabel,
             ),
           ],
         ),
@@ -132,7 +98,7 @@ class _ProductItemState extends State<ProductItem> {
 
 Widget _costsAndStocks({
   required BuildContext context,
-  required GetProductCmxJson product,
+  required GetProductJsonModel product,
 }) {
   final PageController _pageController = PageController(initialPage: 0);
   return InkWell(

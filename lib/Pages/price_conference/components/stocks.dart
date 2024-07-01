@@ -23,15 +23,15 @@ Color _stockColor({
 
 Widget stocks({
   required BuildContext context,
-  required GetProductCmxJson product,
+  required GetProductJsonModel product,
 }) =>
-    product.Stocks.isEmpty
+    product.stocks == null || product.stocks?.isEmpty == true
         ? const Center(
             child: Text("Não há estoques para esse produto"),
           )
         : ListView.builder(
             shrinkWrap: true,
-            itemCount: product.Stocks.length + 1,
+            itemCount: product.stocks!.length + 1,
             itemBuilder: (context, index) {
               if (index == 0) {
                 return const Padding(
@@ -46,13 +46,13 @@ Widget stocks({
                   ),
                 );
               }
-              final stock = product.Stocks[index - 1];
+              final stock = product.stocks![index - 1];
 
               return TitleAndSubtitle.titleAndSubtitle(
-                title: stock.StockName,
-                value: stock.StockQuantity.toString().toBrazilianNumber(3),
+                title: stock.stockName,
+                value: stock.stockQuantity.toString().toBrazilianNumber(3),
                 subtitleColor: _stockColor(
-                  stockQuantity: stock.StockQuantity.toString(),
+                  stockQuantity: stock.stockQuantity.toString(),
                   context: context,
                 ),
               );

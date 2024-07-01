@@ -120,6 +120,8 @@ class SoapHelper {
         throw Exception();
       }
 
+      
+
       GetProductJsonModel.responseAsStringToGetProductJsonModel(
         responseAsString: SoapRequestResponse.responseAsString,
         listToAdd: listToAdd,

@@ -6,7 +6,7 @@ import '../utils/utils.dart';
 import './providers.dart';
 
 class PriceConferenceProvider with ChangeNotifier {
-  List<GetProductCmxJson> _products = [];
+  List<GetProductJsonModel> _products = [];
 
   get products => _products;
   get productsCount => _products.length;
@@ -16,25 +16,6 @@ class PriceConferenceProvider with ChangeNotifier {
   String _errorMessage = "";
 
   get errorMessage => _errorMessage;
-
-  convertSalePracticedRetailToDouble() {
-    _products.forEach((element) {
-      element.SalePracticedRetail =
-          element.SalePracticedRetail.toString().replaceAll(RegExp(r','), '.');
-
-      int pointQuantity =
-          ".".allMatches(element.SalePracticedRetail.toString()).length;
-      for (var x = 1; x < pointQuantity; x++) {
-        if (x < pointQuantity && pointQuantity > 1) {
-          element.SalePracticedRetail = element.SalePracticedRetail.toString()
-              .replaceFirst(RegExp(r'\.'), '');
-        }
-      }
-
-      element.SalePracticedRetail =
-          double.tryParse(element.SalePracticedRetail);
-    });
-  }
 
   clearProducts() {
     _products.clear();
@@ -70,15 +51,8 @@ class PriceConferenceProvider with ChangeNotifier {
     }
 
     try {
-      // await SoapHelper.getGetProductCmxJson(
-      //   enterpriseCode: enterpriseCode,
-      //   searchValue: controllerText,
-      //   isLegacyCodeSearch: isLegacyCodeSearch,
-      //   listToAdd: _products,
-      // );
-
       await SoapHelper.getProductJsonModel(
-        listToAdd: [],
+        listToAdd: _products,
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
         isLegacyCodeSearch: isLegacyCodeSearch,
@@ -141,7 +115,7 @@ class PriceConferenceProvider with ChangeNotifier {
       firebaseCallEnum: FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
     );
 
-    bool newValue = !_products[index].EtiquetaPendente;
+    bool newValue = !_products[index].pendantPrintLabel;
 
     try {
       await SoapRequest.soapPost(
@@ -158,7 +132,8 @@ class PriceConferenceProvider with ChangeNotifier {
       _errorSendToPrint = SoapRequestResponse.errorMessage;
 
       if (_errorSendToPrint == "") {
-        _products[index].EtiquetaPendente = !_products[index].EtiquetaPendente;
+        _products[index].pendantPrintLabel =
+            !_products[index].pendantPrintLabel;
       }
       //como deu certo a marcação/desmarcação, precisa atualizar na lista local se está marcado ou não
     } catch (e) {
@@ -171,30 +146,27 @@ class PriceConferenceProvider with ChangeNotifier {
   }
 
   orderByUpPrice() {
-    convertSalePracticedRetailToDouble();
-    _products
-        .sort((a, b) => a.SalePracticedRetail.compareTo(b.SalePracticedRetail));
+    _products.sort(
+        (a, b) => a.retailPracticedPrice!.compareTo(b.retailPracticedPrice!));
 
     notifyListeners();
   }
 
   orderByDownPrice() {
-    convertSalePracticedRetailToDouble();
-
-    _products
-        .sort((a, b) => b.SalePracticedRetail.compareTo(a.SalePracticedRetail));
+    _products.sort(
+        (a, b) => b.retailPracticedPrice!.compareTo(a.retailPracticedPrice!));
 
     notifyListeners();
   }
 
   orderByUpName() {
-    _products.sort((a, b) => a.Name.compareTo(b.Name));
+    _products.sort((a, b) => a.name!.compareTo(b.name!));
 
     notifyListeners();
   }
 
   orderByDownName() {
-    _products.sort((a, b) => b.Name.compareTo(a.Name));
+    _products.sort((a, b) => b.name!.compareTo(a.name!));
     notifyListeners();
   }
 }
