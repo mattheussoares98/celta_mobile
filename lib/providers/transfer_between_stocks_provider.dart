@@ -3,13 +3,14 @@ import 'dart:convert';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
+import '../models/products/products.dart';
 import '../models/transfer_between_stocks/transfer_between_stocks.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
 class TransferBetweenStocksProvider with ChangeNotifier {
-  List<TransferBetweenStocksProductModel> _products = [];
-  List<TransferBetweenStocksProductModel> get products => _products;
+  List<GetProductCmxJson> _products = [];
+  List<GetProductCmxJson> get products => _products;
 
   List<TransferBetweenStockTypeModel> _originStockTypes = [];
   List<TransferBetweenStockTypeModel> get originStockTypes => _originStockTypes;
@@ -151,27 +152,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": controllerText,
-          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
-        },
-        typeOfResponse: "GetProductCmxJsonResponse",
-        SOAPAction: "GetProductCmxJson",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductCmxJsonResult",
+      await SoapHelper.getGetProductCmxJson(
+        enterpriseCode: enterpriseCode,
+        searchValue: controllerText,
+        isLegacyCodeSearch: configurationsProvider.useLegacyCode,
+        listToAdd: _products,
       );
-
-      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
-      if (_errorMessageGetProducts == "") {
-        TransferBetweenStocksProductModel
-            .dataToTransferBetweenStocksProductModel(
-          data: SoapRequestResponse.responseAsMap,
-          listToAdd: _products,
-        );
-      }
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

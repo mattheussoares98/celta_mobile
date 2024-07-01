@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/transfer_between_stocks/transfer_between_stocks.dart';
 import '../../../providers/providers.dart';
+import '../../../models/products/products.dart';
 import '../../../utils/utils.dart';
 import '../../../components/global_widgets/global_widgets.dart';
 import 'components.dart';
@@ -24,12 +24,10 @@ class ProductsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProductsItems> createState() =>
-      _ProductsItemsState();
+  State<ProductsItems> createState() => _ProductsItemsState();
 }
 
-class _ProductsItemsState
-    extends State<ProductsItems> {
+class _ProductsItemsState extends State<ProductsItems> {
   int _selectedIndex = -1;
 
   changeFocusToConsultedProductFocusNode({
@@ -109,13 +107,12 @@ class _ProductsItemsState
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
     required int index,
   }) {
-    TransferBetweenStocksProductModel product =
-        transferBetweenStocksProvider.products[index];
+    GetProductCmxJson product = transferBetweenStocksProvider.products[index];
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       onTap: transferBetweenStocksProvider
                   .isLoadingTypeStockAndJustifications ||
               transferBetweenStocksProvider.isLoadingAdjustStock
@@ -144,8 +141,7 @@ class _ProductsItemsState
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 value: product.PriceLookUp,
-                otherWidget: AllStocks
-                    .allStocks(
+                otherWidget: AllStocks.allStocks(
                   context: context,
                   hasStocks: product.Stocks.length > 0,
                   product: product,
