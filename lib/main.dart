@@ -16,7 +16,6 @@ import 'pages/price_conference/price_conference.dart';
 import 'pages/receipt/receipt.dart';
 import 'pages/research_prices/research_prices.dart';
 import 'pages/notifications/notifications_page.dart';
-import 'pages/transfer_between_package/transfer_between_package.dart';
 import 'pages/transfer_between_stocks/transfer_between_stocks.dart';
 import 'pages/transfer_request/transfer_request.dart';
 import './providers/providers.dart';
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransferRequestProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
-        ChangeNotifierProvider(create: (_) => TransferBetweenPackageProvider()),
+        // ChangeNotifierProvider(create: (_) => TransferBetweenPackageProvider()),
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
         ChangeNotifierProvider(create: (_) => ConfigurationsProvider()),
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
@@ -205,8 +204,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.TRANSFER: (ctx) => const TransferPage(),
           APPROUTES.TRANSFER_BETWEEN_STOCK: (ctx) =>
               const TransferBetweenStockPage(),
-          APPROUTES.TRANSFER_BETWEEN_PACKAGE: (ctx) =>
-              const TransferBetweenPackagePage(),
+          // APPROUTES.TRANSFER_BETWEEN_PACKAGE: (ctx) =>
+          //     const TransferBetweenPackagePage(),
           APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
           APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
           APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
