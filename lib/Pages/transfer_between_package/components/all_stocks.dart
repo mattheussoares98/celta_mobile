@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/transfer_between_package/transfer_between_package.dart';
+import '../../../models/products/products.dart';
 import '../../../utils/utils.dart';
 import '../../../components/global_widgets/global_widgets.dart';
 
@@ -8,14 +8,14 @@ class AllStocks {
   static allStocks({
     required BuildContext context,
     required bool hasStocks,
-    required TransferBetweenPackageProductModel product,
+    required GetProductCmxJson product,
     required bool isLoading,
   }) {
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       child: Row(
         children: [
           Text(

@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
+import '../models/products/products.dart';
 import '../models/transfer_between_package/transfer_between_package.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
 class TransferBetweenPackageProvider with ChangeNotifier {
-  List<TransferBetweenPackageProductModel> _products = [];
-  List<TransferBetweenPackageProductModel> get products => _products;
+  List<GetProductCmxJson> _products = [];
+  List<GetProductCmxJson> get products => _products;
   int get productsCount => _products.length;
 
   String _errorMessageGetProducts = '';
@@ -120,27 +121,12 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": controllerText,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
-        },
-        typeOfResponse: "GetProductCmxJsonResponse",
-        SOAPAction: "GetProductCmxJson",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductCmxJsonResult",
+      await SoapHelper.getGetProductCmxJson(
+        enterpriseCode: enterpriseCode,
+        searchValue: controllerText,
+        isLegacyCodeSearch: isLegacyCodeSearch,
+        listToAdd: _products,
       );
-
-      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
-      if (_errorMessageGetProducts == "") {
-        TransferBetweenPackageProductModel
-            .dataToTransferBetweenPackageProductModel(
-          data: SoapRequestResponse.responseAsMap,
-          listToAdd: _products,
-        );
-      }
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
