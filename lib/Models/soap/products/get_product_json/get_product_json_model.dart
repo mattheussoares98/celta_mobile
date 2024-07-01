@@ -120,7 +120,10 @@ class GetProductJsonModel {
         stocks!.add(new StocksModel.fromJson(v));
       });
     }
-    lastBuyEntrance = json['LastBuyEntrance'];
+
+    if (json["LastBuyEntrance"] != null) {
+      lastBuyEntrance = LastBuyEntranceModel.fromJson(json['LastBuyEntrance']);
+    }
   }
 
   Map<String, dynamic> toJson() {
