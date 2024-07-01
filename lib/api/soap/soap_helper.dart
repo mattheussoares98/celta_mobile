@@ -1,6 +1,5 @@
 import '../../models/soap/soap.dart';
 
-import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'soap.dart';
 
@@ -100,7 +99,7 @@ class SoapHelper {
     required List<GetProductJsonModel> listToAdd,
     required int enterpriseCode,
     required String searchValue,
-    required ConfigurationsProvider configurationsProvider,
+    required bool isLegacyCodeSearch,
   }) async {
     try {
       await SoapRequest.soapPost(
@@ -108,7 +107,7 @@ class SoapHelper {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": searchValue,
-          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
           "routineTypeInt": 4,
         },
         typeOfResponse: "GetProductJsonResponse",

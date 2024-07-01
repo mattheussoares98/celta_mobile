@@ -70,11 +70,18 @@ class PriceConferenceProvider with ChangeNotifier {
     }
 
     try {
-      await SoapHelper.getGetProductCmxJson(
+      // await SoapHelper.getGetProductCmxJson(
+      //   enterpriseCode: enterpriseCode,
+      //   searchValue: controllerText,
+      //   isLegacyCodeSearch: isLegacyCodeSearch,
+      //   listToAdd: _products,
+      // );
+
+      await SoapHelper.getProductJsonModel(
+        listToAdd: [],
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
         isLegacyCodeSearch: isLegacyCodeSearch,
-        listToAdd: _products,
       );
     } catch (e) {
       //print("Erro para efetuar a requisição : $e");

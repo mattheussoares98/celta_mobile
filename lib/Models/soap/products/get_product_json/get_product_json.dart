@@ -1,1 +1,3 @@
 export './get_product_json_model.dart';
+export './stock_by_enterprise_associateds_model.dart';
+export './stocks_model.dart';
