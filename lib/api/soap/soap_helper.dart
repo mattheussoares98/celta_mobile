@@ -1,5 +1,6 @@
 import '../../models/soap/soap.dart';
 
+import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'soap.dart';
 
@@ -88,6 +89,40 @@ class SoapHelper {
 
       GetJustificationsModel.resultAsStringToJustificationsModel(
         resultAsString: SoapRequestResponse.responseAsString,
+        listToAdd: listToAdd,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<void> getProductJsonModel({
+    required List<GetProductJsonModel> listToAdd,
+    required int enterpriseCode,
+    required String searchValue,
+    required ConfigurationsProvider configurationsProvider,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseCode,
+          "searchValue": searchValue,
+          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+          "routineTypeInt": 4,
+        },
+        typeOfResponse: "GetProductJsonResponse",
+        typeOfResult: "GetProductJsonResult",
+        SOAPAction: "GetProductJson",
+        serviceASMX: "CeltaProductService.asmx",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      GetProductJsonModel.responseAsStringToGetProductJsonModel(
+        responseAsString: SoapRequestResponse.responseAsString,
         listToAdd: listToAdd,
       );
     } catch (e) {
