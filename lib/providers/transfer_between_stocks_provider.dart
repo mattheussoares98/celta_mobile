@@ -4,7 +4,6 @@ import 'dart:convert';
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
 import '../models/soap/soap.dart';
-import '../models/transfer_between_stocks/transfer_between_stocks.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -18,9 +17,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<GetStockTypesModel> _destinyStockTypes = [];
   List<GetStockTypesModel> get destinyStockTypes => _destinyStockTypes;
 
-  List<TransferBetweenStocksJustificationsModel> _justifications = [];
-  List<TransferBetweenStocksJustificationsModel> get justifications =>
-      _justifications;
+  List<JustificationsModel> _justifications = [];
+  List<JustificationsModel> get justifications => _justifications;
 
   int get productsCount => _products.length;
   int get justificationsCount => _justifications.length;
@@ -243,8 +241,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
             SoapRequestResponse.errorMessage;
       }
       if (_errorMessageTypeStockAndJustifications == "") {
-        TransferBetweenStocksJustificationsModel
-            .resultAsStringToTransferBetweenStocksJustificationsModel(
+        JustificationsModel.resultAsStringToJustificationsModel(
           resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _justifications,
         );
