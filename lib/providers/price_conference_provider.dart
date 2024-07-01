@@ -56,6 +56,7 @@ class PriceConferenceProvider with ChangeNotifier {
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
         isLegacyCodeSearch: isLegacyCodeSearch,
+        routineTypeInt: 4,
       );
     } catch (e) {
       //print("Erro para efetuar a requisição : $e");

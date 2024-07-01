@@ -100,6 +100,7 @@ class SoapHelper {
     required int enterpriseCode,
     required String searchValue,
     required bool isLegacyCodeSearch,
+    required int routineTypeInt,
   }) async {
     try {
       await SoapRequest.soapPost(
@@ -108,7 +109,18 @@ class SoapHelper {
           "enterpriseCode": enterpriseCode,
           "searchValue": searchValue,
           "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
-          "routineTypeInt": 4,
+          //   {
+          // Generic = 0,
+          // SaleRequest = 1,
+          // BuyRequest = 2,
+          // TransferRequest = 3,
+          // PriceConference = 4,
+          // AdjustStock = 5,
+          // GoodsReceiving = 6,
+          // ResearchOfPrice = 7,
+          // AdjustSalePrice = 8
+          //   }
+          "routineTypeInt": routineTypeInt,
         },
         typeOfResponse: "GetProductJsonResponse",
         typeOfResult: "GetProductJsonResult",
@@ -119,8 +131,6 @@ class SoapHelper {
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
       }
-
-      
 
       GetProductJsonModel.responseAsStringToGetProductJsonModel(
         responseAsString: SoapRequestResponse.responseAsString,
