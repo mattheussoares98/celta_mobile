@@ -34,27 +34,25 @@ class ImageComponent {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 2.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black38,
-                      border: Border.all(
-                        style: BorderStyle.none,
-                      ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black45,
+                    border: Border.all(
+                      style: BorderStyle.none,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 2.0),
-                      child: Text(
-                        routine,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 15,
-                        ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 1.0),
+                    child: Text(
+                      routine,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
                       ),
                     ),
                   ),

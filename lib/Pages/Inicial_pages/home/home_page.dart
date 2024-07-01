@@ -107,10 +107,9 @@ class _HomePageState extends State<HomePage> {
           crossAxisCount: returnSize(), // define o número de colunas
           childAspectRatio: MediaQuery.of(context).size.width > 900
               ? 1.4
-              : 1.2, // define a proporção de largura/altura dos itens
-          padding: const EdgeInsets.only(top: 8),
-          mainAxisSpacing: 3,
-          crossAxisSpacing: 3,
+              : 1.4, // define a proporção de largura/altura dos itens
+          mainAxisSpacing: 0.0,
+          crossAxisSpacing: 0.0,
           children: [
             ImageComponent.image(
               imagePath: 'lib/assets/Images/consultPrice.jpg',
