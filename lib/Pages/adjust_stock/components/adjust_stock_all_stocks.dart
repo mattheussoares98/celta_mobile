@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/global_widgets/global_widgets.dart';
-import '../../../models/adjust_stock/adjust_stock.dart';
+import '../../../models/products/products.dart';
 import '../../../utils/utils.dart';
 
 class AdjustStockAllStocks {
   static adjustStockAllStocks({
     required BuildContext context,
     required bool hasStocks,
-    required AdjustStockProductModel product,
+    required GetProductCmxJson product,
     required bool isLoading,
   }) {
     return InkWell(

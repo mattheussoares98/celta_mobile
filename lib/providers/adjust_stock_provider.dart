@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
+import '../models/products/products.dart';
 import '../models/adjust_stock/adjust_stock.dart';
 import '../models/adjust_stock/adjust_stock_type_model.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
 class AdjustStockProvider with ChangeNotifier {
-  List<AdjustStockProductModel> _products = [];
-  List<AdjustStockProductModel> get products => _products;
+  List<GetProductCmxJson> _products = [];
+  List<GetProductCmxJson> get products => _products;
 
   List<AdjustStockTypeModel> _stockTypes = [];
   List<AdjustStockTypeModel> get stockTypes => _stockTypes;
@@ -57,7 +58,7 @@ class AdjustStockProvider with ChangeNotifier {
 
   bool get isLoadingAdjustStock => _isLoadingAdjustStock;
   static bool _isLoadingTypeStockAndJustifications = false;
-  set isLoadingAdjustStock(bool newValue){
+  set isLoadingAdjustStock(bool newValue) {
     _isLoadingAdjustStock = newValue;
   }
 
@@ -147,27 +148,12 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": controllerText,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
-        },
-        typeOfResponse: "GetProductCmxJsonResponse",
-        SOAPAction: "GetProductCmxJson",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductCmxJsonResult",
+      await SoapHelper.getGetProductCmxJson(
+        enterpriseCode: enterpriseCode,
+        searchValue: controllerText,
+        isLegacyCodeSearch: isLegacyCodeSearch,
+        listToAdd: _products,
       );
-
-      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
-
-      if (_errorMessageGetProducts == "") {
-        AdjustStockProductModel.dataToAdjustStockProductModel(
-          data: SoapRequestResponse.responseAsMap,
-          listToAdd: _products,
-        );
-      }
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

@@ -1,8 +1,6 @@
+import '../products.dart';
 
-
-import 'adjust_stock_all_stocks_model.dart';
-
-class AdjustStockProductModel {
+class GetProductCmxJson {
   final String PriceLookUp;
   final String CodigoPlu_ProEmb;
   final String Nome_Produto;
@@ -32,9 +30,9 @@ class AdjustStockProductModel {
   final int ProductPackingCode;
   String CurrentStock;
   String SaldoEstoqueVenda;
-  final List<AdjustStockAllStocksModel> Stocks;
+  final List<GetProductCmxJsonStockAllStocksModel> Stocks;
 
-  AdjustStockProductModel({
+  GetProductCmxJson({
     required this.ProductCode,
     required this.ProductPackingCode,
     required this.PriceLookUp,
@@ -67,7 +65,7 @@ class AdjustStockProductModel {
     required this.Stocks,
   });
 
-  static dataToAdjustStockProductModel({
+  static dataToGetProductCmxJson({
     required Map data,
     required List listToAdd,
   }) {
@@ -81,14 +79,14 @@ class AdjustStockProductModel {
     });
   }
 
-  static Map<String, List<AdjustStockAllStocksModel>> _stocks = {};
+  static Map<String, List<GetProductCmxJsonStockAllStocksModel>> _stocks = {};
   static _treatStocks(dynamic element) {
     _stocks = {};
     element["Stocks"].forEach((stockElement) {
       String stockKey = stockElement["CodigoInterno_ProEmpEmb"];
       if (_stocks.containsKey(stockKey)) {
         _stocks[stockKey]!.add(
-          AdjustStockAllStocksModel(
+          GetProductCmxJsonStockAllStocksModel(
             CodigoInterno_ProEmpEmb: int.parse(stockKey),
             StockName: stockElement["StockName"],
             StockQuantity: double.parse(stockElement["StockQuantity"]),
@@ -96,7 +94,7 @@ class AdjustStockProductModel {
         );
       } else {
         _stocks[stockKey] = [
-          AdjustStockAllStocksModel(
+          GetProductCmxJsonStockAllStocksModel(
             CodigoInterno_ProEmpEmb:
                 int.parse(stockElement["CodigoInterno_ProEmpEmb"]),
             StockName: stockElement["StockName"],
@@ -119,7 +117,7 @@ class AdjustStockProductModel {
     }
     products.forEach((productElement) {
       listToAdd.add(
-        AdjustStockProductModel(
+        GetProductCmxJson(
           ProductCode: int.parse(productElement["ProductCode"]),
           ProductPackingCode: int.parse(productElement["ProductPackingCode"]),
           PriceLookUp: productElement["PriceLookUp"],

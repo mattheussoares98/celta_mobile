@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/global_widgets/global_widgets.dart';
-import '../../../models/adjust_stock/adjust_stock.dart';
+import '../../../models/products/products.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import 'components.dart';
-
 
 class AdjustStockProductsItems extends StatefulWidget {
   final int internalEnterpriseCode;
@@ -109,13 +108,13 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
     required AdjustStockProvider adjustStockProvider,
     required int index,
   }) {
-    AdjustStockProductModel product = adjustStockProvider.products[index];
+    GetProductCmxJson product = adjustStockProvider.products[index];
 
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       onTap: adjustStockProvider.isLoadingTypeStockAndJustifications ||
               adjustStockProvider.isLoadingAdjustStock
           ? null
