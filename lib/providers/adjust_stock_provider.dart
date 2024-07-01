@@ -271,30 +271,14 @@ class AdjustStockProvider with ChangeNotifier {
     _updateProductCodeAndProductPackingCode(indexOfProduct);
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "jsonAdjustStock": jsonAdjustStock,
-        },
-        typeOfResponse: "ConfirmAdjustStockResponse",
-        SOAPAction: "ConfirmAdjustStock",
-        serviceASMX: "CeltaProductService.asmx",
+      await SoapHelper.confirmAdjustStock(
+        typeOperator: typeOperator,
+        jsonAdjustStock: jsonAdjustStock,
+        lastUpdatedQuantity: _lastUpdatedQuantity,
+        indexOfLastProductChangedStockQuantity:
+            _indexOfLastProductChangedStockQuantity,
+        indexOfProduct: indexOfProduct,
       );
-
-      _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
-
-      if (_errorMessageAdjustStock == "") {
-        typeOperator = typeOperator
-            .replaceAll(RegExp(r'\('), '')
-            .replaceAll(RegExp(r'\)'), '');
-        _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
-        _indexOfLastProductChangedStockQuantity = indexOfProduct;
-      } else {
-        ShowSnackbarMessage.showMessage(
-          message: _errorMessageAdjustStock,
-          context: context,
-        );
-      }
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
