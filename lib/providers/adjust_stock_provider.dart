@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
 import '../models/soap/soap.dart';
-import '../models/adjust_stock/adjust_stock.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -14,8 +13,8 @@ class AdjustStockProvider with ChangeNotifier {
   List<GetStockTypesModel> _stockTypes = [];
   List<GetStockTypesModel> get stockTypes => _stockTypes;
 
-  List<AdjustStockJustificationModel> _justifications = [];
-  List<AdjustStockJustificationModel> get justifications => _justifications;
+  List<GetJustificationsModel> _justifications = [];
+  List<GetJustificationsModel> get justifications => _justifications;
 
   int get productsCount => _products.length;
   int get justificationsCount => _justifications.length;
@@ -216,30 +215,10 @@ class AdjustStockProvider with ChangeNotifier {
     _justifications.clear();
     notifyListeners();
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "simpleSearchValue": "",
-          "justificationTransferType": 3,
-        },
-        typeOfResponse: "GetJustificationsResponse",
-        SOAPAction: "GetJustifications",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetJustificationsResult",
+      await SoapHelper.getJustifications(
+        justificationTransferType: 3,
+        listToAdd: _justifications,
       );
-
-      if (SoapRequestResponse.errorMessage != "") {
-        _errorMessageTypeStockAndJustifications =
-            SoapRequestResponse.errorMessage;
-      }
-
-      if (_errorMessageTypeStockAndJustifications == "") {
-        AdjustStockJustificationModel
-            .resultAsStringToAdjustStockJustificationModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _justifications,
-        );
-      }
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
