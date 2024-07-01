@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'adjust_stock_type_model.dart';
+import '../../models/soap/soap.dart';
 
 class AdjustStockJustificationModel {
   final int CodigoInterno_JustMov;
@@ -8,7 +8,7 @@ class AdjustStockJustificationModel {
   final String FlagTipo_JustMov;
   final String TypeOperator;
   final String Nome_TipoEstoque;
-  final AdjustStockTypeModel CodigoInterno_TipoEstoque;
+  final GetStockTypesModel CodigoInterno_TipoEstoque;
 
   AdjustStockJustificationModel({
     required this.CodigoInterno_JustMov,
@@ -47,12 +47,12 @@ class AdjustStockJustificationModel {
           Nome_TipoEstoque: element["Nome_TipoEstoque"] ?? "",
           CodigoInterno_TipoEstoque: element["CodigoInterno_TipoEstoque"] ==
                   null
-              ? AdjustStockTypeModel(
+              ? GetStockTypesModel(
                   CodigoInterno_TipoEstoque: -1,
                   Nome_TipoEstoque: "",
                   FlagInterno_TipoEstoque: false,
                 )
-              : AdjustStockTypeModel(
+              : GetStockTypesModel(
                   CodigoInterno_TipoEstoque:
                       element["CodigoInterno_TipoEstoque"],
                   Nome_TipoEstoque: element["Nome_TipoEstoque"],

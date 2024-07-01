@@ -37,12 +37,9 @@ class SoapHelper {
     }
   }
 
-  static Future<void> getStockTypesModel({
-    required int enterpriseCode,
-    required String searchValue,
-    required bool isLegacyCodeSearch,
-    required List<GetStockTypesModel> listToAdd,
-  }) async {
+  static Future<void> getStockTypesModel(
+    List<GetStockTypesModel> listToAdd,
+  ) async {
     try {
       await SoapRequest.soapPost(
         parameters: {

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
-import '../models/soap/products/products.dart';
+import '../models/soap/soap.dart';
 import '../models/adjust_stock/adjust_stock.dart';
-import '../models/adjust_stock/adjust_stock_type_model.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -12,8 +11,8 @@ class AdjustStockProvider with ChangeNotifier {
   List<GetProductCmxJson> _products = [];
   List<GetProductCmxJson> get products => _products;
 
-  List<AdjustStockTypeModel> _stockTypes = [];
-  List<AdjustStockTypeModel> get stockTypes => _stockTypes;
+  List<GetStockTypesModel> _stockTypes = [];
+  List<GetStockTypesModel> get stockTypes => _stockTypes;
 
   List<AdjustStockJustificationModel> _justifications = [];
   List<AdjustStockJustificationModel> get justifications => _justifications;
@@ -204,28 +203,7 @@ class AdjustStockProvider with ChangeNotifier {
     _stockTypes.clear();
     notifyListeners();
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "simpleSearchValue": "undefined",
-        },
-        typeOfResponse: "GetStockTypesResponse",
-        SOAPAction: "GetStockTypes",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetStockTypesResult",
-      );
-
-      if (SoapRequestResponse.errorMessage != "") {
-        _errorMessageTypeStockAndJustifications =
-            SoapRequestResponse.errorMessage;
-      }
-
-      if (_errorMessageTypeStockAndJustifications == "") {
-        AdjustStockTypeModel.resultAsStringToAdjustStockTypeModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _stockTypes,
-        );
-      }
+      await SoapHelper.getStockTypesModel(_stockTypes);
     } catch (e) {
       //print("Erro para efetuar a requisição stockTypes: $e");
       _errorMessageTypeStockAndJustifications =
