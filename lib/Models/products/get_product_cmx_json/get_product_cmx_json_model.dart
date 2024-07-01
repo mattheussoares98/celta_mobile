@@ -9,7 +9,6 @@ class GetProductCmxJson {
   final String Name;
   final String ReducedName;
   final String PersonalizedCode;
-  final String SalePracticedRetail;
   final String SalePracticedWholeSale;
   final String OperationalCost;
   final String ReplacementCost;
@@ -21,15 +20,19 @@ class GetProductCmxJson {
   final String FiscalCost;
   final String FiscalLiquidCost;
   final String CurrentStockString;
-  final bool EtiquetaPendente;
   final bool AllowTransfer;
   final bool AllowSale;
   final bool AllowBuy;
   final double MinimumWholeQuantity;
   final int ProductCode;
   final int ProductPackingCode;
-  String CurrentStock;
   String SaldoEstoqueVenda;
+  dynamic //quando filtra os produtos por preço, precisa converter para double para conseguir ordenar corretamente. Como estava por string, não estava organizando corretamente
+      SalePracticedRetail; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
+  String
+      CurrentStock; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
+  bool
+      EtiquetaPendente; //não deixei como "final" também porque precisei fazer alterações neles depois da consulta
   final List<GetProductCmxJsonStockAllStocksModel> Stocks;
 
   GetProductCmxJson({

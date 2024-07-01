@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/global_widgets/global_widgets.dart';
-import '../../../models/price_conference/price_conference.dart';
+import '../../../models/products/products.dart';
 import '../../../utils/utils.dart';
 import 'components.dart';
 
 class ProductItem extends StatefulWidget {
-  final PriceConferenceProductsModel product;
+  final GetProductCmxJson product;
   final int internalEnterpriseCode;
   final int index;
   const ProductItem({
@@ -61,7 +61,7 @@ class _ProductItemState extends State<ProductItem> {
           children: [
             TitleAndSubtitle.titleAndSubtitle(
               title: "Nome",
-              value: widget.product.ProductName,
+              value: widget.product.Name,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "PLU",
@@ -132,7 +132,7 @@ class _ProductItemState extends State<ProductItem> {
 
 Widget _costsAndStocks({
   required BuildContext context,
-  required PriceConferenceProductsModel product,
+  required GetProductCmxJson product,
 }) {
   final PageController _pageController = PageController(initialPage: 0);
   return InkWell(
@@ -158,7 +158,8 @@ Widget _costsAndStocks({
           builder: (context) {
             return AlertDialog(
               contentPadding: const EdgeInsets.all(20),
-              insetPadding: const EdgeInsets.symmetric(vertical: 70, horizontal: 20),
+              insetPadding:
+                  const EdgeInsets.symmetric(vertical: 70, horizontal: 20),
               content: Container(
                 height: MediaQuery.of(context).size.height * 0.8,
                 width: MediaQuery.of(context).size.height * 0.95,

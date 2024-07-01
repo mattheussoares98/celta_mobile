@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/price_conference/price_conference.dart';
+import '../../../models/products/products.dart';
 import '../../../utils/utils.dart';
 import '../../../components/global_widgets/global_widgets.dart';
 
 Widget costs({
   required BuildContext context,
-  required PriceConferenceProductsModel product,
+  required GetProductCmxJson product,
 }) =>
     Column(
       children: [

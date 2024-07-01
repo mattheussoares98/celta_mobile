@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
-import '../models/price_conference/price_conference.dart';
+import '../models/products/products.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
 class PriceConferenceProvider with ChangeNotifier {
-  List<PriceConferenceProductsModel> _products = [];
+  List<GetProductCmxJson> _products = [];
 
   get products => _products;
   get productsCount => _products.length;
@@ -70,26 +70,12 @@ class PriceConferenceProvider with ChangeNotifier {
     }
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": controllerText,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
-        },
-        typeOfResponse: "GetProductCmxJsonResponse",
-        SOAPAction: "GetProductCmxJson",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductCmxJsonResult",
+      await SoapHelper.getGetProductCmxJson(
+        enterpriseCode: enterpriseCode,
+        searchValue: controllerText,
+        isLegacyCodeSearch: isLegacyCodeSearch,
+        listToAdd: _products,
       );
-
-      _errorMessage = SoapRequestResponse.errorMessage;
-      if (_errorMessage == "") {
-        PriceConferenceProductsModel.resultAsStringToConsultPriceModel(
-          data: SoapRequestResponse.responseAsMap,
-          listToAdd: _products,
-        );
-      }
     } catch (e) {
       //print("Erro para efetuar a requisição : $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
