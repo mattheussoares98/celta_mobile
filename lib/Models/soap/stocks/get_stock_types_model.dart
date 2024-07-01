@@ -13,7 +13,7 @@ class GetStockTypesModel {
 
   static resultAsStringToGetStockTypesModel({
     required String resultAsString,
-    required List listToAdd,
+    required List<GetStockTypesModel> listToAdd,
   }) {
     List resultAsList = json.decode(resultAsString);
     resultAsList.forEach((element) {

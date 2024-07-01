@@ -1,4 +1,5 @@
-import '../../models/soap/products/products.dart';
+import '../../models/soap/soap.dart';
+
 import '../../utils/utils.dart';
 import 'soap.dart';
 
@@ -27,8 +28,39 @@ class SoapHelper {
         throw Exception();
       }
 
-      return GetProductCmxJson.dataToGetProductCmxJson(
+      GetProductCmxJson.dataToGetProductCmxJson(
         data: SoapRequestResponse.responseAsMap,
+        listToAdd: listToAdd,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<void> getStockTypesModel({
+    required int enterpriseCode,
+    required String searchValue,
+    required bool isLegacyCodeSearch,
+    required List<GetStockTypesModel> listToAdd,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "simpleSearchValue": "undefined",
+        },
+        typeOfResponse: "GetStockTypesResponse",
+        SOAPAction: "GetStockTypes",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetStockTypesResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      GetStockTypesModel.resultAsStringToGetStockTypesModel(
+        resultAsString: SoapRequestResponse.responseAsString,
         listToAdd: listToAdd,
       );
     } catch (e) {

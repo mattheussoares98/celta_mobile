@@ -70,7 +70,7 @@ class GetProductCmxJson {
 
   static dataToGetProductCmxJson({
     required Map data,
-    required List listToAdd,
+    required List<GetProductCmxJson> listToAdd,
   }) {
     List dataList = [];
     dataList.add(data);
