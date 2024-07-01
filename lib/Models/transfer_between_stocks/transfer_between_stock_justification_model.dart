@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'transfer_between_stocks.dart';
+import '../../models/soap/soap.dart';
 
 class TransferBetweenStocksJustificationsModel {
   final int CodigoInterno_JustMov; /*  37, */
@@ -8,7 +8,7 @@ class TransferBetweenStocksJustificationsModel {
   final String FlagTipo_JustMov; /*  "Saída", */
   final String TypeOperator; /*  "(-)", */
   final String Nome_TipoEstoque; /*  "", */
-  final TransferBetweenStockTypeModel CodigoInterno_TipoEstoque;
+  final GetStockTypesModel CodigoInterno_TipoEstoque;
 
   TransferBetweenStocksJustificationsModel({
     required this.CodigoInterno_JustMov,
@@ -47,12 +47,12 @@ class TransferBetweenStocksJustificationsModel {
           Nome_TipoEstoque: element["Nome_TipoEstoque"] ?? "",
           CodigoInterno_TipoEstoque: element["CodigoInterno_TipoEstoque"] ==
                   null
-              ? TransferBetweenStockTypeModel(
+              ? GetStockTypesModel(
                   CodigoInterno_TipoEstoque: -1,
                   Nome_TipoEstoque: "",
                   FlagInterno_TipoEstoque: false,
                 )
-              : TransferBetweenStockTypeModel(
+              : GetStockTypesModel(
                   CodigoInterno_TipoEstoque:
                       element["CodigoInterno_TipoEstoque"],
                   Nome_TipoEstoque: element["Nome_TipoEstoque"],

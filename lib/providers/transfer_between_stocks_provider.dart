@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
-import '../models/soap/products/products.dart';
+import '../models/soap/soap.dart';
 import '../models/transfer_between_stocks/transfer_between_stocks.dart';
 import '../utils/utils.dart';
 import './providers.dart';
@@ -12,12 +12,11 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<GetProductCmxJson> _products = [];
   List<GetProductCmxJson> get products => _products;
 
-  List<TransferBetweenStockTypeModel> _originStockTypes = [];
-  List<TransferBetweenStockTypeModel> get originStockTypes => _originStockTypes;
+  List<GetStockTypesModel> _originStockTypes = [];
+  List<GetStockTypesModel> get originStockTypes => _originStockTypes;
 
-  List<TransferBetweenStockTypeModel> _destinyStockTypes = [];
-  List<TransferBetweenStockTypeModel> get destinyStockTypes =>
-      _destinyStockTypes;
+  List<GetStockTypesModel> _destinyStockTypes = [];
+  List<GetStockTypesModel> get destinyStockTypes => _destinyStockTypes;
 
   List<TransferBetweenStocksJustificationsModel> _justifications = [];
   List<TransferBetweenStocksJustificationsModel> get justifications =>
@@ -211,41 +210,14 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _destinyStockTypes.clear();
     notifyListeners();
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "simpleSearchValue": "undefined",
-        },
-        typeOfResponse: "GetStockTypesResponse",
-        SOAPAction: "GetStockTypes",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetStockTypesResult",
-      );
-
-      if (SoapRequestResponse.errorMessage != "") {
-        _errorMessageTypeStockAndJustifications =
-            SoapRequestResponse.errorMessage;
-      }
-
-      if (_errorMessageTypeStockAndJustifications == "") {
-        TransferBetweenStockTypeModel
-            .resultAsStringToTransferBetweenStockTypeModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _destinyStockTypes,
-        );
-        TransferBetweenStockTypeModel
-            .resultAsStringToTransferBetweenStockTypeModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _originStockTypes,
-        );
-      } else {
-        ShowSnackbarMessage.showMessage(
-          message: _errorMessageTypeStockAndJustifications,
-          context: context,
-        );
-      }
+      await SoapHelper.getStockTypesModel(_originStockTypes);
+      await SoapHelper.getStockTypesModel(_destinyStockTypes);
     } catch (e) {
       //print("Erro para efetuar a requisição stockTypes: $e");
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageTypeStockAndJustifications,
+        context: context,
+      );
     }
     notifyListeners();
   }
