@@ -81,17 +81,32 @@ class _ProductItemState extends State<ProductItem> {
               title: "Nome",
               value: widget.product.name,
             ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: "PLU",
-              value: widget.product.plu,
-              otherWidget: _costsAndStocks(
-                context: context,
-                product: widget.product,
-              ),
-            ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: "Embalagem",
-              value: widget.product.packingQuantity,
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "PLU",
+                        value: widget.product.plu,
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Embalagem",
+                        value: widget.product.packingQuantity,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  flex: 2,
+                  child: _costsAndStocks(
+                    context: context,
+                    product: widget.product,
+                  ),
+                )
+              ],
             ),
             getTitleAndSubtitle(
               value: widget.product.retailSalePrice.toString(),
@@ -146,21 +161,33 @@ Widget _costsAndStocks({
 }) {
   final PageController _pageController = PageController(initialPage: 0);
   return InkWell(
-    child: Row(
-      children: [
-        Icon(
-          Icons.info,
-          color: Theme.of(context).colorScheme.primary,
+    child: Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        // border: Border.all(
+        //   color: Colors.white,
+        // ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.all(3),
+      child: const FittedBox(
+        child: Row(
+          children: [
+            Icon(
+              Icons.info,
+              color: Colors.white,
+            ),
+            SizedBox(width: 5),
+            Text(
+              "Custos, estoques \ne última compra",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 5),
-        Text(
-          "Custo/Estoque/Compra",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
+      ),
     ),
     onTap: () {
       showDialog(
