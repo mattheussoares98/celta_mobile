@@ -1,0 +1,1 @@
+export './get_product_json_model.dart';
