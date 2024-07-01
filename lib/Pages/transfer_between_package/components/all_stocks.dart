@@ -8,7 +8,7 @@ class AllStocks {
   static allStocks({
     required BuildContext context,
     required bool hasStocks,
-    required GetProductCmxJson product,
+    required GetProductJsonModel product,
     required bool isLoading,
   }) {
     return InkWell(
@@ -57,7 +57,7 @@ class AllStocks {
                         width: MediaQuery.of(context).size.width * 0.9,
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: product.Stocks.length,
+                          itemCount: product.stocks!.length,
                           itemBuilder: (
                             BuildContext context,
                             int index,
@@ -75,11 +75,11 @@ class AllStocks {
                                       height: 10,
                                     ),
                                     TitleAndSubtitle.titleAndSubtitle(
-                                        title: product.Stocks[index].StockName,
+                                        title: product.stocks![index].stockName,
                                         value: ConvertString
                                             .convertToBrazilianNumber(
-                                          product.Stocks[index].StockQuantity
-                                              .toStringAsFixed(3)
+                                          product.stocks![index].stockQuantity
+                                              .toString()
                                               .replaceAll(RegExp(r'\.'), ','),
                                         )),
                                     const SizedBox(

@@ -7,8 +7,8 @@ import '../utils/utils.dart';
 import './providers.dart';
 
 class AdjustStockProvider with ChangeNotifier {
-  List<GetProductCmxJson> _products = [];
-  List<GetProductCmxJson> get products => _products;
+  List<GetProductJsonModel> _products = [];
+  List<GetProductJsonModel> get products => _products;
 
   List<GetStockTypesModel> _stockTypes = [];
   List<GetStockTypesModel> get stockTypes => _stockTypes;
@@ -146,11 +146,12 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getGetProductCmxJson(
+      await SoapHelper.getProductJsonModel(
+        listToAdd: _products,
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
         isLegacyCodeSearch: isLegacyCodeSearch,
-        listToAdd: _products,
+        routineTypeInt: 4,
       );
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
@@ -250,8 +251,8 @@ class AdjustStockProvider with ChangeNotifier {
 
   _updateProductCodeAndProductPackingCode(int indexOfProduct) {
     jsonAdjustStock["ProductPackingCode"] =
-        _products[indexOfProduct].ProductPackingCode;
-    jsonAdjustStock["ProductCode"] = _products[indexOfProduct].ProductCode;
+        _products[indexOfProduct].productPackingCode;
+    jsonAdjustStock["ProductCode"] = _products[indexOfProduct].productCode;
   }
 
   confirmAdjustStock({

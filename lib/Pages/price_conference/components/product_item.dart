@@ -37,6 +37,38 @@ class _ProductItemState extends State<ProductItem> {
     );
   }
 
+  String getStockValueMessage() {
+    final currentStock = widget.product.stocks!
+        .where((element) => element.stockName == "Estoque Atual")
+        .first
+        .stockQuantity;
+    if (currentStock == null || currentStock == 0) {
+      return "Sem estoque atual";
+    } else if (currentStock >= 0) {
+      return ConvertString.convertToBrazilianNumber(currentStock);
+    } else {
+      return "Estoque negativo: " +
+          ConvertString.convertToBrazilianNumber(currentStock);
+    }
+  }
+
+  Color getStockSubtitleColor() {
+    final currentStock = widget.product.stocks!
+        .where((element) => element.stockName == "Estoque Atual")
+        .first
+        .stockQuantity;
+
+    if (currentStock == null) {
+      return Colors.black;
+    } else if (currentStock == 0) {
+      return Colors.black;
+    } else if (currentStock > 0) {
+      return Theme.of(context).colorScheme.primary;
+    } else {
+      return Colors.red;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -65,6 +97,18 @@ class _ProductItemState extends State<ProductItem> {
               value: widget.product.retailSalePrice.toString(),
               successMessage: "Preço de venda",
               errorMessage: "Sem preço de venda",
+            ),
+            TitleAndSubtitle.titleAndSubtitle(
+              title: widget.product.stocks!
+                          .where(
+                              (element) => element.stockName == "Estoque Atual")
+                          .first
+                          .stockQuantity! >
+                      0
+                  ? "Estoque atual"
+                  : null,
+              value: getStockValueMessage(),
+              subtitleColor: getStockSubtitleColor(),
             ),
             getTitleAndSubtitle(
               value: widget.product.wholeOfferPrice.toString(),

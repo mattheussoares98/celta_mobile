@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
@@ -8,8 +7,8 @@ import '../utils/utils.dart';
 import './providers.dart';
 
 class TransferBetweenStocksProvider with ChangeNotifier {
-  List<GetProductCmxJson> _products = [];
-  List<GetProductCmxJson> get products => _products;
+  List<GetProductJsonModel> _products = [];
+  List<GetProductJsonModel> get products => _products;
 
   List<GetStockTypesModel> _originStockTypes = [];
   List<GetStockTypesModel> get originStockTypes => _originStockTypes;
@@ -149,11 +148,12 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getGetProductCmxJson(
+      await SoapHelper.getProductJsonModel(
+        listToAdd: _products,
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
         isLegacyCodeSearch: configurationsProvider.useLegacyCode,
-        listToAdd: _products,
+        routineTypeInt: 4,
       );
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
@@ -263,8 +263,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
 
   _updateProductCodeAndProductPackingCode(int indexOfProduct) {
     jsonAdjustStock["ProductPackingCode"] =
-        _products[indexOfProduct].ProductPackingCode;
-    jsonAdjustStock["ProductCode"] = _products[indexOfProduct].ProductCode;
+        _products[indexOfProduct].productPackingCode;
+    jsonAdjustStock["ProductCode"] = _products[indexOfProduct].productCode;
   }
 
   confirmAdjustStock({
@@ -283,15 +283,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _updateProductCodeAndProductPackingCode(indexOfProduct);
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          'jsonAdjustStock': jsonEncode(jsonAdjustStock),
-        },
-        SOAPAction: "ConfirmAdjustStock",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResponse: "ConfirmAdjustStockResponse",
-      );
+      await SoapHelper.confirmAdjustStock(jsonAdjustStock);
 
       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
@@ -303,7 +295,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
             jsonAdjustStock["Quantity"]!.toString());
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
       }
-      _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
+      
       if (SoapRequestResponse.errorMessage != "") {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageAdjustStock,

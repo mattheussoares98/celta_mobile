@@ -107,7 +107,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     required TransferBetweenStocksProvider transferBetweenStocksProvider,
     required int index,
   }) {
-    GetProductCmxJson product = transferBetweenStocksProvider.products[index];
+    GetProductJsonModel product = transferBetweenStocksProvider.products[index];
     return InkWell(
       focusColor: Colors.white.withOpacity(0),
       hoverColor: Colors.white.withOpacity(0),
@@ -120,9 +120,9 @@ class _ProductsItemsState extends State<ProductsItems> {
           : () {
               transferBetweenStocksProvider
                       .jsonAdjustStock["ProductPackingCode"] =
-                  product.ProductPackingCode;
+                  product.productPackingCode;
               transferBetweenStocksProvider.jsonAdjustStock["ProductCode"] =
-                  product.ProductCode;
+                  product.productCode;
               selectIndexAndFocus(
                 transferBetweenStocksProvider: transferBetweenStocksProvider,
                 index: index,
@@ -136,39 +136,29 @@ class _ProductsItemsState extends State<ProductsItems> {
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Nome",
-                value: product.Name,
+                value: product.name,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                value: product.PriceLookUp,
+                value: product.plu,
                 otherWidget: AllStocks.allStocks(
                   context: context,
-                  hasStocks: product.Stocks.length > 0,
+                  hasStocks: product.stocks!.length > 0,
                   product: product,
                   isLoading: transferBetweenStocksProvider.isLoadingAdjustStock,
                 ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Embalagem",
-                value: product.PackingQuantity,
+                value: product.packingQuantity,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Estoque atual",
                 value: ConvertString.convertToBrazilianNumber(
-                  product.CurrentStock,
-                ),
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Saldo estoque de venda",
-                value: ConvertString.convertToBrazilianNumber(
-                  product.SaldoEstoqueVenda,
-                ),
-                otherWidget: Icon(
-                  _selectedIndex != index
-                      ? Icons.arrow_drop_down_sharp
-                      : Icons.arrow_drop_up_sharp,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 30,
+                  product.stocks!
+                      .where((element) => element.stockName == "Estoque Atual")
+                      .first
+                      .stockQuantity,
                 ),
               ),
               if (transferBetweenStocksProvider.lastUpdatedQuantity != "" &&
