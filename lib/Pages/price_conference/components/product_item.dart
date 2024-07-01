@@ -154,7 +154,7 @@ Widget _costsAndStocks({
         ),
         const SizedBox(width: 5),
         Text(
-          "Custos e estoques",
+          "Custo/Estoque/Compra",
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -178,6 +178,7 @@ Widget _costsAndStocks({
                   children: [
                     costs(context: context, product: product),
                     stocks(context: context, product: product),
+                    lastBuyEntrance(context: context, product: product),
                   ],
                 ),
               ),
@@ -186,7 +187,8 @@ Widget _costsAndStocks({
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: ElevatedButton(
+                      flex: 3,
+                      child: TextButton(
                         onPressed: () {
                           _pageController.animateToPage(
                             0,
@@ -194,12 +196,13 @@ Widget _costsAndStocks({
                             curve: Curves.ease,
                           );
                         },
-                        child: const Text('Custos'),
+                        child: const FittedBox(child: Text('Custos')),
                       ),
                     ),
                     const SizedBox(width: 5),
                     Expanded(
-                      child: ElevatedButton(
+                      flex: 3,
+                      child: TextButton(
                         onPressed: () {
                           _pageController.animateToPage(
                             1,
@@ -207,7 +210,21 @@ Widget _costsAndStocks({
                             curve: Curves.ease,
                           );
                         },
-                        child: const Text('Estoques'),
+                        child: const FittedBox(child: Text('Estoques')),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      flex: 4,
+                      child: TextButton(
+                        onPressed: () {
+                          _pageController.animateToPage(
+                            2,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease,
+                          );
+                        },
+                        child: const FittedBox(child: Text('Última compra')),
                       ),
                     ),
                   ],

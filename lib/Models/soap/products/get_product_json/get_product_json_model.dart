@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../../../models/soap/soap.dart';
+
 import 'get_product_json.dart';
 
 class GetProductJsonModel {
@@ -36,7 +38,7 @@ class GetProductJsonModel {
   double? fiscalLiquidCost;
   List<StockByEnterpriseAssociatedsModel>? stockByEnterpriseAssociateds;
   List<StocksModel>? stocks;
-  dynamic lastBuyEntrance;
+  LastBuyEntranceModel? lastBuyEntrance;
 
   GetProductJsonModel({
     required this.enterpriseCode,
@@ -123,6 +125,8 @@ class GetProductJsonModel {
 
     if (json["LastBuyEntrance"] != null) {
       lastBuyEntrance = LastBuyEntranceModel.fromJson(json['LastBuyEntrance']);
+    } else {
+      lastBuyEntrance = null;
     }
   }
 
