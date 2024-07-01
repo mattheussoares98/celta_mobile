@@ -206,6 +206,8 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
     try {
       await SoapHelper.getStockTypesModel(_stockTypes);
+      _errorMessageTypeStockAndJustifications =
+          SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição stockTypes: $e");
       _errorMessageTypeStockAndJustifications =
@@ -222,6 +224,9 @@ class AdjustStockProvider with ChangeNotifier {
         justificationTransferType: 3,
         listToAdd: _justifications,
       );
+
+      _errorMessageTypeStockAndJustifications =
+          SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
@@ -276,11 +281,14 @@ class AdjustStockProvider with ChangeNotifier {
     try {
       await SoapHelper.confirmAdjustStock(jsonAdjustStock);
 
-      typeOperator = typeOperator
-          .replaceAll(RegExp(r'\('), '')
-          .replaceAll(RegExp(r'\)'), '');
-      _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
-      _indexOfLastProductChangedStockQuantity = indexOfProduct;
+      _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
+      if (_errorMessageAdjustStock == "") {
+        typeOperator = typeOperator
+            .replaceAll(RegExp(r'\('), '')
+            .replaceAll(RegExp(r'\)'), '');
+        _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
+        _indexOfLastProductChangedStockQuantity = indexOfProduct;
+      }
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

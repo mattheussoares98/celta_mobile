@@ -28,7 +28,7 @@ class SoapHelper {
         listToAdd: listToAdd,
       );
     } catch (e) {
-      rethrow;
+      e;
     }
   }
 
@@ -58,7 +58,7 @@ class SoapHelper {
         listToAdd: listToAdd,
       );
     } catch (e) {
-      rethrow;
+      e;
     }
   }
 
@@ -126,7 +126,7 @@ class SoapHelper {
         throw Exception();
       }
     } catch (e) {
-      rethrow;
+      e;
     }
   }
 }

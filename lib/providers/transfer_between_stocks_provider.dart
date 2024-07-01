@@ -212,6 +212,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     try {
       await SoapHelper.getStockTypesModel(_originStockTypes);
       await SoapHelper.getStockTypesModel(_destinyStockTypes);
+      _errorMessageTypeStockAndJustifications =
+          SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição stockTypes: $e");
       ShowSnackbarMessage.showMessage(
@@ -230,6 +232,9 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         justificationTransferType: 1,
         listToAdd: _justifications,
       );
+
+      _errorMessageTypeStockAndJustifications =
+          SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
