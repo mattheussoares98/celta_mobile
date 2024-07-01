@@ -25,7 +25,6 @@ class ConfigurationsProvider with ChangeNotifier {
   ConfigurationsProvider._() {
     _configurations = [
       ConfigurationsModel(
-        showInWeb: false,
         isConfigurationOfSearch: false,
         title: "Auto Scan",
         value: _useAutoScan,
@@ -34,7 +33,6 @@ class ConfigurationsProvider with ChangeNotifier {
             "Ao confirmar a alteração de uma quantidade, a câmera será aberta automaticamente para ler o código de barras e consultar o próximo produto",
       ),
       ConfigurationsModel(
-        showInWeb: true,
         isConfigurationOfSearch: true,
         title: "Código legado (produto)",
         value: _useLegacyCode,
@@ -42,7 +40,6 @@ class ConfigurationsProvider with ChangeNotifier {
         subtitle: "Consultar os produtos somente pelo código legado",
       ),
       ConfigurationsModel(
-        showInWeb: true,
         isConfigurationOfSearch: true,
         title: "Código personalizado (cliente)",
         value: _searchCustomerByPersonalizedCode,

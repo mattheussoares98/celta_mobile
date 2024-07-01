@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,8 +23,7 @@ class _ConfigurationsCheckboxState extends State<ConfigurationsCheckbox> {
         children: configurationsProvider.configurations
             .map(
               (e) => (!e.isConfigurationOfSearch &&
-                          widget.showOnlyConfigurationOfSearch) ||
-                      (kIsWeb && !e.showInWeb)
+                      widget.showOnlyConfigurationOfSearch)
                   ? Container()
                   : Card(
                       child: InkWell(
