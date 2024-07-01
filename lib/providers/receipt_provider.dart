@@ -129,14 +129,14 @@ class ReceiptProvider with ChangeNotifier {
       if (validityDate != "") {
         parameters["validityDate"] = validityDate;
       }
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: parameters,
         typeOfResponse: "EntryQuantityResponse",
         SOAPAction: "EntryQuantity",
         serviceASMX: "CeltaGoodsReceivingService.asmx",
       );
 
-      _errorMessageUpdateQuantity = SoapHelperResponseParameters.errorMessage;
+      _errorMessageUpdateQuantity = SoapRequestResponse.errorMessage;
       if (_errorMessageUpdateQuantity == "") {
         _updateAtualQuantity(
           context: context,
@@ -198,7 +198,7 @@ class ReceiptProvider with ChangeNotifier {
     );
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "grDocCode": docCode,
@@ -210,7 +210,7 @@ class ReceiptProvider with ChangeNotifier {
         serviceASMX: "CeltaGoodsReceivingService.asmx",
       );
 
-      _errorMessageUpdateQuantity = SoapHelperResponseParameters.errorMessage;
+      _errorMessageUpdateQuantity = SoapRequestResponse.errorMessage;
 
       if (_errorMessageUpdateQuantity == "") {
         _updateAtualQuantity(
@@ -257,7 +257,7 @@ class ReceiptProvider with ChangeNotifier {
     if (isSearchAllCountedProducts) searchTypeInt = 19;
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "searchTypeInt": searchTypeInt,
@@ -270,11 +270,11 @@ class ReceiptProvider with ChangeNotifier {
         typeOfResult: "GetProductResult",
       );
 
-      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
 
       if (_errorMessageGetProducts == "") {
         ReceiptProductsModel.dataToReceiptConferenceModel(
-          data: SoapHelperResponseParameters.responseAsMap["Produtos"],
+          data: SoapRequestResponse.responseAsMap["Produtos"],
           listToAdd: _products,
         );
       } else {
@@ -311,7 +311,7 @@ class ReceiptProvider with ChangeNotifier {
     //código acima porque está sendo chamado dentro de um setState
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
@@ -322,12 +322,12 @@ class ReceiptProvider with ChangeNotifier {
         typeOfResult: "GetActiveGRDocsStatusResult",
       );
 
-      _errorMessage = SoapHelperResponseParameters.errorMessage;
+      _errorMessage = SoapRequestResponse.errorMessage;
 
       if (_errorMessage == "") {
         ReceiptModel.dataToReceiptModel(
           data:
-              SoapHelperResponseParameters.responseAsMap["ProcRecebDocumentos"],
+              SoapRequestResponse.responseAsMap["ProcRecebDocumentos"],
           listToAdd: _receipts,
         );
       }
@@ -386,7 +386,7 @@ class ReceiptProvider with ChangeNotifier {
     );
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "grDocCode": grDocCode,
@@ -397,7 +397,7 @@ class ReceiptProvider with ChangeNotifier {
         typeOfResult: "LiberateGRDocResult",
       );
 
-      _errorMessageLiberate = SoapHelperResponseParameters.errorMessage;
+      _errorMessageLiberate = SoapRequestResponse.errorMessage;
 
       if (_errorMessageLiberate == "") {
         //quando da certo a liberação, precisa consultar novamente os documentos pra atualizar o status corretamente

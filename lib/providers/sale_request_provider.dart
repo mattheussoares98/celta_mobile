@@ -482,7 +482,7 @@ class SaleRequestProvider with ChangeNotifier {
     if (isConsultingAgain!) notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
@@ -497,11 +497,11 @@ class SaleRequestProvider with ChangeNotifier {
         typeOfResult: "GetRequestTypesJsonResult",
       );
 
-      _errorMessageRequests = SoapHelperResponseParameters.errorMessage;
+      _errorMessageRequests = SoapRequestResponse.errorMessage;
 
       if (_errorMessageRequests == "") {
         SaleRequestsModel.responseAsStringToSaleRequestsModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _requests,
         );
       }
@@ -542,7 +542,7 @@ class SaleRequestProvider with ChangeNotifier {
           //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
           );
 
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "json": jsonBody,
@@ -553,12 +553,12 @@ class SaleRequestProvider with ChangeNotifier {
         typeOfResult: "ProcessCartResult",
       );
 
-      _errorMessageProcessCart = SoapHelperResponseParameters.errorMessage;
+      _errorMessageProcessCart = SoapRequestResponse.errorMessage;
 
       if (_errorMessageProcessCart == "") {
         SaleRequestProcessCartModel.updateCartWithProcessCartResponse(
           jsonSaleRequest: _jsonSaleRequest,
-          apiItemsResponse: SoapHelperResponseParameters.responseAsString,
+          apiItemsResponse: SoapRequestResponse.responseAsString,
           enterpriseCode: enterpriseCode.toString(),
           cartProducts: _cartProducts[enterpriseCode.toString()]!,
         );
@@ -695,7 +695,7 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "customerData": controllerText,
@@ -707,7 +707,7 @@ class SaleRequestProvider with ChangeNotifier {
         typeOfResult: "GetCustomerJsonResult",
       );
 
-      _errorMessageCustomer = SoapHelperResponseParameters.errorMessage;
+      _errorMessageCustomer = SoapRequestResponse.errorMessage;
       if (_errorMessageCustomer ==
           "O formato dos filtros informado está inválido") {
         await _getCustomersNewSearch(
@@ -722,7 +722,7 @@ class SaleRequestProvider with ChangeNotifier {
         }
 
         SaleRequestCustomerModel.responseAsStringToSaleRequestCustomerModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _customers[enterpriseCode]!,
         );
       }
@@ -750,7 +750,7 @@ class SaleRequestProvider with ChangeNotifier {
     _errorMessageCustomer = "";
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode({
             "crossIdentity": UserData.crossIdentity,
@@ -765,7 +765,7 @@ class SaleRequestProvider with ChangeNotifier {
         typeOfResult: "GetCustomerJsonResult",
       );
 
-      _errorMessageCustomer = SoapHelperResponseParameters.errorMessage;
+      _errorMessageCustomer = SoapRequestResponse.errorMessage;
     } catch (e) {
       throw Exception();
     }
@@ -797,7 +797,7 @@ class SaleRequestProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetProducts),
         },
@@ -807,10 +807,10 @@ class SaleRequestProvider with ChangeNotifier {
         typeOfResult: "GetProductsJsonResult",
       );
 
-      _errorMessageProducts = SoapHelperResponseParameters.errorMessage;
+      _errorMessageProducts = SoapRequestResponse.errorMessage;
       if (_errorMessageProducts == "") {
         SaleRequestProductsModel.responseAsStringToSaleRequestProductsModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _products,
         );
       }
@@ -839,7 +839,7 @@ class SaleRequestProvider with ChangeNotifier {
     _jsonSaleRequest["crossId"] = "${UserData.crossIdentity}";
     var jsonSaleRequestEncoded = json.encode(_jsonSaleRequest);
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "json": jsonSaleRequestEncoded,
@@ -850,7 +850,7 @@ class SaleRequestProvider with ChangeNotifier {
         serviceASMX: "CeltaSaleRequestService.asmx",
       );
 
-      _errorMessageSaveSaleRequest = SoapHelperResponseParameters.errorMessage;
+      _errorMessageSaveSaleRequest = SoapRequestResponse.errorMessage;
 
       if (_errorMessageSaveSaleRequest == "") {
         ShowSnackbarMessage.showMessage(
@@ -862,10 +862,10 @@ class SaleRequestProvider with ChangeNotifier {
         RegExp regex = RegExp(
             r'\((.*?)\)'); // Expressão regular para capturar o conteúdo entre parênteses
 
-        Match? match = regex.firstMatch(SoapHelperResponseParameters
+        Match? match = regex.firstMatch(SoapRequestResponse
             .responseAsString); // Encontrar o primeiro match na string
-        SoapHelperResponseParameters.responseAsMap;
-        SoapHelperResponseParameters.responseAsString;
+        SoapRequestResponse.responseAsMap;
+        SoapRequestResponse.responseAsString;
         if (match != null) {
           _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
         } else {

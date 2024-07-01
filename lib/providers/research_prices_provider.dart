@@ -122,7 +122,7 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "json": json.encode(
             {
@@ -146,7 +146,7 @@ class ResearchPricesProvider with ChangeNotifier {
       );
 
       _errorAssociateConcurrentToResearch =
-          SoapHelperResponseParameters.errorMessage;
+          SoapRequestResponse.errorMessage;
 
       if (_errorAssociateConcurrentToResearch.isNotEmpty) {
         ShowSnackbarMessage.showMessage(
@@ -159,7 +159,7 @@ class ResearchPricesProvider with ChangeNotifier {
     } catch (e) {
       // print(e.toString());
       _errorAssociateConcurrentToResearch =
-          SoapHelperResponseParameters.errorMessage;
+          SoapRequestResponse.errorMessage;
     }
 
     _isLoadingAssociateConcurrentToResearch = false;
@@ -189,16 +189,16 @@ class ResearchPricesProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {"json": json.encode(jsonRequest)},
         typeOfResponse: "GetResearchOfPriceJsonResponse",
         SOAPAction: "GetResearchOfPriceJson",
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "GetResearchOfPriceJsonResult",
       );
-      SoapHelperResponseParameters.responseAsMap;
-      SoapHelperResponseParameters.responseAsString;
-      _errorGetResearchPrices = SoapHelperResponseParameters.errorMessage;
+      SoapRequestResponse.responseAsMap;
+      SoapRequestResponse.responseAsString;
+      _errorGetResearchPrices = SoapRequestResponse.errorMessage;
     } catch (e) {
       _errorGetResearchPrices = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
@@ -236,7 +236,7 @@ class ResearchPricesProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "json": json.encode(
             {
@@ -256,7 +256,7 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "InsertUpdateResearchOfPriceResult",
       );
 
-      _errorAddOrUpdateOfResearch = SoapHelperResponseParameters.errorMessage;
+      _errorAddOrUpdateOfResearch = SoapRequestResponse.errorMessage;
 
       if (_errorAddOrUpdateOfResearch.isNotEmpty) {
         ShowSnackbarMessage.showMessage(
@@ -270,12 +270,12 @@ class ResearchPricesProvider with ChangeNotifier {
         _updateLocalSelectedResearch(name: name, observation: observation);
       } else if (_selectedResearch == null) {
         _researchPrices.add(ResearchPricesResearchModel.fromJson(
-          json.decode(SoapHelperResponseParameters.responseAsString),
+          json.decode(SoapRequestResponse.responseAsString),
         ));
       }
     } catch (e) {
       // print(e.toString());
-      _errorAddOrUpdateOfResearch = SoapHelperResponseParameters.errorMessage;
+      _errorAddOrUpdateOfResearch = SoapRequestResponse.errorMessage;
     }
 
     _isLoadingAddOrUpdateOfResearch = false;
@@ -344,14 +344,14 @@ class ResearchPricesProvider with ChangeNotifier {
     }
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {"json": json.encode(jsonBody)},
         typeOfResponse: "InsertUpdateConcurrentJsonResponse",
         SOAPAction: "InsertUpdateConcurrentJson",
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "InsertUpdateConcurrentJsonResult",
       );
-      _errorAddOrUpdateConcurrents = SoapHelperResponseParameters.errorMessage;
+      _errorAddOrUpdateConcurrents = SoapRequestResponse.errorMessage;
 
       if (_errorAddOrUpdateConcurrents == "" && _selectedConcurrent != null) {
         _updateLocalSelectedConcurrent(
@@ -362,7 +362,7 @@ class ResearchPricesProvider with ChangeNotifier {
       } else if (_selectedConcurrent == null) {
         _concurrents.add(
           ResearchPricesConcurrentsModel.fromJson(
-            json.decode(SoapHelperResponseParameters.responseAsString),
+            json.decode(SoapRequestResponse.responseAsString),
           ),
         );
       }
@@ -409,7 +409,7 @@ class ResearchPricesProvider with ChangeNotifier {
           : 2, // "SearchTypeInt - ExactCode = 1, ApproximateName = 2"
     });
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "json": jsonBody,
         },
@@ -418,7 +418,7 @@ class ResearchPricesProvider with ChangeNotifier {
         serviceASMX: "CeltaResearchOfPriceService.asmx",
         typeOfResult: "GetConcurrentJsonResult",
       );
-      _errorGetConcurrents = SoapHelperResponseParameters.errorMessage;
+      _errorGetConcurrents = SoapRequestResponse.errorMessage;
 
       if (_errorGetConcurrents == "") {
         _concurrents.addAll(
@@ -486,7 +486,7 @@ class ResearchPricesProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetProducts),
         },
@@ -496,7 +496,7 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "GetProductsJsonResult",
       );
 
-      _errorGetAssociatedsProducts = SoapHelperResponseParameters.errorMessage;
+      _errorGetAssociatedsProducts = SoapRequestResponse.errorMessage;
 
       if (_errorGetAssociatedsProducts == "") {
         _associatedsProducts.addAll(
@@ -544,7 +544,7 @@ class ResearchPricesProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetProducts),
         },
@@ -555,7 +555,7 @@ class ResearchPricesProvider with ChangeNotifier {
       );
 
       _errorGetNotAssociatedsProducts =
-          SoapHelperResponseParameters.errorMessage;
+          SoapRequestResponse.errorMessage;
 
       if (_errorGetNotAssociatedsProducts == "") {
         _notAssociatedsProducts.addAll(
@@ -688,7 +688,7 @@ class ResearchPricesProvider with ChangeNotifier {
     );
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "json": [json.encode(jsonInsertConcurrentPrices)],
         },
@@ -697,7 +697,7 @@ class ResearchPricesProvider with ChangeNotifier {
         serviceASMX: "CeltaResearchOfPriceService.asmx",
       );
 
-      _errorInsertConcurrentPrices = SoapHelperResponseParameters.errorMessage;
+      _errorInsertConcurrentPrices = SoapRequestResponse.errorMessage;
 
       if (_errorInsertConcurrentPrices == "") {
         _updateLocalProductPrices(

@@ -86,7 +86,7 @@ class InventoryProvider with ChangeNotifier {
     //porque está sendo chamado dentro de um setState
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
@@ -96,16 +96,16 @@ class InventoryProvider with ChangeNotifier {
         serviceASMX: "CeltaInventoryService.asmx",
         typeOfResult: "GetFrozenProcessesResult",
       );
-      _errorMessageInventorys = SoapHelperResponseParameters.errorMessage;
+      _errorMessageInventorys = SoapRequestResponse.errorMessage;
 
       if (_errorMessageInventorys == "") {
         InventoryModel.responseAsStringToInventoryModel(
-          data: SoapHelperResponseParameters.responseAsMap["Inventarios"],
+          data: SoapRequestResponse.responseAsMap["Inventarios"],
           listToAdd: _inventorys,
         );
 
         InventoryCountingsModel.responseInStringToInventoryCountingsModel(
-          data: SoapHelperResponseParameters
+          data: SoapRequestResponse
               .responseAsMap["InventariosContagens"],
           listToAdd: _countings,
         );
@@ -148,7 +148,7 @@ class InventoryProvider with ChangeNotifier {
     }
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
@@ -163,10 +163,10 @@ class InventoryProvider with ChangeNotifier {
         typeOfResult: "GetProductResult",
       );
 
-      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
       if (_errorMessageGetProducts == "") {
         InventoryProductModel.responseInStringToInventoryProductModel(
-          data: SoapHelperResponseParameters.responseAsMap["Produtos"],
+          data: SoapRequestResponse.responseAsMap["Produtos"],
           listToAdd: _products,
         );
       }
@@ -263,7 +263,7 @@ class InventoryProvider with ChangeNotifier {
     );
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "countingCode": countingCode,
@@ -275,7 +275,7 @@ class InventoryProvider with ChangeNotifier {
         serviceASMX: "CeltaInventoryService.asmx",
       );
 
-      _errorMessageQuantity = SoapHelperResponseParameters.errorMessage;
+      _errorMessageQuantity = SoapRequestResponse.errorMessage;
 
       if (_errorMessageQuantity == "") {
         if (isSubtract) {
@@ -329,7 +329,7 @@ class InventoryProvider with ChangeNotifier {
     );
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "countingCode": inventoryProcessCode,
@@ -340,7 +340,7 @@ class InventoryProvider with ChangeNotifier {
         serviceASMX: "CeltaInventoryService.asmx",
       );
 
-      _errorMessageQuantity = SoapHelperResponseParameters.errorMessage;
+      _errorMessageQuantity = SoapRequestResponse.errorMessage;
 
       if (_errorMessageQuantity == "") {
         _products[indexOfProduct].quantidadeInvContProEmb = -1;

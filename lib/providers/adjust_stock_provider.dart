@@ -147,7 +147,7 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
@@ -160,11 +160,11 @@ class AdjustStockProvider with ChangeNotifier {
         typeOfResult: "GetProductCmxJsonResult",
       );
 
-      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
 
       if (_errorMessageGetProducts == "") {
         AdjustStockProductModel.dataToAdjustStockProductModel(
-          data: SoapHelperResponseParameters.responseAsMap,
+          data: SoapRequestResponse.responseAsMap,
           listToAdd: _products,
         );
       }
@@ -218,7 +218,7 @@ class AdjustStockProvider with ChangeNotifier {
     _stockTypes.clear();
     notifyListeners();
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "undefined",
@@ -229,14 +229,14 @@ class AdjustStockProvider with ChangeNotifier {
         typeOfResult: "GetStockTypesResult",
       );
 
-      if (SoapHelperResponseParameters.errorMessage != "") {
+      if (SoapRequestResponse.errorMessage != "") {
         _errorMessageTypeStockAndJustifications =
-            SoapHelperResponseParameters.errorMessage;
+            SoapRequestResponse.errorMessage;
       }
 
       if (_errorMessageTypeStockAndJustifications == "") {
         AdjustStockTypeModel.resultAsStringToAdjustStockTypeModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _stockTypes,
         );
       }
@@ -252,7 +252,7 @@ class AdjustStockProvider with ChangeNotifier {
     _justifications.clear();
     notifyListeners();
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
@@ -264,15 +264,15 @@ class AdjustStockProvider with ChangeNotifier {
         typeOfResult: "GetJustificationsResult",
       );
 
-      if (SoapHelperResponseParameters.errorMessage != "") {
+      if (SoapRequestResponse.errorMessage != "") {
         _errorMessageTypeStockAndJustifications =
-            SoapHelperResponseParameters.errorMessage;
+            SoapRequestResponse.errorMessage;
       }
 
       if (_errorMessageTypeStockAndJustifications == "") {
         AdjustStockJustificationModel
             .resultAsStringToAdjustStockJustificationModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _justifications,
         );
       }
@@ -328,7 +328,7 @@ class AdjustStockProvider with ChangeNotifier {
     _updateProductCodeAndProductPackingCode(indexOfProduct);
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "jsonAdjustStock": jsonAdjustStock,
@@ -338,7 +338,7 @@ class AdjustStockProvider with ChangeNotifier {
         serviceASMX: "CeltaProductService.asmx",
       );
 
-      _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;
+      _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
       if (_errorMessageAdjustStock == "") {
         typeOperator = typeOperator

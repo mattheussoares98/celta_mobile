@@ -438,7 +438,7 @@ class TransferRequestProvider with ChangeNotifier {
     if (isConsultingAgain) notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
@@ -453,11 +453,11 @@ class TransferRequestProvider with ChangeNotifier {
         typeOfResult: "GetRequestTypesJsonResult",
       );
 
-      _errorMessageRequestModel = SoapHelperResponseParameters.errorMessage;
+      _errorMessageRequestModel = SoapRequestResponse.errorMessage;
 
       if (_errorMessageRequestModel == "") {
         TransferRequestModel.resultAsStringToTransferRequestModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _requestModels,
         );
       }
@@ -482,7 +482,7 @@ class TransferRequestProvider with ChangeNotifier {
     if (isConsultingAgain) notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           // "simpleSearchValue": "string",
@@ -494,11 +494,11 @@ class TransferRequestProvider with ChangeNotifier {
         typeOfResult: "GetEnterprisesJsonResult",
       );
 
-      _errorMessageOriginEnterprise = SoapHelperResponseParameters.errorMessage;
+      _errorMessageOriginEnterprise = SoapRequestResponse.errorMessage;
 
       if (_errorMessageOriginEnterprise == "") {
         TransferOriginEnterpriseModel.resultAsStringToOriginEnterpriseModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _originEnterprises,
         );
       }
@@ -565,7 +565,7 @@ class TransferRequestProvider with ChangeNotifier {
     if (isConsultingAgain) notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           // "simpleSearchValue": "string",
@@ -579,11 +579,11 @@ class TransferRequestProvider with ChangeNotifier {
       );
 
       _errorMessageDestinyEnterprise =
-          SoapHelperResponseParameters.errorMessage;
+          SoapRequestResponse.errorMessage;
 
       if (_errorMessageDestinyEnterprise == "") {
         TransferDestinyEnterpriseModel.resultAsStringToDestinyEnterpriseModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _destinyEnterprises,
         );
       }
@@ -609,7 +609,7 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseOriginCode,
@@ -625,12 +625,12 @@ class TransferRequestProvider with ChangeNotifier {
         typeOfResult: "GetProductJsonByRequestTypeResult",
       );
 
-      _errorMessageProducts = SoapHelperResponseParameters.errorMessage;
+      _errorMessageProducts = SoapRequestResponse.errorMessage;
 
       if (_errorMessageProducts == "") {
         TransferRequestProductsModel
             .responseAsStringToTransferRequestProductsModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _products,
         );
       }
@@ -668,7 +668,7 @@ class TransferRequestProvider with ChangeNotifier {
     );
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "json": json.encode(_jsonSaleRequest),
@@ -679,7 +679,7 @@ class TransferRequestProvider with ChangeNotifier {
       );
 
       _errorMessageSaveTransferRequest =
-          SoapHelperResponseParameters.errorMessage;
+          SoapRequestResponse.errorMessage;
 
       if (_errorMessageSaveTransferRequest == "") {
         await clearCart(
@@ -697,7 +697,7 @@ class TransferRequestProvider with ChangeNotifier {
         RegExp regex = RegExp(
             r'\((.*?)\)'); // Expressão regular para capturar o conteúdo entre parênteses
 
-        Match? match = regex.firstMatch(SoapHelperResponseParameters
+        Match? match = regex.firstMatch(SoapRequestResponse
             .responseAsString); // Encontrar o primeiro match na string
 
         if (match != null) {

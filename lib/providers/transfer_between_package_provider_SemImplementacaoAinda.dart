@@ -120,7 +120,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
@@ -133,11 +133,11 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         typeOfResult: "GetProductCmxJsonResult",
       );
 
-      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
       if (_errorMessageGetProducts == "") {
         TransferBetweenPackageProductModel
             .dataToTransferBetweenPackageProductModel(
-          data: SoapHelperResponseParameters.responseAsMap,
+          data: SoapRequestResponse.responseAsMap,
           listToAdd: _products,
         );
       }
@@ -192,7 +192,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     _justifications.clear();
     notifyListeners();
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           'simpleSearchValue': 'undefined',
@@ -204,14 +204,14 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         serviceASMX: "CeltaProductService.asmx",
       );
 
-      if (SoapHelperResponseParameters.errorMessage != "") {
+      if (SoapRequestResponse.errorMessage != "") {
         _errorMessageTypeStockAndJustifications =
-            SoapHelperResponseParameters.errorMessage;
+            SoapRequestResponse.errorMessage;
       }
       if (_errorMessageTypeStockAndJustifications == "") {
         TransferBetweenPackageJustificationsModel
             .resultAsStringToTransferBetweenPackageJustificationsModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _justifications,
         );
       } else {
@@ -222,7 +222,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
       }
 
       _errorMessageTypeStockAndJustifications =
-          SoapHelperResponseParameters.errorMessage;
+          SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
@@ -245,7 +245,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     );
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           'jsonAdjustStock': jsonEncode(jsonAdjustStock),
@@ -255,7 +255,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         typeOfResponse: "ConfirmAdjustStockResponse",
       );
 
-      _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;
+      _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 
       if (_errorMessageAdjustStock == "") {
         typeOperator = typeOperator
@@ -264,8 +264,8 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         _lastUpdatedQuantity = jsonAdjustStock["Quantity"]!.toString();
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
       }
-      _errorMessageAdjustStock = SoapHelperResponseParameters.errorMessage;
-      if (SoapHelperResponseParameters.errorMessage != "") {
+      _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
+      if (SoapRequestResponse.errorMessage != "") {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageAdjustStock,
           context: context,
@@ -310,7 +310,7 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     _destinyStockTypes.clear();
     notifyListeners();
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "undefined",
@@ -321,20 +321,20 @@ class TransferBetweenPackageProvider with ChangeNotifier {
         typeOfResult: "GetStockTypesResult",
       );
 
-      if (SoapHelperResponseParameters.errorMessage != "") {
+      if (SoapRequestResponse.errorMessage != "") {
         _errorMessageTypeStockAndJustifications =
-            SoapHelperResponseParameters.errorMessage;
+            SoapRequestResponse.errorMessage;
       }
 
       if (_errorMessageTypeStockAndJustifications == "") {
         TransferBetweenPackageTypeModel
             .resultAsStringToTransferBetweenPackageTypeModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _destinyStockTypes,
         );
         TransferBetweenPackageTypeModel
             .resultAsStringToTransferBetweenPackageTypeModel(
-          resultAsString: SoapHelperResponseParameters.responseAsString,
+          resultAsString: SoapRequestResponse.responseAsString,
           listToAdd: _originStockTypes,
         );
       } else {

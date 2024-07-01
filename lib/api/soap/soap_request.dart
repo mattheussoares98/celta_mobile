@@ -2,17 +2,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 
-import '../utils/utils.dart';
+import '../../utils/utils.dart';
 
-class SoapHelperResponseParameters {
-  static final SoapHelperResponseParameters _instance =
-      SoapHelperResponseParameters._internal();
+class SoapRequestResponse {
+  static final SoapRequestResponse _instance =
+      SoapRequestResponse._internal();
 
-  factory SoapHelperResponseParameters() {
+  factory SoapRequestResponse() {
     return _instance;
   }
 
-  SoapHelperResponseParameters._internal();
+  SoapRequestResponse._internal();
   static String get responseAsString => _responseAsString;
   static set responseAsString(String value) {
     _responseAsString = value;
@@ -28,7 +28,7 @@ class SoapHelperResponseParameters {
   static Map responseAsMap = {};
 }
 
-class SoapHelper {
+class SoapRequest {
   static Future<void> soapPost({
     required Map<String, dynamic> parameters,
     required String typeOfResponse,
@@ -37,8 +37,8 @@ class SoapHelper {
     required String serviceASMX,
   }) async {
     try {
-      SoapHelperResponseParameters.errorMessage = "";
-      SoapHelperResponseParameters.responseAsString = "";
+      SoapRequestResponse.errorMessage = "";
+      SoapRequestResponse.responseAsString = "";
       final soapHeaders = {
         'Content-Type': 'text/xml; charset=utf-8',
         'SOAPAction': 'http://celtaware.com.br/$SOAPAction',
@@ -85,7 +85,7 @@ class SoapHelper {
             if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
                     [typeOfResult] !=
                 null) {
-              SoapHelperResponseParameters.responseAsString =
+              SoapRequestResponse.responseAsString =
                   parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
                           [typeOfResult]
                       .toString();
@@ -97,7 +97,7 @@ class SoapHelper {
               typeOfResult: typeOfResult,
             )) {
               //no login não retorna nesse padrão de tags, por isso estava ocorrendo erro e por isso precisei criar esse tratamento
-              SoapHelperResponseParameters.responseAsMap =
+              SoapRequestResponse.responseAsMap =
                   parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
                       [typeOfResult]["diffgr:diffgram"]["NewDataSet"];
             }
@@ -106,29 +106,27 @@ class SoapHelper {
           if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
               .toString()
               .contains("sucesso")) {
-            SoapHelperResponseParameters.responseAsString =
+            SoapRequestResponse.responseAsString =
                 parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
                     ["status"];
           } else {
-            SoapHelperResponseParameters.errorMessage =
+            SoapRequestResponse.errorMessage =
                 parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
                     ["status"];
           }
         }
       } else {
-        SoapHelperResponseParameters.errorMessage =
+        SoapRequestResponse.errorMessage =
             DefaultErrorMessageToFindServer.ERROR_MESSAGE;
         // print(response.body);
         throw Exception('Failed to load data');
       }
     } catch (e) {
       //print("erro para fazer a requisição http: $e");
-      SoapHelperResponseParameters.errorMessage =
+      SoapRequestResponse.errorMessage =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
   }
-
-  var x = "y";
 }
 
 bool _validateResultHasPatternNewDataSet({

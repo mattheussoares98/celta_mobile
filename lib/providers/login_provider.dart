@@ -87,7 +87,7 @@ class LoginProvider with ChangeNotifier {
     }
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "user": user,
           "password": password,
@@ -97,7 +97,7 @@ class LoginProvider with ChangeNotifier {
         serviceASMX: "CeltaSecurityService.asmx",
         typeOfResult: "UserCanLoginJsonResult",
       );
-      _errorMessage = SoapHelperResponseParameters.errorMessage;
+      _errorMessage = SoapRequestResponse.errorMessage;
       if (_errorMessage != "") {
         ShowSnackbarMessage.showMessage(
           message: _errorMessage,
@@ -105,7 +105,7 @@ class LoginProvider with ChangeNotifier {
         );
       } else {
         Map resultAsMap =
-            json.decode(SoapHelperResponseParameters.responseAsString);
+            json.decode(SoapRequestResponse.responseAsString);
         // Map resultAsMap = resultAsList.asMap();
 
         final myTransformer = Xml2Json();

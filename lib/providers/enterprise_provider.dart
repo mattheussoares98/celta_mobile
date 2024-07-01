@@ -29,7 +29,7 @@ class EnterpriseProvider with ChangeNotifier {
     //porque está sendo chamado dentro de um setState
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "simpleSearchValue": "",
@@ -42,11 +42,11 @@ class EnterpriseProvider with ChangeNotifier {
       );
 
       EnterpriseModel.resultAsStringToEnterpriseModel(
-        data: SoapHelperResponseParameters.responseAsMap["Empresas"],
+        data: SoapRequestResponse.responseAsMap["Empresas"],
         listToAdd: _enterprises,
       );
 
-      _errorMessage = SoapHelperResponseParameters.errorMessage;
+      _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

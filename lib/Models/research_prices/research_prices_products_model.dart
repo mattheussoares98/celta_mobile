@@ -31,7 +31,7 @@ class ResearchPricesProductsModel {
 
   static List<ResearchPricesProductsModel> resultAsStringToProductsModel() {
     List responseAsList = json.decode(
-      SoapHelperResponseParameters.responseAsString,
+      SoapRequestResponse.responseAsString,
     );
 
     return responseAsList

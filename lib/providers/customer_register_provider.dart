@@ -188,7 +188,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     try {
       _updateJsonInsertCustomer(addressProvider);
       String jsonInsertCustomerEncoded = json.encode(_jsonInsertCustomer);
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "json": jsonInsertCustomerEncoded,
@@ -199,7 +199,7 @@ class CustomerRegisterProvider with ChangeNotifier {
         typeOfResult: "InsertUpdateCustomerResult",
       );
 
-      _errorMessageInsertCustomer = SoapHelperResponseParameters.errorMessage;
+      _errorMessageInsertCustomer = SoapRequestResponse.errorMessage;
 
       if (_errorMessageInsertCustomer == "") {
         clearAllDataInformed(addressProvider);

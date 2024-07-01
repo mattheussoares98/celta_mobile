@@ -32,7 +32,7 @@ class ResearchPricesResearchModel {
 
   static List<ResearchPricesResearchModel> convertResultToResearchModel() {
     List resultAsList =
-        json.decode(SoapHelperResponseParameters.responseAsString);
+        json.decode(SoapRequestResponse.responseAsString);
 
     return resultAsList
         .map((e) => ResearchPricesResearchModel.fromJson(e))

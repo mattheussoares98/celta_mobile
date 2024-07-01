@@ -523,7 +523,7 @@ class BuyRequestProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetProducts),
         },
@@ -533,13 +533,13 @@ class BuyRequestProvider with ChangeNotifier {
         typeOfResult: "GetProductsJsonResult",
       );
 
-      _errorMessageGetProducts = SoapHelperResponseParameters.errorMessage;
+      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
 
-      SoapHelperResponseParameters.responseAsString;
+      SoapRequestResponse.responseAsString;
 
       if (_errorMessageGetProducts == "") {
         BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _products,
         );
 
@@ -580,7 +580,7 @@ class BuyRequestProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetBuyer),
         },
@@ -590,11 +590,11 @@ class BuyRequestProvider with ChangeNotifier {
         typeOfResult: "GetEmployeeJsonResult",
       );
 
-      _errorMessageBuyer = SoapHelperResponseParameters.errorMessage;
+      _errorMessageBuyer = SoapRequestResponse.errorMessage;
 
       if (_errorMessageBuyer == "") {
         BuyRequestBuyerModel.responseAsStringToBuyRequestBuyerModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _buyers,
         );
         await _updateDataInDatabase();
@@ -629,7 +629,7 @@ class BuyRequestProvider with ChangeNotifier {
     if (isSearchingAgain!) notifyListeners();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "inclusiveBuy": true,
@@ -644,12 +644,12 @@ class BuyRequestProvider with ChangeNotifier {
         typeOfResult: "GetRequestTypesJsonResult",
       );
 
-      _errorMessageRequestsType = SoapHelperResponseParameters.errorMessage;
+      _errorMessageRequestsType = SoapRequestResponse.errorMessage;
 
       if (_errorMessageRequestsType == "") {
         BuyRequestRequestsTypeModel
             .responseAsStringToBuyRequestRequestsTypeModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _requestsType,
         );
         await _updateDataInDatabase();
@@ -689,7 +689,7 @@ class BuyRequestProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetSupplier),
         },
@@ -699,11 +699,11 @@ class BuyRequestProvider with ChangeNotifier {
         typeOfResult: "GetSupplierJsonResult",
       );
 
-      _errorMessageSupplier = SoapHelperResponseParameters.errorMessage;
+      _errorMessageSupplier = SoapRequestResponse.errorMessage;
 
       if (_errorMessageSupplier == "") {
         BuyRequestSupplierModel.responseAsStringToBuyRequestSupplierModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _suppliers,
         );
         await _updateDataInDatabase();
@@ -744,7 +744,7 @@ class BuyRequestProvider with ChangeNotifier {
     };
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetEnterprises),
         },
@@ -754,11 +754,11 @@ class BuyRequestProvider with ChangeNotifier {
         typeOfResult: "GetEnterprisesJsonByFiltersResult",
       );
 
-      _errorMessageEnterprises = SoapHelperResponseParameters.errorMessage;
+      _errorMessageEnterprises = SoapRequestResponse.errorMessage;
 
       if (_errorMessageEnterprises == "") {
         BuyRequestEnterpriseModel.responseAsStringToBuyRequestEnterpriseModel(
-          responseAsString: SoapHelperResponseParameters.responseAsString,
+          responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _enterprises,
         );
 
@@ -882,7 +882,7 @@ class BuyRequestProvider with ChangeNotifier {
 
     // Encontre correspondências na string
     Iterable<RegExpMatch> matches =
-        regex.allMatches(SoapHelperResponseParameters.responseAsString);
+        regex.allMatches(SoapRequestResponse.responseAsString);
 
     _lastRequestSavedNumber = matches.first.group(1).toString();
     expandLastRequestSavedNumbers = true;
@@ -895,7 +895,7 @@ class BuyRequestProvider with ChangeNotifier {
     _updateJsonBuyRequest();
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "json": '${json.encode(_jsonBuyRequest)}',
         },
@@ -905,7 +905,7 @@ class BuyRequestProvider with ChangeNotifier {
         typeOfResult: "InsertResult",
       );
 
-      _errorMessageInsertBuyRequest = SoapHelperResponseParameters.errorMessage;
+      _errorMessageInsertBuyRequest = SoapRequestResponse.errorMessage;
 
       if (_errorMessageInsertBuyRequest != "") {
         ShowSnackbarMessage.showMessage(
@@ -917,7 +917,7 @@ class BuyRequestProvider with ChangeNotifier {
       } else {
         _updateLastRequestNumber();
         ShowSnackbarMessage.showMessage(
-          message: SoapHelperResponseParameters.responseAsString,
+          message: SoapRequestResponse.responseAsString,
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );

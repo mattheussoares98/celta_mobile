@@ -70,7 +70,7 @@ class PriceConferenceProvider with ChangeNotifier {
     }
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
@@ -83,10 +83,10 @@ class PriceConferenceProvider with ChangeNotifier {
         typeOfResult: "GetProductCmxJsonResult",
       );
 
-      _errorMessage = SoapHelperResponseParameters.errorMessage;
+      _errorMessage = SoapRequestResponse.errorMessage;
       if (_errorMessage == "") {
         PriceConferenceProductsModel.resultAsStringToConsultPriceModel(
-          data: SoapHelperResponseParameters.responseAsMap,
+          data: SoapRequestResponse.responseAsMap,
           listToAdd: _products,
         );
       }
@@ -151,7 +151,7 @@ class PriceConferenceProvider with ChangeNotifier {
     bool newValue = !_products[index].EtiquetaPendente;
 
     try {
-      await SoapHelper.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
@@ -162,7 +162,7 @@ class PriceConferenceProvider with ChangeNotifier {
         SOAPAction: "SendToPrint",
         serviceASMX: "CeltaPriceConferenceService.asmx",
       );
-      _errorSendToPrint = SoapHelperResponseParameters.errorMessage;
+      _errorSendToPrint = SoapRequestResponse.errorMessage;
 
       if (_errorSendToPrint == "") {
         _products[index].EtiquetaPendente = !_products[index].EtiquetaPendente;
