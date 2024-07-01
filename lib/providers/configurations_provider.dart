@@ -36,7 +36,7 @@ class ConfigurationsProvider with ChangeNotifier {
       ConfigurationsModel(
         showInWeb: true,
         isConfigurationOfSearch: true,
-        title: "Código legado",
+        title: "Código legado (produto)",
         value: _useLegacyCode,
         changeValue: changeUseLegacyCode,
         subtitle: "Consultar os produtos somente pelo código legado",
@@ -44,7 +44,7 @@ class ConfigurationsProvider with ChangeNotifier {
       ConfigurationsModel(
         showInWeb: true,
         isConfigurationOfSearch: true,
-        title: "Código personalizado",
+        title: "Código personalizado (cliente)",
         value: _searchCustomerByPersonalizedCode,
         changeValue: changeSearchCustomerByPersonalizedCode,
         subtitle: "Consultar clientes somente pelo código personalizado",

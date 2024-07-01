@@ -28,17 +28,33 @@ class _ConfigurationsCheckboxState extends State<ConfigurationsCheckbox> {
                       (kIsWeb && !e.showInWeb)
                   ? Container()
                   : Card(
-                      child: CheckboxListTile(
-                        value: e.value,
-                        onChanged: (_) => {
-                          e.changeValue(),
+                      child: InkWell(
+                        onTap: () {
+                          e.changeValue();
                         },
-                        title: Text(e.title),
-                        subtitle: Text(
-                          e.subtitle,
-                          style: const TextStyle(
-                            fontSize: 13,
-                          ),
+                        child: Column(
+                          children: [
+                            CheckboxListTile(
+                              value: e.value,
+                              onChanged: (_) => {
+                                e.changeValue(),
+                              },
+                              title: Text(
+                                e.title,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                              child: Text(
+                                e.subtitle,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

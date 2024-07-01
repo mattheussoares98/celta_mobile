@@ -239,6 +239,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                   return StatefulBuilder(
                     builder: (context, setState) {
                       return AlertDialog(
+                        insetPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding: const EdgeInsets.all(8),
                         title: const FittedBox(
                           child: Text(
                             "Configurações de pesquisa",
