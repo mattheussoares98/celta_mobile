@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
-import '../models/soap/products/products.dart';
+import '../models/soap/soap.dart';
 import '../models/transfer_between_package/transfer_between_package.dart';
 import '../utils/utils.dart';
 import './providers.dart';
@@ -37,13 +37,11 @@ class TransferBetweenPackageProvider with ChangeNotifier {
   // List<TransferBetweenPackageTypeModel> _destinyPackage = [];
   // List<TransferBetweenPackageTypeModel> get destinyPackage => _destinyPackage;
 
-  List<TransferBetweenPackageTypeModel> _originStockTypes = [];
-  List<TransferBetweenPackageTypeModel> get originStockTypes =>
-      _originStockTypes;
+  List<GetStockTypesModel> _originStockTypes = [];
+  List<GetStockTypesModel> get originStockTypes => _originStockTypes;
 
-  List<TransferBetweenPackageTypeModel> _destinyStockTypes = [];
-  List<TransferBetweenPackageTypeModel> get destinyStockTypes =>
-      _destinyStockTypes;
+  List<GetStockTypesModel> _destinyStockTypes = [];
+  List<GetStockTypesModel> get destinyStockTypes => _destinyStockTypes;
 
   Map<String, dynamic> jsonAdjustStock = {
     "EnterpriseCode": -1, //esse parâmetro vem da tela de empresas
@@ -296,41 +294,14 @@ class TransferBetweenPackageProvider with ChangeNotifier {
     _destinyStockTypes.clear();
     notifyListeners();
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "simpleSearchValue": "undefined",
-        },
-        typeOfResponse: "GetStockTypesResponse",
-        SOAPAction: "GetStockTypes",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetStockTypesResult",
-      );
-
-      if (SoapRequestResponse.errorMessage != "") {
-        _errorMessageTypeStockAndJustifications =
-            SoapRequestResponse.errorMessage;
-      }
-
-      if (_errorMessageTypeStockAndJustifications == "") {
-        TransferBetweenPackageTypeModel
-            .resultAsStringToTransferBetweenPackageTypeModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _destinyStockTypes,
-        );
-        TransferBetweenPackageTypeModel
-            .resultAsStringToTransferBetweenPackageTypeModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _originStockTypes,
-        );
-      } else {
-        ShowSnackbarMessage.showMessage(
-          message: _errorMessageTypeStockAndJustifications,
-          context: context,
-        );
-      }
+      await SoapHelper.getStockTypesModel(_destinyStockTypes);
+      await SoapHelper.getStockTypesModel(_originStockTypes);
     } catch (e) {
       //print("Erro para efetuar a requisição stockTypes: $e");
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageTypeStockAndJustifications,
+        context: context,
+      );
     }
     notifyListeners();
   }
