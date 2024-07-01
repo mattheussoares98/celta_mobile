@@ -17,8 +17,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   List<GetStockTypesModel> _destinyStockTypes = [];
   List<GetStockTypesModel> get destinyStockTypes => _destinyStockTypes;
 
-  List<JustificationsModel> _justifications = [];
-  List<JustificationsModel> get justifications => _justifications;
+  List<GetJustificationsModel> _justifications = [];
+  List<GetJustificationsModel> get justifications => _justifications;
 
   int get productsCount => _products.length;
   int get justificationsCount => _justifications.length;
@@ -224,40 +224,18 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     _justifications.clear();
     notifyListeners();
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          'simpleSearchValue': 'undefined',
-          "justificationTransferType": 1,
-        },
-        typeOfResponse: "GetJustificationsResponse",
-        typeOfResult: "GetJustificationsResult",
-        SOAPAction: "GetJustifications",
-        serviceASMX: "CeltaProductService.asmx",
+      await SoapHelper.getJustifications(
+        justificationTransferType: 1,
+        listToAdd: _justifications,
       );
-
-      if (SoapRequestResponse.errorMessage != "") {
-        _errorMessageTypeStockAndJustifications =
-            SoapRequestResponse.errorMessage;
-      }
-      if (_errorMessageTypeStockAndJustifications == "") {
-        JustificationsModel.resultAsStringToJustificationsModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _justifications,
-        );
-      } else {
-        ShowSnackbarMessage.showMessage(
-          message: _errorMessageTypeStockAndJustifications,
-          context: context,
-        );
-      }
-
-      _errorMessageTypeStockAndJustifications =
-          SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
           DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageTypeStockAndJustifications,
+        context: context,
+      );
     }
     notifyListeners();
   }

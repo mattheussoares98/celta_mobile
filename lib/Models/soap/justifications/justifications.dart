@@ -1,1 +1,1 @@
-export './justifications_model.dart';
+export 'get_justifications_model.dart';

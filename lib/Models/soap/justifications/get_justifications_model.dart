@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../soap.dart';
 
-class JustificationsModel {
+class GetJustificationsModel {
   final int CodigoInterno_JustMov; /*  37, */
   final String Descricao_JustMov; /*  "SUBTRAIR", */
   final String FlagTipo_JustMov; /*  "Saída", */
@@ -10,7 +10,7 @@ class JustificationsModel {
   final String Nome_TipoEstoque; /*  "", */
   final GetStockTypesModel CodigoInterno_TipoEstoque;
 
-  JustificationsModel({
+  GetJustificationsModel({
     required this.CodigoInterno_JustMov,
     required this.Descricao_JustMov,
     required this.FlagTipo_JustMov,
@@ -38,7 +38,7 @@ class JustificationsModel {
 // }
     resultAsList.forEach((element) {
       listToAdd.add(
-        JustificationsModel(
+        GetJustificationsModel(
           CodigoInterno_JustMov: element["CodigoInterno_JustMov"],
           Descricao_JustMov: element["Descricao_JustMov"],
           FlagTipo_JustMov:

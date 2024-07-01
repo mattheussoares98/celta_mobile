@@ -65,44 +65,33 @@ class SoapHelper {
     }
   }
 
-  // static Future<void> getJustifications({
-  //   required int justificationTransferType,
-  //   required GetJustificationsModel listToAdd,
-  // }) async {
-  //   try {
-  //     await SoapRequest.soapPost(
-  //       parameters: {
-  //         "crossIdentity": UserData.crossIdentity,
-  //         'simpleSearchValue': 'undefined',
-  //         "justificationTransferType": justificationTransferType,
-  //       },
-  //       typeOfResponse: "GetJustificationsResponse",
-  //       typeOfResult: "GetJustificationsResult",
-  //       SOAPAction: "GetJustifications",
-  //       serviceASMX: "CeltaProductService.asmx",
-  //     );
+  static Future<void> getJustifications({
+    required int justificationTransferType,
+    required List<GetJustificationsModel> listToAdd,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          'simpleSearchValue': 'undefined',
+          "justificationTransferType": justificationTransferType,
+        },
+        typeOfResponse: "GetJustificationsResponse",
+        typeOfResult: "GetJustificationsResult",
+        SOAPAction: "GetJustifications",
+        serviceASMX: "CeltaProductService.asmx",
+      );
 
-  //     if (SoapRequestResponse.errorMessage != "") {
-  //       throw Exception();
-  //     }
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
 
-  //     if (_errorMessageTypeStockAndJustifications == "") {
-  //       TransferBetweenStocksJustificationsModel
-  //           .resultAsStringToTransferBetweenStocksJustificationsModel(
-  //         resultAsString: SoapRequestResponse.responseAsString,
-  //         listToAdd: _justifications,
-  //       );
-  //     } else {
-  //       ShowSnackbarMessage.showMessage(
-  //         message: _errorMessageTypeStockAndJustifications,
-  //         context: context,
-  //       );
-  //     }
-
-  //     _errorMessageTypeStockAndJustifications =
-  //         SoapRequestResponse.errorMessage;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
+      GetJustificationsModel.resultAsStringToJustificationsModel(
+        resultAsString: SoapRequestResponse.responseAsString,
+        listToAdd: listToAdd,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
