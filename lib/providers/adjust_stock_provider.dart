@@ -153,6 +153,8 @@ class AdjustStockProvider with ChangeNotifier {
         isLegacyCodeSearch: isLegacyCodeSearch,
         routineTypeInt: 4,
       );
+
+      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

@@ -9,24 +9,26 @@ Widget lastBuyEntrance({
   required BuildContext context,
   required GetProductJsonModel product,
 }) =>
-    product.lastBuyEntrance == null
-        ? const Center(
-            child: Text("Não há compras para esse produto"),
-          )
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Divider(),
+        const Padding(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Text(
+            "ÚLTIMA COMPRA",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        if (product.lastBuyEntrance == null)
+          const Text("Não há compras para esse produto"),
+        if (product.lastBuyEntrance != null)
+          Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: 30.0),
-                child: Text(
-                  "ÚLTIMA COMPRA",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Número",
                 value: product.lastBuyEntrance!.number,
@@ -48,4 +50,6 @@ Widget lastBuyEntrance({
                     .toBrazilianNumber(),
               ),
             ],
-          );
+          ),
+      ],
+    );

@@ -104,7 +104,7 @@ class SoapHelper {
         listToAdd: listToAdd,
       );
     } catch (e) {
-      rethrow;
+      e;
     }
   }
 

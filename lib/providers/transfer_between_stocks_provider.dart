@@ -155,6 +155,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         isLegacyCodeSearch: configurationsProvider.useLegacyCode,
         routineTypeInt: 4,
       );
+
+      _errorMessageGetProducts = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -295,7 +297,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
             jsonAdjustStock["Quantity"]!.toString());
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
       }
-      
+
       if (SoapRequestResponse.errorMessage != "") {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageAdjustStock,

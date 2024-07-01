@@ -101,7 +101,7 @@ class _ProductItemState extends State<ProductItem> {
                 const SizedBox(width: 10),
                 Expanded(
                   flex: 2,
-                  child: _costsAndStocks(
+                  child: _costsStocksAndLastBuyEntrance(
                     context: context,
                     product: widget.product,
                   ),
@@ -155,18 +155,14 @@ class _ProductItemState extends State<ProductItem> {
   }
 }
 
-Widget _costsAndStocks({
+Widget _costsStocksAndLastBuyEntrance({
   required BuildContext context,
   required GetProductJsonModel product,
 }) {
-  final PageController _pageController = PageController(initialPage: 0);
   return InkWell(
     child: Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
-        // border: Border.all(
-        //   color: Colors.white,
-        // ),
         borderRadius: BorderRadius.circular(10),
       ),
       padding: const EdgeInsets.all(3),
@@ -198,65 +194,18 @@ Widget _costsAndStocks({
               insetPadding:
                   const EdgeInsets.symmetric(vertical: 70, horizontal: 20),
               content: Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                width: MediaQuery.of(context).size.height * 0.95,
-                child: PageView(
-                  controller: _pageController,
-                  children: [
-                    costs(context: context, product: product),
-                    stocks(context: context, product: product),
-                    lastBuyEntrance(context: context, product: product),
-                  ],
+                height: MediaQuery.of(context).size.height * 0.75,
+                width: MediaQuery.of(context).size.width * 0.95,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      costs(context: context, product: product),
+                      stocks(context: context, product: product),
+                      lastBuyEntrance(context: context, product: product),
+                    ],
+                  ),
                 ),
               ),
-              actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: TextButton(
-                        onPressed: () {
-                          _pageController.animateToPage(
-                            0,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: const FittedBox(child: Text('Custos')),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      flex: 3,
-                      child: TextButton(
-                        onPressed: () {
-                          _pageController.animateToPage(
-                            1,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: const FittedBox(child: Text('Estoques')),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      flex: 4,
-                      child: TextButton(
-                        onPressed: () {
-                          _pageController.animateToPage(
-                            2,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: const FittedBox(child: Text('Última compra')),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             );
           });
     },

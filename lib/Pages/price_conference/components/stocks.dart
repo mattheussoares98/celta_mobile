@@ -30,31 +30,37 @@ Widget stocks({
             child: Text("Não há estoques para esse produto"),
           )
         : ListView.builder(
-            shrinkWrap: true,
-            itemCount: product.stocks!.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  child: Text(
-                    "ESTOQUES",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: product.stocks!.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return const Column(
+                children: [
+                  Divider(),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      "ESTOQUES",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                );
-              }
-              final stock = product.stocks![index - 1];
-
-              return TitleAndSubtitle.titleAndSubtitle(
-                title: stock.stockName,
-                value: stock.stockQuantity.toString().toBrazilianNumber(3),
-                subtitleColor: _stockColor(
-                  stockQuantity: stock.stockQuantity.toString(),
-                  context: context,
-                ),
+                ],
               );
-            },
-          );
+            }
+            final stock = product.stocks![index - 1];
+        
+            return TitleAndSubtitle.titleAndSubtitle(
+              title: stock.stockName,
+              value: stock.stockQuantity.toString().toBrazilianNumber(3),
+              subtitleColor: _stockColor(
+                stockQuantity: stock.stockQuantity.toString(),
+                context: context,
+              ),
+            );
+          },
+        );

@@ -11,7 +11,7 @@ Widget costs({
     Column(
       children: [
         const Padding(
-          padding: EdgeInsets.only(bottom: 30.0),
+          padding: EdgeInsets.only(bottom: 10.0),
           child: Text(
             "CUSTOS",
             style: TextStyle(
@@ -26,56 +26,48 @@ Widget costs({
           ),
           title: "Fiscal",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.fiscalLiquidCost,
           ),
           title: "Fiscal líquido",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.liquidCost,
           ),
           title: "Líquido",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.liquidCostMidle,
           ),
           title: "Líquido médio",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.operationalCost,
           ),
           title: "Operacional",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.realCost,
           ),
           title: "Real",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.realLiquidCost,
           ),
           title: "Real líquido",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.replacementCost,
           ),
           title: "Reposição",
         ),
-        const SizedBox(height: 8),
         TitleAndSubtitle.titleAndSubtitle(
           value: ConvertString.convertToBRL(
             product.replacementCostMidle,

@@ -58,6 +58,8 @@ class PriceConferenceProvider with ChangeNotifier {
         isLegacyCodeSearch: isLegacyCodeSearch,
         routineTypeInt: 4,
       );
+
+      _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição : $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
