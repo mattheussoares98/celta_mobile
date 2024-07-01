@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
-import '../models/products/products.dart';
+import '../models/soap/products/products.dart';
 import '../models/adjust_stock/adjust_stock.dart';
 import '../models/adjust_stock/adjust_stock_type_model.dart';
 import '../utils/utils.dart';

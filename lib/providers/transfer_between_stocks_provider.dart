@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import '../api/api.dart';
 import '../components/global_widgets/global_widgets.dart';
-import '../models/products/products.dart';
+import '../models/soap/products/products.dart';
 import '../models/transfer_between_stocks/transfer_between_stocks.dart';
 import '../utils/utils.dart';
 import './providers.dart';

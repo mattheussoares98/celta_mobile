@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/global_widgets/global_widgets.dart';
-import '../../../models/products/products.dart';
+import '../../../models/soap/products/products.dart';
 import '../../../utils/utils.dart';
 
 Color _stockColor({

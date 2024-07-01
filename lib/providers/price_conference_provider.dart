@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
-import '../models/products/products.dart';
+import '../models/soap/products/products.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 

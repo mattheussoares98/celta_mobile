@@ -1,4 +1,4 @@
-import '../../models/products/products.dart';
+import '../../models/soap/products/products.dart';
 import '../../utils/utils.dart';
 import 'soap.dart';
 
