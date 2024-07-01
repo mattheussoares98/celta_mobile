@@ -271,14 +271,13 @@ class AdjustStockProvider with ChangeNotifier {
     _updateProductCodeAndProductPackingCode(indexOfProduct);
 
     try {
-      await SoapHelper.confirmAdjustStock(
-        typeOperator: typeOperator,
-        jsonAdjustStock: jsonAdjustStock,
-        lastUpdatedQuantity: _lastUpdatedQuantity,
-        indexOfLastProductChangedStockQuantity:
-            _indexOfLastProductChangedStockQuantity,
-        indexOfProduct: indexOfProduct,
-      );
+      await SoapHelper.confirmAdjustStock(jsonAdjustStock);
+
+      typeOperator = typeOperator
+          .replaceAll(RegExp(r'\('), '')
+          .replaceAll(RegExp(r'\)'), '');
+      _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
+      _indexOfLastProductChangedStockQuantity = indexOfProduct;
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

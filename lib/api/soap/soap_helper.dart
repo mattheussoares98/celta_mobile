@@ -95,13 +95,9 @@ class SoapHelper {
     }
   }
 
-  static Future<void> confirmAdjustStock({
-    required String typeOperator,
-    required Map<String, dynamic> jsonAdjustStock,
-    required String lastUpdatedQuantity,
-    required int indexOfLastProductChangedStockQuantity,
-    required int indexOfProduct,
-  }) async {
+  static Future<void> confirmAdjustStock(
+    Map<String, dynamic> jsonAdjustStock,
+  ) async {
     try {
       await SoapRequest.soapPost(
         parameters: {
@@ -116,11 +112,6 @@ class SoapHelper {
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
       }
-      typeOperator = typeOperator
-          .replaceAll(RegExp(r'\('), '')
-          .replaceAll(RegExp(r'\)'), '');
-      lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
-      indexOfLastProductChangedStockQuantity = indexOfProduct;
     } catch (e) {
       rethrow;
     }
