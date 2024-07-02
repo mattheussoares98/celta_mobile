@@ -1,6 +1,8 @@
 import '../../models/inventory/inventory.dart';
 import '../../models/soap/soap.dart';
 
+import '../../models/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'soap.dart';
 
@@ -190,6 +192,45 @@ class SoapHelper {
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
       }
+    } catch (e) {
+      e;
+    }
+  }
+
+  static Future<void> getProductTransferRequest({
+    required String enterpriseOriginCode,
+    required String enterpriseDestinyCode,
+    required String requestTypeCode,
+    required String searchValue,
+    required ConfigurationsProvider configurationsProvider,
+    required List<TransferRequestProductsModel> products,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseOriginCode,
+          "enterpriseDestinyCode": enterpriseDestinyCode,
+          "requestTypeCode": requestTypeCode,
+          "searchValue": searchValue,
+          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+          // "routineTypeInt": 3,
+        },
+        typeOfResponse: "GetProductJsonByRequestTypeResponse",
+        SOAPAction: "GetProductJsonByRequestType",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductJsonByRequestTypeResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      TransferRequestProductsModel
+          .responseAsStringToTransferRequestProductsModel(
+        responseAsString: SoapRequestResponse.responseAsString,
+        listToAdd: products,
+      );
     } catch (e) {
       e;
     }
