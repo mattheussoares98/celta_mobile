@@ -7,11 +7,13 @@ class ConfigurationsProvider with ChangeNotifier {
   bool _useAutoScan = false;
   bool _useLegacyCode = false;
   bool _searchCustomerByPersonalizedCode = false;
+  bool _searchProductByPersonalizedCode = false;
 
   bool get useAutoScan => _useAutoScan;
   bool get useLegacyCode => _useLegacyCode;
   bool get searchCustomerByPersonalizedCode =>
       _searchCustomerByPersonalizedCode;
+  bool get searchProductByPersonalizedCode => _searchProductByPersonalizedCode;
 
   List<ConfigurationsModel> _configurations = [];
 
@@ -41,6 +43,13 @@ class ConfigurationsProvider with ChangeNotifier {
       ),
       ConfigurationsModel(
         isConfigurationOfSearch: true,
+        title: "Código personalizado (produto)",
+        value: _useLegacyCode,
+        changeValue: changeUseLegacyCode,
+        subtitle: "Consultar os produtos somente pelo código personalizado",
+      ),
+      ConfigurationsModel(
+        isConfigurationOfSearch: true,
         title: "Código personalizado (cliente)",
         value: _searchCustomerByPersonalizedCode,
         changeValue: changeSearchCustomerByPersonalizedCode,
@@ -56,9 +65,12 @@ class ConfigurationsProvider with ChangeNotifier {
     _useLegacyCode = await PrefsInstance.getUseLegacyCode();
     _searchCustomerByPersonalizedCode =
         await PrefsInstance.getSearchCustomerByPersonalizedCode();
+    _searchProductByPersonalizedCode =
+        await PrefsInstance.getSearchProductByPersonalizedCode();
     _configurations[0].value = _useAutoScan;
     _configurations[1].value = _useLegacyCode;
     _configurations[2].value = _searchCustomerByPersonalizedCode;
+    _configurations[3].value = _searchProductByPersonalizedCode;
 
     notifyListeners();
   }
@@ -83,6 +95,15 @@ class ConfigurationsProvider with ChangeNotifier {
     notifyListeners();
     await PrefsInstance.setSearchCustomerByPersonalizedCode(
       _searchCustomerByPersonalizedCode,
+    );
+  }
+
+  void changeSearchProductByPersonalizedCode() async {
+    _configurations[3].value = !_configurations[3].value;
+    _searchProductByPersonalizedCode = !_searchProductByPersonalizedCode;
+    notifyListeners();
+    await PrefsInstance.setSearchProductByPersonalizedCode(
+      _searchProductByPersonalizedCode,
     );
   }
 }

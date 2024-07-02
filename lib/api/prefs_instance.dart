@@ -18,6 +18,7 @@ enum _PrefsKeys {
   useLegacyCode,
   showMessageToUseCameraInWebVersion,
   searchCustomerByPersonalizedCode,
+  searchProductByPersonalizedCode,
   buyRequest,
   notifications,
   usersInformations,
@@ -189,6 +190,13 @@ class PrefsInstance {
     );
   }
 
+  static Future<void> setSearchProductByPersonalizedCode(bool newValue) async {
+    await _setBool(
+      prefsKeys: _PrefsKeys.searchProductByPersonalizedCode,
+      value: newValue,
+    );
+  }
+
   static Future<void> restoreUserAndEnterpriseNameOrUrlCCS({
     required TextEditingController enterpriseNameOrUrlCCSController,
     required TextEditingController userController,
@@ -216,6 +224,12 @@ class PrefsInstance {
   static Future<bool> getSearchCustomerByPersonalizedCode() async {
     return await _getBool(
       prefsKeys: _PrefsKeys.searchCustomerByPersonalizedCode,
+    );
+  }
+
+  static Future<bool> getSearchProductByPersonalizedCode() async {
+    return await _getBool(
+      prefsKeys: _PrefsKeys.searchProductByPersonalizedCode,
     );
   }
 
