@@ -167,4 +167,31 @@ class SoapHelper {
       e;
     }
   }
+
+  static Future<void> getProductReceipt({
+    required int searchTypeInt,
+    required String searchValue,
+    required int docCode,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "searchTypeInt": searchTypeInt,
+          "searchValue": searchValue,
+          "grDocCode": docCode,
+        },
+        typeOfResponse: "GetProductResponse",
+        SOAPAction: "GetProduct",
+        serviceASMX: "CeltaGoodsReceivingService.asmx",
+        typeOfResult: "GetProductResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+    } catch (e) {
+      e;
+    }
+  }
 }

@@ -5,6 +5,7 @@ import '../components/global_widgets/global_widgets.dart';
 import '../models/receipt/receipt.dart';
 import '../utils/utils.dart';
 import './providers.dart';
+
 class ReceiptProvider with ChangeNotifier {
   final List<ReceiptModel> _receipts = [];
 
@@ -257,17 +258,10 @@ class ReceiptProvider with ChangeNotifier {
     if (isSearchAllCountedProducts) searchTypeInt = 19;
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "searchTypeInt": searchTypeInt,
-          "searchValue": controllerText,
-          "grDocCode": docCode,
-        },
-        typeOfResponse: "GetProductResponse",
-        SOAPAction: "GetProduct",
-        serviceASMX: "CeltaGoodsReceivingService.asmx",
-        typeOfResult: "GetProductResult",
+      await SoapHelper.getProductReceipt(
+        searchTypeInt: searchTypeInt,
+        searchValue: controllerText,
+        docCode: docCode,
       );
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
@@ -298,8 +292,8 @@ class ReceiptProvider with ChangeNotifier {
     required BuildContext context,
     bool isSearchingAgain = false,
   }) async {
-    if(_isLoadingReceipt) return;
-    
+    if (_isLoadingReceipt) return;
+
     _receipts.clear();
     _isLoadingReceipt = true;
     _errorMessage = '';
@@ -326,8 +320,7 @@ class ReceiptProvider with ChangeNotifier {
 
       if (_errorMessage == "") {
         ReceiptModel.dataToReceiptModel(
-          data:
-              SoapRequestResponse.responseAsMap["ProcRecebDocumentos"],
+          data: SoapRequestResponse.responseAsMap["ProcRecebDocumentos"],
           listToAdd: _receipts,
         );
       }
