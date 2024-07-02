@@ -66,6 +66,18 @@ class SoapHelper {
   }
 
   static int _getSearchTypeInt(ConfigurationsProvider configurationsProvider) {
+    //  {
+    //       Generic = 0,
+    //       SaleRequest = 1,
+    //       BuyRequest = 2,
+    //       TransferRequest = 3,
+    //       PriceConference = 4,
+    //       AdjustStock = 5,
+    //       GoodsReceiving = 6,
+    //       ResearchOfPrice = 7,
+    //       AdjustSalePrice = 8
+    //       Todos produtos contados no recebimento = 19,
+    //   }
     if (configurationsProvider.useLegacyCode) {
       return 11;
     } else if (configurationsProvider.searchProductByPersonalizedCode) {
@@ -181,15 +193,18 @@ class SoapHelper {
   }
 
   static Future<void> getProductReceipt({
-    required int searchTypeInt,
+    required ConfigurationsProvider configurationsProvider,
     required String searchValue,
     required int docCode,
+    required bool isSearchAllCountedProducts,
   }) async {
     try {
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "searchTypeInt": searchTypeInt,
+          "searchTypeInt": isSearchAllCountedProducts
+              ? 19
+              : _getSearchTypeInt(configurationsProvider),
           "searchValue": searchValue,
           "grDocCode": docCode,
         },

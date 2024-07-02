@@ -253,15 +253,12 @@ class ReceiptProvider with ChangeNotifier {
     _isLoadingProducts = true;
     notifyListeners();
 
-    int searchTypeInt = 0;
-    if (configurationsProvider.useLegacyCode) searchTypeInt = 11;
-    if (isSearchAllCountedProducts) searchTypeInt = 19;
-
     try {
       await SoapHelper.getProductReceipt(
-        searchTypeInt: searchTypeInt,
+        configurationsProvider: configurationsProvider,
         searchValue: controllerText,
         docCode: docCode,
+        isSearchAllCountedProducts: isSearchAllCountedProducts,
       );
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
