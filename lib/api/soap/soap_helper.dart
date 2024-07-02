@@ -146,7 +146,7 @@ class SoapHelper {
   static Future<void> getProductInventory({
     required int enterpriseCode,
     required String searchValue,
-    required int searchTypeInt,
+    required ConfigurationsProvider configurationsProvider,
     required int inventoryProcessCode,
     required int inventoryCountingCode,
     required List<InventoryProductModel> products,
@@ -157,7 +157,7 @@ class SoapHelper {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": searchValue,
-          "searchTypeInt": searchTypeInt,
+          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
           "inventoryProcessCode": inventoryProcessCode,
           "inventoryCountingCode": inventoryCountingCode,
         },

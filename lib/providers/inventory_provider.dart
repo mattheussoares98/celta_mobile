@@ -150,7 +150,7 @@ class InventoryProvider with ChangeNotifier {
       await SoapHelper.getProductInventory(
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
-        searchTypeInt: configurationsProvider.useLegacyCode ? 11 : 0,
+        configurationsProvider: configurationsProvider,
         inventoryProcessCode: inventoryProcessCode,
         inventoryCountingCode: inventoryCountingCode,
         products: _products,
