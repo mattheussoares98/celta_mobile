@@ -45,7 +45,7 @@ class ConfigurationsProvider with ChangeNotifier {
         isConfigurationOfSearch: true,
         title: "Código personalizado (produto)",
         value: _useLegacyCode,
-        changeValue: changeUseLegacyCode,
+        changeValue: changeSearchProductByPersonalizedCode,
         subtitle: "Consultar os produtos somente pelo código personalizado",
       ),
       ConfigurationsModel(
@@ -89,21 +89,21 @@ class ConfigurationsProvider with ChangeNotifier {
     await PrefsInstance.setUseLegacyCodeValue(_useLegacyCode);
   }
 
-  void changeSearchCustomerByPersonalizedCode() async {
-    _configurations[2].value = !_configurations[2].value;
-    _searchCustomerByPersonalizedCode = !_searchCustomerByPersonalizedCode;
-    notifyListeners();
-    await PrefsInstance.setSearchCustomerByPersonalizedCode(
-      _searchCustomerByPersonalizedCode,
-    );
-  }
-
   void changeSearchProductByPersonalizedCode() async {
-    _configurations[3].value = !_configurations[3].value;
+    _configurations[2].value = !_configurations[2].value;
     _searchProductByPersonalizedCode = !_searchProductByPersonalizedCode;
     notifyListeners();
     await PrefsInstance.setSearchProductByPersonalizedCode(
       _searchProductByPersonalizedCode,
+    );
+  }
+
+  void changeSearchCustomerByPersonalizedCode() async {
+    _configurations[3].value = !_configurations[3].value;
+    _searchCustomerByPersonalizedCode = !_searchCustomerByPersonalizedCode;
+    notifyListeners();
+    await PrefsInstance.setSearchCustomerByPersonalizedCode(
+      _searchCustomerByPersonalizedCode,
     );
   }
 }
