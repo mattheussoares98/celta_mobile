@@ -152,7 +152,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
         listToAdd: _products,
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
-        isLegacyCodeSearch: configurationsProvider.useLegacyCode,
+        configurationsProvider: configurationsProvider,
         routineTypeInt: 4,
       );
 

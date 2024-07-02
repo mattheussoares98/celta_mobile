@@ -65,11 +65,21 @@ class SoapHelper {
     }
   }
 
+  static int _getSearchTypeInt(ConfigurationsProvider configurationsProvider) {
+    if (configurationsProvider.useLegacyCode) {
+      return 11;
+    } else if (configurationsProvider.searchProductByPersonalizedCode) {
+      return 5;
+    } else {
+      return 0;
+    }
+  }
+
   static Future<void> getProductJsonModel({
     required List<GetProductJsonModel> listToAdd,
     required int enterpriseCode,
     required String searchValue,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
     required int routineTypeInt,
   }) async {
     try {
@@ -78,7 +88,7 @@ class SoapHelper {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": searchValue,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
           //   {
           // Generic = 0,
           // SaleRequest = 1,
