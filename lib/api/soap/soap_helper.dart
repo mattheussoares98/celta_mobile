@@ -1,3 +1,4 @@
+import '../../models/inventory/inventory.dart';
 import '../../models/soap/soap.dart';
 
 import '../../utils/utils.dart';
@@ -125,6 +126,43 @@ class SoapHelper {
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
       }
+    } catch (e) {
+      e;
+    }
+  }
+
+  static Future<void> getProductInventory({
+    required int enterpriseCode,
+    required String searchValue,
+    required int searchTypeInt,
+    required int inventoryProcessCode,
+    required int inventoryCountingCode,
+    required List<InventoryProductModel> products,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseCode,
+          "searchValue": searchValue,
+          "searchTypeInt": searchTypeInt,
+          "inventoryProcessCode": inventoryProcessCode,
+          "inventoryCountingCode": inventoryCountingCode,
+        },
+        typeOfResponse: "GetProductResponse",
+        SOAPAction: "GetProduct",
+        serviceASMX: "CeltaInventoryService.asmx",
+        typeOfResult: "GetProductResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      InventoryProductModel.responseInStringToInventoryProductModel(
+        data: SoapRequestResponse.responseAsMap["Produtos"],
+        listToAdd: products,
+      );
     } catch (e) {
       e;
     }
