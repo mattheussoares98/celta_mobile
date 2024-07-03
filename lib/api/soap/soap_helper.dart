@@ -238,7 +238,7 @@ class SoapHelper {
           "enterpriseDestinyCode": enterpriseDestinyCode,
           "requestTypeCode": requestTypeCode,
           "searchValue": searchValue,
-          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
           // "routineTypeInt": 3,
         },
         typeOfResponse: "GetProductJsonByRequestTypeResponse",

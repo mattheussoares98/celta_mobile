@@ -614,7 +614,7 @@ class TransferRequestProvider with ChangeNotifier {
         requestTypeCode: requestTypeCode.toString(),
         searchValue: value,
         configurationsProvider: configurationsProvider,
-        products: products,
+        products: _products,
       );
 
       _errorMessageProducts = SoapRequestResponse.errorMessage;
