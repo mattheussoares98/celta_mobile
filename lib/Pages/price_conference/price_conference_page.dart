@@ -77,12 +77,15 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                 ),
                 if (priceConferenceProvider.errorMessage != "" &&
                     priceConferenceProvider.productsCount == 0)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ErrorMessage(
-                        errorMessage: priceConferenceProvider.errorMessage),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ErrorMessage(
+                          errorMessage: priceConferenceProvider.errorMessage),
+                    ),
                   ),
-                if (!priceConferenceProvider.isLoading)
+                if (!priceConferenceProvider.isLoading &&
+                    priceConferenceProvider.products.isNotEmpty)
                   ProductItems(
                     priceConferenceProvider: priceConferenceProvider,
                     internalEnterpriseCode: arguments["CodigoInterno_Empresa"],

@@ -134,7 +134,7 @@ class AdjustStockProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _errorMessageGetProducts = "";
     _isLoadingProducts = true;
@@ -150,7 +150,7 @@ class AdjustStockProvider with ChangeNotifier {
         listToAdd: _products,
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
-        isLegacyCodeSearch: isLegacyCodeSearch,
+        configurationsProvider: configurationsProvider,
         routineTypeInt: 4,
       );
 
@@ -182,7 +182,7 @@ class AdjustStockProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
       controllerText: controllerText,
       context: context,
-      isLegacyCodeSearch: configurationsProvider.useLegacyCode,
+      configurationsProvider: configurationsProvider,
     );
 
     if (_errorMessageGetProducts != "") {

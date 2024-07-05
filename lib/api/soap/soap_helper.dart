@@ -1,5 +1,8 @@
+import '../../models/inventory/inventory.dart';
 import '../../models/soap/soap.dart';
 
+import '../../models/transfer_request/transfer_request.dart';
+import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'soap.dart';
 
@@ -62,11 +65,33 @@ class SoapHelper {
     }
   }
 
+  static int _getSearchTypeInt(ConfigurationsProvider configurationsProvider) {
+    //  {
+    //       Generic = 0,
+    //       SaleRequest = 1,
+    //       BuyRequest = 2,
+    //       TransferRequest = 3,
+    //       PriceConference = 4,
+    //       AdjustStock = 5,
+    //       GoodsReceiving = 6,
+    //       ResearchOfPrice = 7,
+    //       AdjustSalePrice = 8
+    //       Todos produtos contados no recebimento = 19,
+    //   }
+    if (configurationsProvider.useLegacyCode) {
+      return 11;
+    } else if (configurationsProvider.searchProductByPersonalizedCode) {
+      return 5;
+    } else {
+      return 0;
+    }
+  }
+
   static Future<void> getProductJsonModel({
     required List<GetProductJsonModel> listToAdd,
     required int enterpriseCode,
     required String searchValue,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
     required int routineTypeInt,
   }) async {
     try {
@@ -75,7 +100,7 @@ class SoapHelper {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": searchValue,
-          "searchTypeInt": isLegacyCodeSearch ? 11 : 0,
+          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
           //   {
           // Generic = 0,
           // SaleRequest = 1,
@@ -125,6 +150,112 @@ class SoapHelper {
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
       }
+    } catch (e) {
+      e;
+    }
+  }
+
+  static Future<void> getProductInventory({
+    required int enterpriseCode,
+    required String searchValue,
+    required ConfigurationsProvider configurationsProvider,
+    required int inventoryProcessCode,
+    required int inventoryCountingCode,
+    required List<InventoryProductModel> products,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseCode,
+          "searchValue": searchValue,
+          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
+          "inventoryProcessCode": inventoryProcessCode,
+          "inventoryCountingCode": inventoryCountingCode,
+        },
+        typeOfResponse: "GetProductResponse",
+        SOAPAction: "GetProduct",
+        serviceASMX: "CeltaInventoryService.asmx",
+        typeOfResult: "GetProductResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      InventoryProductModel.responseInStringToInventoryProductModel(
+        data: SoapRequestResponse.responseAsMap["Produtos"],
+        listToAdd: products,
+      );
+    } catch (e) {
+      e;
+    }
+  }
+
+  static Future<void> getProductReceipt({
+    required ConfigurationsProvider configurationsProvider,
+    required String searchValue,
+    required int docCode,
+    required bool isSearchAllCountedProducts,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "searchTypeInt": isSearchAllCountedProducts
+              ? 19
+              : _getSearchTypeInt(configurationsProvider),
+          "searchValue": searchValue,
+          "grDocCode": docCode,
+        },
+        typeOfResponse: "GetProductResponse",
+        SOAPAction: "GetProduct",
+        serviceASMX: "CeltaGoodsReceivingService.asmx",
+        typeOfResult: "GetProductResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+    } catch (e) {
+      e;
+    }
+  }
+
+  static Future<void> getProductTransferRequest({
+    required String enterpriseOriginCode,
+    required String enterpriseDestinyCode,
+    required String requestTypeCode,
+    required String searchValue,
+    required ConfigurationsProvider configurationsProvider,
+    required List<TransferRequestProductsModel> products,
+  }) async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseOriginCode,
+          "enterpriseDestinyCode": enterpriseDestinyCode,
+          "requestTypeCode": requestTypeCode,
+          "searchValue": searchValue,
+          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
+          // "routineTypeInt": 3,
+        },
+        typeOfResponse: "GetProductJsonByRequestTypeResponse",
+        SOAPAction: "GetProductJsonByRequestType",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductJsonByRequestTypeResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      TransferRequestProductsModel
+          .responseAsStringToTransferRequestProductsModel(
+        responseAsString: SoapRequestResponse.responseAsString,
+        listToAdd: products,
+      );
     } catch (e) {
       e;
     }

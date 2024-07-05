@@ -578,8 +578,7 @@ class TransferRequestProvider with ChangeNotifier {
         typeOfResult: "GetEnterprisesDestinyJsonResult",
       );
 
-      _errorMessageDestinyEnterprise =
-          SoapRequestResponse.errorMessage;
+      _errorMessageDestinyEnterprise = SoapRequestResponse.errorMessage;
 
       if (_errorMessageDestinyEnterprise == "") {
         TransferDestinyEnterpriseModel.resultAsStringToDestinyEnterpriseModel(
@@ -609,31 +608,16 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseOriginCode,
-          "enterpriseDestinyCode": enterpriseDestinyCode,
-          "requestTypeCode": requestTypeCode,
-          "searchValue": value,
-          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
-          // "routineTypeInt": 3,
-        },
-        typeOfResponse: "GetProductJsonByRequestTypeResponse",
-        SOAPAction: "GetProductJsonByRequestType",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductJsonByRequestTypeResult",
+      await SoapHelper.getProductTransferRequest(
+        enterpriseOriginCode: enterpriseOriginCode.toString(),
+        enterpriseDestinyCode: enterpriseDestinyCode.toString(),
+        requestTypeCode: requestTypeCode.toString(),
+        searchValue: value,
+        configurationsProvider: configurationsProvider,
+        products: _products,
       );
 
       _errorMessageProducts = SoapRequestResponse.errorMessage;
-
-      if (_errorMessageProducts == "") {
-        TransferRequestProductsModel
-            .responseAsStringToTransferRequestProductsModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _products,
-        );
-      }
     } catch (e) {
       //print('deu erro para consultar os produtos: $e');
       _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
@@ -678,8 +662,7 @@ class TransferRequestProvider with ChangeNotifier {
         serviceASMX: "CeltaTransferRequestService.asmx",
       );
 
-      _errorMessageSaveTransferRequest =
-          SoapRequestResponse.errorMessage;
+      _errorMessageSaveTransferRequest = SoapRequestResponse.errorMessage;
 
       if (_errorMessageSaveTransferRequest == "") {
         await clearCart(

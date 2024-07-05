@@ -8,8 +8,8 @@ import './providers.dart';
 class PriceConferenceProvider with ChangeNotifier {
   List<GetProductJsonModel> _products = [];
 
-  get products => _products;
-  get productsCount => _products.length;
+  List<GetProductJsonModel> get products => _products;
+  int get productsCount => _products.length;
   bool _isLoading = false;
 
   get isLoading => _isLoading;
@@ -30,7 +30,7 @@ class PriceConferenceProvider with ChangeNotifier {
     required int enterpriseCode,
     required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
-    required bool isLegacyCodeSearch,
+    required ConfigurationsProvider configurationsProvider,
   }) async {
     _products.clear();
     _errorMessage = "";
@@ -55,7 +55,7 @@ class PriceConferenceProvider with ChangeNotifier {
         listToAdd: _products,
         enterpriseCode: enterpriseCode,
         searchValue: controllerText,
-        isLegacyCodeSearch: isLegacyCodeSearch,
+        configurationsProvider: configurationsProvider,
         routineTypeInt: 4,
       );
 
@@ -80,7 +80,7 @@ class PriceConferenceProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
       controllerText: controllerText,
       context: context,
-      isLegacyCodeSearch: configurationsProvider.useLegacyCode,
+      configurationsProvider: configurationsProvider,
     );
 
     if (_errorMessage != "") {

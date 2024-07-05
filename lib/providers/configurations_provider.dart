@@ -7,11 +7,13 @@ class ConfigurationsProvider with ChangeNotifier {
   bool _useAutoScan = false;
   bool _useLegacyCode = false;
   bool _searchCustomerByPersonalizedCode = false;
+  bool _searchProductByPersonalizedCode = false;
 
   bool get useAutoScan => _useAutoScan;
   bool get useLegacyCode => _useLegacyCode;
   bool get searchCustomerByPersonalizedCode =>
       _searchCustomerByPersonalizedCode;
+  bool get searchProductByPersonalizedCode => _searchProductByPersonalizedCode;
 
   List<ConfigurationsModel> _configurations = [];
 
@@ -41,6 +43,13 @@ class ConfigurationsProvider with ChangeNotifier {
       ),
       ConfigurationsModel(
         isConfigurationOfSearch: true,
+        title: "Código personalizado (produto)",
+        value: _useLegacyCode,
+        changeValue: changeSearchProductByPersonalizedCode,
+        subtitle: "Consultar os produtos somente pelo código personalizado",
+      ),
+      ConfigurationsModel(
+        isConfigurationOfSearch: true,
         title: "Código personalizado (cliente)",
         value: _searchCustomerByPersonalizedCode,
         changeValue: changeSearchCustomerByPersonalizedCode,
@@ -56,9 +65,12 @@ class ConfigurationsProvider with ChangeNotifier {
     _useLegacyCode = await PrefsInstance.getUseLegacyCode();
     _searchCustomerByPersonalizedCode =
         await PrefsInstance.getSearchCustomerByPersonalizedCode();
+    _searchProductByPersonalizedCode =
+        await PrefsInstance.getSearchProductByPersonalizedCode();
     _configurations[0].value = _useAutoScan;
     _configurations[1].value = _useLegacyCode;
     _configurations[2].value = _searchCustomerByPersonalizedCode;
+    _configurations[3].value = _searchProductByPersonalizedCode;
 
     notifyListeners();
   }
@@ -77,8 +89,17 @@ class ConfigurationsProvider with ChangeNotifier {
     await PrefsInstance.setUseLegacyCodeValue(_useLegacyCode);
   }
 
-  void changeSearchCustomerByPersonalizedCode() async {
+  void changeSearchProductByPersonalizedCode() async {
     _configurations[2].value = !_configurations[2].value;
+    _searchProductByPersonalizedCode = !_searchProductByPersonalizedCode;
+    notifyListeners();
+    await PrefsInstance.setSearchProductByPersonalizedCode(
+      _searchProductByPersonalizedCode,
+    );
+  }
+
+  void changeSearchCustomerByPersonalizedCode() async {
+    _configurations[3].value = !_configurations[3].value;
     _searchCustomerByPersonalizedCode = !_searchCustomerByPersonalizedCode;
     notifyListeners();
     await PrefsInstance.setSearchCustomerByPersonalizedCode(

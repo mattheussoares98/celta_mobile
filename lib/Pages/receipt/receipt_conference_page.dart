@@ -25,7 +25,6 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
     _consultedProductController.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context, listen: true);
@@ -85,36 +84,41 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   },
                   consultProductController: _consultProductController,
                 ),
-                if (receiptProvider.errorMessageGetProducts != "")
-                  ErrorMessage(
-                    errorMessage: receiptProvider.errorMessageGetProducts,
+                if (receiptProvider.errorMessageGetProducts != "" &&
+                    receiptProvider.productsCount == 0)
+                  Expanded(
+                    child: ErrorMessage(
+                      errorMessage: receiptProvider.errorMessageGetProducts,
+                    ),
                   ),
-                ConferenceProductsItems(
-                  getProductsWithCamera: () async {
-                    FocusScope.of(context).unfocus();
-                    _consultProductController.clear();
-
-                    _consultProductController.text =
-                        await ScanBarCode.scanBarcode(context);
-
-                    if (_consultProductController.text != "") {
-                      await receiptProvider.getProducts(
-                        configurationsProvider: configurationsProvider,
-                        docCode: arguments["grDocCode"],
-                        controllerText: _consultProductController.text,
-                        context: context,
-                        isSearchAllCountedProducts: false,
-                      );
-                    }
-
-                    if (receiptProvider.productsCount > 0) {
+                if (receiptProvider.errorMessageGetProducts == "" &&
+                    receiptProvider.productsCount > 0)
+                  ConferenceProductsItems(
+                    getProductsWithCamera: () async {
+                      FocusScope.of(context).unfocus();
                       _consultProductController.clear();
-                    }
-                  },
-                  docCode: arguments["grDocCode"],
-                  consultedProductController: _consultedProductController,
-                  consultProductController: _consultProductController,
-                ),
+
+                      _consultProductController.text =
+                          await ScanBarCode.scanBarcode(context);
+
+                      if (_consultProductController.text != "") {
+                        await receiptProvider.getProducts(
+                          configurationsProvider: configurationsProvider,
+                          docCode: arguments["grDocCode"],
+                          controllerText: _consultProductController.text,
+                          context: context,
+                          isSearchAllCountedProducts: false,
+                        );
+                      }
+
+                      if (receiptProvider.productsCount > 0) {
+                        _consultProductController.clear();
+                      }
+                    },
+                    docCode: arguments["grDocCode"],
+                    consultedProductController: _consultedProductController,
+                    consultProductController: _consultProductController,
+                  ),
                 if (MediaQuery.of(context).viewInsets.bottom == 0)
                   ConsultProductWithoutEanButton(
                     docCode: arguments["grDocCode"],

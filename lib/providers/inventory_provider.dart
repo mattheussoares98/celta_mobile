@@ -105,8 +105,7 @@ class InventoryProvider with ChangeNotifier {
         );
 
         InventoryCountingsModel.responseInStringToInventoryCountingsModel(
-          data: SoapRequestResponse
-              .responseAsMap["InventariosContagens"],
+          data: SoapRequestResponse.responseAsMap["InventariosContagens"],
           listToAdd: _countings,
         );
       }
@@ -148,28 +147,16 @@ class InventoryProvider with ChangeNotifier {
     }
 
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": controllerText,
-          "searchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
-          "inventoryProcessCode": inventoryProcessCode,
-          "inventoryCountingCode": inventoryCountingCode,
-        },
-        typeOfResponse: "GetProductResponse",
-        SOAPAction: "GetProduct",
-        serviceASMX: "CeltaInventoryService.asmx",
-        typeOfResult: "GetProductResult",
+      await SoapHelper.getProductInventory(
+        enterpriseCode: enterpriseCode,
+        searchValue: controllerText,
+        configurationsProvider: configurationsProvider,
+        inventoryProcessCode: inventoryProcessCode,
+        inventoryCountingCode: inventoryCountingCode,
+        products: _products,
       );
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
-      if (_errorMessageGetProducts == "") {
-        InventoryProductModel.responseInStringToInventoryProductModel(
-          data: SoapRequestResponse.responseAsMap["Produtos"],
-          listToAdd: _products,
-        );
-      }
     } catch (e) {
       //print("Erro para efetuar a requisição : $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
