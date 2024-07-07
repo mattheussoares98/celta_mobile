@@ -8,7 +8,7 @@ import './providers.dart';
 class PriceConferenceProvider with ChangeNotifier {
   List<GetProductJsonModel> _products = [];
 
-  List<GetProductJsonModel> get products => _products;
+  List<GetProductJsonModel> get products => [..._products];
   int get productsCount => _products.length;
   bool _isLoading = false;
 
