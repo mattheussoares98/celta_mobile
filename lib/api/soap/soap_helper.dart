@@ -308,4 +308,35 @@ class SoapHelper {
       e;
     }
   }
+
+  static Future<void> getBuyers({
+    required List<BuyRequestBuyerModel> buyers,
+  }) async {
+    try {
+      Map jsonGetBuyer = {
+        "CrossIdentity": UserData.crossIdentity,
+      };
+
+      await SoapRequest.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetBuyer),
+        },
+        typeOfResponse: "GetEmployeeJsonResponse",
+        SOAPAction: "GetEmployeeJson",
+        serviceASMX: "CeltaEmployeeService.asmx",
+        typeOfResult: "GetEmployeeJsonResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      BuyRequestBuyerModel.responseAsStringToBuyRequestBuyerModel(
+        responseAsString: SoapRequestResponse.responseAsString,
+        listToAdd: buyers,
+      );
+    } catch (e) {
+      e;
+    }
+  }
 }

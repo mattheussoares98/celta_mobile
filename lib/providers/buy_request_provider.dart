@@ -542,36 +542,12 @@ class BuyRequestProvider with ChangeNotifier {
     _clearBuyers();
     if (isSearchingAgain!) notifyListeners();
 
-    Map jsonGetBuyer = {
-      "CrossIdentity": UserData.crossIdentity,
-      // "SearchValue": "teste",
-      // "RoutineInt": 2,
-      // "Routine": 2,
-      // "TopQuantity": 1,
-      // "SearchTypeInt": 0,
-      // "RequestTypeCode": 0,
-      // "SupplierCode": 0,
-      // "SearchType": 0,
-    };
-
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "filters": json.encode(jsonGetBuyer),
-        },
-        typeOfResponse: "GetEmployeeJsonResponse",
-        SOAPAction: "GetEmployeeJson",
-        serviceASMX: "CeltaEmployeeService.asmx",
-        typeOfResult: "GetEmployeeJsonResult",
-      );
+      await SoapHelper.getBuyers(buyers: _buyers);
 
       _errorMessageBuyer = SoapRequestResponse.errorMessage;
 
       if (_errorMessageBuyer == "") {
-        BuyRequestBuyerModel.responseAsStringToBuyRequestBuyerModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _buyers,
-        );
         await _updateDataInDatabase();
       } else {
         ShowSnackbarMessage.showMessage(
