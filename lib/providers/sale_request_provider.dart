@@ -788,7 +788,7 @@ class SaleRequestProvider with ChangeNotifier {
       "SearchValue": controllerText,
       "RequestTypeCode": requestTypeCode,
       "EnterpriseCodes": [enterpriseCode],
-      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+      "SearchTypeInt": SoapHelper.getSearchTypeInt(configurationsProvider),
       "RoutineInt": 1,
       // "SupplierCode": _selectedSupplier!.Code,
       // "EnterpriseDestinyCode": 0,

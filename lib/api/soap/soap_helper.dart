@@ -65,7 +65,7 @@ class SoapHelper {
     }
   }
 
-  static int _getSearchTypeInt(ConfigurationsProvider configurationsProvider) {
+  static int getSearchTypeInt(ConfigurationsProvider configurationsProvider) {
     //  {
     //       Generic = 0,
     //       SaleRequest = 1,
@@ -100,7 +100,7 @@ class SoapHelper {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": searchValue,
-          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
+          "searchTypeInt": getSearchTypeInt(configurationsProvider),
           //   {
           // Generic = 0,
           // SaleRequest = 1,
@@ -169,7 +169,7 @@ class SoapHelper {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
           "searchValue": searchValue,
-          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
+          "searchTypeInt": getSearchTypeInt(configurationsProvider),
           "inventoryProcessCode": inventoryProcessCode,
           "inventoryCountingCode": inventoryCountingCode,
         },
@@ -204,7 +204,7 @@ class SoapHelper {
           "crossIdentity": UserData.crossIdentity,
           "searchTypeInt": isSearchAllCountedProducts
               ? 19
-              : _getSearchTypeInt(configurationsProvider),
+              : getSearchTypeInt(configurationsProvider),
           "searchValue": searchValue,
           "grDocCode": docCode,
         },
@@ -238,7 +238,7 @@ class SoapHelper {
           "enterpriseDestinyCode": enterpriseDestinyCode,
           "requestTypeCode": requestTypeCode,
           "searchValue": searchValue,
-          "searchTypeInt": _getSearchTypeInt(configurationsProvider),
+          "searchTypeInt": getSearchTypeInt(configurationsProvider),
           // "routineTypeInt": 3,
         },
         typeOfResponse: "GetProductJsonByRequestTypeResponse",
