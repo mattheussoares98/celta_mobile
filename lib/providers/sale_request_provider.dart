@@ -659,7 +659,7 @@ class SaleRequestProvider with ChangeNotifier {
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
-    } else if (configurationsProvider.searchCustomerByPersonalizedCode) {
+    } else if (configurationsProvider.customerPersonalizedCode?.value == true) {
       await _getCustomersOldSearch(
         searchTypeInt: 4, //PersonalizedCode
         controllerText: controllerText,

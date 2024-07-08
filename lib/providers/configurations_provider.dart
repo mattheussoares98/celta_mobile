@@ -4,11 +4,6 @@ import '../api/api.dart';
 import '../models/configurations/configurations.dart';
 
 class ConfigurationsProvider with ChangeNotifier {
-  bool _searchCustomerByPersonalizedCode = false;
-
-  bool get searchCustomerByPersonalizedCode =>
-      _searchCustomerByPersonalizedCode;
-
   List<ConfigurationsModel> _configurations = [];
 
   // Instância única da classe
@@ -25,6 +20,10 @@ class ConfigurationsProvider with ChangeNotifier {
 
   ConfigurationsModel? get productPersonalizedCode => _productPersonalizedCode;
   ConfigurationsModel? _productPersonalizedCode;
+
+  ConfigurationsModel? get customerPersonalizedCode =>
+      _customerPersonalizedCode;
+  ConfigurationsModel? _customerPersonalizedCode;
 
   ConfigurationsProvider._() {
     _autoScan = ConfigurationsModel(
@@ -52,17 +51,19 @@ class ConfigurationsProvider with ChangeNotifier {
       subtitle: "Consultar os produtos somente pelo código personalizado",
     );
 
+    _customerPersonalizedCode = ConfigurationsModel(
+      isConfigurationOfSearch: true,
+      title: "Código personalizado (cliente)",
+      value: false,
+      updateValue: changeSearchCustomerByPersonalizedCode,
+      subtitle: "Consultar clientes somente pelo código personalizado",
+    );
+
     _configurations = [
       _autoScan!,
       _legacyCode!,
       _productPersonalizedCode!,
-      ConfigurationsModel(
-        isConfigurationOfSearch: true,
-        title: "Código personalizado (cliente)",
-        value: _searchCustomerByPersonalizedCode,
-        updateValue: changeSearchCustomerByPersonalizedCode,
-        subtitle: "Consultar clientes somente pelo código personalizado",
-      ),
+      _customerPersonalizedCode!,
     ];
   }
 
@@ -73,11 +74,8 @@ class ConfigurationsProvider with ChangeNotifier {
     _legacyCode?.value = await PrefsInstance.getUseLegacyCode();
     _productPersonalizedCode?.value =
         await PrefsInstance.getSearchProductByPersonalizedCode();
-
-    _searchCustomerByPersonalizedCode =
+    _customerPersonalizedCode?.value =
         await PrefsInstance.getSearchCustomerByPersonalizedCode();
-
-    _configurations[2].value = _searchCustomerByPersonalizedCode;
 
     notifyListeners();
   }
@@ -110,11 +108,11 @@ class ConfigurationsProvider with ChangeNotifier {
   }
 
   void changeSearchCustomerByPersonalizedCode() async {
-    _configurations[3].value = !_configurations[3].value;
-    _searchCustomerByPersonalizedCode = !_searchCustomerByPersonalizedCode;
+    bool newValue = !_customerPersonalizedCode!.value;
+
+    _customerPersonalizedCode!.value = newValue;
+
     notifyListeners();
-    await PrefsInstance.setSearchCustomerByPersonalizedCode(
-      _searchCustomerByPersonalizedCode,
-    );
+    await PrefsInstance.setSearchCustomerByPersonalizedCode(newValue);
   }
 }
