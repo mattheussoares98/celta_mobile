@@ -56,6 +56,14 @@ class _SearchWidgetState extends State<SearchWidget> {
     }
   }
 
+  String _getHintText(ConfigurationsProvider configurationsProvider) {
+    if (configurationsProvider.legacyCode?.value == true) {
+      return "Código legado";
+    } else {
+      return widget.hintText;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     FocusNode focusNode = widget.focusNodeConsultProduct;
@@ -108,9 +116,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       color: widget.isLoading ? Colors.grey : Colors.red,
                     ),
                   ),
-                  hintText: configurationsProvider.useLegacyCode == true
-                      ? "Código legado"
-                      : widget.hintText,
+                  hintText: _getHintText(configurationsProvider),
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Row(

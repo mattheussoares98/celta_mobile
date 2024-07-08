@@ -78,7 +78,7 @@ class SoapHelper {
     //       AdjustSalePrice = 8
     //       Todos produtos contados no recebimento = 19,
     //   }
-    if (configurationsProvider.useLegacyCode) {
+    if (configurationsProvider.legacyCode?.value == true) {
       return 11;
     } else if (configurationsProvider.searchProductByPersonalizedCode) {
       return 5;

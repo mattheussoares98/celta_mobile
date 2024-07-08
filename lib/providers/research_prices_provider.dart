@@ -145,8 +145,7 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "InsertUpdateResearchOfPriceResult",
       );
 
-      _errorAssociateConcurrentToResearch =
-          SoapRequestResponse.errorMessage;
+      _errorAssociateConcurrentToResearch = SoapRequestResponse.errorMessage;
 
       if (_errorAssociateConcurrentToResearch.isNotEmpty) {
         ShowSnackbarMessage.showMessage(
@@ -158,8 +157,7 @@ class ResearchPricesProvider with ChangeNotifier {
       }
     } catch (e) {
       // print(e.toString());
-      _errorAssociateConcurrentToResearch =
-          SoapRequestResponse.errorMessage;
+      _errorAssociateConcurrentToResearch = SoapRequestResponse.errorMessage;
     }
 
     _isLoadingAssociateConcurrentToResearch = false;
@@ -477,7 +475,8 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
       "SearchValue": searchProductControllerText,
-      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+      "SearchTypeInt":
+          configurationsProvider.legacyCode?.value == true ? 11 : 0,
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
@@ -555,8 +554,7 @@ class ResearchPricesProvider with ChangeNotifier {
         typeOfResult: "GetProductsJsonResult",
       );
 
-      _errorGetNotAssociatedsProducts =
-          SoapRequestResponse.errorMessage;
+      _errorGetNotAssociatedsProducts = SoapRequestResponse.errorMessage;
 
       if (_errorGetNotAssociatedsProducts == "") {
         _notAssociatedsProducts.addAll(

@@ -4,11 +4,9 @@ import '../api/api.dart';
 import '../models/configurations/configurations.dart';
 
 class ConfigurationsProvider with ChangeNotifier {
-  bool _useLegacyCode = false;
   bool _searchCustomerByPersonalizedCode = false;
   bool _searchProductByPersonalizedCode = false;
 
-  bool get useLegacyCode => _useLegacyCode;
   bool get searchCustomerByPersonalizedCode =>
       _searchCustomerByPersonalizedCode;
   bool get searchProductByPersonalizedCode => _searchProductByPersonalizedCode;
@@ -24,6 +22,9 @@ class ConfigurationsProvider with ChangeNotifier {
   ConfigurationsModel? get autoScan => _autoScan;
   ConfigurationsModel? _autoScan;
 
+  ConfigurationsModel? get legacyCode => _legacyCode;
+  ConfigurationsModel? _legacyCode;
+
   ConfigurationsProvider._() {
     _autoScan = ConfigurationsModel(
       isConfigurationOfSearch: false,
@@ -34,19 +35,21 @@ class ConfigurationsProvider with ChangeNotifier {
           "Ao confirmar a alteração de uma quantidade, a câmera será aberta automaticamente para ler o código de barras e consultar o próximo produto",
     );
 
+    _legacyCode = ConfigurationsModel(
+      isConfigurationOfSearch: true,
+      title: "Código legado (produto)",
+      value: false,
+      updateValue: changeUseLegacyCode,
+      subtitle: "Consultar os produtos somente pelo código legado",
+    );
+
     _configurations = [
       _autoScan!,
-      ConfigurationsModel(
-        isConfigurationOfSearch: true,
-        title: "Código legado (produto)",
-        value: _useLegacyCode,
-        updateValue: changeUseLegacyCode,
-        subtitle: "Consultar os produtos somente pelo código legado",
-      ),
+      _legacyCode!,
       ConfigurationsModel(
         isConfigurationOfSearch: true,
         title: "Código personalizado (produto)",
-        value: _useLegacyCode,
+        value: _searchProductByPersonalizedCode,
         updateValue: changeSearchProductByPersonalizedCode,
         subtitle: "Consultar os produtos somente pelo código personalizado",
       ),
@@ -64,13 +67,12 @@ class ConfigurationsProvider with ChangeNotifier {
 
   Future<void> restoreConfigurations() async {
     _autoScan?.value = await PrefsInstance.getUseAutoScan();
-    _useLegacyCode = await PrefsInstance.getUseLegacyCode();
+    _legacyCode?.value = await PrefsInstance.getUseLegacyCode();
     _searchCustomerByPersonalizedCode =
         await PrefsInstance.getSearchCustomerByPersonalizedCode();
     _searchProductByPersonalizedCode =
         await PrefsInstance.getSearchProductByPersonalizedCode();
 
-    _configurations[1].value = _useLegacyCode;
     _configurations[2].value = _searchCustomerByPersonalizedCode;
     _configurations[3].value = _searchProductByPersonalizedCode;
 
@@ -87,10 +89,12 @@ class ConfigurationsProvider with ChangeNotifier {
   }
 
   void changeUseLegacyCode() async {
-    _configurations[1].value = !_configurations[1].value;
-    _useLegacyCode = !_useLegacyCode;
+    bool newValue = !_legacyCode!.value;
+
+    _legacyCode!.value = newValue;
+
     notifyListeners();
-    await PrefsInstance.setUseLegacyCodeValue(_useLegacyCode);
+    await PrefsInstance.setUseLegacyCodeValue(newValue);
   }
 
   void changeSearchProductByPersonalizedCode() async {
