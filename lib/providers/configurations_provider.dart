@@ -94,8 +94,14 @@ class ConfigurationsProvider with ChangeNotifier {
 
     _legacyCode!.value = newValue;
 
-    notifyListeners();
     await PrefsInstance.setUseLegacyCodeValue(newValue);
+
+    if (_productPersonalizedCode?.value == true) {
+      _productPersonalizedCode?.value = false;
+      await PrefsInstance.setSearchProductByPersonalizedCode(false);
+    }
+
+    notifyListeners();
   }
 
   void changeSearchProductByPersonalizedCode() async {
@@ -103,8 +109,13 @@ class ConfigurationsProvider with ChangeNotifier {
 
     _productPersonalizedCode!.value = newValue;
 
-    notifyListeners();
     await PrefsInstance.setSearchProductByPersonalizedCode(newValue);
+
+    if (_legacyCode?.value == true) {
+      _legacyCode?.value = false;
+      await PrefsInstance.setUseLegacyCodeValue(false);
+    }
+    notifyListeners();
   }
 
   void changeSearchCustomerByPersonalizedCode() async {
