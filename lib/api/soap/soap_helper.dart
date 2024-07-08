@@ -80,7 +80,7 @@ class SoapHelper {
     //   }
     if (configurationsProvider.legacyCode?.value == true) {
       return 11;
-    } else if (configurationsProvider.searchProductByPersonalizedCode) {
+    } else if (configurationsProvider.productPersonalizedCode?.value == true) {
       return 5;
     } else {
       return 0;

@@ -59,6 +59,8 @@ class _SearchWidgetState extends State<SearchWidget> {
   String _getHintText(ConfigurationsProvider configurationsProvider) {
     if (configurationsProvider.legacyCode?.value == true) {
       return "Código legado";
+    } else if (configurationsProvider.productPersonalizedCode?.value == true) {
+      return "Código personalizado";
     } else {
       return widget.hintText;
     }
