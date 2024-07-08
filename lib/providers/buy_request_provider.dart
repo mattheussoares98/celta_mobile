@@ -508,47 +508,22 @@ class BuyRequestProvider with ChangeNotifier {
     quantityController.text = "";
     notifyListeners();
 
-    Map jsonGetProducts = {
-      "CrossIdentity": UserData.crossIdentity,
-      "RoutineInt": 2,
-      "SearchValue": searchValue,
-      "RequestTypeCode": _selectedRequestModel!.Code,
-      "EnterpriseCodes":
-          _enterprisesSelecteds.map((e) => e.EnterpriseCode).toList(),
-      "SupplierCode": _selectedSupplier!.Code,
-      // "EnterpriseDestinyCode": 0,
-      "SearchTypeInt": SoapHelper.getSearchTypeInt(configurationsProvider),
-      // "SearchType": 0,
-      // "Routine": 0,
-    };
-
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "filters": json.encode(jsonGetProducts),
-        },
-        typeOfResponse: "GetProductsJsonResponse",
-        SOAPAction: "GetProductsJson",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductsJsonResult",
+      await SoapHelper.getProductBuyRequest(
+        searchValue: searchValue,
+        configurationsProvider: configurationsProvider,
+        selectedRequestModelCode: _selectedRequestModel!.Code,
+        enterpriseCodes:
+            _enterprisesSelecteds.map((e) => e.EnterpriseCode).toList(),
+        selectedSupplierCode: _selectedSupplier!.Code,
+        products: _products,
       );
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
 
-      SoapRequestResponse.responseAsString;
-
-      if (_errorMessageGetProducts == "") {
-        BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _products,
-        );
-
-        _updateProductWithProductCart();
-
-        _orderProductsUpByPlu();
-      }
+      _updateProductWithProductCart();
+      _orderProductsUpByPlu();
     } catch (e) {
-      //print("Erro para obter os produtos: $e");
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoadingProducts = false;
@@ -567,36 +542,12 @@ class BuyRequestProvider with ChangeNotifier {
     _clearBuyers();
     if (isSearchingAgain!) notifyListeners();
 
-    Map jsonGetBuyer = {
-      "CrossIdentity": UserData.crossIdentity,
-      // "SearchValue": "teste",
-      // "RoutineInt": 2,
-      // "Routine": 2,
-      // "TopQuantity": 1,
-      // "SearchTypeInt": 0,
-      // "RequestTypeCode": 0,
-      // "SupplierCode": 0,
-      // "SearchType": 0,
-    };
-
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "filters": json.encode(jsonGetBuyer),
-        },
-        typeOfResponse: "GetEmployeeJsonResponse",
-        SOAPAction: "GetEmployeeJson",
-        serviceASMX: "CeltaEmployeeService.asmx",
-        typeOfResult: "GetEmployeeJsonResult",
-      );
+      await SoapHelper.getBuyers(buyers: _buyers);
 
       _errorMessageBuyer = SoapRequestResponse.errorMessage;
 
       if (_errorMessageBuyer == "") {
-        BuyRequestBuyerModel.responseAsStringToBuyRequestBuyerModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _buyers,
-        );
         await _updateDataInDatabase();
       } else {
         ShowSnackbarMessage.showMessage(

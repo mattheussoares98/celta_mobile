@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import '../../models/buy_request/buy_request.dart';
 import '../../models/inventory/inventory.dart';
 import '../../models/soap/soap.dart';
 
@@ -255,6 +258,82 @@ class SoapHelper {
           .responseAsStringToTransferRequestProductsModel(
         responseAsString: SoapRequestResponse.responseAsString,
         listToAdd: products,
+      );
+    } catch (e) {
+      e;
+    }
+  }
+
+  static Future<void> getProductBuyRequest({
+    required String searchValue,
+    required ConfigurationsProvider configurationsProvider,
+    required int selectedRequestModelCode,
+    required List<int> enterpriseCodes,
+    required int selectedSupplierCode,
+    required List<BuyRequestProductsModel> products,
+  }) async {
+    Map jsonGetProducts = {
+      "CrossIdentity": UserData.crossIdentity,
+      "RoutineInt": 2,
+      "SearchValue": searchValue,
+      "RequestTypeCode": selectedRequestModelCode,
+      "EnterpriseCodes": enterpriseCodes,
+      "SupplierCode": selectedSupplierCode,
+      // "EnterpriseDestinyCode": 0,
+      "SearchTypeInt": getSearchTypeInt(configurationsProvider),
+      // "SearchType": 0,
+      // "Routine": 0,
+    };
+
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetProducts),
+        },
+        typeOfResponse: "GetProductsJsonResponse",
+        SOAPAction: "GetProductsJson",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetProductsJsonResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
+        responseAsString: SoapRequestResponse.responseAsString,
+        listToAdd: products,
+      );
+    } catch (e) {
+      e;
+    }
+  }
+
+  static Future<void> getBuyers({
+    required List<BuyRequestBuyerModel> buyers,
+  }) async {
+    try {
+      Map jsonGetBuyer = {
+        "CrossIdentity": UserData.crossIdentity,
+      };
+
+      await SoapRequest.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetBuyer),
+        },
+        typeOfResponse: "GetEmployeeJsonResponse",
+        SOAPAction: "GetEmployeeJson",
+        serviceASMX: "CeltaEmployeeService.asmx",
+        typeOfResult: "GetEmployeeJsonResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      BuyRequestBuyerModel.responseAsStringToBuyRequestBuyerModel(
+        responseAsString: SoapRequestResponse.responseAsString,
+        listToAdd: buyers,
       );
     } catch (e) {
       e;
