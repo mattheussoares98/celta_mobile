@@ -517,7 +517,7 @@ class BuyRequestProvider with ChangeNotifier {
           _enterprisesSelecteds.map((e) => e.EnterpriseCode).toList(),
       "SupplierCode": _selectedSupplier!.Code,
       // "EnterpriseDestinyCode": 0,
-      "SearchTypeInt": configurationsProvider.useLegacyCode ? 11 : 0,
+      "SearchTypeInt": SoapHelper.getSearchTypeInt(configurationsProvider),
       // "SearchType": 0,
       // "Routine": 0,
     };
