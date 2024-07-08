@@ -337,7 +337,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                       _selectedIndex = -1;
                     });
 
-                    if (configurationsProvider.useAutoScan) {
+                    if (configurationsProvider.autoScan?.value == true) {
                       await widget.getProductsWithCamera();
                     }
                   },

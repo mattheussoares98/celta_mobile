@@ -2,14 +2,14 @@ class ConfigurationsModel {
   bool isConfigurationOfSearch;
   String title;
   bool value;
-  Function changeValue;
+  Function updateValue;
   String subtitle;
 
   ConfigurationsModel({
     required this.isConfigurationOfSearch,
     required this.title,
     required this.value,
-    required this.changeValue,
+    required this.updateValue,
     required this.subtitle,
   });
 }

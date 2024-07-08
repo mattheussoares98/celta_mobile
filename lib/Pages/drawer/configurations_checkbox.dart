@@ -28,14 +28,14 @@ class _ConfigurationsCheckboxState extends State<ConfigurationsCheckbox> {
                   : Card(
                       child: InkWell(
                         onTap: () {
-                          e.changeValue();
+                          e.updateValue();
                         },
                         child: Column(
                           children: [
                             CheckboxListTile(
                               value: e.value,
                               onChanged: (_) => {
-                                e.changeValue(),
+                                e.updateValue(),
                               },
                               title: Text(
                                 e.title,

@@ -56,7 +56,7 @@ class ProductsItemsState extends State<ProductsItems> {
             );
 
             if (inventoryProvider.errorMessageQuantity == "" &&
-                configurationsProvider.useAutoScan) {
+                configurationsProvider.autoScan?.value == true) {
               await widget.getProducts();
             }
           });
@@ -73,7 +73,7 @@ class ProductsItemsState extends State<ProductsItems> {
       );
 
       if (inventoryProvider.errorMessageQuantity == "" &&
-          configurationsProvider.useAutoScan) {
+          configurationsProvider.autoScan?.value == true) {
         await widget.getProducts();
       }
     }
@@ -108,7 +108,7 @@ class ProductsItemsState extends State<ProductsItems> {
         );
 
         if (inventoryProvider.errorMessageQuantity == "" &&
-            configurationsProvider.useAutoScan) {
+            configurationsProvider.autoScan?.value == true) {
           await widget.getProducts();
         }
       },

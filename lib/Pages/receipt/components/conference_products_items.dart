@@ -56,7 +56,7 @@ class _ConferenceProductsItemsState
         _selectedIndex = -1;
       });
 
-      if (configurationsProvider.useAutoScan) {
+      if (configurationsProvider.autoScan?.value == true) {
         await widget.getProductsWithCamera();
       }
 
@@ -104,7 +104,7 @@ class _ConferenceProductsItemsState
           });
           widget.consultedProductController.clear();
 
-          if (configurationsProvider.useAutoScan) {
+          if (configurationsProvider.autoScan?.value == true) {
             await widget.getProductsWithCamera();
           }
         }

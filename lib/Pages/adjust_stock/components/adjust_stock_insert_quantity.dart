@@ -63,7 +63,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
       widget.consultedProductController.clear();
       widget.updateSelectedIndex();
 
-      if (configurationsProvider.useAutoScan) {
+      if (configurationsProvider.autoScan?.value == true) {
         await widget.getProductWithCamera();
       }
     }

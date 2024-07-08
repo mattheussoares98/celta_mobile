@@ -173,7 +173,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                       await _openCamera();
                                     },
                               child: Icon(
-                                configurationsProvider.useAutoScan == true
+                                configurationsProvider.autoScan?.value == true
                                     ? Icons.camera_alt
                                     : Icons.camera_alt_outlined,
                                 size: 40,

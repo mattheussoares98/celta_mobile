@@ -278,7 +278,7 @@ class InventoryProvider with ChangeNotifier {
           indexOfProduct: indexOfProduct,
         );
 
-        if (!configurationsProvider.useAutoScan &&
+        if (configurationsProvider.autoScan?.value != true &&
             productsCount == 1 &&
             !isIndividual) {
           alterFocusToConsultedProduct(

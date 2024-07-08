@@ -75,7 +75,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     if (inventoryProvider.errorMessageQuantity == "" &&
         _isIndividual &&
         inventoryProvider.productsCount == 1 &&
-        !configurationsProvider.useAutoScan) {
+        configurationsProvider.autoScan?.value != true) {
       inventoryProvider.alterFocusToConsultProduct(
         context: context,
       );
@@ -99,7 +99,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     );
 
     if (inventoryProvider.errorMessageGetProducts == '' &&
-        configurationsProvider.useAutoScan) {
+        configurationsProvider.autoScan?.value == true) {
       await _searchProduct(
         inventoryProvider: inventoryProvider,
         arguments: arguments,
