@@ -475,8 +475,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
       "SearchValue": searchProductControllerText,
-      "SearchTypeInt":
-          configurationsProvider.legacyCode?.value == true ? 11 : 0,
+      "SearchTypeInt": SoapHelper.getSearchTypeInt(configurationsProvider),
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
@@ -536,6 +535,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "CrossIdentity": UserData.crossIdentity,
       "RoutineInt": 7,
       "SearchValue": searchProductControllerText,
+      "SearchTypeInt": SoapHelper.getSearchTypeInt(configurationsProvider),
       "ResearchOfPriceFilters": {
         "ResearchOfPriceCode": _selectedResearch!.Code,
         "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
