@@ -32,6 +32,17 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
       title: "Deseja realmente alterar a URL?",
       subtitle: "Nova URL: \n${urlCcsController.text}",
       function: () async {
+        if (!urlCcsController.text.toLowerCase().contains("http") ||
+            !urlCcsController.text.contains(":") ||
+            !urlCcsController.text.contains("//") ||
+            !urlCcsController.text.contains("\.") ||
+            !urlCcsController.text.toLowerCase().contains("ccs")) {
+          ShowSnackbarMessage.showMessage(
+              message:
+                  "Viiixi, acho que essa URL tá errada hein... confirma aew",
+              context: context);
+          return;
+        }
         await webProvider.updateEnterpriseCcs(
           context: context,
           enterpriseId: widget.client.id!,

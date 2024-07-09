@@ -405,6 +405,7 @@ class WebProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
+    notifyListeners();
 
     try {
       int indexOfOldClient =
@@ -431,8 +432,6 @@ class WebProvider with ChangeNotifier {
         context: context,
         backgroundColor: Theme.of(context).colorScheme.primary,
       );
-
-      notifyListeners();
     } catch (e) {
       ShowSnackbarMessage.showMessage(
         message: e.toString(),
@@ -440,6 +439,7 @@ class WebProvider with ChangeNotifier {
       );
     } finally {
       _isLoading = false;
+      notifyListeners();
     }
   }
 
