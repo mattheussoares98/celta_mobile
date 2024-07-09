@@ -57,65 +57,82 @@ class EnterprisesPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              showBottomSheet(
+              showDialog(
                   context: context,
                   builder: (_) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-                            child: TextFormField(
-                              autofocus: true,
-                              controller: _enterpriseController,
-                              focusNode: _enterpriseFocusNode,
-                              onFieldSubmitted: (value) {
-                                if (value.isEmpty == true) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_enterpriseFocusNode);
-                                } else {
-                                  FocusScope.of(context)
-                                      .requestFocus(_urlCcsFocusNode);
-                                }
-                              },
-                              decoration: FormFieldHelper.decoration(
-                                isLoading: webProvider.isLoading,
-                                context: context,
-                                hintText: "Nome da empresa",
-                                labelText: "Nome da empresa",
+                    return AlertDialog(
+                      content: Container(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 30, 8, 8),
+                                    child: TextFormField(
+                                      autofocus: true,
+                                      controller: _enterpriseController,
+                                      focusNode: _enterpriseFocusNode,
+                                      onFieldSubmitted: (value) {
+                                        if (value.isEmpty == true) {
+                                          FocusScope.of(context).requestFocus(
+                                              _enterpriseFocusNode);
+                                        } else {
+                                          FocusScope.of(context)
+                                              .requestFocus(_urlCcsFocusNode);
+                                        }
+                                      },
+                                      decoration: FormFieldHelper.decoration(
+                                        isLoading: webProvider.isLoading,
+                                        context: context,
+                                        hintText: "Nome da empresa",
+                                        labelText: "Nome da empresa",
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      controller: _urlCcsController,
+                                      focusNode: _urlCcsFocusNode,
+                                      onFieldSubmitted: (_) {
+                                        if (_enterpriseController
+                                                .text.isEmpty ==
+                                            true) {
+                                          FocusScope.of(context).requestFocus(
+                                              _enterpriseFocusNode);
+                                        } else {
+                                          addEnterprise();
+                                        }
+                                      },
+                                      decoration: FormFieldHelper.decoration(
+                                        isLoading: webProvider.isLoading,
+                                        context: context,
+                                        hintText: "http://127.0.0.1:9092/ccs",
+                                        labelText: "Url do CCS",
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      addEnterprise();
+                                    },
+                                    child: const Text("Adicionar"),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _urlCcsController,
-                              focusNode: _urlCcsFocusNode,
-                              onFieldSubmitted: (_) {
-                                if (_enterpriseController.text.isEmpty ==
-                                    true) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_enterpriseFocusNode);
-                                } else {
-                                  addEnterprise();
-                                }
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
                               },
-                              decoration: FormFieldHelper.decoration(
-                                isLoading: webProvider.isLoading,
-                                context: context,
-                                hintText: "http://127.0.0.1:9092/ccs",
-                                labelText: "Url do CCS",
-                              ),
+                              child: const Text("Cancelar"),
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              addEnterprise();
-                            },
-                            child: const Text("Adicionar"),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   });
