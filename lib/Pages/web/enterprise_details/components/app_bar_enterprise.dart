@@ -22,7 +22,7 @@ AppBar appBarEnterprise({
               function: () async {
                 await webProvider.deleteEnterprise(
                   context: context,
-                  enterpriseId: client.id!,
+                  enterpriseId: client.id ?? "",
                 );
               },
             );

@@ -34,6 +34,10 @@ class WebProvider with ChangeNotifier {
   List<SoapActionsModel> _antiPenultimateMonth = [];
   List<SoapActionsModel> get antiPenultimateMonth => [..._antiPenultimateMonth];
 
+  void _orderEnterprisesByName() {
+    _clients.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));
+  }
+
   int? _sumRequests(
     int? totalLastThree,
     int? totalEqualSoapClientName,
@@ -209,7 +213,7 @@ class WebProvider with ChangeNotifier {
           )
           .toList();
 
-      _clients.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));
+      _orderEnterprisesByName();
     } catch (e) {
       _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
@@ -383,8 +387,6 @@ class WebProvider with ChangeNotifier {
         context: context,
         backgroundColor: Theme.of(context).colorScheme.primary,
       );
-
-      notifyListeners();
     } catch (e) {
       ShowSnackbarMessage.showMessage(
         message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
@@ -392,6 +394,7 @@ class WebProvider with ChangeNotifier {
       );
     } finally {
       _isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -437,6 +440,44 @@ class WebProvider with ChangeNotifier {
       );
     } finally {
       _isLoading = false;
+    }
+  }
+
+  Future<void> addNewEnterprise({
+    required BuildContext context,
+    required String enterpriseName,
+    required String urlCcs,
+  }) async {
+    _isLoading = true;
+    _errorMessageClients = "";
+    try {
+      final newEnterprise = FirebaseClientModel(
+        enterpriseName: enterpriseName,
+        urlCCS: urlCcs,
+        id: null,
+        usersInformations: null,
+      );
+
+      await FirebaseHelper.addNewEnterprise(newEnterprise);
+
+      _clients.add(newEnterprise);
+      _orderEnterprisesByName();
+
+      Navigator.of(context).pop();
+
+      ShowSnackbarMessage.showMessage(
+        message: "Empresa adicionada com sucesso!",
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      );
+    } catch (e) {
+      ShowSnackbarMessage.showMessage(
+        message: "Ocorreu um erro não esperado para adicionar a empresa!",
+        context: context,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }

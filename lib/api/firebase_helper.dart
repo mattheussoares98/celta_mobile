@@ -411,4 +411,14 @@ class FirebaseHelper {
       rethrow;
     }
   }
+
+  static Future<void> addNewEnterprise(FirebaseClientModel clientModel) async {
+    try {
+      await _clientsCollection
+          .doc(clientModel.enterpriseName)
+          .set(clientModel.toJson());
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
