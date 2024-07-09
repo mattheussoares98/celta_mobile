@@ -46,6 +46,7 @@ class EnterprisesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const Text(""),
         title: webProvider.clients.isEmpty
             ? null
             : Text(

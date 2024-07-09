@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../api/api.dart';
 import '../../components/global_widgets/global_widgets.dart';
-import '../../pages/web/web.dart';
 
 import '../../utils/utils.dart';
 
@@ -54,7 +53,10 @@ class _WebLoginPageState extends State<WebLoginPage> {
               isLoading: false,
             );
           } else if (snapshot.hasData) {
-            return const WebHomePage();
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  APPROUTES.WEB_HOME, (route) => false);
+            });
           }
 
           return Stack(

@@ -19,6 +19,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const Text(""),
         title: const Text("TOTAL DE REQUISIÇÕES"),
       ),
       body: webProvider.clientsNames.isEmpty
