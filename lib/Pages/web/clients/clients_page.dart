@@ -41,33 +41,36 @@ class ClientsPage extends StatelessWidget {
                 itemCount: webProvider.clients.length,
                 itemBuilder: (context, index) {
                   FirebaseClientModel client = webProvider.clients[index];
-                  return ListTile(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        APPROUTES.WEB_ENTERPRISE_DETAILS,
-                        arguments: client,
-                      );
-                    },
-                    trailing: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                            APPROUTES.WEB_ENTERPRISE_DETAILS,
-                            arguments: client,
-                          );
-                        },
-                        icon: Icon(
-                          Icons.remove_red_eye_rounded,
-                          color: Theme.of(context).colorScheme.primary,
-                        )),
-                    title: Text(client.enterpriseName),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(client.urlCCS),
-                        if (client.usersInformations != null)
-                          Text(
-                              "Quantidade de usuários: ${client.usersInformations!.length}"),
-                      ],
+
+                  return Card(
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          APPROUTES.WEB_ENTERPRISE_DETAILS,
+                          arguments: client,
+                        );
+                      },
+                      trailing: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              APPROUTES.WEB_ENTERPRISE_DETAILS,
+                              arguments: client,
+                            );
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                          )),
+                      title: Text(client.enterpriseName),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(client.urlCCS),
+                          if (client.usersInformations != null)
+                            Text(
+                                "Quantidade de usuários: ${client.usersInformations!.length}"),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -79,11 +82,10 @@ class ClientsPage extends StatelessWidget {
                 child: TextButton(
                   onPressed: () async {
                     await webProvider.getAllClients();
-    
+
                     if (webProvider.errorMessageClients != "") {
                       ShowSnackbarMessage.showMessage(
-                        message:
-                            DefaultErrorMessageToFindServer.ERROR_MESSAGE,
+                        message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
                         context: context,
                       );
                     }
