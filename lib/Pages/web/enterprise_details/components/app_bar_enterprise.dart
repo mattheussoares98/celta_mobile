@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../../../components/Global_widgets/global_widgets.dart';
 import '../../../../../models/firebase/firebase.dart';
+import '../../../../providers/providers.dart';
 
-appBarPersonalized({
+AppBar appBarEnterprise({
   required BuildContext context,
   required FirebaseClientModel client,
+  required WebProvider webProvider,
 }) =>
     AppBar(
       title: Text(client.enterpriseName),
@@ -18,9 +20,10 @@ appBarPersonalized({
               subtitle:
                   "Todos dados da empresa serão perdidos e não será possível recuperar!",
               function: () async {
-                try {} catch (e) {
-                  e;
-                }
+                await webProvider.deleteEnterprise(
+                  context: context,
+                  enterpriseId: client.id!,
+                );
               },
             );
           },

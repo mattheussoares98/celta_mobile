@@ -83,7 +83,7 @@ class UsersList extends StatelessWidget {
                           Tooltip(
                             triggerMode: TooltipTriggerMode.tap,
                             message:
-                                "A data não é atualizada em um período menor do que 7 dias",
+                                "A data é atualizada a cada 7 dias",
                             child: Icon(
                               Icons.info,
                               color: Theme.of(context).colorScheme.primary,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../models/firebase/firebase.dart';
-import 'enterprise_details.dart';
+import '../../../providers/providers.dart';
+import './enterprise_details.dart';
 
 class WebEnterpriseDetailsPage extends StatefulWidget {
   const WebEnterpriseDetailsPage({super.key});
@@ -14,11 +16,17 @@ class WebEnterpriseDetailsPage extends StatefulWidget {
 class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
   @override
   Widget build(BuildContext context) {
+    WebProvider webProvider = Provider.of(context);
+
     FirebaseClientModel client =
         ModalRoute.of(context)!.settings.arguments as FirebaseClientModel;
 
     return Scaffold(
-      appBar: appBarPersonalized(context: context, client: client),
+      appBar: appBarEnterprise(
+        context: context,
+        client: client,
+        webProvider: webProvider,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

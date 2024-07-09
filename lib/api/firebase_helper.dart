@@ -372,7 +372,8 @@ class FirebaseHelper {
     }
   }
 
-  static Future<List<QueryDocumentSnapshot>?> getAllSoapActions(yearAndMonth) async {
+  static Future<List<QueryDocumentSnapshot>?> getAllSoapActions(
+      yearAndMonth) async {
     try {
       final soapActions = await _firebaseFirestore
           .collection("soapActions")
@@ -387,5 +388,13 @@ class FirebaseHelper {
       debugPrint("Erro para obter as requisições: $e");
     }
     return null;
+  }
+
+  static Future<void> deleteEnterprise(String id) async {
+    try {
+      await _clientsCollection.doc(id).delete();
+    } catch (e) {
+      rethrow;
+    }
   }
 }

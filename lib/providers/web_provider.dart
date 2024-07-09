@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/global_widgets/show_snackbar_message.dart';
 import 'package:celta_inventario/models/firebase/firebase.dart';
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -214,6 +215,36 @@ class WebProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> deleteEnterprise({
+    required BuildContext context,
+    required String enterpriseId,
+  }) async {
+    _isLoading = true;
+    _errorMessageClients = "";
+
+    try {
+      await FirebaseHelper.deleteEnterprise(enterpriseId);
+
+      _clients.removeWhere((element) => element.id == enterpriseId);
+
+      Navigator.of(context).pop();
+      ShowSnackbarMessage.showMessage(
+        message: "Empresa excluída com sucesso",
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      );
+
+      notifyListeners();
+    } catch (e) {
+      ShowSnackbarMessage.showMessage(
+        message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
+        context: context,
+      );
+    } finally {
+      _isLoading = false;
     }
   }
 
