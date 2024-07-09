@@ -7,8 +7,8 @@ import '../../../models/firebase/firebase.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
-class ClientsPage extends StatelessWidget {
-  const ClientsPage({super.key});
+class EnterprisesPage extends StatelessWidget {
+  const EnterprisesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ClientsPage extends StatelessWidget {
             title: webProvider.clients.isEmpty
                 ? null
                 : Text(
-                    "${webProvider.clients.length} clientes",
+                    "${webProvider.clients.length} empresas",
                     style: const TextStyle(
                       color: Colors.white,
                     ),
@@ -88,7 +88,7 @@ class ClientsPage extends StatelessWidget {
                         }
                       },
                       child: const Text(
-                        "Consultar clientes",
+                        "Consultar empresas",
                       ),
                     ),
                   ),
