@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,26 +22,31 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
     FirebaseClientModel client =
         ModalRoute.of(context)!.settings.arguments as FirebaseClientModel;
 
-    return Scaffold(
-      appBar: appBarEnterprise(
-        context: context,
-        client: client,
-        webProvider: webProvider,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          EditUrlCcs(client: client),
-          const SizedBox(height: 20),
-          if (client.usersInformations == null)
-            const Text(
-              "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
-              textAlign: TextAlign.center,
-            ),
-          if (client.usersInformations?.isNotEmpty == true)
-            UsersList(client: client)
-        ],
-      ),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: appBarEnterprise(
+            context: context,
+            client: client,
+            webProvider: webProvider,
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              EditUrlCcs(client: client),
+              const SizedBox(height: 20),
+              if (client.usersInformations == null)
+                const Text(
+                  "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
+                  textAlign: TextAlign.center,
+                ),
+              if (client.usersInformations?.isNotEmpty == true)
+                UsersList(client: client)
+            ],
+          ),
+        ),
+        loadingWidget(message: "Aguarde...", isLoading: webProvider.isLoading),
+      ],
     );
   }
 }

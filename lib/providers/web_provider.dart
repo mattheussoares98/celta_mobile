@@ -218,36 +218,6 @@ class WebProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteEnterprise({
-    required BuildContext context,
-    required String enterpriseId,
-  }) async {
-    _isLoading = true;
-    _errorMessageClients = "";
-
-    try {
-      await FirebaseHelper.deleteEnterprise(enterpriseId);
-
-      _clients.removeWhere((element) => element.id == enterpriseId);
-
-      Navigator.of(context).pop();
-      ShowSnackbarMessage.showMessage(
-        message: "Empresa excluída com sucesso",
-        context: context,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      );
-
-      notifyListeners();
-    } catch (e) {
-      ShowSnackbarMessage.showMessage(
-        message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
-        context: context,
-      );
-    } finally {
-      _isLoading = false;
-    }
-  }
-
   List<String> _getLastThreeMonts() {
     DateTime now = DateTime.now();
     List<String> lastThreeMonths = [];
@@ -392,6 +362,81 @@ class WebProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> deleteEnterprise({
+    required BuildContext context,
+    required String enterpriseId,
+  }) async {
+    _isLoading = true;
+    _errorMessageClients = "";
+
+    try {
+      await FirebaseHelper.deleteEnterprise(enterpriseId);
+
+      _clients.removeWhere((element) => element.id == enterpriseId);
+
+      Navigator.of(context).pop();
+      ShowSnackbarMessage.showMessage(
+        message: "Empresa excluída com sucesso",
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      );
+
+      notifyListeners();
+    } catch (e) {
+      ShowSnackbarMessage.showMessage(
+        message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
+        context: context,
+      );
+    } finally {
+      _isLoading = false;
+    }
+  }
+
+  Future<void> updateEnterpriseCcs({
+    required BuildContext context,
+    required String enterpriseId,
+    required String newUrlCcs,
+  }) async {
+    _isLoading = true;
+    _errorMessageClients = "";
+
+    try {
+      int indexOfOldClient =
+          _clients.indexWhere((element) => element.id == enterpriseId);
+
+      if (indexOfOldClient == -1) {
+        throw Exception();
+      }
+
+      final oldClient = _clients[indexOfOldClient];
+
+      await FirebaseHelper.updateUrlCcs(newUrl: newUrlCcs, client: oldClient);
+
+      _clients[indexOfOldClient] = FirebaseClientModel(
+        id: enterpriseId,
+        urlCCS: newUrlCcs,
+        usersInformations: oldClient.usersInformations,
+        enterpriseName: oldClient.enterpriseName,
+      );
+
+      Navigator.of(context).pop();
+      ShowSnackbarMessage.showMessage(
+        message: "URL alterada com sucesso",
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      );
+
+      notifyListeners();
+    } catch (e) {
+      ShowSnackbarMessage.showMessage(
+        message: e.toString(),
+        context: context,
+      );
+    } finally {
+      _isLoading = false;
     }
   }
 }

@@ -397,4 +397,18 @@ class FirebaseHelper {
       rethrow;
     }
   }
+
+  static Future<void> updateUrlCcs({
+    required String newUrl,
+    required FirebaseClientModel client,
+  }) async {
+    try {
+      if (client.urlCCS == newUrl) {
+        throw "Ajuda aí poxa kkkk tá colocando a mesma URL";
+      }
+      await _clientsCollection.doc(client.id).update({"urlCCS": newUrl});
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

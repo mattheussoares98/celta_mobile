@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../components/Global_widgets/global_widgets.dart';
 import '../../../../../models/firebase/firebase.dart';
+import '../../../../providers/providers.dart';
 
 class EditUrlCcs extends StatefulWidget {
   final FirebaseClientModel client;
@@ -24,8 +26,25 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
     urlCcsController.dispose();
   }
 
+  void _updateUrlCcs(WebProvider webProvider) {
+    ShowAlertDialog.showAlertDialog(
+      context: context,
+      title: "Deseja realmente alterar a URL?",
+      subtitle: "Nova URL: \n${urlCcsController.text}",
+      function: () async {
+        await webProvider.updateEnterpriseCcs(
+          context: context,
+          enterpriseId: widget.client.id!,
+          newUrlCcs: urlCcsController.text,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    WebProvider webProvider = Provider.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -63,20 +82,14 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
                       isLoading: false,
                       context: context,
                     ),
+                    onFieldSubmitted: (_) {
+                      _updateUrlCcs(webProvider);
+                    },
                   ),
                 ),
                 TextButton(
                   onPressed: () async {
-                    ShowAlertDialog.showAlertDialog(
-                      context: context,
-                      title: "Deseja realmente alterar a URL?",
-                      subtitle: "Nova URL: \n${urlCcsController.text}",
-                      function: () async {
-                        try {} catch (e) {
-                          e;
-                        }
-                      },
-                    );
+                    _updateUrlCcs(webProvider);
                   },
                   child: const Text("Alterar"),
                 ),
