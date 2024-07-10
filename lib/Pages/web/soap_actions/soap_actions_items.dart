@@ -24,8 +24,8 @@ class SoapActionsItems extends StatelessWidget {
             )),
         Expanded(
           child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: MediaQuery.of(context).size.width > 500 ? 5 : 2,
               // childAspectRatio: 0.7,
             ),
             shrinkWrap: true,
