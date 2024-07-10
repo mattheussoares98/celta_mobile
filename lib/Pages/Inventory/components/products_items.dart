@@ -195,17 +195,17 @@ class ProductsItemsState extends State<ProductsItems> {
               const SizedBox(height: 8),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produto",
-                value: inventoryProvider.products[index].productName,
+                subtitle: inventoryProvider.products[index].productName,
                 fontSize: 20,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                value: inventoryProvider.products[index].plu,
+                subtitle: inventoryProvider.products[index].plu,
                 fontSize: 20,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Qtd contada",
-                value: inventoryProvider
+                subtitle: inventoryProvider
                             .products[index].quantidadeInvContProEmb ==
                         -1
                     //quando o valor está nulo, eu coloco como "-1" pra tratar um bug

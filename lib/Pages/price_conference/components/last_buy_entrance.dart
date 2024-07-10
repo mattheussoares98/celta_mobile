@@ -31,21 +31,21 @@ Widget lastBuyEntrance({
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Número",
-                value: product.lastBuyEntrance!.number,
+                subtitle: product.lastBuyEntrance!.number,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Data",
-                value: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(
+                subtitle: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(
                   product.lastBuyEntrance!.entranceDate!,
                 )),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Fornecedor",
-                value: product.lastBuyEntrance!.supplier,
+                subtitle: product.lastBuyEntrance!.supplier,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Quantitade",
-                value: product.lastBuyEntrance!.quantity
+                subtitle: product.lastBuyEntrance!.quantity
                     .toString()
                     .toBrazilianNumber(),
               ),

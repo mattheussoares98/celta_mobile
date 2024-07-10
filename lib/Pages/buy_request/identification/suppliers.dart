@@ -120,23 +120,23 @@ class _SuplliersState extends State<Suplliers> {
                   children: [
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Código",
-                      value: supplier.Code.toString(),
+                      subtitle: supplier.Code.toString(),
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Nome",
-                      value: supplier.Name,
+                      subtitle: supplier.Name,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Nome fantasia",
-                      value: supplier.FantasizesName,
+                      subtitle: supplier.FantasizesName,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "CPF/CNPJ",
-                      value: supplier.CnpjCpfNumber,
+                      subtitle: supplier.CnpjCpfNumber,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Tipo de comércio",
-                      value: supplier.SupplierType,
+                      subtitle: supplier.SupplierType,
                     ),
                     if (supplier.Addresses != null)
                       Text(supplier.Addresses.toString()),

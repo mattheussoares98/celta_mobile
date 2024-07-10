@@ -36,19 +36,19 @@ class EnterpriseItem extends StatelessWidget {
           children: [
             TitleAndSubtitle.titleAndSubtitle(
               title: "Código",
-              value: enterpriseModel.PersonalizedCode.toString(),
+              subtitle: enterpriseModel.PersonalizedCode.toString(),
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "Nome",
-              value: enterpriseModel.Name,
+              subtitle: enterpriseModel.Name,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "Nome fantasia",
-              value: enterpriseModel.FantasizesName,
+              subtitle: enterpriseModel.FantasizesName,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "CPF/CNPJ",
-              value: enterpriseModel.CnpjNumber,
+              subtitle: enterpriseModel.CnpjNumber,
             ),
           ],
         ),

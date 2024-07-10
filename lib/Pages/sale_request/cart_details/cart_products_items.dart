@@ -225,14 +225,14 @@ class CartProductsItems {
                             title: "Desconto",
                             subtitleColor:
                                 Theme.of(context).colorScheme.primary,
-                            value: ConvertString.convertToBRL(
+                            subtitle: ConvertString.convertToBRL(
                               product.AutomaticDiscountValue,
                             ),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             subtitleColor:
                                 Theme.of(context).colorScheme.primary,
-                            value: saleRequestProvider
+                            subtitle: saleRequestProvider
                                 .getDiscountDescription(product),
                           ),
                         ],

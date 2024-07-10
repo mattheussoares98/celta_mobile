@@ -30,27 +30,27 @@ class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
               children: [
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Nome",
-                  value: customerRegisterProvider.nameController.text,
+                  subtitle: customerRegisterProvider.nameController.text,
                 ),
                 if (customerRegisterProvider.cpfCnpjController.text != "")
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "CPF/CNPJ",
-                    value: customerRegisterProvider.cpfCnpjController.text,
+                    subtitle: customerRegisterProvider.cpfCnpjController.text,
                   ),
                 if (customerRegisterProvider.reducedNameController.text != "")
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Nome reduzido",
-                    value: customerRegisterProvider.reducedNameController.text,
+                    subtitle: customerRegisterProvider.reducedNameController.text,
                   ),
                 if (customerRegisterProvider.dateOfBirthController.text != "")
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Data de nascimento",
-                    value: customerRegisterProvider.dateOfBirthController.text,
+                    subtitle: customerRegisterProvider.dateOfBirthController.text,
                   ),
                 if (customerRegisterProvider.selectedSexDropDown.value != null)
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Sexo",
-                    value: customerRegisterProvider.selectedSexDropDown.value,
+                    subtitle: customerRegisterProvider.selectedSexDropDown.value,
                   ),
               ],
             ),

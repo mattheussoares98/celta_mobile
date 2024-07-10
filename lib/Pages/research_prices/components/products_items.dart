@@ -121,11 +121,11 @@ class _ProductsItemsState
           children: [
             TitleAndSubtitle.titleAndSubtitle(
               title: "Produto",
-              value: product.ProductName,
+              subtitle: product.ProductName,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "PLU",
-              value: product.PriceLookUp.toString(),
+              subtitle: product.PriceLookUp.toString(),
               otherWidget: TextButton(
                 onPressed: () {
                   _updateSelectedIndex(

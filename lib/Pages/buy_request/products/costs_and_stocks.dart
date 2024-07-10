@@ -214,7 +214,7 @@ Widget enterpriseStocks({
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                               title: productModel.Stocks![index]["StockName"],
-                              value: ConvertString.convertToBrazilianNumber(
+                              subtitle: ConvertString.convertToBrazilianNumber(
                                 productModel.Stocks?[index]["StockQuantity"]
                                     .toStringAsFixed(3)
                                     .replaceAll(RegExp(r'\.'), ','),
@@ -259,48 +259,48 @@ Widget costs({
               children: [
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Reposição",
-                  value: ConvertString.convertToBRL(product.ReplacementCost),
+                  subtitle: ConvertString.convertToBRL(product.ReplacementCost),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Reposição médio",
-                  value:
+                  subtitle:
                       ConvertString.convertToBRL(product.ReplacementCostMidle),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Fiscal",
-                  value: ConvertString.convertToBRL(product.FiscalCost),
+                  subtitle: ConvertString.convertToBRL(product.FiscalCost),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Fiscal líquido",
-                  value: ConvertString.convertToBRL(product.FiscalLiquidCost),
+                  subtitle: ConvertString.convertToBRL(product.FiscalLiquidCost),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Líquido",
-                  value: ConvertString.convertToBRL(product.LiquidCost),
+                  subtitle: ConvertString.convertToBRL(product.LiquidCost),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Líquido médio",
-                  value: ConvertString.convertToBRL(product.LiquidCostMidle),
+                  subtitle: ConvertString.convertToBRL(product.LiquidCostMidle),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Operacional",
-                  value: ConvertString.convertToBRL(product.OperationalCost),
+                  subtitle: ConvertString.convertToBRL(product.OperationalCost),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Real",
-                  value: ConvertString.convertToBRL(product.RealCost),
+                  subtitle: ConvertString.convertToBRL(product.RealCost),
                 ),
                 const SizedBox(height: 10),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Real líquido",
-                  value: ConvertString.convertToBRL(product.RealLiquidCost),
+                  subtitle: ConvertString.convertToBRL(product.RealLiquidCost),
                 ),
               ],
             ),

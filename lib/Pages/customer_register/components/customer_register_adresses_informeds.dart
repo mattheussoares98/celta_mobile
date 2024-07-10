@@ -61,40 +61,40 @@ class _CustomerRegisterAddressesInformedsState
                   children: [
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "CEP",
-                      value: addressModel.Zip,
+                      subtitle: addressModel.Zip,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Logradouro",
-                      value: addressModel.Address,
+                      subtitle: addressModel.Address,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Bairro",
-                      value: addressModel.District,
+                      subtitle: addressModel.District,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Cidade",
-                      value: addressModel.City,
+                      subtitle: addressModel.City,
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Estado",
-                      value: _getState(
+                      subtitle: _getState(
                         addressProvider: addressProvider,
                         addressModel: addressModel,
                       ),
                     ),
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Número",
-                      value: addressModel.Number.toString(),
+                      subtitle: addressModel.Number.toString(),
                     ),
                     if (addressModel.Complement != "")
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Complemento",
-                        value: addressModel.Complement,
+                        subtitle: addressModel.Complement,
                       ),
                     if (addressModel.Reference != "")
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Referência",
-                        value: addressModel.Reference,
+                        subtitle: addressModel.Reference,
                       ),
                     ElevatedButton(
                       style: ButtonStyle(

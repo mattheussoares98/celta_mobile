@@ -67,7 +67,7 @@ class _DestinyEnterpriseItemsState
                         children: [
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "CNPJ",
-                            value: destinyEnterprise.CnpjNumber,
+                            subtitle: destinyEnterprise.CnpjNumber,
                           )
                         ],
                       ),

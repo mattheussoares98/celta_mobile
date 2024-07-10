@@ -211,19 +211,19 @@ class _ConferenceProductsItemsState
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Nome",
-                value: product.Nome_Produto,
+                subtitle: product.Nome_Produto,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                value: product.CodigoPlu_ProEmb,
+                subtitle: product.CodigoPlu_ProEmb,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Embalagem",
-                value: product.PackingQuantity,
+                subtitle: product.PackingQuantity,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Quantidade contada",
-                value: product.Quantidade_ProcRecebDocProEmb == -1
+                subtitle: product.Quantidade_ProcRecebDocProEmb == -1
                     ? "nula"
                     : ConvertString.convertToBrazilianNumber(
                         product.Quantidade_ProcRecebDocProEmb.toString()),
@@ -231,7 +231,7 @@ class _ConferenceProductsItemsState
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Validade",
-                value: product.DataValidade_ProcRecebDocProEmb == ""
+                subtitle: product.DataValidade_ProcRecebDocProEmb == ""
                     ? "Nenhuma"
                     : product.DataValidade_ProcRecebDocProEmb.toString()
                         .replaceRange(10, null, ""),
@@ -289,7 +289,7 @@ class _ConferenceProductsItemsState
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "EANs",
-                value: product.AllEans != "" ? product.AllEans : "Nenhum",
+                subtitle: product.AllEans != "" ? product.AllEans : "Nenhum",
                 otherWidget: Icon(
                   _selectedIndex != index
                       ? Icons.arrow_drop_down_sharp

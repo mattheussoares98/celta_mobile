@@ -63,7 +63,7 @@ class _OriginEnterpriseItemsState
                         children: [
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "CNPJ",
-                            value: originEnterprise.CnpjNumber,
+                            subtitle: originEnterprise.CnpjNumber,
                           )
                         ],
                       ),

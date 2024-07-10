@@ -21,55 +21,55 @@ Widget costs({
           ),
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.fiscalCost,
           ),
           title: "Fiscal",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.fiscalLiquidCost,
           ),
           title: "Fiscal líquido",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.liquidCost,
           ),
           title: "Líquido",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.liquidCostMidle,
           ),
           title: "Líquido médio",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.operationalCost,
           ),
           title: "Operacional",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.realCost,
           ),
           title: "Real",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.realLiquidCost,
           ),
           title: "Real líquido",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.replacementCost,
           ),
           title: "Reposição",
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          value: ConvertString.convertToBRL(
+          subtitle: ConvertString.convertToBRL(
             product.replacementCostMidle,
           ),
           title: "Reposição médio",

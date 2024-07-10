@@ -47,26 +47,26 @@ class _PricesItemsState extends State<PricesItems> {
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Código",
-                value: research.Code.toString(),
+                subtitle: research.Code.toString(),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Nome",
-                value:
+                subtitle:
                     research.Name?.isEmpty == true ? "Não há" : research.Name,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Observação",
-                value: research.Observation?.isEmpty == true
+                subtitle: research.Observation?.isEmpty == true
                     ? "Não há"
                     : research.Observation,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produtos restringidos",
-                value: research.RestrictProducts ? "Sim" : "Não",
+                subtitle: research.RestrictProducts ? "Sim" : "Não",
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Data de criação",
-                value: research.CreationDate.toString(),
+                subtitle: research.CreationDate.toString(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

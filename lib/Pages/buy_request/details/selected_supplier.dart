@@ -38,23 +38,23 @@ class SelectedSupplier extends StatelessWidget {
                 children: [
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Código",
-                    value: buyRequestProvider.selectedSupplier!.Code.toString(),
+                    subtitle: buyRequestProvider.selectedSupplier!.Code.toString(),
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Nome",
-                    value: buyRequestProvider.selectedSupplier!.Name,
+                    subtitle: buyRequestProvider.selectedSupplier!.Name,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Nome fantasia",
-                    value: buyRequestProvider.selectedSupplier!.FantasizesName,
+                    subtitle: buyRequestProvider.selectedSupplier!.FantasizesName,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "CPF/CNPJ",
-                    value: buyRequestProvider.selectedSupplier!.CnpjCpfNumber,
+                    subtitle: buyRequestProvider.selectedSupplier!.CnpjCpfNumber,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Tipo de comércio",
-                    value: buyRequestProvider.selectedSupplier!.SupplierType,
+                    subtitle: buyRequestProvider.selectedSupplier!.SupplierType,
                   ),
                   if (buyRequestProvider.selectedSupplier!.Addresses != null)
                     Text(buyRequestProvider.selectedSupplier!.Addresses

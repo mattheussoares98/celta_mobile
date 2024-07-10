@@ -37,7 +37,7 @@ class ProductsInformations extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           fontSize: 20,
           subtitleColor: Colors.yellow[900],
-          value: _enterprisePersonalizedCodeAndName(
+          subtitle: _enterprisePersonalizedCodeAndName(
             buyRequestProvider: buyRequestProvider,
             product: product,
           ),
@@ -45,7 +45,7 @@ class ProductsInformations extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           fontSize: 15,
           title: "PLU",
-          value: product.PLU,
+          subtitle: product.PLU,
           otherWidget: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -60,12 +60,12 @@ class ProductsInformations extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           fontSize: 15,
           title: "Nome",
-          value: product.Name,
+          subtitle: product.Name,
         ),
         TitleAndSubtitle.titleAndSubtitle(
           fontSize: 15,
           title: "Embalagem",
-          value: product.PackingQuantity,
+          subtitle: product.PackingQuantity,
           otherWidget: InkWell(
             focusColor: Colors.white.withOpacity(0),
             hoverColor: Colors.white.withOpacity(0),
@@ -97,7 +97,7 @@ class ProductsInformations extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           fontSize: 15,
           title: "Custo",
-          value: ConvertString.convertToBRL(practicedValue),
+          subtitle: ConvertString.convertToBRL(practicedValue),
           subtitleColor:
               double.parse(practicedValue) == 0 ? Colors.red : Colors.green,
           otherWidget: product.quantity > 0
@@ -116,13 +116,13 @@ class ProductsInformations extends StatelessWidget {
               TitleAndSubtitle.titleAndSubtitle(
                 fontSize: 15,
                 title: "Quantidade",
-                value: ConvertString.convertToBrazilianNumber(product.quantity),
+                subtitle: ConvertString.convertToBrazilianNumber(product.quantity),
                 subtitleColor: Theme.of(context).colorScheme.primary,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Total",
                 fontSize: 15,
-                value: ConvertString.convertToBRL(
+                subtitle: ConvertString.convertToBRL(
                   product.ValueTyped * product.quantity,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,

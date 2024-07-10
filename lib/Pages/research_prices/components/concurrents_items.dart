@@ -82,10 +82,10 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                 // ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Código",
-                  value: concurrent.ConcurrentCode.toString(),
+                  subtitle: concurrent.ConcurrentCode.toString(),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
-                  value: researchPricesProvider.selectedResearch!.Concurrents
+                  subtitle: researchPricesProvider.selectedResearch!.Concurrents
                           .contains(concurrent)
                       ? "Associado à pesquisa"
                       : "Não associado à pesquisa",
@@ -97,20 +97,20 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Nome",
-                  value: concurrent.Name?.isEmpty == false
+                  subtitle: concurrent.Name?.isEmpty == false
                       ? concurrent.Name
                       : "Não há",
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Observação",
-                  value: concurrent.Observation?.isNotEmpty == true
+                  subtitle: concurrent.Observation?.isNotEmpty == true
                       ? concurrent.Observation
                       : "Não há",
                 ),
 
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Endereços",
-                  value: concurrent.Address?.Zip?.isEmpty == true
+                  subtitle: concurrent.Address?.Zip?.isEmpty == true
                       ? "Nenhum informado"
                       : addressString(concurrent),
                 ),

@@ -84,24 +84,24 @@ class _CustomersItemsState extends State<CustomersItems> {
                           children: [
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Código",
-                              value: customer.Code.toString(),
+                              subtitle: customer.Code.toString(),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Nome",
-                              value: customer.Name.toString(),
+                              subtitle: customer.Name.toString(),
                             ),
                             if (customer.ReducedName != "")
                               TitleAndSubtitle.titleAndSubtitle(
                                 title: "Nome reduzido",
-                                value: customer.ReducedName.toString(),
+                                subtitle: customer.ReducedName.toString(),
                               ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "CPF/CNPJ",
-                              value: customer.CpfCnpjNumber,
+                              subtitle: customer.CpfCnpjNumber,
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Código personalizado",
-                              value: customer.PersonalizedCode.toString(),
+                              subtitle: customer.PersonalizedCode.toString(),
                             ),
                           ],
                         ),

@@ -108,7 +108,7 @@ class _ProductsItemsState
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                value: product.PLU.toString(),
+                subtitle: product.PLU.toString(),
                 otherWidget: AllStocks.allStocks(
                   context: context,
                   hasStocks: product.Stocks.length > 0,
@@ -117,12 +117,12 @@ class _ProductsItemsState
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produto",
-                value:
+                subtitle:
                     product.Name.toString() + " (${product.PackingQuantity})",
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço",
-                value: ConvertString.convertToBRL(
+                subtitle: ConvertString.convertToBRL(
                   product.Value,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,
@@ -142,7 +142,7 @@ class _ProductsItemsState
               // ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Estoque de venda",
-                value: ConvertString.convertToBrazilianNumber(
+                subtitle: ConvertString.convertToBrazilianNumber(
                   product.BalanceStockSale.toString(),
                 ),
                 otherWidget: Icon(

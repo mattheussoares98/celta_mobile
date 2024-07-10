@@ -31,7 +31,7 @@ class _ProductItemState extends State<ProductItem> {
 
     return TitleAndSubtitle.titleAndSubtitle(
       title: hasValue ? successMessage : null,
-      value: hasValue ? ConvertString.convertToBRL(value) : errorMessage,
+      subtitle: hasValue ? ConvertString.convertToBRL(value) : errorMessage,
       subtitleColor:
           hasValue ? Theme.of(context).colorScheme.primary : Colors.black,
     );
@@ -79,7 +79,7 @@ class _ProductItemState extends State<ProductItem> {
           children: [
             TitleAndSubtitle.titleAndSubtitle(
               title: "Nome",
-              value: widget.product.name,
+              subtitle: widget.product.name,
             ),
             Row(
               children: [
@@ -89,11 +89,11 @@ class _ProductItemState extends State<ProductItem> {
                     children: [
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "PLU",
-                        value: widget.product.plu,
+                        subtitle: widget.product.plu,
                       ),
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Embalagem",
-                        value: widget.product.packingQuantity,
+                        subtitle: widget.product.packingQuantity,
                       ),
                     ],
                   ),
@@ -122,7 +122,7 @@ class _ProductItemState extends State<ProductItem> {
                       0
                   ? "Estoque atual"
                   : null,
-              value: getStockValueMessage(),
+              subtitle: getStockValueMessage(),
               subtitleColor: getStockSubtitleColor(),
             ),
             getTitleAndSubtitle(

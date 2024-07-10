@@ -7,7 +7,7 @@ class TitleAndSubtitle {
     Widget? otherWidget,
     String? title,
     double? fontSize = 17,
-    String? value,
+    String? subtitle,
   }) {
     return Row(
       children: <Widget>[
@@ -25,7 +25,7 @@ class TitleAndSubtitle {
                   ),
                 ),
                 TextSpan(
-                  text: value ?? "",
+                  text: subtitle ?? "",
                   style: TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: fontSize,

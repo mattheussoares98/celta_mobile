@@ -48,7 +48,7 @@ class CountingItems extends StatelessWidget {
                       children: [
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Número da contagem",
-                          value: inventoryProvider
+                          subtitle: inventoryProvider
                               .getCountings(
                                   arguments["codigoInternoInventario"])[index]
                               .numeroContagemInvCont
@@ -56,7 +56,7 @@ class CountingItems extends StatelessWidget {
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Observações",
-                          value: inventoryProvider
+                          subtitle: inventoryProvider
                               .getCountings(
                                   arguments["codigoInternoInventario"])[index]
                               .obsInvCont,

@@ -46,22 +46,22 @@ class InventoryItems extends StatelessWidget {
                       children: [
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Empresa",
-                          value:
+                          subtitle:
                               inventoryProvider.inventorys[index].nomeempresa,
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Tipo de estoque",
-                          value: inventoryProvider
+                          subtitle: inventoryProvider
                               .inventorys[index].nomeTipoEstoque,
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Responsável",
-                          value: inventoryProvider
+                          subtitle: inventoryProvider
                               .inventorys[index].nomefuncionario,
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Congelado em",
-                          value: formatDate(
+                          subtitle: formatDate(
                             inventoryProvider
                                 .inventorys[index].dataCongelamentoInventario,
                             [dd, '/', mm, '/', yyyy, ' ', HH, ':', mm, ':', ss],
@@ -69,7 +69,7 @@ class InventoryItems extends StatelessWidget {
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Observações",
-                          value: inventoryProvider
+                          subtitle: inventoryProvider
                                   .inventorys[index].obsInventario.isEmpty
                               ? 'Não há observações'
                               : inventoryProvider

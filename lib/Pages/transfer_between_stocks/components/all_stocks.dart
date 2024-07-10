@@ -76,7 +76,7 @@ class AllStocks {
                                     ),
                                     TitleAndSubtitle.titleAndSubtitle(
                                         title: product.stocks![index].stockName,
-                                        value: ConvertString
+                                        subtitle: ConvertString
                                             .convertToBrazilianNumber(
                                           product.stocks![index].stockQuantity
                                               .toString()

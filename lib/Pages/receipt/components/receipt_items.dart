@@ -61,23 +61,23 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                       children: [
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Número do recebimento",
-                          value: receipt.Numero_ProcRecebDoc,
+                          subtitle: receipt.Numero_ProcRecebDoc,
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Emitente",
-                          value: receipt.EmitterName == ""
+                          subtitle: receipt.EmitterName == ""
                               ? "Não há"
                               : receipt.EmitterName,
                         ),
                         if (receipt.Grupo != "-1")
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Grupo",
-                            value: receipt.Grupo,
+                            subtitle: receipt.Grupo,
                             subtitleColor: Colors.amber,
                           ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",
-                          value: receipt.Status.toString(),
+                          subtitle: receipt.Status.toString(),
                           subtitleColor: receipt.StatusColor,
                           otherWidget: Icon(
                             selectedIndex != index

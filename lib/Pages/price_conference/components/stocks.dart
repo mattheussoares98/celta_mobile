@@ -56,7 +56,7 @@ Widget stocks({
         
             return TitleAndSubtitle.titleAndSubtitle(
               title: stock.stockName,
-              value: stock.stockQuantity.toString().toBrazilianNumber(3),
+              subtitle: stock.stockQuantity.toString().toBrazilianNumber(3),
               subtitleColor: _stockColor(
                 stockQuantity: stock.stockQuantity.toString(),
                 context: context,

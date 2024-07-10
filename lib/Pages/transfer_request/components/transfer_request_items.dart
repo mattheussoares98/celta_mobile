@@ -56,27 +56,27 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
                         children: [
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Nome",
-                            value: transfer.Name,
+                            subtitle: transfer.Name,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Código personalizado",
-                            value: transfer.PersonalizedCode,
+                            subtitle: transfer.PersonalizedCode,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Número do pedido",
-                            value: transfer.Code.toString(),
+                            subtitle: transfer.Code.toString(),
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Tipo de operação",
-                            value: transfer.OperationTypeString,
+                            subtitle: transfer.OperationTypeString,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Utiliza preço de atacado",
-                            value: transfer.UseWholePriceString,
+                            subtitle: transfer.UseWholePriceString,
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                             title: "Preço praticado",
-                            value: transfer.UnitValueTypeString,
+                            subtitle: transfer.UnitValueTypeString,
                           ),
                         ],
                       ),

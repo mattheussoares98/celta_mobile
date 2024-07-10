@@ -68,16 +68,16 @@ class TechnicalSupportPage extends StatelessWidget {
               Column(
                 children: [
                   TitleAndSubtitle.titleAndSubtitle(
-                    value: "Horário de funcionamento comercial",
+                    subtitle: "Horário de funcionamento comercial",
                     subtitleColor: Theme.of(context).colorScheme.primary,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Dias",
-                    value: businessDays,
+                    subtitle: businessDays,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Horários",
-                    value: businessHours,
+                    subtitle: businessHours,
                   ),
                 ],
               ),

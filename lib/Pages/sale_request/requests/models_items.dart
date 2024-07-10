@@ -87,15 +87,15 @@ class _ModelsItemsState extends State<ModelsItems> {
                           children: [
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Código do pedido",
-                              value: request.PersonalizedCode.toString(),
+                              subtitle: request.PersonalizedCode.toString(),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Nome do pedido",
-                              value: request.Name,
+                              subtitle: request.Name,
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Preço utilizado",
-                              value: request.UnitValueTypeString,
+                              subtitle: request.UnitValueTypeString,
                             ),
                           ],
                         ),

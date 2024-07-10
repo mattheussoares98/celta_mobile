@@ -199,7 +199,7 @@ class _ProductsItemsState extends State<ProductsItems> {
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                value: product.PLU.toString(),
+                subtitle: product.PLU.toString(),
                 otherWidget: ShowAllStocksWidget(
                   productModel: product,
                   hasAssociatedsStock: product.StorageAreaAddress != "" ||
@@ -215,32 +215,32 @@ class _ProductsItemsState extends State<ProductsItems> {
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produto",
-                value:
+                subtitle:
                     product.Name.toString() + " (${product.PackingQuantity})",
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço de venda",
-                value: ConvertString.convertToBRL(
+                subtitle: ConvertString.convertToBRL(
                   product.Value,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço de atacado",
-                value: ConvertString.convertToBRL(
+                subtitle: ConvertString.convertToBRL(
                   product.WholePracticedPrice,
                 ),
                 subtitleColor: Colors.black,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Qtd mínima p/ atacado",
-                value: ConvertString.convertToBrazilianNumber(
+                subtitle: ConvertString.convertToBrazilianNumber(
                   product.MinimumWholeQuantity.toString(),
                 ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Estoque de venda",
-                value: ConvertString.convertToBrazilianNumber(
+                subtitle: ConvertString.convertToBrazilianNumber(
                   product.BalanceStockSale.toString(),
                 ),
                 otherWidget: Icon(

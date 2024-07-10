@@ -213,7 +213,7 @@ Widget enterpriseStocks({
                           ),
                           TitleAndSubtitle.titleAndSubtitle(
                               title: productModel.Stocks[index]["StockName"],
-                              value: ConvertString.convertToBrazilianNumber(
+                              subtitle: ConvertString.convertToBrazilianNumber(
                                 productModel.Stocks[index]["StockQuantity"]
                                     .toStringAsFixed(3)
                                     .replaceAll(RegExp(r'\.'), ','),

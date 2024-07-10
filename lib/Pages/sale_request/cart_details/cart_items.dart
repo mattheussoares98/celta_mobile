@@ -170,17 +170,17 @@ class _CartItemsState extends State<CartItems> {
                           children: [
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Preço venda",
-                              value: ConvertString.convertToBRL(
+                              subtitle: ConvertString.convertToBRL(
                                 product.RetailPracticedPrice,
                               ),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Mín. atacado",
-                              value: product.MinimumWholeQuantity.toString(),
+                              subtitle: product.MinimumWholeQuantity.toString(),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Preço atacado",
-                              value: ConvertString.convertToBRL(
+                              subtitle: ConvertString.convertToBRL(
                                 product.WholePracticedPrice,
                               ),
                             ),

@@ -136,11 +136,11 @@ class _ProductsItemsState extends State<ProductsItems> {
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Nome",
-                value: product.name,
+                subtitle: product.name,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                value: product.plu,
+                subtitle: product.plu,
                 otherWidget: AllStocks.allStocks(
                   context: context,
                   hasStocks: product.stocks!.length > 0,
@@ -150,11 +150,11 @@ class _ProductsItemsState extends State<ProductsItems> {
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Embalagem",
-                value: product.packingQuantity,
+                subtitle: product.packingQuantity,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Estoque atual",
-                value: ConvertString.convertToBrazilianNumber(
+                subtitle: ConvertString.convertToBrazilianNumber(
                   product.stocks!
                       .where((element) => element.stockName == "Estoque Atual")
                       .first
