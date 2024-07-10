@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/address/address.dart';
-import '../../components/global_widgets/global_widgets.dart';
+import '../../components/components.dart';
 import '../../providers/providers.dart';
 import 'customer_register.dart';
 

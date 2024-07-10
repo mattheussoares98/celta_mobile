@@ -1,6 +1,7 @@
-import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
-import 'package:celta_inventario/providers/providers.dart';
-import 'package:celta_inventario/utils/utils.dart';
+import '../../../../components/components.dart';
+import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -80,6 +81,10 @@ class ProductsItems extends StatelessWidget {
                             product.eCommercePracticedPrice! > 0
                         ? Theme.of(context).colorScheme.primary
                         : Colors.black,
+                    otherWidget: TextButton(
+                      onPressed: () async {},
+                      child: const Text("Alterar preços"),
+                    ),
                   ),
                 ],
               ),

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
-import '../components/global_widgets/global_widgets.dart';
+import '../components/components.dart';
 import '../models/buy_request/buy_request.dart';
 import '../utils/utils.dart';
 import './providers.dart';

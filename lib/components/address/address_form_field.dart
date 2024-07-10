@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../global_widgets/global_widgets.dart';
+import '../components.dart';
 
 class AddressFormField extends StatelessWidget {
   final int? limitOfCaracters;

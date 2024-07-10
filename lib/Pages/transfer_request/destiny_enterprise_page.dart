@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
+import '../../components/components.dart';
 import 'components/destiny_enterprise_items.dart';
 import '../../providers/providers.dart';
 

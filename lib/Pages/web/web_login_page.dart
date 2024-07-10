@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../api/api.dart';
-import '../../components/global_widgets/global_widgets.dart';
+import '../../components/components.dart';
 
 import '../../utils/utils.dart';
 

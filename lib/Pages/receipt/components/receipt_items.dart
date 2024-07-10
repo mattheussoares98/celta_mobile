@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/receipt/receipt.dart';
 import '../../../providers/providers.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 import 'components.dart';
 
 class ReceiptItems extends StatefulWidget {

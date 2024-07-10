@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/api.dart';
-import '../components/global_widgets/global_widgets.dart';
+import '../components/components.dart';
 import '../models/transfer_request/transfer_request.dart';
 import '../utils/utils.dart';
 import './providers.dart';

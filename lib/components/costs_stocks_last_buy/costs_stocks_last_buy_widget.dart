@@ -1,4 +1,4 @@
-import 'package:celta_inventario/components/global_widgets/costs_stocks_last_buy/costs_stocks_last_buy.dart';
+import 'package:celta_inventario/components/costs_stocks_last_buy/costs_stocks_last_buy.dart';
 import 'package:celta_inventario/models/soap/products/products.dart';
 import 'package:flutter/material.dart';
 

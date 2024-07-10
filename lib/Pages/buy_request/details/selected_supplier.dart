@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 
 class SelectedSupplier extends StatelessWidget {
   const SelectedSupplier({super.key});

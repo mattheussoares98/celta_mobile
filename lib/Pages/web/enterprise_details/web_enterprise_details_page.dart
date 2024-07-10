@@ -1,8 +1,8 @@
-import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/firebase/firebase.dart';
+import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import './enterprise_details.dart';
 

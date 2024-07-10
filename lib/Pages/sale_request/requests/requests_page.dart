@@ -2,7 +2,7 @@ import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import 'requests.dart';

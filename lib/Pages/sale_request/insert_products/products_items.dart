@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../models/sale_request/sale_request.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 import 'insert_products.dart';
 
 class ProductsItems extends StatefulWidget {

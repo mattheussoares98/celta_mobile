@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../pages/drawer/drawer.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
-import 'global_widgets.dart';
+import 'components.dart';
 
 class SearchWidget extends StatefulWidget {
   final bool isLoading;

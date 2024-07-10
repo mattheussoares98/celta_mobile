@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'global_widgets.dart';
+import 'components.dart';
 
 class InsertQuantityTextFormField extends StatefulWidget {
   final FocusNode focusNode;

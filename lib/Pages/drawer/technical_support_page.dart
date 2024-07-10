@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../api/api.dart';
-import '../../components/global_widgets/global_widgets.dart';
+import '../../components/components.dart';
 
 class TechnicalSupportPage extends StatelessWidget {
   const TechnicalSupportPage({Key? key}) : super(key: key);

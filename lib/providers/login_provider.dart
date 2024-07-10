@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:xml2json/xml2json.dart';
 
 import '../api/api.dart';
-import '../components/global_widgets/global_widgets.dart';
+import '../components/components.dart';
 import '../utils/utils.dart';
 
 class LoginProvider with ChangeNotifier {

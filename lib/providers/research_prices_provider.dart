@@ -4,7 +4,7 @@ import 'package:celta_inventario/models/address/address.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
-import '../../components/global_widgets/global_widgets.dart';
+import '../../components/components.dart';
 import '../../models/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 import '../utils/utils.dart';

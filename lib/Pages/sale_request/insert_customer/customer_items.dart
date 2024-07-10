@@ -3,7 +3,7 @@ import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 import 'insert_customer.dart';
 
 class CustomersItems extends StatefulWidget {

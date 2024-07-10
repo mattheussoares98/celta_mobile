@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/address/address.dart';
-import '../../components/global_widgets/global_widgets.dart';
+import '../../components/components.dart';
 import '../../providers/providers.dart';
 
 class CustomerRegisterPersonalDataPage extends StatefulWidget {

@@ -2,7 +2,7 @@
 // import 'package:provider/provider.dart';
 
 // import 'components/components.dart';
-// import '../../components/global_widgets/global_widgets.dart';
+// import '../../components/components.dart';
 // import '../../providers/providers.dart';
 
 // class TransferBetweenPackagePage extends StatefulWidget {

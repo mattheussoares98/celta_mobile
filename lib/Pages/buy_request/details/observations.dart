@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 
 class Observations extends StatefulWidget {
   final FocusNode focusNode;

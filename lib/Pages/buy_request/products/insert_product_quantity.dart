@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 
 class InsertProductQuantity extends StatefulWidget {
   final BuyRequestProductsModel product;

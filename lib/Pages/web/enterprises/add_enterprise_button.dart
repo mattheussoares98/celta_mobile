@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 import '../../../providers/web_provider.dart';
 
 class AddEnterpriseButton extends StatefulWidget {

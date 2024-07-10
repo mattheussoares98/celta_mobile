@@ -1,9 +1,9 @@
-import 'package:celta_inventario/components/global_widgets/show_snackbar_message.dart';
-import 'package:celta_inventario/models/firebase/firebase.dart';
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../components/components.dart';
+import '../../models/firebase/firebase.dart';
+import '../../utils/utils.dart';
 import '../api/api.dart';
 
 enum Months {

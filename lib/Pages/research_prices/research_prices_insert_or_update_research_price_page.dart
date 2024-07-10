@@ -2,7 +2,7 @@ import 'package:celta_inventario/providers/research_prices_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
+import '../../components/components.dart';
 import '../../models/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/buy_request/buy_request.dart';
 import '../../../utils/utils.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 
 class CostsAndStocks extends StatefulWidget {
   final BuyRequestProductsModel product;

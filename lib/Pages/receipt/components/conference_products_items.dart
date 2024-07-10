@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../models/receipt/receipt.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 
 class ConferenceProductsItems extends StatefulWidget {
   final int docCode;

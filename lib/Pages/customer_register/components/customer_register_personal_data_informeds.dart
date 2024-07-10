@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../providers/providers.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../../../components/components.dart';
 
 class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
   final CustomerRegisterProvider customerRegisterProvider;
