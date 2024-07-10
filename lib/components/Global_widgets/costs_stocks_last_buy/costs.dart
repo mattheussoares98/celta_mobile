@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/soap/products/products.dart';
+import '../../../models/soap/soap.dart';
 import '../../../utils/utils.dart';
-import '../../../components/global_widgets/global_widgets.dart';
+import '../global_widgets.dart';
 
-Widget costs({
-  required BuildContext context,
-  required GetProductJsonModel product,
-}) =>
-    Column(
+class Costs extends StatelessWidget {
+  final GetProductJsonModel product;
+  const Costs({
+    required this.product,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: [
         const Padding(
           padding: EdgeInsets.only(bottom: 10.0),
@@ -76,3 +81,5 @@ Widget costs({
         ),
       ],
     );
+  }
+}

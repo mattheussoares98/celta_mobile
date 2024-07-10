@@ -101,10 +101,7 @@ class _ProductItemState extends State<ProductItem> {
                 const SizedBox(width: 10),
                 Expanded(
                   flex: 2,
-                  child: _costsStocksAndLastBuyEntrance(
-                    context: context,
-                    product: widget.product,
-                  ),
+                  child: CostsStocksLastBuyWidget(product: widget.product),
                 )
               ],
             ),
@@ -153,61 +150,4 @@ class _ProductItemState extends State<ProductItem> {
       ),
     );
   }
-}
-
-Widget _costsStocksAndLastBuyEntrance({
-  required BuildContext context,
-  required GetProductJsonModel product,
-}) {
-  return InkWell(
-    child: Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      padding: const EdgeInsets.all(3),
-      child: const FittedBox(
-        child: Row(
-          children: [
-            Icon(
-              Icons.info,
-              color: Colors.white,
-            ),
-            SizedBox(width: 5),
-            Text(
-              "Custos, estoques \ne última compra",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-    onTap: () {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              contentPadding: const EdgeInsets.all(20),
-              insetPadding:
-                  const EdgeInsets.symmetric(vertical: 70, horizontal: 20),
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.75,
-                width: MediaQuery.of(context).size.width * 0.95,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      costs(context: context, product: product),
-                      stocks(context: context, product: product),
-                      lastBuyEntrance(context: context, product: product),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          });
-    },
-  );
 }

@@ -1,3 +1,4 @@
+export './costs_stocks_last_buy/costs_stocks_last_buy.dart';
 export 'addOrSubtractButton.dart';
 export 'add_subtract_or_anull_widget.dart';
 export 'enterprise_items.dart';

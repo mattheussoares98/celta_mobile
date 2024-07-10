@@ -1,15 +1,20 @@
-import 'package:celta_inventario/components/global_widgets/global_widgets.dart';
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../models/soap/products/products.dart';
+import '../../../models/soap/soap.dart';
+import '../../../utils/utils.dart';
+import '../global_widgets.dart';
 
-Widget lastBuyEntrance({
-  required BuildContext context,
-  required GetProductJsonModel product,
-}) =>
-    Column(
+class LastBuyEntrance extends StatelessWidget {
+  final GetProductJsonModel product;
+  const LastBuyEntrance({
+    required this.product,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Divider(),
@@ -53,3 +58,5 @@ Widget lastBuyEntrance({
           ),
       ],
     );
+  }
+}
