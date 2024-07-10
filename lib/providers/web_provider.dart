@@ -181,7 +181,7 @@ class WebProvider with ChangeNotifier {
           .any((element) => element.documentId == clientName);
 
       if (!contains) {
-        return totalRequests;
+        continue;
       }
 
       final clientData = _dataFromLastTrheeMonths[month.name]!
