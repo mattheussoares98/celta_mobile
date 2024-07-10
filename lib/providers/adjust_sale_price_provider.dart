@@ -15,6 +15,8 @@ class AdjustSalePriceProvider with ChangeNotifier {
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
+  List<String> get saleOrOffer => ["Venda", "Oferta"];
+
   Future<void> getProducts({
     required int enterpriseCode,
     required String searchValue,

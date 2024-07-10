@@ -1,15 +1,16 @@
-import 'package:celta_inventario/models/soap/products/get_product_json/get_product_json_model.dart';
-import 'package:celta_inventario/utils/utils.dart';
+import '../../../../components/components.dart';
+import '../../../../models/soap/soap.dart';
+import '../../../../pages/adjust_sale_price/adjust_sale_price.dart';
+import '../../../../utils/utils.dart';
+
 import 'package:flutter/material.dart';
 
-import '../../../../components/components.dart';
-
-class ProcuctItem extends StatelessWidget {
+class ProductItem extends StatefulWidget {
   final Function() updateSelectedIndex;
   final GetProductJsonModel product;
   final int index;
-  final int selectedIndex;
-  const ProcuctItem({
+  final int? selectedIndex;
+  const ProductItem({
     required this.updateSelectedIndex,
     required this.product,
     required this.index,
@@ -17,6 +18,11 @@ class ProcuctItem extends StatelessWidget {
     super.key,
   });
 
+  @override
+  State<ProductItem> createState() => _ProductItemState();
+}
+
+class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -26,64 +32,64 @@ class ProcuctItem extends StatelessWidget {
           children: [
             TitleAndSubtitle.titleAndSubtitle(
               // title: "Produto",
-              subtitle: product.name,
+              subtitle: widget.product.name,
             ),
             TitleAndSubtitle.titleAndSubtitle(
               title: "PLU",
-              subtitle: product.plu,
+              subtitle: widget.product.plu,
             ),
             TitleAndSubtitle.titleAndSubtitle(
-              title: product.retailPracticedPrice != null &&
-                      product.retailPracticedPrice! > 0
+              title: widget.product.retailPracticedPrice != null &&
+                      widget.product.retailPracticedPrice! > 0
                   ? "Varejo"
                   : null,
-              subtitle: product.retailPracticedPrice != null &&
-                      product.retailPracticedPrice! > 0
-                  ? product.retailPracticedPrice
+              subtitle: widget.product.retailPracticedPrice != null &&
+                      widget.product.retailPracticedPrice! > 0
+                  ? widget.product.retailPracticedPrice
                       .toString()
                       .toBrazilianNumber()
                       .addBrazilianCoin()
                   : "Sem preço de varejo",
-              subtitleColor: product.retailPracticedPrice != null &&
-                      product.retailPracticedPrice! > 0
+              subtitleColor: widget.product.retailPracticedPrice != null &&
+                      widget.product.retailPracticedPrice! > 0
                   ? Theme.of(context).colorScheme.primary
                   : Colors.black,
             ),
             TitleAndSubtitle.titleAndSubtitle(
-              title: product.wholePracticedPrice != null &&
-                      product.wholePracticedPrice! > 0
+              title: widget.product.wholePracticedPrice != null &&
+                      widget.product.wholePracticedPrice! > 0
                   ? "Atacado"
                   : null,
-              subtitle: product.wholePracticedPrice != null &&
-                      product.wholePracticedPrice! > 0
-                  ? product.wholePracticedPrice
+              subtitle: widget.product.wholePracticedPrice != null &&
+                      widget.product.wholePracticedPrice! > 0
+                  ? widget.product.wholePracticedPrice
                       .toString()
                       .toBrazilianNumber()
                       .addBrazilianCoin()
                   : "Sem preço de atacado",
-              subtitleColor: product.wholePracticedPrice != null &&
-                      product.wholePracticedPrice! > 0
+              subtitleColor: widget.product.wholePracticedPrice != null &&
+                      widget.product.wholePracticedPrice! > 0
                   ? Theme.of(context).colorScheme.primary
                   : Colors.black,
             ),
             TitleAndSubtitle.titleAndSubtitle(
-              title: product.wholePracticedPrice != null &&
-                      product.wholePracticedPrice! > 0
+              title: widget.product.wholePracticedPrice != null &&
+                      widget.product.wholePracticedPrice! > 0
                   ? "Ecommerce"
                   : null,
-              subtitle: product.eCommercePracticedPrice != null &&
-                      product.eCommercePracticedPrice! > 0
-                  ? product.eCommercePracticedPrice
+              subtitle: widget.product.eCommercePracticedPrice != null &&
+                      widget.product.eCommercePracticedPrice! > 0
+                  ? widget.product.eCommercePracticedPrice
                       .toString()
                       .toBrazilianNumber()
                       .addBrazilianCoin()
                   : "Sem preço de ecommerce",
-              subtitleColor: product.eCommercePracticedPrice != null &&
-                      product.eCommercePracticedPrice! > 0
+              subtitleColor: widget.product.eCommercePracticedPrice != null &&
+                      widget.product.eCommercePracticedPrice! > 0
                   ? Theme.of(context).colorScheme.primary
                   : Colors.black,
               otherWidget: InkWell(
-                onTap: updateSelectedIndex,
+                onTap: widget.updateSelectedIndex,
                 child: Row(
                   children: [
                     Text(
@@ -93,7 +99,7 @@ class ProcuctItem extends StatelessWidget {
                       ),
                     ),
                     Icon(
-                      selectedIndex == index
+                      widget.selectedIndex == widget.index
                           ? Icons.arrow_drop_up
                           : Icons.arrow_drop_down,
                       color: Theme.of(context).colorScheme.primary,
@@ -102,8 +108,12 @@ class ProcuctItem extends StatelessWidget {
                 ),
               ),
             ),
-            if (selectedIndex == index)
-              const Text("Esse item aqui tá selecionado")
+            if (widget.selectedIndex == widget.index)
+              const Column(
+                children: [
+                  SaleOrOfferRadios(),
+                ],
+              ),
           ],
         ),
       ),
