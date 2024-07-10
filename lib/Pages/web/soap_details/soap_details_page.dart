@@ -14,11 +14,27 @@ class SoapDetailsPage extends StatelessWidget {
     String enterpriseName =
         ModalRoute.of(context)!.settings.arguments as String;
     WebProvider webProvider = Provider.of(context);
-    SoapActionsModel? atualMonthData;
 
+    SoapActionsModel? atualMonthData;
     if (webProvider.dataFromLastTrheeMonths[Months.AtualMonth.name] != null) {
       atualMonthData = webProvider
           .dataFromLastTrheeMonths[Months.AtualMonth.name]!
+          .where((element) => element.documentId == enterpriseName)
+          .first;
+    }
+    SoapActionsModel? penultimateMonth;
+    if (webProvider.dataFromLastTrheeMonths[Months.PenultimateMonth.name] !=
+        null) {
+      penultimateMonth = webProvider
+          .dataFromLastTrheeMonths[Months.PenultimateMonth.name]!
+          .where((element) => element.documentId == enterpriseName)
+          .first;
+    }
+    SoapActionsModel? antiPenultimateMonth;
+    if (webProvider.dataFromLastTrheeMonths[Months.AntiPenultimateMonth.name] !=
+        null) {
+      antiPenultimateMonth = webProvider
+          .dataFromLastTrheeMonths[Months.AntiPenultimateMonth.name]!
           .where((element) => element.documentId == enterpriseName)
           .first;
     }
@@ -30,14 +46,18 @@ class SoapDetailsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text(
-              webProvider.yearAndMonthFromLastTrheeMonths()[0],
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
+            MonthDetails(
+              monthData: atualMonthData,
+              month: webProvider.yearAndMonthFromLastTrheeMonths()[0],
             ),
-            MonthDetails(monthData: atualMonthData),
+            MonthDetails(
+              monthData: penultimateMonth,
+              month: webProvider.yearAndMonthFromLastTrheeMonths()[1],
+            ),
+            MonthDetails(
+              monthData: antiPenultimateMonth,
+              month: webProvider.yearAndMonthFromLastTrheeMonths()[2],
+            ),
           ],
         ),
       ),
