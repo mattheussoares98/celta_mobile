@@ -10,28 +10,32 @@ class AdjustSalePricePage extends StatefulWidget {
 class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   int _selectedIndex = 0;
 
-  List<Widget> _pages = <Widget>[
-    Scaffold(
-      appBar: AppBar(title: const Text("Varejo")),
-    ),
-    Scaffold(
-      appBar: AppBar(title: const Text("Atacado")),
-    ),
-    Scaffold(
-      appBar: AppBar(title: const Text("Ecommerce")),
-    ),
-  ];
-
   _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    _pageController.jumpToPage(index);
   }
 
+  final PageController _pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages.elementAt(_selectedIndex),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onItemTapped,
+        children: [
+          Scaffold(
+            appBar: AppBar(title: const Text("Varejo")),
+          ),
+          Scaffold(
+            appBar: AppBar(title: const Text("Atacado")),
+          ),
+          Scaffold(
+            appBar: AppBar(title: const Text("Ecommerce")),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedLabelStyle: const TextStyle(color: Colors.black),
         unselectedItemColor: Colors.black,
