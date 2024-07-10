@@ -11,9 +11,15 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   int _selectedIndex = 0;
 
   List<Widget> _pages = <Widget>[
-    const Scaffold(),
-    const Scaffold(),
-    const Scaffold(),
+    Scaffold(
+      appBar: AppBar(title: const Text("Varejo")),
+    ),
+    Scaffold(
+      appBar: AppBar(title: const Text("Atacado")),
+    ),
+    Scaffold(
+      appBar: AppBar(title: const Text("Ecommerce")),
+    ),
   ];
 
   _onItemTapped(int index) {
@@ -45,23 +51,33 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                     width: 35,
                   ),
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             label: 'Atacado',
-            icon: Icon(
-              Icons.business,
-              size: 35,
-            ),
+            icon: _selectedIndex == 1
+                ? Image.asset(
+                    "lib/assets/Images/whole_price_selected.png",
+                    height: 35,
+                    width: 35,
+                  )
+                : Image.asset(
+                    "lib/assets/Images/whole_price_not_selected.png",
+                    height: 35,
+                    width: 35,
+                  ),
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             label: 'Ecommerce',
-            icon: Stack(
-              children: [
-                const Icon(
-                  Icons.shopping_cart,
-                  size: 35,
-                ),
-              ],
-            ),
+            icon: _selectedIndex == 2
+                ? Image.asset(
+                    "lib/assets/Images/ecommerce_selected.png",
+                    height: 35,
+                    width: 35,
+                  )
+                : Image.asset(
+                    "lib/assets/Images/ecommerce_not_selected.png",
+                    height: 35,
+                    width: 35,
+                  ),
           ),
         ],
         currentIndex: _selectedIndex,
