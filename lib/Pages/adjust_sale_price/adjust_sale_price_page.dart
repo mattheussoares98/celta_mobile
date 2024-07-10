@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'adjust_sale_price.dart';
+
 class AdjustSalePricePage extends StatefulWidget {
   const AdjustSalePricePage({super.key});
 
@@ -25,9 +27,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
         controller: _pageController,
         onPageChanged: _onItemTapped,
         children: [
-          Scaffold(
-            appBar: AppBar(title: const Text("Varejo")),
-          ),
+          const RetailPricePage(),
           Scaffold(
             appBar: AppBar(title: const Text("Atacado")),
           ),
