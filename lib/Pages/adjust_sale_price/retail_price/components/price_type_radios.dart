@@ -1,17 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../models/enterprise/enterprise.dart';
 import '../../../../providers/providers.dart';
 
-class SaleTypeRadios extends StatefulWidget {
-  const SaleTypeRadios({super.key});
+class PriceTypeRadios extends StatefulWidget {
+  final EnterpriseModel enterpriseModel;
+  const PriceTypeRadios({
+    required this.enterpriseModel,
+    super.key,
+  });
 
   @override
-  State<SaleTypeRadios> createState() => _SaleTypeRadiosState();
+  State<PriceTypeRadios> createState() => _SaleTypeRadiosState();
 }
 
-class _SaleTypeRadiosState extends State<SaleTypeRadios> {
+class _SaleTypeRadiosState extends State<PriceTypeRadios> {
   int? groupValue;
+
+  List<String> priceTypes = [];
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.enterpriseModel.useRetailSale) {
+      priceTypes.add("Varejo");
+    }
+    if (widget.enterpriseModel.useWholeSale) {
+      priceTypes.add("Atacado");
+    }
+    if (widget.enterpriseModel.useEcommerceSale) {
+      priceTypes.add("Ecommerce");
+    }
+
+    Future.delayed(Duration.zero, () {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +46,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
       children: [
         const Divider(),
         const Text(
-          "Tipo de venda",
+          "Tipo de preço",
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w400,
@@ -37,13 +62,13 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
   List<Widget> generateRadios(AdjustSalePriceProvider adjustSalePriceProvider) {
     List<Widget> radios = [];
 
-    for (var i = 0; i < adjustSalePriceProvider.saleOrOffer.length; i++) {
+    for (var i = 0; i < priceTypes.length; i++) {
       radios.add(
         Expanded(
           child: RadioListTile(
+            title: Text(priceTypes[i]),
             visualDensity: VisualDensity.compact,
             contentPadding: const EdgeInsets.all(0),
-            title: Text(adjustSalePriceProvider.saleOrOffer[i]),
             value: i,
             dense: true,
             groupValue: groupValue,

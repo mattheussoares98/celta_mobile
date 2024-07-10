@@ -1,3 +1,5 @@
+import 'package:celta_inventario/models/enterprise/enterprise.dart';
+
 import '../../../../components/components.dart';
 import '../../../../models/soap/soap.dart';
 import '../../../../pages/adjust_sale_price/adjust_sale_price.dart';
@@ -25,6 +27,9 @@ class ProductItem extends StatefulWidget {
 class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
+    final EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments! as EnterpriseModel;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -109,10 +114,11 @@ class _ProductItemState extends State<ProductItem> {
               ),
             ),
             if (widget.selectedIndex == widget.index)
-              const Column(
+              Column(
                 children: [
-                  SaleTypeRadios(),
-                  ReplicationParameters(),
+                  PriceTypeRadios(enterpriseModel: enterprise),
+                  const SaleTypeRadios(),
+                  const ReplicationParameters(),
                 ],
               ),
           ],
