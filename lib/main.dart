@@ -6,6 +6,7 @@ import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
 import './api/api.dart';
+import './pages/adjust_sale_price/adjust_sale_price.dart';
 import 'pages/web/web.dart';
 import 'pages/adjust_stock/adjust_stock.dart';
 import 'pages/buy_request/buy_request.dart';
@@ -225,6 +226,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.WEB_ENTERPRISE_DETAILS: (ctx) =>
               const WebEnterpriseDetailsPage(),
           APPROUTES.WEB_SOAP_DETAILS: (ctx) => const SoapDetailsPage(),
+          APPROUTES.ADJUST_SALE_PRICE: (ctx) => const AdjustSalePricePage(),
         },
       ),
     );

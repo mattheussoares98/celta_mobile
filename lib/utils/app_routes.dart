@@ -39,4 +39,5 @@ class APPROUTES {
   static const WEB_HOME = '/WEB_HOME';
   static const WEB_ENTERPRISE_DETAILS = '/WEB_ENTERPRISE_DETAILS';
   static const WEB_SOAP_DETAILS = '/WEB_SOAP_DETAILS';
+  static const ADJUST_SALE_PRICE = '/ADJUST_SALE_PRICE';
 }
