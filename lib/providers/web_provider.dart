@@ -6,6 +6,12 @@ import 'package:intl/intl.dart';
 
 import '../api/api.dart';
 
+enum Months {
+  AtualMonth,
+  PenultimateMonth,
+  AntiPenultimateMonth,
+}
+
 class WebProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -21,157 +27,20 @@ class WebProvider with ChangeNotifier {
   List<FirebaseClientModel> _clients = [];
   List<FirebaseClientModel> get clients => [..._clients];
 
-  List<SoapActionsModel> _lastThreeMonths = [];
-  List<SoapActionsModel> get lastThreeMonths => [..._lastThreeMonths];
+  Set<String> _clientsNames = {};
+  Set<String> get clientsNames => _clientsNames;
 
-  List<String> _clientsNames = [];
-  List<String> get clientsNames => [..._clientsNames];
+  Map<String, List<SoapActionsModel>> _dataFromLastTrheeMonths = {
+    Months.AtualMonth.name: <SoapActionsModel>[],
+    Months.PenultimateMonth.name: <SoapActionsModel>[],
+    Months.AntiPenultimateMonth.name: <SoapActionsModel>[],
+  };
 
-  List<SoapActionsModel> _atualMonth = [];
-  List<SoapActionsModel> get atualMonth => [..._atualMonth];
-  List<SoapActionsModel> _penultimateMonth = [];
-  List<SoapActionsModel> get penultimateMonth => [..._penultimateMonth];
-  List<SoapActionsModel> _antiPenultimateMonth = [];
-  List<SoapActionsModel> get antiPenultimateMonth => [..._antiPenultimateMonth];
+  Map<String, List<SoapActionsModel>> get dataFromLastTrheeMonths =>
+      _dataFromLastTrheeMonths;
 
   void _orderEnterprisesByName() {
     _clients.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));
-  }
-
-  int? _sumRequests(
-    int? totalLastThree,
-    int? totalEqualSoapClientName,
-  ) {
-    int total = 0;
-
-    if (totalLastThree != null) {
-      total += totalLastThree;
-    }
-
-    if (totalEqualSoapClientName != null) {
-      total += totalEqualSoapClientName;
-    }
-
-    if (total > 0) {
-      return total;
-    } else {
-      return null;
-    }
-  }
-
-  List _mergeDates({
-    required int indexOfEqualSoap,
-    required SoapActionsModel soapAction,
-  }) {
-    var newDates = [];
-
-    for (var date in _lastThreeMonths[indexOfEqualSoap].datesUsed!) {
-      if (soapAction.datesUsed!.contains(date)) {
-        continue;
-      } else {
-        newDates.add(date);
-      }
-    }
-    return newDates;
-  }
-
-  List _mergeUsers({
-    required int indexOfEqualSoap,
-    required SoapActionsModel soapAction,
-  }) {
-    var newUsers = [];
-
-    for (var user in _lastThreeMonths[indexOfEqualSoap].users!) {
-      if (soapAction.users!.contains(user)) {
-        continue;
-      } else {
-        newUsers.add(user);
-      }
-    }
-    return newUsers;
-  }
-
-  void _mergeMonthInLastTrheeMonths(List<SoapActionsModel> listToMerge) {
-    for (var soapAction in listToMerge) {
-      int indexOfEqualSoap = _lastThreeMonths
-          .indexWhere((element) => element.documentId == soapAction.documentId);
-
-      if (indexOfEqualSoap != -1) {
-        final mergedAction = SoapActionsModel(
-          documentId: soapAction.documentId,
-          datesUsed: _mergeDates(
-            indexOfEqualSoap: indexOfEqualSoap,
-            soapAction: soapAction,
-          ),
-          users: _mergeUsers(
-            indexOfEqualSoap: indexOfEqualSoap,
-            soapAction: soapAction,
-          ),
-          adjustStockConfirmQuantity: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].adjustStockConfirmQuantity,
-            soapAction.adjustStockConfirmQuantity,
-          ),
-          priceConferenceGetProductOrSendToPrint: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap]
-                .priceConferenceGetProductOrSendToPrint,
-            soapAction.priceConferenceGetProductOrSendToPrint,
-          ),
-          inventoryEntryQuantity: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].inventoryEntryQuantity,
-            soapAction.inventoryEntryQuantity,
-          ),
-          receiptEntryQuantity: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].receiptEntryQuantity,
-            soapAction.receiptEntryQuantity,
-          ),
-          receiptLiberate: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].receiptLiberate,
-            soapAction.receiptLiberate,
-          ),
-          saleRequestSave: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].saleRequestSave,
-            soapAction.saleRequestSave,
-          ),
-          transferBetweenStocksConfirmAdjust: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap]
-                .transferBetweenStocksConfirmAdjust,
-            soapAction.transferBetweenStocksConfirmAdjust,
-          ),
-          transferBetweenPackageConfirmAdjust: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap]
-                .transferBetweenPackageConfirmAdjust,
-            soapAction.transferBetweenPackageConfirmAdjust,
-          ),
-          transferRequestSave: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].transferRequestSave,
-            soapAction.transferRequestSave,
-          ),
-          customerRegister: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].customerRegister,
-            soapAction.customerRegister,
-          ),
-          buyRequestSave: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].buyRequestSave,
-            soapAction.buyRequestSave,
-          ),
-          researchPricesInsertPrice: _sumRequests(
-            _lastThreeMonths[indexOfEqualSoap].researchPricesInsertPrice,
-            soapAction.researchPricesInsertPrice,
-          ),
-        );
-        _lastThreeMonths[indexOfEqualSoap] = mergedAction;
-      } else {
-        _lastThreeMonths.add(soapAction);
-      }
-    }
-  }
-
-  void _mergeLastThreeMonths() {
-    _lastThreeMonths.clear();
-
-    _mergeMonthInLastTrheeMonths(_atualMonth);
-    _mergeMonthInLastTrheeMonths(_penultimateMonth);
-    _mergeMonthInLastTrheeMonths(_antiPenultimateMonth);
   }
 
   Future<void> signIn({
@@ -235,138 +104,105 @@ class WebProvider with ChangeNotifier {
     return lastThreeMonths;
   }
 
-  void _updateAllClientsNames() {
-    _clientsNames.clear();
-    notifyListeners();
-
-    for (var atual in _atualMonth) {
-      if (_clientsNames.contains(atual.documentId)) {
-        continue;
-      } else {
-        _clientsNames.add(atual.documentId);
-      }
-    }
-    for (var atual in _penultimateMonth) {
-      if (_clientsNames.contains(atual.documentId)) {
-        continue;
-      } else {
-        _clientsNames.add(atual.documentId);
-      }
-    }
-    for (var atual in _antiPenultimateMonth) {
-      if (_clientsNames.contains(atual.documentId)) {
-        continue;
-      } else {
-        _clientsNames.add(atual.documentId);
-      }
-    }
-    notifyListeners();
-  }
-
-  int getTotalRequestsByMonth({
-    required String clientName,
-    required List<SoapActionsModel> monthSoapActions,
-  }) {
-    int counter = 0;
-    final soap =
-        monthSoapActions.where((element) => element.documentId == clientName);
-
-    if (soap.isEmpty) {
-      return 0;
-    }
-
-    sumValueIfHas(int? request) {
-      if (request != null) {
-        counter += request;
-      }
-    }
-
-    sumValueIfHas(soap.first.adjustStockConfirmQuantity);
-    sumValueIfHas(soap.first.priceConferenceGetProductOrSendToPrint);
-    sumValueIfHas(soap.first.inventoryEntryQuantity);
-    sumValueIfHas(soap.first.receiptEntryQuantity);
-    sumValueIfHas(soap.first.receiptLiberate);
-    sumValueIfHas(soap.first.saleRequestSave);
-    sumValueIfHas(soap.first.transferBetweenStocksConfirmAdjust);
-    sumValueIfHas(soap.first.transferBetweenPackageConfirmAdjust);
-    sumValueIfHas(soap.first.transferRequestSave);
-    sumValueIfHas(soap.first.customerRegister);
-    sumValueIfHas(soap.first.buyRequestSave);
-    sumValueIfHas(soap.first.researchPricesInsertPrice);
-
-    return counter;
-  }
-
-  int getTotalRequestsByLastThreeMonths(String clientName) {
-    int total = 0;
-
-    total += getTotalRequestsByMonth(
-        clientName: clientName, monthSoapActions: _atualMonth);
-    total += getTotalRequestsByMonth(
-        clientName: clientName, monthSoapActions: _penultimateMonth);
-    total += getTotalRequestsByMonth(
-        clientName: clientName, monthSoapActions: _antiPenultimateMonth);
-
-    return total;
-  }
-
   Future<dynamic> getLastThreeMonthsSoapActions() async {
     _isLoading = true;
     _errorMessageSoapActions = "";
-    _lastThreeMonths.clear();
 
     notifyListeners();
 
     try {
-      List lastThreeMonths = _getLastThreeMonts();
+      List<String> lastThreeMonths = _getLastThreeMonts();
+
       final atualMonth =
           await FirebaseHelper.getAllSoapActions(lastThreeMonths[0]);
+
       final penultimateMonth =
           await FirebaseHelper.getAllSoapActions(lastThreeMonths[1]);
       final antiPenultimateMonth =
           await FirebaseHelper.getAllSoapActions(lastThreeMonths[2]);
 
-      if (atualMonth != null) {
-        _atualMonth = atualMonth
+      if (atualMonth != null &&
+          penultimateMonth != null &&
+          antiPenultimateMonth != null) {
+        _dataFromLastTrheeMonths[Months.AtualMonth.name] = atualMonth
             .map((element) => SoapActionsModel.fromJson(
                   documentId: element.id,
                   json: element.data() as Map<String, dynamic>,
                 ))
             .toList();
+
+        _dataFromLastTrheeMonths[Months.PenultimateMonth.name] =
+            penultimateMonth
+                .map((element) => SoapActionsModel.fromJson(
+                      documentId: element.id,
+                      json: element.data() as Map<String, dynamic>,
+                    ))
+                .toList();
+
+        _dataFromLastTrheeMonths[Months.AntiPenultimateMonth.name] =
+            antiPenultimateMonth
+                .map((element) => SoapActionsModel.fromJson(
+                      documentId: element.id,
+                      json: element.data() as Map<String, dynamic>,
+                    ))
+                .toList();
+
+        for (var atualMonthData in atualMonth) {
+          _clientsNames.add(atualMonthData.id);
+        }
+        for (var atualMonthData in penultimateMonth) {
+          _clientsNames.add(atualMonthData.id);
+        }
+        for (var atualMonthData in antiPenultimateMonth) {
+          _clientsNames.add(atualMonthData.id);
+        }
+
+        final ordenatedList = _clientsNames.toList()..sort();
+        _clientsNames = ordenatedList.toSet();
       } else {
         throw Exception();
       }
-
-      if (penultimateMonth != null) {
-        _penultimateMonth = penultimateMonth
-            .map((element) => SoapActionsModel.fromJson(
-                  documentId: element.id,
-                  json: element.data() as Map<String, dynamic>,
-                ))
-            .toList();
-      } else {
-        throw Exception();
-      }
-
-      if (antiPenultimateMonth != null) {
-        _antiPenultimateMonth = antiPenultimateMonth
-            .map((element) => SoapActionsModel.fromJson(
-                  documentId: element.id,
-                  json: element.data() as Map<String, dynamic>,
-                ))
-            .toList();
-      } else {
-        throw Exception();
-      }
-
-      _updateAllClientsNames();
-      _mergeLastThreeMonths();
     } catch (e) {
       _errorMessageSoapActions = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  int getTotalSoapActions({
+    required List<Months> months,
+    required String clientName,
+  }) {
+    int totalRequests = 0;
+
+    for (var month in months) {
+      bool contains = _dataFromLastTrheeMonths[month.name]!
+          .any((element) => element.documentId == clientName);
+
+      if (!contains) {
+        return totalRequests;
+      }
+
+      final clientData = _dataFromLastTrheeMonths[month.name]!
+          .where((element) => element.documentId == clientName)
+          .first;
+
+      totalRequests += clientData.adjustStockConfirmQuantity ?? 0;
+      totalRequests += clientData.priceConferenceGetProductOrSendToPrint ?? 0;
+      totalRequests += clientData.inventoryEntryQuantity ?? 0;
+      totalRequests += clientData.receiptEntryQuantity ?? 0;
+      totalRequests += clientData.receiptLiberate ?? 0;
+      totalRequests += clientData.saleRequestSave ?? 0;
+      totalRequests += clientData.transferBetweenStocksConfirmAdjust ?? 0;
+      totalRequests += clientData.transferBetweenPackageConfirmAdjust ?? 0;
+      totalRequests += clientData.transferRequestSave ?? 0;
+      totalRequests += clientData.customerRegister ?? 0;
+      totalRequests += clientData.buyRequestSave ?? 0;
+      totalRequests += clientData.researchPricesInsertPrice ?? 0;
+    }
+
+    return totalRequests;
   }
 
   Future<void> deleteEnterprise({
