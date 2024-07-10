@@ -16,12 +16,14 @@ class EnterprisesPage extends StatelessWidget {
         leading: const Text(""),
         title: webProvider.enterprises.isEmpty
             ? null
-            : Text(
-                "${webProvider.enterprises.length} empresas",
-                style: const TextStyle(
-                  color: Colors.white,
+            : FittedBox(
+              child: Text(
+                  "${webProvider.enterprises.length} empresas cadastradas",
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
+            ),
         actions: [
           const AddEnterpriseButton(),
           IconButton(
