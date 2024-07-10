@@ -47,26 +47,40 @@ class SoapDetailsPage extends StatelessWidget {
       }
     }
 
+    final SoapActionsModel lastThreeMonthsMergeds =
+        webProvider.mergeLastThreeMonths(enterpriseName);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(enterpriseName),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            MonthDetails(
-              monthData: atualMonthData,
-              month: webProvider.yearAndMonthFromLastTrheeMonths()[0],
-            ),
-            MonthDetails(
-              monthData: penultimateMonth,
-              month: webProvider.yearAndMonthFromLastTrheeMonths()[1],
-            ),
-            MonthDetails(
-              monthData: antiPenultimateMonth,
-              month: webProvider.yearAndMonthFromLastTrheeMonths()[2],
-            ),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MonthDetails(
+                monthData: atualMonthData,
+                month: webProvider.yearAndMonthFromLastTrheeMonths()[0],
+              ),
+              MonthDetails(
+                monthData: penultimateMonth,
+                month: webProvider.yearAndMonthFromLastTrheeMonths()[1],
+              ),
+              MonthDetails(
+                monthData: antiPenultimateMonth,
+                month: webProvider.yearAndMonthFromLastTrheeMonths()[2],
+              ),
+              Column(
+                children: [
+                  MonthDetails(
+                    monthData: lastThreeMonthsMergeds,
+                    month: "Total nos últimos 3 meses",
+                    showUsersAndDatesInformations: false,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

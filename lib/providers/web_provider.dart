@@ -35,9 +35,127 @@ class WebProvider with ChangeNotifier {
     Months.PenultimateMonth.name: <SoapActionsModel>[],
     Months.AntiPenultimateMonth.name: <SoapActionsModel>[],
   };
-
   Map<String, List<SoapActionsModel>> get dataFromLastTrheeMonths =>
       _dataFromLastTrheeMonths;
+
+  SoapActionsModel _sumMonthRequests({
+    required List<SoapActionsModel> monthsData,
+    required String enterpriseName,
+  }) {
+    int adjustStockConfirmQuantity = 0;
+    int priceConferenceGetProductOrSendToPrint = 0;
+    int inventoryEntryQuantity = 0;
+    int receiptEntryQuantity = 0;
+    int receiptLiberate = 0;
+    int saleRequestSave = 0;
+    int transferBetweenStocksConfirmAdjust = 0;
+    int transferBetweenPackageConfirmAdjust = 0;
+    int transferRequestSave = 0;
+    int customerRegister = 0;
+    int buyRequestSave = 0;
+    int researchPricesInsertPrice = 0;
+
+    for (var monthData in monthsData) {
+      if (monthData.adjustStockConfirmQuantity != null) {
+        adjustStockConfirmQuantity += monthData.adjustStockConfirmQuantity!;
+      }
+      if (monthData.priceConferenceGetProductOrSendToPrint != null) {
+        priceConferenceGetProductOrSendToPrint +=
+            monthData.priceConferenceGetProductOrSendToPrint!;
+      }
+      if (monthData.inventoryEntryQuantity != null) {
+        inventoryEntryQuantity += monthData.inventoryEntryQuantity!;
+      }
+      if (monthData.receiptEntryQuantity != null) {
+        receiptEntryQuantity += monthData.receiptEntryQuantity!;
+      }
+      if (monthData.receiptLiberate != null) {
+        receiptLiberate += monthData.receiptLiberate!;
+      }
+      if (monthData.saleRequestSave != null) {
+        saleRequestSave += monthData.saleRequestSave!;
+      }
+      if (monthData.transferBetweenStocksConfirmAdjust != null) {
+        transferBetweenStocksConfirmAdjust +=
+            monthData.transferBetweenStocksConfirmAdjust!;
+      }
+      if (monthData.transferBetweenPackageConfirmAdjust != null) {
+        transferBetweenPackageConfirmAdjust +=
+            monthData.transferBetweenPackageConfirmAdjust!;
+      }
+      if (monthData.transferRequestSave != null) {
+        transferRequestSave += monthData.transferRequestSave!;
+      }
+      if (monthData.customerRegister != null) {
+        customerRegister += monthData.customerRegister!;
+      }
+      if (monthData.buyRequestSave != null) {
+        buyRequestSave += monthData.buyRequestSave!;
+      }
+      if (monthData.researchPricesInsertPrice != null) {
+        researchPricesInsertPrice += monthData.researchPricesInsertPrice!;
+      }
+    }
+
+    return SoapActionsModel(
+      documentId: enterpriseName,
+      datesUsed: [],
+      users: [],
+      adjustStockConfirmQuantity:
+          adjustStockConfirmQuantity == 0 ? null : adjustStockConfirmQuantity,
+      priceConferenceGetProductOrSendToPrint:
+          priceConferenceGetProductOrSendToPrint == 0
+              ? null
+              : priceConferenceGetProductOrSendToPrint,
+      inventoryEntryQuantity:
+          inventoryEntryQuantity == 0 ? null : inventoryEntryQuantity,
+      receiptEntryQuantity:
+          receiptEntryQuantity == 0 ? null : receiptEntryQuantity,
+      receiptLiberate: receiptLiberate == 0 ? null : receiptLiberate,
+      saleRequestSave: saleRequestSave == 0 ? null : saleRequestSave,
+      transferBetweenStocksConfirmAdjust:
+          transferBetweenStocksConfirmAdjust == 0
+              ? null
+              : transferBetweenStocksConfirmAdjust,
+      transferBetweenPackageConfirmAdjust:
+          transferBetweenPackageConfirmAdjust == 0
+              ? null
+              : transferBetweenPackageConfirmAdjust,
+      transferRequestSave:
+          transferRequestSave == 0 ? null : transferRequestSave,
+      customerRegister: customerRegister == 0 ? null : customerRegister,
+      buyRequestSave: buyRequestSave == 0 ? null : buyRequestSave,
+      researchPricesInsertPrice:
+          researchPricesInsertPrice == 0 ? null : researchPricesInsertPrice,
+    );
+  }
+
+  SoapActionsModel mergeLastThreeMonths(String enterpriseName) {
+    final monthsThatHaveData = <SoapActionsModel>[];
+
+    final atualMonthData = _dataFromLastTrheeMonths[Months.AtualMonth.name]
+        ?.where((element) => element.documentId == enterpriseName);
+    if (atualMonthData?.isEmpty == false) {
+      monthsThatHaveData.add(atualMonthData!.first);
+    }
+
+    final penultimateMonth =
+        _dataFromLastTrheeMonths[Months.PenultimateMonth.name]
+            ?.where((element) => element.documentId == enterpriseName);
+    if (penultimateMonth?.isEmpty == false) {
+      monthsThatHaveData.add(penultimateMonth!.first);
+    }
+
+    final antiPenultimateMonth =
+        _dataFromLastTrheeMonths[Months.AntiPenultimateMonth.name]
+            ?.where((element) => element.documentId == enterpriseName);
+    if (antiPenultimateMonth?.isEmpty == false) {
+      monthsThatHaveData.add(antiPenultimateMonth!.first);
+    }
+
+    return _sumMonthRequests(
+        monthsData: monthsThatHaveData, enterpriseName: enterpriseName);
+  }
 
   void _orderEnterprisesByName() {
     _enterprises.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));

@@ -5,9 +5,11 @@ import '../../../models/firebase/firebase.dart';
 class MonthDetails extends StatelessWidget {
   final SoapActionsModel? monthData;
   final String month;
+  final bool showUsersAndDatesInformations;
   const MonthDetails({
     required this.monthData,
     required this.month,
+    this.showUsersAndDatesInformations = true,
     super.key,
   });
 
@@ -68,7 +70,9 @@ class MonthDetails extends StatelessWidget {
                       if (monthData?.researchPricesInsertPrice != null)
                         Text(
                             "Pesquisa de preços concorrentes: ${monthData?.researchPricesInsertPrice}"),
-                      if (monthData != null && monthData?.users != null)
+                      if (monthData != null &&
+                          monthData?.users != null &&
+                          showUsersAndDatesInformations)
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(
@@ -79,14 +83,18 @@ class MonthDetails extends StatelessWidget {
                             ),
                           ),
                         ),
-                      if (monthData != null && monthData?.users != null)
+                      if (monthData != null &&
+                          monthData?.users != null &&
+                          showUsersAndDatesInformations)
                         Wrap(
                           children: [
                             for (var i = 0; i < monthData!.users!.length; i++)
                               Text(monthData!.users![i].toString() + "; "),
                           ],
                         ),
-                      if (monthData != null && monthData!.datesUsed != null)
+                      if (monthData != null &&
+                          monthData!.datesUsed != null &&
+                          showUsersAndDatesInformations)
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(
