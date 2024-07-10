@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 
 import '../../../../providers/providers.dart';
 
-class SaleOrOfferRadios extends StatefulWidget {
-  const SaleOrOfferRadios({super.key});
+class SaleTypeRadios extends StatefulWidget {
+  const SaleTypeRadios({super.key});
 
   @override
-  State<SaleOrOfferRadios> createState() => _SaleOrOfferRadiosState();
+  State<SaleTypeRadios> createState() => _SaleTypeRadiosState();
 }
 
-class _SaleOrOfferRadiosState extends State<SaleOrOfferRadios> {
+class _SaleTypeRadiosState extends State<SaleTypeRadios> {
   int? groupValue;
 
   @override
@@ -21,7 +21,7 @@ class _SaleOrOfferRadiosState extends State<SaleOrOfferRadios> {
       children: [
         const Divider(),
         const Text(
-          "Tipo de preço para ser alterado",
+          "Tipo de venda",
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w400,

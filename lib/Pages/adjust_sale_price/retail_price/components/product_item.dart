@@ -111,7 +111,7 @@ class _ProductItemState extends State<ProductItem> {
             if (widget.selectedIndex == widget.index)
               const Column(
                 children: [
-                  SaleOrOfferRadios(),
+                  SaleTypeRadios(),
                   ReplicationParameters(),
                 ],
               ),
