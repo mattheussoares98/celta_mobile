@@ -1,3 +1,4 @@
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -30,7 +31,8 @@ class SoapActionsItems extends StatelessWidget {
             shrinkWrap: true,
             itemCount: webProvider.enterprisesNames.toList().length,
             itemBuilder: (_, index) {
-              final clientName = webProvider.enterprisesNames.toList()[index];
+              final enterpriseName =
+                  webProvider.enterprisesNames.toList()[index];
 
               return Card(
                 child: Padding(
@@ -41,7 +43,7 @@ class SoapActionsItems extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              clientName.toUpperCase(),
+                              enterpriseName.toUpperCase(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontSize: 17,
@@ -53,42 +55,31 @@ class SoapActionsItems extends StatelessWidget {
                         Text(
                           "Mês retrasado: ${webProvider.getTotalSoapActions(months: [
                                 Months.AntiPenultimateMonth
-                              ], clientName: clientName)}",
+                              ], clientName: enterpriseName)}",
                         ),
                         Text(
                           "Mês passado: ${webProvider.getTotalSoapActions(months: [
                                 Months.PenultimateMonth
-                              ], clientName: clientName)}",
+                              ], clientName: enterpriseName)}",
                         ),
                         Text(
                           "Mês atual: ${webProvider.getTotalSoapActions(months: [
                                 Months.AtualMonth
-                              ], clientName: clientName)}",
+                              ], clientName: enterpriseName)}",
                         ),
                         Text(
                           "Últimos 3 meses: ${webProvider.getTotalSoapActions(months: [
                                 Months.AtualMonth,
                                 Months.PenultimateMonth,
                                 Months.AntiPenultimateMonth,
-                              ], clientName: clientName)}",
+                              ], clientName: enterpriseName)}",
                         ),
                         TextButton(
                           onPressed: () {
-                            showDialog(
-                                context: pageContext,
-                                builder: (_) {
-                                  return const AlertDialog(
-                                    title: const Text(
-                                        "Implemente aqui os detalhes"),
-                                    contentPadding: const EdgeInsets.all(0),
-                                    insetPadding: const EdgeInsets.all(10),
-                                    content: SingleChildScrollView(
-                                      child: Column(
-                                        children: [],
-                                      ),
-                                    ),
-                                  );
-                                });
+                            Navigator.of(context).pushNamed(
+                              APPROUTES.WEB_SOAP_DETAILS,
+                              arguments: enterpriseName,
+                            );
                           },
                           child: const Text("Visualizar detalhes"),
                         ),

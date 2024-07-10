@@ -224,6 +224,7 @@ class MyApp extends StatelessWidget {
           APPROUTES.WEB_HOME: (ctx) => const WebHomePage(),
           APPROUTES.WEB_ENTERPRISE_DETAILS: (ctx) =>
               const WebEnterpriseDetailsPage(),
+          APPROUTES.WEB_SOAP_DETAILS: (ctx) => const SoapDetailsPage(),
         },
       ),
     );

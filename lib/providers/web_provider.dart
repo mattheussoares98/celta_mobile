@@ -91,7 +91,7 @@ class WebProvider with ChangeNotifier {
     }
   }
 
-  List<String> _getLastThreeMonts() {
+  List<String> yearAndMonthFromLastTrheeMonths() {
     DateTime now = DateTime.now();
     List<String> lastThreeMonths = [];
 
@@ -111,7 +111,7 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      List<String> lastThreeMonths = _getLastThreeMonts();
+      List<String> lastThreeMonths = yearAndMonthFromLastTrheeMonths();
 
       final atualMonth =
           await FirebaseHelper.getAllSoapActions(lastThreeMonths[0]);

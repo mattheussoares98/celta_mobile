@@ -1,0 +1,1 @@
+export './soap_details_page.dart';
