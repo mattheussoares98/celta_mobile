@@ -17,26 +17,34 @@ class SoapDetailsPage extends StatelessWidget {
 
     SoapActionsModel? atualMonthData;
     if (webProvider.dataFromLastTrheeMonths[Months.AtualMonth.name] != null) {
-      atualMonthData = webProvider
-          .dataFromLastTrheeMonths[Months.AtualMonth.name]!
-          .where((element) => element.documentId == enterpriseName)
-          .first;
+      final data = webProvider.dataFromLastTrheeMonths[Months.AtualMonth.name]!
+          .where((element) => element.documentId == enterpriseName);
+
+      if (data.isNotEmpty) {
+        atualMonthData = data.first;
+      }
     }
     SoapActionsModel? penultimateMonth;
     if (webProvider.dataFromLastTrheeMonths[Months.PenultimateMonth.name] !=
         null) {
-      penultimateMonth = webProvider
+      final data = webProvider
           .dataFromLastTrheeMonths[Months.PenultimateMonth.name]!
-          .where((element) => element.documentId == enterpriseName)
-          .first;
+          .where((element) => element.documentId == enterpriseName);
+
+      if (data.isNotEmpty) {
+        penultimateMonth = data.first;
+      }
     }
     SoapActionsModel? antiPenultimateMonth;
     if (webProvider.dataFromLastTrheeMonths[Months.AntiPenultimateMonth.name] !=
         null) {
-      antiPenultimateMonth = webProvider
+      final data = webProvider
           .dataFromLastTrheeMonths[Months.AntiPenultimateMonth.name]!
-          .where((element) => element.documentId == enterpriseName)
-          .first;
+          .where((element) => element.documentId == enterpriseName);
+
+      if (data.isNotEmpty) {
+        antiPenultimateMonth = data.first;
+      }
     }
 
     return Scaffold(
