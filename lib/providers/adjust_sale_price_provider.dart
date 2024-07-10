@@ -20,7 +20,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
   }) async {
-    _isLoading = false;
+    _isLoading = true;
     _products.clear();
     _errorMessage = "";
     notifyListeners();
@@ -31,7 +31,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
         enterpriseCode: enterpriseCode,
         searchValue: searchValue,
         configurationsProvider: configurationsProvider,
-        routineTypeInt: 8,
+        routineTypeInt: 0,
       );
 
       _errorMessage = SoapRequestResponse.errorMessage;

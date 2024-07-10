@@ -1,12 +1,35 @@
+import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../models/enterprise/enterprise_model.dart';
 
-class RetailPricePage extends StatelessWidget {
+class RetailPricePage extends StatefulWidget {
   const RetailPricePage({super.key});
 
   @override
+  State<RetailPricePage> createState() => _RetailPricePageState();
+}
+
+class _RetailPricePageState extends State<RetailPricePage> {
+  final searchValueController = TextEditingController();
+  final searchFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchFocusNode.dispose();
+    searchValueController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Varejo"),
@@ -15,45 +38,30 @@ class RetailPricePage extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           SearchWidget(
-            focusNodeConsultProduct: FocusNode(),
+            focusNodeConsultProduct: searchFocusNode,
             showOnlyConfigurationOfSearch: true,
             isLoading: false,
+            consultProductController: searchValueController,
             onPressSearch: () async {
-              // await priceConferenceProvider.getProduct(
-              //   configurationsProvider: configurationsProvider,
-              //   enterpriseCode: enterprise.codigoInternoEmpresa,
-              //   controllerText: _consultProductController.text,
-              //   context: context,
-              // );
-
-              //não estava funcionando passar o productsCount como parâmetro
-              //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-              //textEditingController após a consulta dos produtos se encontrar
-              //algum produto
-              // if (priceConferenceProvider.productsCount > 0) {
-              //   //se for maior que 0 significa que deu certo a consulta e
-              //   //por isso pode apagar o que foi escrito no campo de
-              //   //consulta
-              //   _consultProductController.clear();
-              // }
+              await adjustSalePriceProvider.getProducts(
+                enterpriseCode: enterprise.codigoInternoEmpresa,
+                searchValue: searchValueController.text,
+                configurationsProvider: configurationsProvider,
+              );
             },
-            consultProductController: TextEditingController(),
           ),
-          // if (priceConferenceProvider.errorMessage != "" &&
-          //     priceConferenceProvider.productsCount == 0)
-          //   Expanded(
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: ErrorMessage(
-          //           errorMessage: priceConferenceProvider.errorMessage),
-          //     ),
-          //   ),
-          // if (!priceConferenceProvider.isLoading &&
-          //     priceConferenceProvider.products.isNotEmpty)
-          //   ProductItems(
-          //     priceConferenceProvider: priceConferenceProvider,
-          //     internalEnterpriseCode: enterprise.codigoInternoEmpresa,
-          //   ),
+          if (adjustSalePriceProvider.errorMessage != "" &&
+              adjustSalePriceProvider.products.length == 0)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ErrorMessage(
+                    errorMessage: adjustSalePriceProvider.errorMessage),
+              ),
+            ),
+          if (!adjustSalePriceProvider.isLoading &&
+              adjustSalePriceProvider.products.isNotEmpty)
+            const Text("Tem produto aqui"),
           // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
           //     priceConferenceProvider.productsCount > 1)
           //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
