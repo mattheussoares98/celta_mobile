@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../../providers/providers.dart';
+import '../../../../models/adjust_sale_request/adjust_sale_request.dart';
 
 class ReplicationParameters extends StatefulWidget {
   const ReplicationParameters({super.key});
@@ -11,10 +10,15 @@ class ReplicationParameters extends StatefulWidget {
 }
 
 class _ReplicationParametersState extends State<ReplicationParameters> {
+  List<ReplicationModel> replicationParameters = [
+    ReplicationModel(selected: false, name: "Embalagens"),
+    ReplicationModel(selected: false, name: "Agrupamento operacional"),
+    ReplicationModel(selected: false, name: "Classe"),
+    ReplicationModel(selected: false, name: "Grade"),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
-
     return Column(
       children: [
         const Divider(),
@@ -26,7 +30,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
           ),
         ),
         Column(
-          children: adjustSalePriceProvider.replicationParameters
+          children: replicationParameters
               .map((e) => CheckboxListTile(
                     title: Text(
                       e.name,

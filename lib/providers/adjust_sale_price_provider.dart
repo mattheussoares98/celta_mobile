@@ -3,7 +3,6 @@ import 'package:celta_inventario/models/soap/products/get_product_json/get_produ
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-import '../models/adjust_sale_request/adjust_sale_request.dart';
 import 'providers.dart';
 
 class AdjustSalePriceProvider with ChangeNotifier {
@@ -17,12 +16,6 @@ class AdjustSalePriceProvider with ChangeNotifier {
   String get errorMessage => _errorMessage;
 
   List<String> get saleOrOffer => ["Venda", "Oferta"];
-  List<ReplicationModel> replicationParameters = [
-    ReplicationModel(selected: false, name: "Embalagens"),
-    ReplicationModel(selected: false, name: "Agrupamento operacional"),
-    ReplicationModel(selected: false, name: "Classe"),
-    ReplicationModel(selected: false, name: "Grade"),
-  ];
 
   Future<void> getProducts({
     required int enterpriseCode,
