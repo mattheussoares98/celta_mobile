@@ -24,11 +24,11 @@ class WebProvider with ChangeNotifier {
 
   int selectedBottomNavigationBarIndex = 0;
 
-  List<FirebaseClientModel> _clients = [];
-  List<FirebaseClientModel> get clients => [..._clients];
+  List<FirebaseEnterpriseModel> _enterprises = [];
+  List<FirebaseEnterpriseModel> get enterprises => [..._enterprises];
 
-  Set<String> _clientsNames = {};
-  Set<String> get clientsNames => _clientsNames;
+  Set<String> _enterprisesNames = {};
+  Set<String> get enterprisesNames => _enterprisesNames;
 
   Map<String, List<SoapActionsModel>> _dataFromLastTrheeMonths = {
     Months.AtualMonth.name: <SoapActionsModel>[],
@@ -40,7 +40,7 @@ class WebProvider with ChangeNotifier {
       _dataFromLastTrheeMonths;
 
   void _orderEnterprisesByName() {
-    _clients.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));
+    _enterprises.sort((a, b) => a.enterpriseName.compareTo(b.enterpriseName));
   }
 
   Future<void> signIn({
@@ -67,15 +67,15 @@ class WebProvider with ChangeNotifier {
   Future<void> getAllClients() async {
     _isLoading = true;
     _errorMessageClients = "";
-    _clients.clear();
+    _enterprises.clear();
     notifyListeners();
 
     try {
       final clients = await FirebaseHelper.getAllClients();
 
-      _clients = clients
+      _enterprises = clients
           .map(
-            (element) => FirebaseClientModel.fromJson(
+            (element) => FirebaseEnterpriseModel.fromJson(
               json: element.data() as Map,
               id: element.id,
             ),
@@ -148,17 +148,17 @@ class WebProvider with ChangeNotifier {
                 .toList();
 
         for (var atualMonthData in atualMonth) {
-          _clientsNames.add(atualMonthData.id);
+          _enterprisesNames.add(atualMonthData.id);
         }
         for (var atualMonthData in penultimateMonth) {
-          _clientsNames.add(atualMonthData.id);
+          _enterprisesNames.add(atualMonthData.id);
         }
         for (var atualMonthData in antiPenultimateMonth) {
-          _clientsNames.add(atualMonthData.id);
+          _enterprisesNames.add(atualMonthData.id);
         }
 
-        final ordenatedList = _clientsNames.toList()..sort();
-        _clientsNames = ordenatedList.toSet();
+        final ordenatedList = _enterprisesNames.toList()..sort();
+        _enterprisesNames = ordenatedList.toSet();
       } else {
         throw Exception();
       }
@@ -215,7 +215,7 @@ class WebProvider with ChangeNotifier {
     try {
       await FirebaseHelper.deleteEnterprise(enterpriseId);
 
-      _clients.removeWhere((element) => element.id == enterpriseId);
+      _enterprises.removeWhere((element) => element.id == enterpriseId);
 
       Navigator.of(context).pop();
       ShowSnackbarMessage.showMessage(
@@ -245,17 +245,17 @@ class WebProvider with ChangeNotifier {
 
     try {
       int indexOfOldClient =
-          _clients.indexWhere((element) => element.id == enterpriseId);
+          _enterprises.indexWhere((element) => element.id == enterpriseId);
 
       if (indexOfOldClient == -1) {
         throw Exception();
       }
 
-      final oldClient = _clients[indexOfOldClient];
+      final oldClient = _enterprises[indexOfOldClient];
 
       await FirebaseHelper.updateUrlCcs(newUrl: newUrlCcs, client: oldClient);
 
-      _clients[indexOfOldClient] = FirebaseClientModel(
+      _enterprises[indexOfOldClient] = FirebaseEnterpriseModel(
         id: enterpriseId,
         urlCCS: newUrlCcs,
         usersInformations: oldClient.usersInformations,
@@ -287,7 +287,7 @@ class WebProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessageClients = "";
     try {
-      final newEnterprise = FirebaseClientModel(
+      final newEnterprise = FirebaseEnterpriseModel(
         enterpriseName: enterpriseName,
         urlCCS: urlCcs,
         id: null,
@@ -296,7 +296,7 @@ class WebProvider with ChangeNotifier {
 
       await FirebaseHelper.addNewEnterprise(newEnterprise);
 
-      _clients.add(newEnterprise);
+      _enterprises.add(newEnterprise);
       _orderEnterprisesByName();
 
       Navigator.of(context).pop();

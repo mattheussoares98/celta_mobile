@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../models/firebase/firebase.dart';
 
 class UsersList extends StatelessWidget {
-  final FirebaseClientModel client;
+  final FirebaseEnterpriseModel client;
   const UsersList({
     required this.client,
     super.key,

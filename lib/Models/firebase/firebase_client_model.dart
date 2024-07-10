@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import '../../models/firebase/firebase.dart';
 import '../../utils/utils.dart';
 
-class FirebaseClientModel {
+class FirebaseEnterpriseModel {
   final String enterpriseName;
   final String urlCCS;
   final String? id;
   final List<UserInformationsModel>? usersInformations;
-  FirebaseClientModel({
+  FirebaseEnterpriseModel({
     this.enterpriseName = "undefined",
     required this.id,
     required this.urlCCS,
@@ -29,9 +29,9 @@ class FirebaseClientModel {
     }
   }
 
-  factory FirebaseClientModel.fromJson(
+  factory FirebaseEnterpriseModel.fromJson(
       {required Map json, required String id}) {
-    var newClient = FirebaseClientModel(
+    var newClient = FirebaseEnterpriseModel(
       urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
       enterpriseName: json["enterpriseName"],
       id: id,

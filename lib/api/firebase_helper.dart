@@ -178,7 +178,7 @@ class FirebaseHelper {
   }
 
   static addCcsClientInFirebase() async {
-    FirebaseClientModel firebaseClientModel = FirebaseClientModel(
+    FirebaseEnterpriseModel firebaseClientModel = FirebaseEnterpriseModel(
       urlCCS: UserData.urlCCS,
       id: null,
       usersInformations: null,
@@ -400,7 +400,7 @@ class FirebaseHelper {
 
   static Future<void> updateUrlCcs({
     required String newUrl,
-    required FirebaseClientModel client,
+    required FirebaseEnterpriseModel client,
   }) async {
     try {
       if (client.urlCCS == newUrl) {
@@ -412,7 +412,7 @@ class FirebaseHelper {
     }
   }
 
-  static Future<void> addNewEnterprise(FirebaseClientModel clientModel) async {
+  static Future<void> addNewEnterprise(FirebaseEnterpriseModel clientModel) async {
     try {
       await _clientsCollection
           .doc(clientModel.enterpriseName)

@@ -16,7 +16,7 @@ class SoapActionsItems extends StatelessWidget {
     WebProvider webProvider = Provider.of(context);
     return Column(
       children: [
-        Text("Total de clientes: ${webProvider.clientsNames.length}",
+        Text("Total de clientes: ${webProvider.enterprisesNames.length}",
             style: const TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -28,9 +28,9 @@ class SoapActionsItems extends StatelessWidget {
               // childAspectRatio: 0.7,
             ),
             shrinkWrap: true,
-            itemCount: webProvider.clientsNames.toList().length,
+            itemCount: webProvider.enterprisesNames.toList().length,
             itemBuilder: (_, index) {
-              final clientName = webProvider.clientsNames.toList()[index];
+              final clientName = webProvider.enterprisesNames.toList()[index];
 
               return Card(
                 child: Padding(

@@ -47,10 +47,10 @@ class EnterprisesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const Text(""),
-        title: webProvider.clients.isEmpty
+        title: webProvider.enterprises.isEmpty
             ? null
             : Text(
-                "${webProvider.clients.length} empresas",
+                "${webProvider.enterprises.length} empresas",
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -151,12 +151,12 @@ class EnterprisesPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          if (webProvider.clients.isNotEmpty)
+          if (webProvider.enterprises.isNotEmpty)
             Expanded(
               child: ListView.builder(
-                itemCount: webProvider.clients.length,
+                itemCount: webProvider.enterprises.length,
                 itemBuilder: (context, index) {
-                  FirebaseClientModel client = webProvider.clients[index];
+                  FirebaseEnterpriseModel client = webProvider.enterprises[index];
 
                   return Card(
                     child: ListTile(
@@ -185,7 +185,7 @@ class EnterprisesPage extends StatelessWidget {
                 },
               ),
             ),
-          if (webProvider.clients.isEmpty)
+          if (webProvider.enterprises.isEmpty)
             Expanded(
               child: Center(
                 child: TextButton(

@@ -6,7 +6,7 @@ import '../../../../../models/firebase/firebase.dart';
 import '../../../../providers/providers.dart';
 
 class EditUrlCcs extends StatefulWidget {
-  final FirebaseClientModel client;
+  final FirebaseEnterpriseModel client;
   const EditUrlCcs({
     required this.client,
     super.key,

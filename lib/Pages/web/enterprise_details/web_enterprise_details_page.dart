@@ -19,8 +19,8 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
 
-    FirebaseClientModel client =
-        ModalRoute.of(context)!.settings.arguments as FirebaseClientModel;
+    FirebaseEnterpriseModel client =
+        ModalRoute.of(context)!.settings.arguments as FirebaseEnterpriseModel;
 
     return Stack(
       children: [

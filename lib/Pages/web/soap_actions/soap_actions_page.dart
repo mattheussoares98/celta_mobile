@@ -22,7 +22,7 @@ class _SoapActionsPageState extends State<SoapActionsPage> {
         leading: const Text(""),
         title: const Text("TOTAL DE REQUISIÇÕES"),
       ),
-      body: webProvider.clientsNames.isEmpty
+      body: webProvider.enterprisesNames.isEmpty
           ? Center(
               child: TextButton(
                 onPressed: () async {

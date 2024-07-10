@@ -6,7 +6,7 @@ import '../../../../providers/providers.dart';
 
 AppBar appBarEnterprise({
   required BuildContext context,
-  required FirebaseClientModel client,
+  required FirebaseEnterpriseModel client,
   required WebProvider webProvider,
 }) =>
     AppBar(
