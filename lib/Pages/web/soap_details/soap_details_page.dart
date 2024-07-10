@@ -52,7 +52,7 @@ class SoapDetailsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(enterpriseName),
+        title: FittedBox(child: Text("Total de requisições ($enterpriseName)")),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
