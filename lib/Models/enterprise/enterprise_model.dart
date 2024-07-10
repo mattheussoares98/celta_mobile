@@ -4,6 +4,9 @@ class EnterpriseModel {
   final String nomeEmpresa;
   final String cnpj;
   final String CodigoInternoVendaMobile_ModeloPedido;
+  final bool useRetailSale;
+  final bool useWholeSale;
+  final bool useEcommerceSale;
 
   EnterpriseModel({
     required this.codigoInternoEmpresa,
@@ -11,6 +14,9 @@ class EnterpriseModel {
     required this.nomeEmpresa,
     required this.cnpj,
     required this.CodigoInternoVendaMobile_ModeloPedido,
+    required this.useEcommerceSale,
+    required this.useRetailSale,
+    required this.useWholeSale,
   });
 
   static resultAsStringToEnterpriseModel({
@@ -36,6 +42,9 @@ class EnterpriseModel {
           cnpj: element['Cnpj_Empresa'],
           CodigoInternoVendaMobile_ModeloPedido:
               element["CodigoInternoVendaMobile_ModeloPedido"] ?? "-1",
+          useEcommerceSale: element["FlagECommerce_Empresa"] == "1",
+          useRetailSale: element["FlagVarejo_Empresa"] == "1",
+          useWholeSale: element["FlagAtacado_Empresa"] == "1",
         ),
       );
     });
