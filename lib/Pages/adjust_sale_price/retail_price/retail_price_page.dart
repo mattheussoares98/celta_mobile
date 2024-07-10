@@ -1,9 +1,10 @@
+import 'package:celta_inventario/pages/adjust_sale_price/adjust_sale_price.dart';
 import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/global_widgets/global_widgets.dart';
-import '../../models/enterprise/enterprise_model.dart';
+import '../../../components/global_widgets/global_widgets.dart';
+import '../../../models/enterprise/enterprise_model.dart';
 
 class RetailPricePage extends StatefulWidget {
   const RetailPricePage({super.key});
@@ -61,7 +62,7 @@ class _RetailPricePageState extends State<RetailPricePage> {
             ),
           if (!adjustSalePriceProvider.isLoading &&
               adjustSalePriceProvider.products.isNotEmpty)
-            const Text("Tem produto aqui"),
+            const ProductsItems(),
           // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
           //     priceConferenceProvider.productsCount > 1)
           //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
