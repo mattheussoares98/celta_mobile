@@ -20,11 +20,13 @@ class _SaleOrOfferRadiosState extends State<SaleOrOfferRadios> {
     return Column(
       children: [
         const Divider(),
-        const Text("Tipo de preço para ser alterado",
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w400,
-            )),
+        const Text(
+          "Tipo de preço para ser alterado",
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         Row(
           children: generateRadios(adjustSalePriceProvider),
         ),

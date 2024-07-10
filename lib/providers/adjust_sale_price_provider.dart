@@ -16,6 +16,12 @@ class AdjustSalePriceProvider with ChangeNotifier {
   String get errorMessage => _errorMessage;
 
   List<String> get saleOrOffer => ["Venda", "Oferta"];
+  List<Map<String, bool?>> replicationParameters = [
+    {"Embalagens": false},
+    {"Agrupamento operacional": false},
+    {"Classe": false},
+    {"Grade": false},
+  ];
 
   Future<void> getProducts({
     required int enterpriseCode,

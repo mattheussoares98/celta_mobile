@@ -112,6 +112,7 @@ class _ProductItemState extends State<ProductItem> {
               const Column(
                 children: [
                   SaleOrOfferRadios(),
+                  ReplicationParameters(),
                 ],
               ),
           ],
