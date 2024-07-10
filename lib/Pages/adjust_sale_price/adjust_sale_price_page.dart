@@ -23,6 +23,13 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   }
 
   final PageController _pageController = PageController(initialPage: 0);
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
