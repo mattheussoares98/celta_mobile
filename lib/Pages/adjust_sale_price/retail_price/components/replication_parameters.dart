@@ -29,17 +29,17 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
           children: adjustSalePriceProvider.replicationParameters
               .map((e) => CheckboxListTile(
                     title: Text(
-                      e.keys.first,
+                      e.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
                     ),
                     dense: true,
-                    value: e.values.first,
+                    value: e.selected,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        e.update(e.keys.first, (value) => newValue);
+                        e.selected = newValue;
                       });
                     },
                   ))

@@ -1,5 +1,5 @@
 class ReplicationModel {
-  bool selected;
+  bool? selected;
   final String name;
 
   ReplicationModel({
