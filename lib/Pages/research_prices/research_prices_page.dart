@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/enterprise/enterprise.dart';
 import '../../utils/utils.dart';
 import '../../components/global_widgets/global_widgets.dart';
 import 'components/components.dart';
@@ -29,12 +30,13 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
     required ResearchPricesProvider researchPricesProvider,
     required String searchText,
   }) async {
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     await researchPricesProvider.getResearchPrices(
       context: context,
       notifyListenersFromUpdate: notityListenersFromUpdate,
-      enterpriseCode: arguments["CodigoInterno_Empresa"],
+      enterpriseCode: enterprise.codigoInternoEmpresa,
       searchText: searchText,
     );
 
@@ -45,7 +47,8 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     ResearchPricesProvider researchPricesProvider =
         Provider.of(context, listen: true);
@@ -131,7 +134,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                   ),
                 if (!researchPricesProvider.isLoadingResearchPrices)
                   PricesItems(
-                    enterpriseCode: arguments["CodigoInterno_Empresa"],
+                    enterpriseCode: enterprise.codigoInternoEmpresa,
                   ),
               ],
             ),
@@ -148,7 +151,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                   await Navigator.of(context).pushNamed(
                     APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
                     arguments: {
-                      "enterpriseCode": arguments["CodigoInterno_Empresa"],
+                      "enterpriseCode": enterprise.codigoInternoEmpresa,
                     },
                   );
 

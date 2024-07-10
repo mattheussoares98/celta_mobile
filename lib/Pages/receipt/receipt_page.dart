@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../models/enterprise/enterprise.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 
@@ -17,10 +18,11 @@ class _ReceiptPageState extends State<ReceiptPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
     if (!isLoaded) {
       Provider.of<ReceiptProvider>(context, listen: true).getReceipt(
-        enterpriseCode: arguments["CodigoInterno_Empresa"],
+        enterpriseCode: enterprise.codigoInternoEmpresa,
         context: context,
       );
     }
@@ -30,7 +32,8 @@ class _ReceiptPageState extends State<ReceiptPage> {
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context, listen: true);
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return Stack(
       children: [
@@ -47,7 +50,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       ? null
                       : () async {
                           await receiptProvider.getReceipt(
-                            enterpriseCode: arguments["CodigoInterno_Empresa"],
+                            enterpriseCode: enterprise.codigoInternoEmpresa,
                             context: context,
                             isSearchingAgain: true,
                           );
@@ -60,7 +63,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
             body: RefreshIndicator(
               onRefresh: () async {
                 await receiptProvider.getReceipt(
-                  enterpriseCode: arguments["CodigoInterno_Empresa"],
+                  enterpriseCode: enterprise.codigoInternoEmpresa,
                   context: context,
                   isSearchingAgain: true,
                 );
@@ -77,7 +80,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                             setState(() {});
                             await receiptProvider.getReceipt(
                               enterpriseCode:
-                                  arguments["CodigoInterno_Empresa"],
+                                  enterprise.codigoInternoEmpresa,
                               context: context,
                             );
                           }),
@@ -86,7 +89,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       receiptProvider.errorMessage == '')
                     Expanded(
                       child: ReceiptItems(
-                        enterpriseCode: arguments["CodigoInterno_Empresa"],
+                        enterpriseCode: enterprise.codigoInternoEmpresa,
                         receiptProvider: receiptProvider,
                       ),
                     ),

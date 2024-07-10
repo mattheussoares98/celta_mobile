@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../models/enterprise/enterprise.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'components/components.dart';
@@ -36,7 +37,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
         Provider.of(context, listen: true);
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return Stack(
       children: [
@@ -71,7 +73,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                           adjustStockProvider.isLoadingAdjustStock,
                       onPressSearch: () async {
                         await adjustStockProvider.getProducts(
-                          enterpriseCode: arguments["CodigoInterno_Empresa"],
+                          enterpriseCode: enterprise.codigoInternoEmpresa,
                           controllerText: _consultProductController.text,
                           context: context,
                           configurationsProvider: configurationsProvider,
@@ -121,7 +123,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                     errorMessage: adjustStockProvider.errorMessageGetProducts,
                   ),
                 AdjustStockProductsItems(
-                    internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
+                    internalEnterpriseCode: enterprise.codigoInternoEmpresa,
                     consultedProductController: _consultedProductController,
                     dropDownFormKey: _dropDownFormKey,
                     insertQuantityFormKey: _insertQuantityFormKey,
@@ -137,7 +139,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       }
 
                       await adjustStockProvider.getProducts(
-                        enterpriseCode: arguments["CodigoInterno_Empresa"],
+                        enterpriseCode: enterprise.codigoInternoEmpresa,
                         controllerText: _consultProductController.text,
                         context: context,
                         configurationsProvider: configurationsProvider,

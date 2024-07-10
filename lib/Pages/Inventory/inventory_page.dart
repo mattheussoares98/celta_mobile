@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../models/enterprise/enterprise.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
@@ -19,11 +20,12 @@ class _InventoryPageState extends State<InventoryPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     if (!_isLoaded) {
       Provider.of<InventoryProvider>(context, listen: false).getInventory(
-        enterpriseCode: arguments["CodigoInterno_Empresa"],
+        enterpriseCode: enterprise.codigoInternoEmpresa,
         userIdentity: UserData.crossIdentity,
       );
       _isLoaded = true;
@@ -33,7 +35,8 @@ class _InventoryPageState extends State<InventoryPage> {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context, listen: true);
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return Stack(
       children: [
@@ -48,7 +51,7 @@ class _InventoryPageState extends State<InventoryPage> {
                     ? null
                     : () async {
                         await inventoryProvider.getInventory(
-                          enterpriseCode: arguments["CodigoInterno_Empresa"],
+                          enterpriseCode: enterprise.codigoInternoEmpresa,
                           userIdentity: UserData.crossIdentity,
                           isConsultingAgain: true,
                         );
@@ -61,7 +64,7 @@ class _InventoryPageState extends State<InventoryPage> {
           body: RefreshIndicator(
             onRefresh: () async {
               await inventoryProvider.getInventory(
-                enterpriseCode: arguments["CodigoInterno_Empresa"],
+                enterpriseCode: enterprise.codigoInternoEmpresa,
                 userIdentity: UserData.crossIdentity,
                 isConsultingAgain: true,
               );
@@ -74,7 +77,7 @@ class _InventoryPageState extends State<InventoryPage> {
                       errorMessage: inventoryProvider.errorMessage,
                       request: () async => setState(() {
                         inventoryProvider.getInventory(
-                          enterpriseCode: arguments["CodigoInterno_Empresa"],
+                          enterpriseCode: enterprise.codigoInternoEmpresa,
                           userIdentity: UserData.crossIdentity,
                         );
                       }),

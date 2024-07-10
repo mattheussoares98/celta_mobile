@@ -52,15 +52,8 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(widget.nextPageRoute, arguments: {
-                      "CodigoInterno_Empresa": enterpriseProvider
-                          .enterprises[index].codigoInternoEmpresa,
-                      "CodigoInternoVendaMobile_ModeloPedido": int.tryParse(
-                              enterpriseProvider.enterprises[index]
-                                  .CodigoInternoVendaMobile_ModeloPedido) ??
-                          0,
-                    });
+                    Navigator.of(context).pushNamed(widget.nextPageRoute,
+                        arguments: enterpriseProvider.enterprises[index]);
                   },
                 ),
               );

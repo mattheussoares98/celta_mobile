@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../models/enterprise/enterprise.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
@@ -40,7 +41,8 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
         Provider.of(context, listen: true);
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return Stack(
       children: [
@@ -53,7 +55,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
             if (value == true) {
               transferBetweenStocksProvider
                   .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-            }  
+            }
           },
           child: Scaffold(
             resizeToAvoidBottomInset: kIsWeb ? false : true,
@@ -81,7 +83,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                             transferBetweenStocksProvider.isLoadingAdjustStock,
                         onPressSearch: () async {
                           await transferBetweenStocksProvider.getProducts(
-                            enterpriseCode: arguments["CodigoInterno_Empresa"],
+                            enterpriseCode: enterprise.codigoInternoEmpresa,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,
@@ -96,8 +98,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       Row(
                         children: [
                           Expanded(
-                            child:
-                                JustificationsAndStocksDropwdownWidget(
+                            child: JustificationsAndStocksDropwdownWidget(
                               dropDownFormKey: _dropDownFormKey,
                               keyJustifications: _keyJustifications,
                               keyOriginStockType: _keyOriginStockType,
@@ -160,7 +161,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                   if (!transferBetweenStocksProvider.isLoadingProducts)
                     ProductsItems(
                       internalEnterpriseCode:
-                          arguments["CodigoInterno_Empresa"],
+                          enterprise.codigoInternoEmpresa,
                       consultedProductController: _consultedProductController,
                       dropDownFormKey: _dropDownFormKey,
                       insertQuantityFormKey: _insertQuantityFormKey,
@@ -176,7 +177,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                         }
 
                         await transferBetweenStocksProvider.getProducts(
-                          enterpriseCode: arguments["CodigoInterno_Empresa"],
+                          enterpriseCode: enterprise.codigoInternoEmpresa,
                           controllerText: _consultProductController.text,
                           context: context,
                           configurationsProvider: configurationsProvider,

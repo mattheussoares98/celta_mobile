@@ -1,7 +1,9 @@
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/global_widgets/global_widgets.dart';
+import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import 'requests.dart';
 
@@ -21,7 +23,8 @@ class _RequestsPageState extends State<RequestsPage> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     SaleRequestProvider saleRequestProvider = Provider.of(
       context,
@@ -29,7 +32,7 @@ class _RequestsPageState extends State<RequestsPage> {
     );
 
     if (!_isLoaded) {
-      if (arguments["CodigoInternoVendaMobile_ModeloPedido"] == -1) {
+      if (enterprise.CodigoInternoVendaMobile_ModeloPedido == -1) {
         //significa que não possui um modelo de pedido de vendas padrão cadastrado no BS
         _hasDefaultRequestModel = false;
       } else {
@@ -37,7 +40,7 @@ class _RequestsPageState extends State<RequestsPage> {
       }
 
       await saleRequestProvider.getRequests(
-        enterpriseCode: arguments["CodigoInterno_Empresa"],
+        enterpriseCode: enterprise.codigoInternoEmpresa,
         context: context,
       );
       _isLoaded = true;
@@ -49,12 +52,13 @@ class _RequestsPageState extends State<RequestsPage> {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
 
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_){
+          onPopInvoked: (_) {
             saleRequestProvider.clearRequests();
           },
           child: Scaffold(
@@ -71,7 +75,7 @@ class _RequestsPageState extends State<RequestsPage> {
                       ? null
                       : () async {
                           await saleRequestProvider.getRequests(
-                            enterpriseCode: arguments["CodigoInterno_Empresa"],
+                            enterpriseCode: enterprise.codigoInternoEmpresa,
                             context: context,
                             isConsultingAgain: true,
                           );
@@ -83,7 +87,7 @@ class _RequestsPageState extends State<RequestsPage> {
             ),
             body: RefreshIndicator(
               onRefresh: () => saleRequestProvider.getRequests(
-                enterpriseCode: arguments["CodigoInterno_Empresa"],
+                enterpriseCode: enterprise.codigoInternoEmpresa,
                 context: context,
                 isConsultingAgain: true,
               ),
@@ -94,9 +98,9 @@ class _RequestsPageState extends State<RequestsPage> {
                   if (!saleRequestProvider.isLoadingRequests)
                     ModelsItems(
                       hasDefaultRequestModel: _hasDefaultRequestModel,
-                      enterpriseCode: arguments["CodigoInterno_Empresa"],
-                      saleRequestTypeCode:
-                          arguments["CodigoInternoVendaMobile_ModeloPedido"],
+                      enterpriseCode: enterprise.codigoInternoEmpresa,
+                      saleRequestTypeCode: enterprise
+                          .CodigoInternoVendaMobile_ModeloPedido.toInt(),
                     ),
                   if (saleRequestProvider.errorMessageRequests != "" &&
                       saleRequestProvider.productsCount == 0)
@@ -106,7 +110,7 @@ class _RequestsPageState extends State<RequestsPage> {
                         request: () async {
                           setState(() {});
                           await saleRequestProvider.getRequests(
-                            enterpriseCode: arguments["CodigoInterno_Empresa"],
+                            enterpriseCode: enterprise.codigoInternoEmpresa,
                             context: context,
                           );
                         },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/global_widgets/global_widgets.dart';
+import '../../models/enterprise/enterprise.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 
@@ -28,7 +29,8 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
         Provider.of(context, listen: true);
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return PopScope(
       canPop: !priceConferenceProvider.isLoading &&
@@ -57,7 +59,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                   onPressSearch: () async {
                     await priceConferenceProvider.getProduct(
                       configurationsProvider: configurationsProvider,
-                      enterpriseCode: arguments["CodigoInterno_Empresa"],
+                      enterpriseCode: enterprise.codigoInternoEmpresa,
                       controllerText: _consultProductController.text,
                       context: context,
                     );
@@ -88,7 +90,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                     priceConferenceProvider.products.isNotEmpty)
                   ProductItems(
                     priceConferenceProvider: priceConferenceProvider,
-                    internalEnterpriseCode: arguments["CodigoInterno_Empresa"],
+                    internalEnterpriseCode: enterprise.codigoInternoEmpresa,
                   ),
                 if (MediaQuery.of(context).viewInsets.bottom == 0 &&
                     priceConferenceProvider.productsCount > 1)
