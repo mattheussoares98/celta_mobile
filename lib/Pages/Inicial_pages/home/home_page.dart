@@ -187,6 +187,13 @@ class _HomePageState extends State<HomePage> {
               nextRoute: APPROUTES.RESEARCH_PRICES,
               context: context,
             ),
+            ImageComponent.image(
+              imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
+              routine: 'Alteração de preços',
+              route: APPROUTES.ENTERPRISE,
+              nextRoute: APPROUTES.RESEARCH_PRICES,
+              context: context,
+            ),
           ],
         ),
       ),
