@@ -35,13 +35,13 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
             children: [
               EditUrlCcs(client: client),
               const SizedBox(height: 20),
-              if (client.usersInformations == null)
-                const Text(
-                  "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
-                  textAlign: TextAlign.center,
-                ),
-              if (client.usersInformations?.isNotEmpty == true)
-                UsersList(client: client)
+              // if (client.usersInformations == null)
+              //   const Text(
+              //     "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
+              //     textAlign: TextAlign.center,
+              //   ),
+              // if (client.usersInformations?.isNotEmpty == true)
+              //   UsersList(client: client)
             ],
           ),
         ),
