@@ -5,8 +5,15 @@ import '../../../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProductsItems extends StatelessWidget {
+class ProductsItems extends StatefulWidget {
   const ProductsItems({super.key});
+
+  @override
+  State<ProductsItems> createState() => _ProductsItemsState();
+}
+
+class _ProductsItemsState extends State<ProductsItems> {
+  int? selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +88,35 @@ class ProductsItems extends StatelessWidget {
                             product.eCommercePracticedPrice! > 0
                         ? Theme.of(context).colorScheme.primary
                         : Colors.black,
-                    otherWidget: TextButton(
-                      onPressed: () async {},
-                      child: const Text("Alterar preços"),
+                    otherWidget: InkWell(
+                      onTap: () {
+                        if (selectedIndex == index) {
+                          selectedIndex = null;
+                        } else {
+                          selectedIndex = index;
+                        }
+                        setState(() {});
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            "Alterar preços",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          Icon(
+                            selectedIndex == index
+                                ? Icons.arrow_drop_up
+                                : Icons.arrow_drop_down,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                  if (selectedIndex == index)
+                    const Text("Esse item aqui tá selecionado")
                 ],
               ),
             ),
