@@ -1,9 +1,6 @@
-import 'package:celta_inventario/models/enterprise/enterprise.dart';
-
-import '../../../../components/components.dart';
+import '../../../../models/enterprise/enterprise.dart';
 import '../../../../models/soap/soap.dart';
 import '../../../../pages/adjust_sale_price/adjust_sale_price.dart';
-import '../../../../utils/utils.dart';
 
 import 'package:flutter/material.dart';
 
@@ -38,83 +35,11 @@ class _ProductItemState extends State<ProductItem> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            TitleAndSubtitle.titleAndSubtitle(
-              // title: "Produto",
-              subtitle: widget.product.name,
-            ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: "PLU",
-              subtitle: widget.product.plu,
-            ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: widget.product.retailPracticedPrice != null &&
-                      widget.product.retailPracticedPrice! > 0
-                  ? "Varejo"
-                  : null,
-              subtitle: widget.product.retailPracticedPrice != null &&
-                      widget.product.retailPracticedPrice! > 0
-                  ? widget.product.retailPracticedPrice
-                      .toString()
-                      .toBrazilianNumber()
-                      .addBrazilianCoin()
-                  : "Sem preço de varejo",
-              subtitleColor: widget.product.retailPracticedPrice != null &&
-                      widget.product.retailPracticedPrice! > 0
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.black,
-            ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: widget.product.wholePracticedPrice != null &&
-                      widget.product.wholePracticedPrice! > 0
-                  ? "Atacado"
-                  : null,
-              subtitle: widget.product.wholePracticedPrice != null &&
-                      widget.product.wholePracticedPrice! > 0
-                  ? widget.product.wholePracticedPrice
-                      .toString()
-                      .toBrazilianNumber()
-                      .addBrazilianCoin()
-                  : "Sem preço de atacado",
-              subtitleColor: widget.product.wholePracticedPrice != null &&
-                      widget.product.wholePracticedPrice! > 0
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.black,
-            ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: widget.product.wholePracticedPrice != null &&
-                      widget.product.wholePracticedPrice! > 0
-                  ? "Ecommerce"
-                  : null,
-              subtitle: widget.product.eCommercePracticedPrice != null &&
-                      widget.product.eCommercePracticedPrice! > 0
-                  ? widget.product.eCommercePracticedPrice
-                      .toString()
-                      .toBrazilianNumber()
-                      .addBrazilianCoin()
-                  : "Sem preço de ecommerce",
-              subtitleColor: widget.product.eCommercePracticedPrice != null &&
-                      widget.product.eCommercePracticedPrice! > 0
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.black,
-              otherWidget: InkWell(
-                onTap: widget.updateSelectedIndex,
-                child: Row(
-                  children: [
-                    Text(
-                      "Alterar preços",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    Icon(
-                      widget.selectedIndex == widget.index
-                          ? Icons.arrow_drop_up
-                          : Icons.arrow_drop_down,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ],
-                ),
-              ),
+            ProductInformations(
+              product: widget.product,
+              index: widget.index,
+              selectedIndex: widget.selectedIndex,
+              updateSelectedIndex: widget.updateSelectedIndex,
             ),
             if (widget.selectedIndex == widget.index)
               Column(
