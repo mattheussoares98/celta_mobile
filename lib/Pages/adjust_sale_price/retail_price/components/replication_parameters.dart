@@ -3,20 +3,17 @@ import 'package:flutter/material.dart';
 import '../../../../models/adjust_sale_request/adjust_sale_request.dart';
 
 class ReplicationParameters extends StatefulWidget {
-  const ReplicationParameters({super.key});
+  final List<ReplicationModel> replicationParameters;
+  const ReplicationParameters({
+    required this.replicationParameters,
+    super.key,
+  });
 
   @override
   State<ReplicationParameters> createState() => _ReplicationParametersState();
 }
 
 class _ReplicationParametersState extends State<ReplicationParameters> {
-  List<ReplicationModel> replicationParameters = [
-    ReplicationModel(selected: false, name: "Embalagens"),
-    ReplicationModel(selected: false, name: "Agrupamento operacional"),
-    ReplicationModel(selected: false, name: "Classe"),
-    ReplicationModel(selected: false, name: "Grade"),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,7 +27,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
           ),
         ),
         Column(
-          children: replicationParameters
+          children: widget.replicationParameters
               .map((e) => CheckboxListTile(
                     title: Text(
                       e.name,

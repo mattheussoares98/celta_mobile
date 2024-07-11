@@ -1,3 +1,4 @@
+import '../../../../models/adjust_sale_request/adjust_sale_request.dart';
 import '../../../../models/enterprise/enterprise.dart';
 import '../../../../models/soap/soap.dart';
 import '../../../../pages/adjust_sale_price/adjust_sale_price.dart';
@@ -24,6 +25,12 @@ class ProductItem extends StatefulWidget {
 class _ProductItemState extends State<ProductItem> {
   String initialDate = "Data atual";
   String finishDate = "Sem término";
+  List<ReplicationModel> replicationParameters = [
+    ReplicationModel(selected: false, name: "Embalagens"),
+    ReplicationModel(selected: false, name: "Agrupamento operacional"),
+    ReplicationModel(selected: false, name: "Classe"),
+    ReplicationModel(selected: false, name: "Grade"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +53,9 @@ class _ProductItemState extends State<ProductItem> {
                 children: [
                   PriceTypeRadios(enterpriseModel: enterprise),
                   const SaleTypeRadios(),
-                  const ReplicationParameters(),
+                  ReplicationParameters(
+                    replicationParameters: replicationParameters,
+                  ),
                   InitialAndFinishDates(
                       initialDate: initialDate,
                       finishDate: finishDate,
