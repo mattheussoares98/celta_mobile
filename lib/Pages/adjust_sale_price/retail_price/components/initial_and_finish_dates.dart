@@ -23,6 +23,13 @@ class InitialAndFinishDates extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
+                  const Text(
+                    "Início",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                    ),
+                  ),
                   Text(initialDate),
                   TextButton(
                     child: const Text(
@@ -37,6 +44,13 @@ class InitialAndFinishDates extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
+                  const Text(
+                    "Término",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                    ),
+                  ),
                   Text(finishDate),
                   TextButton(
                     child: const Text(
