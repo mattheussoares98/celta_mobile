@@ -25,6 +25,9 @@ class ProductItem extends StatefulWidget {
 }
 
 class _ProductItemState extends State<ProductItem> {
+  String initialDate = "Data atual";
+  String finishDate = "Sem término";
+
   @override
   Widget build(BuildContext context) {
     final EnterpriseModel enterprise =
@@ -119,6 +122,25 @@ class _ProductItemState extends State<ProductItem> {
                   PriceTypeRadios(enterpriseModel: enterprise),
                   const SaleTypeRadios(),
                   const ReplicationParameters(),
+                  InitialAndFinishDates(
+                      initialDate: initialDate,
+                      finishDate: finishDate,
+                      updateInitialDate: () async {
+                        final newDate = await getNewDate(context: context);
+                        if (newDate != null) {
+                          setState(() {
+                            initialDate = newDate;
+                          });
+                        }
+                      },
+                      updateFinishDate: () async {
+                        final newDate = await getNewDate(context: context);
+                        if (newDate != null) {
+                          setState(() {
+                            finishDate = newDate;
+                          });
+                        }
+                      }),
                 ],
               ),
           ],
