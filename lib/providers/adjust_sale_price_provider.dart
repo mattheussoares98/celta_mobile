@@ -59,9 +59,9 @@ class AdjustSalePriceProvider with ChangeNotifier {
     try {
       Map jsonGetSchedules = {
         "CrossIdentity": UserData.crossIdentity,
-        "EnterpriseCode": 1,
-        "ProductCode": 2,
-        "ProductPackingCode": 3,
+        "EnterpriseCode": enterpriseCode,
+        "ProductCode": productCode,
+        "ProductPackingCode": productPackingCode,
         "SaleTypeInt": 1,
       };
       await SoapRequest.soapPost(
