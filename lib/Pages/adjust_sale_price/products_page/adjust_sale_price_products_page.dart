@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../models/enterprise/enterprise_model.dart';
-import '../../../pages/adjust_sale_price/adjust_sale_price.dart';
+import '../adjust_sale_price.dart';
 import '../../../providers/providers.dart';
 
 class AdjustSalePriceProductsPage extends StatefulWidget {
