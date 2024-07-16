@@ -1,3 +1,5 @@
+import 'package:celta_inventario/models/enterprise/enterprise.dart';
+import 'package:celta_inventario/models/soap/products/products.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,40 +29,45 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   Widget build(BuildContext context) {
     AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
     final Map arguments = ModalRoute.of(context)!.settings.arguments! as Map;
+    final EnterpriseModel enterprise = arguments["enterprise"];
+    final GetProductJsonModel product = arguments["product"];
 
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(
-            title: const Text("Alteração de preços"),
+            title: Text(product.name.toString()),
           ),
-          body: Column(
-            children: [
-              PriceTypeRadios(enterpriseModel: arguments["enterprise"]),
-              const SaleTypeRadios(),
-              ReplicationParameters(
-                replicationParameters: replicationParameters,
-              ),
-              InitialAndFinishDates(
-                  initialDate: initialDate,
-                  finishDate: finishDate,
-                  updateInitialDate: () async {
-                    final newDate = await getNewDate(context: context);
-                    if (newDate != null) {
-                      setState(() {
-                        initialDate = newDate;
-                      });
-                    }
-                  },
-                  updateFinishDate: () async {
-                    final newDate = await getNewDate(context: context);
-                    if (newDate != null) {
-                      setState(() {
-                        finishDate = newDate;
-                      });
-                    }
-                  }),
-            ],
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                PriceTypeRadios(enterpriseModel: enterprise),
+                const SaleTypeRadios(),
+                ReplicationParameters(
+                  replicationParameters: replicationParameters,
+                ),
+                InitialAndFinishDates(
+                    initialDate: initialDate,
+                    finishDate: finishDate,
+                    updateInitialDate: () async {
+                      final newDate = await getNewDate(context: context);
+                      if (newDate != null) {
+                        setState(() {
+                          initialDate = newDate;
+                        });
+                      }
+                    },
+                    updateFinishDate: () async {
+                      final newDate = await getNewDate(context: context);
+                      if (newDate != null) {
+                        setState(() {
+                          finishDate = newDate;
+                        });
+                      }
+                    }),
+              ],
+            ),
           ),
         ),
         loadingWidget(

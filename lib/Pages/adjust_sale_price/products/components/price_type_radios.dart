@@ -44,7 +44,6 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
 
     return Column(
       children: [
-        const Divider(),
         const Text(
           "Tipo de preço",
           style: TextStyle(
