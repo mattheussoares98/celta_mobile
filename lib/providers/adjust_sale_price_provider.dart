@@ -74,7 +74,6 @@ class AdjustSalePriceProvider with ChangeNotifier {
       );
 
       print(SoapRequestResponse.responseAsString);
-      print(SoapRequestResponse.responseAsMap);
       _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;

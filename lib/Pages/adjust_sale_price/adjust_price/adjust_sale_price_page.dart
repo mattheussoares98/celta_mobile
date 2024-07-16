@@ -42,6 +42,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
+                GetSchedulesPrices(enterprise: enterprise, product: product),
                 PriceTypeRadios(enterpriseModel: enterprise),
                 const SaleTypeRadios(),
                 ReplicationParameters(
