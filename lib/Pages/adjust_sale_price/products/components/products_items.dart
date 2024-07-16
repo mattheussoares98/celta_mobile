@@ -22,9 +22,18 @@ class _ProductsItemsState extends State<ProductsItems> {
         itemBuilder: (context, index) {
           final product = adjustSalePriceProvider.products[index];
 
-          return ProductItem(
-            product: product,
-            index: index,
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  ProductInformations(
+                    product: product,
+                    index: index,
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),

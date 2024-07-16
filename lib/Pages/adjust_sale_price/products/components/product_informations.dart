@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../components/components.dart';
+import '../../../../models/enterprise/enterprise.dart';
 import '../../../../models/soap/soap.dart';
 import '../../../../utils/utils.dart';
 
@@ -15,6 +16,9 @@ class ProductInformations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments! as EnterpriseModel;
+
     return Column(
       children: [
         TitleAndSubtitle.titleAndSubtitle(
@@ -77,7 +81,13 @@ class ProductInformations extends StatelessWidget {
               : Colors.black,
           otherWidget: InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed(APPROUTES.ADJUST_SALE_PRICE);
+              Navigator.of(context).pushNamed(
+                APPROUTES.ADJUST_SALE_PRICE,
+                arguments: {
+                  "enterprise": enterprise,
+                  "product": product,
+                },
+              );
             },
             child: Row(
               children: [
