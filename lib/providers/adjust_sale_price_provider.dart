@@ -54,6 +54,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
+    notifyListeners();
 
     try {
       Map jsonGetSchedules = {
@@ -77,6 +78,9 @@ class AdjustSalePriceProvider with ChangeNotifier {
       _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }
