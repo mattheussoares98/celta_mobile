@@ -227,8 +227,9 @@ class MyApp extends StatelessWidget {
           APPROUTES.WEB_ENTERPRISE_DETAILS: (ctx) =>
               const WebEnterpriseDetailsPage(),
           APPROUTES.WEB_SOAP_DETAILS: (ctx) => const SoapDetailsPage(),
-          APPROUTES.ADJUST_SALE_PRICE_PRODUCTS_PAGE: (ctx) =>
+          APPROUTES.ADJUST_SALE_PRICE_PRODUCTS: (ctx) =>
               const AdjustSalePriceProductsPage(),
+          APPROUTES.ADJUST_SALE_PRICE: (ctx) => const AdjustSalePricePage(),
         },
       ),
     );
