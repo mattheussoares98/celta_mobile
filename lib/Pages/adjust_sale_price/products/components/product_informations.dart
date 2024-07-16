@@ -1,17 +1,15 @@
-import 'package:celta_inventario/models/soap/soap.dart';
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../components/components.dart';
+import '../../../../models/soap/soap.dart';
+import '../../../../utils/utils.dart';
 
 class ProductInformations extends StatelessWidget {
   final GetProductJsonModel product;
-  final Function() updateSelectedIndex;
   final int index;
   final int? selectedIndex;
   const ProductInformations({
     required this.product,
-    required this.updateSelectedIndex,
     required this.index,
     required this.selectedIndex,
     super.key,
@@ -80,7 +78,9 @@ class ProductInformations extends StatelessWidget {
               ? Theme.of(context).colorScheme.primary
               : Colors.black,
           otherWidget: InkWell(
-            onTap: updateSelectedIndex,
+            onTap: () {
+              Navigator.of(context).pushNamed(APPROUTES.ADJUST_SALE_PRICE);
+            },
             child: Row(
               children: [
                 Text(

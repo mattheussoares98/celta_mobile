@@ -46,7 +46,6 @@ class _ProductItemState extends State<ProductItem> {
               product: widget.product,
               index: widget.index,
               selectedIndex: widget.selectedIndex,
-              updateSelectedIndex: widget.updateSelectedIndex,
             ),
             if (widget.selectedIndex == widget.index)
               Column(

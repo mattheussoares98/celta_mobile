@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../providers/providers.dart';
-import 'adjust_sale_price.dart';
 
 class AdjustSalePricePage extends StatefulWidget {
   const AdjustSalePricePage({super.key});
@@ -19,8 +18,13 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
 
     return Stack(
       children: [
-        const Scaffold(
-          body: AdjustSalePriceProductsPage(),
+        Scaffold(
+          appBar: AppBar(
+            title: const Text("Alteração de preços"),
+          ),
+          body: const Column(
+            children: [],
+          ),
         ),
         loadingWidget(
           message: "Aguarde...",
