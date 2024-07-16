@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> {
               imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
               routine: 'Alteração de preços',
               route: APPROUTES.ENTERPRISE,
-              nextRoute: APPROUTES.ADJUST_SALE_PRICE,
+              nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS_PAGE,
               context: context,
             ),
           ],
