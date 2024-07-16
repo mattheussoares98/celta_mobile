@@ -1,19 +1,19 @@
-import 'package:celta_inventario/pages/adjust_sale_price/adjust_sale_price.dart';
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../models/enterprise/enterprise_model.dart';
+import '../../../pages/adjust_sale_price/adjust_sale_price.dart';
+import '../../../providers/providers.dart';
 
-class RetailPricePage extends StatefulWidget {
-  const RetailPricePage({super.key});
+class AdjustSalePriceProductsPage extends StatefulWidget {
+  const AdjustSalePriceProductsPage({super.key});
 
   @override
-  State<RetailPricePage> createState() => _RetailPricePageState();
+  State<AdjustSalePriceProductsPage> createState() => _AdjustSalePriceProductsPageState();
 }
 
-class _RetailPricePageState extends State<RetailPricePage> {
+class _AdjustSalePriceProductsPageState extends State<AdjustSalePriceProductsPage> {
   final searchValueController = TextEditingController();
   final searchFocusNode = FocusNode();
 

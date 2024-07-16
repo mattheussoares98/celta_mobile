@@ -1,7 +1,7 @@
 import '../../../../models/adjust_sale_request/adjust_sale_request.dart';
 import '../../../../models/enterprise/enterprise.dart';
 import '../../../../models/soap/soap.dart';
-import '../../../../pages/adjust_sale_price/adjust_sale_price.dart';
+import '../../adjust_sale_price.dart';
 
 import 'package:flutter/material.dart';
 

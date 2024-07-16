@@ -20,7 +20,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
     return Stack(
       children: [
         const Scaffold(
-          body: RetailPricePage(),
+          body: AdjustSalePriceProductsPage(),
         ),
         loadingWidget(
           message: "Aguarde...",
