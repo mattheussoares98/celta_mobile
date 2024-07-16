@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:celta_inventario/api/soap/soap.dart';
 import 'package:celta_inventario/models/soap/products/get_product_json/get_product_json_model.dart';
 import 'package:celta_inventario/utils/utils.dart';
@@ -42,6 +44,40 @@ class AdjustSalePriceProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> getProductSchedules({
+    required int enterpriseCode,
+    required int productCode,
+    required int productPackingCode,
+  }) async {
+    _isLoading = true;
+    _errorMessage = "";
+
+    try {
+      Map jsonGetSchedules = {
+        "CrossIdentity": UserData.crossIdentity,
+        "EnterpriseCode": 1,
+        "ProductCode": 2,
+        "ProductPackingCode": 3,
+        "SaleTypeInt": 1,
+      };
+      await SoapRequest.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetSchedules),
+        },
+        typeOfResponse: "GetPriceSchedulesResponse",
+        SOAPAction: "GetPriceSchedules",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetPriceSchedulesResult",
+      );
+
+      print(SoapRequestResponse.responseAsString);
+      print(SoapRequestResponse.responseAsMap);
+      _errorMessage = SoapRequestResponse.errorMessage;
+    } catch (e) {
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     }
   }
 }
