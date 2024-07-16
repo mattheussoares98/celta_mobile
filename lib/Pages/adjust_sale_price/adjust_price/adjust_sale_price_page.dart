@@ -3,10 +3,10 @@ import 'package:celta_inventario/models/soap/products/products.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/components.dart';
-import '../../models/adjust_sale_request/adjust_sale_request.dart';
-import '../../providers/providers.dart';
-import 'adjust_sale_price.dart';
+import '../../../components/components.dart';
+import '../../../models/adjust_sale_request/adjust_sale_request.dart';
+import '../../../providers/providers.dart';
+import '../adjust_sale_price.dart';
 
 class AdjustSalePricePage extends StatefulWidget {
   const AdjustSalePricePage({super.key});

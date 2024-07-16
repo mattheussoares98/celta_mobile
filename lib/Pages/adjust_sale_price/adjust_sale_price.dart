@@ -1,2 +1,2 @@
-export './adjust_sale_price_page.dart';
-export 'products_page/products.dart';
+export './adjust_price/adjust_price.dart';
+export 'products_page/products_page.dart';
