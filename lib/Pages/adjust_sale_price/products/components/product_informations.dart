@@ -7,11 +7,9 @@ import '../../../../utils/utils.dart';
 class ProductInformations extends StatelessWidget {
   final GetProductJsonModel product;
   final int index;
-  final int? selectedIndex;
   const ProductInformations({
     required this.product,
     required this.index,
-    required this.selectedIndex,
     super.key,
   });
 
@@ -88,12 +86,6 @@ class ProductInformations extends StatelessWidget {
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                ),
-                Icon(
-                  selectedIndex == index
-                      ? Icons.arrow_drop_up
-                      : Icons.arrow_drop_down,
-                  color: Theme.of(context).colorScheme.primary,
                 ),
               ],
             ),

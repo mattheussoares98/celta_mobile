@@ -6,15 +6,11 @@ import '../../adjust_sale_price.dart';
 import 'package:flutter/material.dart';
 
 class ProductItem extends StatefulWidget {
-  final Function() updateSelectedIndex;
   final GetProductJsonModel product;
   final int index;
-  final int? selectedIndex;
   const ProductItem({
-    required this.updateSelectedIndex,
     required this.product,
     required this.index,
-    required this.selectedIndex,
     super.key,
   });
 
@@ -45,37 +41,35 @@ class _ProductItemState extends State<ProductItem> {
             ProductInformations(
               product: widget.product,
               index: widget.index,
-              selectedIndex: widget.selectedIndex,
             ),
-            if (widget.selectedIndex == widget.index)
-              Column(
-                children: [
-                  PriceTypeRadios(enterpriseModel: enterprise),
-                  const SaleTypeRadios(),
-                  ReplicationParameters(
-                    replicationParameters: replicationParameters,
-                  ),
-                  InitialAndFinishDates(
-                      initialDate: initialDate,
-                      finishDate: finishDate,
-                      updateInitialDate: () async {
-                        final newDate = await getNewDate(context: context);
-                        if (newDate != null) {
-                          setState(() {
-                            initialDate = newDate;
-                          });
-                        }
-                      },
-                      updateFinishDate: () async {
-                        final newDate = await getNewDate(context: context);
-                        if (newDate != null) {
-                          setState(() {
-                            finishDate = newDate;
-                          });
-                        }
-                      }),
-                ],
-              ),
+            Column(
+              children: [
+                PriceTypeRadios(enterpriseModel: enterprise),
+                const SaleTypeRadios(),
+                ReplicationParameters(
+                  replicationParameters: replicationParameters,
+                ),
+                InitialAndFinishDates(
+                    initialDate: initialDate,
+                    finishDate: finishDate,
+                    updateInitialDate: () async {
+                      final newDate = await getNewDate(context: context);
+                      if (newDate != null) {
+                        setState(() {
+                          initialDate = newDate;
+                        });
+                      }
+                    },
+                    updateFinishDate: () async {
+                      final newDate = await getNewDate(context: context);
+                      if (newDate != null) {
+                        setState(() {
+                          finishDate = newDate;
+                        });
+                      }
+                    }),
+              ],
+            ),
           ],
         ),
       ),
