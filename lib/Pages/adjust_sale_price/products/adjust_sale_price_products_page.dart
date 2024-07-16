@@ -10,10 +10,12 @@ class AdjustSalePriceProductsPage extends StatefulWidget {
   const AdjustSalePriceProductsPage({super.key});
 
   @override
-  State<AdjustSalePriceProductsPage> createState() => _AdjustSalePriceProductsPageState();
+  State<AdjustSalePriceProductsPage> createState() =>
+      _AdjustSalePriceProductsPageState();
 }
 
-class _AdjustSalePriceProductsPageState extends State<AdjustSalePriceProductsPage> {
+class _AdjustSalePriceProductsPageState
+    extends State<AdjustSalePriceProductsPage> {
   final searchValueController = TextEditingController();
   final searchFocusNode = FocusNode();
 
@@ -31,45 +33,57 @@ class _AdjustSalePriceProductsPageState extends State<AdjustSalePriceProductsPag
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Varejo"),
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SearchWidget(
-            focusNodeConsultProduct: searchFocusNode,
-            showOnlyConfigurationOfSearch: true,
-            isLoading: false,
-            consultProductController: searchValueController,
-            onPressSearch: () async {
-              await adjustSalePriceProvider.getProducts(
-                enterpriseCode: enterprise.codigoInternoEmpresa,
-                searchValue: searchValueController.text,
-                configurationsProvider: configurationsProvider,
-              );
-            },
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: const Text("Varejo"),
           ),
-          if (adjustSalePriceProvider.errorMessage != "" &&
-              adjustSalePriceProvider.products.length == 0)
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ErrorMessage(
-                    errorMessage: adjustSalePriceProvider.errorMessage),
+          body: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SearchWidget(
+                focusNodeConsultProduct: searchFocusNode,
+                showOnlyConfigurationOfSearch: true,
+                isLoading: false,
+                consultProductController: searchValueController,
+                onPressSearch: () async {
+                  await adjustSalePriceProvider.getProducts(
+                    enterpriseCode: enterprise.codigoInternoEmpresa,
+                    searchValue: searchValueController.text,
+                    configurationsProvider: configurationsProvider,
+                  );
+
+                  if (adjustSalePriceProvider.products.isNotEmpty) {
+                    searchValueController.clear();
+                  }
+                },
               ),
-            ),
-          if (!adjustSalePriceProvider.isLoading &&
-              adjustSalePriceProvider.products.isNotEmpty)
-            const ProductsItems(),
-          // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
-          //     priceConferenceProvider.productsCount > 1)
-          //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
-          //   PriceConferenceOrderProductsButtons(
-          //       priceConferenceProvider: priceConferenceProvider)
-        ],
-      ),
+              if (adjustSalePriceProvider.errorMessage != "" &&
+                  adjustSalePriceProvider.products.length == 0)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ErrorMessage(
+                        errorMessage: adjustSalePriceProvider.errorMessage),
+                  ),
+                ),
+              if (!adjustSalePriceProvider.isLoading &&
+                  adjustSalePriceProvider.products.isNotEmpty)
+                const ProductsItems(),
+              // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
+              //     priceConferenceProvider.productsCount > 1)
+              //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
+              //   PriceConferenceOrderProductsButtons(
+              //       priceConferenceProvider: priceConferenceProvider)
+            ],
+          ),
+        ),
+        loadingWidget(
+          message: "Aguarde...",
+          isLoading: adjustSalePriceProvider.isLoading,
+        ),
+      ],
     );
   }
 }
