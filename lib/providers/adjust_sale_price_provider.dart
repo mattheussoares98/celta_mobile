@@ -103,12 +103,43 @@ class AdjustSalePriceProvider with ChangeNotifier {
     }
   }
 
-  Future<void> confirmAdjust() async {
+  Future<void> confirmAdjust({
+    required int productPackingCode,
+    required int productCode,
+    required int enterpriseCode,
+  }) async {
     _isLoading = true;
     _errorMessage = "";
     notifyListeners();
 
-    try {} catch (e) {
+    try {
+      final Map jsonRequest = {
+        "CrossIdentity": UserData.crossIdentity,
+        "EnterpriseCode": enterpriseCode,
+        "ProductCode": productCode,
+        "ProductPackingCode": productPackingCode,
+        "UpdatePriceClass": false,
+        "UpdatePackings": false,
+        "UpdateEnterpriseGroup": false,
+        "UpdateGrate": false,
+        "SaleTypeInt": 1,
+        "Price": 10,
+        "EffectuationDatePrice": DateTime.now().toIso8601String(),
+        "Offer": 9.99,
+        "EffectuationDateOffer": DateTime.now().toIso8601String(),
+        "EndDateOffer": DateTime.now().toIso8601String()
+      };
+      SoapRequest.soapPost(
+        parameters: {
+          "parameters": json.encode(jsonRequest),
+        },
+        typeOfResponse: "AdjustSalePriceResponse",
+        SOAPAction: "AdjustSalePrice",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "AdjustSalePriceResult",
+      );
+      _errorMessage = SoapRequestResponse.errorMessage;
+    } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoading = false;
