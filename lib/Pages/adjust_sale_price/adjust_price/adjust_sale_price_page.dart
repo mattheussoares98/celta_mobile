@@ -37,6 +37,13 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
         Scaffold(
           appBar: AppBar(
             title: Text(product.name.toString()),
+            leading: IconButton(
+              onPressed: () {
+                adjustSalePriceProvider.clearDataOnCloseAdjustPriceScreen();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_outlined),
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),

@@ -23,6 +23,10 @@ class AdjustSalePriceProvider with ChangeNotifier {
 
   List<String> get saleOrOffer => ["Venda", "Oferta"];
 
+  void clearDataOnCloseAdjustPriceScreen() {
+    _schedules.clear();
+  }
+
   Future<void> getProducts({
     required int enterpriseCode,
     required String searchValue,
