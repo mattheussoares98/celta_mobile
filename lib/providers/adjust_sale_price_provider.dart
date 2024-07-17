@@ -104,9 +104,18 @@ class AdjustSalePriceProvider with ChangeNotifier {
   }
 
   Future<void> confirmAdjust({
-    required int productPackingCode,
-    required int productCode,
     required int enterpriseCode,
+    required int productCode,
+    required int productPackingCode,
+    required bool updatePriceClass,
+    required bool updatePackings,
+    required bool updateEnterpriseGroup,
+    required bool updateGrate,
+    required int saleTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
+    required double price,
+    required DateTime effectuationDatePrice,
+    required DateTime effectuationDateOffer,
+    required DateTime endDateOffer,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -118,16 +127,16 @@ class AdjustSalePriceProvider with ChangeNotifier {
         "EnterpriseCode": enterpriseCode,
         "ProductCode": productCode,
         "ProductPackingCode": productPackingCode,
-        "UpdatePriceClass": false,
-        "UpdatePackings": false,
-        "UpdateEnterpriseGroup": false,
-        "UpdateGrate": false,
-        "SaleTypeInt": 1,
-        "Price": 10,
-        "EffectuationDatePrice": DateTime.now().toIso8601String(),
-        "Offer": 9.99,
-        "EffectuationDateOffer": DateTime.now().toIso8601String(),
-        "EndDateOffer": DateTime.now().toIso8601String()
+        "UpdatePriceClass": updatePriceClass,
+        "UpdatePackings": updatePackings,
+        "UpdateEnterpriseGroup": updateEnterpriseGroup,
+        "UpdateGrate": updateGrate,
+        "SaleTypeInt": saleTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
+        "Price": price,
+        "Offer": price,
+        "EffectuationDatePrice": effectuationDatePrice.toIso8601String(),
+        "EffectuationDateOffer": effectuationDateOffer.toIso8601String(),
+        "EndDateOffer": endDateOffer.toIso8601String()
       };
       SoapRequest.soapPost(
         parameters: {

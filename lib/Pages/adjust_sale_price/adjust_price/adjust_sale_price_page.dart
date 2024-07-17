@@ -30,9 +30,9 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   Future<void> confirmAdjust(
     AdjustSalePriceProvider adjustSalePriceProvider,
   ) async {
-    final Map arguments = ModalRoute.of(context)!.settings.arguments! as Map;
-    final EnterpriseModel enterprise = arguments["enterprise"];
-    final GetProductJsonModel product = arguments["product"];
+    // final Map arguments = ModalRoute.of(context)!.settings.arguments! as Map;
+    // final EnterpriseModel enterprise = arguments["enterprise"];
+    // final GetProductJsonModel product = arguments["product"];
 
     bool? isValid = formKey.currentState?.validate();
 
@@ -41,11 +41,12 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
           context: context,
           title: "Confirmar ajuste?",
           function: () async {
-            await adjustSalePriceProvider.confirmAdjust(
-              productPackingCode: product.productPackingCode!,
-              productCode: product.productCode!,
-              enterpriseCode: enterprise.codigoInternoEmpresa,
-            );
+            // await adjustSalePriceProvider.confirmAdjust(
+            //   productPackingCode: product.productPackingCode!,
+            //   productCode: product.productCode!,
+            //   enterpriseCode: enterprise.codigoInternoEmpresa,
+            //   // price: priceTextController.text.
+            // );
           });
     }
   }
