@@ -28,22 +28,42 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
         ),
         Column(
           children: widget.replicationParameters
-              .map((e) => CheckboxListTile(
-                    title: Text(
-                      e.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
+              .map(
+                (e) => InkWell(
+                  onTap: () {
+                    setState(() {
+                      if (e.selected == true) {
+                        e.selected = false;
+                      } else {
+                        e.selected = true;
+                      }
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          e.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        ),
                       ),
-                    ),
-                    dense: true,
-                    value: e.selected,
-                    onChanged: (bool? newValue) {
-                      setState(() {
-                        e.selected = newValue;
-                      });
-                    },
-                  ))
+                      Checkbox(
+                        value: e.selected,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            e.selected = newValue;
+                          });
+                        },
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ],
+                  ),
+                ),
+              )
               .toList(),
         ),
       ],
