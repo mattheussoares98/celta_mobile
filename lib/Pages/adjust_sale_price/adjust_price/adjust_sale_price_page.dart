@@ -77,59 +77,61 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
               icon: const Icon(Icons.arrow_back_ios_new_outlined),
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                GetSchedulesPrices(enterprise: enterprise, product: product),
-                PriceTypeRadios(enterpriseModel: enterprise),
-                const SaleTypeRadios(),
-                ReplicationParameters(
-                  replicationParameters: replicationParameters,
-                ),
-                InitialAndFinishDates(
-                    initialDate: initialDate,
-                    finishDate: finishDate,
-                    updateInitialDate: () async {
-                      final newDate = await getNewDate(context: context);
-                      if (newDate != null) {
-                        setState(() {
-                          initialDate = newDate;
-                        });
-                      }
-                    },
-                    updateFinishDate: () async {
-                      final newDate = await getNewDate(context: context);
-                      if (newDate != null) {
-                        setState(() {
-                          finishDate = newDate;
-                        });
-                      }
-                    }),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: PriceFormField(
-                        priceTextController: priceTextController,
-                        formKey: formKey,
-                        confirmAdjust: () async {
-                          await confirmAdjust(adjustSalePriceProvider);
-                        },
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  GetSchedulesPrices(enterprise: enterprise, product: product),
+                  PriceTypeRadios(enterpriseModel: enterprise),
+                  const SaleTypeRadios(),
+                  ReplicationParameters(
+                    replicationParameters: replicationParameters,
+                  ),
+                  InitialAndFinishDates(
+                      initialDate: initialDate,
+                      finishDate: finishDate,
+                      updateInitialDate: () async {
+                        final newDate = await getNewDate(context: context);
+                        if (newDate != null) {
+                          setState(() {
+                            initialDate = newDate;
+                          });
+                        }
+                      },
+                      updateFinishDate: () async {
+                        final newDate = await getNewDate(context: context);
+                        if (newDate != null) {
+                          setState(() {
+                            finishDate = newDate;
+                          });
+                        }
+                      }),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: PriceFormField(
+                          priceTextController: priceTextController,
+                          formKey: formKey,
+                          confirmAdjust: () async {
+                            await confirmAdjust(adjustSalePriceProvider);
+                          },
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ConfirmAdjustPriceButton(
-                        formKey: formKey,
-                        confirmAdjust: () async {
-                          await confirmAdjust(adjustSalePriceProvider);
-                        },
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ConfirmAdjustPriceButton(
+                          formKey: formKey,
+                          confirmAdjust: () async {
+                            await confirmAdjust(adjustSalePriceProvider);
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
