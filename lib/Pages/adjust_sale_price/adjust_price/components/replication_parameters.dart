@@ -23,7 +23,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
           "Parâmetros de replicação",
           style: TextStyle(
             fontSize: 17,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.bold,
           ),
         ),
         Column(
@@ -46,8 +46,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
                         child: Text(
                           e.name,
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),

@@ -49,7 +49,7 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
           "Tipo de preço",
           style: TextStyle(
             fontSize: 17,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.bold,
           ),
         ),
         generateRadios(adjustSalePriceProvider)
@@ -89,7 +89,7 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
                     priceTypes[i],
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w400,
                     )
                   ),
                 ),

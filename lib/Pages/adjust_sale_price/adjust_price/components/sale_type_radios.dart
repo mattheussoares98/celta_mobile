@@ -24,7 +24,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
           "Tipo de venda",
           style: TextStyle(
             fontSize: 17,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.bold,
           ),
         ),
         Row(
@@ -40,18 +40,24 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
     for (var i = 0; i < adjustSalePriceProvider.saleOrOffer.length; i++) {
       radios.add(
         Expanded(
-          child: RadioListTile(
-            visualDensity: VisualDensity.compact,
-            contentPadding: const EdgeInsets.all(0),
-            title: Text(adjustSalePriceProvider.saleOrOffer[i]),
-            value: i,
-            dense: true,
-            groupValue: groupValue,
-            onChanged: (value) {
-              setState(() {
-                groupValue = value;
-              });
-            },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Radio(
+                value: i,
+                groupValue: groupValue,
+                onChanged: (value) {
+                  setState(() {
+                    groupValue = value;
+                  });
+                },
+                visualDensity: VisualDensity.compact,
+              ),
+              Text(
+                adjustSalePriceProvider.saleOrOffer[i],
+                style: const TextStyle(fontWeight: FontWeight.w400),
+              ),
+            ],
           ),
         ),
       );
