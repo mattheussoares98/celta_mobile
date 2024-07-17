@@ -25,13 +25,18 @@ class _ProductItemState extends State<ProductItem> {
     required String value,
     required String successMessage,
     required String errorMessage,
+    required bool isPrice,
   }) {
     bool hasValue =
         double.tryParse(value) != null && double.tryParse(value)! > 0;
 
     return TitleAndSubtitle.titleAndSubtitle(
       title: hasValue ? successMessage : null,
-      subtitle: hasValue ? ConvertString.convertToBRL(value) : errorMessage,
+      subtitle: hasValue
+          ? (isPrice
+              ? value.toBrazilianNumber().addBrazilianCoin()
+              : value.toBrazilianNumber())
+          : errorMessage,
       subtitleColor:
           hasValue ? Theme.of(context).colorScheme.primary : Colors.black,
     );
@@ -106,7 +111,8 @@ class _ProductItemState extends State<ProductItem> {
               ],
             ),
             getTitleAndSubtitle(
-              value: widget.product.retailSalePrice.toString(),
+              value: widget.product.retailPracticedPrice.toString(),
+              isPrice: true,
               successMessage: "Preço de venda",
               errorMessage: "Sem preço de venda",
             ),
@@ -123,11 +129,13 @@ class _ProductItemState extends State<ProductItem> {
               subtitleColor: getStockSubtitleColor(),
             ),
             getTitleAndSubtitle(
-              value: widget.product.wholeOfferPrice.toString(),
+              isPrice: true,
+              value: widget.product.wholePracticedPrice.toString(),
               successMessage: "Preço de atacado",
               errorMessage: "Sem preço de atacado",
             ),
             getTitleAndSubtitle(
+              isPrice: false,
               value: widget.product.minimumWholeQuantity.toString(),
               successMessage: "Qtd mín atacado",
               errorMessage: "Sem qtd mín p/ atacado",
@@ -135,6 +143,7 @@ class _ProductItemState extends State<ProductItem> {
             if (!widget.product.liquidCost.toString().contains("-1"))
               //quando o usuário não possui permissão para consultar o estoque, a API retorna "-1.0"
               getTitleAndSubtitle(
+                isPrice: true,
                 value: widget.product.liquidCost.toString(),
                 successMessage: "Custo líquido",
                 errorMessage: "Sem custo líquido",
