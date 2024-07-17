@@ -3,7 +3,29 @@ class ReplicationModel {
   final String name;
 
   ReplicationModel({
-    required this.selected,
+    this.selected = false,
     required this.name,
   });
+}
+
+enum ReplicationNames {
+  Embalagens,
+  AgrupamentoOperacional,
+  Classe,
+  Grade,
+}
+
+extension ReplicationNamesExtension on ReplicationNames {
+  String get description {
+    switch (this) {
+      case ReplicationNames.Embalagens:
+        return "Embalagens";
+      case ReplicationNames.AgrupamentoOperacional:
+        return "Agrupamento operacional";
+      case ReplicationNames.Classe:
+        return "Classe";
+      case ReplicationNames.Grade:
+        return "Grade";
+    }
+  }
 }
