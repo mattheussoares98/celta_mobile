@@ -106,11 +106,13 @@ class AdjustSalePriceProvider with ChangeNotifier {
   Future<void> confirmAdjust() async {
     _isLoading = true;
     _errorMessage = "";
+    notifyListeners();
 
     try {} catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoading = false;
+      notifyListeners();
     }
   }
 }
