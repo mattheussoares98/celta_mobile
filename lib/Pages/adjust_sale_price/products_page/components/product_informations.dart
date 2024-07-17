@@ -36,10 +36,11 @@ class ProductInformations extends StatelessWidget {
               : null,
           subtitle: product.retailPracticedPrice != null &&
                   product.retailPracticedPrice! > 0
-              ? product.retailPracticedPrice
-                  .toString()
-                  .toBrazilianNumber()
-                  .addBrazilianCoin()
+              ? "Varejo: " +
+                  product.retailPracticedPrice
+                      .toString()
+                      .toBrazilianNumber()
+                      .addBrazilianCoin()
               : "Sem preço de varejo",
           subtitleColor: product.retailPracticedPrice != null &&
                   product.retailPracticedPrice! > 0
@@ -53,10 +54,11 @@ class ProductInformations extends StatelessWidget {
               : null,
           subtitle: product.wholePracticedPrice != null &&
                   product.wholePracticedPrice! > 0
-              ? product.wholePracticedPrice
-                  .toString()
-                  .toBrazilianNumber()
-                  .addBrazilianCoin()
+              ? "Atacado: " +
+                  product.wholePracticedPrice
+                      .toString()
+                      .toBrazilianNumber()
+                      .addBrazilianCoin()
               : "Sem preço de atacado",
           subtitleColor: product.wholePracticedPrice != null &&
                   product.wholePracticedPrice! > 0
@@ -70,10 +72,11 @@ class ProductInformations extends StatelessWidget {
               : null,
           subtitle: product.eCommercePracticedPrice != null &&
                   product.eCommercePracticedPrice! > 0
-              ? product.eCommercePracticedPrice
-                  .toString()
-                  .toBrazilianNumber()
-                  .addBrazilianCoin()
+              ? "Ecommerce: " +
+                  product.eCommercePracticedPrice
+                      .toString()
+                      .toBrazilianNumber()
+                      .addBrazilianCoin()
               : "Sem preço de ecommerce",
           subtitleColor: product.eCommercePracticedPrice != null &&
                   product.eCommercePracticedPrice! > 0
