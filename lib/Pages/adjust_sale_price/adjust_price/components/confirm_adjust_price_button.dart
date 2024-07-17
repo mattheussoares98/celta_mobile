@@ -15,7 +15,7 @@ class ConfirmAdjustPriceButton extends StatelessWidget {
       onPressed: () async {
         await confirmAdjust();
       },
-      child: const Text("Confirmar ajuste"),
+      child: const FittedBox(child: Text("Confirmar ajuste")),
     );
   }
 }

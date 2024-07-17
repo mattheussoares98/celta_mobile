@@ -21,27 +21,22 @@ class PriceFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
 
-    return Column(
-      children: [
-        const Divider(),
-        Form(
-            key: formKey,
-            child: TextFormField(
-              controller: priceTextController,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              keyboardType: const TextInputType.numberWithOptions(),
-              inputFormatters: [LengthLimitingTextInputFormatter(10)],
-              style: FormFieldHelper.style(),
-              onFieldSubmitted: (value) async {
-                await confirmAdjust();
-              },
-              decoration: FormFieldHelper.decoration(
-                isLoading: adjustSalePriceProvider.isLoading,
-                context: context,
-              ),
-              validator: FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 2),
-            )),
-      ],
-    );
+    return Form(
+        key: formKey,
+        child: TextFormField(
+          controller: priceTextController,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          keyboardType: const TextInputType.numberWithOptions(),
+          inputFormatters: [LengthLimitingTextInputFormatter(10)],
+          style: FormFieldHelper.style(),
+          onFieldSubmitted: (value) async {
+            await confirmAdjust();
+          },
+          decoration: FormFieldHelper.decoration(
+            isLoading: adjustSalePriceProvider.isLoading,
+            context: context,
+          ),
+          validator: FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 2),
+        ));
   }
 }

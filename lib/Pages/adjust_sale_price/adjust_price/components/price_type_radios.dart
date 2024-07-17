@@ -52,35 +52,58 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        Row(
-          children: generateRadios(adjustSalePriceProvider),
-        ),
+        generateRadios(adjustSalePriceProvider)
       ],
     );
   }
 
-  List<Widget> generateRadios(AdjustSalePriceProvider adjustSalePriceProvider) {
+  Widget generateRadios(AdjustSalePriceProvider adjustSalePriceProvider) {
     List<Widget> radios = [];
 
     for (var i = 0; i < priceTypes.length; i++) {
       radios.add(
         Expanded(
-          child: RadioListTile(
-            title: Text(priceTypes[i]),
-            visualDensity: VisualDensity.compact,
-            contentPadding: const EdgeInsets.all(0),
-            value: i,
-            dense: true,
-            groupValue: groupValue,
-            onChanged: (value) {
+          child: InkWell(
+            onTap: () {
               setState(() {
-                groupValue = value;
+                groupValue = i;
               });
             },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Radio(
+                    value: i,
+                    visualDensity: VisualDensity.compact,
+                    groupValue: groupValue,
+                    onChanged: (value) {
+                      setState(() {
+                        groupValue = value;
+                      });
+                    },
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Text(
+                    priceTypes[i],
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
     }
-    return radios;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ...radios,
+      ],
+    );
   }
 }
