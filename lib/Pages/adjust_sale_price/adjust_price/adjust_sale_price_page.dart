@@ -95,7 +95,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text(product.name.toString()),
+              title: FittedBox(child: Text("${product.name} (${product.plu})")),
             ),
             body: SingleChildScrollView(
               child: Padding(
