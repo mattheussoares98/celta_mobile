@@ -58,6 +58,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
+    _schedules.clear();
     notifyListeners();
 
     try {
@@ -79,7 +80,11 @@ class AdjustSalePriceProvider with ChangeNotifier {
       );
 
       print(SoapRequestResponse.responseAsString);
-      _errorMessage = SoapRequestResponse.errorMessage;
+      final List teste = json.decode(SoapRequestResponse.responseAsString);
+
+      _schedules = teste.map((e) => ScheduleModel.fromJson(e)).toList();
+
+      // _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {

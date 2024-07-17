@@ -1,104 +1,104 @@
 class ScheduleModel {
-  final int? code;
-  final int? priceType;
-  final int? origin;
-  final double? originalPrice;
-  final double? price;
-  final double? lastPrice;
-  final String? user;
-  final String? date;
-  final String? executionDate;
-  final String? priceTypeString;
-  final String? originString;
-  final String? offerSchedule;
-  final bool? roundedPrice;
-  final bool? alteredByEnterpriseGroup;
-  final bool? alteredByClass;
-  final bool? alteredByPackings;
-  final bool? alteredByGrid;
-  final bool? updateClass;
-  final bool? updateEnterpriseOperationalGroup;
-  final bool? isFather;
-  final bool? isBrother;
-  final bool? isExecuted;
-  final bool? isFinished;
+  final int? Code;
+  final int? PriceType;
+  final int? Origin;
+  final double? OriginalPrice;
+  final double? Price;
+  final double? LastPrice;
+  final String? User;
+  final String? Date;
+  final String? ExecutionDate;
+  final String? PriceTypeString;
+  final String? OriginString;
+  final String? OfferSchedule;
+  final bool? RoundedPrice;
+  final bool? AlteredByEnterpriseGroup;
+  final bool? AlteredByClass;
+  final bool? AlteredByPackings;
+  final bool? AlteredByGrid;
+  final bool? UpdateClass;
+  final bool? UpdateEnterpriseOperationalGroup;
+  final bool? IsFather;
+  final bool? IsBrother;
+  final bool? IsExecuted;
+  final bool? IsFinished;
 
   ScheduleModel({
-    required this.code,
-    required this.priceType,
-    required this.origin,
-    required this.originalPrice,
-    required this.price,
-    required this.lastPrice,
-    required this.user,
-    required this.date,
-    required this.executionDate,
-    required this.priceTypeString,
-    required this.originString,
-    required this.offerSchedule,
-    required this.roundedPrice,
-    required this.alteredByEnterpriseGroup,
-    required this.alteredByClass,
-    required this.alteredByPackings,
-    required this.alteredByGrid,
-    required this.updateClass,
-    required this.updateEnterpriseOperationalGroup,
-    required this.isFather,
-    required this.isBrother,
-    required this.isExecuted,
-    required this.isFinished,
+    required this.Code,
+    required this.PriceType,
+    required this.Origin,
+    required this.OriginalPrice,
+    required this.Price,
+    required this.LastPrice,
+    required this.User,
+    required this.Date,
+    required this.ExecutionDate,
+    required this.PriceTypeString,
+    required this.OriginString,
+    required this.OfferSchedule,
+    required this.RoundedPrice,
+    required this.AlteredByEnterpriseGroup,
+    required this.AlteredByClass,
+    required this.AlteredByPackings,
+    required this.AlteredByGrid,
+    required this.UpdateClass,
+    required this.UpdateEnterpriseOperationalGroup,
+    required this.IsFather,
+    required this.IsBrother,
+    required this.IsExecuted,
+    required this.IsFinished,
   });
 
   factory ScheduleModel.fromJson(Map json) => ScheduleModel(
-        code: json["code"],
-        priceType: json["priceType"],
-        origin: json["origin"],
-        originalPrice: json["originalPrice"],
-        price: json["price"],
-        lastPrice: json["lastPrice"],
-        user: json["user"],
-        date: json["date"],
-        executionDate: json["executionDate"],
-        priceTypeString: json["priceTypeString"],
-        originString: json["originString"],
-        offerSchedule: json["offerSchedule"],
-        roundedPrice: json["roundedPrice"],
-        alteredByEnterpriseGroup: json["alteredByEnterpriseGroup"],
-        alteredByClass: json["alteredByClass"],
-        alteredByPackings: json["alteredByPackings"],
-        alteredByGrid: json["alteredByGrid"],
-        updateClass: json["updateClass"],
-        updateEnterpriseOperationalGroup:
-            json["updateEnterpriseOperationalGroup"],
-        isFather: json["isFather"],
-        isBrother: json["isBrother"],
-        isExecuted: json["isExecuted"],
-        isFinished: json["isFinished"],
+        Code: json["Code"],
+        PriceType: json["PriceType"],
+        Origin: json["Origin"],
+        OriginalPrice: json["OriginalPrice"],
+        Price: json["Price"],
+        LastPrice: json["LastPrice"],
+        User: json["User"],
+        Date: json["Date"],
+        ExecutionDate: json["ExecutionDate"],
+        PriceTypeString: json["PriceTypeString"],
+        OriginString: json["OriginString"],
+        OfferSchedule: json["OfferSchedule"],
+        RoundedPrice: json["RoundedPrice"],
+        AlteredByEnterpriseGroup: json["AlteredByEnterpriseGroup"],
+        AlteredByClass: json["AlteredByClass"],
+        AlteredByPackings: json["AlteredByPackings"],
+        AlteredByGrid: json["AlteredByGrid"],
+        UpdateClass: json["UpdateClass"],
+        UpdateEnterpriseOperationalGroup:
+            json["UpdateEnterpriseOperationalGroup"],
+        IsFather: json["IsFather"],
+        IsBrother: json["IsBrother"],
+        IsExecuted: json["IsExecuted"],
+        IsFinished: json["IsFinished"],
       );
 
   Map<String, dynamic> toJson(ScheduleModel scheduleModel) => {
-        "code": code,
-        "priceType": priceType,
-        "origin": origin,
-        "originalPrice": originalPrice,
-        "price": price,
-        "lastPrice": lastPrice,
-        "user": user,
-        "date": date,
-        "executionDate": executionDate,
-        "priceTypeString": priceTypeString,
-        "originString": originString,
-        "offerSchedule": offerSchedule,
-        "roundedPrice": roundedPrice,
-        "alteredByEnterpriseGroup": alteredByEnterpriseGroup,
-        "alteredByClass": alteredByClass,
-        "alteredByPackings": alteredByPackings,
-        "alteredByGrid": alteredByGrid,
-        "updateClass": updateClass,
-        "updateEnterpriseOperationalGroup": updateEnterpriseOperationalGroup,
-        "isFather": isFather,
-        "isBrother": isBrother,
-        "isExecuted": isExecuted,
-        "isFinished": isFinished,
+        "Code": Code,
+        "PriceType": PriceType,
+        "Origin": Origin,
+        "OriginalPrice": OriginalPrice,
+        "Price": Price,
+        "LastPrice": LastPrice,
+        "User": User,
+        "Date": Date,
+        "ExecutionDate": ExecutionDate,
+        "PriceTypeString": PriceTypeString,
+        "OriginString": OriginString,
+        "OfferSchedule": OfferSchedule,
+        "RoundedPrice": RoundedPrice,
+        "AlteredByEnterpriseGroup": AlteredByEnterpriseGroup,
+        "AlteredByClass": AlteredByClass,
+        "AlteredByPackings": AlteredByPackings,
+        "AlteredByGrid": AlteredByGrid,
+        "UpdateClass": UpdateClass,
+        "UpdateEnterpriseOperationalGroup": UpdateEnterpriseOperationalGroup,
+        "IsFather": IsFather,
+        "IsBrother": IsBrother,
+        "IsExecuted": IsExecuted,
+        "IsFinished": IsFinished,
       };
 }
