@@ -9,9 +9,11 @@ import '../../../../providers/providers.dart';
 class PriceFormField extends StatelessWidget {
   final TextEditingController priceTextController;
   final GlobalKey<FormState> formKey;
+  final Function() confirmAdjust;
   const PriceFormField({
     required this.priceTextController,
     required this.formKey,
+    required this.confirmAdjust,
     super.key,
   });
 
@@ -30,6 +32,9 @@ class PriceFormField extends StatelessWidget {
               keyboardType: const TextInputType.numberWithOptions(),
               inputFormatters: [LengthLimitingTextInputFormatter(10)],
               style: FormFieldHelper.style(),
+              onFieldSubmitted: (value) async {
+                await confirmAdjust();
+              },
               decoration: FormFieldHelper.decoration(
                 isLoading: adjustSalePriceProvider.isLoading,
                 context: context,

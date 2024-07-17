@@ -27,6 +27,21 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   final priceTextController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
+  Future<void> confirmAdjust(
+    AdjustSalePriceProvider adjustSalePriceProvider,
+  ) async {
+    bool? isValid = formKey.currentState?.validate();
+
+    if (isValid == true) {
+      ShowAlertDialog.showAlertDialog(
+          context: context,
+          title: "Confirmar ajuste?",
+          function: () async {
+            await adjustSalePriceProvider.confirmAdjust();
+          });
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -90,10 +105,20 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                       child: PriceFormField(
                         priceTextController: priceTextController,
                         formKey: formKey,
+                        confirmAdjust: () async {
+                          await confirmAdjust(adjustSalePriceProvider);
+                        },
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(child: ConfirmAdjustPriceButton(formKey: formKey)),
+                    Expanded(
+                      child: ConfirmAdjustPriceButton(
+                        formKey: formKey,
+                        confirmAdjust: () async {
+                          await confirmAdjust(adjustSalePriceProvider);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],
