@@ -25,6 +25,12 @@ class AdjustSalePriceProvider with ChangeNotifier {
 
   void clearDataOnCloseAdjustPriceScreen() {
     _schedules.clear();
+    _errorMessage = "";
+  }
+
+  void clearDataOnCloseProductsScreen() {
+    _products.clear();
+    _errorMessage = "";
   }
 
   Future<void> getProducts({

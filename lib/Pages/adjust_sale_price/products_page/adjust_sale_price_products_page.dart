@@ -38,6 +38,13 @@ class _AdjustSalePriceProductsPageState
         Scaffold(
           appBar: AppBar(
             title: const Text("Varejo"),
+            leading: IconButton(
+              onPressed: () {
+                adjustSalePriceProvider.clearDataOnCloseProductsScreen();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new),
+            ),
           ),
           body: Column(
             mainAxisSize: MainAxisSize.max,
