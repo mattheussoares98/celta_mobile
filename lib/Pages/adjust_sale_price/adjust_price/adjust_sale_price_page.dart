@@ -86,88 +86,87 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
     final EnterpriseModel enterprise = arguments["enterprise"];
     final GetProductJsonModel product = arguments["product"];
 
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: Text(product.name.toString()),
-            leading: IconButton(
-              onPressed: () {
-                adjustSalePriceProvider.clearDataOnCloseAdjustPriceScreen();
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined),
+    return PopScope(
+      canPop: !adjustSalePriceProvider.isLoading,
+      onPopInvoked: (_) {
+        adjustSalePriceProvider.clearDataOnCloseAdjustPriceScreen();
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text(product.name.toString()),
             ),
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  GetSchedulesPricesButton(
-                      enterprise: enterprise, product: product),
-                  PriceTypeRadios(enterpriseModel: enterprise),
-                  const SaleTypeRadios(),
-                  ReplicationParameters(
-                    replicationParameters: replicationParameters,
-                  ),
-                  InitialAndFinishDates(
-                      initialDate: initialDate,
-                      finishDate: finishDate,
-                      updateInitialDate: () async {
-                        final newDate = await getNewDate(context: context);
-                        if (newDate != null) {
-                          setState(() {
-                            initialDate = newDate;
-                          });
-                        }
-                      },
-                      updateFinishDate: () async {
-                        final newDate = await getNewDate(context: context);
-                        if (newDate != null) {
-                          setState(() {
-                            finishDate = newDate;
-                          });
-                        }
-                      }),
-                  Column(
-                    children: [
-                      const Divider(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: PriceFormField(
-                              priceTextController: priceTextController,
-                              formKey: formKey,
-                              confirmAdjust: () async {
-                                await confirmAdjust(adjustSalePriceProvider);
-                              },
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    GetSchedulesPricesButton(
+                        enterprise: enterprise, product: product),
+                    PriceTypeRadios(enterpriseModel: enterprise),
+                    const SaleTypeRadios(),
+                    ReplicationParameters(
+                      replicationParameters: replicationParameters,
+                    ),
+                    InitialAndFinishDates(
+                        initialDate: initialDate,
+                        finishDate: finishDate,
+                        updateInitialDate: () async {
+                          final newDate = await getNewDate(context: context);
+                          if (newDate != null) {
+                            setState(() {
+                              initialDate = newDate;
+                            });
+                          }
+                        },
+                        updateFinishDate: () async {
+                          final newDate = await getNewDate(context: context);
+                          if (newDate != null) {
+                            setState(() {
+                              finishDate = newDate;
+                            });
+                          }
+                        }),
+                    Column(
+                      children: [
+                        const Divider(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: PriceFormField(
+                                priceTextController: priceTextController,
+                                formKey: formKey,
+                                confirmAdjust: () async {
+                                  await confirmAdjust(adjustSalePriceProvider);
+                                },
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ConfirmAdjustPriceButton(
-                              formKey: formKey,
-                              confirmAdjust: () async {
-                                await confirmAdjust(adjustSalePriceProvider);
-                              },
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ConfirmAdjustPriceButton(
+                                formKey: formKey,
+                                confirmAdjust: () async {
+                                  await confirmAdjust(adjustSalePriceProvider);
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        loadingWidget(
-          message: "Aguarde...",
-          isLoading: adjustSalePriceProvider.isLoading,
-        )
-      ],
+          loadingWidget(
+            message: "Aguarde...",
+            isLoading: adjustSalePriceProvider.isLoading,
+          )
+        ],
+      ),
     );
   }
 }
