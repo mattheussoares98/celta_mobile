@@ -83,9 +83,18 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                         });
                       }
                     }),
-                PriceFormField(
-                  priceTextController: priceTextController,
-                  formKey: formKey,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: PriceFormField(
+                        priceTextController: priceTextController,
+                        formKey: formKey,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(child: ConfirmAdjustPriceButton(formKey: formKey)),
+                  ],
                 ),
               ],
             ),
