@@ -24,6 +24,15 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
     ReplicationModel(selected: false, name: "Classe"),
     ReplicationModel(selected: false, name: "Grade"),
   ];
+  final priceTextController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    priceTextController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +83,10 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                         });
                       }
                     }),
+                PriceFormField(
+                  priceTextController: priceTextController,
+                  formKey: formKey,
+                ),
               ],
             ),
           ),
