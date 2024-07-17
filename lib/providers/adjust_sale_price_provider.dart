@@ -5,6 +5,7 @@ import 'package:celta_inventario/models/soap/products/get_product_json/get_produ
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+import '../models/adjust_sale_request/adjust_sale_request.dart';
 import 'providers.dart';
 
 class AdjustSalePriceProvider with ChangeNotifier {
@@ -13,6 +14,9 @@ class AdjustSalePriceProvider with ChangeNotifier {
 
   List<GetProductJsonModel> _products = [];
   List<GetProductJsonModel> get products => [..._products];
+
+  List<ScheduleModel> _schedules = [];
+  List<ScheduleModel> get schedules => [..._schedules];
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
