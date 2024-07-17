@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class GetSchedulesPricesButton extends StatelessWidget {
+class GetSchedulesPrices extends StatelessWidget {
   final EnterpriseModel enterprise;
   final GetProductJsonModel product;
-  const GetSchedulesPricesButton({
+  const GetSchedulesPrices({
     required this.enterprise,
     required this.product,
     super.key,
@@ -42,6 +42,11 @@ class GetSchedulesPricesButton extends StatelessWidget {
             ],
           ),
         ),
+        if (adjustSalePriceProvider.errorMessageSchedule.isNotEmpty)
+          ErrorMessage(
+            errorMessage: adjustSalePriceProvider.errorMessageSchedule,
+            fontSize: 12,
+          ),
         if (adjustSalePriceProvider.schedules.isNotEmpty)
           ListView.builder(
             shrinkWrap: true,

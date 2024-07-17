@@ -21,11 +21,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
+  String _errorMessageSchedule = "";
+  String get errorMessageSchedule => _errorMessageSchedule;
+
   List<String> get saleOrOffer => ["Venda", "Oferta"];
 
   void clearDataOnCloseAdjustPriceScreen() {
     _schedules.clear();
-    _errorMessage = "";
+    _errorMessageSchedule = "";
   }
 
   void clearDataOnCloseProductsScreen() {
@@ -67,7 +70,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required int productPackingCode,
   }) async {
     _isLoading = true;
-    _errorMessage = "";
+    _errorMessageSchedule = "";
     _schedules.clear();
     notifyListeners();
 
@@ -89,12 +92,16 @@ class AdjustSalePriceProvider with ChangeNotifier {
         typeOfResult: "GetPriceSchedulesResult",
       );
 
-      print(SoapRequestResponse.responseAsString);
       final List teste = json.decode(SoapRequestResponse.responseAsString);
 
       _schedules = teste.map((e) => ScheduleModel.fromJson(e)).toList();
 
-      // _errorMessage = SoapRequestResponse.errorMessage;
+      _errorMessageSchedule = SoapRequestResponse.errorMessage;
+
+      if (_schedules.isEmpty) {
+        _errorMessageSchedule =
+            "Não foram encontrados agendamentos para esse produto";
+      }
     } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
