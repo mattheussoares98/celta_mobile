@@ -68,6 +68,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
         true;
   }
 
+  void updateSelectedSaleType(int index) {
+    for (var saleType in _saleTypes) {
+      saleType.selected = false;
+    }
+    _saleTypes[index].selected = true;
+    debugPrint(_saleTypes[index].selected.toString());
+  }
+
   void clearDataOnCloseAdjustPriceScreen() {
     _schedules.clear();
     _errorMessageSchedule = "";

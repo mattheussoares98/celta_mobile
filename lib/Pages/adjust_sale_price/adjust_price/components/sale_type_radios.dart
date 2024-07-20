@@ -43,6 +43,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
         Expanded(
           child: InkWell(
             onTap: () {
+              adjustSalePriceProvider.updateSelectedSaleType(i);
               setState(() {
                 groupValue = i;
               });
@@ -54,6 +55,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
                   value: i,
                   groupValue: groupValue,
                   onChanged: (value) {
+                    adjustSalePriceProvider.updateSelectedSaleType(i);
                     setState(() {
                       groupValue = value;
                     });
