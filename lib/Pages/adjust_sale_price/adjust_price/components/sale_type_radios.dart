@@ -1,3 +1,4 @@
+import 'package:celta_inventario/models/adjust_sale_price/adjust_sale_price.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
   List<Widget> generateRadios(AdjustSalePriceProvider adjustSalePriceProvider) {
     List<Widget> radios = [];
 
-    for (var i = 0; i < adjustSalePriceProvider.saleOrOffer.length; i++) {
+    for (var i = 0; i < adjustSalePriceProvider.saleTypes.length; i++) {
       radios.add(
         Expanded(
           child: InkWell(
@@ -60,7 +61,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
                   visualDensity: VisualDensity.compact,
                 ),
                 Text(
-                  adjustSalePriceProvider.saleOrOffer[i],
+                  adjustSalePriceProvider.saleTypes[i].saleTypeName.description,
                   style: const TextStyle(fontWeight: FontWeight.w400),
                 ),
               ],

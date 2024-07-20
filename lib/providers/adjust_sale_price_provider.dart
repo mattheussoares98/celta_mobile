@@ -37,7 +37,11 @@ class AdjustSalePriceProvider with ChangeNotifier {
   String _errorMessageSchedule = "";
   String get errorMessageSchedule => _errorMessageSchedule;
 
-  List<String> get saleOrOffer => ["Venda", "Oferta"];
+  List<SaleTypeModel> _saleTypes = [
+    SaleTypeModel(saleTypeName: SaleTypeName.Venda),
+    SaleTypeModel(saleTypeName: SaleTypeName.Oferta),
+  ];
+  List<SaleTypeModel> get saleTypes => [..._saleTypes];
 
   void addUsedPriceTypes(EnterpriseModel enterpriseModel) {
     if (_priceTypes.isNotEmpty) {
