@@ -1,3 +1,4 @@
+import 'package:celta_inventario/models/adjust_sale_price/price_type_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,19 +19,20 @@ class PriceTypeRadios extends StatefulWidget {
 class _SaleTypeRadiosState extends State<PriceTypeRadios> {
   int? groupValue;
 
-  List<String> priceTypes = [];
+  List<PriceTypeModel> priceTypes = [];
   @override
   void initState() {
     super.initState();
 
     if (widget.enterpriseModel.useRetailSale) {
-      priceTypes.add("Varejo");
+      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Varejo));
     }
     if (widget.enterpriseModel.useWholeSale) {
-      priceTypes.add("Atacado");
+      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Atacado));
     }
     if (widget.enterpriseModel.useEcommerceSale) {
-      priceTypes.add("Ecommerce");
+      priceTypes
+          .add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Ecommerce));
     }
 
     Future.delayed(Duration.zero, () {
@@ -85,13 +87,11 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
                 ),
                 Expanded(
                   flex: 4,
-                  child: Text(
-                    priceTypes[i],
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                    )
-                  ),
+                  child: Text(priceTypes[i].priceTypeName.description,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                      )),
                 ),
               ],
             ),
