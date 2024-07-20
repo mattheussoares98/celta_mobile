@@ -1,11 +1,12 @@
 class PriceTypeModel {
   final PriceTypeNames priceTypeName;
   bool selected = false;
+  final int priceTypeInt;
 
   PriceTypeModel._({
     required this.priceTypeName,
     required this.selected,
-    required int priceTypeInt,
+    required this.priceTypeInt,
   });
 
   factory PriceTypeModel.fromPriceTypeName(PriceTypeNames priceTypeName) {

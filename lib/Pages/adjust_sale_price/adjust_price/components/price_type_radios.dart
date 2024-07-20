@@ -53,49 +53,46 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
   }
 
   Widget generateRadios(AdjustSalePriceProvider adjustSalePriceProvider) {
-    List<Widget> radios = [];
+    List<Widget> radios = adjustSalePriceProvider.priceTypes
+        .map((e) => Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    adjustSalePriceProvider
+                        .updateSelectedPriceType(e.priceTypeName);
+                    groupValue = e.priceTypeInt;
+                  });
+                },
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Radio(
+                        value: e.priceTypeInt,
+                        visualDensity: VisualDensity.compact,
+                        groupValue: groupValue,
+                        onChanged: (value) {
+                          setState(() {
+                            adjustSalePriceProvider
+                                .updateSelectedPriceType(e.priceTypeName);
+                            groupValue = value;
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(e.priceTypeName.description,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ))
+        .toList();
 
-    for (var i = 0; i < adjustSalePriceProvider.priceTypes.length; i++) {
-      radios.add(
-        Expanded(
-          child: InkWell(
-            onTap: () {
-              adjustSalePriceProvider.updateSelectedPriceType(i);
-              setState(() {
-                groupValue = i;
-              });
-            },
-            child: Row(
-              children: [
-                Expanded(
-                  child: Radio(
-                    value: i,
-                    visualDensity: VisualDensity.compact,
-                    groupValue: groupValue,
-                    onChanged: (value) {
-                      adjustSalePriceProvider.updateSelectedPriceType(i);
-                      setState(() {
-                        groupValue = value;
-                      });
-                    },
-                  ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Text(
-                      adjustSalePriceProvider
-                          .priceTypes[i].priceTypeName.description,
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                      )),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

@@ -55,11 +55,12 @@ class AdjustSalePriceProvider with ChangeNotifier {
     }
   }
 
-  void updateSelectedPriceType(int index) {
+  void updateSelectedPriceType(PriceTypeNames priceTypeName) {
     for (var priceType in _priceTypes) {
       priceType.selected = false;
     }
-    _priceTypes[index].selected = true;
+    _priceTypes.where((e) => e.priceTypeName == priceTypeName).first.selected =
+        true;
   }
 
   void clearDataOnCloseAdjustPriceScreen() {
