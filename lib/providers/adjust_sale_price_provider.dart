@@ -6,6 +6,7 @@ import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import '../models/adjust_sale_price/adjust_sale_price.dart';
+import '../models/enterprise/enterprise.dart';
 import 'providers.dart';
 
 class AdjustSalePriceProvider with ChangeNotifier {
@@ -18,6 +19,8 @@ class AdjustSalePriceProvider with ChangeNotifier {
   List<ScheduleModel> _schedules = [];
   List<ScheduleModel> get schedules => [..._schedules];
 
+  List<PriceTypeModel> priceTypes = [];
+
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
@@ -25,6 +28,23 @@ class AdjustSalePriceProvider with ChangeNotifier {
   String get errorMessageSchedule => _errorMessageSchedule;
 
   List<String> get saleOrOffer => ["Venda", "Oferta"];
+
+  void addUsedPriceTypes(EnterpriseModel enterpriseModel) {
+    if (priceTypes.isNotEmpty) {
+      return;
+    }
+
+    if (enterpriseModel.useRetailSale) {
+      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Varejo));
+    }
+    if (enterpriseModel.useWholeSale) {
+      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Atacado));
+    }
+    if (enterpriseModel.useEcommerceSale) {
+      priceTypes
+          .add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Ecommerce));
+    }
+  }
 
   void clearDataOnCloseAdjustPriceScreen() {
     _schedules.clear();

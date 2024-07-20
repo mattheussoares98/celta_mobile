@@ -1,8 +1,10 @@
 class PriceTypeModel {
   final PriceTypeNames priceTypeName;
+  bool selected = false;
 
   PriceTypeModel._({
     required this.priceTypeName,
+    required this.selected,
     required int priceTypeInt,
   });
 
@@ -11,6 +13,7 @@ class PriceTypeModel {
     return PriceTypeModel._(
       priceTypeName: priceTypeName,
       priceTypeInt: priceTypeInt,
+      selected: false,
     );
   }
 }

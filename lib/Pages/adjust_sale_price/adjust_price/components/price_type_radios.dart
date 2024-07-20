@@ -19,21 +19,14 @@ class PriceTypeRadios extends StatefulWidget {
 class _SaleTypeRadiosState extends State<PriceTypeRadios> {
   int? groupValue;
 
-  List<PriceTypeModel> priceTypes = [];
   @override
   void initState() {
     super.initState();
 
-    if (widget.enterpriseModel.useRetailSale) {
-      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Varejo));
-    }
-    if (widget.enterpriseModel.useWholeSale) {
-      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Atacado));
-    }
-    if (widget.enterpriseModel.useEcommerceSale) {
-      priceTypes
-          .add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Ecommerce));
-    }
+    AdjustSalePriceProvider adjustSalePriceProvider =
+        Provider.of(context, listen: false);
+
+    adjustSalePriceProvider.addUsedPriceTypes(widget.enterpriseModel);
 
     Future.delayed(Duration.zero, () {
       setState(() {});
@@ -62,7 +55,7 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
   Widget generateRadios(AdjustSalePriceProvider adjustSalePriceProvider) {
     List<Widget> radios = [];
 
-    for (var i = 0; i < priceTypes.length; i++) {
+    for (var i = 0; i < adjustSalePriceProvider.priceTypes.length; i++) {
       radios.add(
         Expanded(
           child: InkWell(
@@ -87,7 +80,9 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
                 ),
                 Expanded(
                   flex: 4,
-                  child: Text(priceTypes[i].priceTypeName.description,
+                  child: Text(
+                      adjustSalePriceProvider
+                          .priceTypes[i].priceTypeName.description,
                       textAlign: TextAlign.start,
                       style: const TextStyle(
                         fontWeight: FontWeight.w400,
