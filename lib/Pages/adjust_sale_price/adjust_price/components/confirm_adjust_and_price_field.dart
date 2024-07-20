@@ -28,7 +28,7 @@ class _PriceFieldAndConfirmAdjustButtonState
 
   bool getUpdateReplicationParameter(ReplicationNames replicationName) {
     return widget.replicationParameters
-            .firstWhere((e) => e.name == replicationName.description)
+            .firstWhere((e) => e.replicationName == replicationName)
             .selected ==
         true;
   }

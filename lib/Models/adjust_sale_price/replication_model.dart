@@ -1,11 +1,18 @@
 class ReplicationModel {
-  bool? selected;
-  final String name;
+  final ReplicationNames replicationName;
+  bool? selected = false;
 
-  ReplicationModel({
-    this.selected = false,
-    required this.name,
+  ReplicationModel._({
+    required this.replicationName,
+    required this.selected,
   });
+
+  factory ReplicationModel.fromReplicationName(ReplicationNames replicationName) {
+    return ReplicationModel._(
+      replicationName: replicationName,
+      selected: false,
+    );
+  }
 }
 
 enum ReplicationNames {

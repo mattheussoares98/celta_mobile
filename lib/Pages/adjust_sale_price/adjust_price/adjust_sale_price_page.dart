@@ -19,10 +19,11 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   String initialDate = "Data atual";
   String finishDate = "Sem término";
   List<ReplicationModel> replicationParameters = [
-    ReplicationModel(name: ReplicationNames.Embalagens.description),
-    ReplicationModel(name: ReplicationNames.AgrupamentoOperacional.description),
-    ReplicationModel(name: ReplicationNames.Classe.description),
-    ReplicationModel(name: ReplicationNames.Grade.description),
+    ReplicationModel.fromReplicationName(ReplicationNames.Embalagens),
+    ReplicationModel.fromReplicationName(
+        ReplicationNames.AgrupamentoOperacional),
+    ReplicationModel.fromReplicationName(ReplicationNames.Classe),
+    ReplicationModel.fromReplicationName(ReplicationNames.Grade),
   ];
 
   @override

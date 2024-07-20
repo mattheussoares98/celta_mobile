@@ -44,7 +44,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
                     children: [
                       Expanded(
                         child: Text(
-                          e.name,
+                          e.replicationName.description,
                           style: const TextStyle(
                             fontWeight: FontWeight.w400,
                           ),
