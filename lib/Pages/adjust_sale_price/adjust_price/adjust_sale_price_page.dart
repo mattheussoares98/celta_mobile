@@ -1,11 +1,10 @@
-import 'package:celta_inventario/models/enterprise/enterprise.dart';
-import 'package:celta_inventario/models/soap/products/products.dart';
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../models/adjust_sale_request/adjust_sale_request.dart';
+import '../../../models/enterprise/enterprise.dart';
+import '../../../models/soap/products/products.dart';
 import '../../../providers/providers.dart';
 import '../adjust_sale_price.dart';
 
@@ -25,59 +24,6 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
     ReplicationModel(name: ReplicationNames.Classe.description),
     ReplicationModel(name: ReplicationNames.Grade.description),
   ];
-
-  final priceTextController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-
-  bool getUpdateReplicationParameter(ReplicationNames replicationName) {
-    return replicationParameters
-            .firstWhere((e) => e.name == replicationName.description)
-            .selected ==
-        true;
-  }
-
-  Future<void> confirmAdjust(
-    AdjustSalePriceProvider adjustSalePriceProvider,
-  ) async {
-    final Map arguments = ModalRoute.of(context)!.settings.arguments! as Map;
-    final EnterpriseModel enterprise = arguments["enterprise"];
-    final GetProductJsonModel product = arguments["product"];
-
-    bool? isValid = formKey.currentState?.validate();
-
-    if (isValid == true) {
-      ShowAlertDialog.showAlertDialog(
-          context: context,
-          title: "Confirmar ajuste?",
-          function: () async {
-            await adjustSalePriceProvider.confirmAdjust(
-              productPackingCode: product.productPackingCode!,
-              productCode: product.productCode!,
-              enterpriseCode: enterprise.codigoInternoEmpresa,
-              price: priceTextController.text.toDouble(),
-              updatePackings:
-                  getUpdateReplicationParameter(ReplicationNames.Embalagens),
-              updateEnterpriseGroup: getUpdateReplicationParameter(
-                  ReplicationNames.AgrupamentoOperacional),
-              updatePriceClass:
-                  getUpdateReplicationParameter(ReplicationNames.Classe),
-              updateGrate:
-                  getUpdateReplicationParameter(ReplicationNames.Grade),
-              effectuationDateOffer: DateTime.now(),
-              effectuationDatePrice: DateTime.now(),
-              endDateOffer: DateTime.now(),
-              saleTypeInt: 1,
-            );
-          });
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    priceTextController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,33 +74,8 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                             });
                           }
                         }),
-                    Column(
-                      children: [
-                        const Divider(),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: PriceFormField(
-                                priceTextController: priceTextController,
-                                formKey: formKey,
-                                confirmAdjust: () async {
-                                  await confirmAdjust(adjustSalePriceProvider);
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: ConfirmAdjustPriceButton(
-                                formKey: formKey,
-                                confirmAdjust: () async {
-                                  await confirmAdjust(adjustSalePriceProvider);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    PriceFieldAndConfirmAdjustButton(
+                      replicationParameters: replicationParameters,
                     ),
                   ],
                 ),
