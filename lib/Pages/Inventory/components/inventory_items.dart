@@ -1,3 +1,4 @@
+import 'package:celta_inventario/models/enterprise/enterprise_model.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,8 @@ class InventoryItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InventoryProvider inventoryProvider = Provider.of(context);
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    EnterpriseModel arguments =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return Column(
       children: [
@@ -21,18 +23,17 @@ class InventoryItems extends StatelessWidget {
             itemCount: inventoryProvider.inventoryCount,
             itemBuilder: (context, index) {
               return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+                focusColor: Colors.white.withOpacity(0),
+                hoverColor: Colors.white.withOpacity(0),
+                splashColor: Colors.white.withOpacity(0),
+                highlightColor: Colors.white.withOpacity(0),
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.COUNTINGS,
                     arguments: {
                       "codigoInternoInventario": inventoryProvider
                           .inventorys[index].codigoInternoInventario,
-                      "codigoInternoEmpresa": arguments[
-                          "CodigoInterno_Empresa"], //passando o código da empresa também porque vai precisar na tela de consulta de produtos
+                      "codigoInternoEmpresa": arguments.codigoInternoEmpresa, //passando o código da empresa também porque vai precisar na tela de consulta de produtos
                     },
                   );
                 },
