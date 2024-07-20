@@ -87,7 +87,7 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
                   flex: 4,
                   child: Text(
                     priceTypes[i],
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                     )
