@@ -60,6 +60,7 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
         Expanded(
           child: InkWell(
             onTap: () {
+              adjustSalePriceProvider.updateSelectedPriceType(i);
               setState(() {
                 groupValue = i;
               });
@@ -72,6 +73,7 @@ class _SaleTypeRadiosState extends State<PriceTypeRadios> {
                     visualDensity: VisualDensity.compact,
                     groupValue: groupValue,
                     onChanged: (value) {
+                      adjustSalePriceProvider.updateSelectedPriceType(i);
                       setState(() {
                         groupValue = value;
                       });

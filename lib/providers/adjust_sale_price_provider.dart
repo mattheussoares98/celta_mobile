@@ -19,7 +19,8 @@ class AdjustSalePriceProvider with ChangeNotifier {
   List<ScheduleModel> _schedules = [];
   List<ScheduleModel> get schedules => [..._schedules];
 
-  List<PriceTypeModel> priceTypes = [];
+  List<PriceTypeModel> _priceTypes = [];
+  List<PriceTypeModel> get priceTypes => [..._priceTypes];
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
@@ -30,20 +31,27 @@ class AdjustSalePriceProvider with ChangeNotifier {
   List<String> get saleOrOffer => ["Venda", "Oferta"];
 
   void addUsedPriceTypes(EnterpriseModel enterpriseModel) {
-    if (priceTypes.isNotEmpty) {
+    if (_priceTypes.isNotEmpty) {
       return;
     }
 
     if (enterpriseModel.useRetailSale) {
-      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Varejo));
+      _priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Varejo));
     }
     if (enterpriseModel.useWholeSale) {
-      priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Atacado));
+      _priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Atacado));
     }
     if (enterpriseModel.useEcommerceSale) {
-      priceTypes
+      _priceTypes
           .add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Ecommerce));
     }
+  }
+
+  void updateSelectedPriceType(int index) {
+    for (var priceType in _priceTypes) {
+      priceType.selected = false;
+    }
+    _priceTypes[index].selected = true;
   }
 
   void clearDataOnCloseAdjustPriceScreen() {
