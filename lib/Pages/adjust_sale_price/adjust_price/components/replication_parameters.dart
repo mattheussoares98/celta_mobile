@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../models/adjust_sale_request/adjust_sale_request.dart';
+import '../../../../models/adjust_sale_price/adjust_sale_price.dart';
 
 class ReplicationParameters extends StatefulWidget {
   final List<ReplicationModel> replicationParameters;

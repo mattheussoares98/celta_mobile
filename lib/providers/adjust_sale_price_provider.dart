@@ -5,7 +5,7 @@ import 'package:celta_inventario/models/soap/products/get_product_json/get_produ
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-import '../models/adjust_sale_request/adjust_sale_request.dart';
+import '../models/adjust_sale_price/adjust_sale_price.dart';
 import 'providers.dart';
 
 class AdjustSalePriceProvider with ChangeNotifier {
