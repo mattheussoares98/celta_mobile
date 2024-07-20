@@ -40,24 +40,31 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
     for (var i = 0; i < adjustSalePriceProvider.saleOrOffer.length; i++) {
       radios.add(
         Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Radio(
-                value: i,
-                groupValue: groupValue,
-                onChanged: (value) {
-                  setState(() {
-                    groupValue = value;
-                  });
-                },
-                visualDensity: VisualDensity.compact,
-              ),
-              Text(
-                adjustSalePriceProvider.saleOrOffer[i],
-                style: const TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ],
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                groupValue = i;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Radio(
+                  value: i,
+                  groupValue: groupValue,
+                  onChanged: (value) {
+                    setState(() {
+                      groupValue = value;
+                    });
+                  },
+                  visualDensity: VisualDensity.compact,
+                ),
+                Text(
+                  adjustSalePriceProvider.saleOrOffer[i],
+                  style: const TextStyle(fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
           ),
         ),
       );
