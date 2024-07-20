@@ -374,43 +374,34 @@ class _ProductsItemsState extends State<ProductsItems> {
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
     int productsCount = saleRequestProvider.productsCount;
 
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: saleRequestProvider.productsCount > 1
-            ? MainAxisAlignment.center
-            : MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: productsCount,
-              itemBuilder: (context, index) {
-                if (saleRequestProvider.productsCount == 1) {
-                  _selectedIndex = index;
-                }
-
-                final startIndex = index * itensPerLine;
-                final endIndex = (startIndex + itensPerLine <= productsCount)
-                    ? startIndex + itensPerLine
-                    : productsCount;
-
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var i = startIndex; i < endIndex; i++)
-                      Expanded(
-                        child: itemOfList(
-                          index: i,
-                          saleRequestProvider: saleRequestProvider,
-                          configurationsProvider: configurationsProvider,
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: productsCount,
+      itemBuilder: (context, index) {
+        if (saleRequestProvider.productsCount == 1) {
+          _selectedIndex = index;
+        }
+    
+        final startIndex = index * itensPerLine;
+        final endIndex = (startIndex + itensPerLine <= productsCount)
+            ? startIndex + itensPerLine
+            : productsCount;
+    
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = startIndex; i < endIndex; i++)
+              Expanded(
+                child: itemOfList(
+                  index: i,
+                  saleRequestProvider: saleRequestProvider,
+                  configurationsProvider: configurationsProvider,
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

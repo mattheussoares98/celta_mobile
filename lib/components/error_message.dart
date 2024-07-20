@@ -11,16 +11,18 @@ class ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        errorMessage,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: 'OpenSans',
-          fontSize: fontSize!,
-          fontWeight: FontWeight.bold,
-          color: Colors.red,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          errorMessage,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: fontSize!,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
         ),
       ),
     );

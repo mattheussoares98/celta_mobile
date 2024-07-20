@@ -59,97 +59,99 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                 'AJUSTE DE ESTOQUE  ',
               ),
             ),
-            body: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Column(
-                  children: [
-                    SearchWidget(
-                      focusNodeConsultProduct:
-                          adjustStockProvider.consultProductFocusNode,
-                      isLoading: adjustStockProvider.isLoadingProducts ||
-                          adjustStockProvider.isLoadingAdjustStock,
-                      onPressSearch: () async {
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Column(
+                    children: [
+                      SearchWidget(
+                        focusNodeConsultProduct:
+                            adjustStockProvider.consultProductFocusNode,
+                        isLoading: adjustStockProvider.isLoadingProducts ||
+                            adjustStockProvider.isLoadingAdjustStock,
+                        onPressSearch: () async {
+                          await adjustStockProvider.getProducts(
+                            enterpriseCode: enterprise.codigoInternoEmpresa,
+                            controllerText: _consultProductController.text,
+                            context: context,
+                            configurationsProvider: configurationsProvider,
+                          );
+              
+                          if (adjustStockProvider.productsCount > 0) {
+                            _consultProductController.clear();
+                          }
+                        },
+                        consultProductController: _consultProductController,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AdjustStockJustificationsStockDropwdownWidget(
+                              dropDownFormKey: _dropDownFormKey,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.refresh,
+                              size: 30,
+                              color: adjustStockProvider
+                                          .isLoadingTypeStockAndJustifications ||
+                                      adjustStockProvider.isLoadingAdjustStock ||
+                                      adjustStockProvider.isLoadingProducts
+                                  ? Colors.grey
+                                  : Theme.of(context).colorScheme.primary,
+                            ),
+                            tooltip: "Consultar justificativas e estoques",
+                            onPressed: adjustStockProvider
+                                        .isLoadingTypeStockAndJustifications ||
+                                    adjustStockProvider.isLoadingAdjustStock ||
+                                    adjustStockProvider.isLoadingProducts
+                                ? null
+                                : () async {
+                                    await adjustStockProvider
+                                        .getStockTypeAndJustifications(context);
+                                  },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  if (adjustStockProvider.errorMessageGetProducts != "")
+                    ErrorMessage(
+                      errorMessage: adjustStockProvider.errorMessageGetProducts,
+                    ),
+                  AdjustStockProductsItems(
+                      internalEnterpriseCode: enterprise.codigoInternoEmpresa,
+                      consultedProductController: _consultedProductController,
+                      dropDownFormKey: _dropDownFormKey,
+                      insertQuantityFormKey: _insertQuantityFormKey,
+                      getProductWithCamera: () async {
+                        FocusScope.of(context).unfocus();
+                        _consultProductController.clear();
+              
+                        _consultProductController.text =
+                            await ScanBarCode.scanBarcode(context);
+              
+                        if (_consultProductController.text == "") {
+                          return;
+                        }
+              
                         await adjustStockProvider.getProducts(
                           enterpriseCode: enterprise.codigoInternoEmpresa,
                           controllerText: _consultProductController.text,
                           context: context,
                           configurationsProvider: configurationsProvider,
                         );
-
+              
                         if (adjustStockProvider.productsCount > 0) {
                           _consultProductController.clear();
                         }
-                      },
-                      consultProductController: _consultProductController,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AdjustStockJustificationsStockDropwdownWidget(
-                            dropDownFormKey: _dropDownFormKey,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.refresh,
-                            size: 30,
-                            color: adjustStockProvider
-                                        .isLoadingTypeStockAndJustifications ||
-                                    adjustStockProvider.isLoadingAdjustStock ||
-                                    adjustStockProvider.isLoadingProducts
-                                ? Colors.grey
-                                : Theme.of(context).colorScheme.primary,
-                          ),
-                          tooltip: "Consultar justificativas e estoques",
-                          onPressed: adjustStockProvider
-                                      .isLoadingTypeStockAndJustifications ||
-                                  adjustStockProvider.isLoadingAdjustStock ||
-                                  adjustStockProvider.isLoadingProducts
-                              ? null
-                              : () async {
-                                  await adjustStockProvider
-                                      .getStockTypeAndJustifications(context);
-                                },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                if (adjustStockProvider.errorMessageGetProducts != "")
-                  ErrorMessage(
-                    errorMessage: adjustStockProvider.errorMessageGetProducts,
-                  ),
-                AdjustStockProductsItems(
-                    internalEnterpriseCode: enterprise.codigoInternoEmpresa,
-                    consultedProductController: _consultedProductController,
-                    dropDownFormKey: _dropDownFormKey,
-                    insertQuantityFormKey: _insertQuantityFormKey,
-                    getProductWithCamera: () async {
-                      FocusScope.of(context).unfocus();
-                      _consultProductController.clear();
-
-                      _consultProductController.text =
-                          await ScanBarCode.scanBarcode(context);
-
-                      if (_consultProductController.text == "") {
-                        return;
-                      }
-
-                      await adjustStockProvider.getProducts(
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
-                        controllerText: _consultProductController.text,
-                        context: context,
-                        configurationsProvider: configurationsProvider,
-                      );
-
-                      if (adjustStockProvider.productsCount > 0) {
-                        _consultProductController.clear();
-                      }
-                    }),
-              ],
+                      }),
+                ],
+              ),
             ),
           ),
         ),

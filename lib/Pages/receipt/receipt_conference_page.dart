@@ -54,54 +54,17 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 ),
               ),
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            body: Stack(
               children: [
-                SearchWidget(
-                  focusNodeConsultProduct:
-                      receiptProvider.consultProductFocusNode,
-                  isLoading: receiptProvider.isLoadingProducts ||
-                      receiptProvider.isLoadingUpdateQuantity,
-                  onPressSearch: () async {
-                    await receiptProvider.getProducts(
-                      configurationsProvider: configurationsProvider,
-                      docCode: arguments["grDocCode"],
-                      controllerText: _consultProductController.text,
-                      context: context,
-                      isSearchAllCountedProducts: false,
-                    );
-
-                    //não estava funcionando passar o productsCount como parâmetro
-                    //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                    //textEditingController após a consulta dos produtos se encontrar
-                    //algum produto
-                    if (receiptProvider.productsCount > 0) {
-                      //se for maior que 0 significa que deu certo a consulta e
-                      //por isso pode apagar o que foi escrito no campo de
-                      //consulta
-                      _consultProductController.clear();
-                    }
-                  },
-                  consultProductController: _consultProductController,
-                ),
-                if (receiptProvider.errorMessageGetProducts != "" &&
-                    receiptProvider.productsCount == 0)
-                  Expanded(
-                    child: ErrorMessage(
-                      errorMessage: receiptProvider.errorMessageGetProducts,
-                    ),
-                  ),
-                if (receiptProvider.errorMessageGetProducts == "" &&
-                    receiptProvider.productsCount > 0)
-                  ConferenceProductsItems(
-                    getProductsWithCamera: () async {
-                      FocusScope.of(context).unfocus();
-                      _consultProductController.clear();
-
-                      _consultProductController.text =
-                          await ScanBarCode.scanBarcode(context);
-
-                      if (_consultProductController.text != "") {
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SearchWidget(
+                      focusNodeConsultProduct:
+                          receiptProvider.consultProductFocusNode,
+                      isLoading: receiptProvider.isLoadingProducts ||
+                          receiptProvider.isLoadingUpdateQuantity,
+                      onPressSearch: () async {
                         await receiptProvider.getProducts(
                           configurationsProvider: configurationsProvider,
                           docCode: arguments["grDocCode"],
@@ -109,19 +72,65 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                           context: context,
                           isSearchAllCountedProducts: false,
                         );
-                      }
 
-                      if (receiptProvider.productsCount > 0) {
-                        _consultProductController.clear();
-                      }
-                    },
-                    docCode: arguments["grDocCode"],
-                    consultedProductController: _consultedProductController,
-                    consultProductController: _consultProductController,
-                  ),
+                        //não estava funcionando passar o productsCount como parâmetro
+                        //para o "SearchProductWithEanPluOrNameWidget" para apagar o
+                        //textEditingController após a consulta dos produtos se encontrar
+                        //algum produto
+                        if (receiptProvider.productsCount > 0) {
+                          //se for maior que 0 significa que deu certo a consulta e
+                          //por isso pode apagar o que foi escrito no campo de
+                          //consulta
+                          _consultProductController.clear();
+                        }
+                      },
+                      consultProductController: _consultProductController,
+                    ),
+                    if (receiptProvider.errorMessageGetProducts != "" &&
+                        receiptProvider.productsCount == 0)
+                      Expanded(
+                        child: ErrorMessage(
+                          errorMessage: receiptProvider.errorMessageGetProducts,
+                        ),
+                      ),
+                    if (receiptProvider.errorMessageGetProducts == "" &&
+                        receiptProvider.productsCount > 0)
+                      ConferenceProductsItems(
+                        getProductsWithCamera: () async {
+                          FocusScope.of(context).unfocus();
+                          _consultProductController.clear();
+
+                          _consultProductController.text =
+                              await ScanBarCode.scanBarcode(context);
+
+                          if (_consultProductController.text != "") {
+                            await receiptProvider.getProducts(
+                              configurationsProvider: configurationsProvider,
+                              docCode: arguments["grDocCode"],
+                              controllerText: _consultProductController.text,
+                              context: context,
+                              isSearchAllCountedProducts: false,
+                            );
+                          }
+
+                          if (receiptProvider.productsCount > 0) {
+                            _consultProductController.clear();
+                          }
+                        },
+                        docCode: arguments["grDocCode"],
+                        consultedProductController: _consultedProductController,
+                        consultProductController: _consultProductController,
+                      ),
+                  ],
+                ),
                 if (MediaQuery.of(context).viewInsets.bottom == 0)
-                  ConsultProductWithoutEanButton(
-                    docCode: arguments["grDocCode"],
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    child: ConsultProductWithoutEanButton(
+                      docCode: arguments["grDocCode"],
+                    ),
                   ),
               ],
             ),

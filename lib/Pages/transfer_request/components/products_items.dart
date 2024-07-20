@@ -338,46 +338,37 @@ class _ProductsItemsState
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
     int productsCount = transferRequestProvider.productsCount;
 
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: transferRequestProvider.productsCount > 1
-            ? MainAxisAlignment.center
-            : MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: productsCount,
-              itemBuilder: (context, index) {
-                if (transferRequestProvider.products.isEmpty)
-                  return Container();
-
-                if (transferRequestProvider.productsCount == 1) {
-                  selectedIndex = 0;
-                }
-
-                final startIndex = index * itensPerLine;
-                final endIndex = (startIndex + itensPerLine <= productsCount)
-                    ? startIndex + itensPerLine
-                    : productsCount;
-
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var i = startIndex; i < endIndex; i++)
-                      Expanded(
-                        child: itemOfList(
-                          transferRequestProvider: transferRequestProvider,
-                          index: i,
-                          configurationsProvider: configurationsProvider,
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: productsCount,
+      itemBuilder: (context, index) {
+        if (transferRequestProvider.products.isEmpty)
+          return Container();
+      
+        if (transferRequestProvider.productsCount == 1) {
+          selectedIndex = 0;
+        }
+      
+        final startIndex = index * itensPerLine;
+        final endIndex = (startIndex + itensPerLine <= productsCount)
+            ? startIndex + itensPerLine
+            : productsCount;
+      
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = startIndex; i < endIndex; i++)
+              Expanded(
+                child: itemOfList(
+                  transferRequestProvider: transferRequestProvider,
+                  index: i,
+                  configurationsProvider: configurationsProvider,
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

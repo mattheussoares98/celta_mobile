@@ -18,12 +18,10 @@ class InsertProductsPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<InsertProductsPage> createState() =>
-      _InsertProductsPageState();
+  State<InsertProductsPage> createState() => _InsertProductsPageState();
 }
 
-class _InsertProductsPageState
-    extends State<InsertProductsPage> {
+class _InsertProductsPageState extends State<InsertProductsPage> {
   TextEditingController _searchProductTextEditingController =
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
@@ -42,62 +40,66 @@ class _InsertProductsPageState
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SearchWidget(
-          consultProductController: _searchProductTextEditingController,
-          isLoading: transferRequestProvider.isLoadingProducts,
-          autofocus: false,
-          onPressSearch: () async {
-            _consultedProductController.clear();
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SearchWidget(
+              consultProductController: _searchProductTextEditingController,
+              isLoading: transferRequestProvider.isLoadingProducts,
+              autofocus: false,
+              onPressSearch: () async {
+                _consultedProductController.clear();
 
-            await transferRequestProvider.getProducts(
-              requestTypeCode: widget.requestTypeCode.toString(),
-              enterpriseOriginCode: widget.enterpriseOriginCode,
-              enterpriseDestinyCode: widget.enterpriseDestinyCode,
-              value: _searchProductTextEditingController.text,
-              configurationsProvider: configurationsProvider,
-            );
+                await transferRequestProvider.getProducts(
+                  requestTypeCode: widget.requestTypeCode.toString(),
+                  enterpriseOriginCode: widget.enterpriseOriginCode,
+                  enterpriseDestinyCode: widget.enterpriseDestinyCode,
+                  value: _searchProductTextEditingController.text,
+                  configurationsProvider: configurationsProvider,
+                );
 
-            if (transferRequestProvider.productsCount > 0) {
-              _searchProductTextEditingController.clear();
-            }
-          },
-          focusNodeConsultProduct:
-              transferRequestProvider.searchProductFocusNode,
+                if (transferRequestProvider.productsCount > 0) {
+                  _searchProductTextEditingController.clear();
+                }
+              },
+              focusNodeConsultProduct:
+                  transferRequestProvider.searchProductFocusNode,
+            ),
+            if (transferRequestProvider.errorMessageProducts != "")
+              ErrorMessage(
+                errorMessage: transferRequestProvider.errorMessageProducts,
+              ),
+            ProductsItems(
+              consultedProductController: _consultedProductController,
+              getProductsWithCamera: () async {
+                FocusScope.of(context).unfocus();
+                _searchProductTextEditingController.clear();
+
+                _searchProductTextEditingController.text =
+                    await ScanBarCode.scanBarcode(context);
+
+                if (_searchProductTextEditingController.text == "") {
+                  return;
+                }
+
+                await transferRequestProvider.getProducts(
+                  requestTypeCode: widget.requestTypeCode.toString(),
+                  enterpriseOriginCode: widget.enterpriseOriginCode,
+                  enterpriseDestinyCode: widget.enterpriseDestinyCode,
+                  value: _searchProductTextEditingController.text,
+                  configurationsProvider: configurationsProvider,
+                );
+
+                if (transferRequestProvider.productsCount > 0) {
+                  _searchProductTextEditingController.clear();
+                }
+              },
+            ),
+          ],
         ),
-        if (transferRequestProvider.errorMessageProducts != "")
-          ErrorMessage(
-            errorMessage: transferRequestProvider.errorMessageProducts,
-          ),
-        ProductsItems(
-          consultedProductController: _consultedProductController,
-          getProductsWithCamera: () async {
-            FocusScope.of(context).unfocus();
-            _searchProductTextEditingController.clear();
-
-            _searchProductTextEditingController.text =
-                await ScanBarCode.scanBarcode(context);
-
-            if (_searchProductTextEditingController.text == "") {
-              return;
-            }
-
-            await transferRequestProvider.getProducts(
-              requestTypeCode: widget.requestTypeCode.toString(),
-              enterpriseOriginCode: widget.enterpriseOriginCode,
-              enterpriseDestinyCode: widget.enterpriseDestinyCode,
-              value: _searchProductTextEditingController.text,
-              configurationsProvider: configurationsProvider,
-            );
-
-            if (transferRequestProvider.productsCount > 0) {
-              _searchProductTextEditingController.clear();
-            }
-          },
-        ),
-      ],
+      ),
     );
   }
 }

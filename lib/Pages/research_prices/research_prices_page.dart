@@ -70,73 +70,75 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                 ),
               ),
             ),
-            body: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: SearchWidget(
-                        consultProductController: searchController,
-                        isLoading:
-                            researchPricesProvider.isLoadingResearchPrices ||
-                                researchPricesProvider
-                                    .isLoadingAddOrUpdateOfResearch,
-                        onPressSearch: () async {
-                          await _getResearchPrices(
-                            notityListenersFromUpdate: true,
-                            researchPricesProvider: researchPricesProvider,
-                            searchText: searchController.text,
-                          );
-                        },
-                        hintText: "Nome ou código",
-                        labelText: "Nome ou código",
-                        focusNodeConsultProduct: _focusNode,
-                        useCamera: false,
-                        showConfigurationsIcon: false,
-                      ),
-                    ),
-                    FittedBox(
-                      child: TextButton(
-                        onPressed:
-                            researchPricesProvider.isLoadingGetConcurrents ||
-                                    researchPricesProvider
-                                        .isLoadingAddOrUpdateOfResearch
-                                ? null
-                                : () async {
-                                    await _getResearchPrices(
-                                      notityListenersFromUpdate: true,
-                                      researchPricesProvider:
-                                          researchPricesProvider,
-                                      searchText: "%",
-                                    );
-                                  },
-                        child: Text(
-                          "Consultar\ntodas",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: researchPricesProvider
-                                        .isLoadingGetConcurrents ||
-                                    researchPricesProvider
-                                        .isLoadingAddOrUpdateOfResearch
-                                ? Colors.grey
-                                : Theme.of(context).colorScheme.primary,
-                          ),
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SearchWidget(
+                          consultProductController: searchController,
+                          isLoading:
+                              researchPricesProvider.isLoadingResearchPrices ||
+                                  researchPricesProvider
+                                      .isLoadingAddOrUpdateOfResearch,
+                          onPressSearch: () async {
+                            await _getResearchPrices(
+                              notityListenersFromUpdate: true,
+                              researchPricesProvider: researchPricesProvider,
+                              searchText: searchController.text,
+                            );
+                          },
+                          hintText: "Nome ou código",
+                          labelText: "Nome ou código",
+                          focusNodeConsultProduct: _focusNode,
+                          useCamera: false,
+                          showConfigurationsIcon: false,
                         ),
                       ),
-                    )
-                  ],
-                ),
-                if (researchPricesProvider.errorGetResearchPrices != "" &&
-                    researchPricesProvider.researchPricesCount == 0)
-                  ErrorMessage(
-                    errorMessage: researchPricesProvider.errorGetResearchPrices,
+                      FittedBox(
+                        child: TextButton(
+                          onPressed:
+                              researchPricesProvider.isLoadingGetConcurrents ||
+                                      researchPricesProvider
+                                          .isLoadingAddOrUpdateOfResearch
+                                  ? null
+                                  : () async {
+                                      await _getResearchPrices(
+                                        notityListenersFromUpdate: true,
+                                        researchPricesProvider:
+                                            researchPricesProvider,
+                                        searchText: "%",
+                                      );
+                                    },
+                          child: Text(
+                            "Consultar\ntodas",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: researchPricesProvider
+                                          .isLoadingGetConcurrents ||
+                                      researchPricesProvider
+                                          .isLoadingAddOrUpdateOfResearch
+                                  ? Colors.grey
+                                  : Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                if (!researchPricesProvider.isLoadingResearchPrices)
-                  PricesItems(
-                    enterpriseCode: enterprise.codigoInternoEmpresa,
-                  ),
-              ],
+                  if (researchPricesProvider.errorGetResearchPrices != "" &&
+                      researchPricesProvider.researchPricesCount == 0)
+                    ErrorMessage(
+                      errorMessage: researchPricesProvider.errorGetResearchPrices,
+                    ),
+                  if (!researchPricesProvider.isLoadingResearchPrices)
+                    PricesItems(
+                      enterpriseCode: enterprise.codigoInternoEmpresa,
+                    ),
+                ],
+              ),
             ),
             floatingActionButton: floatingPersonalizedButton(
                 context: context,

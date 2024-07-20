@@ -98,34 +98,32 @@ class _PricesItemsState extends State<PricesItems> {
     int itensPerLine = ResponsiveItems.getItensPerLine(context);
     int researchsCount = researchPricesProvider.researchPricesCount;
 
-    return Expanded(
-      child: Container(
-        child: ListView.builder(
-          itemCount: ResponsiveItems.itemCount(
-            itemsCount: researchsCount,
-            context: context,
-          ),
-          itemBuilder: (context, index) {
-            final startIndex = index * itensPerLine;
-            final endIndex = (startIndex + itensPerLine <= researchsCount)
-                ? startIndex + itensPerLine
-                : researchsCount;
-
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var i = startIndex; i < endIndex; i++)
-                  Expanded(
-                    child: itemOfList(
-                      index: i,
-                      researchPricesProvider: researchPricesProvider,
-                    ),
-                  ),
-              ],
-            );
-          },
-        ),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: ResponsiveItems.itemCount(
+        itemsCount: researchsCount,
+        context: context,
       ),
+      itemBuilder: (context, index) {
+        final startIndex = index * itensPerLine;
+        final endIndex = (startIndex + itensPerLine <= researchsCount)
+            ? startIndex + itensPerLine
+            : researchsCount;
+        
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = startIndex; i < endIndex; i++)
+              Expanded(
+                child: itemOfList(
+                  index: i,
+                  researchPricesProvider: researchPricesProvider,
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

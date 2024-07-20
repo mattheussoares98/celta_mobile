@@ -328,34 +328,33 @@ class ProductsItemsState extends State<ProductsItems> {
     int productsCount = inventoryProvider.productsCount;
 
     return Expanded(
-      child: Container(
-        child: ListView.builder(
-          itemCount: inventoryProvider.productsCount,
-          itemBuilder: (context, index) {
-            if (inventoryProvider.productsCount == 1) {
-              _selectedIndex = index;
-            }
-
-            final startIndex = index * itensPerLine;
-            final endIndex = (startIndex + itensPerLine <= productsCount)
-                ? startIndex + itensPerLine
-                : productsCount;
-
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var i = startIndex; i < endIndex; i++)
-                  Expanded(
-                    child: itemOfList(
-                      inventoryProvider: inventoryProvider,
-                      index: i,
-                      configurationsProvider: configurationsProvider,
-                    ),
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: inventoryProvider.productsCount,
+        itemBuilder: (context, index) {
+          if (inventoryProvider.productsCount == 1) {
+            _selectedIndex = index;
+          }
+          
+          final startIndex = index * itensPerLine;
+          final endIndex = (startIndex + itensPerLine <= productsCount)
+              ? startIndex + itensPerLine
+              : productsCount;
+          
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var i = startIndex; i < endIndex; i++)
+                Expanded(
+                  child: itemOfList(
+                    inventoryProvider: inventoryProvider,
+                    index: i,
+                    configurationsProvider: configurationsProvider,
                   ),
-              ],
-            );
-          },
-        ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

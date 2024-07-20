@@ -38,61 +38,65 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SearchWidget(
-          consultProductController: _searchProductTextEditingController,
-          isLoading: saleRequestProvider.isLoadingProducts,
-          autofocus: false,
-          onPressSearch: () async {
-            _consultedProductController.clear();
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SearchWidget(
+              consultProductController: _searchProductTextEditingController,
+              isLoading: saleRequestProvider.isLoadingProducts,
+              autofocus: false,
+              onPressSearch: () async {
+                _consultedProductController.clear();
 
-            await saleRequestProvider.getProducts(
-              context: context,
-              configurationsProvider: configurationsProvider,
-              enterpriseCode: widget.enterpriseCode,
-              controllerText: _searchProductTextEditingController.text,
-              requestTypeCode: widget.requestTypeCode,
-            );
+                await saleRequestProvider.getProducts(
+                  context: context,
+                  configurationsProvider: configurationsProvider,
+                  enterpriseCode: widget.enterpriseCode,
+                  controllerText: _searchProductTextEditingController.text,
+                  requestTypeCode: widget.requestTypeCode,
+                );
 
-            if (saleRequestProvider.productsCount > 0) {
-              _searchProductTextEditingController.clear();
-            }
-          },
-          focusNodeConsultProduct: saleRequestProvider.searchProductFocusNode,
-        ),
-        if (saleRequestProvider.errorMessageProducts != "")
-          ErrorMessage(
-            errorMessage: saleRequestProvider.errorMessageProducts,
-          ),
-        ProductsItems(
-            consultedProductController: _consultedProductController,
-            enterpriseCode: widget.enterpriseCode,
-            getProductsWithCamera: () async {
-              FocusScope.of(context).unfocus();
-              _searchProductTextEditingController.clear();
-
-              _searchProductTextEditingController.text =
-                  await ScanBarCode.scanBarcode(context);
-
-              if (_searchProductTextEditingController.text == "") {
-                return;
-              }
-
-              await saleRequestProvider.getProducts(
-                configurationsProvider: configurationsProvider,
-                context: context,
+                if (saleRequestProvider.productsCount > 0) {
+                  _searchProductTextEditingController.clear();
+                }
+              },
+              focusNodeConsultProduct:
+                  saleRequestProvider.searchProductFocusNode,
+            ),
+            if (saleRequestProvider.errorMessageProducts != "")
+              ErrorMessage(
+                errorMessage: saleRequestProvider.errorMessageProducts,
+              ),
+            ProductsItems(
+                consultedProductController: _consultedProductController,
                 enterpriseCode: widget.enterpriseCode,
-                controllerText: _searchProductTextEditingController.text,
-                requestTypeCode: widget.requestTypeCode,
-              );
+                getProductsWithCamera: () async {
+                  FocusScope.of(context).unfocus();
+                  _searchProductTextEditingController.clear();
 
-              if (saleRequestProvider.productsCount > 0) {
-                _searchProductTextEditingController.clear();
-              }
-            }),
-      ],
+                  _searchProductTextEditingController.text =
+                      await ScanBarCode.scanBarcode(context);
+
+                  if (_searchProductTextEditingController.text == "") {
+                    return;
+                  }
+
+                  await saleRequestProvider.getProducts(
+                    configurationsProvider: configurationsProvider,
+                    context: context,
+                    enterpriseCode: widget.enterpriseCode,
+                    controllerText: _searchProductTextEditingController.text,
+                    requestTypeCode: widget.requestTypeCode,
+                  );
+
+                  if (saleRequestProvider.productsCount > 0) {
+                    _searchProductTextEditingController.clear();
+                  }
+                }),
+          ],
+        ),
+      ),
     );
   }
 }

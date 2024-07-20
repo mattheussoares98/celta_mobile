@@ -38,66 +38,63 @@ class _InsertCustomerPageState extends State<InsertCustomerPage> {
         Provider.of(context, listen: false);
 
     return Scaffold(
-      body: Column(
-        children: [
-          SearchWidget(
-            consultProductController: searchCustomerController,
-            isLoading: saleRequestProvider.isLoadingCustomer,
-            autofocus: false,
-            onPressSearch: () async {
-              await saleRequestProvider.getCustomers(
-                context: context,
-                controllerText: searchCustomerController.text,
-                enterpriseCode: widget.enterpriseCode.toString(),
-                configurationsProvider: configurationsProvider,
-              );
-
-              if (saleRequestProvider
-                      .customersCount(widget.enterpriseCode.toString()) >
-                  0) {
-                searchCustomerController.clear();
-              }
-            },
-            focusNodeConsultProduct: searchCustomerFocusNode,
-            hintText: "Código, nome, CPF ou CNPJ",
-            labelText: "Consultar cliente",
-            useCamera: false,
-          ),
-          if (saleRequestProvider
-                  .customersCount(widget.enterpriseCode.toString()) >
-              0)
-            CustomersItems(enterpriseCode: widget.enterpriseCode),
-          if (saleRequestProvider.errorMessageCustomer != "" &&
-              saleRequestProvider
-                      .customersCount(widget.enterpriseCode.toString()) ==
-                  0)
-            Expanded(
-              child: searchAgain(
-                errorMessage:
-                    'Ocorreu um erro para consultar o cliente "consumidor"',
-                request: () async {
-                  await saleRequestProvider.getCustomers(
-                    context: context,
-                    controllerText: "-1",
-                    enterpriseCode: widget.enterpriseCode.toString(),
-                    configurationsProvider: configurationsProvider,
-                  );
-                },
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SearchWidget(
+              consultProductController: searchCustomerController,
+              isLoading: saleRequestProvider.isLoadingCustomer,
+              autofocus: false,
+              onPressSearch: () async {
+                await saleRequestProvider.getCustomers(
+                  context: context,
+                  controllerText: searchCustomerController.text,
+                  enterpriseCode: widget.enterpriseCode.toString(),
+                  configurationsProvider: configurationsProvider,
+                );
+        
+                if (saleRequestProvider
+                        .customersCount(widget.enterpriseCode.toString()) >
+                    0) {
+                  searchCustomerController.clear();
+                }
+              },
+              focusNodeConsultProduct: searchCustomerFocusNode,
+              hintText: "Código, nome, CPF ou CNPJ",
+              labelText: "Consultar cliente",
+              useCamera: false,
             ),
-          if (saleRequestProvider.errorMessageCustomer != "" &&
-              saleRequestProvider
-                      .customersCount(widget.enterpriseCode.toString()) >
-                  0)
-            Expanded(
-              flex: 2,
-              child: SingleChildScrollView(
-                child: ErrorMessage(
-                  errorMessage: saleRequestProvider.errorMessageCustomer,
+            if (saleRequestProvider
+                    .customersCount(widget.enterpriseCode.toString()) >
+                0)
+              CustomersItems(enterpriseCode: widget.enterpriseCode),
+            if (saleRequestProvider.errorMessageCustomer != "" &&
+                saleRequestProvider
+                        .customersCount(widget.enterpriseCode.toString()) ==
+                    0)
+              Expanded(
+                child: searchAgain(
+                  errorMessage:
+                      'Ocorreu um erro para consultar o cliente "consumidor"',
+                  request: () async {
+                    await saleRequestProvider.getCustomers(
+                      context: context,
+                      controllerText: "-1",
+                      enterpriseCode: widget.enterpriseCode.toString(),
+                      configurationsProvider: configurationsProvider,
+                    );
+                  },
                 ),
               ),
-            ),
-        ],
+            if (saleRequestProvider.errorMessageCustomer != "" &&
+                saleRequestProvider
+                        .customersCount(widget.enterpriseCode.toString()) >
+                    0)
+              ErrorMessage(
+                errorMessage: saleRequestProvider.errorMessageCustomer,
+              ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Cadastrar cliente",
