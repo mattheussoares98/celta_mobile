@@ -178,13 +178,10 @@ class GetProductJsonModel {
     required String responseAsString,
     required List listToAdd,
   }) {
-    List responseAsList = json.decode(responseAsString.toString());
-    Map responseAsMap = responseAsList.asMap();
+    List parsed = json.decode(responseAsString);
 
-    responseAsMap.forEach((id, data) {
-      listToAdd.add(
-        GetProductJsonModel.fromJson(data),
-      );
-    });
+    listToAdd.addAll(
+      parsed.map((e) => GetProductJsonModel.fromJson(e)).toList(),
+    );
   }
 }
