@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../models/adjust_sale_price/adjust_sale_price.dart';
 import '../../../models/enterprise/enterprise.dart';
 import '../../../models/soap/products/products.dart';
 import '../../../providers/providers.dart';
@@ -18,13 +17,6 @@ class AdjustSalePricePage extends StatefulWidget {
 class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
   String initialDate = "Data atual";
   String finishDate = "Sem término";
-  List<ReplicationModel> replicationParameters = [
-    ReplicationModel.fromReplicationName(ReplicationNames.Embalagens),
-    ReplicationModel.fromReplicationName(
-        ReplicationNames.AgrupamentoOperacional),
-    ReplicationModel.fromReplicationName(ReplicationNames.Classe),
-    ReplicationModel.fromReplicationName(ReplicationNames.Grade),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +46,8 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                     PriceTypeRadios(enterpriseModel: enterprise),
                     const SaleTypeRadios(),
                     ReplicationParameters(
-                      replicationParameters: replicationParameters,
+                      replicationParameters:
+                          adjustSalePriceProvider.replicationParameters,
                     ),
                     InitialAndFinishDates(
                         initialDate: initialDate,
@@ -76,7 +69,8 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                           }
                         }),
                     PriceFieldAndConfirmAdjustButton(
-                      replicationParameters: replicationParameters,
+                      replicationParameters:
+                          adjustSalePriceProvider.replicationParameters,
                     ),
                   ],
                 ),

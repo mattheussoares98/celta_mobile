@@ -22,6 +22,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
   List<PriceTypeModel> _priceTypes = [];
   List<PriceTypeModel> get priceTypes => [..._priceTypes];
 
+  List<ReplicationModel> get replicationParameters => [
+        ReplicationModel.fromReplicationName(ReplicationNames.Embalagens),
+        ReplicationModel.fromReplicationName(
+            ReplicationNames.AgrupamentoOperacional),
+        ReplicationModel.fromReplicationName(ReplicationNames.Classe),
+        ReplicationModel.fromReplicationName(ReplicationNames.Grade),
+      ];
+
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
