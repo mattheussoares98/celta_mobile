@@ -160,6 +160,13 @@ class AdjustSalePriceProvider with ChangeNotifier {
     }
   }
 
+  bool allObligatoryDataAreInformed() {
+    int priceTypeIndex = _priceTypes.indexWhere((e) => e.selected == true);
+    int saleTypeIndex = _saleTypes.indexWhere((e) => e.selected == true);
+
+    return (priceTypeIndex != -1 && saleTypeIndex != -1);
+  }
+
   Future<void> confirmAdjust({
     required int enterpriseCode,
     required int productCode,
