@@ -45,10 +45,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                         enterprise: enterprise, product: product),
                     PriceTypeRadios(enterpriseModel: enterprise),
                     const SaleTypeRadios(),
-                    ReplicationParameters(
-                      replicationParameters:
-                          adjustSalePriceProvider.replicationParameters,
-                    ),
+                    const ReplicationParameters(),
                     InitialAndFinishDates(
                         initialDate: initialDate,
                         finishDate: finishDate,

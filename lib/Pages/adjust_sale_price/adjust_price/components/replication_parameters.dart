@@ -1,13 +1,11 @@
+import 'package:celta_inventario/models/adjust_sale_price/adjust_sale_price.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../models/adjust_sale_price/adjust_sale_price.dart';
+import '../../../../providers/providers.dart';
 
 class ReplicationParameters extends StatefulWidget {
-  final List<ReplicationModel> replicationParameters;
-  const ReplicationParameters({
-    required this.replicationParameters,
-    super.key,
-  });
+  const ReplicationParameters({super.key});
 
   @override
   State<ReplicationParameters> createState() => _ReplicationParametersState();
@@ -16,6 +14,9 @@ class ReplicationParameters extends StatefulWidget {
 class _ReplicationParametersState extends State<ReplicationParameters> {
   @override
   Widget build(BuildContext context) {
+    AdjustSalePriceProvider adjustSalePriceProvider =
+        Provider.of(context, listen: false);
+
     return Column(
       children: [
         const Divider(),
@@ -27,7 +28,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
           ),
         ),
         Column(
-          children: widget.replicationParameters
+          children: adjustSalePriceProvider.replicationParameters
               .map(
                 (e) => InkWell(
                   onTap: () {
@@ -54,7 +55,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
                         value: e.selected,
                         onChanged: (bool? newValue) {
                           setState(() {
-                            e.selected = newValue;
+                            e.selected = newValue ?? false;
                           });
                         },
                         visualDensity: VisualDensity.compact,
