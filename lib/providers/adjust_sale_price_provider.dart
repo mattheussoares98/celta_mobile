@@ -210,13 +210,22 @@ class AdjustSalePriceProvider with ChangeNotifier {
         "UpdatePackings": updatePackings,
         "UpdateEnterpriseGroup": updateEnterpriseGroup,
         "UpdateGrate": updateGrate,
-        "SaleTypeInt": saleTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
-        "Price": price,
-        "Offer": price,
+        "SaleTypeInt": _saleTypes
+            .where((e) => e.selected == true)
+            .first
+            .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
         "EffectuationDatePrice": effectuationDatePrice.toIso8601String(),
         "EffectuationDateOffer": effectuationDateOffer.toIso8601String(),
         "EndDateOffer": endDateOffer.toIso8601String()
       };
+      if (_priceTypes
+          .firstWhere((e) => e.priceTypeName == PriceTypeName.Venda)
+          .selected) {
+        jsonRequest["Price"] = price;
+      } else {
+        jsonRequest["Offer"] = price;
+      }
+
       SoapRequest.soapPost(
         parameters: {
           "parameters": json.encode(jsonRequest),
