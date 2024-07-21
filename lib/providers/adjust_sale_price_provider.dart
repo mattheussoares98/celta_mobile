@@ -62,6 +62,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
   void updateSelectedPriceType(int index) {
     _unselectAllPriceTypes();
     _priceTypes[index].selected = true;
+    notifyListeners();
   }
 
   void _unselectAllPriceTypes() {
@@ -182,6 +183,12 @@ class AdjustSalePriceProvider with ChangeNotifier {
     return (priceTypeIndex != -1 && saleTypeIndex != -1);
   }
 
+  bool offerPriceIsSelected() {
+    return _priceTypes
+        .firstWhere((e) => e.priceTypeName == PriceTypeName.Oferta)
+        .selected;
+  }
+
   Future<void> confirmAdjust({
     required int enterpriseCode,
     required int productCode,
@@ -218,12 +225,10 @@ class AdjustSalePriceProvider with ChangeNotifier {
         "EffectuationDateOffer": effectuationDateOffer.toIso8601String(),
         "EndDateOffer": endDateOffer.toIso8601String()
       };
-      if (_priceTypes
-          .firstWhere((e) => e.priceTypeName == PriceTypeName.Venda)
-          .selected) {
-        jsonRequest["Price"] = price;
-      } else {
+      if (offerPriceIsSelected()) {
         jsonRequest["Offer"] = price;
+      } else {
+        jsonRequest["Price"] = price;
       }
 
       SoapRequest.soapPost(
