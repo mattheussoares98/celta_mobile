@@ -238,14 +238,9 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required int enterpriseCode,
     required int productCode,
     required int productPackingCode,
-    required bool updatePriceClass,
-    required bool updatePackings,
-    required bool updateEnterpriseGroup,
-    required bool updateGrate,
-    required int saleTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
     required double price,
     required DateTime effectuationDatePrice,
-    required DateTime effectuationDateOffer,
+    required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
   }) async {
     _isLoading = true;

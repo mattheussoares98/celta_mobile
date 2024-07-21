@@ -26,13 +26,6 @@ class _PriceFieldAndConfirmAdjustButtonState
   final priceTextController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  bool getUpdateReplicationParameter(ReplicationNames replicationName) {
-    return widget.replicationParameters
-            .firstWhere((e) => e.replicationName == replicationName)
-            .selected ==
-        true;
-  }
-
   Future<void> confirmAdjust(
     AdjustSalePriceProvider adjustSalePriceProvider,
   ) async {
@@ -60,18 +53,9 @@ class _PriceFieldAndConfirmAdjustButtonState
               productCode: product.productCode!,
               enterpriseCode: enterprise.codigoInternoEmpresa,
               price: priceTextController.text.toDouble(),
-              updatePackings:
-                  getUpdateReplicationParameter(ReplicationNames.Embalagens),
-              updateEnterpriseGroup: getUpdateReplicationParameter(
-                  ReplicationNames.AgrupamentoOperacional),
-              updatePriceClass:
-                  getUpdateReplicationParameter(ReplicationNames.Classe),
-              updateGrate:
-                  getUpdateReplicationParameter(ReplicationNames.Grade),
               effectuationDateOffer: DateTime.now(),
               effectuationDatePrice: DateTime.now(),
               endDateOffer: DateTime.now(),
-              saleTypeInt: 1,
             );
 
             if (adjustSalePriceProvider.errorMessage == "") {
