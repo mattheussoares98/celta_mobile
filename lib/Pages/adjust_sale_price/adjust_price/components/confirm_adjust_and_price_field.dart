@@ -73,6 +73,15 @@ class _PriceFieldAndConfirmAdjustButtonState
               endDateOffer: DateTime.now(),
               saleTypeInt: 1,
             );
+
+            if (adjustSalePriceProvider.errorMessage == "") {
+              Navigator.of(context).pop();
+              ShowSnackbarMessage.showMessage(
+                message: "Ajuste confirmado com sucesso",
+                context: context,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              );
+            }
           });
     }
   }
