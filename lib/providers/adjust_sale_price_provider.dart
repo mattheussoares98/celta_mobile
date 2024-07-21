@@ -19,9 +19,6 @@ class AdjustSalePriceProvider with ChangeNotifier {
   List<ScheduleModel> _schedules = [];
   List<ScheduleModel> get schedules => [..._schedules];
 
-  List<PriceTypeModel> _priceTypes = [];
-  List<PriceTypeModel> get priceTypes => [..._priceTypes];
-
   List<ReplicationModel> _replicationParameters = [
     ReplicationModel(replicationName: ReplicationNames.Embalagens),
     ReplicationModel(replicationName: ReplicationNames.AgrupamentoOperacional),
@@ -37,33 +34,34 @@ class AdjustSalePriceProvider with ChangeNotifier {
   String _errorMessageSchedule = "";
   String get errorMessageSchedule => _errorMessageSchedule;
 
-  List<SaleTypeModel> _saleTypes = [
-    SaleTypeModel(saleTypeName: SaleTypeName.Venda),
-    SaleTypeModel(saleTypeName: SaleTypeName.Oferta),
-  ];
+  List<SaleTypeModel> _saleTypes = [];
   List<SaleTypeModel> get saleTypes => [..._saleTypes];
 
-  void addUsedPriceTypes(EnterpriseModel enterpriseModel) {
-    if (_priceTypes.isNotEmpty) {
+  List<PriceTypeModel> _priceTypes = [
+    PriceTypeModel(priceTypeName: PriceTypeName.Venda),
+    PriceTypeModel(priceTypeName: PriceTypeName.Oferta),
+  ];
+  List<PriceTypeModel> get priceTypes => [..._priceTypes];
+
+  void addUsedSaleTypes(EnterpriseModel enterpriseModel) {
+    if (_saleTypes.isNotEmpty) {
       return;
     }
 
     if (enterpriseModel.useRetailSale) {
-      _priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Varejo));
+      _saleTypes.add(SaleTypeModel.fromSaleTypeName(SaleTypeName.Varejo));
     }
     if (enterpriseModel.useWholeSale) {
-      _priceTypes.add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Atacado));
+      _saleTypes.add(SaleTypeModel.fromSaleTypeName(SaleTypeName.Atacado));
     }
     if (enterpriseModel.useEcommerceSale) {
-      _priceTypes
-          .add(PriceTypeModel.fromPriceTypeName(PriceTypeNames.Ecommerce));
+      _saleTypes.add(SaleTypeModel.fromSaleTypeName(SaleTypeName.Ecommerce));
     }
   }
 
-  void updateSelectedPriceType(PriceTypeNames priceTypeName) {
+  void updateSelectedPriceType(int index) {
     _unselectAllPriceTypes();
-    _priceTypes.where((e) => e.priceTypeName == priceTypeName).first.selected =
-        true;
+    _priceTypes[index].selected = true;
   }
 
   void _unselectAllPriceTypes() {

@@ -43,8 +43,8 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                   children: [
                     GetSchedulesPrices(
                         enterprise: enterprise, product: product),
-                    PriceTypeRadios(enterpriseModel: enterprise),
-                    const SaleTypeRadios(),
+                    SaleTypeRadios(enterpriseModel: enterprise),
+                    const PriceTypeRadios(),
                     const ReplicationParameters(),
                     InitialAndFinishDates(
                         initialDate: initialDate,

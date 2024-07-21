@@ -1,11 +1,15 @@
-import 'package:celta_inventario/models/adjust_sale_price/adjust_sale_price.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../models/enterprise/enterprise.dart';
 import '../../../../providers/providers.dart';
 
 class SaleTypeRadios extends StatefulWidget {
-  const SaleTypeRadios({super.key});
+  final EnterpriseModel enterpriseModel;
+  const SaleTypeRadios({
+    required this.enterpriseModel,
+    super.key,
+  });
 
   @override
   State<SaleTypeRadios> createState() => _SaleTypeRadiosState();
@@ -13,6 +17,20 @@ class SaleTypeRadios extends StatefulWidget {
 
 class _SaleTypeRadiosState extends State<SaleTypeRadios> {
   int? groupValue;
+
+  @override
+  void initState() {
+    super.initState();
+
+    AdjustSalePriceProvider adjustSalePriceProvider =
+        Provider.of(context, listen: false);
+
+    adjustSalePriceProvider.addUsedSaleTypes(widget.enterpriseModel);
+
+    Future.delayed(Duration.zero, () {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +46,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Row(
-          children: generateRadios(adjustSalePriceProvider),
-        ),
+        Row(children: generateRadios(adjustSalePriceProvider))
       ],
     );
   }
@@ -63,7 +79,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
                   visualDensity: VisualDensity.compact,
                 ),
                 Text(
-                  adjustSalePriceProvider.saleTypes[i].saleTypeName.description,
+                  adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
                   style: const TextStyle(fontWeight: FontWeight.w400),
                 ),
               ],
