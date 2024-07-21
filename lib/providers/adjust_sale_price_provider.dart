@@ -61,24 +61,41 @@ class AdjustSalePriceProvider with ChangeNotifier {
   }
 
   void updateSelectedPriceType(PriceTypeNames priceTypeName) {
-    for (var priceType in _priceTypes) {
-      priceType.selected = false;
-    }
+    _unselectAllPriceTypes();
     _priceTypes.where((e) => e.priceTypeName == priceTypeName).first.selected =
         true;
   }
 
+  void _unselectAllPriceTypes() {
+    for (var priceType in _priceTypes) {
+      priceType.selected = false;
+    }
+  }
+
   void updateSelectedSaleType(int index) {
+    _unselectAllSaleTypes();
+
+    _saleTypes[index].selected = true;
+  }
+
+  void _unselectAllSaleTypes() {
     for (var saleType in _saleTypes) {
       saleType.selected = false;
     }
-    _saleTypes[index].selected = true;
-    debugPrint(_saleTypes[index].selected.toString());
   }
 
   void clearDataOnCloseAdjustPriceScreen() {
     _schedules.clear();
     _errorMessageSchedule = "";
+    _unselectAllPriceTypes();
+    _unselectAllSaleTypes();
+    _unselectAllReplicationParameters();
+  }
+
+  void _unselectAllReplicationParameters() {
+    for (var replicationParameter in _replicationParameters) {
+      replicationParameter.selected = false;
+    }
   }
 
   void clearDataOnCloseProductsScreen() {

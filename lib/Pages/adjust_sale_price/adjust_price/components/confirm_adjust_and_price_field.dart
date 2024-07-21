@@ -40,6 +40,14 @@ class _PriceFieldAndConfirmAdjustButtonState
     final EnterpriseModel enterprise = arguments["enterprise"];
     final GetProductJsonModel product = arguments["product"];
 
+    if (!adjustSalePriceProvider.allObligatoryDataAreInformed()) {
+      ShowSnackbarMessage.showMessage(
+        message: "Selecione o tipo de preço e o tipo de venda",
+        context: context,
+      );
+      return;
+    }
+
     bool? isValid = formKey.currentState?.validate();
 
     if (isValid == true) {
