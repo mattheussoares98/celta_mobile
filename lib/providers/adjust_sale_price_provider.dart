@@ -189,6 +189,51 @@ class AdjustSalePriceProvider with ChangeNotifier {
         .selected;
   }
 
+  Map<String, dynamic> _getJsonRequest({
+    required int enterpriseCode,
+    required int productCode,
+    required int productPackingCode,
+    required double price,
+    required DateTime? effectuationDatePrice,
+    required DateTime? effectuationDateOffer,
+    required DateTime? endDateOffer,
+  }) {
+    final Map<String, dynamic> jsonRequest = {
+      "CrossIdentity": UserData.crossIdentity,
+      "EnterpriseCode": enterpriseCode,
+      "ProductCode": productCode,
+      "ProductPackingCode": productPackingCode,
+      "UpdatePriceClass": _replicationParameters
+          .firstWhere((e) => e.replicationName == ReplicationNames.Classe),
+      "UpdatePackings": _replicationParameters
+          .firstWhere((e) => e.replicationName == ReplicationNames.Embalagens),
+      "UpdateEnterpriseGroup": _replicationParameters.firstWhere(
+          (e) => e.replicationName == ReplicationNames.AgrupamentoOperacional),
+      "UpdateGrate": _replicationParameters
+          .firstWhere((e) => e.replicationName == ReplicationNames.Grade),
+      "SaleTypeInt": _saleTypes
+          .where((e) => e.selected == true)
+          .first
+          .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
+    };
+
+    if (offerPriceIsSelected()) {
+      jsonRequest["Offer"] = price;
+
+      jsonRequest["EffectuationDateOffer"] =
+          (effectuationDateOffer ?? DateTime.now()).toIso8601String();
+      if (endDateOffer != null) {
+        jsonRequest["EndDateOffer"] = endDateOffer.toIso8601String();
+      }
+    } else {
+      jsonRequest["EffectuationDatePrice"] =
+          (effectuationDatePrice ?? DateTime.now()).toIso8601String();
+      jsonRequest["Price"] = price;
+    }
+
+    return jsonRequest;
+  }
+
   Future<void> confirmAdjust({
     required int enterpriseCode,
     required int productCode,
@@ -201,35 +246,22 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required double price,
     required DateTime effectuationDatePrice,
     required DateTime effectuationDateOffer,
-    required DateTime endDateOffer,
+    required DateTime? endDateOffer,
   }) async {
     _isLoading = true;
     _errorMessage = "";
     notifyListeners();
 
     try {
-      final Map jsonRequest = {
-        "CrossIdentity": UserData.crossIdentity,
-        "EnterpriseCode": enterpriseCode,
-        "ProductCode": productCode,
-        "ProductPackingCode": productPackingCode,
-        "UpdatePriceClass": updatePriceClass,
-        "UpdatePackings": updatePackings,
-        "UpdateEnterpriseGroup": updateEnterpriseGroup,
-        "UpdateGrate": updateGrate,
-        "SaleTypeInt": _saleTypes
-            .where((e) => e.selected == true)
-            .first
-            .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
-        "EffectuationDatePrice": effectuationDatePrice.toIso8601String(),
-        "EffectuationDateOffer": effectuationDateOffer.toIso8601String(),
-        "EndDateOffer": endDateOffer.toIso8601String()
-      };
-      if (offerPriceIsSelected()) {
-        jsonRequest["Offer"] = price;
-      } else {
-        jsonRequest["Price"] = price;
-      }
+      final jsonRequest = _getJsonRequest(
+        enterpriseCode: enterpriseCode,
+        productCode: productCode,
+        productPackingCode: productPackingCode,
+        price: price,
+        effectuationDatePrice: effectuationDatePrice,
+        effectuationDateOffer: effectuationDateOffer,
+        endDateOffer: endDateOffer,
+      );
 
       SoapRequest.soapPost(
         parameters: {
