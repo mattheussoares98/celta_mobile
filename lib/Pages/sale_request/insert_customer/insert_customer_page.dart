@@ -14,8 +14,7 @@ class InsertCustomerPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<InsertCustomerPage> createState() =>
-      _InsertCustomerPageState();
+  State<InsertCustomerPage> createState() => _InsertCustomerPageState();
 }
 
 class _InsertCustomerPageState extends State<InsertCustomerPage> {
@@ -52,7 +51,7 @@ class _InsertCustomerPageState extends State<InsertCustomerPage> {
                   enterpriseCode: widget.enterpriseCode.toString(),
                   configurationsProvider: configurationsProvider,
                 );
-        
+
                 if (saleRequestProvider
                         .customersCount(widget.enterpriseCode.toString()) >
                     0) {
@@ -72,27 +71,10 @@ class _InsertCustomerPageState extends State<InsertCustomerPage> {
                 saleRequestProvider
                         .customersCount(widget.enterpriseCode.toString()) ==
                     0)
-              Expanded(
-                child: searchAgain(
-                  errorMessage:
-                      'Ocorreu um erro para consultar o cliente "consumidor"',
-                  request: () async {
-                    await saleRequestProvider.getCustomers(
-                      context: context,
-                      controllerText: "-1",
-                      enterpriseCode: widget.enterpriseCode.toString(),
-                      configurationsProvider: configurationsProvider,
-                    );
-                  },
+              if (saleRequestProvider.errorMessageCustomer != "")
+                ErrorMessage(
+                  errorMessage: saleRequestProvider.errorMessageCustomer,
                 ),
-              ),
-            if (saleRequestProvider.errorMessageCustomer != "" &&
-                saleRequestProvider
-                        .customersCount(widget.enterpriseCode.toString()) >
-                    0)
-              ErrorMessage(
-                errorMessage: saleRequestProvider.errorMessageCustomer,
-              ),
           ],
         ),
       ),
