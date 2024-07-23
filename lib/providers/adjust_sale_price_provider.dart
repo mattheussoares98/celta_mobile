@@ -198,22 +198,23 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
   }) {
+    bool getReplicationIsSelected(ReplicationNames replicationName) =>
+        _replicationParameters
+            .firstWhere((e) => e.replicationName == replicationName)
+            .selected;
+
     final Map<String, dynamic> jsonRequest = {
       "CrossIdentity": UserData.crossIdentity,
       "EnterpriseCode": enterpriseCode,
       "ProductCode": productCode,
       "ProductPackingCode": productPackingCode,
-      "UpdatePriceClass": _replicationParameters
-          .firstWhere((e) => e.replicationName == ReplicationNames.Classe),
-      "UpdatePackings": _replicationParameters
-          .firstWhere((e) => e.replicationName == ReplicationNames.Embalagens),
-      "UpdateEnterpriseGroup": _replicationParameters.firstWhere(
-          (e) => e.replicationName == ReplicationNames.AgrupamentoOperacional),
-      "UpdateGrate": _replicationParameters
-          .firstWhere((e) => e.replicationName == ReplicationNames.Grade),
+      "UpdatePriceClass": getReplicationIsSelected(ReplicationNames.Classe),
+      "UpdatePackings": getReplicationIsSelected(ReplicationNames.Embalagens),
+      "UpdateEnterpriseGroup":
+          getReplicationIsSelected(ReplicationNames.AgrupamentoOperacional),
+      "UpdateGrate": getReplicationIsSelected(ReplicationNames.Grade),
       "SaleTypeInt": _saleTypes
-          .where((e) => e.selected == true)
-          .first
+          .firstWhere((e) => e.selected == true)
           .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
     };
 
