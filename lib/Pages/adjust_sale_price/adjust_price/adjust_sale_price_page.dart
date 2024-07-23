@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
@@ -15,9 +16,6 @@ class AdjustSalePricePage extends StatefulWidget {
 }
 
 class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
-  String initialDate = "Data atual";
-  String finishDate = "Sem término";
-
   @override
   Widget build(BuildContext context) {
     AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
@@ -36,40 +34,61 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
             appBar: AppBar(
               title: FittedBox(child: Text("${product.name} (${product.plu})")),
             ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    GetSchedulesPrices(
-                        enterprise: enterprise, product: product),
-                    SaleTypeRadios(enterpriseModel: enterprise),
-                    const PriceTypeRadios(),
-                    const ReplicationParameters(),
-                    InitialAndFinishDates(
-                        initialDate: initialDate,
-                        finishDate: finishDate,
-                        updateInitialDate: () async {
-                          final newDate = await getNewDate(context: context);
-                          if (newDate != null) {
-                            setState(() {
-                              initialDate = newDate;
-                            });
-                          }
-                        },
-                        updateFinishDate: () async {
-                          final newDate = await getNewDate(context: context);
-                          if (newDate != null) {
-                            setState(() {
-                              finishDate = newDate;
-                            });
-                          }
-                        }),
-                    PriceFieldAndConfirmAdjustButton(
-                      replicationParameters:
-                          adjustSalePriceProvider.replicationParameters,
-                    ),
-                  ],
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      GetSchedulesPrices(
+                        enterprise: enterprise,
+                        product: product,
+                      ),
+                      SaleTypeRadios(enterpriseModel: enterprise),
+                      const PriceTypeRadios(),
+                      const ReplicationParameters(),
+                      InitialAndFinishDates(
+                          initialDate: adjustSalePriceProvider.initialDate ==
+                                  null
+                              ? "Data atual"
+                              : DateFormat("dd/MM/yyy HH:mm").format(
+                                  DateTime(
+                                    adjustSalePriceProvider.initialDate!.year,
+                                    adjustSalePriceProvider.initialDate!.month,
+                                    adjustSalePriceProvider.initialDate!.day,
+                                    adjustSalePriceProvider.initialDate!.hour,
+                                    adjustSalePriceProvider.initialDate!.minute,
+                                  ),
+                                ),
+                          finishDate: adjustSalePriceProvider.finishDate == null
+                              ? "Data atual"
+                              : DateFormat("dd/MM/yyy HH:mm").format(
+                                  DateTime(
+                                    adjustSalePriceProvider.finishDate!.year,
+                                    adjustSalePriceProvider.finishDate!.month,
+                                    adjustSalePriceProvider.finishDate!.day,
+                                    adjustSalePriceProvider.finishDate!.hour,
+                                    adjustSalePriceProvider.finishDate!.minute,
+                                  ),
+                                ),
+                          updateInitialDate: () async {
+                            final newDate = await getNewDate(context: context);
+                            if (newDate != null) {
+                              adjustSalePriceProvider.initialDate = newDate;
+                            }
+                          },
+                          updateFinishDate: () async {
+                            final newDate = await getNewDate(context: context);
+                            if (newDate != null) {
+                              adjustSalePriceProvider.finishDate = newDate;
+                            }
+                          }),
+                      PriceFieldAndConfirmAdjustButton(
+                        replicationParameters:
+                            adjustSalePriceProvider.replicationParameters,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

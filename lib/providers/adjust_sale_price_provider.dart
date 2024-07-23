@@ -43,6 +43,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
   ];
   List<PriceTypeModel> get priceTypes => [..._priceTypes];
 
+  DateTime? _initialDate;
+  DateTime? get initialDate => _initialDate;
+  set initialDate(DateTime? newDate) => _initialDate = newDate;
+
+  DateTime? _finishDate;
+  DateTime? get finishDate => _finishDate;
+  set finishDate(DateTime? newDate) => _finishDate = newDate;
+
   void addUsedSaleTypes(EnterpriseModel enterpriseModel) {
     if (_saleTypes.isNotEmpty) {
       return;
@@ -89,6 +97,8 @@ class AdjustSalePriceProvider with ChangeNotifier {
     _unselectAllPriceTypes();
     _unselectAllSaleTypes();
     _unselectAllReplicationParameters();
+    initialDate = null;
+    finishDate = null;
   }
 
   void _unselectAllReplicationParameters() {
@@ -198,22 +208,23 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
   }) {
+    bool getReplicationIsSelected(ReplicationNames replicationName) =>
+        _replicationParameters
+            .firstWhere((e) => e.replicationName == replicationName)
+            .selected;
+
     final Map<String, dynamic> jsonRequest = {
       "CrossIdentity": UserData.crossIdentity,
       "EnterpriseCode": enterpriseCode,
       "ProductCode": productCode,
       "ProductPackingCode": productPackingCode,
-      "UpdatePriceClass": _replicationParameters
-          .firstWhere((e) => e.replicationName == ReplicationNames.Classe),
-      "UpdatePackings": _replicationParameters
-          .firstWhere((e) => e.replicationName == ReplicationNames.Embalagens),
-      "UpdateEnterpriseGroup": _replicationParameters.firstWhere(
-          (e) => e.replicationName == ReplicationNames.AgrupamentoOperacional),
-      "UpdateGrate": _replicationParameters
-          .firstWhere((e) => e.replicationName == ReplicationNames.Grade),
+      "UpdatePriceClass": getReplicationIsSelected(ReplicationNames.Classe),
+      "UpdatePackings": getReplicationIsSelected(ReplicationNames.Embalagens),
+      "UpdateEnterpriseGroup":
+          getReplicationIsSelected(ReplicationNames.AgrupamentoOperacional),
+      "UpdateGrate": getReplicationIsSelected(ReplicationNames.Grade),
       "SaleTypeInt": _saleTypes
-          .where((e) => e.selected == true)
-          .first
+          .firstWhere((e) => e.selected == true)
           .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
     };
 

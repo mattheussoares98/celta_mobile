@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../components/components.dart';
 
-Future<String?> getNewDate({
+Future<DateTime?> getNewDate({
   required BuildContext context,
 }) async {
   DateTime? validityDate = await showDatePicker(
@@ -26,14 +25,12 @@ Future<String?> getNewDate({
         context: context,
       );
     } else {
-      return DateFormat("dd/MM/yyy HH:mm").format(
-        DateTime(
-          validityDate.year,
-          validityDate.month,
-          validityDate.day,
-          newTime.hour,
-          newTime.minute,
-        ),
+      return DateTime(
+        validityDate.year,
+        validityDate.month,
+        validityDate.day,
+        newTime.hour,
+        newTime.minute,
       );
     }
   }

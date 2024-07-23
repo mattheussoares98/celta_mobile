@@ -9,10 +9,10 @@ class ImageComponent {
     String? nextRoute,
   }) {
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       onTap: () {
         Navigator.of(context).pushNamed(
           route,
@@ -35,10 +35,13 @@ class ImageComponent {
               left: 0,
               right: 0,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black45,
+                    color: Colors.black38,
                     border: Border.all(
                       style: BorderStyle.none,
                     ),
