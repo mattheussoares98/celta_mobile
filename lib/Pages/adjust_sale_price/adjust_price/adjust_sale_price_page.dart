@@ -36,40 +36,42 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
             appBar: AppBar(
               title: FittedBox(child: Text("${product.name} (${product.plu})")),
             ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    GetSchedulesPrices(
-                        enterprise: enterprise, product: product),
-                    SaleTypeRadios(enterpriseModel: enterprise),
-                    const PriceTypeRadios(),
-                    const ReplicationParameters(),
-                    InitialAndFinishDates(
-                        initialDate: initialDate,
-                        finishDate: finishDate,
-                        updateInitialDate: () async {
-                          final newDate = await getNewDate(context: context);
-                          if (newDate != null) {
-                            setState(() {
-                              initialDate = newDate;
-                            });
-                          }
-                        },
-                        updateFinishDate: () async {
-                          final newDate = await getNewDate(context: context);
-                          if (newDate != null) {
-                            setState(() {
-                              finishDate = newDate;
-                            });
-                          }
-                        }),
-                    PriceFieldAndConfirmAdjustButton(
-                      replicationParameters:
-                          adjustSalePriceProvider.replicationParameters,
-                    ),
-                  ],
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      GetSchedulesPrices(
+                          enterprise: enterprise, product: product),
+                      SaleTypeRadios(enterpriseModel: enterprise),
+                      const PriceTypeRadios(),
+                      const ReplicationParameters(),
+                      InitialAndFinishDates(
+                          initialDate: initialDate,
+                          finishDate: finishDate,
+                          updateInitialDate: () async {
+                            final newDate = await getNewDate(context: context);
+                            if (newDate != null) {
+                              setState(() {
+                                initialDate = newDate;
+                              });
+                            }
+                          },
+                          updateFinishDate: () async {
+                            final newDate = await getNewDate(context: context);
+                            if (newDate != null) {
+                              setState(() {
+                                finishDate = newDate;
+                              });
+                            }
+                          }),
+                      PriceFieldAndConfirmAdjustButton(
+                        replicationParameters:
+                            adjustSalePriceProvider.replicationParameters,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
