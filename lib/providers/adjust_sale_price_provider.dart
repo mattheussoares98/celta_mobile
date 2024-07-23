@@ -43,6 +43,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
   ];
   List<PriceTypeModel> get priceTypes => [..._priceTypes];
 
+  DateTime? _initialDate;
+  DateTime? get initialDate => _initialDate;
+  set initialDate(DateTime? newDate) => _initialDate = newDate;
+
+  DateTime? _finishDate;
+  DateTime? get finishDate => _finishDate;
+  set finishDate(DateTime? newDate) => _finishDate = newDate;
+
   void addUsedSaleTypes(EnterpriseModel enterpriseModel) {
     if (_saleTypes.isNotEmpty) {
       return;
@@ -89,6 +97,8 @@ class AdjustSalePriceProvider with ChangeNotifier {
     _unselectAllPriceTypes();
     _unselectAllSaleTypes();
     _unselectAllReplicationParameters();
+    initialDate = null;
+    finishDate = null;
   }
 
   void _unselectAllReplicationParameters() {

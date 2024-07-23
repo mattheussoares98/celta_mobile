@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
@@ -15,9 +16,6 @@ class AdjustSalePricePage extends StatefulWidget {
 }
 
 class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
-  String initialDate = "Data atual";
-  String finishDate = "Sem término";
-
   @override
   Widget build(BuildContext context) {
     AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
@@ -43,27 +41,46 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                   child: Column(
                     children: [
                       GetSchedulesPrices(
-                          enterprise: enterprise, product: product),
+                        enterprise: enterprise,
+                        product: product,
+                      ),
                       SaleTypeRadios(enterpriseModel: enterprise),
                       const PriceTypeRadios(),
                       const ReplicationParameters(),
                       InitialAndFinishDates(
-                          initialDate: initialDate,
-                          finishDate: finishDate,
+                          initialDate: adjustSalePriceProvider.initialDate ==
+                                  null
+                              ? "Data atual"
+                              : DateFormat("dd/MM/yyy HH:mm").format(
+                                  DateTime(
+                                    adjustSalePriceProvider.initialDate!.year,
+                                    adjustSalePriceProvider.initialDate!.month,
+                                    adjustSalePriceProvider.initialDate!.day,
+                                    adjustSalePriceProvider.initialDate!.hour,
+                                    adjustSalePriceProvider.initialDate!.minute,
+                                  ),
+                                ),
+                          finishDate: adjustSalePriceProvider.finishDate == null
+                              ? "Data atual"
+                              : DateFormat("dd/MM/yyy HH:mm").format(
+                                  DateTime(
+                                    adjustSalePriceProvider.finishDate!.year,
+                                    adjustSalePriceProvider.finishDate!.month,
+                                    adjustSalePriceProvider.finishDate!.day,
+                                    adjustSalePriceProvider.finishDate!.hour,
+                                    adjustSalePriceProvider.finishDate!.minute,
+                                  ),
+                                ),
                           updateInitialDate: () async {
                             final newDate = await getNewDate(context: context);
                             if (newDate != null) {
-                              setState(() {
-                                initialDate = newDate;
-                              });
+                              adjustSalePriceProvider.initialDate = newDate;
                             }
                           },
                           updateFinishDate: () async {
                             final newDate = await getNewDate(context: context);
                             if (newDate != null) {
-                              setState(() {
-                                finishDate = newDate;
-                              });
+                              adjustSalePriceProvider.finishDate = newDate;
                             }
                           }),
                       PriceFieldAndConfirmAdjustButton(
