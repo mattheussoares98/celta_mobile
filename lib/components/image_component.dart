@@ -26,7 +26,7 @@ class ImageComponent {
             Image.asset(
               imagePath,
               width: double.infinity,
-              fit: BoxFit.fill,
+              fit: BoxFit.contain,
               alignment: Alignment.topCenter,
               height: double.infinity,
             ),
