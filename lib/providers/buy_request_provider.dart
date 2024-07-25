@@ -170,7 +170,7 @@ class BuyRequestProvider with ChangeNotifier {
     var requestsTypesJsonList =
         _requestsType.map((requestsType) => requestsType.toJson()).toList();
 
-    Map _json = {
+    Map<String, dynamic> _json = {
       "buyers": buyersJsonList,
       "suppliers": suppliersJsonList,
       "enterprises": enterprisesJsonList,
@@ -184,11 +184,16 @@ class BuyRequestProvider with ChangeNotifier {
       "lastRequestSavedNumber": _lastRequestSavedNumber,
     };
 
-    await PrefsInstance.setBuyRequest(json.encode(_json));
+    await PrefsInstance.setObject(
+      prefsKeys: PrefsKeys.buyRequest,
+      object: _json,
+    );
   }
 
   Future<void> restoreDataByDatabase() async {
-    String buyRequestStringInDatabase = await PrefsInstance.getBuyRequest();
+    String buyRequestStringInDatabase = await PrefsInstance.getString(
+      PrefsKeys.buyRequest,
+    );
 
     if (buyRequestStringInDatabase == "") {
       return;

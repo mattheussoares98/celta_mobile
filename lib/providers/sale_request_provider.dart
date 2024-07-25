@@ -123,11 +123,14 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _updateCustomerInDatabase() async {
-    await PrefsInstance.setCustomerSaleRequest(json.encode(_customers));
+    await PrefsInstance.setObject(
+      prefsKeys: PrefsKeys.customers,
+      object: _customers,
+    );
   }
 
   restorecustomers(String enterpriseCode) async {
-    String customers = await PrefsInstance.getCustomerSaleRequest();
+    String customers = await PrefsInstance.getString(PrefsKeys.customers);
     if (customers != "") {
       Map customersInDatabase = jsonDecode(customers);
 
@@ -206,12 +209,15 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _updateCartInDatabase() async {
-    await PrefsInstance.setCartSaleRequest(json.encode(_cartProducts));
+    await PrefsInstance.setString(
+      prefsKeys: PrefsKeys.cart,
+      value: json.encode(_cartProducts),
+    );
     _updatedCart = true;
   }
 
   restoreProducts(String enterpriseCode) async {
-    String cart = await PrefsInstance.getCartSaleRequest();
+    String cart = await PrefsInstance.getString(PrefsKeys.cart);
     if (cart != "") {
       Map cartProductsInDatabase = jsonDecode(cart);
 
@@ -375,7 +381,7 @@ class SaleRequestProvider with ChangeNotifier {
 
     await _clearcustomers(enterpriseCode);
     clearProducts();
-    await PrefsInstance.clearCartSaleRequest();
+    await PrefsInstance.removeKey(PrefsKeys.cart);
     _updatedCart = true;
 
     await _getCustomersOldSearch(

@@ -54,7 +54,10 @@ class LoginProvider with ChangeNotifier {
     _errorMessage = '';
     _isLoading = true;
     UserData.userName = user;
-    await PrefsInstance.setUserName();
+    await PrefsInstance.setString(
+      prefsKeys: PrefsKeys.user,
+      value: UserData.userName,
+    );
     notifyListeners();
 
     if (_changedEnterpriseNameOrUrlCcs) {
@@ -72,7 +75,14 @@ class LoginProvider with ChangeNotifier {
         enterpriseNameOrUrlCCSController.text,
       );
 
-      await PrefsInstance.setUrlCcsAndEnterpriseName();
+      await PrefsInstance.setString(
+        prefsKeys: PrefsKeys.urlCCS,
+        value: UserData.urlCCS,
+      );
+      await PrefsInstance.setString(
+        prefsKeys: PrefsKeys.enterpriseName,
+        value: UserData.enterpriseName,
+      );
     }
 
     if (_errorMessage != "" &&
@@ -116,7 +126,10 @@ class LoginProvider with ChangeNotifier {
         Map toParker2 = json.decode(toParker);
         UserData.crossIdentity = toParker2['string'];
 
-        await PrefsInstance.setUserIdentity();
+        await PrefsInstance.setString(
+          prefsKeys: PrefsKeys.userIdentity,
+          value: UserData.crossIdentity,
+        );
         await FirebaseHelper.addCcsClientInFirebase();
 
         _loginController?.add(true);
@@ -139,7 +152,10 @@ class LoginProvider with ChangeNotifier {
   logout() async {
     UserData.crossIdentity = "";
 
-    await PrefsInstance.setUserIdentity();
+    await PrefsInstance.setString(
+      prefsKeys: PrefsKeys.userIdentity,
+      value: UserData.crossIdentity,
+    );
 
     _loginController?.add(false);
   }

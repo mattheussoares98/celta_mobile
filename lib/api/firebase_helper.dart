@@ -165,7 +165,7 @@ class FirebaseHelper {
 
         batch.commit().then(
           (value) async {
-            await PrefsInstance.clearSoaps();
+            await PrefsInstance.removeKey(PrefsKeys.mySoaps);
             ////print("soapInformation adicionada");
           },
         ).catchError((error) {
@@ -365,7 +365,10 @@ class FirebaseHelper {
 
         UserData.alreadyInsertedUsersInformations = true;
 
-        await PrefsInstance.setUsersInformations(json.encode(userInformations));
+        await PrefsInstance.setObject(
+          prefsKeys: PrefsKeys.usersInformations,
+          object: userInformations,
+        );
       }
     } catch (e) {
       print("erro para adicionar as informações do usuário ==== $e");
@@ -412,7 +415,8 @@ class FirebaseHelper {
     }
   }
 
-  static Future<void> addNewEnterprise(FirebaseEnterpriseModel clientModel) async {
+  static Future<void> addNewEnterprise(
+      FirebaseEnterpriseModel clientModel) async {
     try {
       await _clientsCollection
           .doc(clientModel.enterpriseName)
