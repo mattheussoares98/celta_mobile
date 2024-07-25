@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
 
     if (!isLoaded) {
-      UserData.userName = await PrefsInstance.getUserName();
+      UserData.userName = await PrefsInstance.getString(PrefsKeys.user);
 
       setState(() {});
       ConfigurationsProvider configurationsProvider =
@@ -105,7 +105,8 @@ class _HomePageState extends State<HomePage> {
         },
         child: GridView.count(
           crossAxisCount: returnSize(), // define o número de colunas
-          childAspectRatio: 1.7, // define a proporção de largura/altura dos itens
+          childAspectRatio:
+              1.7, // define a proporção de largura/altura dos itens
           mainAxisSpacing: 0.0,
           crossAxisSpacing: 0.0,
           children: [

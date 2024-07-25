@@ -95,10 +95,6 @@ class PrefsInstance {
     }
   }
 
-  static Future<String> getUserName() async {
-    return await _getString(prefsKeys: PrefsKeys.user);
-  }
-
   static Future<String> getUrlCcs() async {
     return await _getString(prefsKeys: PrefsKeys.urlCCS);
   }
@@ -204,7 +200,7 @@ class PrefsInstance {
     required TextEditingController enterpriseNameOrUrlCCSController,
     required TextEditingController userController,
   }) async {
-    userController.text = await PrefsInstance.getUserName();
+    userController.text = await PrefsInstance.getString(PrefsKeys.user);
     UserData.userName = userController.text;
     UserData.urlCCS = await PrefsInstance.getUrlCcs();
     UserData.enterpriseName = await PrefsInstance.getEnterpriseName();
