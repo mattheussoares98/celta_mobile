@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/utils.dart';
 
-enum _PrefsKeys {
+enum PrefsKeys {
   userIdentity,
   user,
   urlCCS,
@@ -29,7 +29,7 @@ class PrefsInstance {
   static Future<void> removeNotUsedPrefsKeys() async {
     _prefs = await SharedPreferences.getInstance();
 
-    await _prefs.remove(_PrefsKeys.notifications.name);
+    await _prefs.remove(PrefsKeys.notifications.name);
   }
 
   static Future<bool> _prefsContainsKey(String key) async {
@@ -38,8 +38,26 @@ class PrefsInstance {
     return _prefs.containsKey(key);
   }
 
+  static Future<void> setString({
+    required PrefsKeys prefsKeys,
+    required Map<String, dynamic> map,
+  }) async {
+    _prefs = await SharedPreferences.getInstance();
+
+    await _prefs.setString(prefsKeys.name, json.encode(map));
+  }
+
+  static Future<String> getString(PrefsKeys prefsKeys) async {
+    _prefs = await SharedPreferences.getInstance();
+    if (await _prefsContainsKey(prefsKeys.name)) {
+      return await _prefs.getString(prefsKeys.name)!;
+    } else {
+      return "";
+    }
+  }
+
   static Future<void> _setString({
-    required _PrefsKeys prefsKeys,
+    required PrefsKeys prefsKeys,
     required String value,
   }) async {
     _prefs = await SharedPreferences.getInstance();
@@ -47,7 +65,7 @@ class PrefsInstance {
   }
 
   static Future<bool> _setBool({
-    required _PrefsKeys prefsKeys,
+    required PrefsKeys prefsKeys,
     required bool value,
   }) async {
     _prefs = await SharedPreferences.getInstance();
@@ -56,7 +74,7 @@ class PrefsInstance {
   }
 
   static Future<String> _getString({
-    required _PrefsKeys prefsKeys,
+    required PrefsKeys prefsKeys,
   }) async {
     _prefs = await SharedPreferences.getInstance();
     if (await _prefsContainsKey(prefsKeys.name)) {
@@ -67,7 +85,7 @@ class PrefsInstance {
   }
 
   static Future<bool> _getBool({
-    required _PrefsKeys prefsKeys,
+    required PrefsKeys prefsKeys,
   }) async {
     _prefs = await SharedPreferences.getInstance();
     if (await _prefsContainsKey(prefsKeys.name)) {
@@ -77,97 +95,82 @@ class PrefsInstance {
     }
   }
 
-  static Future<bool> isLogged() async {
-    _prefs = await SharedPreferences.getInstance();
-    ;
-    return await _prefs.containsKey(_PrefsKeys.userIdentity.name) &&
-        await _getString(prefsKeys: _PrefsKeys.userIdentity) != "";
-  }
-
-  static Future<String> getUserIdentity() async {
-    if (await isLogged()) {
-      return await _getString(prefsKeys: _PrefsKeys.userIdentity);
-    } else {
-      return "";
-    }
-  }
-
   static Future<String> getUserName() async {
-    return await _getString(prefsKeys: _PrefsKeys.user);
+    return await _getString(prefsKeys: PrefsKeys.user);
   }
 
   static Future<String> getUrlCcs() async {
-    return await _getString(prefsKeys: _PrefsKeys.urlCCS);
+    return await _getString(prefsKeys: PrefsKeys.urlCCS);
   }
 
   static Future<void> setUrlCcsAndEnterpriseName() async {
     await _setString(
-      prefsKeys: _PrefsKeys.urlCCS,
+      prefsKeys: PrefsKeys.urlCCS,
       value: UserData.urlCCS,
     );
     await _setString(
-      prefsKeys: _PrefsKeys.enterpriseName,
+      prefsKeys: PrefsKeys.enterpriseName,
       value: UserData.enterpriseName,
     );
   }
 
   static Future<String> getEnterpriseName() async {
-    return await _getString(prefsKeys: _PrefsKeys.enterpriseName);
+    return await _getString(prefsKeys: PrefsKeys.enterpriseName);
   }
 
   static Future<void> setUserIdentity() async {
     await _setString(
-        prefsKeys: _PrefsKeys.userIdentity, value: UserData.crossIdentity);
+        prefsKeys: PrefsKeys.userIdentity, value: UserData.crossIdentity);
   }
 
   static Future<void> setUserName() async {
-    await _setString(prefsKeys: _PrefsKeys.user, value: UserData.userName);
+    await _setString(prefsKeys: PrefsKeys.user, value: UserData.userName);
   }
 
   static Future<void> setCustomerSaleRequest(String newCustomers) async {
-    await _setString(prefsKeys: _PrefsKeys.customers, value: newCustomers);
+    await _setString(prefsKeys: PrefsKeys.customers, value: newCustomers);
   }
 
   static Future<void> clearCustomerSaleRequest() async {
     _prefs = await SharedPreferences.getInstance();
-    await _prefs.setString(_PrefsKeys.customers.name, "");
+    await _prefs.setString(PrefsKeys.customers.name, "");
   }
 
   static Future<String> getCustomerSaleRequest() async {
-    return await _getString(prefsKeys: _PrefsKeys.customers);
+    return await _getString(prefsKeys: PrefsKeys.customers);
   }
 
   static Future<String> getCartSaleRequest() async {
-    return await _getString(prefsKeys: _PrefsKeys.cart);
+    return await _getString(prefsKeys: PrefsKeys.cart);
   }
 
   static Future<void> setCartSaleRequest(String newCart) async {
-    await _setString(prefsKeys: _PrefsKeys.cart, value: newCart);
+    await _setString(prefsKeys: PrefsKeys.cart, value: newCart);
   }
 
   static Future<void> clearCartSaleRequest() async {
     _prefs = await SharedPreferences.getInstance();
-    await _prefs.setString(_PrefsKeys.cart.name, "");
+    await _prefs.setString(PrefsKeys.cart.name, "");
   }
 
   static Future<void> setSoaps(List<dynamic> mySoaps) async {
     _prefs = await SharedPreferences.getInstance();
     List<String> encodedMySoaps =
         mySoaps.map((item) => json.encode(item)).toList();
-    await _prefs.setStringList(_PrefsKeys.mySoaps.name, encodedMySoaps);
+    await _prefs.setStringList(PrefsKeys.mySoaps.name, encodedMySoaps);
   }
 
   static Future<void> clearSoaps() async {
     _prefs = await SharedPreferences.getInstance();
-    await _prefs.remove(_PrefsKeys.mySoaps.name);
+    await _prefs.remove(PrefsKeys.mySoaps.name);
   }
 
   static Future<List<dynamic>> getSoaps() async {
     List<dynamic> mySoaps = [];
     _prefs = await SharedPreferences.getInstance();
-    if (_prefs.getStringList(_PrefsKeys.mySoaps.name) != null) {
+    if (_prefs.getStringList(PrefsKeys.mySoaps.name) != null) {
       List<String> encodedMySoaps =
-          await _prefs.getStringList(_PrefsKeys.mySoaps.name)!;
+          await _prefs.getStringList(PrefsKeys.mySoaps.name)!;
 
       mySoaps = encodedMySoaps.map((item) => json.decode(item)).toList();
     }
@@ -176,23 +179,23 @@ class PrefsInstance {
   }
 
   static Future<void> setUseAutoScanValue(bool newValue) async {
-    await _setBool(prefsKeys: _PrefsKeys.useAutoScan, value: newValue);
+    await _setBool(prefsKeys: PrefsKeys.useAutoScan, value: newValue);
   }
 
   static Future<void> setUseLegacyCodeValue(bool newValue) async {
-    await _setBool(prefsKeys: _PrefsKeys.useLegacyCode, value: newValue);
+    await _setBool(prefsKeys: PrefsKeys.useLegacyCode, value: newValue);
   }
 
   static Future<void> setSearchCustomerByPersonalizedCode(bool newValue) async {
     await _setBool(
-      prefsKeys: _PrefsKeys.searchCustomerByPersonalizedCode,
+      prefsKeys: PrefsKeys.searchCustomerByPersonalizedCode,
       value: newValue,
     );
   }
 
   static Future<void> setSearchProductByPersonalizedCode(bool newValue) async {
     await _setBool(
-      prefsKeys: _PrefsKeys.searchProductByPersonalizedCode,
+      prefsKeys: PrefsKeys.searchProductByPersonalizedCode,
       value: newValue,
     );
   }
@@ -214,70 +217,70 @@ class PrefsInstance {
   }
 
   static Future<bool> getUseAutoScan() async {
-    return await _getBool(prefsKeys: _PrefsKeys.useAutoScan);
+    return await _getBool(prefsKeys: PrefsKeys.useAutoScan);
   }
 
   static Future<bool> getUseLegacyCode() async {
-    return await _getBool(prefsKeys: _PrefsKeys.useLegacyCode);
+    return await _getBool(prefsKeys: PrefsKeys.useLegacyCode);
   }
 
   static Future<bool> getSearchCustomerByPersonalizedCode() async {
     return await _getBool(
-      prefsKeys: _PrefsKeys.searchCustomerByPersonalizedCode,
+      prefsKeys: PrefsKeys.searchCustomerByPersonalizedCode,
     );
   }
 
   static Future<bool> getSearchProductByPersonalizedCode() async {
     return await _getBool(
-      prefsKeys: _PrefsKeys.searchProductByPersonalizedCode,
+      prefsKeys: PrefsKeys.searchProductByPersonalizedCode,
     );
   }
 
   static Future<void> setToNoShowAgainMessageToUseCameraInWebVersion() async {
     await _setBool(
-        prefsKeys: _PrefsKeys.showMessageToUseCameraInWebVersion, value: false);
+        prefsKeys: PrefsKeys.showMessageToUseCameraInWebVersion, value: false);
   }
 
   static Future<bool> getShowMessageToUseCameraInWebVersion() async {
     if (!await _prefsContainsKey(
-        _PrefsKeys.showMessageToUseCameraInWebVersion.name)) {
+        PrefsKeys.showMessageToUseCameraInWebVersion.name)) {
       await _setBool(
-        prefsKeys: _PrefsKeys.showMessageToUseCameraInWebVersion,
+        prefsKeys: PrefsKeys.showMessageToUseCameraInWebVersion,
         value: true,
       );
     }
 
     return await _getBool(
-        prefsKeys: _PrefsKeys.showMessageToUseCameraInWebVersion);
+        prefsKeys: PrefsKeys.showMessageToUseCameraInWebVersion);
   }
 
   static Future<void> setBuyRequest(String newBuyRequest) async {
-    await _setString(prefsKeys: _PrefsKeys.buyRequest, value: newBuyRequest);
+    await _setString(prefsKeys: PrefsKeys.buyRequest, value: newBuyRequest);
   }
 
   static Future<String> getBuyRequest() async {
-    return await _getString(prefsKeys: _PrefsKeys.buyRequest);
+    return await _getString(prefsKeys: PrefsKeys.buyRequest);
   }
 
   static Future<void> setHasUnreadNotifications(bool newValue) async {
     await _setBool(
-        prefsKeys: _PrefsKeys.hasUnreadNotifications, value: newValue);
+        prefsKeys: PrefsKeys.hasUnreadNotifications, value: newValue);
   }
 
   static Future<bool> getHasUnreadNotifications() async {
-    return await _getBool(prefsKeys: _PrefsKeys.hasUnreadNotifications);
+    return await _getBool(prefsKeys: PrefsKeys.hasUnreadNotifications);
   }
 
   static Future<void> setUsersInformations(String newValue) async {
     await _setString(
-      prefsKeys: _PrefsKeys.usersInformations,
+      prefsKeys: PrefsKeys.usersInformations,
       value: newValue,
     );
   }
 
   static Future<String> getUsersInformations() async {
     return await _getString(
-      prefsKeys: _PrefsKeys.usersInformations,
+      prefsKeys: PrefsKeys.usersInformations,
     );
   }
 }

@@ -35,10 +35,12 @@ class LoginProvider with ChangeNotifier {
   Stream<bool> get authStream => _isAuthStream;
 
   Future<void> verifyIsLogged() async {
-    bool isLogged = await PrefsInstance.isLogged();
+    final crossIdentity = await PrefsInstance.getString(PrefsKeys.userIdentity);
 
-    if (isLogged) {
-      UserData.crossIdentity = await PrefsInstance.getUserIdentity();
+    if (crossIdentity.isNotEmpty) {
+      UserData.crossIdentity = await PrefsInstance.getString(
+        PrefsKeys.userIdentity,
+      );
       _loginController!.add(true);
     }
   }
@@ -104,8 +106,7 @@ class LoginProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        Map resultAsMap =
-            json.decode(SoapRequestResponse.responseAsString);
+        Map resultAsMap = json.decode(SoapRequestResponse.responseAsString);
         // Map resultAsMap = resultAsList.asMap();
 
         final myTransformer = Xml2Json();
