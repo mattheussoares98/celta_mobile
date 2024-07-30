@@ -157,6 +157,7 @@ class LoginProvider with ChangeNotifier {
       value: UserData.crossIdentity,
     );
 
+    await PrefsInstance.removeKeysOnLogout();
     _loginController?.add(false);
   }
 }
