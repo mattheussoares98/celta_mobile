@@ -6,22 +6,23 @@ import 'package:flutter/material.dart';
 import '../utils/utils.dart';
 
 enum PrefsKeys {
-  userIdentity,
-  user,
-  urlCCS,
-  enterpriseName,
-  customers,
+  buyRequest,
   cart,
+  customers,
+  enterpriseName,
   hasUnreadNotifications,
   mySoaps,
-  useAutoScan,
-  useLegacyCode,
-  showMessageToUseCameraInWebVersion,
+  notifications,
   searchCustomerByPersonalizedCode,
   searchProductByPersonalizedCode,
-  buyRequest,
-  notifications,
+  showMessageToUseCameraInWebVersion,
+  transferCart,
+  urlCCS,
+  useAutoScan,
+  useLegacyCode,
+  user,
   usersInformations,
+  userIdentity,
 }
 
 class PrefsInstance {
@@ -29,16 +30,14 @@ class PrefsInstance {
   static Future<void> removeKeysOnLogout() async {
     _prefs = await SharedPreferences.getInstance();
 
-    await _prefs.remove(PrefsKeys.notifications.name);
-    await _prefs.remove(PrefsKeys.userIdentity.name);
-    await _prefs.remove(PrefsKeys.urlCCS.name);
-    await _prefs.remove(PrefsKeys.enterpriseName.name);
-    await _prefs.remove(PrefsKeys.mySoaps.name);
-    await _prefs.remove(PrefsKeys.showMessageToUseCameraInWebVersion.name);
-    await _prefs.remove(PrefsKeys.searchCustomerByPersonalizedCode.name);
-    await _prefs.remove(PrefsKeys.searchProductByPersonalizedCode.name);
     await _prefs.remove(PrefsKeys.buyRequest.name);
+    await _prefs.remove(PrefsKeys.cart.name);
+    await _prefs.remove(PrefsKeys.customers.name);
+    await _prefs.remove(PrefsKeys.hasUnreadNotifications.name);
     await _prefs.remove(PrefsKeys.notifications.name);
+    await _prefs.remove(PrefsKeys.showMessageToUseCameraInWebVersion.name);
+    await _prefs.remove(PrefsKeys.userIdentity.name);
+    await _prefs.remove(PrefsKeys.transferCart.name);
   }
 
   static Future<bool> _prefsContainsKey(String key) async {

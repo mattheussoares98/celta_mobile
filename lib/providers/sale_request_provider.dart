@@ -131,7 +131,10 @@ class SaleRequestProvider with ChangeNotifier {
 
   restorecustomers(String enterpriseCode) async {
     String customers = await PrefsInstance.getString(PrefsKeys.customers);
-    if (customers != "") {
+
+    if (customers.isEmpty) {
+      _customers.clear();
+    } else {
       Map customersInDatabase = jsonDecode(customers);
 
       List<SaleRequestCustomerModel> customersTemp = [];
@@ -143,9 +146,8 @@ class SaleRequestProvider with ChangeNotifier {
         }
       });
       _customers[enterpriseCode] = customersTemp;
-
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   _clearcustomers(String enterpriseCode) async {
@@ -218,7 +220,10 @@ class SaleRequestProvider with ChangeNotifier {
 
   restoreProducts(String enterpriseCode) async {
     String cart = await PrefsInstance.getString(PrefsKeys.cart);
-    if (cart != "") {
+
+    if (cart.isEmpty) {
+      _cartProducts.clear();
+    } else {
       Map cartProductsInDatabase = jsonDecode(cart);
 
       List<SaleRequestCartProductsModel> cartProductsTemp = [];
@@ -232,9 +237,8 @@ class SaleRequestProvider with ChangeNotifier {
       });
 
       _cartProducts[enterpriseCode] = cartProductsTemp;
-
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   dynamic addProductInCart({

@@ -351,11 +351,12 @@ class TransferRequestProvider with ChangeNotifier {
     required String enterpriseDestinyCode,
     required String requestTypeCode,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('transferCart') != "" &&
-        prefs.getString('transferCart') != null) {
-      var _key = prefs.getString("transferCart")!;
-      Map cartProductsInDatabase = jsonDecode(_key);
+    final cart = await PrefsInstance.getString(PrefsKeys.transferCart);
+
+    if (cart.isEmpty) {
+      _cartProducts.clear();
+    } else {
+      Map cartProductsInDatabase = jsonDecode(cart);
 
       List<TransferRequestCartProductsModel> cartProductsTemp = [];
 
@@ -388,9 +389,9 @@ class TransferRequestProvider with ChangeNotifier {
         _cartProducts[requestTypeCode]?[enterpriseOriginCode]
             ?[enterpriseDestinyCode] = cartProductsTemp;
       });
-
-      notifyListeners();
     }
+
+    notifyListeners();
   }
 
   Future<void> updateProductFromCart({

@@ -195,20 +195,31 @@ class BuyRequestProvider with ChangeNotifier {
       PrefsKeys.buyRequest,
     );
 
-    if (buyRequestStringInDatabase == "") {
-      return;
+    if (buyRequestStringInDatabase.isEmpty) {
+      _requestsType.clear();
+      _buyers.clear();
+      _suppliers.clear();
+      _enterprises.clear();
+      _products.clear();
+      _productsInCart.clear();
+      _observationsController.clear();
+      _selectedBuyer = null;
+      _selectedRequestModel = null;
+      _selectedSupplier = null;
+      _lastRequestSavedNumber = "";
+    } else {
+      Map jsonInDatabase = {};
+      jsonInDatabase = json.decode(buyRequestStringInDatabase);
+
+      _restoreRequestTypeAndSelectedRequestType(jsonInDatabase);
+      _restoreBuyersAndSelectedBuyer(jsonInDatabase);
+      _restoreSuppliersAndSelectedSuppliers(jsonInDatabase);
+      _restoreEnterprisesAndSelectedEnterprises(jsonInDatabase);
+      _restoreCartProducts(jsonInDatabase);
+      _restoreObservations(jsonInDatabase);
+      _restoreLastRequestSavedNumber(jsonInDatabase);
     }
 
-    Map jsonInDatabase = {};
-    jsonInDatabase = json.decode(buyRequestStringInDatabase);
-
-    _restoreRequestTypeAndSelectedRequestType(jsonInDatabase);
-    _restoreBuyersAndSelectedBuyer(jsonInDatabase);
-    _restoreSuppliersAndSelectedSuppliers(jsonInDatabase);
-    _restoreEnterprisesAndSelectedEnterprises(jsonInDatabase);
-    _restoreCartProducts(jsonInDatabase);
-    _restoreObservations(jsonInDatabase);
-    _restoreLastRequestSavedNumber(jsonInDatabase);
     notifyListeners();
   }
 
