@@ -21,7 +21,10 @@ class NotificationsProvider with ChangeNotifier {
     required bool notify,
   }) {
     _hasUnreadNotifications = newValue;
-    PrefsInstance.setHasUnreadNotifications(newValue);
+    PrefsInstance.setBool(
+      prefsKeys: PrefsKeys.hasUnreadNotifications,
+      value: newValue,
+    );
     if (notify) {
       notifyListeners();
     }

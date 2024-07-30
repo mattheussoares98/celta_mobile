@@ -322,7 +322,7 @@ class FirebaseHelper {
     if (UserData.alreadyInsertedUsersInformations) return;
 
     try {
-      final value = await PrefsInstance.getUsersInformations();
+      final value = await PrefsInstance.getString(PrefsKeys.usersInformations);
 
       if (value.isNotEmpty) {
         UserData.alreadyInsertedUsersInformations = true;

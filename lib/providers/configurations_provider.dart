@@ -70,12 +70,16 @@ class ConfigurationsProvider with ChangeNotifier {
   List<ConfigurationsModel> get configurations => _configurations;
 
   Future<void> restoreConfigurations() async {
-    _autoScan?.value = await PrefsInstance.getUseAutoScan();
-    _legacyCode?.value = await PrefsInstance.getUseLegacyCode();
-    _productPersonalizedCode?.value =
-        await PrefsInstance.getSearchProductByPersonalizedCode();
-    _customerPersonalizedCode?.value =
-        await PrefsInstance.getSearchCustomerByPersonalizedCode();
+    _autoScan?.value =
+        await PrefsInstance.getBool(prefsKeys: PrefsKeys.useAutoScan);
+    _legacyCode?.value =
+        await PrefsInstance.getBool(prefsKeys: PrefsKeys.useLegacyCode);
+    _productPersonalizedCode?.value = await PrefsInstance.getBool(
+      prefsKeys: PrefsKeys.searchProductByPersonalizedCode,
+    );
+    _customerPersonalizedCode?.value = await PrefsInstance.getBool(
+      prefsKeys: PrefsKeys.searchCustomerByPersonalizedCode,
+    );
 
     notifyListeners();
   }
@@ -85,7 +89,10 @@ class ConfigurationsProvider with ChangeNotifier {
 
     _autoScan!.value = newValue;
 
-    await PrefsInstance.setUseAutoScanValue(newValue);
+    await PrefsInstance.setBool(
+      prefsKeys: PrefsKeys.useAutoScan,
+      value: newValue,
+    );
     notifyListeners();
   }
 
@@ -94,11 +101,17 @@ class ConfigurationsProvider with ChangeNotifier {
 
     _legacyCode!.value = newValue;
 
-    await PrefsInstance.setUseLegacyCodeValue(newValue);
+    await PrefsInstance.setBool(
+      prefsKeys: PrefsKeys.useLegacyCode,
+      value: newValue,
+    );
 
     if (_productPersonalizedCode?.value == true) {
       _productPersonalizedCode?.value = false;
-      await PrefsInstance.setSearchProductByPersonalizedCode(false);
+      await PrefsInstance.setBool(
+        prefsKeys: PrefsKeys.searchCustomerByPersonalizedCode,
+        value: newValue,
+      );
     }
 
     notifyListeners();
@@ -109,11 +122,17 @@ class ConfigurationsProvider with ChangeNotifier {
 
     _productPersonalizedCode!.value = newValue;
 
-    await PrefsInstance.setSearchProductByPersonalizedCode(newValue);
+    await PrefsInstance.setBool(
+      prefsKeys: PrefsKeys.searchProductByPersonalizedCode,
+      value: newValue,
+    );
 
     if (_legacyCode?.value == true) {
       _legacyCode?.value = false;
-      await PrefsInstance.setUseLegacyCodeValue(false);
+      await PrefsInstance.setBool(
+        prefsKeys: PrefsKeys.useLegacyCode,
+        value: false,
+      );
     }
     notifyListeners();
   }
@@ -124,6 +143,9 @@ class ConfigurationsProvider with ChangeNotifier {
     _customerPersonalizedCode!.value = newValue;
 
     notifyListeners();
-    await PrefsInstance.setSearchCustomerByPersonalizedCode(newValue);
+    await PrefsInstance.setBool(
+      prefsKeys: PrefsKeys.searchCustomerByPersonalizedCode,
+      value: newValue,
+    );
   }
 }

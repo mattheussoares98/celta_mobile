@@ -209,9 +209,9 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   _updateCartInDatabase() async {
-    await PrefsInstance.setString(
+    await PrefsInstance.setObject(
       prefsKeys: PrefsKeys.cart,
-      value: json.encode(_cartProducts),
+      object: _cartProducts,
     );
     _updatedCart = true;
   }

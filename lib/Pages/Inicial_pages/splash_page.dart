@@ -60,8 +60,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             APPROUTES.LOGIN_OR_HOME_PAGE, (route) => false);
       }
     });
-
-    PrefsInstance.removeNotUsedPrefsKeys();
   }
 
   @override
