@@ -587,7 +587,7 @@ class ResearchPricesProvider with ChangeNotifier {
   Map _jsonInsertConcurrentPrices({
     required int productCode,
     required String priceLookUp,
-    required String productName,
+    // required String productName,
     required double? priceRetail,
     required double? offerRetail,
     required double? priceWhole,
@@ -601,7 +601,7 @@ class ResearchPricesProvider with ChangeNotifier {
       "ConcurrentCode": _selectedConcurrent!.ConcurrentCode,
       "ProductPackingCode": productCode,
       "PriceLookUp": priceLookUp,
-      "ProductName": productName,
+      // "ProductName": productName,
       // "PriceRetail": 1, //somente para teste
       // "OfferRetail": 2, //somente para teste
       // "PriceWhole": 3, //somente para teste
@@ -677,7 +677,6 @@ class ResearchPricesProvider with ChangeNotifier {
     Map jsonInsertConcurrentPrices = _jsonInsertConcurrentPrices(
       productCode: productCode,
       priceLookUp: priceLookUp,
-      productName: productName,
       priceRetail: priceRetail,
       offerRetail: offerRetail,
       priceWhole: priceWhole,
