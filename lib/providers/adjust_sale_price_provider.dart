@@ -128,7 +128,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
         enterpriseCode: enterpriseCode,
         searchValue: searchValue,
         configurationsProvider: configurationsProvider,
-        routineTypeInt: 0,
+        routineTypeInt: 8,
       );
 
       _errorMessage = SoapRequestResponse.errorMessage;
