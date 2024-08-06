@@ -1,14 +1,15 @@
-import 'package:celta_inventario/models/adjust_sale_price/adjust_sale_price.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import '../../../../models/adjust_sale_price/adjust_sale_price.dart';
+import '../../../../models/enterprise/enterprise.dart';
 import '../../../../models/soap/soap.dart';
-import '../../../../providers/providers.dart';
 
 class ReplicationParameters extends StatefulWidget {
   final GetProductJsonModel product;
+  final EnterpriseModel enterprise;
   const ReplicationParameters({
     required this.product,
+    required this.enterprise,
     super.key,
   });
 
@@ -17,10 +18,29 @@ class ReplicationParameters extends StatefulWidget {
 }
 
 class _ReplicationParametersState extends State<ReplicationParameters> {
+  List<ReplicationModel> replicationParameters = [
+    ReplicationModel(replicationName: ReplicationNames.AgrupamentoOperacional)
+  ];
+
   @override
   Widget build(BuildContext context) {
-    AdjustSalePriceProvider adjustSalePriceProvider =
-        Provider.of(context, listen: false);
+    if (widget.product.isFatherOfGrate == true) {
+      replicationParameters
+          .add(ReplicationModel(replicationName: ReplicationNames.Grade));
+    }
+    if (widget.product.inClass == true) {
+      replicationParameters.add(
+        ReplicationModel(
+          replicationName: ReplicationNames.Classe,
+          selected:
+              widget.product.markUpdateClassInAdjustSalePriceIndividual == true,
+        ),
+      );
+    }
+    if (widget.product.alterationPriceForAllPackings == true) {
+      replicationParameters
+          .add(ReplicationModel(replicationName: ReplicationNames.Embalagens));
+    }
 
     return Column(
       children: [
@@ -33,7 +53,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
           ),
         ),
         Column(
-          children: adjustSalePriceProvider.replicationParameters
+          children: replicationParameters
               .map(
                 (e) => InkWell(
                   onTap: () {
