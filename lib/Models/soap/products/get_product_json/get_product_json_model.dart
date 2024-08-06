@@ -36,6 +36,10 @@ class GetProductJsonModel {
   double? realLiquidCost;
   double? fiscalCost;
   double? fiscalLiquidCost;
+  bool? markUpdateClassInAdjustSalePriceIndividual;
+  bool? inClass;
+  bool? isFatherOfGrate;
+  bool? alterationPriceForAllPackings;
   List<StockByEnterpriseAssociatedsModel>? stockByEnterpriseAssociateds;
   List<StocksModel>? stocks;
   LastBuyEntranceModel? lastBuyEntrance;
@@ -75,6 +79,10 @@ class GetProductJsonModel {
     required this.stockByEnterpriseAssociateds,
     required this.stocks,
     required this.lastBuyEntrance,
+    required this.markUpdateClassInAdjustSalePriceIndividual,
+    required this.inClass,
+    required this.isFatherOfGrate,
+    required this.alterationPriceForAllPackings,
   });
 
   GetProductJsonModel.fromJson(Map<String, dynamic> json) {
@@ -109,6 +117,13 @@ class GetProductJsonModel {
     realLiquidCost = json['RealLiquidCost'];
     fiscalCost = json['FiscalCost'];
     fiscalLiquidCost = json['FiscalLiquidCost'];
+    markUpdateClassInAdjustSalePriceIndividual =
+        json["markUpdateClassInAdjustSalePriceIndividual"] ?? false;
+    inClass = json["inClass"] ?? false;
+    isFatherOfGrate = json["isFatherOfGrate"] ?? false;
+    alterationPriceForAllPackings =
+        json["alterationPriceForAllPackings"] ?? false;
+
     if (json['StockByEnterpriseAssociateds'] != null) {
       stockByEnterpriseAssociateds = <StockByEnterpriseAssociatedsModel>[];
       json['StockByEnterpriseAssociateds'].forEach((v) {
@@ -163,6 +178,11 @@ class GetProductJsonModel {
     data['RealLiquidCost'] = this.realLiquidCost;
     data['FiscalCost'] = this.fiscalCost;
     data['FiscalLiquidCost'] = this.fiscalLiquidCost;
+    data["markUpdateClassInAdjustSalePriceIndividual"] =
+        this.markUpdateClassInAdjustSalePriceIndividual;
+    data["inClass"] = this.inClass;
+    data["isFatherOfGrate"] = this.isFatherOfGrate;
+    data["alterationPriceForAllPackings"] = this.alterationPriceForAllPackings;
     if (this.stockByEnterpriseAssociateds != null) {
       data['StockByEnterpriseAssociateds'] =
           this.stockByEnterpriseAssociateds!.map((v) => v.toJson()).toList();
