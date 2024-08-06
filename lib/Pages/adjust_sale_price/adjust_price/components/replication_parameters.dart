@@ -2,10 +2,15 @@ import 'package:celta_inventario/models/adjust_sale_price/adjust_sale_price.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../models/soap/soap.dart';
 import '../../../../providers/providers.dart';
 
 class ReplicationParameters extends StatefulWidget {
-  const ReplicationParameters({super.key});
+  final GetProductJsonModel product;
+  const ReplicationParameters({
+    required this.product,
+    super.key,
+  });
 
   @override
   State<ReplicationParameters> createState() => _ReplicationParametersState();
