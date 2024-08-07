@@ -42,7 +42,7 @@ class _AdjustSalePriceProductsPageState
         children: [
           Scaffold(
             appBar: AppBar(
-              title: const Text("Varejo"),
+              title: const Text("Produtos"),
             ),
             body: Column(
               mainAxisSize: MainAxisSize.max,
