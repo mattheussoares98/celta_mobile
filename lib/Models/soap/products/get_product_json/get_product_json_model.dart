@@ -118,11 +118,11 @@ class GetProductJsonModel {
     fiscalCost = json['FiscalCost'];
     fiscalLiquidCost = json['FiscalLiquidCost'];
     markUpdateClassInAdjustSalePriceIndividual =
-        json["markUpdateClassInAdjustSalePriceIndividual"] ?? false;
-    inClass = json["inClass"] ?? false;
-    isFatherOfGrate = json["isFatherOfGrate"] ?? false;
+        json["MarkUpdateClassInAdjustSalePriceIndividual"] ?? false;
+    inClass = json["InClass"] ?? false;
+    isFatherOfGrate = json["IsFatherOfGrate"] ?? false;
     alterationPriceForAllPackings =
-        json["alterationPriceForAllPackings"] ?? false;
+        json["AlterationPriceForAllPackings"] ?? false;
 
     if (json['StockByEnterpriseAssociateds'] != null) {
       stockByEnterpriseAssociateds = <StockByEnterpriseAssociatedsModel>[];

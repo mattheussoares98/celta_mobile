@@ -42,6 +42,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
       replicationParameters
           .add(ReplicationModel(replicationName: ReplicationNames.Embalagens));
     }
+    setState(() {});
   }
 
   @override
