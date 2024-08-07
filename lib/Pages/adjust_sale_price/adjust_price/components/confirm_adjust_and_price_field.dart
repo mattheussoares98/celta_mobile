@@ -3,16 +3,21 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/components.dart';
-import '../../../../models/adjust_sale_price/adjust_sale_price.dart';
 import '../../../../models/enterprise/enterprise.dart';
 import '../../../../models/soap/soap.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 
 class PriceFieldAndConfirmAdjustButton extends StatefulWidget {
-  final List<ReplicationModel> replicationParameters;
+  final bool updatePriceClass;
+  final bool updatePackings;
+  final bool updateEnterpriseGroup;
+  final bool updateGrate;
   const PriceFieldAndConfirmAdjustButton({
-    required this.replicationParameters,
+    required this.updatePriceClass,
+    required this.updatePackings,
+    required this.updateEnterpriseGroup,
+    required this.updateGrate,
     super.key,
   });
 
@@ -56,6 +61,10 @@ class _PriceFieldAndConfirmAdjustButtonState
               effectuationDateOffer: DateTime.now(),
               effectuationDatePrice: DateTime.now(),
               endDateOffer: DateTime.now(),
+              updatePriceClass: widget.updatePriceClass,
+              updatePackings: widget.updatePackings,
+              updateEnterpriseGroup: widget.updateEnterpriseGroup,
+              updateGrate: widget.updateGrate,
             );
 
             if (adjustSalePriceProvider.errorMessage == "") {

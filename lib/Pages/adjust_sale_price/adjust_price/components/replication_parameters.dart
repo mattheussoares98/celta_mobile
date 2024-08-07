@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/adjust_sale_price/adjust_sale_price.dart';
-import '../../../../models/enterprise/enterprise.dart';
-import '../../../../models/soap/soap.dart';
 
 class ReplicationParameters extends StatefulWidget {
-  final GetProductJsonModel product;
-  final EnterpriseModel enterprise;
+  final List<ReplicationModel> replicationParameters;
   const ReplicationParameters({
-    required this.product,
-    required this.enterprise,
+    required this.replicationParameters,
     super.key,
   });
 
@@ -18,30 +14,8 @@ class ReplicationParameters extends StatefulWidget {
 }
 
 class _ReplicationParametersState extends State<ReplicationParameters> {
-  List<ReplicationModel> replicationParameters = [
-    ReplicationModel(replicationName: ReplicationNames.AgrupamentoOperacional)
-  ];
-
   @override
   Widget build(BuildContext context) {
-    if (widget.product.isFatherOfGrate == true) {
-      replicationParameters
-          .add(ReplicationModel(replicationName: ReplicationNames.Grade));
-    }
-    if (widget.product.inClass == true) {
-      replicationParameters.add(
-        ReplicationModel(
-          replicationName: ReplicationNames.Classe,
-          selected:
-              widget.product.markUpdateClassInAdjustSalePriceIndividual == true,
-        ),
-      );
-    }
-    if (widget.product.alterationPriceForAllPackings == true) {
-      replicationParameters
-          .add(ReplicationModel(replicationName: ReplicationNames.Embalagens));
-    }
-
     return Column(
       children: [
         const Divider(),
@@ -53,7 +27,7 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
           ),
         ),
         Column(
-          children: replicationParameters
+          children: widget.replicationParameters
               .map(
                 (e) => InkWell(
                   onTap: () {

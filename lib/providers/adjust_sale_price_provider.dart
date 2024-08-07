@@ -19,15 +19,6 @@ class AdjustSalePriceProvider with ChangeNotifier {
   List<ScheduleModel> _schedules = [];
   List<ScheduleModel> get schedules => [..._schedules];
 
-  List<ReplicationModel> _replicationParameters = [
-    ReplicationModel(replicationName: ReplicationNames.Embalagens),
-    ReplicationModel(replicationName: ReplicationNames.AgrupamentoOperacional),
-    ReplicationModel(replicationName: ReplicationNames.Classe),
-    ReplicationModel(replicationName: ReplicationNames.Grade),
-  ];
-  List<ReplicationModel> get replicationParameters =>
-      [..._replicationParameters];
-
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
@@ -96,15 +87,8 @@ class AdjustSalePriceProvider with ChangeNotifier {
     _errorMessageSchedule = "";
     _unselectAllPriceTypes();
     _unselectAllSaleTypes();
-    _unselectAllReplicationParameters();
     initialDate = null;
     finishDate = null;
-  }
-
-  void _unselectAllReplicationParameters() {
-    for (var replicationParameter in _replicationParameters) {
-      replicationParameter.selected = false;
-    }
   }
 
   void clearDataOnCloseProductsScreen() {
@@ -207,22 +191,20 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required DateTime? effectuationDatePrice,
     required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
+    required bool updatePriceClass,
+    required bool updatePackings,
+    required bool updateEnterpriseGroup,
+    required bool updateGrate,
   }) {
-    bool getReplicationIsSelected(ReplicationNames replicationName) =>
-        _replicationParameters
-            .firstWhere((e) => e.replicationName == replicationName)
-            .selected;
-
     final Map<String, dynamic> jsonRequest = {
       "CrossIdentity": UserData.crossIdentity,
       "EnterpriseCode": enterpriseCode,
       "ProductCode": productCode,
       "ProductPackingCode": productPackingCode,
-      "UpdatePriceClass": getReplicationIsSelected(ReplicationNames.Classe),
-      "UpdatePackings": getReplicationIsSelected(ReplicationNames.Embalagens),
-      "UpdateEnterpriseGroup":
-          getReplicationIsSelected(ReplicationNames.AgrupamentoOperacional),
-      "UpdateGrate": getReplicationIsSelected(ReplicationNames.Grade),
+      "UpdatePriceClass": updatePriceClass,
+      "UpdatePackings": updatePackings,
+      "UpdateEnterpriseGroup": updateEnterpriseGroup,
+      "UpdateGrate": updateGrate,
       "SaleTypeInt": _saleTypes
           .firstWhere((e) => e.selected == true)
           .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
@@ -253,6 +235,10 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required DateTime effectuationDatePrice,
     required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
+    required bool updatePriceClass,
+    required bool updatePackings,
+    required bool updateEnterpriseGroup,
+    required bool updateGrate,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -267,6 +253,10 @@ class AdjustSalePriceProvider with ChangeNotifier {
         effectuationDatePrice: effectuationDatePrice,
         effectuationDateOffer: effectuationDateOffer,
         endDateOffer: endDateOffer,
+        updatePriceClass: updatePriceClass,
+        updatePackings: updatePackings,
+        updateEnterpriseGroup: updateEnterpriseGroup,
+        updateGrate: updateGrate,
       );
 
       SoapRequest.soapPost(
