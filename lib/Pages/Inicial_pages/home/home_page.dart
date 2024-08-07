@@ -140,9 +140,9 @@ class _HomePageState extends State<HomePage> {
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
-              routine: 'Conferência de produtos'.toUpperCase(),
+              routine: 'Conferência de produtos (expedição)'.toUpperCase(),
               route: APPROUTES.ENTERPRISE,
-              nextRoute: APPROUTES.PRICE_CONFERENCE,
+              nextRoute: APPROUTES.EXPEDITION_CONTROLS,
               context: context,
               isNew: true,
             ),

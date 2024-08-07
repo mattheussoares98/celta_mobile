@@ -1,3 +1,4 @@
+import 'package:celta_inventario/pages/products_conference/expedition_controls_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -193,6 +194,8 @@ class MyApp extends StatelessWidget {
           APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
           APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
           APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
+          APPROUTES.EXPEDITION_CONTROLS: (ctx) =>
+              const ExpeditionControlsPage(),
           APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
           APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
           APPROUTES.SALE_REQUEST_MODEL: (ctx) => const RequestsPage(),
