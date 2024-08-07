@@ -9,15 +9,7 @@ import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 
 class PriceFieldAndConfirmAdjustButton extends StatefulWidget {
-  final bool updatePriceClass;
-  final bool updatePackings;
-  final bool updateEnterpriseGroup;
-  final bool updateGrate;
   const PriceFieldAndConfirmAdjustButton({
-    required this.updatePriceClass,
-    required this.updatePackings,
-    required this.updateEnterpriseGroup,
-    required this.updateGrate,
     super.key,
   });
 
@@ -61,10 +53,6 @@ class _PriceFieldAndConfirmAdjustButtonState
               effectuationDateOffer: DateTime.now(),
               effectuationDatePrice: DateTime.now(),
               endDateOffer: DateTime.now(),
-              updatePriceClass: widget.updatePriceClass,
-              updatePackings: widget.updatePackings,
-              updateEnterpriseGroup: widget.updateEnterpriseGroup,
-              updateGrate: widget.updateGrate,
             );
 
             if (adjustSalePriceProvider.errorMessage == "") {

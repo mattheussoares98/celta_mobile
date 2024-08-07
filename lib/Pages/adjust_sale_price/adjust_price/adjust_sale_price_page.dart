@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../models/adjust_sale_price/adjust_sale_price.dart';
 import '../../../models/enterprise/enterprise.dart';
 import '../../../models/soap/products/products.dart';
 import '../../../providers/providers.dart';
@@ -17,38 +16,22 @@ class AdjustSalePricePage extends StatefulWidget {
 }
 
 class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
-  List<ReplicationModel> replicationParameters = [
-    ReplicationModel(replicationName: ReplicationNames.AgrupamentoOperacional)
-  ];
-
-  void _addPermittedReplicationParameters() async {
-    await Future.delayed(Duration.zero);
-    final Map arguments = ModalRoute.of(context)!.settings.arguments! as Map;
-    final GetProductJsonModel product = arguments["product"];
-
-    if (product.isFatherOfGrate == true) {
-      replicationParameters
-          .add(ReplicationModel(replicationName: ReplicationNames.Grade));
-    }
-    if (product.inClass == true) {
-      replicationParameters.add(
-        ReplicationModel(
-          replicationName: ReplicationNames.Classe,
-          selected: product.markUpdateClassInAdjustSalePriceIndividual == true,
-        ),
-      );
-    }
-    if (product.alterationPriceForAllPackings == true) {
-      replicationParameters
-          .add(ReplicationModel(replicationName: ReplicationNames.Embalagens));
-    }
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
     _addPermittedReplicationParameters();
+  }
+
+  void _addPermittedReplicationParameters() async {
+    await Future.delayed(Duration.zero);
+
+    AdjustSalePriceProvider adjustSalePriceProvider =
+        Provider.of(context, listen: false);
+    final Map arguments = ModalRoute.of(context)!.settings.arguments! as Map;
+    final EnterpriseModel enterprise = arguments["enterprise"];
+    final GetProductJsonModel product = arguments["product"];
+    adjustSalePriceProvider.addPermittedReplicationParameters(
+        product, enterprise);
   }
 
   @override
@@ -82,7 +65,8 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                       SaleTypeRadios(enterpriseModel: enterprise),
                       const PriceTypeRadios(),
                       ReplicationParameters(
-                        replicationParameters: replicationParameters,
+                        replicationParameters:
+                            adjustSalePriceProvider.replicationParameters,
                       ),
                       InitialAndFinishDates(
                           initialDate: adjustSalePriceProvider.initialDate ==
@@ -120,17 +104,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                               adjustSalePriceProvider.finishDate = newDate;
                             }
                           }),
-                      PriceFieldAndConfirmAdjustButton(
-                        updatePriceClass: _getReplicationIsSelected(
-                            replicationParameters, ReplicationNames.Classe),
-                        updatePackings: _getReplicationIsSelected(
-                            replicationParameters, ReplicationNames.Embalagens),
-                        updateEnterpriseGroup: _getReplicationIsSelected(
-                            replicationParameters,
-                            ReplicationNames.AgrupamentoOperacional),
-                        updateGrate: _getReplicationIsSelected(
-                            replicationParameters, ReplicationNames.Grade),
-                      ),
+                      const PriceFieldAndConfirmAdjustButton(),
                     ],
                   ),
                 ),
@@ -144,17 +118,5 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
         ],
       ),
     );
-  }
-}
-
-bool _getReplicationIsSelected(List<ReplicationModel> replicationParameters,
-    ReplicationNames replicationName) {
-  int index = replicationParameters
-      .indexWhere((e) => e.replicationName == replicationName);
-
-  if (index != -1) {
-    return replicationParameters[index].selected;
-  } else {
-    return false;
   }
 }

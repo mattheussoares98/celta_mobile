@@ -34,6 +34,15 @@ class AdjustSalePriceProvider with ChangeNotifier {
   ];
   List<PriceTypeModel> get priceTypes => [..._priceTypes];
 
+  List<ReplicationModel> _replicationParameters = [
+    ReplicationModel(replicationName: ReplicationNames.Embalagens),
+    ReplicationModel(replicationName: ReplicationNames.AgrupamentoOperacional),
+    ReplicationModel(replicationName: ReplicationNames.Classe),
+    ReplicationModel(replicationName: ReplicationNames.Grade),
+  ];
+  List<ReplicationModel> get replicationParameters =>
+      [..._replicationParameters];
+
   DateTime? _initialDate;
   DateTime? get initialDate => _initialDate;
   set initialDate(DateTime? newDate) => _initialDate = newDate;
@@ -87,8 +96,13 @@ class AdjustSalePriceProvider with ChangeNotifier {
     _errorMessageSchedule = "";
     _unselectAllPriceTypes();
     _unselectAllSaleTypes();
+    _clearReplicationParameters();
     initialDate = null;
     finishDate = null;
+  }
+
+  void _clearReplicationParameters() {
+    _replicationParameters.clear();
   }
 
   void clearDataOnCloseProductsScreen() {
@@ -183,6 +197,41 @@ class AdjustSalePriceProvider with ChangeNotifier {
         .selected;
   }
 
+  void addPermittedReplicationParameters(
+    GetProductJsonModel product,
+    EnterpriseModel
+        enterprise, //adicionar agrupamento operacional assim que for corrigido pra retornar na API
+  ) {
+    if (product.isFatherOfGrate == true) {
+      _replicationParameters
+          .add(ReplicationModel(replicationName: ReplicationNames.Grade));
+    }
+    if (product.inClass == true) {
+      _replicationParameters.add(
+        ReplicationModel(
+          replicationName: ReplicationNames.Classe,
+          selected: product.markUpdateClassInAdjustSalePriceIndividual == true,
+        ),
+      );
+    }
+    if (product.alterationPriceForAllPackings == true) {
+      _replicationParameters
+          .add(ReplicationModel(replicationName: ReplicationNames.Embalagens));
+    }
+    notifyListeners();
+  }
+
+  bool _getReplicationIsSelected(ReplicationNames replicationName) {
+    int index = _replicationParameters
+        .indexWhere((e) => e.replicationName == replicationName);
+
+    if (index != -1) {
+      return _replicationParameters[index].selected;
+    } else {
+      return false;
+    }
+  }
+
   Map<String, dynamic> _getJsonRequest({
     required int enterpriseCode,
     required int productCode,
@@ -191,20 +240,17 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required DateTime? effectuationDatePrice,
     required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
-    required bool updatePriceClass,
-    required bool updatePackings,
-    required bool updateEnterpriseGroup,
-    required bool updateGrate,
   }) {
     final Map<String, dynamic> jsonRequest = {
       "CrossIdentity": UserData.crossIdentity,
       "EnterpriseCode": enterpriseCode,
       "ProductCode": productCode,
       "ProductPackingCode": productPackingCode,
-      "UpdatePriceClass": updatePriceClass,
-      "UpdatePackings": updatePackings,
-      "UpdateEnterpriseGroup": updateEnterpriseGroup,
-      "UpdateGrate": updateGrate,
+      "UpdatePriceClass": _getReplicationIsSelected(ReplicationNames.Classe),
+      "UpdatePackings": _getReplicationIsSelected(ReplicationNames.Embalagens),
+      "UpdateEnterpriseGroup":
+          _getReplicationIsSelected(ReplicationNames.AgrupamentoOperacional),
+      "UpdateGrate": _getReplicationIsSelected(ReplicationNames.Grade),
       "SaleTypeInt": _saleTypes
           .firstWhere((e) => e.selected == true)
           .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
@@ -235,10 +281,6 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required DateTime effectuationDatePrice,
     required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
-    required bool updatePriceClass,
-    required bool updatePackings,
-    required bool updateEnterpriseGroup,
-    required bool updateGrate,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -253,10 +295,6 @@ class AdjustSalePriceProvider with ChangeNotifier {
         effectuationDatePrice: effectuationDatePrice,
         effectuationDateOffer: effectuationDateOffer,
         endDateOffer: endDateOffer,
-        updatePriceClass: updatePriceClass,
-        updatePackings: updatePackings,
-        updateEnterpriseGroup: updateEnterpriseGroup,
-        updateGrate: updateGrate,
       );
 
       SoapRequest.soapPost(
