@@ -7,6 +7,7 @@ class ImageComponent {
     required String route,
     required BuildContext context,
     String? nextRoute,
+    bool? isNew,
   }) {
     return InkWell(
       focusColor: Colors.white.withOpacity(0),
@@ -29,6 +30,27 @@ class ImageComponent {
               fit: BoxFit.contain,
               alignment: Alignment.topCenter,
               height: double.infinity,
+            ),
+            if(isNew == true)
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),
+                  color: Colors.red,
+                ),
+                padding: const EdgeInsets.all(4),
+                child: const Text(
+                  'NOVO',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
             ),
             Positioned(
               bottom: 0,
