@@ -78,9 +78,12 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
                   },
                   visualDensity: VisualDensity.compact,
                 ),
-                Text(
-                  adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
-                  style: const TextStyle(fontWeight: FontWeight.w400),
+                Expanded(
+                  child: Text(
+                    adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
