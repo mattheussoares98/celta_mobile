@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ResponsiveItems {
   static const headline6 = 40.0;
-  static const appBarToolbarHeight = 60.0;
+  static const appBarToolbarHeight = 40.0;
 
   static int getItensPerLine(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
