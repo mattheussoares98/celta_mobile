@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 import '../utils/utils.dart';
 
 ThemeData theme() {
+  const appBarText = Colors.white;
+  const text = Colors.white;
+  const headline6 = Colors.black;
+  const headline2 = Colors.black;
+  const principalColor = Colors.green;
+  const elevatedButtonTextColor = Colors.white;
+
   return ThemeData(
     useMaterial3: true,
-    primaryColor: ColorsTheme.principalColor,
+    primaryColor: principalColor,
     inputDecorationTheme: const InputDecorationTheme(
       //usado no dropdown
       enabledBorder: UnderlineInputBorder(
@@ -19,11 +26,11 @@ ThemeData theme() {
     cardTheme: CardTheme(
       color: Colors.grey[50],
       surfaceTintColor: Colors.amber[100],
-      shadowColor: ColorsTheme.principalColor,
+      shadowColor: principalColor,
       shape: const RoundedRectangleBorder(
         side: BorderSide(
           width: 1,
-          color: ColorsTheme.principalColor,
+          color: principalColor,
         ),
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
@@ -31,30 +38,30 @@ ThemeData theme() {
       ),
       elevation: 5,
     ),
-    secondaryHeaderColor: ColorsTheme.text,
+    secondaryHeaderColor: text,
     appBarTheme: ThemeData().appBarTheme.copyWith(
           actionsIconTheme: const IconThemeData(
             color: Colors.white,
           ),
           iconTheme: const IconThemeData(color: Colors.white),
           toolbarHeight: ResponsiveItems.appBarToolbarHeight,
-          backgroundColor: ColorsTheme.principalColor,
+          backgroundColor: principalColor,
           centerTitle: true,
           titleTextStyle: const TextStyle(
             letterSpacing: 0.7,
-            color: ColorsTheme.appBarText,
+            color: appBarText,
             fontFamily: 'BebasNeue',
             fontSize: 30,
           ),
         ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        foregroundColor: ColorsTheme.text,
-        backgroundColor: ColorsTheme.principalColor,
+        foregroundColor: text,
+        backgroundColor: principalColor,
         textStyle: const TextStyle(
           fontWeight: FontWeight.bold,
           fontFamily: 'OpenSans',
-          color: ColorsTheme.elevatedButtonTextColor,
+          color: elevatedButtonTextColor,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
@@ -65,14 +72,14 @@ ThemeData theme() {
       backgroundColor: Colors.white,
       shadowColor: Colors.white,
       dividerColor: Colors.amberAccent,
-      headerBackgroundColor: ColorsTheme.principalColor,
+      headerBackgroundColor: principalColor,
       surfaceTintColor: Colors.white,
       headerForegroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme(
       brightness: Brightness.light,
-      primary: ColorsTheme.principalColor,
-      onPrimary: ColorsTheme.principalColor,
+      primary: principalColor,
+      onPrimary: principalColor,
       secondary: const Color.fromARGB(255, 92, 152, 94),
       onSecondary: const Color.fromARGB(255, 92, 152, 94),
       error: Colors.red,
@@ -85,28 +92,28 @@ ThemeData theme() {
           titleLarge: const TextStyle(
             letterSpacing: 1,
             fontWeight: FontWeight.bold,
-            color: ColorsTheme.headline6,
+            color: headline6,
             fontSize: ResponsiveItems.headline6,
             fontFamily: 'BebasNeue',
           ),
           displayMedium: const TextStyle(
             // letterSpacing: 1,
             fontWeight: FontWeight.bold,
-            color: ColorsTheme.headline2,
+            color: headline2,
             fontSize: 17,
             fontFamily: 'OpenSans',
           ),
           bodyLarge: const TextStyle(
             fontFamily: 'OpenSans',
-            color: ColorsTheme.headline6,
+            color: headline6,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
         ),
     colorScheme: ThemeData().colorScheme.copyWith(
-          primary: ColorsTheme.principalColor,
-          secondary: ColorsTheme.text,
-          onSecondary: ColorsTheme.principalColor,
+          primary: principalColor,
+          secondary: text,
+          onSecondary: principalColor,
         ),
   );
 }

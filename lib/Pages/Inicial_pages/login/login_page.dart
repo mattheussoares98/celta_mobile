@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/utils.dart';
 import 'auth_form.dart';
 
 class LoginPage extends StatefulWidget {
@@ -96,7 +95,7 @@ class _LoginPageState extends State<LoginPage>
                               'Celta mobile',
                               style: TextStyle(
                                 fontSize: 100,
-                                color: ColorsTheme.text,
+                                color: Colors.white,
                                 fontFamily: 'BebasNeue',
                               ),
                             ),
