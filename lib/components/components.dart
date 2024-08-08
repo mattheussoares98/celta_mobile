@@ -1,4 +1,5 @@
 export 'costs_stocks_last_buy/costs_stocks_last_buy.dart';
+export './product_informations/product_informations.dart';
 export 'addOrSubtractButton.dart';
 export 'add_subtract_or_anull_widget.dart';
 export 'enterprise_items.dart';
@@ -11,7 +12,6 @@ export 'searchAgain.dart';
 export 'search_widget.dart';
 export 'loading_widget.dart';
 export 'show_alert_dialog.dart';
-export 'show_all_stocks.dart';
 export 'show_snackbar_message.dart';
 export 'title_and_subtitle.dart';
 export 'address/address_component.dart';
