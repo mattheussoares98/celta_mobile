@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/sale_request/sale_request.dart';
+import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
@@ -84,11 +84,11 @@ class _ProductsItemsState extends State<ProductsItems> {
   selectIndexAndFocus({
     required SaleRequestProvider saleRequestProvider,
     required int index,
-    required SaleRequestProductsModel product,
+    required GetProductJsonModel product,
   }) {
     widget.consultedProductController.text = "";
 
-    if (product.RetailPracticedPrice == 0 && product.WholePracticedPrice == 0) {
+    if (product.retailPracticedPrice == 0 && product.wholePracticedPrice == 0) {
       ShowSnackbarMessage.showMessage(
         message:
             "O preço de venda e atacado estão zerados! Utilize esse produto somente caso esteja utilizando modelo de pedido de vendas que utiliza o custo como preço!",
@@ -165,9 +165,9 @@ class _ProductsItemsState extends State<ProductsItems> {
     required int index,
     required ConfigurationsProvider configurationsProvider,
   }) {
-    SaleRequestProductsModel product = saleRequestProvider.products[index];
+    GetProductJsonModel product = saleRequestProvider.products[index];
     double _totalItensInCart = saleRequestProvider.getTotalItensInCart(
-      ProductPackingCode: product.ProductPackingCode,
+      ProductPackingCode: product.productPackingCode!,
       enterpriseCode: widget.enterpriseCode.toString(),
     );
 
@@ -199,49 +199,41 @@ class _ProductsItemsState extends State<ProductsItems> {
             children: [
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
-                subtitle: product.PLU.toString(),
+                subtitle: product.plu.toString(),
                 otherWidget: ShowAllStocksWidget(
                   productModel: product,
-                  hasAssociatedsStock: product.StorageAreaAddress != "" ||
-                      (product.StockByEnterpriseAssociateds != null &&
-                          product.StockByEnterpriseAssociateds!.length > 0),
-                  hasStocks:
-                      product.Stocks != null && product.Stocks!.length > 0,
                   context: context,
-                  stockByEnterpriseAssociatedsLength:
-                      product.StockByEnterpriseAssociateds?.length ?? 0,
-                  stocksLength: product.Stocks?.length ?? 0,
                 ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Produto",
                 subtitle:
-                    product.Name.toString() + " (${product.PackingQuantity})",
+                    product.name.toString() + " (${product.packingQuantity})",
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço de venda",
                 subtitle: ConvertString.convertToBRL(
-                  product.Value,
+                  product.value,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Preço de atacado",
                 subtitle: ConvertString.convertToBRL(
-                  product.WholePracticedPrice,
+                  product.wholePracticedPrice,
                 ),
                 subtitleColor: Colors.black,
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Qtd mínima p/ atacado",
                 subtitle: ConvertString.convertToBrazilianNumber(
-                  product.MinimumWholeQuantity.toString(),
+                  product.minimumWholeQuantity.toString(),
                 ),
               ),
               TitleAndSubtitle.titleAndSubtitle(
                 title: "Estoque de venda",
                 subtitle: ConvertString.convertToBrazilianNumber(
-                  product.BalanceStockSale.toString(),
+                  product.balanceStockSale.toString(),
                 ),
                 otherWidget: Icon(
                   _selectedIndex != index
@@ -252,7 +244,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 ),
               ),
               if (saleRequestProvider.alreadyContainsProduct(
-                ProductPackingCode: product.ProductPackingCode,
+                ProductPackingCode: product.productPackingCode!,
                 enterpriseCode: widget.enterpriseCode.toString(),
               ))
                 Row(
@@ -265,7 +257,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                             saleRequestProvider
                                 .getTotalItensInCart(
                                   ProductPackingCode:
-                                      product.ProductPackingCode,
+                                      product.productPackingCode!,
                                   enterpriseCode:
                                       widget.enterpriseCode.toString(),
                                 )
@@ -382,12 +374,12 @@ class _ProductsItemsState extends State<ProductsItems> {
         if (saleRequestProvider.productsCount == 1) {
           _selectedIndex = index;
         }
-    
+
         final startIndex = index * itensPerLine;
         final endIndex = (startIndex + itensPerLine <= productsCount)
             ? startIndex + itensPerLine
             : productsCount;
-    
+
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

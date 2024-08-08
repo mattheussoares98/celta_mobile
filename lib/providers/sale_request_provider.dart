@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../api/api.dart';
 import '../components/components.dart';
 import '../models/sale_request/sale_request.dart';
+import '../models/soap/soap.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -83,7 +84,7 @@ class SaleRequestProvider with ChangeNotifier {
   bool get isLoadingProducts => _isLoadingProducts;
   String _errorMessageProducts = "";
   String get errorMessageProducts => _errorMessageProducts;
-  List<SaleRequestProductsModel> _products = [];
+  List<GetProductJsonModel> _products = [];
   get products => [..._products];
   get productsCount => _products.length;
   var removedProduct;
@@ -174,7 +175,7 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   double getTotalItemValue({
-    required SaleRequestProductsModel product,
+    required GetProductJsonModel product,
     required TextEditingController consultedProductController,
     required String enterpriseCode,
   }) {
@@ -188,7 +189,7 @@ class SaleRequestProvider with ChangeNotifier {
       _quantityToAdd = 1;
     }
 
-    double _totalItemValue = _quantityToAdd * product.Value;
+    double _totalItemValue = _quantityToAdd * (product.value ?? 1);
 
     double? controllerInDouble = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
@@ -242,7 +243,7 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   dynamic addProductInCart({
-    required SaleRequestProductsModel product,
+    required GetProductJsonModel product,
     required TextEditingController consultedProductController,
     required String enterpriseCode,
   }) async {
@@ -255,42 +256,42 @@ class SaleRequestProvider with ChangeNotifier {
 
     SaleRequestCartProductsModel cartProductsModel =
         SaleRequestCartProductsModel(
-      ProductPackingCode: product.ProductPackingCode,
-      Name: product.Name,
+      ProductPackingCode: product.productPackingCode!,
+      Name: product.name!,
       Quantity: quantity,
-      Value: product.Value,
+      Value: product.value ?? 0,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
       DiscountValue: 0.0,
       ExpectedDeliveryDate: "\"${DateTime.now().toString()}\"",
-      ProductCode: product.ProductCode,
-      PLU: product.PLU,
-      PackingQuantity: product.PackingQuantity,
-      RetailPracticedPrice: product.RetailPracticedPrice,
-      RetailSalePrice: product.RetailSalePrice,
-      RetailOfferPrice: product.RetailOfferPrice,
-      WholePracticedPrice: product.WholePracticedPrice,
-      WholeSalePrice: product.WholeSalePrice,
-      WholeOfferPrice: product.WholeOfferPrice,
-      ECommercePracticedPrice: product.ECommercePracticedPrice,
-      ECommerceSalePrice: product.ECommerceSalePrice,
-      ECommerceOfferPrice: product.ECommerceOfferPrice,
-      MinimumWholeQuantity: product.MinimumWholeQuantity,
-      BalanceStockSale: product.BalanceStockSale,
-      StorageAreaAddress: product.StorageAreaAddress,
-      StockByEnterpriseAssociateds: product.StockByEnterpriseAssociateds,
+      ProductCode: product.productCode!,
+      PLU: product.plu!,
+      PackingQuantity: product.packingQuantity ?? "0",
+      RetailPracticedPrice: product.retailPracticedPrice ?? 0,
+      RetailSalePrice: product.retailSalePrice ?? 0,
+      RetailOfferPrice: product.retailOfferPrice ?? 0,
+      WholePracticedPrice: product.wholePracticedPrice ?? 0,
+      WholeSalePrice: product.wholeSalePrice ?? 0,
+      WholeOfferPrice: product.wholeOfferPrice ?? 0,
+      ECommercePracticedPrice: product.eCommercePracticedPrice ?? 0,
+      ECommerceSalePrice: product.eCommerceSalePrice ?? 0,
+      ECommerceOfferPrice: product.eCommerceOfferPrice ?? 0,
+      MinimumWholeQuantity: product.minimumWholeQuantity ?? 0,
+      BalanceStockSale: product.balanceStockSale ?? 0,
+      StorageAreaAddress: product.storageAreaAddress,
+      StockByEnterpriseAssociateds: product.stockByEnterpriseAssociateds,
     );
 
     if (alreadyContainsProduct(
-      ProductPackingCode: product.ProductPackingCode,
+      ProductPackingCode: product.productPackingCode!,
       enterpriseCode: enterpriseCode,
     )) {
       int index = _cartProducts[enterpriseCode]!.indexWhere((element) =>
-          element.ProductPackingCode == product.ProductPackingCode);
+          element.ProductPackingCode == product.productPackingCode);
 
       _cartProducts[enterpriseCode]![index].Quantity += quantity;
-      _cartProducts[enterpriseCode]![index].Value = product.Value;
+      _cartProducts[enterpriseCode]![index].Value = product.value ?? 0;
     } else {
       if (_cartProducts[enterpriseCode.toString()] != null) {
         _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);
@@ -819,7 +820,7 @@ class SaleRequestProvider with ChangeNotifier {
 
       _errorMessageProducts = SoapRequestResponse.errorMessage;
       if (_errorMessageProducts == "") {
-        SaleRequestProductsModel.responseAsStringToSaleRequestProductsModel(
+        GetProductJsonModel.responseAsStringToGetProductJsonModel(
           responseAsString: SoapRequestResponse.responseAsString,
           listToAdd: _products,
         );

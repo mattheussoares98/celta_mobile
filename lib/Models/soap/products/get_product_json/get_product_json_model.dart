@@ -43,6 +43,8 @@ class GetProductJsonModel {
   List<StockByEnterpriseAssociatedsModel>? stockByEnterpriseAssociateds;
   List<StocksModel>? stocks;
   LastBuyEntranceModel? lastBuyEntrance;
+  double quantity = 0;
+  double valueTyped = 0;
 
   GetProductJsonModel({
     required this.enterpriseCode,
@@ -83,6 +85,8 @@ class GetProductJsonModel {
     required this.inClass,
     required this.isFatherOfGrate,
     required this.alterationPriceForAllPackings,
+    required this.quantity,
+    required this.valueTyped,
   });
 
   GetProductJsonModel.fromJson(Map<String, dynamic> json) {
@@ -121,6 +125,8 @@ class GetProductJsonModel {
         json["MarkUpdateClassInAdjustSalePriceIndividual"] ?? false;
     inClass = json["InClass"] ?? false;
     isFatherOfGrate = json["IsFatherOfGrate"] ?? false;
+    quantity = json["quantity"] ?? 0;
+    valueTyped = json["valueTyped"] ?? 0;
     alterationPriceForAllPackings =
         json["AlterationPriceForAllPackings"] ?? false;
 
@@ -178,6 +184,8 @@ class GetProductJsonModel {
     data['RealLiquidCost'] = this.realLiquidCost;
     data['FiscalCost'] = this.fiscalCost;
     data['FiscalLiquidCost'] = this.fiscalLiquidCost;
+    data['quantity'] = this.quantity;
+    data['valueTyped'] = this.valueTyped;
     data["markUpdateClassInAdjustSalePriceIndividual"] =
         this.markUpdateClassInAdjustSalePriceIndividual;
     data["inClass"] = this.inClass;

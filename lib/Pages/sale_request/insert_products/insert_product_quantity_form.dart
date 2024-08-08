@@ -1,4 +1,4 @@
-import '../../../models/sale_request/sale_request.dart';
+import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ class InsertProductQuantityForm extends StatefulWidget {
   final TextEditingController consultedProductController;
   final double totalItensInCart;
   final double totalItemValue;
-  final SaleRequestProductsModel product;
+  final GetProductJsonModel product;
   final Function addProductInCart;
   final Function updateTotalItemValue;
   final int enterpriseCode;
@@ -32,8 +32,7 @@ class InsertProductQuantityForm extends StatefulWidget {
       _InsertProductQuantityFormState();
 }
 
-class _InsertProductQuantityFormState
-    extends State<InsertProductQuantityForm> {
+class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
   addItemInCart() {
     if (widget.consultedProductController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
