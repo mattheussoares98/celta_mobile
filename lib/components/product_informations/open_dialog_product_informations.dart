@@ -19,47 +19,9 @@ class _OpenDialogProductInformationsState
     extends State<OpenDialogProductInformations> {
   final PageController _pageController = PageController(initialPage: 0);
 
-  Widget selectTypeStockButton({
-    required String textButton,
-    required bool isAdvancePage,
-  }) {
-    return FittedBox(
-      child: TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          textStyle: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        onPressed: () {
-          if (isAdvancePage) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-          } else {
-            _pageController.previousPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-          }
-        },
-        child: FittedBox(
-          child: Text(
-            textButton,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     super.dispose();
-
     _pageController.dispose();
   }
 
