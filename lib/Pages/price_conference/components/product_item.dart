@@ -106,7 +106,7 @@ class _ProductItemState extends State<ProductItem> {
                 const SizedBox(width: 10),
                 Expanded(
                   flex: 2,
-                  child: CostsStocksLastBuyWidget(product: widget.product),
+                  child: OpenDialogProductInformations(product: widget.product),
                 )
               ],
             ),
