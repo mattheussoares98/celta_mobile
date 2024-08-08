@@ -17,7 +17,6 @@ class LastBuyEntrance extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Divider(),
         const Padding(
           padding: EdgeInsets.only(bottom: 10),
           child: Text(

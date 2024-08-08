@@ -68,6 +68,7 @@ class _OpenDialogProductInformationsState
                         product: widget.product,
                       ),
                       Costs(product: widget.product),
+                      LastBuyEntrance(product: widget.product),
                     ],
                   ),
                 ),
@@ -112,6 +113,14 @@ class _OpenDialogProductInformationsState
                           pageIndex: 2,
                           pageController: _pageController,
                           textButton: "Custos",
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Flexible(
+                        child: ActionButton(
+                          pageIndex: 3,
+                          pageController: _pageController,
+                          textButton: "Última compra",
                         ),
                       ),
                     ],
