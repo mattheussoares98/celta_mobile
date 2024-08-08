@@ -200,7 +200,7 @@ class _ProductsItemsState extends State<ProductsItems> {
               TitleAndSubtitle.titleAndSubtitle(
                 title: "PLU",
                 subtitle: product.plu.toString(),
-                otherWidget: ShowAllStocksWidget(
+                otherWidget: OpenDialogProductInformations(
                   product: product,
                 ),
               ),

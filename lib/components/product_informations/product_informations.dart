@@ -1,5 +1,5 @@
 export './action_button.dart';
 export './associated_stocks.dart';
 export './costs.dart';
-export './show_all_stocks.dart';
+export 'open_dialog_product_informations.dart';
 export './stocks.dart';

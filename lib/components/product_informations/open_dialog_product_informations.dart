@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 import '../../models/soap/soap.dart';
 import '../components.dart';
 
-class ShowAllStocksWidget extends StatefulWidget {
+class OpenDialogProductInformations extends StatefulWidget {
   final GetProductJsonModel product;
-  const ShowAllStocksWidget({
+  const OpenDialogProductInformations({
     required this.product,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ShowAllStocksWidget> createState() => _ShowAllStocksWidgetState();
+  State<OpenDialogProductInformations> createState() =>
+      _OpenDialogProductInformationsState();
 }
 
-class _ShowAllStocksWidgetState extends State<ShowAllStocksWidget> {
+class _OpenDialogProductInformationsState
+    extends State<OpenDialogProductInformations> {
   final PageController _pageController = PageController(initialPage: 0);
 
   Widget selectTypeStockButton({
