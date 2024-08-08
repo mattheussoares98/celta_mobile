@@ -112,18 +112,20 @@ class _ShowAllStocksWidgetState extends State<ShowAllStocksWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Flexible(
-                        child: selectTypeStockButton(
+                        child: ActionButton(
+                          pageIndex: 0,
+                          pageController: _pageController,
                           textButton: "Estoques",
-                          isAdvancePage: false,
                         ),
                       ),
                       const SizedBox(width: 5),
                       Flexible(
                         child: Column(
                           children: [
-                            selectTypeStockButton(
+                            ActionButton(
+                              pageIndex: 1,
+                              pageController: _pageController,
                               textButton: "Endereços",
-                              isAdvancePage: true,
                             ),
                             TextButton(
                               onPressed: () {
