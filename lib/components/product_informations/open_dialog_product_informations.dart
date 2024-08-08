@@ -67,6 +67,7 @@ class _OpenDialogProductInformationsState
                       AssociatedStocks(
                         product: widget.product,
                       ),
+                      Costs(product: widget.product),
                     ],
                   ),
                 ),
@@ -103,6 +104,14 @@ class _OpenDialogProductInformationsState
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Flexible(
+                        child: ActionButton(
+                          pageIndex: 2,
+                          pageController: _pageController,
+                          textButton: "Custos",
                         ),
                       ),
                     ],
