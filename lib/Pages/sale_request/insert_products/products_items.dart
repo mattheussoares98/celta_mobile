@@ -202,7 +202,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                 subtitle: product.plu.toString(),
                 otherWidget: ShowAllStocksWidget(
                   productModel: product,
-                  context: context,
                 ),
               ),
               TitleAndSubtitle.titleAndSubtitle(

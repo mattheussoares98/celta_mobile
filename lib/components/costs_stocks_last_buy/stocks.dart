@@ -25,7 +25,6 @@ class Stocks extends StatelessWidget {
               if (index == 0) {
                 return const Column(
                   children: [
-                    Divider(),
                     Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: Text(
