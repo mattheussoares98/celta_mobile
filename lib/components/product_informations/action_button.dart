@@ -13,25 +13,27 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        textStyle: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
-      onPressed: () {
-        pageController.animateToPage(
-          pageIndex,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.ease,
-        );
-      },
-      child: FittedBox(
-        child: Text(
-          textButton,
-          style: const TextStyle(
+    return Flexible(
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          textStyle: const TextStyle(
             color: Colors.white,
+          ),
+        ),
+        onPressed: () {
+          pageController.animateToPage(
+            pageIndex,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
+        },
+        child: FittedBox(
+          child: Text(
+            textButton,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
           ),
         ),
       ),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../models/soap/soap.dart';
 
-class AssociatedStocks extends StatelessWidget {
+class StockAddress extends StatelessWidget {
   final GetProductJsonModel product;
-  const AssociatedStocks({
+  const StockAddress({
     required this.product,
     super.key,
   });

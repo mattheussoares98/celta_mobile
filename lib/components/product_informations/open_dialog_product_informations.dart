@@ -63,64 +63,55 @@ class _OpenDialogProductInformationsState
                   child: PageView(
                     controller: _pageController,
                     children: [
-                      Stocks(product: widget.product),
-                      AssociatedStocks(
-                        product: widget.product,
-                      ),
                       Costs(product: widget.product),
+                      Stocks(product: widget.product),
+                      StockAddress(product: widget.product),
                       LastBuyEntrance(product: widget.product),
                     ],
                   ),
                 ),
                 actions: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Flexible(
-                        child: ActionButton(
-                          pageIndex: 0,
-                          pageController: _pageController,
-                          textButton: "Estoques",
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ActionButton(
+                            pageIndex: 0,
+                            pageController: _pageController,
+                            textButton: "Custos",
+                          ),
+                          const SizedBox(width: 3),
+                          ActionButton(
+                            pageIndex: 1,
+                            pageController: _pageController,
+                            textButton: "Estoques",
+                          ),
+                          const SizedBox(width: 3),
+                          ActionButton(
+                            pageIndex: 2,
+                            pageController: _pageController,
+                            textButton: "Endereços",
+                          ),
+                          const SizedBox(width: 3),
+                          ActionButton(
+                            pageIndex: 3,
+                            pageController: _pageController,
+                            textButton: "Última compra",
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 5),
-                      Flexible(
-                        child: Column(
-                          children: [
-                            ActionButton(
-                              pageIndex: 1,
-                              pageController: _pageController,
-                              textButton: "Endereços",
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                "Fechar",
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Flexible(
-                        child: ActionButton(
-                          pageIndex: 2,
-                          pageController: _pageController,
-                          textButton: "Custos",
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Flexible(
-                        child: ActionButton(
-                          pageIndex: 3,
-                          pageController: _pageController,
-                          textButton: "Última compra",
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          "Fechar",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
                         ),
                       ),
                     ],
