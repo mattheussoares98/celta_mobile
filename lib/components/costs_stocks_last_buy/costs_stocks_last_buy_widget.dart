@@ -1,6 +1,7 @@
-import 'package:celta_inventario/components/costs_stocks_last_buy/costs_stocks_last_buy.dart';
-import 'package:celta_inventario/models/soap/products/products.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/soap/soap.dart';
+import '../components.dart';
 
 class CostsStocksLastBuyWidget extends StatelessWidget {
   final GetProductJsonModel product;
