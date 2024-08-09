@@ -128,8 +128,7 @@ class _HomePageState extends State<HomePage> {
             ImageComponent.image(
               imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
               routine: 'Avaliação e sugestôes'.toUpperCase(),
-              route: APPROUTES.ENTERPRISE,
-              nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
+              route: APPROUTES.AVALIATION_AND_SUGGESTIONS,
               context: context,
               isNew: true,
             ),
