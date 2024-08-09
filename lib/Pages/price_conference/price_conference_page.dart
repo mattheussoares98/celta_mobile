@@ -88,9 +88,24 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                   ),
                 if (!priceConferenceProvider.isLoading &&
                     priceConferenceProvider.products.isNotEmpty)
-                  ProductItems(
-                    priceConferenceProvider: priceConferenceProvider,
-                    internalEnterpriseCode: enterprise.codigoInternoEmpresa,
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: priceConferenceProvider.products.length,
+                      itemBuilder: (context, index) {
+                        final product = priceConferenceProvider.products[index];
+                    
+                        return ProductItem(
+                          product: priceConferenceProvider.products[index],
+                          componentAfterProductInformations: SendToPrintButton(
+                            internalEnterpriseCode:
+                                enterprise.codigoInternoEmpresa,
+                            index: index,
+                            productPackingCode: product.productPackingCode!,
+                            etiquetaPendente: product.pendantPrintLabel,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 if (MediaQuery.of(context).viewInsets.bottom == 0 &&
                     priceConferenceProvider.productsCount > 1)
