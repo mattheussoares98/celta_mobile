@@ -231,12 +231,21 @@ class SaleRequestProvider with ChangeNotifier {
       quantity = 1;
     }
 
+    double productValue() {
+      if (product.wholePracticedPrice != null &&
+          product.wholePracticedPrice! > 0) {
+        return product.wholePracticedPrice!;
+      } else {
+        return product.retailPracticedPrice!;
+      }
+    }
+
     SaleRequestCartProductsModel cartProductsModel =
         SaleRequestCartProductsModel(
       ProductPackingCode: product.productPackingCode!,
       Name: product.name!,
       Quantity: quantity,
-      Value: product.value ?? 0,
+      Value: productValue(),
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
