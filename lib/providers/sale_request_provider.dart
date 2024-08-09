@@ -169,10 +169,7 @@ class SaleRequestProvider with ChangeNotifier {
   }) {
     double _quantityToAdd = consultedProductController.text.toDouble();
 
-    if (_quantityToAdd == 0) {
-      //quando o campo de quantidade estiver sem dados ou não conseguir
-      //converter a informação para inteiro, o aplicativo vai informar que a
-      //quanitdade a ser inserida será "1"
+    if (_quantityToAdd <= 0) {
       _quantityToAdd = 1;
     }
 
@@ -180,15 +177,6 @@ class SaleRequestProvider with ChangeNotifier {
         (product.wholePracticedPrice == 0 || product.wholePracticedPrice == null
             ? product.retailPracticedPrice!
             : product.wholePracticedPrice!);
-
-    double? controllerInDouble = double.tryParse(
-        consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
-
-    if (controllerInDouble != null) {
-      _quantityToAdd = double.tryParse(
-        consultedProductController.text.replaceAll(RegExp(r','), '\.'),
-      )!;
-    }
 
     _changeCursorToLastIndex(consultedProductController);
 
