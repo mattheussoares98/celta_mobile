@@ -182,6 +182,17 @@ class _ProductsItemsState extends State<ProductsItems> {
             showCosts: false,
             componentAfterProductInformations: Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(
+                      _selectedIndex == index
+                          ? Icons.arrow_drop_up_sharp
+                          : Icons.arrow_drop_down_sharp,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  ],
+                ),
                 if (saleRequestProvider.alreadyContainsProduct(
                   ProductPackingCode: product.productPackingCode!,
                   enterpriseCode: widget.enterpriseCode.toString(),
