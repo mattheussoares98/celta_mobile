@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../pages/avaliation_and_suggestions/avaliation_and_suggestions.dart';
+import '../pages/evaliation_and_suggestions/avaliation_and_suggestions.dart';
 import '../pages/products_conference/expedition_controls_page.dart';
 import '../pages/adjust_sale_price/adjust_sale_price.dart';
 import '../pages/web/web.dart';
