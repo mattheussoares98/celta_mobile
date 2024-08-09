@@ -162,25 +162,12 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  double tryChangeControllerTextToDouble(
-      TextEditingController consultedProductController) {
-    if (double.tryParse(
-            consultedProductController.text.replaceAll(RegExp(r','), '.')) !=
-        null) {
-      return double.tryParse(
-          consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
-    } else {
-      return 0;
-    }
-  }
-
   double getTotalItemValue({
     required GetProductJsonModel product,
     required TextEditingController consultedProductController,
     required String enterpriseCode,
   }) {
-    double _quantityToAdd =
-        tryChangeControllerTextToDouble(consultedProductController);
+    double _quantityToAdd = consultedProductController.text.toDouble();
 
     if (_quantityToAdd == 0) {
       //quando o campo de quantidade estiver sem dados ou não conseguir
@@ -250,8 +237,7 @@ class SaleRequestProvider with ChangeNotifier {
     required TextEditingController consultedProductController,
     required String enterpriseCode,
   }) async {
-    double quantity =
-        tryChangeControllerTextToDouble(consultedProductController);
+    double quantity = consultedProductController.text.toDouble();
 
     if (quantity == 0) {
       quantity = 1; //quando retornar zero, precisa adicionar uma unidade
