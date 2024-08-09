@@ -1,4 +1,4 @@
-export './product_informations/product_informations.dart';
+export 'more_informations/more_informations.dart';
 export 'add_or_subtract_button.dart';
 export 'add_subtract_or_anull_widget.dart';
 export 'enterprise_items.dart';
