@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/soap/soap.dart';
-import '../../utils/utils.dart';
-import '../components.dart';
+import '../../../models/soap/soap.dart';
+import '../../../utils/utils.dart';
+import '../../components.dart';
 
 class LastBuyEntrance extends StatelessWidget {
   final GetProductJsonModel product;

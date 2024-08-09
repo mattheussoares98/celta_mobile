@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/soap/soap.dart';
-import '../../utils/utils.dart';
-import '../components.dart';
+import '../../../models/soap/soap.dart';
+import '../../../utils/utils.dart';
+import '../../components.dart';
 
 class Costs extends StatelessWidget {
   final GetProductJsonModel product;

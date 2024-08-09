@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/soap/soap.dart';
+import '../../../models/soap/soap.dart';
 
 class StockAddress extends StatelessWidget {
   final GetProductJsonModel product;

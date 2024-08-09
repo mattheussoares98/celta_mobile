@@ -1,0 +1,1 @@
+export './more_informations/more_informations.dart';

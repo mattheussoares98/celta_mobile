@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/soap/soap.dart';
-import '../components.dart';
+import '../../../models/soap/soap.dart';
+import '../../components.dart';
 
 class OpenDialogProductInformations extends StatefulWidget {
   final GetProductJsonModel product;
