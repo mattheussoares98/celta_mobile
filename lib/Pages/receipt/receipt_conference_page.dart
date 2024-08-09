@@ -60,7 +60,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SearchWidget(
-                      focusNodeConsultProduct:
+                      searchProductFocusNode:
                           receiptProvider.consultProductFocusNode,
                       isLoading: receiptProvider.isLoadingProducts ||
                           receiptProvider.isLoadingUpdateQuantity,
@@ -84,7 +84,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                           _consultProductController.clear();
                         }
                       },
-                      consultProductController: _consultProductController,
+                      searchProductController: _consultProductController,
                     ),
                     if (receiptProvider.errorMessageGetProducts != "" &&
                         receiptProvider.productsCount == 0)

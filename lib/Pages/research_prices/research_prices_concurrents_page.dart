@@ -72,7 +72,7 @@ class _ResearchPricesConcurrentsPageState
                     Expanded(
                       child: SearchWidget(
                         autofocus: false,
-                        consultProductController:
+                        searchProductController:
                             searchConcurrentControllerText,
                         isLoading:
                             researchPricesProvider.isLoadingGetConcurrents ||
@@ -86,7 +86,7 @@ class _ResearchPricesConcurrentsPageState
                         },
                         hintText: "Nome ou código",
                         labelText: "Nome ou código",
-                        focusNodeConsultProduct: focusNodeSearch,
+                        searchProductFocusNode: focusNodeSearch,
                         useCamera: false,
                         showConfigurationsIcon: false,
                       ),

@@ -76,7 +76,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                   Column(
                     children: [
                       SearchWidget(
-                        focusNodeConsultProduct: transferBetweenStocksProvider
+                        searchProductFocusNode: transferBetweenStocksProvider
                             .consultProductFocusNode,
                         isLoading: transferBetweenStocksProvider
                                 .isLoadingProducts ||
@@ -93,7 +93,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                             _consultProductController.clear();
                           }
                         },
-                        consultProductController: _consultProductController,
+                        searchProductController: _consultProductController,
                       ),
                       Row(
                         children: [

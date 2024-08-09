@@ -48,10 +48,10 @@ class _AdjustSalePriceProductsPageState
               mainAxisSize: MainAxisSize.max,
               children: [
                 SearchWidget(
-                  focusNodeConsultProduct: searchFocusNode,
+                  searchProductFocusNode: searchFocusNode,
                   showOnlyConfigurationOfSearch: true,
                   isLoading: false,
-                  consultProductController: searchValueController,
+                  searchProductController: searchValueController,
                   onPressSearch: () async {
                     await adjustSalePriceProvider.getProducts(
                       enterpriseCode: enterprise.codigoInternoEmpresa,

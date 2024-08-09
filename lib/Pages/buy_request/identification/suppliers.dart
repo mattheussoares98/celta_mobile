@@ -72,7 +72,7 @@ class _SuplliersState extends State<Suplliers> {
           labelText: "Consultar fornecedor",
           useCamera: false,
           autofocus: false,
-          consultProductController: searchValueController,
+          searchProductController: searchValueController,
           isLoading: buyRequestProvider.isLoadingSupplier,
           onPressSearch: () async {
             if (buyRequestProvider.enterprisesCount > 0) {
@@ -89,7 +89,7 @@ class _SuplliersState extends State<Suplliers> {
               await getSuppliers(buyRequestProvider);
             }
           },
-          focusNodeConsultProduct: focusNodeConsultProduct,
+          searchProductFocusNode: focusNodeConsultProduct,
         ),
         ListView.builder(
           shrinkWrap: true,

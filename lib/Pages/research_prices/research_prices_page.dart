@@ -78,7 +78,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                     children: [
                       Expanded(
                         child: SearchWidget(
-                          consultProductController: searchController,
+                          searchProductController: searchController,
                           isLoading:
                               researchPricesProvider.isLoadingResearchPrices ||
                                   researchPricesProvider
@@ -92,7 +92,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                           },
                           hintText: "Nome ou código",
                           labelText: "Nome ou código",
-                          focusNodeConsultProduct: _focusNode,
+                          searchProductFocusNode: _focusNode,
                           useCamera: false,
                           showConfigurationsIcon: false,
                         ),

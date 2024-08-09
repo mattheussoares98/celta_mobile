@@ -24,8 +24,8 @@ class ProductsItems extends StatefulWidget {
 
 class _ProductsItemsState extends State<ProductsItems> {
   int _selectedIndex = -1;
-
   GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
+  final _insertQuantityFocusNode = FocusNode();
 
   changeCursorToLastIndex() {
     widget.consultedProductController.selection = TextSelection.collapsed(
@@ -67,14 +67,16 @@ class _ProductsItemsState extends State<ProductsItems> {
     );
   }
 
-  changeFocusToConsultedProductFocusNode({
-    required SaleRequestProvider saleRequestProvider,
-  }) {
+  changeFocusToConsultedProductFocusNode() {
+    if (_selectedIndex < 0) return;
+
     Future.delayed(const Duration(milliseconds: 300), () {
-      //se não colocar em um future pra mudar o foco,
-      //não funciona corretamente
+      if (_insertQuantityFocusNode.hasFocus &&
+          MediaQuery.of(context).viewInsets.bottom == 0) {
+        _insertQuantityFocusNode.unfocus();
+      }
       FocusScope.of(context).requestFocus(
-        saleRequestProvider.consultedProductFocusNode,
+        _insertQuantityFocusNode,
       );
     });
   }
@@ -86,60 +88,38 @@ class _ProductsItemsState extends State<ProductsItems> {
   }) {
     widget.consultedProductController.text = "";
 
-    if (product.retailPracticedPrice == 0 && product.wholePracticedPrice == 0) {
+    if (saleRequestProvider.productsCount == 1 ||
+        saleRequestProvider.isLoadingProducts) {
+      return;
+    } else if (_selectedIndex == index) {
+      setState(() {
+        _selectedIndex = -1;
+      });
+    } else if (product.retailPracticedPrice == 0 &&
+        product.wholePracticedPrice == 0) {
       ShowSnackbarMessage.showMessage(
         message:
             "O preço de venda e atacado estão zerados! Utilize esse produto somente caso esteja utilizando modelo de pedido de vendas que utiliza o custo como preço!",
         context: context,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        secondsDuration: 7,
+        secondsDuration: 4,
       );
       setState(() {
         _selectedIndex = index;
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
       });
-
-      return;
-    }
-
-    if (saleRequestProvider.productsCount == 1 ||
-        saleRequestProvider.isLoadingProducts) {
-      return;
-    }
-
-    if (_selectedIndex != index) {
+    } else {
       setState(() {
         _selectedIndex = index;
       });
-
-      if (saleRequestProvider.consultedProductFocusNode.hasFocus &&
-          MediaQuery.of(context).viewInsets.bottom == 0) {
-        FocusScope.of(context).unfocus();
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
-      }
-      if (!saleRequestProvider.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
-      }
-      return;
     }
 
-    if (_selectedIndex == index) {
-      if (!saleRequestProvider.consultedProductFocusNode.hasFocus) {
-        changeFocusToConsultedProductFocusNode(
-          saleRequestProvider: saleRequestProvider,
-        );
-      } else {
-        setState(() {
-          _selectedIndex = -1;
-        });
-      }
-    }
+    changeFocusToConsultedProductFocusNode();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _insertQuantityFocusNode.dispose();
   }
 
   @override
@@ -231,9 +211,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                         child: TextButton(
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.red,
-                            // primary: _totalItensInCart > 0
-                            //     ? Colors.red
-                            //     : Colors.grey,
                           ),
                           onPressed: _totalItensInCart > 0
                               ? () => removeProduct(
@@ -262,9 +239,9 @@ class _ProductsItemsState extends State<ProductsItems> {
                   ),
                 if (_selectedIndex == index)
                   InsertProductQuantityForm(
+                    insertQuantityFocusNode: _insertQuantityFocusNode,
                     enterpriseCode: widget.enterpriseCode,
-                    consultedProductController:
-                        widget.consultedProductController,
+                    searchProductController: widget.consultedProductController,
                     consultedProductFormKey: _consultedProductFormKey,
                     totalItemValue: _totalItemValue,
                     product: product,

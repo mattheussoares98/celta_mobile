@@ -41,7 +41,7 @@ class _InsertCustomerPageState extends State<InsertCustomerPage> {
         child: Column(
           children: [
             SearchWidget(
-              consultProductController: searchCustomerController,
+              searchProductController: searchCustomerController,
               isLoading: saleRequestProvider.isLoadingCustomer,
               autofocus: false,
               onPressSearch: () async {
@@ -58,7 +58,7 @@ class _InsertCustomerPageState extends State<InsertCustomerPage> {
                   searchCustomerController.clear();
                 }
               },
-              focusNodeConsultProduct: searchCustomerFocusNode,
+              searchProductFocusNode: searchCustomerFocusNode,
               hintText: "Código, nome, CPF ou CNPJ",
               labelText: "Consultar cliente",
               useCamera: false,

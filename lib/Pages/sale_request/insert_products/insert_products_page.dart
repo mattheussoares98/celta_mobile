@@ -23,12 +23,16 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
   TextEditingController _searchProductTextEditingController =
       TextEditingController();
   TextEditingController _consultedProductController = TextEditingController();
+  FocusNode _searchProductFocusNode = FocusNode();
+  FocusNode _consultedProductFocusNode = FocusNode();
 
   @override
   void dispose() {
     super.dispose();
     _searchProductTextEditingController.dispose();
     _consultedProductController.dispose();
+    _searchProductFocusNode.dispose();
+    _consultedProductFocusNode.dispose();
   }
 
   @override
@@ -43,7 +47,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
         child: Column(
           children: [
             SearchWidget(
-              consultProductController: _searchProductTextEditingController,
+              searchProductController: _searchProductTextEditingController,
               isLoading: saleRequestProvider.isLoadingProducts,
               autofocus: false,
               onPressSearch: () async {
@@ -61,8 +65,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                   _searchProductTextEditingController.clear();
                 }
               },
-              focusNodeConsultProduct:
-                  saleRequestProvider.searchProductFocusNode,
+              searchProductFocusNode: _searchProductFocusNode,
             ),
             if (saleRequestProvider.errorMessageProducts != "")
               ErrorMessage(

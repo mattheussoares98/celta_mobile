@@ -52,7 +52,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 SearchWidget(
-                  focusNodeConsultProduct:
+                  searchProductFocusNode:
                       priceConferenceProvider.consultProductFocusNode,
                   isLoading: priceConferenceProvider.isLoading ||
                       priceConferenceProvider.isSendingToPrint,
@@ -75,7 +75,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                       _consultProductController.clear();
                     }
                   },
-                  consultProductController: _consultProductController,
+                  searchProductController: _consultProductController,
                 ),
                 if (priceConferenceProvider.errorMessage != "" &&
                     priceConferenceProvider.productsCount == 0)

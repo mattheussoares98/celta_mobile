@@ -342,15 +342,6 @@ class SaleRequestProvider with ChangeNotifier {
     "Products": [],
   };
 
-  FocusNode searchProductFocusNode = FocusNode();
-  FocusNode consultedProductFocusNode = FocusNode();
-
-  changeFocusToConsultedProduct(BuildContext context) {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      FocusScope.of(context).requestFocus(consultedProductFocusNode);
-    });
-  }
-
   clearProducts() {
     _products.clear();
     notifyListeners();

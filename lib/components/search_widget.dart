@@ -11,8 +11,8 @@ import 'components.dart';
 class SearchWidget extends StatefulWidget {
   final bool isLoading;
   final Function onPressSearch;
-  final TextEditingController consultProductController;
-  final FocusNode focusNodeConsultProduct;
+  final TextEditingController searchProductController;
+  final FocusNode searchProductFocusNode;
   final String hintText;
   final String labelText;
   final bool useCamera;
@@ -24,10 +24,10 @@ class SearchWidget extends StatefulWidget {
     this.showOnlyConfigurationOfSearch = false,
     this.useCamera = true,
     this.showConfigurationsIcon = true,
-    required this.consultProductController,
+    required this.searchProductController,
     required this.isLoading,
     required this.onPressSearch,
-    required this.focusNodeConsultProduct,
+    required this.searchProductFocusNode,
     this.hintText = "PLU-EAN-NOME-%",
     this.labelText = "Consultar produto",
     Key? key,
@@ -46,12 +46,12 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   Future<void> _openCamera() async {
     FocusScope.of(context).unfocus();
-    widget.consultProductController.clear();
+    widget.searchProductController.clear();
 
-    widget.consultProductController.text =
+    widget.searchProductController.text =
         await ScanBarCode.scanBarcode(context);
 
-    if (widget.consultProductController.text != "") {
+    if (widget.searchProductController.text != "") {
       await widget.onPressSearch();
     }
   }
@@ -68,7 +68,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    FocusNode focusNode = widget.focusNodeConsultProduct;
+    FocusNode focusNode = widget.searchProductFocusNode;
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     return Padding(
@@ -83,7 +83,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 focusNode: focusNode,
                 enabled: !widget.isLoading,
                 autofocus: widget.autofocus,
-                controller: widget.consultProductController,
+                controller: widget.searchProductController,
                 // focusNode: _consultedProductFocusNode,
                 // inputFormatters: [LengthLimitingTextInputFormatter(10)],
                 onChanged: (value) {
@@ -106,7 +106,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     onPressed: widget.isLoading
                         ? null
                         : () {
-                            widget.consultProductController.clear();
+                            widget.searchProductController.clear();
 
                             Future.delayed(const Duration(), () {
                               FocusScope.of(context).unfocus();
@@ -132,7 +132,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                                 : () async {
                                     ClipboardData? clipboardData =
                                         await Clipboard.getData('text/plain');
-                                    widget.consultProductController.text =
+                                    widget.searchProductController.text =
                                         clipboardData?.text ?? '';
 
                                     await widget.onPressSearch();
@@ -199,7 +199,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   if (!isValid()) {
                     Future.delayed(const Duration(), () {
                       FocusScope.of(context)
-                          .requestFocus(widget.focusNodeConsultProduct);
+                          .requestFocus(widget.searchProductFocusNode);
                     });
                     return;
                   }

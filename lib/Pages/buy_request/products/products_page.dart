@@ -10,12 +10,10 @@ class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
 
   @override
-  State<ProductsPage> createState() =>
-      _ProductsPageState();
+  State<ProductsPage> createState() => _ProductsPageState();
 }
 
-class _ProductsPageState
-    extends State<ProductsPage> {
+class _ProductsPageState extends State<ProductsPage> {
   TextEditingController consultProductController = TextEditingController();
 
   Future<void> getProductWithCamera({
@@ -59,7 +57,7 @@ class _ProductsPageState
           SearchWidget(
             autofocus: false,
             showConfigurationsIcon: true,
-            consultProductController: consultProductController,
+            searchProductController: consultProductController,
             isLoading: buyRequestProvider.isLoadingProducts,
             onPressSearch: () async {
               await buyRequestProvider.getProducts(
@@ -71,7 +69,7 @@ class _ProductsPageState
                 consultProductController.text = "";
               }
             },
-            focusNodeConsultProduct: buyRequestProvider.focusNodeConsultProduct,
+            searchProductFocusNode: buyRequestProvider.focusNodeConsultProduct,
           ),
           if (buyRequestProvider.errorMessageGetProducts != "")
             ErrorMessage(

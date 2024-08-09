@@ -68,7 +68,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                   Column(
                     children: [
                       SearchWidget(
-                        focusNodeConsultProduct:
+                        searchProductFocusNode:
                             adjustStockProvider.consultProductFocusNode,
                         isLoading: adjustStockProvider.isLoadingProducts ||
                             adjustStockProvider.isLoadingAdjustStock,
@@ -84,7 +84,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                             _consultProductController.clear();
                           }
                         },
-                        consultProductController: _consultProductController,
+                        searchProductController: _consultProductController,
                       ),
                       Row(
                         children: [

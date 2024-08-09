@@ -1,14 +1,13 @@
 import '../../../models/soap/soap.dart';
-import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
 
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
-  final TextEditingController consultedProductController;
+  final TextEditingController searchProductController;
+  final FocusNode insertQuantityFocusNode;
   final double totalItensInCart;
   final double totalItemValue;
   final GetProductJsonModel product;
@@ -16,7 +15,8 @@ class InsertProductQuantityForm extends StatefulWidget {
   final Function updateTotalItemValue;
   final int enterpriseCode;
   const InsertProductQuantityForm({
-    required this.consultedProductController,
+    required this.searchProductController,
+    required this.insertQuantityFocusNode,
     required this.enterpriseCode,
     required this.consultedProductFormKey,
     required this.totalItensInCart,
@@ -34,7 +34,7 @@ class InsertProductQuantityForm extends StatefulWidget {
 
 class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
   addItemInCart() {
-    if (widget.consultedProductController.text.isEmpty) {
+    if (widget.searchProductController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
       setState(() {
         widget.addProductInCart();
@@ -46,7 +46,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
     bool isValid = widget.consultedProductFormKey.currentState!.validate();
 
     double? controllerInDouble = double.tryParse(
-        widget.consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
+        widget.searchProductController.text.replaceAll(RegExp(r'\,'), '.'));
 
     if (controllerInDouble == null) {
       //se não conseguir converter, é porque vai adicionar uma unidade
@@ -64,11 +64,8 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
 
   @override
   Widget build(BuildContext context) {
-    SaleRequestProvider saleRequestProvider =
-        Provider.of(context, listen: true);
-
     double? quantityToAdd = double.tryParse(
-        widget.consultedProductController.text.replaceAll(RegExp(r','), '.'));
+        widget.searchProductController.text.replaceAll(RegExp(r','), '.'));
 
     return Column(
       children: [
@@ -89,14 +86,13 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
 
                       setState(() {
                         if (quantityToAdd! <= 1) {
-                          widget.consultedProductController.text = "";
-                          widget.consultedProductController.clear();
+                          widget.searchProductController.text = "";
+                          widget.searchProductController.clear();
                         } else {
                           quantityToAdd = quantityToAdd! - 1;
-                          widget.consultedProductController.text =
-                              quantityToAdd!
-                                  .toStringAsFixed(3)
-                                  .replaceAll(RegExp(r'\.'), ',');
+                          widget.searchProductController.text = quantityToAdd!
+                              .toStringAsFixed(3)
+                              .replaceAll(RegExp(r'\.'), ',');
                         }
 
                         widget.updateTotalItemValue();
@@ -104,7 +100,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
                     },
                     icon: Icon(
                       Icons.remove,
-                      color: widget.consultedProductController.text.isEmpty
+                      color: widget.searchProductController.text.isEmpty
                           ? Colors.grey
                           : Theme.of(context).colorScheme.primary,
                     ),
@@ -112,19 +108,19 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
                   IconButton(
                     color: Theme.of(context).colorScheme.primary,
                     onPressed: () {
-                      if (widget.consultedProductController.text.isEmpty ||
-                          widget.consultedProductController.text == "0") {
-                        widget.consultedProductController.text = "1,000";
+                      if (widget.searchProductController.text.isEmpty ||
+                          widget.searchProductController.text == "0") {
+                        widget.searchProductController.text = "1,000";
                         widget.updateTotalItemValue();
                       } else {
                         double? quantityToAdd = double.tryParse(widget
-                            .consultedProductController.text
+                            .searchProductController.text
                             .replaceAll(RegExp(r','), '.'));
 
                         if (quantityToAdd != null) {
                           quantityToAdd++;
 
-                          widget.consultedProductController.text = quantityToAdd
+                          widget.searchProductController.text = quantityToAdd
                               .toStringAsFixed(3)
                               .replaceAll(RegExp(r'\.'), ',');
                         }
@@ -148,11 +144,11 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             Expanded(
               flex: 10,
               child: InsertQuantityTextFormField(
-                focusNode: saleRequestProvider.consultedProductFocusNode,
-                textEditingController: widget.consultedProductController,
+                focusNode: widget.insertQuantityFocusNode,
+                textEditingController: widget.searchProductController,
                 formKey: widget.consultedProductFormKey,
-                onChanged: () => {widget.updateTotalItemValue()},
-                onFieldSubmitted: () => addItemInCart(),
+                onChanged: widget.updateTotalItemValue,
+                onFieldSubmitted: addItemInCart,
                 canReceiveEmptyValue: true,
                 hintText: "Quantidade",
               ),
@@ -166,7 +162,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: () => addItemInCart(),
+                  onPressed: addItemInCart,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
