@@ -277,7 +277,6 @@ class SaleRequestProvider with ChangeNotifier {
           element.ProductPackingCode == product.productPackingCode);
 
       _cartProducts[enterpriseCode]![index].Quantity += quantity;
-      _cartProducts[enterpriseCode]![index].Value = product.value ?? 0;
     } else {
       if (_cartProducts[enterpriseCode.toString()] != null) {
         _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);
