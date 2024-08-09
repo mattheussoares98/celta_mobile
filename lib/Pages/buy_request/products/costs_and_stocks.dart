@@ -178,7 +178,7 @@ Widget enterpriseStocks({
   return productModel.Stocks == null
       ? const Center(
           child: Text(
-            'Não foram encontradas informações de estoque. Caso acredite que isso está errado, entre em contato com o suporte técnico',
+            'Não foram encontradas informações de estoque',
             style: TextStyle(
               color: Colors.black,
             ),

@@ -65,37 +65,36 @@ class StockAddress extends StatelessWidget {
                 ),
               ],
             ),
-          if (!_hasAssociatedStocks())
-            const Center(
-              child: Text(
-                'Não foram encontradas informações de estoques associados. Caso acredite que isso está errado, entre em contato com o suporte técnico',
-              ),
-            ),
-          if (_hasAssociatedStocks())
-            Column(
-              children: [
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Divider(
-                      height: 20,
-                      color: Colors.grey,
-                    ),
-                    FittedBox(
-                      child: Text(
-                        "Estoque nas empresas associadas",
-                        style: TextStyle(
-                          color: Colors.black,
-                          letterSpacing: 0.3,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          fontFamily: "BebasNeue",
-                        ),
-                        textAlign: TextAlign.center,
+          Column(
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Divider(
+                    height: 20,
+                    color: Colors.grey,
+                  ),
+                  FittedBox(
+                    child: Text(
+                      "Estoque nas empresas associadas",
+                      style: TextStyle(
+                        color: Colors.black,
+                        letterSpacing: 0.3,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        fontFamily: "BebasNeue",
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              if (!_hasAssociatedStocks())
+                const Text(
+                  'Não foram encontradas informações de estoques nas empresas associadas',
+                  textAlign: TextAlign.center,
                 ),
+              if (_hasAssociatedStocks())
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -173,8 +172,8 @@ class StockAddress extends StatelessWidget {
                     );
                   },
                 ),
-              ],
-            ),
+            ],
+          ),
         ],
       ),
     );
