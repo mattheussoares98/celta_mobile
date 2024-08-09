@@ -90,6 +90,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                     priceConferenceProvider.products.isNotEmpty)
                   Expanded(
                     child: ListView.builder(
+                      shrinkWrap: true,
                       itemCount: priceConferenceProvider.products.length,
                       itemBuilder: (context, index) {
                         final product = priceConferenceProvider.products[index];

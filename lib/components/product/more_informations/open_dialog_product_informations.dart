@@ -97,16 +97,12 @@ class _OpenDialogProductInformationsState
                             pageController: _pageController,
                             textButton: "Compra",
                           ),
+                          if (widget.showCosts) const SizedBox(width: 3),
                           if (widget.showCosts)
-                            Column(
-                              children: [
-                                const SizedBox(width: 3),
-                                ActionButton(
-                                  pageIndex: 3,
-                                  pageController: _pageController,
-                                  textButton: "Custos",
-                                ),
-                              ],
+                            ActionButton(
+                              pageIndex: 3,
+                              pageController: _pageController,
+                              textButton: "Custos",
                             ),
                         ],
                       ),
