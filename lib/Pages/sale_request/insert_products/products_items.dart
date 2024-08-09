@@ -160,197 +160,6 @@ class _ProductsItemsState extends State<ProductsItems> {
     }
   }
 
-  Widget itemOfList({
-    required SaleRequestProvider saleRequestProvider,
-    required int index,
-    required ConfigurationsProvider configurationsProvider,
-  }) {
-    GetProductJsonModel product = saleRequestProvider.products[index];
-    double _totalItensInCart = saleRequestProvider.getTotalItensInCart(
-      ProductPackingCode: product.productPackingCode!,
-      enterpriseCode: widget.enterpriseCode.toString(),
-    );
-
-    double _totalItemValue = saleRequestProvider.getTotalItemValue(
-      product: product,
-      consultedProductController: widget.consultedProductController,
-      enterpriseCode: widget.enterpriseCode.toString(),
-    );
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
-          onTap: saleRequestProvider.isLoadingProducts
-              ? null
-              : () {
-                  selectIndexAndFocus(
-                    saleRequestProvider: saleRequestProvider,
-                    index: index,
-                    product: product,
-                  );
-                },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "PLU",
-                subtitle: product.plu.toString(),
-                otherWidget: OpenDialogProductInformations(
-                  product: product,
-                ),
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Produto",
-                subtitle:
-                    product.name.toString() + " (${product.packingQuantity})",
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Preço de venda",
-                subtitle: ConvertString.convertToBRL(
-                  product.value,
-                ),
-                subtitleColor: Theme.of(context).colorScheme.primary,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Preço de atacado",
-                subtitle: ConvertString.convertToBRL(
-                  product.wholePracticedPrice,
-                ),
-                subtitleColor: Colors.black,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Qtd mínima p/ atacado",
-                subtitle: ConvertString.convertToBrazilianNumber(
-                  product.minimumWholeQuantity.toString(),
-                ),
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Estoque de venda",
-                subtitle: ConvertString.convertToBrazilianNumber(
-                  product.balanceStockSale.toString(),
-                ),
-                otherWidget: Icon(
-                  _selectedIndex != index
-                      ? Icons.arrow_drop_down_sharp
-                      : Icons.arrow_drop_up_sharp,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 30,
-                ),
-              ),
-              if (saleRequestProvider.alreadyContainsProduct(
-                ProductPackingCode: product.productPackingCode!,
-                enterpriseCode: widget.enterpriseCode.toString(),
-              ))
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 7,
-                      child: Text(
-                        "Qtd no carrinho: " +
-                            saleRequestProvider
-                                .getTotalItensInCart(
-                                  ProductPackingCode:
-                                      product.productPackingCode!,
-                                  enterpriseCode:
-                                      widget.enterpriseCode.toString(),
-                                )
-                                .toStringAsFixed(3)
-                                .replaceAll(RegExp(r'\.'), ','),
-                        style: TextStyle(
-                          color:
-                              _totalItensInCart > 0 ? Colors.red : Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      flex: 4,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          // primary: _totalItensInCart > 0
-                          //     ? Colors.red
-                          //     : Colors.grey,
-                        ),
-                        onPressed: _totalItensInCart > 0
-                            ? () => removeProduct(
-                                  saleRequestProvider: saleRequestProvider,
-                                  totalItemValue: _totalItemValue,
-                                  product: product,
-                                )
-                            : null,
-                        child: const FittedBox(
-                          child: Row(
-                            children: [
-                              Text(
-                                "Remover ",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              if (_selectedIndex == index)
-                InsertProductQuantityForm(
-                  enterpriseCode: widget.enterpriseCode,
-                  consultedProductController: widget.consultedProductController,
-                  consultedProductFormKey: _consultedProductFormKey,
-                  totalItemValue: _totalItemValue,
-                  product: product,
-                  addProductInCart: () async {
-                    if (_totalItemValue == 0) {
-                      ShowSnackbarMessage.showMessage(
-                        message: "O total dos itens está zerado!",
-                        context: context,
-                      );
-                    }
-                    saleRequestProvider.addProductInCart(
-                      consultedProductController:
-                          widget.consultedProductController,
-                      product: product,
-                      enterpriseCode: widget.enterpriseCode.toString(),
-                    );
-                    setState(() {
-                      _selectedIndex = -1;
-                    });
-
-                    if (configurationsProvider.autoScan?.value == true) {
-                      await widget.getProductsWithCamera();
-                    }
-                  },
-                  totalItensInCart: _totalItensInCart,
-                  updateTotalItemValue: () {
-                    setState(() {
-                      _totalItemValue = saleRequestProvider.getTotalItemValue(
-                        product: product,
-                        consultedProductController:
-                            widget.consultedProductController,
-                        enterpriseCode: widget.enterpriseCode.toString(),
-                      );
-                    });
-                  },
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(
@@ -362,35 +171,200 @@ class _ProductsItemsState extends State<ProductsItems> {
       listen: true,
     );
 
-    int itensPerLine = ResponsiveItems.getItensPerLine(context);
-    int productsCount = saleRequestProvider.productsCount;
-
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: productsCount,
+      itemCount: saleRequestProvider.productsCount,
       itemBuilder: (context, index) {
         if (saleRequestProvider.productsCount == 1) {
           _selectedIndex = index;
         }
+        GetProductJsonModel product = saleRequestProvider.products[index];
+        double _totalItensInCart = saleRequestProvider.getTotalItensInCart(
+          ProductPackingCode: product.productPackingCode!,
+          enterpriseCode: widget.enterpriseCode.toString(),
+        );
 
-        final startIndex = index * itensPerLine;
-        final endIndex = (startIndex + itensPerLine <= productsCount)
-            ? startIndex + itensPerLine
-            : productsCount;
+        double _totalItemValue = saleRequestProvider.getTotalItemValue(
+          product: product,
+          consultedProductController: widget.consultedProductController,
+          enterpriseCode: widget.enterpriseCode.toString(),
+        );
 
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (var i = startIndex; i < endIndex; i++)
-              Expanded(
-                child: itemOfList(
-                  index: i,
-                  saleRequestProvider: saleRequestProvider,
-                  configurationsProvider: configurationsProvider,
-                ),
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              focusColor: Colors.white.withOpacity(0),
+              hoverColor: Colors.white.withOpacity(0),
+              splashColor: Colors.white.withOpacity(0),
+              highlightColor: Colors.white.withOpacity(0),
+              onTap: saleRequestProvider.isLoadingProducts
+                  ? null
+                  : () {
+                      selectIndexAndFocus(
+                        saleRequestProvider: saleRequestProvider,
+                        index: index,
+                        product: product,
+                      );
+                    },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "PLU",
+                    subtitle: product.plu.toString(),
+                    otherWidget: OpenDialogProductInformations(
+                      product: product,
+                    ),
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Produto",
+                    subtitle: product.name.toString() +
+                        " (${product.packingQuantity})",
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Preço de venda",
+                    subtitle: ConvertString.convertToBRL(
+                      product.value,
+                    ),
+                    subtitleColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Preço de atacado",
+                    subtitle: ConvertString.convertToBRL(
+                      product.wholePracticedPrice,
+                    ),
+                    subtitleColor: Colors.black,
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Qtd mínima p/ atacado",
+                    subtitle: ConvertString.convertToBrazilianNumber(
+                      product.minimumWholeQuantity.toString(),
+                    ),
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Estoque de venda",
+                    subtitle: ConvertString.convertToBrazilianNumber(
+                      product.balanceStockSale.toString(),
+                    ),
+                    otherWidget: Icon(
+                      _selectedIndex != index
+                          ? Icons.arrow_drop_down_sharp
+                          : Icons.arrow_drop_up_sharp,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 30,
+                    ),
+                  ),
+                  if (saleRequestProvider.alreadyContainsProduct(
+                    ProductPackingCode: product.productPackingCode!,
+                    enterpriseCode: widget.enterpriseCode.toString(),
+                  ))
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 7,
+                          child: Text(
+                            "Qtd no carrinho: " +
+                                saleRequestProvider
+                                    .getTotalItensInCart(
+                                      ProductPackingCode:
+                                          product.productPackingCode!,
+                                      enterpriseCode:
+                                          widget.enterpriseCode.toString(),
+                                    )
+                                    .toStringAsFixed(3)
+                                    .replaceAll(RegExp(r'\.'), ','),
+                            style: TextStyle(
+                              color: _totalItensInCart > 0
+                                  ? Colors.red
+                                  : Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          flex: 4,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              // primary: _totalItensInCart > 0
+                              //     ? Colors.red
+                              //     : Colors.grey,
+                            ),
+                            onPressed: _totalItensInCart > 0
+                                ? () => removeProduct(
+                                      saleRequestProvider: saleRequestProvider,
+                                      totalItemValue: _totalItemValue,
+                                      product: product,
+                                    )
+                                : null,
+                            child: const FittedBox(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Remover ",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (_selectedIndex == index)
+                    InsertProductQuantityForm(
+                      enterpriseCode: widget.enterpriseCode,
+                      consultedProductController:
+                          widget.consultedProductController,
+                      consultedProductFormKey: _consultedProductFormKey,
+                      totalItemValue: _totalItemValue,
+                      product: product,
+                      addProductInCart: () async {
+                        if (_totalItemValue == 0) {
+                          ShowSnackbarMessage.showMessage(
+                            message: "O total dos itens está zerado!",
+                            context: context,
+                          );
+                        }
+                        saleRequestProvider.addProductInCart(
+                          consultedProductController:
+                              widget.consultedProductController,
+                          product: product,
+                          enterpriseCode: widget.enterpriseCode.toString(),
+                        );
+                        setState(() {
+                          _selectedIndex = -1;
+                        });
+
+                        if (configurationsProvider.autoScan?.value == true) {
+                          await widget.getProductsWithCamera();
+                        }
+                      },
+                      totalItensInCart: _totalItensInCart,
+                      updateTotalItemValue: () {
+                        setState(() {
+                          _totalItemValue =
+                              saleRequestProvider.getTotalItemValue(
+                            product: product,
+                            consultedProductController:
+                                widget.consultedProductController,
+                            enterpriseCode: widget.enterpriseCode.toString(),
+                          );
+                        });
+                      },
+                    ),
+                ],
               ),
-          ],
+            ),
+          ),
         );
       },
     );

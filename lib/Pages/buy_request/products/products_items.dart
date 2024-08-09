@@ -15,8 +15,7 @@ class ProductsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProductsItems> createState() =>
-      _ProductsItemsState();
+  State<ProductsItems> createState() => _ProductsItemsState();
 }
 
 class _ProductsItemsState extends State<ProductsItems> {
@@ -115,68 +114,9 @@ class _ProductsItemsState extends State<ProductsItems> {
     }
   }
 
-  Widget itemOfList({
-    required BuyRequestProvider buyRequestProvider,
-    required int index,
-  }) {
-    late BuyRequestProductsModel product;
-
-    if (widget.showOnlyCartProducts) {
-      product = buyRequestProvider.productsInCart[index];
-    } else {
-      product = buyRequestProvider.products[index];
-    }
-
-    return InkWell(
-      focusColor: Colors.white.withOpacity(0),
-      hoverColor: Colors.white.withOpacity(0),
-      splashColor: Colors.white.withOpacity(0),
-      highlightColor: Colors.white.withOpacity(0),
-      onTap: buyRequestProvider.isLoadingProducts ||
-              buyRequestProvider.isLoadingInsertBuyRequest
-          ? null
-          : () {
-              setState(() {
-                selectIndexAndFocus(
-                  buyRequestProvider: buyRequestProvider,
-                  index: index,
-                );
-              });
-            },
-      child: Column(
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  ProductsInformations(
-                    buyRequestProvider: buyRequestProvider,
-                    index: index,
-                    product: product,
-                    practicedValue: practicedValue(product),
-                  ),
-                  if (buyRequestProvider.indexOfSelectedProduct == index)
-                    InsertProductQuantity(
-                      product: product,
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
-    int itensPerLine = ResponsiveItems.getItensPerLine(context);
-    int productsCount = widget.showOnlyCartProducts
-        ? buyRequestProvider.productsInCartCount
-        : buyRequestProvider.productsCount;
 
     return Column(
       mainAxisAlignment: buyRequestProvider.productsCount > 1 ||
@@ -186,41 +126,63 @@ class _ProductsItemsState extends State<ProductsItems> {
           : MainAxisAlignment.start,
       children: [
         ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: widget.showOnlyCartProducts
-              ? buyRequestProvider.productsInCartCount
-              : buyRequestProvider.productsCount,
-          itemBuilder: (context, index) {
-            if (buyRequestProvider.productsCount == 1 &&
-                !widget.showOnlyCartProducts) {
-              buyRequestProvider.indexOfSelectedProduct = index;
-              buyRequestProvider.priceController.text =
-                  practicedValue(buyRequestProvider.products[index]);
-            } else if (buyRequestProvider.productsCount == 0 &&
-                !widget.showOnlyCartProducts) {
-              buyRequestProvider.indexOfSelectedProduct = -1;
-            }
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: widget.showOnlyCartProducts
+                ? buyRequestProvider.productsInCartCount
+                : buyRequestProvider.productsCount,
+            itemBuilder: (context, index) {
+              if (buyRequestProvider.productsCount == 1 &&
+                  !widget.showOnlyCartProducts) {
+                buyRequestProvider.indexOfSelectedProduct = index;
+                buyRequestProvider.priceController.text =
+                    practicedValue(buyRequestProvider.products[index]);
+              } else if (buyRequestProvider.productsCount == 0 &&
+                  !widget.showOnlyCartProducts) {
+                buyRequestProvider.indexOfSelectedProduct = -1;
+              }
 
-            final startIndex = index * itensPerLine;
-            final endIndex = (startIndex + itensPerLine <= productsCount)
-                ? startIndex + itensPerLine
-                : productsCount;
+              final product = buyRequestProvider.products[index];
 
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var i = startIndex; i < endIndex; i++)
-                  Expanded(
-                    child: itemOfList(
-                      index: i,
-                      buyRequestProvider: buyRequestProvider,
+              return GestureDetector(
+                onTap: buyRequestProvider.isLoadingProducts ||
+                        buyRequestProvider.isLoadingInsertBuyRequest
+                    ? null
+                    : () {
+                        setState(() {
+                          selectIndexAndFocus(
+                            buyRequestProvider: buyRequestProvider,
+                            index: index,
+                          );
+                        });
+                      },
+                child: Column(
+                  children: [
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ProductsInformations(
+                              buyRequestProvider: buyRequestProvider,
+                              index: index,
+                              product: product,
+                              practicedValue: practicedValue(product),
+                            ),
+                            if (buyRequestProvider.indexOfSelectedProduct ==
+                                index)
+                              InsertProductQuantity(
+                                product: product,
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-              ],
-            );
-          },
-        ),
+                  ],
+                ),
+              );
+            }),
       ],
     );
   }

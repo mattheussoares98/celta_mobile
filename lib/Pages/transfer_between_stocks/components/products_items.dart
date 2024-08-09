@@ -103,110 +103,10 @@ class _ProductsItemsState extends State<ProductsItems> {
     }
   }
 
-  Widget itemOfList({
-    required TransferBetweenStocksProvider transferBetweenStocksProvider,
-    required int index,
-  }) {
-    GetProductJsonModel product = transferBetweenStocksProvider.products[index];
-    return InkWell(
-      focusColor: Colors.white.withOpacity(0),
-      hoverColor: Colors.white.withOpacity(0),
-      splashColor: Colors.white.withOpacity(0),
-      highlightColor: Colors.white.withOpacity(0),
-      onTap: transferBetweenStocksProvider
-                  .isLoadingTypeStockAndJustifications ||
-              transferBetweenStocksProvider.isLoadingAdjustStock
-          ? null
-          : () {
-              transferBetweenStocksProvider
-                      .jsonAdjustStock["ProductPackingCode"] =
-                  product.productPackingCode;
-              transferBetweenStocksProvider.jsonAdjustStock["ProductCode"] =
-                  product.productCode;
-              selectIndexAndFocus(
-                transferBetweenStocksProvider: transferBetweenStocksProvider,
-                index: index,
-              );
-            },
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Nome",
-                subtitle: product.name,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "PLU",
-                subtitle: product.plu,
-                otherWidget: AllStocks.allStocks(
-                  context: context,
-                  hasStocks: product.stocks!.length > 0,
-                  product: product,
-                  isLoading: transferBetweenStocksProvider.isLoadingAdjustStock,
-                ),
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Embalagem",
-                subtitle: product.packingQuantity,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Estoque atual",
-                subtitle: ConvertString.convertToBrazilianNumber(
-                  product.stocks!
-                      .where((element) => element.stockName == "Estoque Atual")
-                      .first
-                      .stockQuantity,
-                ),
-              ),
-              if (transferBetweenStocksProvider.lastUpdatedQuantity != "" &&
-                  // transferBetweenStocksProvider
-                  //         .indexOfLastProductChangedStockQuantity !=
-                  //     -1 &&
-                  transferBetweenStocksProvider
-                          .indexOfLastProductChangedStockQuantity ==
-                      index)
-                FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Última quantidade confirmada: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
-                      style: TextStyle(
-                        fontSize: 100,
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'BebasNeue',
-                        fontStyle: FontStyle.italic,
-                        letterSpacing: 1,
-                        wordSpacing: 4,
-                      ),
-                    ),
-                  ),
-                ),
-              if (_selectedIndex == index)
-                InsertQuantity(
-                  consultedProductController: widget.consultedProductController,
-                  dropDownFormKey: widget.dropDownFormKey,
-                  insertQuantityFormKey: widget.insertQuantityFormKey,
-                  internalEnterpriseCode: widget.internalEnterpriseCode,
-                  index: index,
-                  getProductsWithCamera: widget.getProductsWithCamera,
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     TransferBetweenStocksProvider transferBetweenStocksProvider =
         Provider.of(context);
-    int itensPerLine = ResponsiveItems.getItensPerLine(context);
-    int productsCount = transferBetweenStocksProvider.productsCount;
 
     return Column(
       mainAxisAlignment: transferBetweenStocksProvider.productsCount > 1
@@ -216,29 +116,109 @@ class _ProductsItemsState extends State<ProductsItems> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: productsCount,
+          itemCount: transferBetweenStocksProvider.productsCount,
           itemBuilder: (context, index) {
             if (transferBetweenStocksProvider.productsCount == 1) {
               _selectedIndex = index;
             }
 
-            final startIndex = index * itensPerLine;
-            final endIndex = (startIndex + itensPerLine <= productsCount)
-                ? startIndex + itensPerLine
-                : productsCount;
-
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var i = startIndex; i < endIndex; i++)
-                  Expanded(
-                    child: itemOfList(
-                      index: i,
-                      transferBetweenStocksProvider:
-                          transferBetweenStocksProvider,
-                    ),
+            GetProductJsonModel product =
+                transferBetweenStocksProvider.products[index];
+            return InkWell(
+              focusColor: Colors.white.withOpacity(0),
+              hoverColor: Colors.white.withOpacity(0),
+              splashColor: Colors.white.withOpacity(0),
+              highlightColor: Colors.white.withOpacity(0),
+              onTap: transferBetweenStocksProvider
+                          .isLoadingTypeStockAndJustifications ||
+                      transferBetweenStocksProvider.isLoadingAdjustStock
+                  ? null
+                  : () {
+                      transferBetweenStocksProvider
+                              .jsonAdjustStock["ProductPackingCode"] =
+                          product.productPackingCode;
+                      transferBetweenStocksProvider
+                          .jsonAdjustStock["ProductCode"] = product.productCode;
+                      selectIndexAndFocus(
+                        transferBetweenStocksProvider:
+                            transferBetweenStocksProvider,
+                        index: index,
+                      );
+                    },
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Nome",
+                        subtitle: product.name,
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "PLU",
+                        subtitle: product.plu,
+                        otherWidget: AllStocks.allStocks(
+                          context: context,
+                          hasStocks: product.stocks!.length > 0,
+                          product: product,
+                          isLoading: transferBetweenStocksProvider
+                              .isLoadingAdjustStock,
+                        ),
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Embalagem",
+                        subtitle: product.packingQuantity,
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Estoque atual",
+                        subtitle: ConvertString.convertToBrazilianNumber(
+                          product.stocks!
+                              .where((element) =>
+                                  element.stockName == "Estoque Atual")
+                              .first
+                              .stockQuantity,
+                        ),
+                      ),
+                      if (transferBetweenStocksProvider.lastUpdatedQuantity !=
+                              "" &&
+                          // transferBetweenStocksProvider
+                          //         .indexOfLastProductChangedStockQuantity !=
+                          //     -1 &&
+                          transferBetweenStocksProvider
+                                  .indexOfLastProductChangedStockQuantity ==
+                              index)
+                        FittedBox(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              "Última quantidade confirmada: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
+                              style: TextStyle(
+                                fontSize: 100,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'BebasNeue',
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 1,
+                                wordSpacing: 4,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (_selectedIndex == index)
+                        InsertQuantity(
+                          consultedProductController:
+                              widget.consultedProductController,
+                          dropDownFormKey: widget.dropDownFormKey,
+                          insertQuantityFormKey: widget.insertQuantityFormKey,
+                          internalEnterpriseCode: widget.internalEnterpriseCode,
+                          index: index,
+                          getProductsWithCamera: widget.getProductsWithCamera,
+                        ),
+                    ],
                   ),
-              ],
+                ),
+              ),
             );
           },
         ),

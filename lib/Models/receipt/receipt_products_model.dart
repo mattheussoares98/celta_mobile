@@ -6,7 +6,7 @@ class ReceiptProductsModel {
   final String CodigoPlu_ProEmb;
   final String Codigo_ProEmb;
   final String PackingQuantity;
-  double Quantidade_ProcRecebDocProEmb; //pode vir como nulo ou double
+  double? Quantidade_ProcRecebDocProEmb; //pode vir como nulo ou double
   final dynamic ReferenciaXml_ProcRecebDocProEmb;
   final String AllEans;
   String DataValidade_ProcRecebDocProEmb;

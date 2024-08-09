@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../utils/utils.dart';
-
 ThemeData theme() {
   const appBarText = Colors.white;
   const text = Colors.white;
@@ -44,7 +42,7 @@ ThemeData theme() {
             color: Colors.white,
           ),
           iconTheme: const IconThemeData(color: Colors.white),
-          toolbarHeight: ResponsiveItems.appBarToolbarHeight,
+          toolbarHeight: 40,
           backgroundColor: principalColor,
           centerTitle: true,
           titleTextStyle: const TextStyle(
@@ -93,7 +91,7 @@ ThemeData theme() {
             letterSpacing: 1,
             fontWeight: FontWeight.bold,
             color: headline6,
-            fontSize: ResponsiveItems.headline6,
+            fontSize: 40,
             fontFamily: 'BebasNeue',
           ),
           displayMedium: const TextStyle(

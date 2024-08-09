@@ -206,8 +206,6 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
   @override
   Widget build(BuildContext context) {
     AdjustStockProvider adjustStockProvider = Provider.of(context);
-    int itensPerLine = ResponsiveItems.getItensPerLine(context);
-    int productsCount = adjustStockProvider.productsCount;
 
     return Column(
       mainAxisAlignment: adjustStockProvider.productsCount > 1
@@ -215,33 +213,111 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
           : MainAxisAlignment.start,
       children: [
         ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: adjustStockProvider.productsCount,
-          itemBuilder: (context, index) {
-            if (adjustStockProvider.productsCount == 1) {
-              _selectedIndex = index;
-            }
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: adjustStockProvider.productsCount,
+            itemBuilder: (context, index) {
+              if (adjustStockProvider.productsCount == 1) {
+                _selectedIndex = index;
+              }
 
-            final startIndex = index * itensPerLine;
-            final endIndex = (startIndex + itensPerLine <= productsCount)
-                ? startIndex + itensPerLine
-                : productsCount;
+              final product = adjustStockProvider.products[index];
 
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var i = startIndex; i < endIndex; i++)
-                  Expanded(
-                    child: itemOfList(
-                      index: i,
-                      adjustStockProvider: adjustStockProvider,
+              return GestureDetector(
+                onTap:
+                    adjustStockProvider.isLoadingTypeStockAndJustifications ||
+                            adjustStockProvider.isLoadingAdjustStock
+                        ? null
+                        : () {
+                            adjustStockProvider
+                                    .jsonAdjustStock["ProductPackingCode"] =
+                                product.productPackingCode.toString();
+                            adjustStockProvider.jsonAdjustStock["ProductCode"] =
+                                product.productCode.toString();
+
+                            selectIndexAndFocus(
+                              adjustStockProvider: adjustStockProvider,
+                              index: index,
+                            );
+                          },
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Nome",
+                          subtitle: product.name,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "PLU",
+                          subtitle: product.plu,
+                          otherWidget:
+                              AdjustStockAllStocks.adjustStockAllStocks(
+                            context: context,
+                            hasStocks: product.stocks!.length > 0,
+                            product: product,
+                            isLoading: adjustStockProvider.isLoadingAdjustStock,
+                          ),
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Embalagem",
+                          subtitle: product.packingQuantity,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Estoque atual",
+                          subtitle: ConvertString.convertToBrazilianNumber(
+                            product.stocks!
+                                .where((element) =>
+                                    element.stockName == "Estoque Atual")
+                                .first
+                                .stockQuantity,
+                          ),
+                        ),
+                        if (adjustStockProvider.lastUpdatedQuantity != "" &&
+                            adjustStockProvider
+                                    .indexOfLastProductChangedStockQuantity ==
+                                index)
+                          FittedBox(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                "Última quantidade confirmada: ${adjustStockProvider.lastUpdatedQuantity}",
+                                style: TextStyle(
+                                  fontSize: 100,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'BebasNeue',
+                                  fontStyle: FontStyle.italic,
+                                  letterSpacing: 1,
+                                  wordSpacing: 4,
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (_selectedIndex == index)
+                          AdjustStockInsertQuantity(
+                            consultedProductController:
+                                widget.consultedProductController,
+                            dropDownFormKey: widget.dropDownFormKey,
+                            insertQuantityFormKey: widget.insertQuantityFormKey,
+                            internalEnterpriseCode:
+                                widget.internalEnterpriseCode,
+                            index: index,
+                            getProductWithCamera: widget.getProductWithCamera,
+                            updateSelectedIndex: () {
+                              setState(() {
+                                _selectedIndex = -1;
+                              });
+                            },
+                          ),
+                      ],
                     ),
                   ),
-              ],
-            );
-          },
-        ),
+                ),
+              );
+            }),
       ],
     );
   }

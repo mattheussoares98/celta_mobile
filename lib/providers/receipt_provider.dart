@@ -23,8 +23,8 @@ class ReceiptProvider with ChangeNotifier {
   static String _errorMessageLiberate = '';
 
   List<ReceiptProductsModel> _products = [];
-  get products => _products;
-  get productsCount => _products.length;
+  List<ReceiptProductsModel> get products => _products;
+  int get productsCount => _products.length;
   bool _isLoadingProducts = false;
 
   get isLoadingProducts => _isLoadingProducts;
@@ -54,9 +54,11 @@ class ReceiptProvider with ChangeNotifier {
       if (_products[index].Quantidade_ProcRecebDocProEmb == -1) {
         _products[index].Quantidade_ProcRecebDocProEmb = 0;
       }
-      quantity = _products[index].Quantidade_ProcRecebDocProEmb + quantity;
+      quantity =
+          (_products[index].Quantidade_ProcRecebDocProEmb ?? 0) + quantity;
     } else if (_products[index].Quantidade_ProcRecebDocProEmb != -1) {
-      quantity = _products[index].Quantidade_ProcRecebDocProEmb + quantity;
+      quantity =
+          (_products[index].Quantidade_ProcRecebDocProEmb ?? 0) + quantity;
     }
 
     if (isAnnulQuantity) {
@@ -95,7 +97,7 @@ class ReceiptProvider with ChangeNotifier {
       notifyListeners();
       return;
     } else if (isSubtract &&
-        quantity > _products[index].Quantidade_ProcRecebDocProEmb &&
+        quantity > (_products[index].Quantidade_ProcRecebDocProEmb ?? 0) &&
         _products[index].Quantidade_ProcRecebDocProEmb != -1) {
       _isLoadingUpdateQuantity = false;
       _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";

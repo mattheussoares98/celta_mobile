@@ -122,183 +122,12 @@ class _CartItemsState extends State<CartItems> {
     }
   }
 
-  Widget itemOfList({
-    required SaleRequestProvider saleRequestProvider,
-    required int index,
-  }) {
-    double? controllerInDouble = double.tryParse(
-      widget.textEditingController.text.replaceAll(RegExp(r'\,'), '.'),
-    );
-
-    var cartProducts =
-        saleRequestProvider.getCartProducts(widget.enterpriseCode);
-
-    SaleRequestCartProductsModel product = cartProducts[index];
-    return Card(
-      child: Column(
-        children: [
-          CartProductsItems.saleRequestCartProductsItems(
-            updateSelectedIndex: () {
-              setState(() {
-                _selectedIndex = -1;
-              });
-            },
-            saleRequestProvider: saleRequestProvider,
-            changeFocus: () => selectIndexAndFocus(
-              saleRequestProvider: saleRequestProvider,
-              index: index,
-            ),
-            context: context,
-            index: index,
-            product: product,
-            enterpriseCode: widget.enterpriseCode,
-            selectedIndex: _selectedIndex,
-          ),
-          if (_selectedIndex == index)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 55,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "Preço venda",
-                              subtitle: ConvertString.convertToBRL(
-                                product.RetailPracticedPrice,
-                              ),
-                            ),
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "Mín. atacado",
-                              subtitle: product.MinimumWholeQuantity.toString(),
-                            ),
-                            TitleAndSubtitle.titleAndSubtitle(
-                              title: "Preço atacado",
-                              subtitle: ConvertString.convertToBRL(
-                                product.WholePracticedPrice,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 45,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(300, 60),
-                          ),
-                          onPressed: controllerInDouble == null ||
-                                  controllerInDouble == 0
-                              ? null
-                              : () {
-                                  ShowAlertDialog.showAlertDialog(
-                                      context: context,
-                                      title: "Atualizar o preço",
-                                      subtitle:
-                                          "Deseja realmente atualizar a quantidade e o preço?",
-                                      function: () {
-                                        updateProductInCart(
-                                          saleRequestProvider:
-                                              saleRequestProvider,
-                                          product: product,
-                                          index: index,
-                                        );
-
-                                        FocusScope.of(context).unfocus();
-                                      });
-                                },
-                          child: const Text("ATUALIZAR"),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 55,
-                        child: InsertQuantityTextFormField(
-                          isLoading:
-                              saleRequestProvider.isLoadingSaveSaleRequest ||
-                                  saleRequestProvider.isLoadingProcessCart,
-                          lengthLimitingTextInputFormatter: 8,
-                          focusNode: _focusNode,
-                          textEditingController: widget.textEditingController,
-                          formKey: _formKey,
-                          onFieldSubmitted: () {
-                            ShowAlertDialog.showAlertDialog(
-                              context: context,
-                              title: "Atualizar o preço",
-                              subtitle:
-                                  "Deseja realmente atualizar a quantidade e o preço?",
-                              function: () => updateProductInCart(
-                                saleRequestProvider: saleRequestProvider,
-                                product: product,
-                                index: index,
-                              ),
-                            );
-                          },
-                          onChanged: () {
-                            setState(() {});
-                          },
-                          labelText: "Digite a nova quantidade",
-                          hintText: "Nova quantidade",
-                        ),
-                      ),
-                      Expanded(
-                        flex: 45,
-                        child: Column(
-                          children: [
-                            const FittedBox(
-                              child: Text(
-                                " NOVO PREÇO",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ),
-                            FittedBox(
-                              child: Text(
-                                getNewPrice(
-                                  product: product,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
 
     int cartProductsCount =
         saleRequestProvider.cartProductsCount(widget.enterpriseCode.toString());
-
-    int itensPerLine = ResponsiveItems.getItensPerLine(context);
 
     return Expanded(
       child: Column(
@@ -310,26 +139,190 @@ class _CartItemsState extends State<CartItems> {
               child: ListView.builder(
                 itemCount: cartProductsCount,
                 itemBuilder: (context, index) {
-                  final startIndex = index * itensPerLine;
-                  final endIndex =
-                      (startIndex + itensPerLine <= cartProductsCount)
-                          ? startIndex + itensPerLine
-                          : cartProductsCount;
+                  var cartProducts = saleRequestProvider
+                      .getCartProducts(widget.enterpriseCode);
+                  SaleRequestCartProductsModel product = cartProducts[index];
+                  double? controllerInDouble = double.tryParse(
+                    widget.textEditingController.text
+                        .replaceAll(RegExp(r'\,'), '.'),
+                  );
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (var i = startIndex; i < endIndex; i++)
-                            Expanded(
-                              child: itemOfList(
+                      Card(
+                        child: Column(
+                          children: [
+                            CartProductsItems.saleRequestCartProductsItems(
+                              updateSelectedIndex: () {
+                                setState(() {
+                                  _selectedIndex = -1;
+                                });
+                              },
+                              saleRequestProvider: saleRequestProvider,
+                              changeFocus: () => selectIndexAndFocus(
                                 saleRequestProvider: saleRequestProvider,
-                                index: i,
+                                index: index,
                               ),
+                              context: context,
+                              index: index,
+                              product: product,
+                              enterpriseCode: widget.enterpriseCode,
+                              selectedIndex: _selectedIndex,
                             ),
-                        ],
+                            if (_selectedIndex == index)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 55,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TitleAndSubtitle.titleAndSubtitle(
+                                                title: "Preço venda",
+                                                subtitle:
+                                                    ConvertString.convertToBRL(
+                                                  product.RetailPracticedPrice,
+                                                ),
+                                              ),
+                                              TitleAndSubtitle.titleAndSubtitle(
+                                                title: "Mín. atacado",
+                                                subtitle:
+                                                    product.MinimumWholeQuantity
+                                                        .toString(),
+                                              ),
+                                              TitleAndSubtitle.titleAndSubtitle(
+                                                title: "Preço atacado",
+                                                subtitle:
+                                                    ConvertString.convertToBRL(
+                                                  product.WholePracticedPrice,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 45,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              fixedSize: const Size(300, 60),
+                                            ),
+                                            onPressed: controllerInDouble ==
+                                                        null ||
+                                                    controllerInDouble == 0
+                                                ? null
+                                                : () {
+                                                    ShowAlertDialog
+                                                        .showAlertDialog(
+                                                            context: context,
+                                                            title:
+                                                                "Atualizar o preço",
+                                                            subtitle:
+                                                                "Deseja realmente atualizar a quantidade e o preço?",
+                                                            function: () {
+                                                              updateProductInCart(
+                                                                saleRequestProvider:
+                                                                    saleRequestProvider,
+                                                                product:
+                                                                    product,
+                                                                index: index,
+                                                              );
+
+                                                              FocusScope.of(
+                                                                      context)
+                                                                  .unfocus();
+                                                            });
+                                                  },
+                                            child: const Text("ATUALIZAR"),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 55,
+                                          child: InsertQuantityTextFormField(
+                                            isLoading: saleRequestProvider
+                                                    .isLoadingSaveSaleRequest ||
+                                                saleRequestProvider
+                                                    .isLoadingProcessCart,
+                                            lengthLimitingTextInputFormatter: 8,
+                                            focusNode: _focusNode,
+                                            textEditingController:
+                                                widget.textEditingController,
+                                            formKey: _formKey,
+                                            onFieldSubmitted: () {
+                                              ShowAlertDialog.showAlertDialog(
+                                                context: context,
+                                                title: "Atualizar o preço",
+                                                subtitle:
+                                                    "Deseja realmente atualizar a quantidade e o preço?",
+                                                function: () =>
+                                                    updateProductInCart(
+                                                  saleRequestProvider:
+                                                      saleRequestProvider,
+                                                  product: product,
+                                                  index: index,
+                                                ),
+                                              );
+                                            },
+                                            onChanged: () {
+                                              setState(() {});
+                                            },
+                                            labelText:
+                                                "Digite a nova quantidade",
+                                            hintText: "Nova quantidade",
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 45,
+                                          child: Column(
+                                            children: [
+                                              const FittedBox(
+                                                child: Text(
+                                                  " NOVO PREÇO",
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ),
+                                              FittedBox(
+                                                child: Text(
+                                                  getNewPrice(
+                                                    product: product,
+                                                  ),
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.italic,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                       if (index == cartProductsCount - 1 &&
                           cartProductsCount > 1)
