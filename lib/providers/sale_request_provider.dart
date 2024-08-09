@@ -189,7 +189,10 @@ class SaleRequestProvider with ChangeNotifier {
       _quantityToAdd = 1;
     }
 
-    double _totalItemValue = _quantityToAdd * (product.value ?? 1);
+    double _totalItemValue = _quantityToAdd *
+        (product.wholePracticedPrice == 0 || product.wholePracticedPrice == null
+            ? product.retailPracticedPrice!
+            : product.wholePracticedPrice!);
 
     double? controllerInDouble = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
@@ -242,7 +245,7 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  dynamic addProductInCart({
+  void addProductInCart({
     required GetProductJsonModel product,
     required TextEditingController consultedProductController,
     required String enterpriseCode,
