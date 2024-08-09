@@ -7,9 +7,11 @@ import '../../../utils/utils.dart';
 class ProductItem extends StatelessWidget {
   final GetProductJsonModel product;
   final Widget componentAfterProductInformations;
+  final bool showCosts;
   const ProductItem({
     required this.product,
     required this.componentAfterProductInformations,
+    required this.showCosts,
     super.key,
   });
 
@@ -34,7 +36,10 @@ class ProductItem extends StatelessWidget {
                     subtitle: product.plu,
                   ),
                 ),
-                OpenDialogProductInformations(product: product),
+                OpenDialogProductInformations(
+                  product: product,
+                  showCosts: showCosts,
+                ),
               ],
             ),
             getTitleAndSubtitle(
@@ -70,7 +75,7 @@ class ProductItem extends StatelessWidget {
               errorMessage: "Sem qtd mín p/ atacado",
               context: context,
             ),
-            if (!product.liquidCost.toString().contains("-1"))
+            if (!product.liquidCost.toString().contains("-1") && showCosts)
               //quando o usuário não possui permissão para consultar o estoque, a API retorna "-1.0"
               getTitleAndSubtitle(
                 isPrice: true,

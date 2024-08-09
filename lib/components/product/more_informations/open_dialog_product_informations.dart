@@ -5,8 +5,10 @@ import '../../components.dart';
 
 class OpenDialogProductInformations extends StatefulWidget {
   final GetProductJsonModel product;
+  final bool showCosts;
   const OpenDialogProductInformations({
     required this.product,
+    required this.showCosts,
     Key? key,
   }) : super(key: key);
 
@@ -63,10 +65,10 @@ class _OpenDialogProductInformationsState
                   child: PageView(
                     controller: _pageController,
                     children: [
-                      Costs(product: widget.product),
                       Stocks(product: widget.product),
                       StockAddress(product: widget.product),
                       LastBuyEntrance(product: widget.product),
+                      if (widget.showCosts) Costs(product: widget.product),
                     ],
                   ),
                 ),
@@ -81,26 +83,31 @@ class _OpenDialogProductInformationsState
                           ActionButton(
                             pageIndex: 0,
                             pageController: _pageController,
-                            textButton: "Custos",
+                            textButton: "Estoques",
                           ),
                           const SizedBox(width: 3),
                           ActionButton(
                             pageIndex: 1,
                             pageController: _pageController,
-                            textButton: "Estoques",
+                            textButton: "Endereços",
                           ),
                           const SizedBox(width: 3),
                           ActionButton(
                             pageIndex: 2,
                             pageController: _pageController,
-                            textButton: "Endereços",
-                          ),
-                          const SizedBox(width: 3),
-                          ActionButton(
-                            pageIndex: 3,
-                            pageController: _pageController,
                             textButton: "Compra",
                           ),
+                          if (widget.showCosts)
+                            Column(
+                              children: [
+                                const SizedBox(width: 3),
+                                ActionButton(
+                                  pageIndex: 3,
+                                  pageController: _pageController,
+                                  textButton: "Custos",
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                       TextButton(

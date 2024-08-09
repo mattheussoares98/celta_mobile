@@ -179,6 +179,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 },
           child: ProductItem(
             product: product,
+            showCosts: false,
             componentAfterProductInformations: Column(
               children: [
                 if (saleRequestProvider.alreadyContainsProduct(
