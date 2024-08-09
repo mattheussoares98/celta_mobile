@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AddressProvider()),
         ChangeNotifierProvider(create: (_) => AdjustSalePriceProvider()),
         ChangeNotifierProvider(create: (_) => AdjustStockProvider()),
+        ChangeNotifierProvider(create: (_) => EvaluationAndSuggestionsProvider()),
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
         ChangeNotifierProvider(create: (_) => EnterpriseProvider()),
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
