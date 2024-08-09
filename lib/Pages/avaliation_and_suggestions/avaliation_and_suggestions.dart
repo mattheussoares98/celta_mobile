@@ -1,0 +1,1 @@
+export './avaliation_and_suggestions_page.dart';
