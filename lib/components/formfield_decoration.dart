@@ -8,6 +8,7 @@ class FormFieldHelper {
     double? hintSize = 12,
     double? labelSize = 12,
     double? errorSize = 12,
+    double? floatingLabelSize = 12,
     String? hintText,
     Widget? prefixIcon,
     Widget? suffixIcon,
@@ -27,6 +28,7 @@ class FormFieldHelper {
       floatingLabelStyle: TextStyle(
         color: isLoading ? Colors.grey : Theme.of(context).primaryColor,
         fontWeight: FontWeight.normal,
+        fontSize: floatingLabelSize,
       ),
       errorStyle: TextStyle(
         fontSize: errorSize,

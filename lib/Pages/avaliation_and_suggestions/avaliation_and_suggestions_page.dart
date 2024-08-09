@@ -1,13 +1,78 @@
 import 'package:flutter/material.dart';
 
+import '../../components/components.dart';
+
 class AvaliationAndSuggestionsPage extends StatelessWidget {
   const AvaliationAndSuggestionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: const Center(child: Text("Avaliações e sugestões")),
+      appBar: AppBar(
+        title: const FittedBox(child: const Text("Avaliações e sugestões")),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            suggestionItem("Ajuda na produtividade"),
+            suggestionItem("Facilidade de uso"),
+            suggestionItem("Desempenho"),
+            suggestionItem("Aparência e design"),
+            suggestionItem("Atualizações e melhorias"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 3),
+              child: TextField(
+                decoration: FormFieldHelper.decoration(
+                  isLoading: false,
+                  context: context,
+                  hintText: "Comentários e/ou sugestões para novos módulos",
+                  labelText: "Comentários e/ou sugestões para novos módulos",
+                ),
+                style: FormFieldHelper.style(),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text("Enviar"),
+            ),
+          ],
+        ),
+      ),
     );
   }
+}
+
+Widget suggestionItem(String title) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Text(title),
+      ),
+      SizedBox(
+        height: 50,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return FittedBox(
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.star,
+                  color: Colors.grey[350],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Divider(height: 5),
+      ),
+    ],
+  );
 }
