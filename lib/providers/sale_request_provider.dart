@@ -227,8 +227,8 @@ class SaleRequestProvider with ChangeNotifier {
   }) async {
     double quantity = consultedProductController.text.toDouble();
 
-    if (quantity == 0) {
-      quantity = 1; //quando retornar zero, precisa adicionar uma unidade
+    if (quantity <= 0) {
+      quantity = 1;
     }
 
     SaleRequestCartProductsModel cartProductsModel =
