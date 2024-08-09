@@ -83,8 +83,9 @@ class _ProductItemState extends State<ProductItem> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TitleAndSubtitle.titleAndSubtitle(
-              title: "Nome",
-              subtitle: widget.product.name,
+              title: "Produto",
+              subtitle: widget.product.name.toString() +
+                  " (${widget.product.packingQuantity})",
             ),
             Row(
               children: [
@@ -97,11 +98,6 @@ class _ProductItemState extends State<ProductItem> {
                 OpenDialogProductInformations(product: widget.product),
               ],
             ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: "Embalagem",
-              subtitle: widget.product.packingQuantity,
-            ),
-            const SizedBox(width: 10),
             getTitleAndSubtitle(
               value: widget.product.retailPracticedPrice.toString(),
               isPrice: true,
