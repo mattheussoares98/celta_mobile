@@ -147,6 +147,10 @@ class _ProductsItemsState extends State<ProductsItems> {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
 
+    if (saleRequestProvider.products.isEmpty) {
+      _selectedIndex = -1;
+    }
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

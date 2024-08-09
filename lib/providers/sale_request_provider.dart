@@ -85,8 +85,8 @@ class SaleRequestProvider with ChangeNotifier {
   String _errorMessageProducts = "";
   String get errorMessageProducts => _errorMessageProducts;
   List<GetProductJsonModel> _products = [];
-  get products => [..._products];
-  get productsCount => _products.length;
+  List<GetProductJsonModel> get products => [..._products];
+  int get productsCount => _products.length;
   var removedProduct;
   int? indexOfRemovedProduct;
 
