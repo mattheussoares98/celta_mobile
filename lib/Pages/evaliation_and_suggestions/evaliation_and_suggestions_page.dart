@@ -1,4 +1,6 @@
+import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 
@@ -7,6 +9,9 @@ class AvaliationAndSuggestionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    EvaluationAndSuggestionsProvider evaluationAndSuggestionsProvider =
+        Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const FittedBox(child: const Text("Avaliações e sugestões")),
@@ -14,11 +19,15 @@ class AvaliationAndSuggestionsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            suggestionItem("Ajuda na produtividade"),
-            suggestionItem("Facilidade de uso"),
-            suggestionItem("Desempenho"),
-            suggestionItem("Aparência e design"),
-            suggestionItem("Atualizações e melhorias"),
+            ListView.builder(
+              itemCount: evaluationAndSuggestionsProvider.evaluations.length,
+              itemBuilder: (context, index) {
+                final evaluate =
+                    evaluationAndSuggestionsProvider.evaluations[index];
+
+                return suggestionItem(evaluate.name);
+              },
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 3),
               child: TextField(
