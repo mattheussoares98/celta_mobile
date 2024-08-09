@@ -126,6 +126,14 @@ class _HomePageState extends State<HomePage> {
               context: context,
             ),
             ImageComponent.image(
+              imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
+              routine: 'Avaliação e sugestôes'.toUpperCase(),
+              route: APPROUTES.ENTERPRISE,
+              nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
+              context: context,
+              isNew: true,
+            ),
+            ImageComponent.image(
               imagePath: 'lib/assets/Images/newClient.jpg',
               routine: 'Cadastro de clientes'.toUpperCase(),
               route: APPROUTES.CUSTOMER_REGISTER,

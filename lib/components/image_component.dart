@@ -31,27 +31,30 @@ class ImageComponent {
               alignment: Alignment.topCenter,
               height: double.infinity,
             ),
-            if(isNew == true)
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),
-                  color: Colors.red,
-                ),
-                padding: const EdgeInsets.all(4),
-                child: const Text(
-                  'NOVO',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
+            if (isNew == true)
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                    color: Colors.red,
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  child: const Text(
+                    'NOVO',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ),
-            ),
             Positioned(
               bottom: 0,
               left: 0,
