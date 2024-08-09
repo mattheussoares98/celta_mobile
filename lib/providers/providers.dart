@@ -4,6 +4,7 @@ export './buy_request_provider.dart';
 export './configurations_provider.dart';
 export './customer_register_provider.dart';
 export './enterprise_provider.dart';
+export './evaluation_and_suggestions_provider.dart';
 export './inventory_provider.dart';
 export './login_provider.dart';
 export './notifications_provider.dart';
