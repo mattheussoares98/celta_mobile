@@ -89,27 +89,19 @@ class _ProductItemState extends State<ProductItem> {
             Row(
               children: [
                 Expanded(
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "PLU",
-                        subtitle: widget.product.plu,
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Embalagem",
-                        subtitle: widget.product.packingQuantity,
-                      ),
-                    ],
+                  child: TitleAndSubtitle.titleAndSubtitle(
+                    title: "PLU",
+                    subtitle: widget.product.plu,
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  flex: 2,
-                  child: OpenDialogProductInformations(product: widget.product),
-                )
+                OpenDialogProductInformations(product: widget.product),
               ],
             ),
+            TitleAndSubtitle.titleAndSubtitle(
+              title: "Embalagem",
+              subtitle: widget.product.packingQuantity,
+            ),
+            const SizedBox(width: 10),
             getTitleAndSubtitle(
               value: widget.product.retailPracticedPrice.toString(),
               isPrice: true,

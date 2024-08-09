@@ -31,7 +31,7 @@ class _OpenDialogProductInformationsState
       child: Row(
         children: [
           Text(
-            "Estoque",
+            "Mais informações",
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -99,7 +99,7 @@ class _OpenDialogProductInformationsState
                           ActionButton(
                             pageIndex: 3,
                             pageController: _pageController,
-                            textButton: "Última compra",
+                            textButton: "Compra",
                           ),
                         ],
                       ),
