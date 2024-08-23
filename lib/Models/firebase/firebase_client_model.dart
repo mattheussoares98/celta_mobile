@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../../models/firebase/firebase.dart';
 import '../../utils/utils.dart';
 
@@ -16,17 +14,10 @@ class FirebaseEnterpriseModel {
   });
 
   Map<String, dynamic> toJson() {
-    if (kIsWeb) {
-      return {
-        'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
-        'urlCCSWeb': urlCCS.toLowerCase().removeWhiteSpaces(),
-      };
-    } else {
-      return {
-        'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
-        'urlCCS': urlCCS.toLowerCase().removeWhiteSpaces(),
-      };
-    }
+    return {
+      'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
+      'urlCCS': urlCCS.toLowerCase().removeWhiteSpaces(),
+    };
   }
 
   factory FirebaseEnterpriseModel.fromJson(
