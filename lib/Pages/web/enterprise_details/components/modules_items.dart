@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/firebase/firebase.dart';
+import '../../../../models/modules/modules.dart';
 import '../../web.dart';
 
 class ModulesItems extends StatelessWidget {
@@ -24,51 +25,63 @@ class ModulesItems extends StatelessWidget {
         ),
         EnableOrDisableModule(
           enabled: client.modules?.adjustSalePrice == true,
-          module: "Ajuste de preços",
+          moduleName: "Ajuste de preços",
+          module: Modules.adjustSalePrice,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.adjustStock == true,
-          module: "Ajuste de estoques",
+          moduleName: "Ajuste de estoques",
+          module: Modules.adjustStock,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.buyRequest == true,
-          module: "Pedido de compra",
+          moduleName: "Pedido de compra",
+          module: Modules.buyRequest,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.customerRegister == true,
-          module: "Cadastro de cliente",
+          moduleName: "Cadastro de cliente",
+          module: Modules.customerRegister,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.inventory == true,
-          module: "Inventário",
+          moduleName: "Inventário",
+          module: Modules.inventory,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.priceConference == true,
-          module: "Consulta de preços",
+          moduleName: "Consulta de preços",
+          module: Modules.priceConference,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.productsConference == true,
-          module: "Conferência de produtos (expedição)",
+          moduleName: "Conferência de produtos (expedição)",
+          module: Modules.productsConference,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.receipt == true,
-          module: "Recebimento",
+          moduleName: "Recebimento",
+          module: Modules.receipt,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.researchPrices == true,
-          module: "Consulta de preços concorrentes",
+          moduleName: "Consulta de preços concorrentes",
+          module: Modules.researchPrices,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.saleRequest == true,
-          module: "Pedido de vendas",
+          moduleName: "Pedido de vendas",
+          module: Modules.saleRequest,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.transferBetweenStocks == true,
-          module: "Transferência entre estoques",
+          moduleName: "Transferência entre estoques",
+          module: Modules.transferBetweenStocks,
         ),
         EnableOrDisableModule(
           enabled: client.modules?.transferRequest == true,
-          module: "Pedido de transferência",
+          moduleName: "Pedido de transferência",
+          module: Modules.transferRequest,
         ),
       ],
     );

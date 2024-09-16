@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../../models/modules/modules.dart';
+
 class EnableOrDisableModule extends StatelessWidget {
   final bool enabled;
-  final String module;
+  final String moduleName;
+  final Modules module;
   const EnableOrDisableModule({
     required this.enabled,
+    required this.moduleName,
     required this.module,
     super.key,
   });
@@ -21,7 +25,7 @@ class EnableOrDisableModule extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    module,
+                    moduleName,
                     style: const TextStyle(
                       fontSize: 17,
                     ),
