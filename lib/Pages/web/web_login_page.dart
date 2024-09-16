@@ -33,13 +33,11 @@ class _WebLoginPageState extends State<WebLoginPage> {
       password: passwordController.text,
     );
 
-    if (userCredential != null) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(APPROUTES.WEB_HOME, (route) => false);
+    if (userCredential == null) {
+      setState(() {
+        isLoading = false;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override
