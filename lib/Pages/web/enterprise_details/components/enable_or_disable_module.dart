@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../models/firebase/firebase.dart';
 import '../../../../models/modules/modules.dart';
+import '../../../../providers/providers.dart';
 
 class EnableOrDisableModule extends StatelessWidget {
   final bool enabled;
   final String moduleName;
   final Modules module;
+  final FirebaseEnterpriseModel client;
   const EnableOrDisableModule({
     required this.enabled,
     required this.moduleName,
     required this.module,
+    required this.client,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    WebProvider webProvider = Provider.of(context);
+
     return Column(
       children: [
         Padding(
@@ -39,7 +46,9 @@ class EnableOrDisableModule extends StatelessWidget {
                 ],
               ),
               ElevatedButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  await webProvider.enableOrDisableModule(module, client);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: enabled ? Colors.red : Colors.green,
                 ),

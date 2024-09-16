@@ -449,4 +449,149 @@ class WebProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> enableOrDisableModule(
+    Modules module,
+    FirebaseEnterpriseModel client,
+  ) async {
+    _isLoading = true;
+    _errorMessageClients = "";
+    notifyListeners();
+
+    try {
+      bool newValue = _getNewValueToUpdateModule(module, client);
+
+      await FirebaseHelper.enableOrDisableModule(
+        client: client,
+        module: module,
+        newValue: newValue,
+      );
+
+      client = getUpdatedClient(module, client);
+    } catch (e) {
+      _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  bool _getNewValueToUpdateModule(
+    Modules module,
+    FirebaseEnterpriseModel client,
+  ) {
+    switch (module) {
+      case Modules.adjustSalePrice:
+        return !client.modules!.adjustSalePrice;
+      case Modules.adjustStock:
+        return !client.modules!.adjustStock;
+      case Modules.buyRequest:
+        return !client.modules!.buyRequest;
+      case Modules.customerRegister:
+        return !client.modules!.customerRegister;
+      case Modules.inventory:
+        return !client.modules!.inventory;
+      case Modules.priceConference:
+        return !client.modules!.priceConference;
+      case Modules.productsConference:
+        return !client.modules!.productsConference;
+      case Modules.receipt:
+        return !client.modules!.receipt;
+      case Modules.researchPrices:
+        return !client.modules!.researchPrices;
+      case Modules.saleRequest:
+        return !client.modules!.saleRequest;
+      case Modules.transferBetweenStocks:
+        return !client.modules!.transferBetweenStocks;
+      case Modules.transferRequest:
+        return !client.modules!.transferRequest;
+    }
+  }
+
+  FirebaseEnterpriseModel getUpdatedClient(
+    Modules module,
+    FirebaseEnterpriseModel client,
+  ) {
+    return FirebaseEnterpriseModel(
+      id: client.id,
+      urlCCS: client.urlCCS,
+      usersInformations: client.usersInformations,
+      enterpriseName: client.enterpriseName,
+      modules: ModuleModel(
+        adjustSalePrice: module == Modules.adjustSalePrice
+            ? !client.modules!.adjustSalePrice
+            : client.modules!.adjustSalePrice,
+        adjustStock: module == Modules.adjustStock
+            ? !client.modules!.adjustStock
+            : client.modules!.adjustStock,
+        buyRequest: module == Modules.buyRequest
+            ? !client.modules!.buyRequest
+            : client.modules!.buyRequest,
+        customerRegister: module == Modules.customerRegister
+            ? !client.modules!.customerRegister
+            : client.modules!.customerRegister,
+        inventory: module == Modules.inventory
+            ? !client.modules!.inventory
+            : client.modules!.inventory,
+        priceConference: module == Modules.priceConference
+            ? !client.modules!.priceConference
+            : client.modules!.priceConference,
+        productsConference: module == Modules.productsConference
+            ? !client.modules!.productsConference
+            : client.modules!.productsConference,
+        receipt: module == Modules.receipt
+            ? !client.modules!.receipt
+            : client.modules!.receipt,
+        researchPrices: module == Modules.researchPrices
+            ? !client.modules!.researchPrices
+            : client.modules!.researchPrices,
+        saleRequest: module == Modules.saleRequest
+            ? !client.modules!.saleRequest
+            : client.modules!.saleRequest,
+        transferBetweenStocks: module == Modules.transferBetweenStocks
+            ? !client.modules!.transferBetweenStocks
+            : client.modules!.transferBetweenStocks,
+        transferRequest: module == Modules.transferRequest
+            ? !client.modules!.transferRequest
+            : client.modules!.transferRequest,
+      ),
+    );
+    // switch (module) {
+    //   case Modules.adjustSalePrice:
+    //      client.modules!.adjustSalePrice= !client.modules!.adjustSalePrice;
+    //      break;
+    //   case Modules.adjustStock:
+    //      client.modules!.adjustStock= !client.modules!.adjustStock;
+    //      break;
+    //   case Modules.buyRequest:
+    //      client.modules!.buyRequest= !client.modules!.buyRequest;
+    //      break;
+    //   case Modules.customerRegister:
+    //      client.modules!.customerRegister= !client.modules!.customerRegister;
+    //      break;
+    //   case Modules.inventory:
+    //      client.modules!.inventory= !client.modules!.inventory;
+    //      break;
+    //   case Modules.priceConference:
+    //      client.modules!.priceConference= !client.modules!.priceConference;
+    //      break;
+    //   case Modules.productsConference:
+    //      client.modules!.productsConference= !client.modules!.productsConference;
+    //      break;
+    //   case Modules.receipt:
+    //      client.modules!.receipt= !client.modules!.receipt;
+    //      break;
+    //   case Modules.researchPrices:
+    //      client.modules!.researchPrices= !client.modules!.researchPrices;
+    //      break;
+    //   case Modules.saleRequest:
+    //      client.modules!.saleRequest= !client.modules!.saleRequest;
+    //      break;
+    //   case Modules.transferBetweenStocks:
+    //      client.modules!.transferBetweenStocks= !client.modules!.transferBetweenStocks;
+    //      break;
+    //   case Modules.transferRequest:
+    //      client.modules!.transferRequest= !client.modules!.transferRequest;
+    //      break;
+  }
 }
