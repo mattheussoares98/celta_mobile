@@ -175,7 +175,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         customerRegisterProvider: customerRegisterProvider,
         addressProvider: addressProvider,
       ),
-      onPopInvoked: (value) {
+      onPopInvokedWithResult: (value, __){
         if (value == true) {
           addressProvider.clearAddresses();
           addressProvider.clearAddressControllers(clearCep: true);

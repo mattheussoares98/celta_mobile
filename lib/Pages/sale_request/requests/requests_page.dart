@@ -58,7 +58,7 @@ class _RequestsPageState extends State<RequestsPage> {
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_) {
+          onPopInvokedWithResult: (_, __){
             saleRequestProvider.clearRequests();
           },
           child: Scaffold(

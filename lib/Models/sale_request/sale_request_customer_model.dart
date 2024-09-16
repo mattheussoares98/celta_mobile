@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import './sale_request_covenant_model.dart';
+import 'sale_request_covenant_model.dart';
 
 class SaleRequestCustomerModel {
   int Code;

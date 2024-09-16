@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
       drawer: const MyDrawer(),
       body: PopScope(
         canPop: false,
-        onPopInvoked: (_) async {
+        onPopInvokedWithResult: (_, __)async{
           ShowAlertDialog.showAlertDialog(
             context: context,
             title: "Fechar o aplicativo",

@@ -34,7 +34,7 @@ class _RequestsModelPageState extends State<RequestsModelPage> {
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (value) {
+          onPopInvokedWithResult: (value, __){
             transferRequestProvider.clearRequestModels();
           },
           child: Scaffold(

@@ -99,11 +99,11 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: ((didPop) {
+          onPopInvokedWithResult: (_, __) {
             researchPricesProvider.updateSelectedConcurrent(concurrent: null);
             addressProvider.clearAddresses();
             addressProvider.clearAddressControllers(clearCep: true);
-          }),
+          },
           child: Scaffold(
             appBar: AppBar(
               title: FittedBox(

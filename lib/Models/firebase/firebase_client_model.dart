@@ -1,4 +1,4 @@
-import '../../models/firebase/firebase.dart';
+import 'firebase.dart';
 import '../../utils/utils.dart';
 
 class FirebaseEnterpriseModel {

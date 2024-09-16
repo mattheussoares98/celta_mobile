@@ -189,7 +189,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return PopScope(
-      onPopInvoked: (value) {
+      onPopInvokedWithResult: (value, __){
         if (value == true) {
           inventoryProvider.clearProducts();
         }

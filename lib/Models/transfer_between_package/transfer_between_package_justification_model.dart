@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../models/soap/soap.dart';
+import '../soap/soap.dart';
 
 class TransferBetweenPackageJustificationsModel {
   final int CodigoInterno_JustMov; /*  37, */

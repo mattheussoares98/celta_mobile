@@ -35,7 +35,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
     return PopScope(
       canPop: !priceConferenceProvider.isLoading &&
           !priceConferenceProvider.isSendingToPrint,
-      onPopInvoked: (value) async {
+      onPopInvokedWithResult: (value, __)async{
         if (value == true) {
           priceConferenceProvider.clearProducts();
         }

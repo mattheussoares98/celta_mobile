@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../../../models/soap/soap.dart';
+import '../../soap.dart';
 
 import 'get_product_json.dart';
 

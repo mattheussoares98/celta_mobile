@@ -42,7 +42,7 @@ class _DestinyEnterprisePageState
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_) {
+          onPopInvokedWithResult: (_, __){
             transferRequestProvider.clearDestinyEnterprise();
           },
           child: Scaffold(

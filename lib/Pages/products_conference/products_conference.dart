@@ -1,1 +1,1 @@
-export './expedition_controls_page.dart';
+export 'expedition_controls_page.dart';

@@ -89,7 +89,7 @@ class _TransferPageState extends State<TransferPage> {
         PopScope(
           canPop: !transferRequestProvider.isLoadingSaveTransferRequest &&
               !transferRequestProvider.isLoadingProducts,
-          onPopInvoked: (value) {
+          onPopInvokedWithResult: (value, __){
             if (value == true) {
               transferRequestProvider.clearProducts();
             }

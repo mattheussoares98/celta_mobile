@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../api/api.dart';
-import '../../models/address/address.dart';
+import '../address/address.dart';
 
 class ResearchPricesConcurrentsModel {
   // final int ResearchOfPriceCode;

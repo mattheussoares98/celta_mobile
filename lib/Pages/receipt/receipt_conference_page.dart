@@ -37,7 +37,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
         PopScope(
           canPop: !receiptProvider.isLoadingUpdateQuantity &&
               !receiptProvider.isLoadingProducts,
-          onPopInvoked: (value) {
+          onPopInvokedWithResult: (value, __){
             if (value == true) {
               receiptProvider.clearProducts();
             }

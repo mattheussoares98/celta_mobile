@@ -42,7 +42,7 @@
 //       children: [
 //         PopScope(
 //           canPop: !transferBetweenPackageProvider.isLoadingAdjustStock,
-//           onPopInvoked: (value) {
+//           onPopInvokedWithResult: (value, __){
 //             if (value == true) {
 //               transferBetweenPackageProvider
 //                   .clearProductsJustificationsPackageAndJsonAdjustStock();

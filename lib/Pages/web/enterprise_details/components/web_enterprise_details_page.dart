@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../components/components.dart';
 import '../../../../models/firebase/firebase.dart';
 import '../../../../providers/providers.dart';
-import './components.dart';
+import 'components.dart';
 
 class WebEnterpriseDetailsPage extends StatefulWidget {
   const WebEnterpriseDetailsPage({super.key});

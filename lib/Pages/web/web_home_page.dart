@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import 'enterprises/enterprises_page.dart';
-import '../../pages/web/soap_actions/soap_actions_page.dart';
+import 'soap_actions/soap_actions_page.dart';
 import '../../providers/providers.dart';
 
 class WebHomePage extends StatefulWidget {

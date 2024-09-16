@@ -33,7 +33,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     NotificationsProvider notificationsProvider = Provider.of(context);
 
     return PopScope(
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (_, __){
         notificationsProvider.setHasUnreadNotifications(
             newValue: false, notify: true);
       },

@@ -2,7 +2,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../pages/web/web.dart';
+import '../web.dart';
 import '../../../providers/providers.dart';
 
 class SoapActionsPage extends StatefulWidget {

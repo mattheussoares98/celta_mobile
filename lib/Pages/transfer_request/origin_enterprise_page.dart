@@ -41,7 +41,7 @@ class _OriginEnterprisePageState
     return Stack(
       children: [
         PopScope(
-          onPopInvoked: (_) {
+          onPopInvokedWithResult: (_, __){
             transferRequestProvider.clearOriginEnterprise();
           },
           child: Scaffold(

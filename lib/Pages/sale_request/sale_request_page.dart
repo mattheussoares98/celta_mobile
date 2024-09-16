@@ -155,7 +155,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           canPop: !saleRequestProvider.isLoadingSaveSaleRequest &&
               !saleRequestProvider.isLoadingProcessCart &&
               !saleRequestProvider.isLoadingProducts,
-          onPopInvoked: (value) {
+          onPopInvokedWithResult: (value, __){
             if (value == true) {
               saleRequestProvider.clearProducts();
             }

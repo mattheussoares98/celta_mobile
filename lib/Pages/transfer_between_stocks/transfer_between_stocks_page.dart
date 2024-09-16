@@ -51,7 +51,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
               !transferBetweenStocksProvider.isLoadingProducts &&
               !transferBetweenStocksProvider
                   .isLoadingTypeStockAndJustifications,
-          onPopInvoked: (value) {
+          onPopInvokedWithResult: (value, __){
             if (value == true) {
               transferBetweenStocksProvider
                   .clearProductsJustificationsStockTypesAndJsonAdjustStock();

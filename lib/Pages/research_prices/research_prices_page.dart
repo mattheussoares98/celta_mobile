@@ -55,7 +55,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
 
     return PopScope(
       canPop: !researchPricesProvider.isLoadingResearchPrices,
-      onPopInvoked: (value) {
+      onPopInvokedWithResult: (value, __){
         if (value == true) {
           researchPricesProvider.clearResearchPrices();
         }

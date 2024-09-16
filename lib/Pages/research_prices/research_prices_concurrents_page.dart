@@ -50,7 +50,7 @@ class _ResearchPricesConcurrentsPageState
     return PopScope(
       canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents &&
           !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-      onPopInvoked: (_) async {
+      onPopInvokedWithResult: (_, __)async{
         researchPricesProvider.updateSelectedConcurrent(concurrent: null);
         researchPricesProvider.clearConcurrents();
       },

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import './sale_request_cart_products_model.dart';
+import 'sale_request_cart_products_model.dart';
 
 
 class SaleRequestProcessCartModel {

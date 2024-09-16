@@ -99,7 +99,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
       children: [
         PopScope(
           canPop: !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-          onPopInvoked: (value) {
+          onPopInvokedWithResult: (value, __){
             if (value == true) {
               researchPricesProvider.updateSelectedResearch(null);
             }

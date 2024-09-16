@@ -60,7 +60,7 @@ class _ResearchPricesProductsPageState
         PopScope(
           canPop: !researchPricesProvider.isLoadingGetProducts &&
               !researchPricesProvider.isLoadingInsertConcurrentPrices,
-          onPopInvoked: (value) {
+          onPopInvokedWithResult: (value, __){
             if (value == true) {
               researchPricesProvider.clearAssociatedsProducts();
               researchPricesProvider.clearNotAssociatedsProducts();

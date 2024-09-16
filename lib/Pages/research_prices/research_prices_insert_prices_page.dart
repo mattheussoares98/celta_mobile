@@ -129,7 +129,7 @@ class _ResearchPricesInsertPricesPageState
     ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return PopScope(
-      onPopInvoked: (_) async {
+      onPopInvokedWithResult: (_, __)async{
         researchPricesProvider.clearAssociatedsProducts();
         researchPricesProvider.clearNotAssociatedsProducts();
       },

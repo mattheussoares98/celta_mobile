@@ -43,7 +43,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
 
     return PopScope(
       canPop: !adjustSalePriceProvider.isLoading,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (_, __) {
         adjustSalePriceProvider.clearDataOnCloseAdjustPriceScreen();
       },
       child: Stack(

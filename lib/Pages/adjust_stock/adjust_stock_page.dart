@@ -46,7 +46,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
           canPop: !adjustStockProvider.isLoadingProducts &&
               !adjustStockProvider.isLoadingAdjustStock &&
               !adjustStockProvider.isLoadingTypeStockAndJustifications,
-          onPopInvoked: (value) async {
+          onPopInvokedWithResult: (value, __) async {
             if (value == true) {
               adjustStockProvider
                   .clearProductsJustificationsStockTypesAndJsonAdjustStock();
@@ -79,7 +79,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                             context: context,
                             configurationsProvider: configurationsProvider,
                           );
-              
+
                           if (adjustStockProvider.productsCount > 0) {
                             _consultProductController.clear();
                           }
@@ -89,7 +89,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       Row(
                         children: [
                           Expanded(
-                            child: AdjustStockJustificationsStockDropwdownWidget(
+                            child:
+                                AdjustStockJustificationsStockDropwdownWidget(
                               dropDownFormKey: _dropDownFormKey,
                             ),
                           ),
@@ -99,7 +100,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                               size: 30,
                               color: adjustStockProvider
                                           .isLoadingTypeStockAndJustifications ||
-                                      adjustStockProvider.isLoadingAdjustStock ||
+                                      adjustStockProvider
+                                          .isLoadingAdjustStock ||
                                       adjustStockProvider.isLoadingProducts
                                   ? Colors.grey
                                   : Theme.of(context).colorScheme.primary,
@@ -131,21 +133,21 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                       getProductWithCamera: () async {
                         FocusScope.of(context).unfocus();
                         _consultProductController.clear();
-              
+
                         _consultProductController.text =
                             await ScanBarCode.scanBarcode(context);
-              
+
                         if (_consultProductController.text == "") {
                           return;
                         }
-              
+
                         await adjustStockProvider.getProducts(
                           enterpriseCode: enterprise.codigoInternoEmpresa,
                           controllerText: _consultProductController.text,
                           context: context,
                           configurationsProvider: configurationsProvider,
                         );
-              
+
                         if (adjustStockProvider.productsCount > 0) {
                           _consultProductController.clear();
                         }
