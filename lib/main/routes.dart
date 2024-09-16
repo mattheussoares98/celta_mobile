@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../pages/evaliation_and_suggestions/avaliation_and_suggestions.dart';
+
+import '../pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
 import '../pages/products_conference/expedition_controls_page.dart';
 import '../pages/adjust_sale_price/adjust_sale_price.dart';
 import '../pages/web/web.dart';
@@ -20,8 +21,8 @@ import '../pages/sale_request/sale_request.dart';
 import '../utils/utils.dart';
 
 Map<String, Widget Function(BuildContext)> routes() => {
-      APPROUTES.AVALIATION_AND_SUGGESTIONS: (ctx) =>
-          const AvaliationAndSuggestionsPage(),
+      APPROUTES.EVALUATION_AND_SUGGESTIONS: (ctx) =>
+          const EvaluationAndSuggestionsPage(),
       APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
       APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
       APPROUTES.INVENTORY: (ctx) => const InventoryPage(),

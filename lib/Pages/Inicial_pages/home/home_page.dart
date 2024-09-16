@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
       drawer: const MyDrawer(),
       body: PopScope(
         canPop: false,
-        onPopInvokedWithResult: (_, __)async{
+        onPopInvokedWithResult: (_, __) async {
           ShowAlertDialog.showAlertDialog(
             context: context,
             title: "Fechar o aplicativo",
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
             ImageComponent.image(
               imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
               routine: 'Avaliação e sugestôes'.toUpperCase(),
-              route: APPROUTES.AVALIATION_AND_SUGGESTIONS,
+              route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
               context: context,
               isNew: true,
             ),

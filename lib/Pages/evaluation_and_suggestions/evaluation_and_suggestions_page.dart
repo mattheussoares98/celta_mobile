@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 
-class AvaliationAndSuggestionsPage extends StatelessWidget {
-  const AvaliationAndSuggestionsPage({super.key});
+class EvaluationAndSuggestionsPage extends StatelessWidget {
+  const EvaluationAndSuggestionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
