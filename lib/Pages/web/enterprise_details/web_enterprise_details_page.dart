@@ -30,19 +30,22 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
             client: client,
             webProvider: webProvider,
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              EditUrlCcs(client: client),
-              const SizedBox(height: 20),
-              // if (client.usersInformations == null)
-              //   const Text(
-              //     "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
-              //     textAlign: TextAlign.center,
-              //   ),
-              // if (client.usersInformations?.isNotEmpty == true)
-              //   UsersList(client: client)
-            ],
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                EditUrlCcs(client: client),
+                ModulesItems(client: client),
+                const SizedBox(height: 20),
+                // if (client.usersInformations == null)
+                //   const Text(
+                //     "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
+                //     textAlign: TextAlign.center,
+                //   ),
+                // if (client.usersInformations?.isNotEmpty == true)
+                //   UsersList(client: client)
+              ],
+            ),
           ),
         ),
         loadingWidget(message: "Aguarde...", isLoading: webProvider.isLoading),

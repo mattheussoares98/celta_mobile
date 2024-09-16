@@ -1,5 +1,5 @@
 import 'firebase.dart';
-import '../../models/modules/modules.dart';
+import '../modules/modules.dart';
 import '../../utils/utils.dart';
 
 class FirebaseEnterpriseModel {
