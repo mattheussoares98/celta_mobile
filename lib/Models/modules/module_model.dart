@@ -1,3 +1,18 @@
+enum Modules {
+  adjustSalePrice,
+  adjustStock,
+  buyRequest,
+  customerRegister,
+  inventory,
+  priceConference,
+  productsConference,
+  receipt,
+  researchPrices,
+  saleRequest,
+  transferBetweenStocks,
+  transferRequest,
+}
+
 class ModuleModel {
   final bool adjustSalePrice;
   final bool adjustStock;
@@ -28,18 +43,18 @@ class ModuleModel {
   });
 
   Map<String, dynamic> toJson() => {
-        "adjustSalePrice": adjustSalePrice,
-        "adjustStock": adjustStock,
-        "buyRequest": buyRequest,
-        "customerRegister": customerRegister,
-        "inventory": inventory,
-        "priceConference": priceConference,
-        "productsConference": productsConference,
-        "receipt": receipt,
-        "researchPrices": researchPrices,
-        "saleRequest": saleRequest,
-        "transferBetweenStocks": transferBetweenStocks,
-        "transferRequest": transferRequest,
+        Modules.adjustSalePrice.name: adjustSalePrice,
+        Modules.adjustStock.name: adjustStock,
+        Modules.buyRequest.name: buyRequest,
+        Modules.customerRegister.name: customerRegister,
+        Modules.inventory.name: inventory,
+        Modules.priceConference.name: priceConference,
+        Modules.productsConference.name: productsConference,
+        Modules.receipt.name: receipt,
+        Modules.researchPrices.name: researchPrices,
+        Modules.saleRequest.name: saleRequest,
+        Modules.transferBetweenStocks.name: transferBetweenStocks,
+        Modules.transferRequest.name: transferRequest,
       };
 
   factory ModuleModel.fromJson(Map data) => ModuleModel(
