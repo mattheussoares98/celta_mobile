@@ -43,17 +43,17 @@ class ModuleModel {
       };
 
   factory ModuleModel.fromJson(Map data) => ModuleModel(
-        adjustSalePrice: data["adjustSalePrice"],
-        adjustStock: data["adjustStock"],
-        buyRequest: data["buyRequest"],
-        customerRegister: data["customerRegister"],
-        inventory: data["inventory"],
-        priceConference: data["priceConference"],
-        productsConference: data["productsConference"],
-        receipt: data["receipt"],
-        researchPrices: data["researchPrices"],
-        saleRequest: data["saleRequest"],
-        transferBetweenStocks: data["transferBetweenStocks"],
-        transferRequest: data["transferRequest"],
+        adjustSalePrice: data["adjustSalePrice"] ?? false,
+        adjustStock: data["adjustStock"] ?? false,
+        buyRequest: data["buyRequest"] ?? false,
+        customerRegister: data["customerRegister"] ?? false,
+        inventory: data["inventory"] ?? false,
+        priceConference: data["priceConference"] ?? false,
+        productsConference: data["productsConference"] ?? false,
+        receipt: data["receipt"] ?? false,
+        researchPrices: data["researchPrices"] ?? false,
+        saleRequest: data["saleRequest"] ?? false,
+        transferBetweenStocks: data["transferBetweenStocks"] ?? false,
+        transferRequest: data["transferRequest"] ?? false,
       );
 }
