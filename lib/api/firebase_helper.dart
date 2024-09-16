@@ -223,7 +223,7 @@ class FirebaseHelper {
 
   static Future<void> initNotifications(
       NotificationsProvider notificationsProvider) async {
-    if (kIsWeb) {
+    if (kIsWeb || PlatformPlus.platform.isWindowsNative) {
       return;
     }
     await _firebaseMessaging.requestPermission();
