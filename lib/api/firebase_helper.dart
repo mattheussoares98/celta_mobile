@@ -182,6 +182,7 @@ class FirebaseHelper {
       urlCCS: UserData.urlCCS,
       id: null,
       usersInformations: null,
+      modules: null,
     );
 
     QuerySnapshot? querySnapshotCcs;

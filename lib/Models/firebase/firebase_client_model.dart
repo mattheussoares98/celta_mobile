@@ -1,4 +1,5 @@
 import 'firebase.dart';
+import '../../models/modules/modules.dart';
 import '../../utils/utils.dart';
 
 class FirebaseEnterpriseModel {
@@ -6,23 +7,27 @@ class FirebaseEnterpriseModel {
   final String urlCCS;
   final String? id;
   final List<UserInformationsModel>? usersInformations;
+  final ModuleModel? modules;
   FirebaseEnterpriseModel({
     this.enterpriseName = "undefined",
     required this.id,
     required this.urlCCS,
     required this.usersInformations,
+    required this.modules,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
       'urlCCS': urlCCS.toLowerCase().removeWhiteSpaces(),
+      'modules': modules?.toJson(),
     };
   }
 
   factory FirebaseEnterpriseModel.fromJson(
       {required Map json, required String id}) {
     var newClient = FirebaseEnterpriseModel(
+      modules: ModuleModel.fromJson(json["modules"]),
       urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
       enterpriseName: json["enterpriseName"],
       id: id,

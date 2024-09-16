@@ -5,6 +5,7 @@ import '../../components/components.dart';
 import '../../models/firebase/firebase.dart';
 import '../../utils/utils.dart';
 import '../api/api.dart';
+import '../models/modules/modules.dart';
 
 enum Months {
   AtualMonth,
@@ -378,6 +379,7 @@ class WebProvider with ChangeNotifier {
         urlCCS: newUrlCcs,
         usersInformations: oldClient.usersInformations,
         enterpriseName: oldClient.enterpriseName,
+        modules: oldClient.modules,
       );
 
       Navigator.of(context).pop();
@@ -406,11 +408,24 @@ class WebProvider with ChangeNotifier {
     _errorMessageClients = "";
     try {
       final newEnterprise = FirebaseEnterpriseModel(
-        enterpriseName: enterpriseName,
-        urlCCS: urlCcs,
-        id: null,
-        usersInformations: null,
-      );
+          enterpriseName: enterpriseName,
+          urlCCS: urlCcs,
+          id: null,
+          usersInformations: null,
+          modules: ModuleModel(
+            adjustSalePrice: false,
+            adjustStock: true,
+            buyRequest: true,
+            customerRegister: true,
+            inventory: true,
+            priceConference: true,
+            productsConference: true,
+            receipt: true,
+            researchPrices: true,
+            saleRequest: true,
+            transferBetweenStocks: true,
+            transferRequest: true,
+          ));
 
       await FirebaseHelper.addNewEnterprise(newEnterprise);
 
