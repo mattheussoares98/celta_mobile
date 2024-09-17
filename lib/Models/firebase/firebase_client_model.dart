@@ -7,7 +7,7 @@ class FirebaseEnterpriseModel {
   final String urlCCS;
   final String? id;
   final List<UserInformationsModel>? usersInformations;
-  final List<ModuleViewModel>? modules;
+  final List<ModuleModel>? modules;
   FirebaseEnterpriseModel({
     this.enterpriseName = "undefined",
     required this.id,
@@ -24,10 +24,14 @@ class FirebaseEnterpriseModel {
     };
   }
 
-  factory FirebaseEnterpriseModel.fromJson(
-      {required Map json, required String id}) {
+  factory FirebaseEnterpriseModel.fromJson({
+    required Map json,
+    required String id,
+  }) {
     var newClient = FirebaseEnterpriseModel(
-      modules: json["modules"].map((e) => ModuleViewModel.fromJson(e)).toList(),
+      modules: json["modules"]
+          .map<ModuleModel>((e) => ModuleModel.fromJson(e))
+          .toList(),
       urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
       enterpriseName: json["enterpriseName"],
       id: id,

@@ -477,4 +477,82 @@ class FirebaseHelper {
     }
     return null;
   }
+
+  static Future<void> updateAllEnterprisesParameters() async {
+    // final enterprises = await getAllClients();
+
+    // try {
+    //   for (var enterprise in enterprises) {
+    //     await _clientsCollection.doc(enterprise.id).set(
+    //       {
+    //         "modules": [
+    //           ModuleViewModel(
+    //             module: Modules.adjustSalePrice,
+    //             enabled: false,
+    //             name: "Ajuste de preços",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.adjustStock,
+    //             enabled: true,
+    //             name: "Ajuste de estoques",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.buyRequest,
+    //             enabled: true,
+    //             name: "Pedido de compra",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.customerRegister,
+    //             enabled: true,
+    //             name: "Cadastro de cliente",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.inventory,
+    //             enabled: true,
+    //             name: "Inventário",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.priceConference,
+    //             enabled: true,
+    //             name: "Consulta de preços",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.productsConference,
+    //             enabled: true,
+    //             name: "Conferência de produtos (expedição)",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.receipt,
+    //             enabled: true,
+    //             name: "Recebimento",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.researchPrices,
+    //             enabled: true,
+    //             name: "Consulta de preços concorrentes",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.saleRequest,
+    //             enabled: true,
+    //             name: "Pedido de vendas",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.transferBetweenStocks,
+    //             enabled: true,
+    //             name: "Transferência entre estoques",
+    //           ),
+    //           ModuleViewModel(
+    //             module: Modules.transferRequest,
+    //             enabled: true,
+    //             name: "Pedido de transferência",
+    //           ),
+    //         ].map((e) => e.toJson()).toList()
+    //       },
+    //       SetOptions(merge: true),
+    //     );
+    //   }
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    // }
+  }
 }

@@ -46,8 +46,8 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<ModuleViewModel> _selectedModules = [];
-  List<ModuleViewModel> get selectedModules => _selectedModules;
+  List<ModuleModel> _selectedModules = [];
+  List<ModuleModel> get selectedModules => _selectedModules;
 
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
@@ -423,63 +423,63 @@ class WebProvider with ChangeNotifier {
         id: null,
         usersInformations: null,
         modules: [
-          ModuleViewModel(
-            module: Modules.adjustSalePrice,
+          ModuleModel(
+            module: Modules.adjustSalePrice.name,
             enabled: false,
             name: "Ajuste de preços",
           ),
-          ModuleViewModel(
-            module: Modules.adjustStock,
+          ModuleModel(
+            module: Modules.adjustStock.name,
             enabled: true,
             name: "Ajuste de estoques",
           ),
-          ModuleViewModel(
-            module: Modules.buyRequest,
+          ModuleModel(
+            module: Modules.buyRequest.name,
             enabled: true,
             name: "Pedido de compra",
           ),
-          ModuleViewModel(
-            module: Modules.customerRegister,
+          ModuleModel(
+            module: Modules.customerRegister.name,
             enabled: true,
             name: "Cadastro de cliente",
           ),
-          ModuleViewModel(
-            module: Modules.inventory,
+          ModuleModel(
+            module: Modules.inventory.name,
             enabled: true,
             name: "Inventário",
           ),
-          ModuleViewModel(
-            module: Modules.priceConference,
+          ModuleModel(
+            module: Modules.priceConference.name,
             enabled: true,
             name: "Consulta de preços",
           ),
-          ModuleViewModel(
-            module: Modules.productsConference,
+          ModuleModel(
+            module: Modules.productsConference.name,
             enabled: true,
             name: "Conferência de produtos (expedição)",
           ),
-          ModuleViewModel(
-            module: Modules.receipt,
+          ModuleModel(
+            module: Modules.receipt.name,
             enabled: true,
             name: "Recebimento",
           ),
-          ModuleViewModel(
-            module: Modules.researchPrices,
+          ModuleModel(
+            module: Modules.researchPrices.name,
             enabled: true,
             name: "Consulta de preços concorrentes",
           ),
-          ModuleViewModel(
-            module: Modules.saleRequest,
+          ModuleModel(
+            module: Modules.saleRequest.name,
             enabled: true,
             name: "Pedido de vendas",
           ),
-          ModuleViewModel(
-            module: Modules.transferBetweenStocks,
+          ModuleModel(
+            module: Modules.transferBetweenStocks.name,
             enabled: true,
             name: "Transferência entre estoques",
           ),
-          ModuleViewModel(
-            module: Modules.transferRequest,
+          ModuleModel(
+            module: Modules.transferRequest.name,
             enabled: true,
             name: "Pedido de transferência",
           ),
@@ -520,7 +520,7 @@ class WebProvider with ChangeNotifier {
 
       await FirebaseHelper.enableOrDisableModule(
         client: client,
-        moduleName: _selectedModules[index].module.name,
+        moduleName: _selectedModules[index].module,
         newValue: newValue,
       );
 
@@ -535,7 +535,7 @@ class WebProvider with ChangeNotifier {
 
   void updateValue(int index) {
     final oldValue = _selectedModules[index];
-    ModuleViewModel newValue = ModuleViewModel(
+    ModuleModel newValue = ModuleModel(
       name: oldValue.name,
       enabled: !oldValue.enabled,
       module: oldValue.module,

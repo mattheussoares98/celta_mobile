@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     Modules module,
   ) {
     return enterpriseProvider.firebaseEnterpriseModel?.modules
-            ?.firstWhere((e) => e.module == module)
+            ?.firstWhere((e) => e.module == module.name)
             .enabled ==
         true;
   }
