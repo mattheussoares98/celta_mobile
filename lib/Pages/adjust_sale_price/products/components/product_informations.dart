@@ -30,10 +30,6 @@ class ProductInformations extends StatelessWidget {
           subtitle: product.plu,
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          title: product.retailPracticedPrice != null &&
-                  product.retailPracticedPrice! > 0
-              ? "Varejo"
-              : null,
           subtitle: product.retailPracticedPrice != null &&
                   product.retailPracticedPrice! > 0
               ? "Varejo: " +
@@ -48,10 +44,6 @@ class ProductInformations extends StatelessWidget {
               : Colors.black,
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          title: product.wholePracticedPrice != null &&
-                  product.wholePracticedPrice! > 0
-              ? "Atacado"
-              : null,
           subtitle: product.wholePracticedPrice != null &&
                   product.wholePracticedPrice! > 0
               ? "Atacado: " +
@@ -66,10 +58,6 @@ class ProductInformations extends StatelessWidget {
               : Colors.black,
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          title: product.wholePracticedPrice != null &&
-                  product.wholePracticedPrice! > 0
-              ? "Ecommerce"
-              : null,
           subtitle: product.eCommercePracticedPrice != null &&
                   product.eCommercePracticedPrice! > 0
               ? "Ecommerce: " +
