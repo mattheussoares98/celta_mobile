@@ -218,6 +218,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
       _replicationParameters
           .add(ReplicationModel(replicationName: ReplicationNames.Embalagens));
     }
+    
     notifyListeners();
   }
 

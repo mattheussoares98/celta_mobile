@@ -67,8 +67,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                       if (adjustSalePriceProvider
                           .replicationParameters.isNotEmpty)
                         ReplicationParameters(
-                          replicationParameters:
-                              adjustSalePriceProvider.replicationParameters,
+                          product: product,
                         ),
                       InitialAndFinishDates(
                           initialDate: adjustSalePriceProvider.initialDate ==
