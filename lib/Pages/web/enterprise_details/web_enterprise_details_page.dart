@@ -20,7 +20,7 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
     WebProvider webProvider = Provider.of(context);
 
     FirebaseEnterpriseModel client =
-        ModalRoute.of(context)!.settings.arguments as FirebaseEnterpriseModel;
+        webProvider.enterprises[webProvider.indexOfSelectedEnterprise];
 
     return Stack(
       children: [
@@ -35,7 +35,7 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 EditUrlCcs(client: client),
-                ModulesItems(client: client),
+                const ModulesItems(),
                 const SizedBox(height: 20),
                 // if (client.usersInformations == null)
                 //   const Text(

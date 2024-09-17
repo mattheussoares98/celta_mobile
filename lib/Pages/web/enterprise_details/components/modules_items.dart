@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../models/firebase/firebase.dart';
 import '../../../../models/modules/modules.dart';
+import '../../../../providers/providers.dart';
 import '../../web.dart';
 
 class ModulesItems extends StatelessWidget {
-  final FirebaseEnterpriseModel client;
-  const ModulesItems({
-    required this.client,
-    super.key,
-  });
+  const ModulesItems({super.key});
 
   @override
   Widget build(BuildContext context) {
+    WebProvider webProvider = Provider.of(context);
+
+    final client =
+        webProvider.enterprises[webProvider.indexOfSelectedEnterprise];
     return Column(
       children: [
         const Divider(),

@@ -23,9 +23,9 @@ class WebEnterpriseItems extends StatelessWidget {
           return Card(
             child: ListTile(
               onTap: () {
+                webProvider.indexOfSelectedEnterprise = index;
                 Navigator.of(context).pushNamed(
                   APPROUTES.WEB_ENTERPRISE_DETAILS,
-                  arguments: client,
                 );
               },
               trailing: Icon(

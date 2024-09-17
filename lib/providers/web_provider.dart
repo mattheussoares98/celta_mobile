@@ -42,7 +42,7 @@ class WebProvider with ChangeNotifier {
   int _indexOfSelectedEnterprise = -1;
   int get indexOfSelectedEnterprise => _indexOfSelectedEnterprise;
   set indexOfSelectedEnterprise(int newValue) {
-    indexOfSelectedEnterprise = newValue;
+    _indexOfSelectedEnterprise = newValue;
     notifyListeners();
   }
 
