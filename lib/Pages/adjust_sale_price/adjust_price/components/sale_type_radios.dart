@@ -55,6 +55,9 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
     List<Widget> radios = [];
 
     for (var i = 0; i < adjustSalePriceProvider.saleTypes.length; i++) {
+      if (adjustSalePriceProvider.saleTypes.length == 1) {
+        groupValue = i;
+      }
       radios.add(
         Expanded(
           child: InkWell(
@@ -78,12 +81,10 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
                   },
                   visualDensity: VisualDensity.compact,
                 ),
-                Expanded(
-                  child: Text(
-                    adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
-                    style: const TextStyle(fontWeight: FontWeight.w400),
-                    textAlign: TextAlign.center,
-                  ),
+                Text(
+                  adjustSalePriceProvider.saleTypes[i].saleTypeName.name,
+                  style: const TextStyle(fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.start,
                 ),
               ],
             ),

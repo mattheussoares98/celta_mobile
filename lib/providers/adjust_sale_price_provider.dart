@@ -47,9 +47,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
   set finishDate(DateTime? newDate) => _finishDate = newDate;
 
   void addUsedSaleTypes(EnterpriseModel enterpriseModel) {
-    if (_saleTypes.isNotEmpty) {
-      return;
-    }
+    _saleTypes.clear();
 
     if (enterpriseModel.useRetailSale) {
       _saleTypes.add(SaleTypeModel.fromSaleTypeName(SaleTypeName.Varejo));
