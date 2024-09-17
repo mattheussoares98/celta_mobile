@@ -1,17 +1,4 @@
-enum Modules {
-  adjustSalePrice,
-  adjustStock,
-  buyRequest,
-  customerRegister,
-  inventory,
-  priceConference,
-  productsConference,
-  receipt,
-  researchPrices,
-  saleRequest,
-  transferBetweenStocks,
-  transferRequest,
-}
+import 'modules.dart';
 
 class ModuleModel {
   final bool adjustSalePrice;
