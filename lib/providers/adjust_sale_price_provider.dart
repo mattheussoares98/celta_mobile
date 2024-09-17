@@ -200,8 +200,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
       ),
     );
 
-    if (product.isFatherOfGrate == true) {
-      //the backend needs return to me if is child too. If is child, I need add this replication parameter
+    if (product.isFatherOfGrate == true || product.isChildOfGrate == true) {
       _replicationParameters.add(
         ReplicationModel(
           replicationName: ReplicationNames.Grid,

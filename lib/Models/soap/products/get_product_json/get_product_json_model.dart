@@ -40,6 +40,7 @@ class GetProductJsonModel {
   bool? inClass;
   bool? isFatherOfGrate;
   bool? alterationPriceForAllPackings;
+  bool? isChildOfGrate;
   List<StockByEnterpriseAssociatedsModel>? stockByEnterpriseAssociateds;
   List<StocksModel>? stocks;
   LastBuyEntranceModel? lastBuyEntrance;
@@ -83,9 +84,11 @@ class GetProductJsonModel {
     required this.inClass,
     required this.isFatherOfGrate,
     required this.alterationPriceForAllPackings,
+    required this.isChildOfGrate,
   });
 
   GetProductJsonModel.fromJson(Map<String, dynamic> json) {
+    isChildOfGrate = json['IsChildOfGrate'];
     enterpriseCode = json['EnterpriseCode'];
     productCode = json['ProductCode'];
     productPackingCode = json['ProductPackingCode'];
@@ -149,6 +152,7 @@ class GetProductJsonModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['EnterpriseCode'] = this.enterpriseCode;
+    data['IsChildOfGrate'] = this.isChildOfGrate;
     data['ProductCode'] = this.productCode;
     data['ProductPackingCode'] = this.productPackingCode;
     data['PLU'] = this.plu;
