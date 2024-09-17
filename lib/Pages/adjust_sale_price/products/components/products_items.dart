@@ -25,13 +25,9 @@ class _ProductsItemsState extends State<ProductsItems> {
           return Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  ProductInformations(
-                    product: product,
-                    index: index,
-                  ),
-                ],
+              child: ProductInformations(
+                product: product,
+                index: index,
               ),
             ),
           );

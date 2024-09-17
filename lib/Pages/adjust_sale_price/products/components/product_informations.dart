@@ -23,7 +23,7 @@ class ProductInformations extends StatelessWidget {
       children: [
         TitleAndSubtitle.titleAndSubtitle(
           // title: "Produto",
-          subtitle: product.name,
+          subtitle: "${product.name} (${product.packingQuantity})",
         ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "PLU",
