@@ -34,12 +34,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
   ];
   List<PriceTypeModel> get priceTypes => [..._priceTypes];
 
-  List<ReplicationModel> _replicationParameters = [
-    ReplicationModel(replicationName: ReplicationNames.Packings),
-    ReplicationModel(replicationName: ReplicationNames.OperationalGrouping),
-    ReplicationModel(replicationName: ReplicationNames.Class),
-    ReplicationModel(replicationName: ReplicationNames.Grid),
-  ];
+  List<ReplicationModel> _replicationParameters = [];
   List<ReplicationModel> get replicationParameters =>
       [..._replicationParameters];
 
@@ -213,13 +208,6 @@ class AdjustSalePriceProvider with ChangeNotifier {
         ReplicationModel(
           replicationName: ReplicationNames.Class,
           selected: product.markUpdateClassInAdjustSalePriceIndividual == true,
-        ),
-      );
-    }
-    if (product.alterationPriceForAllPackings == true) {
-      _replicationParameters.add(
-        ReplicationModel(
-          replicationName: ReplicationNames.Packings,
         ),
       );
     }
