@@ -47,7 +47,7 @@ class EnterpriseModel {
           useEcommerceSale: element["FlagECommerce_Empresa"] == "1",
           useRetailSale: element["FlagVarejo_Empresa"] == "1",
           useWholeSale: element["FlagAtacado_Empresa"] == "1",
-          participateEnterpriseGroup: element["FlagAtacado_Empresa"] == "1",
+          participateEnterpriseGroup: element["EnterpriseParticipateEnterpriseGroup"] == "1",
         ),
       );
     });

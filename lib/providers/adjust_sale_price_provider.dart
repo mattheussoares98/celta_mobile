@@ -199,12 +199,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
 
   void addPermittedReplicationParameters(
     GetProductJsonModel product,
-    EnterpriseModel
-        enterprise, //adicionar agrupamento operacional assim que for corrigido pra retornar na API
+    EnterpriseModel enterprise,
   ) {
     if (product.isFatherOfGrate == true) {
-      _replicationParameters
-          .add(ReplicationModel(replicationName: ReplicationNames.Grade));
+      _replicationParameters.add(
+        ReplicationModel(
+          replicationName: ReplicationNames.Grade,
+        ),
+      );
     }
     if (product.inClass == true) {
       _replicationParameters.add(
@@ -215,10 +217,21 @@ class AdjustSalePriceProvider with ChangeNotifier {
       );
     }
     if (product.alterationPriceForAllPackings == true) {
-      _replicationParameters
-          .add(ReplicationModel(replicationName: ReplicationNames.Embalagens));
+      _replicationParameters.add(
+        ReplicationModel(
+          replicationName: ReplicationNames.Embalagens,
+        ),
+      );
     }
-    
+
+    if (enterprise.participateEnterpriseGroup) {
+      _replicationParameters.add(
+        ReplicationModel(
+          replicationName: ReplicationNames.AgrupamentoOperacional,
+        ),
+      );
+    }
+
     notifyListeners();
   }
 
