@@ -56,7 +56,7 @@ class GetSchedulesPrices extends StatelessWidget {
               final schedule = adjustSalePriceProvider.schedules[index];
 
               return Card(
-                margin: const EdgeInsets.all(0),
+                margin: const EdgeInsets.only(bottom: 8),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -74,17 +74,27 @@ class GetSchedulesPrices extends StatelessWidget {
                         subtitle: schedule.OriginString.toString(),
                       ),
                       TitleAndSubtitle.titleAndSubtitle(
-                        title: "Preço atual",
-                        subtitle: schedule.Price.toString()
-                            .toBrazilianNumber()
-                            .addBrazilianCoin(),
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
                         title: "Novo preço",
                         subtitle: schedule.OriginalPrice.toString()
                             .toBrazilianNumber()
                             .addBrazilianCoin(),
                       ),
+                      if (schedule.AlteredByClass == true)
+                        TitleAndSubtitle.titleAndSubtitle(
+                          subtitle: "Altera a classe",
+                        ),
+                      if (schedule.UpdateEnterpriseOperationalGroup == true)
+                        TitleAndSubtitle.titleAndSubtitle(
+                          subtitle: "Altera o agrupamento operacional",
+                        ),
+                      if (schedule.AlteredByGrid == true)
+                        TitleAndSubtitle.titleAndSubtitle(
+                          subtitle: "Altera a grade",
+                        ),
+                      if (schedule.AlteredByPackings == true)
+                        TitleAndSubtitle.titleAndSubtitle(
+                          subtitle: "Altera as embalagens",
+                        ),
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Finalizado",
                         subtitle: schedule.IsFinished == true ? "Sim" : "Não",
