@@ -39,6 +39,13 @@ class WebProvider with ChangeNotifier {
   Map<String, List<SoapActionsModel>> get dataFromLastTrheeMonths =>
       _dataFromLastTrheeMonths;
 
+  int _indexOfSelectedEnterprise = -1;
+  int get indexOfSelectedEnterprise => _indexOfSelectedEnterprise;
+  set indexOfSelectedEnterprise(int newValue) {
+    indexOfSelectedEnterprise = newValue;
+    notifyListeners();
+  }
+
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
     required String enterpriseName,
