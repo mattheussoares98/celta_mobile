@@ -58,6 +58,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    EnterpriseProvider enterpriseProvider = Provider.of(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -131,6 +133,9 @@ class _HomePageState extends State<HomePage> {
               nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
               context: context,
               isNew: true,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.adjustSalePrice ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/adjustStock.jpg',
@@ -138,6 +143,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.ADJUST_STOCK,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.adjustStock ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
@@ -145,12 +153,16 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
               context: context,
               isNew: true,
+              moduleIsLiberated: true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/newClient.jpg',
               routine: 'Cadastro de clientes'.toUpperCase(),
               route: APPROUTES.CUSTOMER_REGISTER,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.customerRegister ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/consultPrice.jpg',
@@ -158,6 +170,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.PRICE_CONFERENCE,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.priceConference ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
@@ -166,6 +181,9 @@ class _HomePageState extends State<HomePage> {
               nextRoute: APPROUTES.EXPEDITION_CONTROLS,
               context: context,
               isNew: true,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.productsConference ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/inventory.jpg',
@@ -173,6 +191,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.INVENTORY,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.inventory ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/buyRequest.jpg',
@@ -180,6 +201,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.BUYERS,
               // nextRoute: APPROUTES.BUYERS,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.buyRequest ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/transfer.jpg',
@@ -187,6 +211,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.TRANSFER_REQUEST_MODEL,
               nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.transferRequest ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/saleRequest.jpg',
@@ -194,6 +221,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.SALE_REQUEST_MODEL,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.saleRequest ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/search_concurrent_price.jpg',
@@ -201,6 +231,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.RESEARCH_PRICES,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.researchPrices ==
+                  true,
             ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/receipt.jpg',
@@ -208,6 +241,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.RECEIPT,
               context: context,
+              moduleIsLiberated: enterpriseProvider
+                      .firebaseEnterpriseModel?.modules?.receipt ==
+                  true,
             ),
 
             ImageComponent.image(
@@ -216,6 +252,9 @@ class _HomePageState extends State<HomePage> {
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
               context: context,
+              moduleIsLiberated: enterpriseProvider.firebaseEnterpriseModel
+                      ?.modules?.transferBetweenStocks ==
+                  true,
             ),
             // ImageComponent.image(
             //   imagePath: 'lib/assets/Images/transferBetweenStocks.jpg',

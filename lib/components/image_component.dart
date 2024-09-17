@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'components.dart';
+
 class ImageComponent {
   static InkWell image({
     required String imagePath,
     required String routine,
     required String route,
     required BuildContext context,
+    required bool moduleIsLiberated,
     String? nextRoute,
     bool? isNew,
   }) {
@@ -15,10 +18,18 @@ class ImageComponent {
       splashColor: Colors.white.withOpacity(0),
       highlightColor: Colors.white.withOpacity(0),
       onTap: () {
-        Navigator.of(context).pushNamed(
-          route,
-          arguments: nextRoute,
-        );
+        if (!moduleIsLiberated) {
+          ShowSnackbarMessage.showMessage(
+            message:
+                "Esse módulo não está liberado. Entre em contato com o setor administrativo",
+            context: context,
+          );
+        } else {
+          Navigator.of(context).pushNamed(
+            route,
+            arguments: nextRoute,
+          );
+        }
       },
       child: Card(
         child: Stack(
