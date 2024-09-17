@@ -38,6 +38,15 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
                   widget.product.alterationPriceForAllPackings == true) {
                 e.selected = true;
               }
+              if (e.replicationName == ReplicationNames.Classe &&
+                  widget.product.markUpdateClassInAdjustSalePriceIndividual ==
+                      true) {
+                e.selected = true;
+              }
+              if (e.replicationName ==
+                  ReplicationNames.AgrupamentoOperacional) {
+                e.selected = true;
+              }
               return InkWell(
                 onTap: () {
                   setState(() {
