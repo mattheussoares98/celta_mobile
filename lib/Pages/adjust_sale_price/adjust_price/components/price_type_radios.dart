@@ -61,9 +61,11 @@ class _PriceTypeRadiosState extends State<PriceTypeRadios> {
                   },
                   visualDensity: VisualDensity.compact,
                 ),
-                Text(
-                  adjustSalePriceProvider.priceTypes[i].priceTypeName.name,
-                  style: const TextStyle(fontWeight: FontWeight.w400),
+                Flexible(
+                  child: Text(
+                    adjustSalePriceProvider.priceTypes[i].priceTypeName.name,
+                    style: const TextStyle(fontWeight: FontWeight.w400),
+                  ),
                 ),
               ],
             ),

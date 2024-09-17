@@ -76,19 +76,23 @@ Widget _updateDateWidget({
           ),
         ),
         Text(date),
-        TextButton(
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Alterar data",
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(width: 10),
-              Icon(Icons.date_range)
-            ],
+        Flexible(
+          child: TextButton(
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(
+                    "Alterar data",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Flexible(child: Icon(Icons.date_range))
+              ],
+            ),
+            onPressed: updateDate,
           ),
-          onPressed: updateDate,
         ),
       ],
     ),

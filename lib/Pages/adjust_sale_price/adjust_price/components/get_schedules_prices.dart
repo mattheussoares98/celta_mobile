@@ -34,9 +34,11 @@ class GetSchedulesPrices extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(adjustSalePriceProvider.schedules.isEmpty
-                  ? "Obter agendamentos de preços"
-                  : "Atualizar agendamentos"),
+              Flexible(
+                child: Text(adjustSalePriceProvider.schedules.isEmpty
+                    ? "Obter agendamentos de preços"
+                    : "Atualizar agendamentos"),
+              ),
               const SizedBox(width: 5),
               const Icon(Icons.timer_sharp)
             ],
