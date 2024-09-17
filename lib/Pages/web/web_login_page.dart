@@ -43,6 +43,17 @@ class _WebLoginPageState extends State<WebLoginPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<User?>(
         future: FirebaseAuth.instance.authStateChanges().first,
