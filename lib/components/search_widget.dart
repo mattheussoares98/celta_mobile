@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -144,50 +146,55 @@ class _SearchWidgetState extends State<SearchWidget> {
                               ),
                             ),
                           ),
-                        InkWell(
-                          focusColor: Colors.white.withOpacity(0),
-                          hoverColor: Colors.white.withOpacity(0),
-                          splashColor: Colors.white.withOpacity(0),
-                          highlightColor: Colors.white.withOpacity(0),
-                          onTap: widget.isLoading
-                              ? null
-                              : () async {
-                                  if (!isValid()) {
-                                    return;
-                                  }
-                                  FocusScope.of(context).unfocus();
+                        Flexible(
+                          child: InkWell(
+                            focusColor: Colors.white.withOpacity(0),
+                            hoverColor: Colors.white.withOpacity(0),
+                            splashColor: Colors.white.withOpacity(0),
+                            highlightColor: Colors.white.withOpacity(0),
+                            onTap: widget.isLoading
+                                ? null
+                                : () async {
+                                    if (!isValid()) {
+                                      return;
+                                    }
+                                    FocusScope.of(context).unfocus();
 
-                                  await widget.onPressSearch();
-                                },
-                          child: Icon(
-                            Icons.search,
-                            size: 35,
-                            color: widget.isLoading
-                                ? Colors.grey
-                                : Theme.of(context).primaryColor,
+                                    await widget.onPressSearch();
+                                  },
+                            child: Icon(
+                              Icons.search,
+                              size: 35,
+                              color: widget.isLoading
+                                  ? Colors.grey
+                                  : Theme.of(context).primaryColor,
+                            ),
                           ),
                         ),
-                        if (widget.useCamera)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: InkWell(
-                              focusColor: Colors.white.withOpacity(0),
-                              hoverColor: Colors.white.withOpacity(0),
-                              splashColor: Colors.white.withOpacity(0),
-                              highlightColor: Colors.white.withOpacity(0),
-                              onTap: widget.isLoading
-                                  ? null
-                                  : () async {
-                                      await _openCamera();
-                                    },
-                              child: Icon(
-                                configurationsProvider.autoScan?.value == true
-                                    ? Icons.camera_alt
-                                    : Icons.camera_alt_outlined,
-                                size: 40,
-                                color: widget.isLoading
-                                    ? Colors.grey
-                                    : Theme.of(context).primaryColor,
+                        if (widget.useCamera &&
+                            (Platform.isIOS || Platform.isAndroid))
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: InkWell(
+                                focusColor: Colors.white.withOpacity(0),
+                                hoverColor: Colors.white.withOpacity(0),
+                                splashColor: Colors.white.withOpacity(0),
+                                highlightColor: Colors.white.withOpacity(0),
+                                onTap: widget.isLoading
+                                    ? null
+                                    : () async {
+                                        await _openCamera();
+                                      },
+                                child: Icon(
+                                  configurationsProvider.autoScan?.value == true
+                                      ? Icons.camera_alt
+                                      : Icons.camera_alt_outlined,
+                                  size: 40,
+                                  color: widget.isLoading
+                                      ? Colors.grey
+                                      : Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                           ),
