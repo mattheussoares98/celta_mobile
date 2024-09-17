@@ -41,7 +41,7 @@ class EnterprisePageState extends State<EnterprisePage> {
             ),
             actions: [
               IconButton(
-                onPressed: enterpriseProvider.isLoadingEnterprises
+                onPressed: enterpriseProvider.isLoading
                     ? null
                     : () async {
                         await enterpriseProvider.getEnterprises(
@@ -62,7 +62,7 @@ class EnterprisePageState extends State<EnterprisePage> {
             child: Column(
               children: [
                 if (enterpriseProvider.errorMessage != '' &&
-                    !enterpriseProvider.isLoadingEnterprises)
+                    !enterpriseProvider.isLoading)
                   Expanded(
                     child: searchAgain(
                       errorMessage: enterpriseProvider.errorMessage,
@@ -73,7 +73,7 @@ class EnterprisePageState extends State<EnterprisePage> {
                     ),
                   ),
                 if (enterpriseProvider.errorMessage == "" &&
-                    !enterpriseProvider.isLoadingEnterprises)
+                    !enterpriseProvider.isLoading)
                   Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
               ],
             ),
@@ -81,7 +81,7 @@ class EnterprisePageState extends State<EnterprisePage> {
         ),
         loadingWidget(
           message: "Consultando empresas...",
-          isLoading: enterpriseProvider.isLoadingEnterprises,
+          isLoading: enterpriseProvider.isLoading,
         )
       ],
     );

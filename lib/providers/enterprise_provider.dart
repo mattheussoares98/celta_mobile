@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../models/enterprise/enterprise.dart';
+import '../models/firebase/firebase.dart';
 import '../utils/utils.dart';
 
 class EnterpriseProvider with ChangeNotifier {
@@ -12,18 +13,23 @@ class EnterpriseProvider with ChangeNotifier {
   String _errorMessage = '';
 
   String get errorMessage => _errorMessage;
-  static bool _isLoadingEnterprises = false;
+  static bool _isLoading = false;
 
-  bool get isLoadingEnterprises => _isLoadingEnterprises;
+  bool get isLoading => _isLoading;
+
+  FirebaseEnterpriseModel? _firebaseEnterpriseModel;
+  FirebaseEnterpriseModel? get firebaseEnterpriseModel =>
+      _firebaseEnterpriseModel;
+
   Future getEnterprises({
     bool? isConsultingAgain = false,
   }) async {
-    if (_isLoadingEnterprises) {
+    if (_isLoading) {
       return;
     }
     _enterprises.clear();
     _errorMessage = '';
-    _isLoadingEnterprises = true;
+    _isLoading = true;
     if (isConsultingAgain!) notifyListeners();
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
@@ -51,7 +57,24 @@ class EnterpriseProvider with ChangeNotifier {
       //print("Erro para efetuar a requisição: $e");
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
-      _isLoadingEnterprises = false;
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getFirebaseEnterpriseModel() async {
+    _errorMessage = "";
+    _isLoading = true;
+    _firebaseEnterpriseModel = null;
+    notifyListeners();
+
+    try {
+      _firebaseEnterpriseModel =
+          await FirebaseHelper.getFirebaseEnterpriseModel();
+    } catch (e) {
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoading = false;
       notifyListeners();
     }
   }

@@ -447,4 +447,34 @@ class FirebaseHelper {
       rethrow;
     }
   }
+
+  static Future<FirebaseEnterpriseModel?> getFirebaseEnterpriseModel() async {
+    try {
+      QuerySnapshot<Object?> value;
+
+      value = await _getQuerySnapshot(
+        collection: _clientsCollection,
+        fieldToSearch: "urlCCS",
+        isEqualTo: UserData.urlCCS,
+      );
+
+      if (value.docs.isEmpty) {
+        value = await _getQuerySnapshot(
+          collection: _clientsCollection,
+          fieldToSearch: "enterpriseName",
+          isEqualTo: UserData.userName,
+        );
+      }
+
+      if (value.docs.isNotEmpty) {
+        return FirebaseEnterpriseModel.fromJson(
+          json: value.docs.first.data() as Map<String, dynamic>,
+          id: value.docs.first.id,
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
 }

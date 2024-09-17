@@ -43,6 +43,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        EnterpriseProvider enterpriseProvider =
+            Provider.of(context, listen: false);
+
+        await enterpriseProvider.getFirebaseEnterpriseModel();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
