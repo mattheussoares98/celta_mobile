@@ -43,8 +43,11 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
                       true) {
                 e.selected = true;
               }
-              if (e.replicationName ==
-                  ReplicationNames.OperationalGrouping) {
+              if (e.replicationName == ReplicationNames.OperationalGrouping) {
+                e.selected = true;
+              }
+              if (e.replicationName == ReplicationNames.Grid &&
+                  widget.product.isFatherOfGrate == true) {
                 e.selected = true;
               }
               return InkWell(

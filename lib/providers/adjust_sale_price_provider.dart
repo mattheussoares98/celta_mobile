@@ -196,7 +196,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
     GetProductJsonModel product,
     EnterpriseModel enterprise,
   ) {
+    _replicationParameters.add(
+      ReplicationModel(
+        replicationName: ReplicationNames.Packings,
+      ),
+    );
+
     if (product.isFatherOfGrate == true) {
+      //the backend needs return to me if is child too. If is child, I need add this replication parameter
       _replicationParameters.add(
         ReplicationModel(
           replicationName: ReplicationNames.Grid,
