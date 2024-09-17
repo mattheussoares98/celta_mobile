@@ -64,7 +64,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
               isLoading: false,
             );
           } else if (snapshot.hasData) {
-            Future.delayed(Duration.zero, () {
+            Future.delayed(const Duration(milliseconds: 100), () {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   APPROUTES.WEB_HOME, (route) => false);
             });

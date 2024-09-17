@@ -21,6 +21,17 @@ class _WebHomePageState extends State<WebHomePage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
 
