@@ -34,20 +34,6 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
         Column(
           children: adjustSalePriceProvider.replicationParameters.map(
             (e) {
-              //agrupamento operacional é tratado de acordo com a empresa
-              if (e.replicationName == ReplicationNames.Classe &&
-                  widget.product.inClass != true) {
-                return const SizedBox();
-              }
-              if (e.replicationName == ReplicationNames.Embalagens &&
-                  widget.product.alterationPriceForAllPackings != true) {
-                return const SizedBox();
-              }
-              if (e.replicationName == ReplicationNames.Grade &&
-                  widget.product.isFatherOfGrate != true) {
-                return const SizedBox();
-              }
-
               if (e.replicationName == ReplicationNames.Embalagens &&
                   widget.product.alterationPriceForAllPackings == true) {
                 e.selected = true;
