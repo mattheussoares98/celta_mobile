@@ -7,6 +7,7 @@ class EnterpriseModel {
   final bool useRetailSale;
   final bool useWholeSale;
   final bool useEcommerceSale;
+  final bool participateEnterpriseGroup;
 
   EnterpriseModel({
     required this.codigoInternoEmpresa,
@@ -17,6 +18,7 @@ class EnterpriseModel {
     required this.useEcommerceSale,
     required this.useRetailSale,
     required this.useWholeSale,
+    required this.participateEnterpriseGroup,
   });
 
   static resultAsStringToEnterpriseModel({
@@ -45,6 +47,7 @@ class EnterpriseModel {
           useEcommerceSale: element["FlagECommerce_Empresa"] == "1",
           useRetailSale: element["FlagVarejo_Empresa"] == "1",
           useWholeSale: element["FlagAtacado_Empresa"] == "1",
+          participateEnterpriseGroup: element["FlagAtacado_Empresa"] == "1",
         ),
       );
     });
