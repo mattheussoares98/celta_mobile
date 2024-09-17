@@ -50,50 +50,62 @@ class WebProvider with ChangeNotifier {
       ModuleViewModel(
         name: "Ajuste de preços",
         enabled: modules?.adjustSalePrice == true,
+        module: Modules.adjustSalePrice,
       ),
       ModuleViewModel(
         name: "Ajuste de estoques",
         enabled: modules?.adjustStock == true,
+        module: Modules.adjustStock,
       ),
       ModuleViewModel(
         name: "Pedido de compra",
         enabled: modules?.buyRequest == true,
+        module: Modules.buyRequest,
       ),
       ModuleViewModel(
         name: "Cadastro de cliente",
         enabled: modules?.customerRegister == true,
+        module: Modules.customerRegister,
       ),
       ModuleViewModel(
         name: "Inventário",
         enabled: modules?.inventory == true,
+        module: Modules.inventory,
       ),
       ModuleViewModel(
         name: "Consulta de preços",
         enabled: modules?.priceConference == true,
+        module: Modules.priceConference,
       ),
       ModuleViewModel(
         name: "Conferência de produtos (expedição)",
         enabled: modules?.productsConference == true,
+        module: Modules.productsConference,
       ),
       ModuleViewModel(
         name: "Recebimento",
         enabled: modules?.receipt == true,
+        module: Modules.receipt,
       ),
       ModuleViewModel(
         name: "Consulta de preços concorrentes",
         enabled: modules?.researchPrices == true,
+        module: Modules.researchPrices,
       ),
       ModuleViewModel(
         name: "Pedido de vendas",
         enabled: modules?.saleRequest == true,
+        module: Modules.saleRequest,
       ),
       ModuleViewModel(
         name: "Transferência entre estoques",
         enabled: modules?.transferBetweenStocks == true,
+        module: Modules.transferBetweenStocks,
       ),
       ModuleViewModel(
         name: "Pedido de transferência",
         enabled: modules?.transferRequest == true,
+        module: Modules.transferRequest,
       ),
     ];
     notifyListeners();
@@ -524,7 +536,7 @@ class WebProvider with ChangeNotifier {
 
       await FirebaseHelper.enableOrDisableModule(
         client: client,
-        moduleName: _selectedModules[index].name,
+        moduleName: _selectedModules[index].module.name,
         newValue: newValue,
       );
 
@@ -542,6 +554,7 @@ class WebProvider with ChangeNotifier {
     ModuleViewModel newValue = ModuleViewModel(
       name: oldValue.name,
       enabled: !oldValue.enabled,
+      module: oldValue.module,
     );
     _selectedModules[index] = newValue;
     notifyListeners();
@@ -595,42 +608,5 @@ class WebProvider with ChangeNotifier {
             : client.modules!.transferRequest,
       ),
     );
-    // switch (module) {
-    //   case Modules.adjustSalePrice:
-    //      client.modules!.adjustSalePrice= !client.modules!.adjustSalePrice;
-    //      break;
-    //   case Modules.adjustStock:
-    //      client.modules!.adjustStock= !client.modules!.adjustStock;
-    //      break;
-    //   case Modules.buyRequest:
-    //      client.modules!.buyRequest= !client.modules!.buyRequest;
-    //      break;
-    //   case Modules.customerRegister:
-    //      client.modules!.customerRegister= !client.modules!.customerRegister;
-    //      break;
-    //   case Modules.inventory:
-    //      client.modules!.inventory= !client.modules!.inventory;
-    //      break;
-    //   case Modules.priceConference:
-    //      client.modules!.priceConference= !client.modules!.priceConference;
-    //      break;
-    //   case Modules.productsConference:
-    //      client.modules!.productsConference= !client.modules!.productsConference;
-    //      break;
-    //   case Modules.receipt:
-    //      client.modules!.receipt= !client.modules!.receipt;
-    //      break;
-    //   case Modules.researchPrices:
-    //      client.modules!.researchPrices= !client.modules!.researchPrices;
-    //      break;
-    //   case Modules.saleRequest:
-    //      client.modules!.saleRequest= !client.modules!.saleRequest;
-    //      break;
-    //   case Modules.transferBetweenStocks:
-    //      client.modules!.transferBetweenStocks= !client.modules!.transferBetweenStocks;
-    //      break;
-    //   case Modules.transferRequest:
-    //      client.modules!.transferRequest= !client.modules!.transferRequest;
-    //      break;
   }
 }
