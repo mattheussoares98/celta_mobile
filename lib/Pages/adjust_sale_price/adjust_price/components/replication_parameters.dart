@@ -34,17 +34,17 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
         Column(
           children: adjustSalePriceProvider.replicationParameters.map(
             (e) {
-              if (e.replicationName == ReplicationNames.Embalagens &&
+              if (e.replicationName == ReplicationNames.Packings &&
                   widget.product.alterationPriceForAllPackings == true) {
                 e.selected = true;
               }
-              if (e.replicationName == ReplicationNames.Classe &&
+              if (e.replicationName == ReplicationNames.Class &&
                   widget.product.markUpdateClassInAdjustSalePriceIndividual ==
                       true) {
                 e.selected = true;
               }
               if (e.replicationName ==
-                  ReplicationNames.AgrupamentoOperacional) {
+                  ReplicationNames.OperationalGrouping) {
                 e.selected = true;
               }
               return InkWell(

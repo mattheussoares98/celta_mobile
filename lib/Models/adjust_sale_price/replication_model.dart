@@ -8,23 +8,18 @@ class ReplicationModel {
   });
 }
 
-enum ReplicationNames {
-  Embalagens,
-  AgrupamentoOperacional,
-  Classe,
-  Grade,
-}
+enum ReplicationNames { Packings, OperationalGrouping, Class, Grid }
 
 extension ReplicationNamesExtension on ReplicationNames {
   String get description {
     switch (this) {
-      case ReplicationNames.Embalagens:
+      case ReplicationNames.Packings:
         return "Embalagens";
-      case ReplicationNames.AgrupamentoOperacional:
+      case ReplicationNames.OperationalGrouping:
         return "Agrupamento operacional";
-      case ReplicationNames.Classe:
+      case ReplicationNames.Class:
         return "Classe";
-      case ReplicationNames.Grade:
+      case ReplicationNames.Grid:
         return "Grade";
     }
   }

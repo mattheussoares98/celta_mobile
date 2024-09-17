@@ -35,10 +35,10 @@ class AdjustSalePriceProvider with ChangeNotifier {
   List<PriceTypeModel> get priceTypes => [..._priceTypes];
 
   List<ReplicationModel> _replicationParameters = [
-    ReplicationModel(replicationName: ReplicationNames.Embalagens),
-    ReplicationModel(replicationName: ReplicationNames.AgrupamentoOperacional),
-    ReplicationModel(replicationName: ReplicationNames.Classe),
-    ReplicationModel(replicationName: ReplicationNames.Grade),
+    ReplicationModel(replicationName: ReplicationNames.Packings),
+    ReplicationModel(replicationName: ReplicationNames.OperationalGrouping),
+    ReplicationModel(replicationName: ReplicationNames.Class),
+    ReplicationModel(replicationName: ReplicationNames.Grid),
   ];
   List<ReplicationModel> get replicationParameters =>
       [..._replicationParameters];
@@ -204,14 +204,14 @@ class AdjustSalePriceProvider with ChangeNotifier {
     if (product.isFatherOfGrate == true) {
       _replicationParameters.add(
         ReplicationModel(
-          replicationName: ReplicationNames.Grade,
+          replicationName: ReplicationNames.Grid,
         ),
       );
     }
     if (product.inClass == true) {
       _replicationParameters.add(
         ReplicationModel(
-          replicationName: ReplicationNames.Classe,
+          replicationName: ReplicationNames.Class,
           selected: product.markUpdateClassInAdjustSalePriceIndividual == true,
         ),
       );
@@ -219,7 +219,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
     if (product.alterationPriceForAllPackings == true) {
       _replicationParameters.add(
         ReplicationModel(
-          replicationName: ReplicationNames.Embalagens,
+          replicationName: ReplicationNames.Packings,
         ),
       );
     }
@@ -227,7 +227,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
     if (enterprise.participateEnterpriseGroup) {
       _replicationParameters.add(
         ReplicationModel(
-          replicationName: ReplicationNames.AgrupamentoOperacional,
+          replicationName: ReplicationNames.OperationalGrouping,
         ),
       );
     }
@@ -260,11 +260,11 @@ class AdjustSalePriceProvider with ChangeNotifier {
       "EnterpriseCode": enterpriseCode,
       "ProductCode": productCode,
       "ProductPackingCode": productPackingCode,
-      "UpdatePriceClass": _getReplicationIsSelected(ReplicationNames.Classe),
-      "UpdatePackings": _getReplicationIsSelected(ReplicationNames.Embalagens),
+      "UpdatePriceClass": _getReplicationIsSelected(ReplicationNames.Class),
+      "UpdatePackings": _getReplicationIsSelected(ReplicationNames.Packings),
       "UpdateEnterpriseGroup":
-          _getReplicationIsSelected(ReplicationNames.AgrupamentoOperacional),
-      "UpdateGrate": _getReplicationIsSelected(ReplicationNames.Grade),
+          _getReplicationIsSelected(ReplicationNames.OperationalGrouping),
+      "UpdateGrate": _getReplicationIsSelected(ReplicationNames.Grid),
       "SaleTypeInt": _saleTypes
           .firstWhere((e) => e.selected == true)
           .priceTypeInt, //1 == varejo; 2 == atacado; 3 == ecommerce
