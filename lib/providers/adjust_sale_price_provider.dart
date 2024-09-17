@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/api/soap/soap.dart';
-import 'package:celta_inventario/models/soap/products/get_product_json/get_product_json_model.dart';
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+import '../api/api.dart';
 import '../models/adjust_sale_price/adjust_sale_price.dart';
 import '../models/enterprise/enterprise.dart';
+import '../models/soap/products/products.dart';
+import '../utils/utils.dart';
 import 'providers.dart';
 
 class AdjustSalePriceProvider with ChangeNotifier {
@@ -294,6 +294,9 @@ class AdjustSalePriceProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      FirebaseHelper.addSoapCallInFirebase(
+        firebaseCallEnum: FirebaseCallEnum.adjustSalePrice,
+      );
       final jsonRequest = _getJsonRequest(
         enterpriseCode: enterpriseCode,
         productCode: productCode,
