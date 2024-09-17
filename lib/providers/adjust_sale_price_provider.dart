@@ -287,7 +287,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
     required int productCode,
     required int productPackingCode,
     required double price,
-    required DateTime effectuationDatePrice,
+    required DateTime? effectuationDatePrice,
     required DateTime? effectuationDateOffer,
     required DateTime? endDateOffer,
   }) async {

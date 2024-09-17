@@ -50,9 +50,9 @@ class _PriceFieldAndConfirmAdjustButtonState
               productCode: product.productCode!,
               enterpriseCode: enterprise.codigoInternoEmpresa,
               price: priceTextController.text.toDouble(),
-              effectuationDateOffer: DateTime.now(),
-              effectuationDatePrice: DateTime.now(),
-              endDateOffer: DateTime.now(),
+              effectuationDateOffer: adjustSalePriceProvider.initialDate,
+              effectuationDatePrice: adjustSalePriceProvider.initialDate,
+              endDateOffer: adjustSalePriceProvider.finishDate,
             );
 
             if (adjustSalePriceProvider.errorMessage == "") {
