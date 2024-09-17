@@ -33,6 +33,6 @@ class ModuleViewModel {
   Map<String, dynamic> toJson() => {
         "name": name,
         "enabled": enabled,
-        "module": module,
+        "module": module.name,
       };
 }

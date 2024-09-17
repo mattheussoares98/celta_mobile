@@ -43,71 +43,6 @@ class WebProvider with ChangeNotifier {
   int get indexOfSelectedEnterprise => _indexOfSelectedEnterprise;
   set indexOfSelectedEnterprise(int newValue) {
     _indexOfSelectedEnterprise = newValue;
-
-    final modules = _enterprises[_indexOfSelectedEnterprise].modules;
-
-    _selectedModules = [
-      ModuleViewModel(
-        name: "Ajuste de preços",
-        enabled: modules?.adjustSalePrice == true,
-        module: Modules.adjustSalePrice,
-      ),
-      ModuleViewModel(
-        name: "Ajuste de estoques",
-        enabled: modules?.adjustStock == true,
-        module: Modules.adjustStock,
-      ),
-      ModuleViewModel(
-        name: "Pedido de compra",
-        enabled: modules?.buyRequest == true,
-        module: Modules.buyRequest,
-      ),
-      ModuleViewModel(
-        name: "Cadastro de cliente",
-        enabled: modules?.customerRegister == true,
-        module: Modules.customerRegister,
-      ),
-      ModuleViewModel(
-        name: "Inventário",
-        enabled: modules?.inventory == true,
-        module: Modules.inventory,
-      ),
-      ModuleViewModel(
-        name: "Consulta de preços",
-        enabled: modules?.priceConference == true,
-        module: Modules.priceConference,
-      ),
-      ModuleViewModel(
-        name: "Conferência de produtos (expedição)",
-        enabled: modules?.productsConference == true,
-        module: Modules.productsConference,
-      ),
-      ModuleViewModel(
-        name: "Recebimento",
-        enabled: modules?.receipt == true,
-        module: Modules.receipt,
-      ),
-      ModuleViewModel(
-        name: "Consulta de preços concorrentes",
-        enabled: modules?.researchPrices == true,
-        module: Modules.researchPrices,
-      ),
-      ModuleViewModel(
-        name: "Pedido de vendas",
-        enabled: modules?.saleRequest == true,
-        module: Modules.saleRequest,
-      ),
-      ModuleViewModel(
-        name: "Transferência entre estoques",
-        enabled: modules?.transferBetweenStocks == true,
-        module: Modules.transferBetweenStocks,
-      ),
-      ModuleViewModel(
-        name: "Pedido de transferência",
-        enabled: modules?.transferRequest == true,
-        module: Modules.transferRequest,
-      ),
-    ];
     notifyListeners();
   }
 
@@ -483,24 +418,73 @@ class WebProvider with ChangeNotifier {
     _errorMessageClients = "";
     try {
       final newEnterprise = FirebaseEnterpriseModel(
-          enterpriseName: enterpriseName,
-          urlCCS: urlCcs,
-          id: null,
-          usersInformations: null,
-          modules: ModuleModel(
-            adjustSalePrice: false,
-            adjustStock: true,
-            buyRequest: true,
-            customerRegister: true,
-            inventory: true,
-            priceConference: true,
-            productsConference: true,
-            receipt: true,
-            researchPrices: true,
-            saleRequest: true,
-            transferBetweenStocks: true,
-            transferRequest: true,
-          ));
+        enterpriseName: enterpriseName,
+        urlCCS: urlCcs,
+        id: null,
+        usersInformations: null,
+        modules: [
+          ModuleViewModel(
+            module: Modules.adjustSalePrice,
+            enabled: false,
+            name: "Ajuste de preços",
+          ),
+          ModuleViewModel(
+            module: Modules.adjustStock,
+            enabled: true,
+            name: "Ajuste de estoques",
+          ),
+          ModuleViewModel(
+            module: Modules.buyRequest,
+            enabled: true,
+            name: "Pedido de compra",
+          ),
+          ModuleViewModel(
+            module: Modules.customerRegister,
+            enabled: true,
+            name: "Cadastro de cliente",
+          ),
+          ModuleViewModel(
+            module: Modules.inventory,
+            enabled: true,
+            name: "Inventário",
+          ),
+          ModuleViewModel(
+            module: Modules.priceConference,
+            enabled: true,
+            name: "Consulta de preços",
+          ),
+          ModuleViewModel(
+            module: Modules.productsConference,
+            enabled: true,
+            name: "Conferência de produtos (expedição)",
+          ),
+          ModuleViewModel(
+            module: Modules.receipt,
+            enabled: true,
+            name: "Recebimento",
+          ),
+          ModuleViewModel(
+            module: Modules.researchPrices,
+            enabled: true,
+            name: "Consulta de preços concorrentes",
+          ),
+          ModuleViewModel(
+            module: Modules.saleRequest,
+            enabled: true,
+            name: "Pedido de vendas",
+          ),
+          ModuleViewModel(
+            module: Modules.transferBetweenStocks,
+            enabled: true,
+            name: "Transferência entre estoques",
+          ),
+          ModuleViewModel(
+            module: Modules.transferRequest,
+            enabled: true,
+            name: "Pedido de transferência",
+          ),
+        ],
+      );
 
       await FirebaseHelper.addNewEnterprise(newEnterprise);
 
@@ -560,53 +544,53 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  FirebaseEnterpriseModel getUpdatedClient(
-    Modules module,
-    FirebaseEnterpriseModel client,
-  ) {
-    return FirebaseEnterpriseModel(
-      id: client.id,
-      urlCCS: client.urlCCS,
-      usersInformations: client.usersInformations,
-      enterpriseName: client.enterpriseName,
-      modules: ModuleModel(
-        adjustSalePrice: module == Modules.adjustSalePrice
-            ? !client.modules!.adjustSalePrice
-            : client.modules!.adjustSalePrice,
-        adjustStock: module == Modules.adjustStock
-            ? !client.modules!.adjustStock
-            : client.modules!.adjustStock,
-        buyRequest: module == Modules.buyRequest
-            ? !client.modules!.buyRequest
-            : client.modules!.buyRequest,
-        customerRegister: module == Modules.customerRegister
-            ? !client.modules!.customerRegister
-            : client.modules!.customerRegister,
-        inventory: module == Modules.inventory
-            ? !client.modules!.inventory
-            : client.modules!.inventory,
-        priceConference: module == Modules.priceConference
-            ? !client.modules!.priceConference
-            : client.modules!.priceConference,
-        productsConference: module == Modules.productsConference
-            ? !client.modules!.productsConference
-            : client.modules!.productsConference,
-        receipt: module == Modules.receipt
-            ? !client.modules!.receipt
-            : client.modules!.receipt,
-        researchPrices: module == Modules.researchPrices
-            ? !client.modules!.researchPrices
-            : client.modules!.researchPrices,
-        saleRequest: module == Modules.saleRequest
-            ? !client.modules!.saleRequest
-            : client.modules!.saleRequest,
-        transferBetweenStocks: module == Modules.transferBetweenStocks
-            ? !client.modules!.transferBetweenStocks
-            : client.modules!.transferBetweenStocks,
-        transferRequest: module == Modules.transferRequest
-            ? !client.modules!.transferRequest
-            : client.modules!.transferRequest,
-      ),
-    );
-  }
+  // FirebaseEnterpriseModel getUpdatedClient(
+  //   Modules module,
+  //   FirebaseEnterpriseModel client,
+  // ) {
+  //   return FirebaseEnterpriseModel(
+  //     id: client.id,
+  //     urlCCS: client.urlCCS,
+  //     usersInformations: client.usersInformations,
+  //     enterpriseName: client.enterpriseName,
+  //     modules: ModuleModel(
+  //       adjustSalePrice: module == Modules.adjustSalePrice
+  //           ? !client.modules!.adjustSalePrice
+  //           : client.modules!.adjustSalePrice,
+  //       adjustStock: module == Modules.adjustStock
+  //           ? !client.modules!.adjustStock
+  //           : client.modules!.adjustStock,
+  //       buyRequest: module == Modules.buyRequest
+  //           ? !client.modules!.buyRequest
+  //           : client.modules!.buyRequest,
+  //       customerRegister: module == Modules.customerRegister
+  //           ? !client.modules!.customerRegister
+  //           : client.modules!.customerRegister,
+  //       inventory: module == Modules.inventory
+  //           ? !client.modules!.inventory
+  //           : client.modules!.inventory,
+  //       priceConference: module == Modules.priceConference
+  //           ? !client.modules!.priceConference
+  //           : client.modules!.priceConference,
+  //       productsConference: module == Modules.productsConference
+  //           ? !client.modules!.productsConference
+  //           : client.modules!.productsConference,
+  //       receipt: module == Modules.receipt
+  //           ? !client.modules!.receipt
+  //           : client.modules!.receipt,
+  //       researchPrices: module == Modules.researchPrices
+  //           ? !client.modules!.researchPrices
+  //           : client.modules!.researchPrices,
+  //       saleRequest: module == Modules.saleRequest
+  //           ? !client.modules!.saleRequest
+  //           : client.modules!.saleRequest,
+  //       transferBetweenStocks: module == Modules.transferBetweenStocks
+  //           ? !client.modules!.transferBetweenStocks
+  //           : client.modules!.transferBetweenStocks,
+  //       transferRequest: module == Modules.transferRequest
+  //           ? !client.modules!.transferRequest
+  //           : client.modules!.transferRequest,
+  //     ),
+  //   );
+  // }
 }
