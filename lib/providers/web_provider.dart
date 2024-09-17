@@ -43,8 +43,64 @@ class WebProvider with ChangeNotifier {
   int get indexOfSelectedEnterprise => _indexOfSelectedEnterprise;
   set indexOfSelectedEnterprise(int newValue) {
     _indexOfSelectedEnterprise = newValue;
+
+    final modules = _enterprises[_indexOfSelectedEnterprise].modules;
+
+    _selectedModules = [
+      ModuleViewModel(
+        name: "Ajuste de preços",
+        enabled: modules?.adjustSalePrice == true,
+      ),
+      ModuleViewModel(
+        name: "Ajuste de estoques",
+        enabled: modules?.adjustStock == true,
+      ),
+      ModuleViewModel(
+        name: "Pedido de compra",
+        enabled: modules?.buyRequest == true,
+      ),
+      ModuleViewModel(
+        name: "Cadastro de cliente",
+        enabled: modules?.customerRegister == true,
+      ),
+      ModuleViewModel(
+        name: "Inventário",
+        enabled: modules?.inventory == true,
+      ),
+      ModuleViewModel(
+        name: "Consulta de preços",
+        enabled: modules?.priceConference == true,
+      ),
+      ModuleViewModel(
+        name: "Conferência de produtos (expedição)",
+        enabled: modules?.productsConference == true,
+      ),
+      ModuleViewModel(
+        name: "Recebimento",
+        enabled: modules?.receipt == true,
+      ),
+      ModuleViewModel(
+        name: "Consulta de preços concorrentes",
+        enabled: modules?.researchPrices == true,
+      ),
+      ModuleViewModel(
+        name: "Pedido de vendas",
+        enabled: modules?.saleRequest == true,
+      ),
+      ModuleViewModel(
+        name: "Transferência entre estoques",
+        enabled: modules?.transferBetweenStocks == true,
+      ),
+      ModuleViewModel(
+        name: "Pedido de transferência",
+        enabled: modules?.transferRequest == true,
+      ),
+    ];
     notifyListeners();
   }
+
+  List<ModuleViewModel> _selectedModules = [];
+  List<ModuleViewModel> get selectedModules => _selectedModules;
 
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
@@ -457,24 +513,22 @@ class WebProvider with ChangeNotifier {
     }
   }
 
-  Future<void> enableOrDisableModule(
-    Modules module,
-    FirebaseEnterpriseModel client,
-  ) async {
+  Future<void> enableOrDisableModule(int index) async {
     _isLoading = true;
     _errorMessageClients = "";
     notifyListeners();
 
     try {
-      bool newValue = _getNewValueToUpdateModule(module, client);
+      final client = _enterprises[_indexOfSelectedEnterprise];
+      bool newValue = !_selectedModules[index].enabled;
 
       await FirebaseHelper.enableOrDisableModule(
         client: client,
-        module: module,
+        moduleName: _selectedModules[index].name,
         newValue: newValue,
       );
 
-      client = getUpdatedClient(module, client);
+      updateValue(index);
     } catch (e) {
       _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
@@ -483,36 +537,14 @@ class WebProvider with ChangeNotifier {
     }
   }
 
-  bool _getNewValueToUpdateModule(
-    Modules module,
-    FirebaseEnterpriseModel client,
-  ) {
-    switch (module) {
-      case Modules.adjustSalePrice:
-        return !client.modules!.adjustSalePrice;
-      case Modules.adjustStock:
-        return !client.modules!.adjustStock;
-      case Modules.buyRequest:
-        return !client.modules!.buyRequest;
-      case Modules.customerRegister:
-        return !client.modules!.customerRegister;
-      case Modules.inventory:
-        return !client.modules!.inventory;
-      case Modules.priceConference:
-        return !client.modules!.priceConference;
-      case Modules.productsConference:
-        return !client.modules!.productsConference;
-      case Modules.receipt:
-        return !client.modules!.receipt;
-      case Modules.researchPrices:
-        return !client.modules!.researchPrices;
-      case Modules.saleRequest:
-        return !client.modules!.saleRequest;
-      case Modules.transferBetweenStocks:
-        return !client.modules!.transferBetweenStocks;
-      case Modules.transferRequest:
-        return !client.modules!.transferRequest;
-    }
+  void updateValue(int index) {
+    final oldValue = _selectedModules[index];
+    ModuleViewModel newValue = ModuleViewModel(
+      name: oldValue.name,
+      enabled: !oldValue.enabled,
+    );
+    _selectedModules[index] = newValue;
+    notifyListeners();
   }
 
   FirebaseEnterpriseModel getUpdatedClient(
