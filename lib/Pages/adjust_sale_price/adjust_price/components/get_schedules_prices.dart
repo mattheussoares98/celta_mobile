@@ -83,32 +83,32 @@ class GetSchedulesPrices extends StatelessWidget {
                       ),
                       if (schedule.AlteredByClass == true)
                         TitleAndSubtitle.titleAndSubtitle(
-                          subtitle: "Altera a classe",
+                          subtitle: "Alterado pela classe",
                         ),
-                      if (schedule.UpdateEnterpriseOperationalGroup == true)
-                        TitleAndSubtitle.titleAndSubtitle(
-                          subtitle: "Altera o agrupamento operacional",
-                        ),
+                      // if (schedule.UpdateEnterpriseOperationalGroup == true)
+                      //   TitleAndSubtitle.titleAndSubtitle(
+                      //     subtitle: "Alterado pelo agrupamento operacional",
+                      //   ),
                       if (schedule.AlteredByGrid == true)
                         TitleAndSubtitle.titleAndSubtitle(
-                          subtitle: "Altera a grade",
+                          subtitle: "Alterado pela grade",
                         ),
                       if (schedule.AlteredByPackings == true)
                         TitleAndSubtitle.titleAndSubtitle(
-                          subtitle: "Altera as embalagens",
+                          subtitle: "Alterado pelas embalagens",
                         ),
                       TitleAndSubtitle.titleAndSubtitle(
                         title: "Finalizado",
                         subtitle: schedule.IsFinished == true ? "Sim" : "Não",
                       ),
                       TitleAndSubtitle.titleAndSubtitle(
-                        title: "Data do agendamento",
+                        title: "Agendado em",
                         subtitle: DateFormat("dd/MM/yyyy HH:mm").format(
                           DateTime.parse(schedule.Date.toString()),
                         ),
                       ),
                       TitleAndSubtitle.titleAndSubtitle(
-                        title: "Data de execução",
+                        title: "Será executado em",
                         subtitle: DateFormat("dd/MM/yyyy HH:mm").format(
                           DateTime.parse(schedule.ExecutionDate.toString()),
                         ),
