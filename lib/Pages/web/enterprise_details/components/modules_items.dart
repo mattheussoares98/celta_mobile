@@ -23,9 +23,14 @@ class ModulesItems extends StatelessWidget {
         ),
         ListView.builder(
           shrinkWrap: true,
-          itemCount: webProvider.selectedModules.length,
+          itemCount: webProvider
+              .enterprises[webProvider.indexOfSelectedEnterprise]
+              .modules
+              ?.length,
           itemBuilder: (context, index) {
-            final item = webProvider.selectedModules[index];
+            final item = webProvider
+                .enterprises[webProvider.indexOfSelectedEnterprise]
+                .modules![index];
 
             return EnableOrDisableModule(
               enabled: item.enabled,

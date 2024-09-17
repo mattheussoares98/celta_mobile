@@ -46,9 +46,6 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<ModuleModel> _selectedModules = [];
-  List<ModuleModel> get selectedModules => _selectedModules;
-
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
     required String enterpriseName,
@@ -516,12 +513,11 @@ class WebProvider with ChangeNotifier {
 
     try {
       final client = _enterprises[_indexOfSelectedEnterprise];
-      bool newValue = !_selectedModules[index].enabled;
 
       await FirebaseHelper.enableOrDisableModule(
         client: client,
-        moduleName: _selectedModules[index].module,
-        newValue: newValue,
+        index: index,
+        moduleModel: _enterprises[_indexOfSelectedEnterprise].modules![index],
       );
 
       updateValue(index);
@@ -534,13 +530,13 @@ class WebProvider with ChangeNotifier {
   }
 
   void updateValue(int index) {
-    final oldValue = _selectedModules[index];
+    final oldValue = _enterprises[_indexOfSelectedEnterprise].modules![index];
     ModuleModel newValue = ModuleModel(
       name: oldValue.name,
       enabled: !oldValue.enabled,
       module: oldValue.module,
     );
-    _selectedModules[index] = newValue;
+    _enterprises[_indexOfSelectedEnterprise].modules![index] = newValue;
     notifyListeners();
   }
 

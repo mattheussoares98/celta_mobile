@@ -11,6 +11,7 @@ import 'package:platform_plus/platform_plus.dart';
 
 import '../models/firebase/firebase.dart';
 import '../firebase_options.dart';
+import '../models/modules/modules.dart';
 import '../providers/providers.dart';
 import '../utils/utils.dart';
 import './api.dart';
@@ -431,15 +432,13 @@ class FirebaseHelper {
 
   static Future<void> enableOrDisableModule({
     required FirebaseEnterpriseModel client,
-    required String moduleName,
-    required bool newValue,
+    required ModuleModel moduleModel,
+    required int index,
   }) async {
     try {
       await _clientsCollection.doc(client.id).set(
         {
-          "modules": {
-            moduleName: newValue,
-          },
+          "modules": FieldValue.arrayUnion([moduleModel.toJson()]),
         },
         SetOptions(merge: true),
       );
