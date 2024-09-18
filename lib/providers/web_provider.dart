@@ -514,13 +514,20 @@ class WebProvider with ChangeNotifier {
     try {
       final client = _enterprises[_indexOfSelectedEnterprise];
 
-      await FirebaseHelper.enableOrDisableModule(
-        client: client,
-        index: index,
-        modulesModels: _enterprises[_indexOfSelectedEnterprise].modules!,
+      final newModules = client.modules?.map((e) => e).toList();
+      newModules![index] = ModuleModel(
+        name: newModules[index].name,
+        enabled: !newModules[index].enabled,
+        module: newModules[index].module,
       );
 
-      updateValue(index);
+      await FirebaseHelper.enableOrDisableModule(
+        client: client,
+        updatedModules: newModules,
+      );
+
+      _enterprises[_indexOfSelectedEnterprise].modules![index] =
+          newModules[index];
     } catch (e) {
       _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {

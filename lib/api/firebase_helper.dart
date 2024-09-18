@@ -432,13 +432,12 @@ class FirebaseHelper {
 
   static Future<void> enableOrDisableModule({
     required FirebaseEnterpriseModel client,
-    required List<ModuleModel> modulesModels,
-    required int index,
+    required List<ModuleModel> updatedModules,
   }) async {
     try {
       await _clientsCollection.doc(client.id).set(
         {
-          "modules": modulesModels.map((e) => e.toJson()).toList(),
+          "modules": updatedModules.map((e) => e.toJson()).toList(),
         },
         SetOptions(merge: true),
       );
@@ -480,78 +479,78 @@ class FirebaseHelper {
   static Future<void> updateAllEnterprisesParameters() async {
     // final enterprises = await getAllClients();
 
-    // try {
-    //   for (var enterprise in enterprises) {
-    //     await _clientsCollection.doc(enterprise.id).set(
-    //       {
-    //         "modules": [
-    //           ModuleViewModel(
-    //             module: Modules.adjustSalePrice,
-    //             enabled: false,
-    //             name: "Ajuste de preços",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.adjustStock,
-    //             enabled: true,
-    //             name: "Ajuste de estoques",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.buyRequest,
-    //             enabled: true,
-    //             name: "Pedido de compra",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.customerRegister,
-    //             enabled: true,
-    //             name: "Cadastro de cliente",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.inventory,
-    //             enabled: true,
-    //             name: "Inventário",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.priceConference,
-    //             enabled: true,
-    //             name: "Consulta de preços",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.productsConference,
-    //             enabled: true,
-    //             name: "Conferência de produtos (expedição)",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.receipt,
-    //             enabled: true,
-    //             name: "Recebimento",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.researchPrices,
-    //             enabled: true,
-    //             name: "Consulta de preços concorrentes",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.saleRequest,
-    //             enabled: true,
-    //             name: "Pedido de vendas",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.transferBetweenStocks,
-    //             enabled: true,
-    //             name: "Transferência entre estoques",
-    //           ),
-    //           ModuleViewModel(
-    //             module: Modules.transferRequest,
-    //             enabled: true,
-    //             name: "Pedido de transferência",
-    //           ),
-    //         ].map((e) => e.toJson()).toList()
-    //       },
-    //       SetOptions(merge: true),
-    //     );
-    //   }
-    // } catch (e) {
-    //   debugPrint(e.toString());
-    // }
+    try {
+      // for (var enterprise in enterprises) {
+      await _clientsCollection.doc("1teste").set(
+        {
+          "modules": [
+            ModuleModel(
+              module: Modules.adjustSalePrice.name,
+              enabled: false,
+              name: "Ajuste de preços",
+            ),
+            ModuleModel(
+              module: Modules.adjustStock.name,
+              enabled: true,
+              name: "Ajuste de estoques",
+            ),
+            ModuleModel(
+              module: Modules.buyRequest.name,
+              enabled: true,
+              name: "Pedido de compra",
+            ),
+            ModuleModel(
+              module: Modules.customerRegister.name,
+              enabled: true,
+              name: "Cadastro de cliente",
+            ),
+            ModuleModel(
+              module: Modules.inventory.name,
+              enabled: true,
+              name: "Inventário",
+            ),
+            ModuleModel(
+              module: Modules.priceConference.name,
+              enabled: true,
+              name: "Consulta de preços",
+            ),
+            ModuleModel(
+              module: Modules.productsConference.name,
+              enabled: true,
+              name: "Conferência de produtos (expedição)",
+            ),
+            ModuleModel(
+              module: Modules.receipt.name,
+              enabled: true,
+              name: "Recebimento",
+            ),
+            ModuleModel(
+              module: Modules.researchPrices.name,
+              enabled: true,
+              name: "Consulta de preços concorrentes",
+            ),
+            ModuleModel(
+              module: Modules.saleRequest.name,
+              enabled: true,
+              name: "Pedido de vendas",
+            ),
+            ModuleModel(
+              module: Modules.transferBetweenStocks.name,
+              enabled: true,
+              name: "Transferência entre estoques",
+            ),
+            ModuleModel(
+              module: Modules.transferRequest.name,
+              enabled: true,
+              name: "Pedido de transferência",
+            ),
+          ].map((e) => e.toJson()).toList()
+        },
+        SetOptions(merge: true),
+      );
+      // }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
