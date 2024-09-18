@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 0.0,
           children: [
             ImageComponent.image(
-              imagePath: 'lib/assets/Images/adjustPrice.jpg',
+              imagePath: 'lib/assets/Images/adjustPrice.png',
               routine: 'Alteração de preços'.toUpperCase(),
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
@@ -160,14 +160,14 @@ class _HomePageState extends State<HomePage> {
                 Modules.adjustStock,
               ),
             ),
-            ImageComponent.image(
-              imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
-              routine: 'Avaliação e sugestôes'.toUpperCase(),
-              route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
-              context: context,
-              isNew: true,
-              moduleIsLiberated: true,
-            ),
+            // ImageComponent.image(
+            //   imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
+            //   routine: 'Avaliação e sugestôes'.toUpperCase(),
+            //   route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
+            //   context: context,
+            //   isNew: true,
+            //   moduleIsLiberated: true,
+            // ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/newClient.jpg',
               routine: 'Cadastro de clientes'.toUpperCase(),
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ImageComponent.image(
-              imagePath: 'lib/assets/Images/consultPrice.jpg',
+              imagePath: 'lib/assets/Images/consultPrice.png',
               routine: 'Consulta de preços'.toUpperCase(),
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.PRICE_CONFERENCE,
@@ -189,18 +189,18 @@ class _HomePageState extends State<HomePage> {
                 Modules.priceConference,
               ),
             ),
-            ImageComponent.image(
-              imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
-              routine: 'Conferência de produtos (expedição)'.toUpperCase(),
-              route: APPROUTES.ENTERPRISE,
-              nextRoute: APPROUTES.EXPEDITION_CONTROLS,
-              context: context,
-              isNew: true,
-              moduleIsLiberated: getModuleIsEnabled(
-                enterpriseProvider,
-                Modules.productsConference,
-              ),
-            ),
+            // ImageComponent.image(
+            //   imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
+            //   routine: 'Conferência de produtos (expedição)'.toUpperCase(),
+            //   route: APPROUTES.ENTERPRISE,
+            //   nextRoute: APPROUTES.EXPEDITION_CONTROLS,
+            //   context: context,
+            //   isNew: true,
+            //   moduleIsLiberated: getModuleIsEnabled(
+            //     enterpriseProvider,
+            //     Modules.productsConference,
+            //   ),
+            // ),
             ImageComponent.image(
               imagePath: 'lib/assets/Images/inventory.jpg',
               routine: 'Inventário'.toUpperCase(),
@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ImageComponent.image(
-              imagePath: 'lib/assets/Images/search_concurrent_price.jpg',
+              imagePath: 'lib/assets/Images/searchConcurrentPrice.jpg',
               routine: 'Preços concorrentes'.toUpperCase(),
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.RESEARCH_PRICES,
@@ -269,7 +269,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
             ImageComponent.image(
-              imagePath: 'lib/assets/Images/transferBetweenStocks.jpg',
+              imagePath: 'lib/assets/Images/transferBetweenStocks.png',
               routine: 'Transferência entre estoques'.toUpperCase(),
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
