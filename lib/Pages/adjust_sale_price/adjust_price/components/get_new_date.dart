@@ -5,11 +5,13 @@ import '../../../../components/components.dart';
 Future<DateTime?> getNewDate({
   required BuildContext context,
 }) async {
+  DateTime now = DateTime.now();
+
   DateTime? validityDate = await showDatePicker(
     context: context,
-    firstDate: DateTime.now(),
-    initialDate: DateTime.now(),
-    lastDate: DateTime.now().add(const Duration(days: 1825)),
+    firstDate: now,
+    initialDate: now,
+    lastDate: now.add(const Duration(days: 1825)),
     locale: const Locale('pt', 'BR'),
   );
 
@@ -25,13 +27,23 @@ Future<DateTime?> getNewDate({
         context: context,
       );
     } else {
-      return DateTime(
+      DateTime selectedDateTime = DateTime(
         validityDate.year,
         validityDate.month,
         validityDate.day,
         newTime.hour,
         newTime.minute,
       );
+
+      if (selectedDateTime.isBefore(now)) {
+        ShowSnackbarMessage.showMessage(
+          message: "Horário anterior à data atual. Isso não é permitido",
+          context: context,
+        );
+        return null;
+      } else {
+        return selectedDateTime;
+      }
     }
   }
 
