@@ -477,78 +477,78 @@ class FirebaseHelper {
   }
 
   static Future<void> updateAllEnterprisesParameters() async {
-    // final enterprises = await getAllClients();
+    final enterprises = await getAllClients();
 
     try {
-      // for (var enterprise in enterprises) {
-      await _clientsCollection.doc("1teste").set(
-        {
-          "modules": [
-            ModuleModel(
-              module: Modules.adjustSalePrice.name,
-              enabled: false,
-              name: "Ajuste de preços",
-            ),
-            ModuleModel(
-              module: Modules.adjustStock.name,
-              enabled: true,
-              name: "Ajuste de estoques",
-            ),
-            ModuleModel(
-              module: Modules.buyRequest.name,
-              enabled: true,
-              name: "Pedido de compra",
-            ),
-            ModuleModel(
-              module: Modules.customerRegister.name,
-              enabled: true,
-              name: "Cadastro de cliente",
-            ),
-            ModuleModel(
-              module: Modules.inventory.name,
-              enabled: true,
-              name: "Inventário",
-            ),
-            ModuleModel(
-              module: Modules.priceConference.name,
-              enabled: true,
-              name: "Consulta de preços",
-            ),
-            ModuleModel(
-              module: Modules.productsConference.name,
-              enabled: true,
-              name: "Conferência de produtos (expedição)",
-            ),
-            ModuleModel(
-              module: Modules.receipt.name,
-              enabled: true,
-              name: "Recebimento",
-            ),
-            ModuleModel(
-              module: Modules.researchPrices.name,
-              enabled: true,
-              name: "Consulta de preços concorrentes",
-            ),
-            ModuleModel(
-              module: Modules.saleRequest.name,
-              enabled: true,
-              name: "Pedido de vendas",
-            ),
-            ModuleModel(
-              module: Modules.transferBetweenStocks.name,
-              enabled: true,
-              name: "Transferência entre estoques",
-            ),
-            ModuleModel(
-              module: Modules.transferRequest.name,
-              enabled: true,
-              name: "Pedido de transferência",
-            ),
-          ].map((e) => e.toJson()).toList()
-        },
-        SetOptions(merge: true),
-      );
-      // }
+      for (var enterprise in enterprises) {
+        await _clientsCollection.doc(enterprise.id).set(
+          {
+            "modules": [
+              ModuleModel(
+                module: Modules.adjustSalePrice.name,
+                enabled: true,
+                name: "Ajuste de preços",
+              ),
+              ModuleModel(
+                module: Modules.adjustStock.name,
+                enabled: true,
+                name: "Ajuste de estoques",
+              ),
+              ModuleModel(
+                module: Modules.buyRequest.name,
+                enabled: true,
+                name: "Pedido de compra",
+              ),
+              ModuleModel(
+                module: Modules.customerRegister.name,
+                enabled: true,
+                name: "Cadastro de cliente",
+              ),
+              ModuleModel(
+                module: Modules.inventory.name,
+                enabled: true,
+                name: "Inventário",
+              ),
+              ModuleModel(
+                module: Modules.priceConference.name,
+                enabled: true,
+                name: "Consulta de preços",
+              ),
+              ModuleModel(
+                module: Modules.productsConference.name,
+                enabled: true,
+                name: "Conferência de produtos (expedição)",
+              ),
+              ModuleModel(
+                module: Modules.receipt.name,
+                enabled: true,
+                name: "Recebimento",
+              ),
+              ModuleModel(
+                module: Modules.researchPrices.name,
+                enabled: true,
+                name: "Consulta de preços concorrentes",
+              ),
+              ModuleModel(
+                module: Modules.saleRequest.name,
+                enabled: true,
+                name: "Pedido de vendas",
+              ),
+              ModuleModel(
+                module: Modules.transferBetweenStocks.name,
+                enabled: true,
+                name: "Transferência entre estoques",
+              ),
+              ModuleModel(
+                module: Modules.transferRequest.name,
+                enabled: true,
+                name: "Pedido de transferência",
+              ),
+            ].map((e) => e.toJson()).toList()
+          },
+          SetOptions(merge: true),
+        );
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
