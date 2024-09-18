@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 
 class EnterprisePage extends StatefulWidget {
   const EnterprisePage({Key? key}) : super(key: key);
@@ -12,15 +13,34 @@ class EnterprisePage extends StatefulWidget {
 }
 
 class EnterprisePageState extends State<EnterprisePage> {
-  getEnterprises(EnterpriseProvider enterpriseProvider) async {
+  Future<void> getEnterprises(EnterpriseProvider enterpriseProvider) async {
+    final String nextRoute =
+        ModalRoute.of(context)!.settings.arguments as String;
+
+    if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS) {
+      ShowAlertDialog.showAlertDialog(
+        context: context,
+        title: "Bem-vindo ao módulo de Alteração de preços!",
+        function: () {},
+        showConfirmAndCancelMessage: false,
+        showCloseAlertDialogButton: true,
+        subtitle:
+            "Estamos felizes em anunciar que este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá continuar melhorando o aplicativo e adicionando novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
+      );
+    }
     await enterpriseProvider.getEnterprises();
   }
 
   @override
   void initState() {
     super.initState();
+
     EnterpriseProvider enterpriseProvider = Provider.of(context, listen: false);
-    getEnterprises(enterpriseProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        await getEnterprises(enterpriseProvider);
+      }
+    });
   }
 
   @override
