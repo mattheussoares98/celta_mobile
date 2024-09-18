@@ -105,6 +105,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                               adjustSalePriceProvider.finishDate = newDate;
                             }
                           }),
+                      ShowCosts(product: product),
                       const PriceFieldAndConfirmAdjustButton(),
                     ],
                   ),
