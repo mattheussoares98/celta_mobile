@@ -57,6 +57,7 @@ class _SaleTypeRadiosState extends State<SaleTypeRadios> {
     for (var i = 0; i < adjustSalePriceProvider.saleTypes.length; i++) {
       if (adjustSalePriceProvider.saleTypes.length == 1) {
         groupValue = i;
+        adjustSalePriceProvider.updateSelectedSaleType(i);
       }
       radios.add(
         Expanded(
