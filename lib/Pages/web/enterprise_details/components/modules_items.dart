@@ -21,12 +21,16 @@ class ModulesItems extends StatelessWidget {
             fontSize: 30,
           ),
         ),
-        ListView.builder(
-          shrinkWrap: true,
+        ListView.separated(
           itemCount: webProvider
-              .enterprises[webProvider.indexOfSelectedEnterprise]
-              .modules
-              ?.length,
+                  .enterprises[webProvider.indexOfSelectedEnterprise]
+                  .modules
+                  ?.length ??
+              0,
+          separatorBuilder: (context, index) {
+            return const Divider(height: 3);
+          },
+          shrinkWrap: true,
           itemBuilder: (context, index) {
             final item = webProvider
                 .enterprises[webProvider.indexOfSelectedEnterprise]
