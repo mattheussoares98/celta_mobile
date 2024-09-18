@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 0.0,
           children: [
             ImageComponent.image(
-              imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
+              imagePath: 'lib/assets/Images/adjustPrice.jpg',
               routine: 'Alteração de preços'.toUpperCase(),
               route: APPROUTES.ENTERPRISE,
               nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
