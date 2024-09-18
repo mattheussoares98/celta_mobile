@@ -432,13 +432,13 @@ class FirebaseHelper {
 
   static Future<void> enableOrDisableModule({
     required FirebaseEnterpriseModel client,
-    required ModuleModel moduleModel,
+    required List<ModuleModel> modulesModels,
     required int index,
   }) async {
     try {
       await _clientsCollection.doc(client.id).set(
         {
-          "modules": FieldValue.arrayUnion([moduleModel.toJson()]),
+          "modules": modulesModels.map((e) => e.toJson()).toList(),
         },
         SetOptions(merge: true),
       );

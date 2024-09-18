@@ -517,7 +517,7 @@ class WebProvider with ChangeNotifier {
       await FirebaseHelper.enableOrDisableModule(
         client: client,
         index: index,
-        moduleModel: _enterprises[_indexOfSelectedEnterprise].modules![index],
+        modulesModels: _enterprises[_indexOfSelectedEnterprise].modules!,
       );
 
       updateValue(index);
