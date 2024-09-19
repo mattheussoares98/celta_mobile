@@ -47,20 +47,21 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (mounted) {
-        EnterpriseProvider enterpriseProvider =
-            Provider.of(context, listen: false);
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   if (mounted) {
+    //     EnterpriseProvider enterpriseProvider =
+    //         Provider.of(context, listen: false);
 
-        await enterpriseProvider.getFirebaseEnterpriseModel();
-      }
-    });
+    //     await enterpriseProvider.getFirebaseEnterpriseModel();
+    //   }
+    // });
   }
 
   bool getModuleIsEnabled(
     EnterpriseProvider enterpriseProvider,
     Modules module,
   ) {
+    return true;
     return enterpriseProvider.firebaseEnterpriseModel?.modules
             ?.firstWhere((e) => e.module == module.name)
             .enabled ==
