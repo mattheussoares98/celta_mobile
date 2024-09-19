@@ -29,9 +29,11 @@ class FirebaseEnterpriseModel {
     required String id,
   }) {
     var newClient = FirebaseEnterpriseModel(
-      modules: json["modules"]
-          .map<ModuleModel>((e) => ModuleModel.fromJson(e))
-          .toList(),
+      modules: json["modules"] == null
+          ? []
+          : json["modules"]
+              .map<ModuleModel>((e) => ModuleModel.fromJson(e))
+              .toList(),
       urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
       enterpriseName: json["enterpriseName"],
       id: id,
