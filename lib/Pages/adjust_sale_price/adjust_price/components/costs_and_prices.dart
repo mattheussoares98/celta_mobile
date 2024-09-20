@@ -8,9 +8,9 @@ import '../../../../models/adjust_sale_price/adjust_sale_price.dart';
 import '../../../../models/soap/soap.dart';
 import '../../../../providers/providers.dart';
 
-class ShowCosts extends StatelessWidget {
+class CostsAndPrices extends StatelessWidget {
   final GetProductJsonModel product;
-  const ShowCosts({
+  const CostsAndPrices({
     required this.product,
     super.key,
   });
