@@ -31,12 +31,14 @@ class ShowAlertDialog {
           ),
           content: subtitle == null
               ? null
-              : Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: subtitleSize,
+              : SingleChildScrollView(
+                  child: Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: subtitleSize,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
           actionsPadding: const EdgeInsets.all(10),
           actions: [
