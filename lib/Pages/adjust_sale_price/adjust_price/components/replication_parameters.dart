@@ -17,6 +17,35 @@ class ReplicationParameters extends StatefulWidget {
 }
 
 class _ReplicationParametersState extends State<ReplicationParameters> {
+  bool isUpdated = false;
+  void updateIsSelected(ReplicationModel replication) async {
+    if (isUpdated) {
+      return;
+    }
+
+    await Future.delayed(Duration.zero);
+
+    if (replication.replicationName == ReplicationNames.Packings &&
+        widget.product.alterationPriceForAllPackings == true) {
+      replication.selected = true;
+    }
+    if (replication.replicationName == ReplicationNames.Class &&
+        widget.product.markUpdateClassInAdjustSalePriceIndividual == true) {
+      replication.selected = true;
+    }
+    if (replication.replicationName == ReplicationNames.OperationalGrouping) {
+      replication.selected = true;
+    }
+    if (replication.replicationName == ReplicationNames.Grid &&
+        widget.product.isFatherOfGrate == true) {
+      replication.selected = true;
+    }
+
+    isUpdated = true;
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
@@ -34,22 +63,8 @@ class _ReplicationParametersState extends State<ReplicationParameters> {
         Column(
           children: adjustSalePriceProvider.replicationParameters.map(
             (e) {
-              if (e.replicationName == ReplicationNames.Packings &&
-                  widget.product.alterationPriceForAllPackings == true) {
-                e.selected = true;
-              }
-              if (e.replicationName == ReplicationNames.Class &&
-                  widget.product.markUpdateClassInAdjustSalePriceIndividual ==
-                      true) {
-                e.selected = true;
-              }
-              if (e.replicationName == ReplicationNames.OperationalGrouping) {
-                e.selected = true;
-              }
-              if (e.replicationName == ReplicationNames.Grid &&
-                  widget.product.isFatherOfGrate == true) {
-                e.selected = true;
-              }
+              updateIsSelected(e);
+
               return InkWell(
                 onTap: () {
                   setState(() {
