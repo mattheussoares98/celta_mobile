@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-enum MoreInformationType { stocks, stockAddress, lastBuyEntrance, costs }
+enum MoreInformationType {
+  costs,
+  lastBuyEntrance,
+  prices,
+  stockAddress,
+  stocks,
+}
 
 abstract class MoreInformationWidget extends StatelessWidget {
   MoreInformationType get type;

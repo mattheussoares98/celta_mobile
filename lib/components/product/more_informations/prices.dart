@@ -2,12 +2,18 @@ import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../components/components.dart';
-import '../../../../models/adjust_sale_price/adjust_sale_price.dart';
-import '../../../../models/soap/soap.dart';
-import '../../../../providers/providers.dart';
+import '../../components.dart';
+import '../../../models/adjust_sale_price/adjust_sale_price.dart';
+import '../../../models/soap/soap.dart';
+import '../../../providers/providers.dart';
 
-class Prices extends StatelessWidget {
+class Prices extends StatelessWidget implements MoreInformationWidget {
+  @override
+  MoreInformationType get type => MoreInformationType.prices;
+
+  @override
+  String get moreInformationName => "Preços";
+
   final GetProductJsonModel product;
   const Prices({
     required this.product,
