@@ -41,9 +41,6 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         typeOfResult: "GetExpeditionControlsToConferenceResult",
       );
 
-      SoapRequestResponse.responseAsMap;
-      SoapRequestResponse.responseAsString;
-      _errorMessage = SoapRequestResponse.errorMessage;
       List responseAsMap = json.decode(SoapRequestResponse.responseAsString);
 
       _expeditionControlsToConference =
