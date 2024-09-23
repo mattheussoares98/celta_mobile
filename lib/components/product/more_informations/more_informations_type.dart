@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 enum MoreInformationType {
   costs,
   lastBuyEntrance,
+  margins,
   prices,
   stockAddress,
   stocks,
