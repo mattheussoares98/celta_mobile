@@ -38,6 +38,8 @@ class _ExpeditionControlsPageState extends State<ExpeditionControlsPage> {
   Widget build(BuildContext context) {
     ProductsConferenceProvider productsConferenceProvider =
         Provider.of(context);
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return Stack(
       children: [
@@ -50,11 +52,15 @@ class _ExpeditionControlsPageState extends State<ExpeditionControlsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Controles de expedição"),
                 if (productsConferenceProvider.errorMessage != "")
-                  ErrorMessage(
-                    errorMessage: productsConferenceProvider.errorMessage,
-                  ),
+                  searchAgain(
+                      errorMessage: productsConferenceProvider.errorMessage,
+                      request: () async {
+                        await productsConferenceProvider
+                            .getExpeditionControlsToConference(
+                          enterpriseCode: enterprise.codigoInternoEmpresa,
+                        );
+                      }),
               ],
             ),
           ),
