@@ -140,167 +140,169 @@ class _HomePageState extends State<HomePage> {
                     request: enterpriseProvider.getFirebaseEnterpriseModel,
                   ),
                 if (enterpriseProvider.firebaseEnterpriseModel != null)
-                  GridView.count(
-                    crossAxisCount: returnSize(), // define o número de colunas
-                    childAspectRatio:
-                        1.7, // define a proporção de largura/altura dos itens
-                    mainAxisSpacing: 0.0,
-                    crossAxisSpacing: 0.0,
-                    shrinkWrap: true,
-                    children: [
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/adjustPrice.png',
-                        routine: 'Alteração de preços'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
-                        context: context,
-                        isNew: true,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.adjustSalePrice,
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: returnSize(), // define o número de colunas
+                      childAspectRatio:
+                          1.7, // define a proporção de largura/altura dos itens
+                      mainAxisSpacing: 0.0,
+                      crossAxisSpacing: 0.0,
+                      shrinkWrap: true,
+                      children: [
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/adjustPrice.png',
+                          routine: 'Alteração de preços'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
+                          context: context,
+                          isNew: true,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.adjustSalePrice,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/adjustStock.png',
-                        routine: 'Ajuste de estoque'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.ADJUST_STOCK,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.adjustStock,
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/adjustStock.png',
+                          routine: 'Ajuste de estoque'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.ADJUST_STOCK,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.adjustStock,
+                          ),
                         ),
-                      ),
-                      // ImageComponent.image(
-                      //   imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
-                      //   routine: 'Avaliação e sugestôes'.toUpperCase(),
-                      //   route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
-                      //   context: context,
-                      //   isNew: true,
-                      //   moduleIsLiberated: true,
-                      // ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/newClient.png',
-                        routine: 'Cadastro de clientes'.toUpperCase(),
-                        route: APPROUTES.CUSTOMER_REGISTER,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.customerRegister,
+                        // ImageComponent.image(
+                        //   imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
+                        //   routine: 'Avaliação e sugestôes'.toUpperCase(),
+                        //   route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
+                        //   context: context,
+                        //   isNew: true,
+                        //   moduleIsLiberated: true,
+                        // ),
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/newClient.png',
+                          routine: 'Cadastro de clientes'.toUpperCase(),
+                          route: APPROUTES.CUSTOMER_REGISTER,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.customerRegister,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/productsConference.png',
-                        routine: 'Conferência de produtos (expedição)'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.EXPEDITION_CONTROLS,
-                        context: context,
-                        isNew: true,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.productsConference,
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/productsConference.png',
+                          routine: 'Conferência de produtos (expedição)'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.EXPEDITION_CONTROLS,
+                          context: context,
+                          isNew: true,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.productsConference,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/consultPrice.png',
-                        routine: 'Consulta de preços'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.PRICE_CONFERENCE,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.priceConference,
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/consultPrice.png',
+                          routine: 'Consulta de preços'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.PRICE_CONFERENCE,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.priceConference,
+                          ),
                         ),
-                      ),
-
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/inventory.png',
-                        routine: 'Inventário'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.INVENTORY,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.inventory,
+                    
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/inventory.png',
+                          routine: 'Inventário'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.INVENTORY,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.inventory,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/buyRequest.jpg',
-                        routine: 'Pedido de compras'.toUpperCase(),
-                        route: APPROUTES.BUYERS,
-                        // nextRoute: APPROUTES.BUYERS,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.buyRequest,
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/buyRequest.jpg',
+                          routine: 'Pedido de compras'.toUpperCase(),
+                          route: APPROUTES.BUYERS,
+                          // nextRoute: APPROUTES.BUYERS,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.buyRequest,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/transfer.png',
-                        routine: 'Pedido de transferência'.toUpperCase(),
-                        route: APPROUTES.TRANSFER_REQUEST_MODEL,
-                        nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.transferRequest,
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/transfer.png',
+                          routine: 'Pedido de transferência'.toUpperCase(),
+                          route: APPROUTES.TRANSFER_REQUEST_MODEL,
+                          nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.transferRequest,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/saleRequest.png',
-                        routine: 'Pedido de vendas'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.SALE_REQUEST_MODEL,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.saleRequest,
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/saleRequest.png',
+                          routine: 'Pedido de vendas'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.SALE_REQUEST_MODEL,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.saleRequest,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath:
-                            'lib/assets/Images/searchConcurrentPrice.png',
-                        routine: 'Preços concorrentes'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.RESEARCH_PRICES,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.researchPrices,
+                        ImageComponent.image(
+                          imagePath:
+                              'lib/assets/Images/searchConcurrentPrice.png',
+                          routine: 'Preços concorrentes'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.RESEARCH_PRICES,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.researchPrices,
+                          ),
                         ),
-                      ),
-                      ImageComponent.image(
-                        imagePath: 'lib/assets/Images/receipt.jpg',
-                        routine: 'Recebimento de mercadorias'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.RECEIPT,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.receipt,
+                        ImageComponent.image(
+                          imagePath: 'lib/assets/Images/receipt.jpg',
+                          routine: 'Recebimento de mercadorias'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.RECEIPT,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.receipt,
+                          ),
                         ),
-                      ),
-
-                      ImageComponent.image(
-                        imagePath:
-                            'lib/assets/Images/transferBetweenStocks.png',
-                        routine: 'Transferência entre estoques'.toUpperCase(),
-                        route: APPROUTES.ENTERPRISE,
-                        nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
-                        context: context,
-                        moduleIsLiberated: getModuleIsEnabled(
-                          enterpriseProvider,
-                          Modules.transferBetweenStocks,
+                    
+                        ImageComponent.image(
+                          imagePath:
+                              'lib/assets/Images/transferBetweenStocks.png',
+                          routine: 'Transferência entre estoques'.toUpperCase(),
+                          route: APPROUTES.ENTERPRISE,
+                          nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
+                          context: context,
+                          moduleIsLiberated: getModuleIsEnabled(
+                            enterpriseProvider,
+                            Modules.transferBetweenStocks,
+                          ),
                         ),
-                      ),
-                      // ImageComponent.image(
-                      //   imagePath: 'lib/assets/Images/transferBetweenStocks.jpg',
-                      //   routine: 'Transferência entre embalagens'.toUpperCase(),
-                      //   route: APPROUTES.ENTERPRISE,
-                      //   nextRoute: APPROUTES.TRANSFER_BETWEEN_PACKAGE,
-                      //   context: context,
-                      // ),
-                    ],
+                        // ImageComponent.image(
+                        //   imagePath: 'lib/assets/Images/transferBetweenStocks.jpg',
+                        //   routine: 'Transferência entre embalagens'.toUpperCase(),
+                        //   route: APPROUTES.ENTERPRISE,
+                        //   nextRoute: APPROUTES.TRANSFER_BETWEEN_PACKAGE,
+                        //   context: context,
+                        // ),
+                      ],
+                    ),
                   ),
               ],
             ),
