@@ -5,7 +5,12 @@ import '../../../models/soap/soap.dart';
 import '../../../utils/utils.dart';
 import '../../components.dart';
 
-class LastBuyEntrance extends StatelessWidget {
+class LastBuyEntrance extends StatelessWidget implements MoreInformationWidget {
+  @override
+  MoreInformationType get type => MoreInformationType.lastBuyEntrance;
+  @override
+  String get moreInformationName => "Compra";
+
   final GetProductJsonModel product;
   const LastBuyEntrance({
     required this.product,

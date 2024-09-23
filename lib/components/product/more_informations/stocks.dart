@@ -4,7 +4,12 @@ import '../../components.dart';
 import '../../../models/soap/products/products.dart';
 import '../../../utils/utils.dart';
 
-class Stocks extends StatelessWidget {
+class Stocks extends StatelessWidget implements MoreInformationWidget {
+  @override
+  MoreInformationType get type => MoreInformationType.stocks;
+  @override
+  String get moreInformationName => "Estoques";
+
   final GetProductJsonModel product;
   const Stocks({
     required this.product,

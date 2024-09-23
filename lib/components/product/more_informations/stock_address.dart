@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/soap/soap.dart';
+import '../../components.dart';
 
-class StockAddress extends StatelessWidget {
+class StockAddress extends StatelessWidget implements MoreInformationWidget {
+  @override
+  MoreInformationType get type => MoreInformationType.stockAddress;
+  @override
+  String get moreInformationName => "Endereços";
+
   final GetProductJsonModel product;
   const StockAddress({
     required this.product,

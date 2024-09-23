@@ -38,7 +38,12 @@ class ProductItem extends StatelessWidget {
                 ),
                 OpenDialogProductInformations(
                   product: product,
-                  showCosts: showCosts,
+                  pages: [
+                    Stocks(product: product),
+                    StockAddress(product: product),
+                    LastBuyEntrance(product: product),
+                    if (showCosts) Costs(product: product),
+                  ],
                 ),
               ],
             ),

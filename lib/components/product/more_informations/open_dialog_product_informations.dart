@@ -5,10 +5,10 @@ import '../../components.dart';
 
 class OpenDialogProductInformations extends StatefulWidget {
   final GetProductJsonModel product;
-  final bool showCosts;
+  final List<MoreInformationWidget> pages;
   const OpenDialogProductInformations({
     required this.product,
-    required this.showCosts,
+    required this.pages,
     Key? key,
   }) : super(key: key);
 
@@ -64,12 +64,7 @@ class _OpenDialogProductInformationsState
                   width: MediaQuery.of(context).size.width,
                   child: PageView(
                     controller: _pageController,
-                    children: [
-                      Stocks(product: widget.product),
-                      StockAddress(product: widget.product),
-                      LastBuyEntrance(product: widget.product),
-                      if (widget.showCosts) Costs(product: widget.product),
-                    ],
+                    children: widget.pages,
                   ),
                 ),
                 actions: [
@@ -80,29 +75,11 @@ class _OpenDialogProductInformationsState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ActionButton(
-                            pageIndex: 0,
-                            pageController: _pageController,
-                            textButton: "Estoques",
-                          ),
-                          const SizedBox(width: 3),
-                          ActionButton(
-                            pageIndex: 1,
-                            pageController: _pageController,
-                            textButton: "Endereços",
-                          ),
-                          const SizedBox(width: 3),
-                          ActionButton(
-                            pageIndex: 2,
-                            pageController: _pageController,
-                            textButton: "Compra",
-                          ),
-                          if (widget.showCosts) const SizedBox(width: 3),
-                          if (widget.showCosts)
+                          for (var i = 0; i < widget.pages.length; i++)
                             ActionButton(
-                              pageIndex: 3,
+                              pageIndex: i,
                               pageController: _pageController,
-                              textButton: "Custos",
+                              textButton: widget.pages[i].moreInformationName,
                             ),
                         ],
                       ),
