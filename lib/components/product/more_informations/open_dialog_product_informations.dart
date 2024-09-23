@@ -6,9 +6,11 @@ import '../../components.dart';
 class OpenDialogProductInformations extends StatefulWidget {
   final GetProductJsonModel product;
   final List<MoreInformationWidget> pages;
+  final String title;
   const OpenDialogProductInformations({
     required this.product,
     required this.pages,
+    this.title = "Mais informações",
     Key? key,
   }) : super(key: key);
 
@@ -33,7 +35,7 @@ class _OpenDialogProductInformationsState
       child: Row(
         children: [
           Text(
-            "Mais informações",
+            widget.title,
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
             ),

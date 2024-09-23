@@ -106,12 +106,19 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                               adjustSalePriceProvider.finishDate = newDate;
                             }
                           }),
-                      OpenDialogProductInformations(
-                        product: product,
-                        pages: [
-                          Prices(product: product),
-                          Costs(product: product),
-                          Margins(product: product),
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OpenDialogProductInformations(
+                            product: product,
+                            title: "Preços, custos e margens",
+                            pages: [
+                              Prices(product: product),
+                              Costs(product: product),
+                              Margins(product: product),
+                            ],
+                          ),
                         ],
                       ),
                       const PriceFieldAndConfirmAdjustButton(),
