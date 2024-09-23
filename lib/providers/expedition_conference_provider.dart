@@ -6,23 +6,23 @@ import 'package:flutter/material.dart';
 
 import '../models/products_conference/products_conference.dart';
 
-class ProductsConferenceProvider with ChangeNotifier {
+class ExpeditionConferenceProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
-  List<ExpeditionControlModel> _expeditionControlsProducts = [];
-  List<ExpeditionControlModel> get expeditionControlsProducts =>
-      _expeditionControlsProducts;
+  List<ExpeditionControlModel> _expeditionControlsToConference = [];
+  List<ExpeditionControlModel> get expeditionControlsToConference =>
+      _expeditionControlsToConference;
 
   Future<void> getExpeditionControlsToConference({
     required int enterpriseCode,
   }) async {
     _errorMessage = "";
     _isLoading = true;
-    _expeditionControlsProducts.clear();
+    _expeditionControlsToConference.clear();
     notifyListeners();
 
     try {
@@ -46,7 +46,7 @@ class ProductsConferenceProvider with ChangeNotifier {
       _errorMessage = SoapRequestResponse.errorMessage;
       List responseAsMap = json.decode(SoapRequestResponse.responseAsString);
 
-      _expeditionControlsProducts =
+      _expeditionControlsToConference =
           responseAsMap.map((e) => ExpeditionControlModel.fromJson(e)).toList();
 
       // _expeditionControlsProducts =

@@ -16,13 +16,13 @@ class _ExpeditionControlsPageState extends State<ExpeditionControlsPage> {
   Future<void> _getExpeditionControlsToConference() async {
     await Future.delayed(Duration.zero);
 
-    ProductsConferenceProvider productsConferenceProvider =
+    ExpeditionConferenceProvider expeditionConferenceProvider =
         Provider.of(context, listen: false);
 
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
-    await productsConferenceProvider.getExpeditionControlsToConference(
+    await expeditionConferenceProvider.getExpeditionControlsToConference(
       enterpriseCode: enterprise.codigoInternoEmpresa,
     );
   }
@@ -36,7 +36,7 @@ class _ExpeditionControlsPageState extends State<ExpeditionControlsPage> {
 
   @override
   Widget build(BuildContext context) {
-    ProductsConferenceProvider productsConferenceProvider =
+    ExpeditionConferenceProvider expeditionConferenceProvider =
         Provider.of(context);
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
@@ -52,11 +52,11 @@ class _ExpeditionControlsPageState extends State<ExpeditionControlsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (productsConferenceProvider.errorMessage != "")
+                if (expeditionConferenceProvider.errorMessage != "")
                   searchAgain(
-                      errorMessage: productsConferenceProvider.errorMessage,
+                      errorMessage: expeditionConferenceProvider.errorMessage,
                       request: () async {
-                        await productsConferenceProvider
+                        await expeditionConferenceProvider
                             .getExpeditionControlsToConference(
                           enterpriseCode: enterprise.codigoInternoEmpresa,
                         );
@@ -67,7 +67,7 @@ class _ExpeditionControlsPageState extends State<ExpeditionControlsPage> {
         ),
         loadingWidget(
           message: "Aguarde...",
-          isLoading: productsConferenceProvider.isLoading,
+          isLoading: expeditionConferenceProvider.isLoading,
         )
       ],
     );
