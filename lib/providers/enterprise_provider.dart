@@ -72,7 +72,8 @@ class EnterpriseProvider with ChangeNotifier {
       _firebaseEnterpriseModel =
           await FirebaseHelper.getFirebaseEnterpriseModel();
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessage =
+          "Ocorreu um erro não esperado para carregar as informações da empresa \n$e";
     } finally {
       _isLoading = false;
       notifyListeners();
