@@ -111,6 +111,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                         pages: [
                           Prices(product: product),
                           Costs(product: product),
+                          Margins(product: product),
                         ],
                       ),
                       const PriceFieldAndConfirmAdjustButton(),

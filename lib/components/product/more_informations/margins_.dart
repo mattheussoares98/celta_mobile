@@ -30,60 +30,88 @@ class Margins extends StatelessWidget implements MoreInformationWidget {
             ),
           ),
         ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.RetailMargin,
+        if (product.priceCost == null)
+          const Text(
+            "Peça para o suporte atualizar o CeltaBS para exibir as margens corretamente",
+            textAlign: TextAlign.center,
           ),
-          title: "Varejo",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.RetailMinimumMargin,
+        if (product.priceCost != null)
+          Column(
+            children: [
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.RetailMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Varejo",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.RetailMinimumMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Mín varejo",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.RetailOfferMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Mín varejo oferta",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.WholeMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Atacado",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.WholeMinimumMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Mín atacado",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.WholeMinimumMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Mín atacado oferta",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.ECommerceMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Ecommerce",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.ECommerceMinimumMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Mín ecommerce",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: (product.priceCost?.ECommerceMinimumMargin
+                            ?.toString()
+                            .toBrazilianNumber() ??
+                        "0") +
+                    " %",
+                title: "Mín ecommerce oferta",
+              ),
+            ],
           ),
-          title: "Mín varejo",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.RetailOfferMargin,
-          ),
-          title: "Mín varejo oferta",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.WholeMargin,
-          ),
-          title: "Atacado",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.WholeMinimumMargin,
-          ),
-          title: "Mín atacado",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.WholeMinimumMargin,
-          ),
-          title: "Mín atacado oferta",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.ECommerceMargin,
-          ),
-          title: "Ecommerce",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.ECommerceMinimumMargin,
-          ),
-          title: "Mín ecommerce",
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          subtitle: ConvertString.convertToBRL(
-            product.priceCost?.ECommerceMinimumMargin,
-          ),
-          title: "Mín ecommerce oferta",
-        ),
       ],
     );
   }
