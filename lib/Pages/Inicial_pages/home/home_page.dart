@@ -190,6 +190,18 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ImageComponent.image(
+                        imagePath: 'lib/assets/Images/productsConference.jpg',
+                        routine: 'Conferência de produtos (expedição)'.toUpperCase(),
+                        route: APPROUTES.ENTERPRISE,
+                        nextRoute: APPROUTES.EXPEDITION_CONTROLS,
+                        context: context,
+                        isNew: true,
+                        moduleIsLiberated: getModuleIsEnabled(
+                          enterpriseProvider,
+                          Modules.productsConference,
+                        ),
+                      ),
+                      ImageComponent.image(
                         imagePath: 'lib/assets/Images/consultPrice.png',
                         routine: 'Consulta de preços'.toUpperCase(),
                         route: APPROUTES.ENTERPRISE,
@@ -200,18 +212,7 @@ class _HomePageState extends State<HomePage> {
                           Modules.priceConference,
                         ),
                       ),
-                      // ImageComponent.image(
-                      //   imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
-                      //   routine: 'Conferência de produtos (expedição)'.toUpperCase(),
-                      //   route: APPROUTES.ENTERPRISE,
-                      //   nextRoute: APPROUTES.EXPEDITION_CONTROLS,
-                      //   context: context,
-                      //   isNew: true,
-                      //   moduleIsLiberated: getModuleIsEnabled(
-                      //     enterpriseProvider,
-                      //     Modules.productsConference,
-                      //   ),
-                      // ),
+
                       ImageComponent.image(
                         imagePath: 'lib/assets/Images/inventory.jpg',
                         routine: 'Inventário'.toUpperCase(),
