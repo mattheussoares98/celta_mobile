@@ -1,3 +1,4 @@
+import 'package:celta_inventario/components/product/more_informations/prices.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -105,7 +106,13 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                               adjustSalePriceProvider.finishDate = newDate;
                             }
                           }),
-                      CostsAndPrices(product: product),
+                      OpenDialogProductInformations(
+                        product: product,
+                        pages: [
+                          Prices(product: product),
+                          Costs(product: product),
+                        ],
+                      ),
                       const PriceFieldAndConfirmAdjustButton(),
                     ],
                   ),
