@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 import '../pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
-import '../pages/products_conference/expedition_controls_page.dart';
+import '../pages/expedition_conference/expedition_controls_to_conference_page.dart';
 import '../pages/adjust_sale_price/adjust_sale_price.dart';
 import '../pages/web/web.dart';
 import '../pages/adjust_stock/adjust_stock.dart';
@@ -34,7 +34,7 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
       APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
       APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
-      APPROUTES.EXPEDITION_CONTROLS: (ctx) => const ExpeditionControlsPage(),
+      APPROUTES.EXPEDITION_CONTROLS: (ctx) => const ExpeditionControlsToConferencePage(),
       APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
       APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
       APPROUTES.SALE_REQUEST_MODEL: (ctx) => const RequestsPage(),
