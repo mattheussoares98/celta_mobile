@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ImageComponent.image(
-                        imagePath: 'lib/assets/Images/adjustStock.jpg',
+                        imagePath: 'lib/assets/Images/adjustStock.png',
                         routine: 'Ajuste de estoque'.toUpperCase(),
                         route: APPROUTES.ENTERPRISE,
                         nextRoute: APPROUTES.ADJUST_STOCK,
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                       //   moduleIsLiberated: true,
                       // ),
                       ImageComponent.image(
-                        imagePath: 'lib/assets/Images/newClient.jpg',
+                        imagePath: 'lib/assets/Images/newClient.png',
                         routine: 'Cadastro de clientes'.toUpperCase(),
                         route: APPROUTES.CUSTOMER_REGISTER,
                         context: context,
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ImageComponent.image(
-                        imagePath: 'lib/assets/Images/productsConference.jpg',
+                        imagePath: 'lib/assets/Images/productsConference.png',
                         routine: 'Conferência de produtos (expedição)'.toUpperCase(),
                         route: APPROUTES.ENTERPRISE,
                         nextRoute: APPROUTES.EXPEDITION_CONTROLS,
@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                       ),
 
                       ImageComponent.image(
-                        imagePath: 'lib/assets/Images/inventory.jpg',
+                        imagePath: 'lib/assets/Images/inventory.png',
                         routine: 'Inventário'.toUpperCase(),
                         route: APPROUTES.ENTERPRISE,
                         nextRoute: APPROUTES.INVENTORY,
@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ImageComponent.image(
-                        imagePath: 'lib/assets/Images/transfer.jpg',
+                        imagePath: 'lib/assets/Images/transfer.png',
                         routine: 'Pedido de transferência'.toUpperCase(),
                         route: APPROUTES.TRANSFER_REQUEST_MODEL,
                         nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       ImageComponent.image(
-                        imagePath: 'lib/assets/Images/saleRequest.jpg',
+                        imagePath: 'lib/assets/Images/saleRequest.png',
                         routine: 'Pedido de vendas'.toUpperCase(),
                         route: APPROUTES.ENTERPRISE,
                         nextRoute: APPROUTES.SALE_REQUEST_MODEL,
@@ -259,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ImageComponent.image(
                         imagePath:
-                            'lib/assets/Images/searchConcurrentPrice.jpg',
+                            'lib/assets/Images/searchConcurrentPrice.png',
                         routine: 'Preços concorrentes'.toUpperCase(),
                         route: APPROUTES.ENTERPRISE,
                         nextRoute: APPROUTES.RESEARCH_PRICES,
