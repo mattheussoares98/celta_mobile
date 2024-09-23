@@ -4,6 +4,8 @@ import 'package:celta_inventario/api/api.dart';
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+import '../models/products_conference/products_conference.dart';
+
 class ProductsConferenceProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -11,11 +13,16 @@ class ProductsConferenceProvider with ChangeNotifier {
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
+  List<ExpeditionControlModel> _expeditionControlsProducts = [];
+  List<ExpeditionControlModel> get expeditionControlsProducts =>
+      _expeditionControlsProducts;
+
   Future<void> getExpeditionControlsToConference({
     required int enterpriseCode,
   }) async {
     _errorMessage = "";
     _isLoading = true;
+    _expeditionControlsProducts.clear();
     notifyListeners();
 
     try {
@@ -37,6 +44,15 @@ class ProductsConferenceProvider with ChangeNotifier {
       SoapRequestResponse.responseAsMap;
       SoapRequestResponse.responseAsString;
       _errorMessage = SoapRequestResponse.errorMessage;
+      List responseAsMap = json.decode(SoapRequestResponse.responseAsString);
+
+      _expeditionControlsProducts =
+          responseAsMap.map((e) => ExpeditionControlModel.fromJson(e)).toList();
+
+      // _expeditionControlsProducts =
+      //     (SoapRequestResponse.responseAsString as Map)
+      //         .map((e) => ExpeditionControlModel.fromJson(e))
+      //         .toList();
     } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
