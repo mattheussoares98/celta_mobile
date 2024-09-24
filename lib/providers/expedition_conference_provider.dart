@@ -18,7 +18,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       _expeditionControlsToConference;
 
   List<ExpeditionControlProductModel> _expeditionControlsProducts = [];
-  List<ExpeditionControlProductModel> get expeditionControlsProducts =>
+  List<ExpeditionControlProductModel> get pendingProducts =>
       _expeditionControlsProducts;
 
   Future<void> getExpeditionControlsToConference({
