@@ -49,13 +49,14 @@ class _ExpeditionControlsProductsPageState
             title: const FittedBox(child: Text("Conferência de produtos")),
             actions: [
               IconButton(
-                  onPressed: () async {
-                    await expeditionConferenceProvider.getProducts(
-                      expeditionControlCode:
-                          expeditionControl.ExpeditionControlCode!,
-                    );
-                  },
-                  icon: const Icon(Icons.refresh))
+                onPressed: () async {
+                  await expeditionConferenceProvider.getProducts(
+                    expeditionControlCode:
+                        expeditionControl.ExpeditionControlCode!,
+                  );
+                },
+                icon: const Icon(Icons.refresh),
+              ),
             ],
           ),
           body: ListView.builder(

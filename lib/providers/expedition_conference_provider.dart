@@ -17,9 +17,12 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   List<ExpeditionControlModel> get expeditionControlsToConference =>
       _expeditionControlsToConference;
 
-  List<ExpeditionControlProductModel> _expeditionControlsProducts = [];
-  List<ExpeditionControlProductModel> get pendingProducts =>
-      _expeditionControlsProducts;
+  List<ExpeditionControlProductModel> _pendingProducts = [];
+  List<ExpeditionControlProductModel> get pendingProducts => _pendingProducts;
+
+  List<ExpeditionControlProductModel> _confirmedProducts = [];
+  List<ExpeditionControlProductModel> get confirmedProducts =>
+      _confirmedProducts;
 
   Future<void> getExpeditionControlsToConference({
     required int enterpriseCode,
@@ -73,6 +76,8 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   }) async {
     _errorMessage = "";
     _isLoading = true;
+    _confirmedProducts.clear();
+    _pendingProducts.clear();
     notifyListeners();
 
     try {
@@ -98,7 +103,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       }
 
       List decodedResponse = json.decode(SoapRequestResponse.responseAsString);
-      _expeditionControlsProducts = decodedResponse
+      _pendingProducts = decodedResponse
           .map((e) => ExpeditionControlProductModel.fromJson(e))
           .toList();
     } catch (e) {
