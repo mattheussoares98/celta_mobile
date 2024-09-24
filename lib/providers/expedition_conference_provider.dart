@@ -63,4 +63,41 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> getProducts({
+    required int expeditionControlCode,
+  }) async {
+    _errorMessage = "";
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final jsonFilters = {
+        "CrossIdentity": UserData.crossIdentity,
+        "ExpeditionControlCode": expeditionControlCode,
+      };
+
+      await SoapRequest.soapPost(
+        parameters: {
+          "stringFilters": json.encode(jsonFilters),
+        },
+        typeOfResponse: "GetExpeditionControlProductsResponse",
+        SOAPAction: "GetExpeditionControlProducts",
+        serviceASMX: "CeltaProductService.asmx",
+        typeOfResult: "GetExpeditionControlProductsResult",
+      );
+
+      _errorMessage = SoapRequestResponse.errorMessage;
+      SoapRequestResponse.responseAsMap;
+      SoapRequestResponse.responseAsString;
+      if (_errorMessage.isNotEmpty) {
+        return;
+      }
+    } catch (e) {
+      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }
