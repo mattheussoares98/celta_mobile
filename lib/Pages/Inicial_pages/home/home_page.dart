@@ -142,7 +142,8 @@ class _HomePageState extends State<HomePage> {
                 if (enterpriseProvider.firebaseEnterpriseModel != null)
                   Expanded(
                     child: GridView.count(
-                      crossAxisCount: returnSize(), // define o número de colunas
+                      crossAxisCount:
+                          returnSize(), // define o número de colunas
                       childAspectRatio:
                           1.7, // define a proporção de largura/altura dos itens
                       mainAxisSpacing: 0.0,
@@ -192,9 +193,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/productsConference.png',
-                          routine: 'Conferência de produtos (expedição)'.toUpperCase(),
+                          routine: 'Conferência de produtos (expedição)'
+                              .toUpperCase(),
                           route: APPROUTES.ENTERPRISE,
-                          nextRoute: APPROUTES.EXPEDITION_CONTROLS,
+                          nextRoute:
+                              APPROUTES.EXPEDITION_CONTROLS_TO_CONFERENCE,
                           context: context,
                           isNew: true,
                           moduleIsLiberated: getModuleIsEnabled(
@@ -213,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                             Modules.priceConference,
                           ),
                         ),
-                    
+
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/inventory.png',
                           routine: 'Inventário'.toUpperCase(),
@@ -281,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                             Modules.receipt,
                           ),
                         ),
-                    
+
                         ImageComponent.image(
                           imagePath:
                               'lib/assets/Images/transferBetweenStocks.png',
