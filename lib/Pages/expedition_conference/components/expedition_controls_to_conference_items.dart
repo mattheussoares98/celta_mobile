@@ -24,7 +24,7 @@ class ExpeditionControlsToConferenceItems extends StatelessWidget {
         return InkWell(
           onTap: () {
             Navigator.of(context).pushNamed(
-              APPROUTES.EXPEDITION_CONTROLS_PRODUCTS,
+              APPROUTES.EXPEDITION_CONFERENCE_PRODUCTS,
               arguments: expeditionControl,
             );
           },

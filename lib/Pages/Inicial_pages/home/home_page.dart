@@ -196,8 +196,8 @@ class _HomePageState extends State<HomePage> {
                           routine: 'Conferência de produtos (expedição)'
                               .toUpperCase(),
                           route: APPROUTES.ENTERPRISE,
-                          nextRoute:
-                              APPROUTES.EXPEDITION_CONTROLS_TO_CONFERENCE,
+                          nextRoute: APPROUTES
+                              .EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE,
                           context: context,
                           isNew: true,
                           moduleIsLiberated: getModuleIsEnabled(

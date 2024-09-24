@@ -17,25 +17,6 @@ class ExpeditionConferencePendingProductsPage extends StatefulWidget {
 class _ExpeditionConferencePendingProductsPageState
     extends State<ExpeditionConferencePendingProductsPage> {
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (mounted) {
-        ExpeditionConferenceProvider expeditionConferenceProvider =
-            Provider.of(context, listen: false);
-        ExpeditionControlModel expeditionControl = ModalRoute.of(context)!
-            .settings
-            .arguments as ExpeditionControlModel;
-
-        await expeditionConferenceProvider.getProducts(
-          expeditionControlCode: expeditionControl.ExpeditionControlCode!,
-        );
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     ExpeditionConferenceProvider expeditionConferenceProvider =
         Provider.of(context);
