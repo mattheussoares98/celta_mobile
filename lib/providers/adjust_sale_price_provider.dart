@@ -306,7 +306,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
         endDateOffer: endDateOffer,
       );
 
-      SoapRequest.soapPost(
+      await SoapRequest.soapPost(
         parameters: {
           "parameters": json.encode(jsonRequest),
         },
