@@ -33,74 +33,77 @@ class ProductInformations extends StatelessWidget {
       onTap: () {
         onTapProduct(context, enterprise);
       },
-      child: Column(
-        children: [
-          TitleAndSubtitle.titleAndSubtitle(
-            // title: "Produto",
-            subtitle: "${product.name} (${product.packingQuantity})",
-          ),
-          TitleAndSubtitle.titleAndSubtitle(
-            title: "PLU",
-            subtitle: product.plu,
-          ),
-          TitleAndSubtitle.titleAndSubtitle(
-            subtitle: product.retailPracticedPrice != null &&
-                    product.retailPracticedPrice! > 0
-                ? "Varejo: " +
-                    product.retailPracticedPrice
-                        .toString()
-                        .toBrazilianNumber()
-                        .addBrazilianCoin()
-                : "Sem preço de varejo",
-            subtitleColor: product.retailPracticedPrice != null &&
-                    product.retailPracticedPrice! > 0
-                ? Theme.of(context).colorScheme.primary
-                : Colors.black,
-          ),
-          TitleAndSubtitle.titleAndSubtitle(
-            subtitle: product.wholePracticedPrice != null &&
-                    product.wholePracticedPrice! > 0
-                ? "Atacado: " +
-                    product.wholePracticedPrice
-                        .toString()
-                        .toBrazilianNumber()
-                        .addBrazilianCoin()
-                : "Sem preço de atacado",
-            subtitleColor: product.wholePracticedPrice != null &&
-                    product.wholePracticedPrice! > 0
-                ? Theme.of(context).colorScheme.primary
-                : Colors.black,
-          ),
-          TitleAndSubtitle.titleAndSubtitle(
-            subtitle: product.eCommercePracticedPrice != null &&
-                    product.eCommercePracticedPrice! > 0
-                ? "Ecommerce: " +
-                    product.eCommercePracticedPrice
-                        .toString()
-                        .toBrazilianNumber()
-                        .addBrazilianCoin()
-                : "Sem preço de ecommerce",
-            subtitleColor: product.eCommercePracticedPrice != null &&
-                    product.eCommercePracticedPrice! > 0
-                ? Theme.of(context).colorScheme.primary
-                : Colors.black,
-            otherWidget: InkWell(
-              onTap: () {
-                onTapProduct(context, enterprise);
-              },
-              child: Row(
-                children: [
-                  Text(
-                    "Alterar preços",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            TitleAndSubtitle.titleAndSubtitle(
+              // title: "Produto",
+              subtitle: "${product.name} (${product.packingQuantity})",
+            ),
+            TitleAndSubtitle.titleAndSubtitle(
+              title: "PLU",
+              subtitle: product.plu,
+            ),
+            TitleAndSubtitle.titleAndSubtitle(
+              subtitle: product.retailPracticedPrice != null &&
+                      product.retailPracticedPrice! > 0
+                  ? "Varejo: " +
+                      product.retailPracticedPrice
+                          .toString()
+                          .toBrazilianNumber()
+                          .addBrazilianCoin()
+                  : "Sem preço de varejo",
+              subtitleColor: product.retailPracticedPrice != null &&
+                      product.retailPracticedPrice! > 0
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.black,
+            ),
+            TitleAndSubtitle.titleAndSubtitle(
+              subtitle: product.wholePracticedPrice != null &&
+                      product.wholePracticedPrice! > 0
+                  ? "Atacado: " +
+                      product.wholePracticedPrice
+                          .toString()
+                          .toBrazilianNumber()
+                          .addBrazilianCoin()
+                  : "Sem preço de atacado",
+              subtitleColor: product.wholePracticedPrice != null &&
+                      product.wholePracticedPrice! > 0
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.black,
+            ),
+            TitleAndSubtitle.titleAndSubtitle(
+              subtitle: product.eCommercePracticedPrice != null &&
+                      product.eCommercePracticedPrice! > 0
+                  ? "Ecommerce: " +
+                      product.eCommercePracticedPrice
+                          .toString()
+                          .toBrazilianNumber()
+                          .addBrazilianCoin()
+                  : "Sem preço de ecommerce",
+              subtitleColor: product.eCommercePracticedPrice != null &&
+                      product.eCommercePracticedPrice! > 0
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.black,
+              otherWidget: InkWell(
+                onTap: () {
+                  onTapProduct(context, enterprise);
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      "Alterar preços",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

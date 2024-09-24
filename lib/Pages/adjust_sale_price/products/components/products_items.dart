@@ -23,12 +23,9 @@ class _ProductsItemsState extends State<ProductsItems> {
           final product = adjustSalePriceProvider.products[index];
 
           return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ProductInformations(
-                product: product,
-                index: index,
-              ),
+            child: ProductInformations(
+              product: product,
+              index: index,
             ),
           );
         },
