@@ -226,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         ImageComponent.image(
-                          imagePath: 'lib/assets/Images/buyRequest.jpg',
+                          imagePath: 'lib/assets/Images/buyRequest.png',
                           routine: 'Pedido de compras'.toUpperCase(),
                           route: APPROUTES.BUYERS,
                           // nextRoute: APPROUTES.BUYERS,
