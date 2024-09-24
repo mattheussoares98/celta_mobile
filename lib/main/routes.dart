@@ -1,8 +1,8 @@
-import 'package:celta_inventario/pages/expedition_conference/expedition_controls_products_page.dart';
+import 'package:celta_inventario/pages/expedition_conference/expedition_conference_pending_products_page.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
-import '../pages/expedition_conference/expedition_controls_to_conference_page.dart';
+import '../pages/expedition_conference/expedition_conference_controls_to_conference_page.dart';
 import '../pages/adjust_sale_price/adjust_sale_price.dart';
 import '../pages/web/web.dart';
 import '../pages/adjust_stock/adjust_stock.dart';
@@ -35,9 +35,9 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
       APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
       APPROUTES.EXPEDITION_CONTROLS_PRODUCTS: (ctx) =>
-          const ExpeditionControlsProductsPage(),
+          const ExpeditionConferencePendingProductsPage(),
       APPROUTES.EXPEDITION_CONTROLS_TO_CONFERENCE: (ctx) =>
-          const ExpeditionControlsToConferencePage(),
+          const ExpeditionConferenceControlsToConferencePage(),
       APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
       APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
       APPROUTES.SALE_REQUEST_MODEL: (ctx) => const RequestsPage(),

@@ -6,16 +6,16 @@ import '../../models/expedition_control/expedition_control.dart';
 import '../../providers/providers.dart';
 import 'components/components.dart';
 
-class ExpeditionControlsProductsPage extends StatefulWidget {
-  const ExpeditionControlsProductsPage({super.key});
+class ExpeditionConferencePendingProductsPage extends StatefulWidget {
+  const ExpeditionConferencePendingProductsPage({super.key});
 
   @override
-  State<ExpeditionControlsProductsPage> createState() =>
-      _ExpeditionControlsProductsPageState();
+  State<ExpeditionConferencePendingProductsPage> createState() =>
+      _ExpeditionConferencePendingProductsPageState();
 }
 
-class _ExpeditionControlsProductsPageState
-    extends State<ExpeditionControlsProductsPage> {
+class _ExpeditionConferencePendingProductsPageState
+    extends State<ExpeditionConferencePendingProductsPage> {
   @override
   void initState() {
     super.initState();

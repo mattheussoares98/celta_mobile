@@ -6,16 +6,16 @@ import '../../models/enterprise/enterprise.dart';
 import '../../pages/expedition_conference/components/components.dart';
 import '../../providers/providers.dart';
 
-class ExpeditionControlsToConferencePage extends StatefulWidget {
-  const ExpeditionControlsToConferencePage({super.key});
+class ExpeditionConferenceControlsToConferencePage extends StatefulWidget {
+  const ExpeditionConferenceControlsToConferencePage({super.key});
 
   @override
-  State<ExpeditionControlsToConferencePage> createState() =>
-      _ExpeditionControlsToConferencePageState();
+  State<ExpeditionConferenceControlsToConferencePage> createState() =>
+      _ExpeditionConferenceControlsToConferencePageState();
 }
 
-class _ExpeditionControlsToConferencePageState
-    extends State<ExpeditionControlsToConferencePage> {
+class _ExpeditionConferenceControlsToConferencePageState
+    extends State<ExpeditionConferenceControlsToConferencePage> {
   Future<void> _getExpeditionControlsToConference() async {
     await Future.delayed(Duration.zero);
 
