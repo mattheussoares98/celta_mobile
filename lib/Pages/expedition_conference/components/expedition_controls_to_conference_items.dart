@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
 class ExpeditionControlsToConferenceItems extends StatelessWidget {
   const ExpeditionControlsToConferenceItems({super.key});
@@ -20,24 +21,32 @@ class ExpeditionControlsToConferenceItems extends StatelessWidget {
         final expeditionControl =
             expeditionConferenceProvider.expeditionControlsToConference[index];
 
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Documento",
-                  subtitle: expeditionControl.DocumentNumber,
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Nome da etapa",
-                  subtitle: expeditionControl.StepName,
-                ),
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Origem",
-                  subtitle: expeditionControl.OriginTypeString,
-                ),
-              ],
+        return InkWell(
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              APPROUTES.EXPEDITION_CONTROLS_PRODUCTS,
+              arguments: expeditionControl,
+            );
+          },
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Documento",
+                    subtitle: expeditionControl.DocumentNumber,
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Nome da etapa",
+                    subtitle: expeditionControl.StepName,
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "Origem",
+                    subtitle: expeditionControl.OriginTypeString,
+                  ),
+                ],
+              ),
             ),
           ),
         );
