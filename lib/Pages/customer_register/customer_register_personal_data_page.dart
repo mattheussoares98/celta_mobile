@@ -11,8 +11,10 @@ import '../../providers/providers.dart';
 
 class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final GlobalKey<FormState> personFormKey;
+  final Function() validateFormKey;
   const CustomerRegisterPersonalDataPage({
     required this.personFormKey,
+    required this.validateFormKey,
     Key? key,
   }) : super(key: key);
 
@@ -83,6 +85,9 @@ class _CustomerRegisterPersonalDataPageState
             AddressFormField(
               enabled: true,
               focusNode: nameFocusNode,
+              onChanged: (_) {
+                widget.validateFormKey();
+              },
               onFieldSubmitted: (String? value) {
                 FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
               },
@@ -123,6 +128,7 @@ class _CustomerRegisterPersonalDataPageState
               enabled: true,
               onChanged: (value) {
                 updateCpfCnpjEnabled();
+                widget.validateFormKey();
               },
               suffixWidget: IconButton(
                 onPressed: () {
@@ -175,6 +181,9 @@ class _CustomerRegisterPersonalDataPageState
             AddressFormField(
               enabled: true,
               focusNode: reducedNameFocusNode,
+              onChanged: (_) {
+                widget.validateFormKey();
+              },
               suffixWidget: IconButton(
                 onPressed: () {
                   customerRegisterProvider.reducedNameController.text = "";
@@ -197,6 +206,9 @@ class _CustomerRegisterPersonalDataPageState
               keyboardType: TextInputType.number,
               enabled: true,
               focusNode: dateOfBirthFocusNode,
+              onChanged: (_) {
+                widget.validateFormKey();
+              },
               onFieldSubmitted: (String? value) {
                 FocusScope.of(context).requestFocus(sexTypeFocusNode);
               },
@@ -314,6 +326,7 @@ class _CustomerRegisterPersonalDataPageState
                   onChanged: (value) {
                     customerRegisterProvider.selectedSexDropDown =
                         ValueNotifier(value);
+                    widget.validateFormKey();
                   },
                   decoration: const InputDecoration(
                     labelText: '',

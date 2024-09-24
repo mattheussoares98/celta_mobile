@@ -59,14 +59,16 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     );
   }
 
-  bool _formKeyIsValid() {
+  bool _validateFormKey() {
     CustomerRegisterProvider customerRegisterProvider =
         Provider.of(context, listen: false);
 
     AddressProvider addressProvider = Provider.of(context, listen: false);
     if (_selectedIndex == 0) {
-      customerRegisterProvider.personFormKeyIsValid =
-          _personFormKey.currentState!.validate();
+      setState(() {
+        customerRegisterProvider.personFormKeyIsValid =
+            _personFormKey.currentState!.validate();
+      });
       return customerRegisterProvider.personFormKeyIsValid;
     }
     if (_selectedIndex == 1) {
@@ -121,7 +123,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       errorMessage = "Corrija os dados e salve o endereço para mudar de tela!";
     }
 
-    if (_formKeyIsValid() && !hasAdressInformed) {
+    if (_validateFormKey() && !hasAdressInformed) {
       setState(() {
         _selectedIndex = index;
       });
@@ -151,19 +153,20 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     List<Widget> _pages = <Widget>[
       CustomerRegisterPersonalDataPage(
         personFormKey: _personFormKey,
+        validateFormKey: _validateFormKey,
       ),
       AddressComponent(
-        validateAdressFormKey: _formKeyIsValid,
+        validateAdressFormKey: _validateFormKey,
         adressFormKey: _adressFormKey,
         canInsertMoreThanOneAddress: true,
       ),
       CustomerRegisterEmailPage(
         emailFormKey: _emailFormKey,
-        validateAdressFormKey: _formKeyIsValid,
+        validateAdressFormKey: _validateFormKey,
       ),
       CustomerRegisterTelephonePage(
         telephoneFormKey: _telephoneFormKey,
-        validateTelephoneFormKey: _formKeyIsValid,
+        validateTelephoneFormKey: _validateFormKey,
       ),
       const CustomerRegisterAddPage(),
     ];
@@ -175,7 +178,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         customerRegisterProvider: customerRegisterProvider,
         addressProvider: addressProvider,
       ),
-      onPopInvokedWithResult: (value, __){
+      onPopInvokedWithResult: (value, __) {
         if (value == true) {
           addressProvider.clearAddresses();
           addressProvider.clearAddressControllers(clearCep: true);
