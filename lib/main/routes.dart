@@ -1,3 +1,4 @@
+import 'package:celta_inventario/pages/expedition_conference/expedition_controls_products_page.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
@@ -33,6 +34,8 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
       APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
       APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
+      APPROUTES.EXPEDITION_CONTROLS_PRODUCTS: (ctx) =>
+          const ExpeditionControlsProductsPage(),
       APPROUTES.EXPEDITION_CONTROLS_TO_CONFERENCE: (ctx) =>
           const ExpeditionControlsToConferencePage(),
       APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
