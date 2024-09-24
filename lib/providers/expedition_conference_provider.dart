@@ -41,15 +41,21 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         typeOfResult: "GetExpeditionControlsToConferenceResult",
       );
 
+      _errorMessage = SoapRequestResponse.errorMessage;
+
+      if (_errorMessage != "") {
+        return;
+      }
+
       List responseAsMap = json.decode(SoapRequestResponse.responseAsString);
 
       _expeditionControlsToConference =
           responseAsMap.map((e) => ExpeditionControlModel.fromJson(e)).toList();
 
-      // _expeditionControlsProducts =
-      //     (SoapRequestResponse.responseAsString as Map)
-      //         .map((e) => ExpeditionControlModel.fromJson(e))
-      //         .toList();
+      if (_expeditionControlsToConference.isEmpty) {
+        _errorMessage =
+            "Nenhum documento está no processo de conferência de produtos";
+      }
     } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {

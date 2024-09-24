@@ -49,6 +49,16 @@ class _ExpeditionControlsToConferencePageState
         Scaffold(
           appBar: AppBar(
             title: const Text("Controles de expedição"),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  await expeditionConferenceProvider
+                      .getExpeditionControlsToConference(
+                          enterpriseCode: enterprise.codigoInternoEmpresa);
+                },
+                icon: const Icon(Icons.refresh),
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(
