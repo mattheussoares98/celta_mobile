@@ -2,7 +2,7 @@ import 'package:celta_inventario/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/products_conference/products_conference.dart';
+import '../../models/expedition_control/expedition_control.dart';
 import '../../providers/providers.dart';
 
 class ExpeditionControlsProductsPage extends StatefulWidget {

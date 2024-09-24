@@ -4,7 +4,7 @@ import 'package:celta_inventario/api/api.dart';
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-import '../models/products_conference/products_conference.dart';
+import '../models/expedition_control/expedition_control.dart';
 
 class ExpeditionConferenceProvider with ChangeNotifier {
   bool _isLoading = false;
