@@ -66,7 +66,6 @@ class _PriceFieldAndConfirmAdjustButtonState
               ShowSnackbarMessage.showMessage(
                 message: adjustSalePriceProvider.errorMessage,
                 context: context,
-                backgroundColor: Theme.of(context).colorScheme.primary,
               );
             }
           });
