@@ -17,6 +17,10 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   List<ExpeditionControlModel> get expeditionControlsToConference =>
       _expeditionControlsToConference;
 
+  List<ExpeditionControlProductModel> _expeditionControlsProducts = [];
+  List<ExpeditionControlProductModel> get expeditionControlsProducts =>
+      _expeditionControlsProducts;
+
   Future<void> getExpeditionControlsToConference({
     required int enterpriseCode,
   }) async {
@@ -88,11 +92,15 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       );
 
       _errorMessage = SoapRequestResponse.errorMessage;
-      SoapRequestResponse.responseAsMap;
-      SoapRequestResponse.responseAsString;
+
       if (_errorMessage.isNotEmpty) {
         return;
       }
+
+      List decodedResponse = json.decode(SoapRequestResponse.responseAsString);
+      _expeditionControlsProducts = decodedResponse
+          .map((e) => ExpeditionControlProductModel.fromJson(e))
+          .toList();
     } catch (e) {
       _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
