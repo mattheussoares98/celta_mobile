@@ -158,19 +158,22 @@ class AdjustSalePriceProvider with ChangeNotifier {
         serviceASMX: "CeltaProductService.asmx",
         typeOfResult: "GetPriceSchedulesResult",
       );
+      _errorMessageSchedule = SoapRequestResponse.errorMessage;
+
+      if (_errorMessageSchedule != "") {
+        return;
+      }
 
       final List teste = json.decode(SoapRequestResponse.responseAsString);
 
       _schedules = teste.map((e) => ScheduleModel.fromJson(e)).toList();
-
-      _errorMessageSchedule = SoapRequestResponse.errorMessage;
 
       if (_schedules.isEmpty) {
         _errorMessageSchedule =
             "Não foram encontrados agendamentos para esse produto";
       }
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageSchedule = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
     } finally {
       _isLoading = false;
       notifyListeners();
