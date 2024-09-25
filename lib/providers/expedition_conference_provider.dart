@@ -186,6 +186,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         message: "Esse produto não faz parte da conferência",
         context: NavigatorKey.navigatorKey.currentState!.context,
       );
+      return;
     }
 
     final pendingProduct =
@@ -281,7 +282,12 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       _errorMessageConfirmConference = SoapRequestResponse.errorMessage;
 
       if (_errorMessageConfirmConference.isEmpty) {
-        Navigator.of(NavigatorKey.navigatorKey.currentState!.context).pop();
+        Navigator.of(NavigatorKey.navigatorKey.currentState!.context).popUntil(
+          (route) =>
+              route.settings.name ==
+              APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE,
+        );
+
         ShowSnackbarMessage.showMessage(
           message: "Conferência concluída com sucesso",
           context: NavigatorKey.navigatorKey.currentState!.context,

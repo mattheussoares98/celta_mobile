@@ -19,10 +19,12 @@ class _ExpeditionConferencePendingProductsPageState
     extends State<ExpeditionConferencePendingProductsPage> {
   final searchProductsController = TextEditingController();
   final searchProductFocusNode = FocusNode();
+  bool disposedProductsController = false;
 
   @override
   void dispose() {
     super.dispose();
+    disposedProductsController = true;
     searchProductsController.dispose();
     searchProductFocusNode.dispose();
   }
@@ -42,7 +44,8 @@ class _ExpeditionConferencePendingProductsPageState
       expeditionControlCode: expeditionControl.ExpeditionControlCode!,
     );
 
-    if (expeditionConferenceProvider.errorMessageGetProducts.isEmpty) {
+    if (expeditionConferenceProvider.errorMessageGetProducts.isEmpty &&
+        !disposedProductsController) {
       searchProductsController.clear();
     }
 
