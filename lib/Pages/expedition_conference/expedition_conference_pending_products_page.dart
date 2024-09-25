@@ -50,13 +50,19 @@ class _ExpeditionConferencePendingProductsPageState
     }
 
     if (expeditionConferenceProvider.searchedProducts.length > 1) {
-      showDialog(
+      await showDialog(
         context: context,
         builder: (context) => ConfirmProductDialog(
           expeditionControlCode: expeditionControl.ExpeditionControlCode!,
           enterpriseCode: enterprise.codigoInternoEmpresa,
         ),
       );
+    }
+
+    if (expeditionConferenceProvider.pendingProducts.isNotEmpty) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        FocusScope.of(context).requestFocus(searchProductFocusNode);
+      });
     }
   }
 
