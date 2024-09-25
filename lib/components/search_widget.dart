@@ -12,7 +12,7 @@ import 'components.dart';
 
 class SearchWidget extends StatefulWidget {
   final bool isLoading;
-  final Function onPressSearch;
+  final Function()? onPressSearch;
   final TextEditingController searchProductController;
   final FocusNode searchProductFocusNode;
   final String hintText;
@@ -53,8 +53,9 @@ class _SearchWidgetState extends State<SearchWidget> {
     widget.searchProductController.text =
         await ScanBarCode.scanBarcode(context);
 
-    if (widget.searchProductController.text != "") {
-      await widget.onPressSearch();
+    if (widget.searchProductController.text != "" &&
+        widget.onPressSearch != null) {
+      await widget.onPressSearch!();
     }
   }
 
@@ -137,7 +138,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                                     widget.searchProductController.text =
                                         clipboardData?.text ?? '';
 
-                                    await widget.onPressSearch();
+                                    if (widget.onPressSearch != null) {
+                                      await widget.onPressSearch!();
+                                    }
                                   },
                             child: const Text(
                               "colar\ntexto",
@@ -152,16 +155,17 @@ class _SearchWidgetState extends State<SearchWidget> {
                             hoverColor: Colors.white.withOpacity(0),
                             splashColor: Colors.white.withOpacity(0),
                             highlightColor: Colors.white.withOpacity(0),
-                            onTap: widget.isLoading
-                                ? null
-                                : () async {
-                                    if (!isValid()) {
-                                      return;
-                                    }
-                                    FocusScope.of(context).unfocus();
+                            onTap:
+                                widget.isLoading || widget.onPressSearch == null
+                                    ? null
+                                    : () async {
+                                        if (!isValid()) {
+                                          return;
+                                        }
+                                        FocusScope.of(context).unfocus();
 
-                                    await widget.onPressSearch();
-                                  },
+                                        await widget.onPressSearch!();
+                                      },
                             child: Icon(
                               Icons.search,
                               size: 35,
@@ -211,7 +215,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                     return;
                   }
 
-                  await widget.onPressSearch();
+                  if (widget.onPressSearch != null) {
+                    await widget.onPressSearch!();
+                  }
                 },
                 style: const TextStyle(
                   fontSize: 18,

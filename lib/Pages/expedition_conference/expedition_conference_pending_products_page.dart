@@ -85,9 +85,11 @@ class _ExpeditionConferencePendingProductsPageState
           searchProductFocusNode: FocusNode(),
           searchProductController: searchProductsController,
           isLoading: expeditionConferenceProvider.isLoading,
-          onPressSearch: () async {
-            await searchProduct(expeditionConferenceProvider, enterprise);
-          },
+          onPressSearch: expeditionConferenceProvider.pendingProducts.isEmpty
+              ? null
+              : () async {
+                  await searchProduct(expeditionConferenceProvider, enterprise);
+                },
         ),
         Expanded(
           child: ListView.builder(
