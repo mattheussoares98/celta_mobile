@@ -49,6 +49,7 @@ class _ExpeditionConferencePendingProductsPageState
       children: [
         SearchWidget(
           useCamera: true,
+          autofocus: true,
           showOnlyConfigurationOfSearchProducts: true,
           searchProductFocusNode: FocusNode(),
           searchProductController: searchProductsController,
@@ -60,7 +61,10 @@ class _ExpeditionConferencePendingProductsPageState
               configurationsProvider: ConfigurationsProvider(),
             );
 
-            if (expeditionConferenceProvider.searchedProducts.length == 1) {
+            if (expeditionConferenceProvider.searchedProducts.isEmpty) {
+              return;
+            } else if (expeditionConferenceProvider.searchedProducts.length ==
+                1) {
               expeditionConferenceProvider.addConfirmedProduct(0);
             } else {
               showDialog(
@@ -68,6 +72,7 @@ class _ExpeditionConferencePendingProductsPageState
                 builder: (context) => const ConfirmProductDialog(),
               );
             }
+            searchProductsController.clear();
           },
         ),
         Expanded(

@@ -144,10 +144,17 @@ class ExpeditionConferenceProvider with ChangeNotifier {
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
       if (_errorMessageGetProducts != "") {
-        return;
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageGetProducts,
+          context: NavigatorKey.navigatorKey.currentState!.context,
+        );
       }
     } catch (e) {
       _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      ShowSnackbarMessage.showMessage(
+        message: _errorMessageGetProducts,
+        context: NavigatorKey.navigatorKey.currentState!.context,
+      );
     } finally {
       _isLoading = false;
       notifyListeners();
