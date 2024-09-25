@@ -48,23 +48,7 @@ class ConfirmProductDialog extends StatelessWidget {
 
                     return InkWell(
                       onTap: () {
-                        final succeeds = expeditionConferenceProvider
-                            .addConfirmedProduct(index);
-
-                        if (succeeds) {
-                          Navigator.of(context).pop();
-                          ShowSnackbarMessage.showMessage(
-                            message: "Produto confirmado com sucesso",
-                            context: context,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                          );
-                        } else {
-                          ShowSnackbarMessage.showMessage(
-                              message: expeditionConferenceProvider
-                                  .errorMessageGetProducts,
-                              context: context);
-                        }
+                        expeditionConferenceProvider.addConfirmedProduct(index);
                       },
                       child: Card(
                         child: Padding(

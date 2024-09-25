@@ -26,8 +26,6 @@ void main() async {
   runApp(MyApp());
 }
 
-GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AddressProvider()),
         ChangeNotifierProvider(create: (_) => AdjustSalePriceProvider()),
         ChangeNotifierProvider(create: (_) => AdjustStockProvider()),
-        ChangeNotifierProvider(create: (_) => EvaluationAndSuggestionsProvider()),
+        ChangeNotifierProvider(
+            create: (_) => EvaluationAndSuggestionsProvider()),
         ChangeNotifierProvider(create: (_) => BuyRequestProvider()),
         ChangeNotifierProvider(create: (_) => EnterpriseProvider()),
         ChangeNotifierProvider(create: (_) => CustomerRegisterProvider()),
@@ -54,7 +53,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => WebProvider()),
       ],
       child: MaterialApp(
-        navigatorKey: _navigatorKey,
+        navigatorKey: NavigatorKey.navigatorKey,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

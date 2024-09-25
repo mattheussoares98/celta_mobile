@@ -4,6 +4,7 @@ import 'package:celta_inventario/api/api.dart';
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+import '../components/components.dart';
 import '../models/expedition_control/expedition_control.dart';
 import '../models/soap/soap.dart';
 import 'providers.dart';
@@ -153,15 +154,17 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     }
   }
 
-  bool addConfirmedProduct(int indexOfSearchedProduct) {
+  void addConfirmedProduct(int indexOfSearchedProduct) {
     final confirmedProduct = _searchedProducts[indexOfSearchedProduct];
 
     final indexOfConfirmedProductInPendingProducts = _pendingProducts
         .indexWhere((e) => e.PriceLookUp == confirmedProduct.plu);
 
     if (indexOfConfirmedProductInPendingProducts == -1) {
-      _errorMessageGetProducts = "Esse produto não faz parte da conferência";
-      return false;
+      ShowSnackbarMessage.showMessage(
+        message: "Esse produto não faz parte da conferência",
+        context: NavigatorKey.navigatorKey.currentState!.context,
+      );
     }
 
     final pendingProduct =
@@ -184,7 +187,13 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       );
     }
     notifyListeners();
-    return true;
+    ShowSnackbarMessage.showMessage(
+      message: "Produto conferido",
+      context: NavigatorKey.navigatorKey.currentState!.context,
+      backgroundColor: Theme.of(NavigatorKey.navigatorKey.currentState!.context)
+          .colorScheme
+          .primary,
+    );
   }
 
   void _addOrSumQuantityInCheckedProducts(

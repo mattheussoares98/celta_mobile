@@ -59,20 +59,7 @@ class _ExpeditionConferencePendingProductsPageState
             );
 
             if (expeditionConferenceProvider.searchedProducts.length == 1) {
-              final succeeds =
-                  expeditionConferenceProvider.addConfirmedProduct(0);
-              if (succeeds) {
-                ShowSnackbarMessage.showMessage(
-                  message: "Produto confirmado",
-                  context: context,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                );
-              } else {
-                ShowSnackbarMessage.showMessage(
-                  message: expeditionConferenceProvider.errorMessageGetProducts,
-                  context: context,
-                );
-              }
+              expeditionConferenceProvider.addConfirmedProduct(0);
             } else {
               showDialog(
                 context: context,
