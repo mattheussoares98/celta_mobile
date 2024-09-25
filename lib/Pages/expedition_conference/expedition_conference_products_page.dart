@@ -58,10 +58,12 @@ class _ExpeditionConferenceProductsPageState
       const ExpeditionConferencePendingProductsPage(),
       const ExpeditionConferenceCheckedProductsPage(),
     ];
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    ExpeditionControlModel expeditionControl = arguments["expeditionControl"];
 
     List<String> appBarTitles = [
-      "Produtos pendentes",
-      "Produtos conferidos",
+      "Pendentes (${expeditionControl.DocumentNumber})",
+      "Conferidos (${expeditionControl.DocumentNumber})",
     ];
 
     ExpeditionConferenceProvider expeditionConferenceProvider =
@@ -71,8 +73,10 @@ class _ExpeditionConferenceProductsPageState
       children: [
         Scaffold(
           appBar: AppBar(
-            title: Text(
-              appBarTitles[_selectedIndex],
+            title: FittedBox(
+              child: Text(
+                appBarTitles[_selectedIndex],
+              ),
             ),
           ),
           body: PageView(
@@ -89,14 +93,14 @@ class _ExpeditionConferenceProductsPageState
                   icon: Icons.error,
                   quantity: expeditionConferenceProvider.pendingProducts.length,
                 ),
-                label: 'Pendentes',
+                label: 'Produtos pendentes',
               ),
               BottomNavigationBarItem(
                 icon: BottomNavigationIcon(
                   icon: Icons.verified_rounded,
                   quantity: expeditionConferenceProvider.checkedProducts.length,
                 ),
-                label: 'Conferidos',
+                label: 'Produtos conferidos',
               ),
             ],
             selectedItemColor: Theme.of(context).colorScheme.primary,
