@@ -48,7 +48,7 @@ class _ExpeditionConferenceControlsToConferencePageState
       children: [
         Scaffold(
           appBar: AppBar(
-            title: const Text("Controles de expedição"),
+            title: const FittedBox(child: Text("Controles de expedição")),
             actions: [
               IconButton(
                 onPressed: () async {

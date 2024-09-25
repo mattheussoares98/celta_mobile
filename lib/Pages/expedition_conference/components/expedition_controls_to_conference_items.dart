@@ -16,47 +16,54 @@ class ExpeditionControlsToConferenceItems extends StatelessWidget {
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount:
-          expeditionConferenceProvider.expeditionControlsToConference.length,
-      itemBuilder: (context, index) {
-        final expeditionControl =
-            expeditionConferenceProvider.expeditionControlsToConference[index];
-
-        return InkWell(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              APPROUTES.EXPEDITION_CONFERENCE_PRODUCTS,
-              arguments: {
-                "expeditionControl": expeditionControl,
-                "enterprise": enterprise,
-              },
-            );
-          },
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "Documento",
-                    subtitle: expeditionControl.DocumentNumber,
-                  ),
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "Nome da etapa",
-                    subtitle: expeditionControl.StepName,
-                  ),
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "Origem",
-                    subtitle: expeditionControl.OriginTypeString,
-                  ),
-                ],
-              ),
-            ),
-          ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await expeditionConferenceProvider.getExpeditionControlsToConference(
+          enterpriseCode: enterprise.codigoInternoEmpresa,
         );
       },
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount:
+            expeditionConferenceProvider.expeditionControlsToConference.length,
+        itemBuilder: (context, index) {
+          final expeditionControl = expeditionConferenceProvider
+              .expeditionControlsToConference[index];
+
+          return InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                APPROUTES.EXPEDITION_CONFERENCE_PRODUCTS,
+                arguments: {
+                  "expeditionControl": expeditionControl,
+                  "enterprise": enterprise,
+                },
+              );
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    TitleAndSubtitle.titleAndSubtitle(
+                      title: "Documento",
+                      subtitle: expeditionControl.DocumentNumber,
+                    ),
+                    TitleAndSubtitle.titleAndSubtitle(
+                      title: "Nome da etapa",
+                      subtitle: expeditionControl.StepName,
+                    ),
+                    TitleAndSubtitle.titleAndSubtitle(
+                      title: "Origem",
+                      subtitle: expeditionControl.OriginTypeString,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
