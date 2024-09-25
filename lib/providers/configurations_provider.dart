@@ -27,7 +27,7 @@ class ConfigurationsProvider with ChangeNotifier {
 
   ConfigurationsProvider._() {
     _autoScan = ConfigurationsModel(
-      isConfigurationOfSearch: false,
+      showOnlyConfigurationOfSearchProducts: false,
       title: "Auto Scan",
       value: false,
       updateValue: changeUseAutoScan,
@@ -36,7 +36,7 @@ class ConfigurationsProvider with ChangeNotifier {
     );
 
     _legacyCode = ConfigurationsModel(
-      isConfigurationOfSearch: true,
+      showOnlyConfigurationOfSearchProducts: true,
       title: "Código legado (produto)",
       value: false,
       updateValue: changeUseLegacyCode,
@@ -44,7 +44,7 @@ class ConfigurationsProvider with ChangeNotifier {
     );
 
     _productPersonalizedCode = ConfigurationsModel(
-      isConfigurationOfSearch: true,
+      showOnlyConfigurationOfSearchProducts: true,
       title: "Código personalizado (produto)",
       value: false,
       updateValue: changeSearchProductByPersonalizedCode,
@@ -52,7 +52,7 @@ class ConfigurationsProvider with ChangeNotifier {
     );
 
     _customerPersonalizedCode = ConfigurationsModel(
-      isConfigurationOfSearch: false,
+      showOnlyConfigurationOfSearchProducts: false,
       title: "Código personalizado (cliente)",
       value: false,
       updateValue: changeSearchCustomerByPersonalizedCode,

@@ -137,7 +137,7 @@ class _ResearchPricesInsertPricesPageState
         children: [
           SearchWidget(
             showConfigurationsIcon: true,
-            showOnlyConfigurationOfSearch: true,
+            showOnlyConfigurationOfSearchProducts: true,
             searchProductController: widget.searchProductController,
             isLoading: false,
             autofocus: false,

@@ -22,7 +22,7 @@ class _ConfigurationsCheckboxState extends State<ConfigurationsCheckbox> {
     return Column(
         children: configurationsProvider.configurations
             .map(
-              (e) => (!e.isConfigurationOfSearch &&
+              (e) => (!e.showOnlyConfigurationOfSearchProducts &&
                       widget.showOnlyConfigurationOfSearch)
                   ? Container()
                   : Card(

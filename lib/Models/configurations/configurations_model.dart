@@ -1,12 +1,12 @@
 class ConfigurationsModel {
-  bool isConfigurationOfSearch;
+  bool showOnlyConfigurationOfSearchProducts;
   String title;
   bool value;
   Function updateValue;
   String subtitle;
 
   ConfigurationsModel({
-    required this.isConfigurationOfSearch,
+    required this.showOnlyConfigurationOfSearchProducts,
     required this.title,
     required this.value,
     required this.updateValue,

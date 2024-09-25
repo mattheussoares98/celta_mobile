@@ -49,7 +49,7 @@ class _ExpeditionConferencePendingProductsPageState
       children: [
         SearchWidget(
           useCamera: true,
-          showOnlyConfigurationOfSearch: true,
+          showOnlyConfigurationOfSearchProducts: true,
           searchProductFocusNode: FocusNode(),
           searchProductController: searchProductsController,
           isLoading: expeditionConferenceProvider.isLoading,

@@ -49,7 +49,7 @@ class _AdjustSalePriceProductsPageState
               children: [
                 SearchWidget(
                   searchProductFocusNode: searchFocusNode,
-                  showOnlyConfigurationOfSearch: true,
+                  showOnlyConfigurationOfSearchProducts: true,
                   isLoading: false,
                   searchProductController: searchValueController,
                   onPressSearch: () async {
