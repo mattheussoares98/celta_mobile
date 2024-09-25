@@ -33,6 +33,7 @@ class _ExpeditionConferencePendingProductsPageState
   ) async {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     ExpeditionControlModel expeditionControl = arguments["expeditionControl"];
+    EnterpriseModel enterprise = arguments["enterprise"];
 
     await expeditionConferenceProvider.getProducts(
       value: searchProductsController.text,
@@ -50,6 +51,7 @@ class _ExpeditionConferencePendingProductsPageState
         context: context,
         builder: (context) => ConfirmProductDialog(
           expeditionControlCode: expeditionControl.ExpeditionControlCode!,
+          enterpriseCode: enterprise.codigoInternoEmpresa,
         ),
       );
     }
@@ -90,6 +92,19 @@ class _ExpeditionConferencePendingProductsPageState
                   await searchProduct(expeditionConferenceProvider, enterprise);
                 },
         ),
+        if (expeditionConferenceProvider
+            .errorMessageConfirmConference.isNotEmpty)
+          searchAgain(
+            message: "Tentar confirmar conferência novamente",
+            errorMessage:
+                expeditionConferenceProvider.errorMessageConfirmConference,
+            request: () async {
+              await expeditionConferenceProvider.confirmConference(
+                expeditionControlCode: expeditionControl.ExpeditionControlCode!,
+                enterpriseCode: enterprise.codigoInternoEmpresa,
+              );
+            },
+          ),
         Expanded(
           child: ListView.builder(
             itemCount: expeditionConferenceProvider.pendingProducts.length,

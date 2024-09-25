@@ -6,8 +6,10 @@ import '../../../providers/providers.dart';
 
 class ConfirmProductDialog extends StatelessWidget {
   final int expeditionControlCode;
+  final int enterpriseCode;
   const ConfirmProductDialog({
     required this.expeditionControlCode,
+    required this.enterpriseCode,
     super.key,
   });
 
@@ -55,6 +57,7 @@ class ConfirmProductDialog extends StatelessWidget {
                         await expeditionConferenceProvider.addConfirmedProduct(
                           indexOfSearchedProduct: index,
                           expeditionControlCode: expeditionControlCode,
+                          enterpriseCode: enterpriseCode,
                         );
                       },
                       child: Card(

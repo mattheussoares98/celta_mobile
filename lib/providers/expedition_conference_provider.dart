@@ -156,6 +156,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         await addConfirmedProduct(
           indexOfSearchedProduct: 0,
           expeditionControlCode: expeditionControlCode,
+          enterpriseCode: enterpriseCode,
         );
       }
     } catch (e) {
@@ -173,6 +174,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   Future<void> addConfirmedProduct({
     required int indexOfSearchedProduct,
     required int expeditionControlCode,
+    required int enterpriseCode,
   }) async {
     final confirmedProduct = _searchedProducts[indexOfSearchedProduct];
 
@@ -215,7 +217,10 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     );
 
     if (_pendingProducts.isEmpty) {
-      await confirmConference(expeditionControlCode);
+      await confirmConference(
+        expeditionControlCode: expeditionControlCode,
+        enterpriseCode: enterpriseCode,
+      );
     }
   }
 
@@ -253,7 +258,10 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     }
   }
 
-  Future<void> confirmConference(int expeditionControlCode) async {
+  Future<void> confirmConference({
+    required int expeditionControlCode,
+    required int enterpriseCode,
+  }) async {
     _errorMessageConfirmConference = "";
     _isLoading = true;
     notifyListeners();
@@ -265,7 +273,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         "Confered": true,
       };
       await SoapRequest.soapPost(
-        parameters: parameters,
+        parameters: {"parametersString": json.encode(parameters)},
         typeOfResponse: "ConfirmConferenceResponse",
         SOAPAction: "ConfirmConference",
         serviceASMX: "CeltaProductService.asmx",
@@ -282,6 +290,8 @@ class ExpeditionConferenceProvider with ChangeNotifier {
                   .colorScheme
                   .primary,
         );
+
+        await getExpeditionControlsToConference(enterpriseCode: enterpriseCode);
       }
     } catch (e) {
       _errorMessageConfirmConference =

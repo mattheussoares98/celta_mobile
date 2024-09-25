@@ -9,7 +9,7 @@ class ShowSnackbarMessage {
     Color backgroundColor = Colors.red,
     int? secondsDuration = 5,
   }) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
