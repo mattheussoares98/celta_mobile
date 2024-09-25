@@ -25,6 +25,29 @@ class _ExpeditionConferencePendingProductsPageState
     searchProductsController.dispose();
   }
 
+  Future<void> searchProduct(
+    ExpeditionConferenceProvider expeditionConferenceProvider,
+    EnterpriseModel enterprise,
+  ) async {
+    await expeditionConferenceProvider.getProducts(
+      value: searchProductsController.text,
+      enterpriseCode: enterprise.codigoInternoEmpresa,
+      configurationsProvider: ConfigurationsProvider(),
+    );
+
+    if (expeditionConferenceProvider.searchedProducts.isEmpty) {
+      return;
+    } else if (expeditionConferenceProvider.searchedProducts.length == 1) {
+      expeditionConferenceProvider.addConfirmedProduct(0);
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => const ConfirmProductDialog(),
+      );
+    }
+    searchProductsController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     ExpeditionConferenceProvider expeditionConferenceProvider =
@@ -55,24 +78,7 @@ class _ExpeditionConferencePendingProductsPageState
           searchProductController: searchProductsController,
           isLoading: expeditionConferenceProvider.isLoading,
           onPressSearch: () async {
-            await expeditionConferenceProvider.getProducts(
-              value: searchProductsController.text,
-              enterpriseCode: enterprise.codigoInternoEmpresa,
-              configurationsProvider: ConfigurationsProvider(),
-            );
-
-            if (expeditionConferenceProvider.searchedProducts.isEmpty) {
-              return;
-            } else if (expeditionConferenceProvider.searchedProducts.length ==
-                1) {
-              expeditionConferenceProvider.addConfirmedProduct(0);
-            } else {
-              showDialog(
-                context: context,
-                builder: (context) => const ConfirmProductDialog(),
-              );
-            }
-            searchProductsController.clear();
+            await searchProduct(expeditionConferenceProvider, enterprise);
           },
         ),
         Expanded(

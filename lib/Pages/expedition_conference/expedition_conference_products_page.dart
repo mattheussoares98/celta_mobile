@@ -79,14 +79,21 @@ class _ExpeditionConferenceProductsPageState
             children: _pages,
           ),
           bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _selectedIndex,
             type: BottomNavigationBarType.fixed,
             items: <BottomNavigationBarItem>[
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.error),
+              BottomNavigationBarItem(
+                icon: BottomNavigationIcon(
+                  icon: Icons.error,
+                  quantity: expeditionConferenceProvider.pendingProducts.length,
+                ),
                 label: 'Pendentes',
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.verified_rounded),
+              BottomNavigationBarItem(
+                icon: BottomNavigationIcon(
+                  icon: Icons.verified_rounded,
+                  quantity: expeditionConferenceProvider.checkedProducts.length,
+                ),
                 label: 'Conferidos',
               ),
             ],
