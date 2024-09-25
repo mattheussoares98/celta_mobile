@@ -262,7 +262,7 @@ class AdjustStockProvider with ChangeNotifier {
     jsonAdjustStock["ProductCode"] = _products[indexOfProduct].productCode;
   }
 
-  confirmAdjustStock({
+  Future<void> confirmAdjustStock({
     required BuildContext context,
     required int indexOfProduct,
     required String consultedProductControllerText,
@@ -288,6 +288,11 @@ class AdjustStockProvider with ChangeNotifier {
             .replaceAll(RegExp(r'\)'), '');
         _lastUpdatedQuantity = typeOperator + jsonAdjustStock["Quantity"]!;
         _indexOfLastProductChangedStockQuantity = indexOfProduct;
+      } else {
+        ShowSnackbarMessage.showMessage(
+          message: _errorMessageAdjustStock,
+          context: context,
+        );
       }
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
