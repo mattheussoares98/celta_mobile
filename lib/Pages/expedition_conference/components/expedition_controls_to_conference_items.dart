@@ -2,6 +2,7 @@ import 'package:celta_inventario/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
@@ -12,6 +13,8 @@ class ExpeditionControlsToConferenceItems extends StatelessWidget {
   Widget build(BuildContext context) {
     ExpeditionConferenceProvider expeditionConferenceProvider =
         Provider.of(context);
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     return ListView.builder(
       shrinkWrap: true,
@@ -25,7 +28,10 @@ class ExpeditionControlsToConferenceItems extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               APPROUTES.EXPEDITION_CONFERENCE_PRODUCTS,
-              arguments: expeditionControl,
+              arguments: {
+                "expeditionControl": expeditionControl,
+                "enterprise": enterprise,
+              },
             );
           },
           child: Card(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
-import '../../models/expedition_control/expedition_control.dart';
 import '../../pages/expedition_conference/expedition_conference.dart';
 import '../../providers/providers.dart';
 
@@ -27,11 +26,10 @@ class _ExpeditionConferenceProductsPageState
       if (mounted) {
         ExpeditionConferenceProvider expeditionConferenceProvider =
             Provider.of(context, listen: false);
-        ExpeditionControlModel expeditionControl = ModalRoute.of(context)!
-            .settings
-            .arguments as ExpeditionControlModel;
+        final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+        final expeditionControl = arguments["expeditionControl"];
 
-        await expeditionConferenceProvider.getProducts(
+        await expeditionConferenceProvider.getPendingProducts(
           expeditionControlCode: expeditionControl.ExpeditionControlCode!,
         );
       }
@@ -94,9 +92,7 @@ class _ExpeditionConferenceProductsPageState
             ],
             selectedItemColor: Theme.of(context).colorScheme.primary,
             unselectedItemColor: Colors.grey,
-            onTap: (index) {
-              _pageController.jumpToPage(index);
-            },
+            onTap: _onPageChanged,
           ),
         ),
         loadingWidget(
