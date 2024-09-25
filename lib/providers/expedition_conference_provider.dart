@@ -217,6 +217,11 @@ class ExpeditionConferenceProvider with ChangeNotifier {
           .primary,
     );
 
+    Navigator.of(NavigatorKey.navigatorKey.currentState!.context).popUntil(
+      (route) =>
+          route.settings.name == APPROUTES.EXPEDITION_CONFERENCE_PRODUCTS,
+    );
+
     if (_pendingProducts.isEmpty) {
       await confirmConference(
         expeditionControlCode: expeditionControlCode,
