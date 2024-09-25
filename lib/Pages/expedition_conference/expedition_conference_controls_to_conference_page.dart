@@ -65,7 +65,9 @@ class _ExpeditionConferenceControlsToConferencePageState
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (expeditionConferenceProvider.errorMessage != "")
+                if (expeditionConferenceProvider.errorMessage != "" &&
+                    expeditionConferenceProvider
+                        .expeditionControlsToConference.isEmpty)
                   searchAgain(
                       errorMessage: expeditionConferenceProvider.errorMessage,
                       request: () async {

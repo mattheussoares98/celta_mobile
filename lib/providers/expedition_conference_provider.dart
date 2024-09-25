@@ -20,9 +20,9 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   List<ExpeditionControlProductModel> _pendingProducts = [];
   List<ExpeditionControlProductModel> get pendingProducts => _pendingProducts;
 
-  List<ExpeditionControlProductModel> _confirmedProducts = [];
-  List<ExpeditionControlProductModel> get confirmedProducts =>
-      _confirmedProducts;
+  List<ExpeditionControlProductModel> _checkedProducts = [];
+  List<ExpeditionControlProductModel> get checkedProducts =>
+      _checkedProducts;
 
   Future<void> getExpeditionControlsToConference({
     required int enterpriseCode,
@@ -76,7 +76,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   }) async {
     _errorMessage = "";
     _isLoading = true;
-    _confirmedProducts.clear();
+    _checkedProducts.clear();
     _pendingProducts.clear();
     notifyListeners();
 

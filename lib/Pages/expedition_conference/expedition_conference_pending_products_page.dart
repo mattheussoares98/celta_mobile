@@ -1,7 +1,7 @@
+import 'package:celta_inventario/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/components.dart';
 import '../../models/expedition_control/expedition_control.dart';
 import '../../providers/providers.dart';
 import 'components/components.dart';
@@ -23,38 +23,25 @@ class _ExpeditionConferencePendingProductsPageState
     ExpeditionControlModel expeditionControl =
         ModalRoute.of(context)!.settings.arguments as ExpeditionControlModel;
 
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: const FittedBox(child: Text("Conferência de produtos")),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  await expeditionConferenceProvider.getProducts(
-                    expeditionControlCode:
-                        expeditionControl.ExpeditionControlCode!,
-                  );
-                },
-                icon: const Icon(Icons.refresh),
-              ),
-            ],
-          ),
-          body: ListView.builder(
-            itemCount: expeditionConferenceProvider.pendingProducts.length,
-            itemBuilder: (context, index) {
-              ExpeditionControlProductModel product =
-                  expeditionConferenceProvider.pendingProducts[index];
+    if (expeditionConferenceProvider.errorMessage != "" &&
+        expeditionConferenceProvider.pendingProducts.isEmpty) {
+      return searchAgain(
+          errorMessage: expeditionConferenceProvider.errorMessage,
+          request: () async {
+            await expeditionConferenceProvider.getProducts(
+              expeditionControlCode: expeditionControl.ExpeditionControlCode!,
+            );
+          });
+    }
 
-              return ExpeditionControlProductItem(product: product);
-            },
-          ),
-        ),
-        loadingWidget(
-          message: "Aguarde...",
-          isLoading: expeditionConferenceProvider.isLoading,
-        ),
-      ],
+    return ListView.builder(
+      itemCount: expeditionConferenceProvider.pendingProducts.length,
+      itemBuilder: (context, index) {
+        ExpeditionControlProductModel product =
+            expeditionConferenceProvider.pendingProducts[index];
+
+        return ExpeditionControlProductItem(product: product);
+      },
     );
   }
 }

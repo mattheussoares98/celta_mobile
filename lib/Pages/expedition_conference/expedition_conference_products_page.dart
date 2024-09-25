@@ -1,9 +1,9 @@
-import 'package:celta_inventario/pages/expedition_conference/expedition_conference_pending_products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../models/expedition_control/expedition_control.dart';
+import '../../pages/expedition_conference/expedition_conference.dart';
 import '../../providers/providers.dart';
 
 class ExpeditionConferenceProductsPage extends StatefulWidget {
@@ -16,6 +16,7 @@ class ExpeditionConferenceProductsPage extends StatefulWidget {
 
 class _ExpeditionConferenceProductsPageState
     extends State<ExpeditionConferenceProductsPage> {
+  final PageController _pageController = PageController();
   int _selectedIndex = 0;
 
   @override
@@ -37,16 +38,25 @@ class _ExpeditionConferenceProductsPageState
     });
   }
 
-  void _onItemTapped(int index) {
+  void _onPageChanged(int index) {
+    _pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 300), curve: Curves.linear);
     setState(() {
       _selectedIndex = index;
     });
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       const ExpeditionConferencePendingProductsPage(),
+      const ExpeditionConferenceCheckedProductsPage(),
     ];
 
     List<String> appBarTitles = [
@@ -65,6 +75,11 @@ class _ExpeditionConferenceProductsPageState
               appBarTitles[_selectedIndex],
             ),
           ),
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: _pages,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             items: <BottomNavigationBarItem>[
@@ -77,12 +92,12 @@ class _ExpeditionConferenceProductsPageState
                 label: 'Conferidos',
               ),
             ],
-            currentIndex: _selectedIndex,
             selectedItemColor: Theme.of(context).colorScheme.primary,
             unselectedItemColor: Colors.grey,
-            onTap: _onItemTapped,
+            onTap: (index) {
+              _pageController.jumpToPage(index);
+            },
           ),
-          body: _pages.elementAt(_selectedIndex),
         ),
         loadingWidget(
           message: "Aguarde...",
