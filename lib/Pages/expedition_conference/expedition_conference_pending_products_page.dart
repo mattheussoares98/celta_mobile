@@ -48,6 +48,8 @@ class _ExpeditionConferencePendingProductsPageState
     return Column(
       children: [
         SearchWidget(
+          useCamera: true,
+          showOnlyConfigurationOfSearch: true,
           searchProductFocusNode: FocusNode(),
           searchProductController: searchProductsController,
           isLoading: expeditionConferenceProvider.isLoading,

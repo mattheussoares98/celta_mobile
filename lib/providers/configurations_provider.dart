@@ -52,7 +52,7 @@ class ConfigurationsProvider with ChangeNotifier {
     );
 
     _customerPersonalizedCode = ConfigurationsModel(
-      isConfigurationOfSearch: true,
+      isConfigurationOfSearch: false,
       title: "Código personalizado (cliente)",
       value: false,
       updateValue: changeSearchCustomerByPersonalizedCode,
