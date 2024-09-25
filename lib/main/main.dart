@@ -29,8 +29,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    debugPrint("Width: ${MediaQuery.of(context).size.width}");
-    debugPrint("Height: ${MediaQuery.of(context).size.height}");
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AddressProvider()),

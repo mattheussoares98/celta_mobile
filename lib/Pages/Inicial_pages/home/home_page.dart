@@ -71,6 +71,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     EnterpriseProvider enterpriseProvider = Provider.of(context);
 
+    debugPrint("Width: ${MediaQuery.of(context).size.width}");
+    debugPrint("Height: ${MediaQuery.of(context).size.height}");
+
     return Stack(
       children: [
         Scaffold(
