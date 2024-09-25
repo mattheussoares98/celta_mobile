@@ -222,22 +222,20 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                                       controllerInDouble == 0
                                                   ? null
                                                   : () {
-                                                      ShowAlertDialog
-                                                          .showAlertDialog(
-                                                              context: context,
-                                                              title:
-                                                                  "Atualizar o preço",
-                                                              subtitle:
-                                                                  "Deseja realmente atualizar a quantidade e o preço?",
-                                                              function: () {
-                                                                updateProductInCart(
-                                                                  transferRequestProvider:
-                                                                      transferRequestProvider,
-                                                                  product:
-                                                                      product,
-                                                                  index: index,
-                                                                );
-                                                              });
+                                                      ShowAlertDialog.show(
+                                                          context: context,
+                                                          title:
+                                                              "Atualizar o preço",
+                                                          subtitle:
+                                                              "Deseja realmente atualizar a quantidade e o preço?",
+                                                          function: () {
+                                                            updateProductInCart(
+                                                              transferRequestProvider:
+                                                                  transferRequestProvider,
+                                                              product: product,
+                                                              index: index,
+                                                            );
+                                                          });
                                                     },
                                               child: const Text("ATUALIZAR"),
                                             ),
@@ -259,7 +257,7 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                                   widget.textEditingController,
                                               formKey: _formKey,
                                               onFieldSubmitted: () {
-                                                ShowAlertDialog.showAlertDialog(
+                                                ShowAlertDialog.show(
                                                   context: context,
                                                   title: "Atualizar o preço",
                                                   subtitle:
@@ -333,7 +331,7 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                   .isLoadingSaveTransferRequest
                               ? null
                               : () {
-                                  ShowAlertDialog.showAlertDialog(
+                                  ShowAlertDialog.show(
                                     context: context,
                                     title: "Limpar carrinho",
                                     subtitle:

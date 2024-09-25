@@ -19,7 +19,7 @@ class EnterpriseItems extends StatelessWidget {
 
     Future<void> _getEnterprises() async {
       if (buyRequestProvider.productsInCartCount > 0) {
-        ShowAlertDialog.showAlertDialog(
+        ShowAlertDialog.show(
           context: context,
           title: "Consultar empresas",
           subtitle:

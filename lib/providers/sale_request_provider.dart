@@ -494,7 +494,7 @@ class SaleRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter os modelos de pedido: $e");
-      _errorMessageRequests = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageRequests = DefaultErrorMessage.ERROR;
     }
 
     _isLoadingRequests = false;
@@ -552,14 +552,14 @@ class SaleRequestProvider with ChangeNotifier {
 
         _updatedCart = false;
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageProcessCart,
           context: context,
         );
       }
     } catch (e) {
       //print("Erro para obter os preços do carrinho: $e");
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorMessageProcessCart,
         context: context,
       );
@@ -717,7 +717,7 @@ class SaleRequestProvider with ChangeNotifier {
       await _updateCustomerInDatabase();
     } catch (e) {
       //print("Erro para obter os clientes: $e");
-      _errorMessageCustomer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageCustomer = DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingCustomer = false;
       notifyListeners();
@@ -803,7 +803,7 @@ class SaleRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter os produtos: $e");
-      _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageProducts = DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingProducts = false;
       notifyListeners();
@@ -840,7 +840,7 @@ class SaleRequestProvider with ChangeNotifier {
       _errorMessageSaveSaleRequest = SoapRequestResponse.errorMessage;
 
       if (_errorMessageSaveSaleRequest == "") {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "O pedido foi salvo com sucesso!",
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -870,7 +870,7 @@ class SaleRequestProvider with ChangeNotifier {
       } else {
         _isLoadingSaveSaleRequest = false;
 
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageSaveSaleRequest,
           context: context,
         );
@@ -878,8 +878,8 @@ class SaleRequestProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para salvar o pedido: $e");
       _errorMessageSaveSaleRequest =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+          DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageSaveSaleRequest,
         context: context,
       );

@@ -19,7 +19,7 @@ class ImageComponent {
       highlightColor: Colors.white.withOpacity(0),
       onTap: () {
         if (!moduleIsLiberated) {
-          ShowSnackbarMessage.showMessage(
+          ShowSnackbarMessage.show(
             message:
                 "Esse módulo não está liberado. Entre em contato com o setor administrativo",
             context: context,

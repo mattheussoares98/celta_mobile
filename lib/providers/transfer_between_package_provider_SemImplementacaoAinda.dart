@@ -199,7 +199,7 @@
 //           listToAdd: _justifications,
 //         );
 //       } else {
-//         ShowSnackbarMessage.showMessage(
+//         ShowSnackbarMessage.show(
 //           message: _errorMessageTypeStockAndJustifications,
 //           context: context,
 //         );
@@ -250,7 +250,7 @@
 //       }
 //       _errorMessageAdjustStock = SoapRequestResponse.errorMessage;
 //       if (SoapRequestResponse.errorMessage != "") {
-//         ShowSnackbarMessage.showMessage(
+//         ShowSnackbarMessage.show(
 //           message: _errorMessageAdjustStock,
 //           context: context,
 //         );
@@ -258,7 +258,7 @@
 //     } catch (e) {
 //       //print("Erro para confirmar o ajuste: $e");
 //       _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-//       ShowSnackbarMessage.showMessage(
+//       ShowSnackbarMessage.show(
 //         message: _errorMessageAdjustStock,
 //         context: context,
 //       );
@@ -279,7 +279,7 @@
 //     await _getJustificationsType(context);
 
 //     if (_errorMessageTypeStockAndJustifications != "") {
-//       ShowSnackbarMessage.showMessage(
+//       ShowSnackbarMessage.show(
 //         message: _errorMessageTypeStockAndJustifications,
 //         context: context,
 //       );
@@ -298,7 +298,7 @@
 //       await SoapHelper.getStockTypesModel(_originStockTypes);
 //     } catch (e) {
 //       //print("Erro para efetuar a requisição stockTypes: $e");
-//       ShowSnackbarMessage.showMessage(
+//       ShowSnackbarMessage.show(
 //         message: _errorMessageTypeStockAndJustifications,
 //         context: context,
 //       );

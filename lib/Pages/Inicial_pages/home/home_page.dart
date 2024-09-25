@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
           body: PopScope(
             canPop: false,
             onPopInvokedWithResult: (_, __) async {
-              ShowAlertDialog.showAlertDialog(
+              ShowAlertDialog.show(
                 context: context,
                 title: "Fechar o aplicativo",
                 subtitle: "Deseja realmente fechar o aplicativo?",

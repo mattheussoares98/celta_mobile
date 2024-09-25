@@ -45,7 +45,7 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
         return null;
       } else if (saleRequestProvider.updatedCart) {
         return () => {
-              ShowAlertDialog.showAlertDialog(
+              ShowAlertDialog.show(
                 context: context,
                 title: "Calcular preços?",
                 confirmMessage: "CALCULAR",
@@ -68,7 +68,7 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
             };
       } else {
         return () => {
-              ShowAlertDialog.showAlertDialog(
+              ShowAlertDialog.show(
                 context: context,
                 title: "Salvar pedido",
                 subtitle: "Deseja salvar o pedido?",

@@ -62,7 +62,7 @@ class PriceConferenceProvider with ChangeNotifier {
       _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição : $e");
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessage = DefaultErrorMessage.ERROR;
     }
     _isLoading = false;
     notifyListeners();
@@ -141,7 +141,7 @@ class PriceConferenceProvider with ChangeNotifier {
       //como deu certo a marcação/desmarcação, precisa atualizar na lista local se está marcado ou não
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
-      _errorSendToPrint = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorSendToPrint = DefaultErrorMessage.ERROR;
     } finally {
       _isSendingToPrint = false;
       notifyListeners();

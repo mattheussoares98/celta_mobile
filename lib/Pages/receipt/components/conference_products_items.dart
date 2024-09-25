@@ -77,14 +77,14 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
     FocusScope.of(context).unfocus();
 
     if (receiptProvider.products[index].Quantidade_ProcRecebDocProEmb == null) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "A quantidade já está nula!",
         context: context,
       );
       return;
     }
 
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
       context: context,
       title: "Deseja realmente anular a quantidade?",
       function: () async {

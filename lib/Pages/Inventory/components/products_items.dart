@@ -38,7 +38,7 @@ class ProductsItemsState extends State<ProductsItems> {
 
     if (quantity != null && quantity >= 10000) {
       //se a quantidade digitada for maior que 10.000, vai abrir um alertDialog pra confirmar a quantidade
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
           context: context,
           title: 'Confirmar quantidade?',
           subtitle: isSubtract!
@@ -86,14 +86,14 @@ class ProductsItemsState extends State<ProductsItems> {
   }) async {
     FocusScope.of(context).unfocus();
     if (inventoryProvider.products[index].quantidadeInvContProEmb == -1) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "A quantidade já está nula!",
         context: context,
       );
       return;
     }
 
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
       confirmMessageSize: 300,
       cancelMessageSize: 300,
       context: context,

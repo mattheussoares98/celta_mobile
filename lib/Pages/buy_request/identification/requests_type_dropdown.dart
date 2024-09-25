@@ -46,7 +46,7 @@ class _RequestsTypeDropdownState
 
     if (buyRequestProvider.enterprisesCount > 0 ||
         buyRequestProvider.productsInCartCount > 0) {
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
         context: context,
         title: "Alterar valor",
         subtitle:
@@ -78,7 +78,7 @@ class _RequestsTypeDropdownState
 
     if (buyRequestProvider.enterprisesCount > 0 ||
         buyRequestProvider.productsInCartCount > 0) {
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
         context: context,
         title: "Consultar modelos",
         subtitle:

@@ -36,13 +36,13 @@ class _CustomerRegisterTelephonePageState
       if (customerRegisterProvider.errorMessageAddTelephone == "") {
         FocusScope.of(context).unfocus();
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: customerRegisterProvider.errorMessageAddTelephone,
           context: context,
         );
       }
     } else {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Digite um telefone válido! Informe o número com o DDD",
         context: context,
       );

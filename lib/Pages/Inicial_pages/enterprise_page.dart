@@ -19,7 +19,7 @@ class EnterprisePageState extends State<EnterprisePage> {
 
     if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS &&
         !enterpriseProvider.showedAdjustPriceAlert) {
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
         contentPadding: const EdgeInsets.all(10),
         insetPadding: const EdgeInsets.all(10),
         context: context,
@@ -35,7 +35,7 @@ class EnterprisePageState extends State<EnterprisePage> {
     } else if (nextRoute ==
             APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE &&
         !enterpriseProvider.showedExpeditionConferenteAlert) {
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
         contentPadding: const EdgeInsets.all(10),
         insetPadding: const EdgeInsets.all(10),
         context: context,

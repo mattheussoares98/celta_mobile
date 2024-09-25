@@ -124,7 +124,7 @@ class CartProductsItems {
                                 .isLoadingSaveTransferRequest
                             ? null
                             : () {
-                                ShowAlertDialog.showAlertDialog(
+                                ShowAlertDialog.show(
                                   context: context,
                                   title: "Remover item",
                                   subtitle:
@@ -142,7 +142,7 @@ class CartProductsItems {
                                     );
                                     updateSelectedIndex();
 
-                                    ShowSnackbarMessage.showMessage(
+                                    ShowSnackbarMessage.show(
                                       message: "Produto removido",
                                       context: context,
                                       functionSnackBarAction: () {

@@ -122,7 +122,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                     onFieldSubmitted: (_) async {
                       if (_isValid()) {
                         //print("formulários corretos. Pode salvar");
-                        ShowAlertDialog.showAlertDialog(
+                        ShowAlertDialog.show(
                           context: context,
                           title: "Confirmar ajuste",
                           function: () async {
@@ -151,7 +151,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                         : () async {
                             if (_isValid()) {
                               //print("formulários corretos. Pode salvar");
-                              ShowAlertDialog.showAlertDialog(
+                              ShowAlertDialog.show(
                                 context: context,
                                 title: "Confirmar ajuste",
                                 function: () async {

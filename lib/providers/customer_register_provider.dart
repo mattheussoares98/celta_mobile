@@ -209,7 +209,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');
       _errorMessageInsertCustomer =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     } finally {}
     _isLoadingInsertCustomer = false;
     notifyListeners();

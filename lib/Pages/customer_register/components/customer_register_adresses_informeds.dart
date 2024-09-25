@@ -113,7 +113,7 @@ class _CustomerRegisterAddressesInformedsState
                                   widget.isLoading
                               ? null
                               : () {
-                                  ShowAlertDialog.showAlertDialog(
+                                  ShowAlertDialog.show(
                                     context: context,
                                     title: "Remover endereço",
                                     subtitle:

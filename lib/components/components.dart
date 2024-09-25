@@ -5,7 +5,6 @@ export 'enterprise_items.dart';
 export 'error_message.dart';
 export 'formfield_decoration.dart';
 export 'image_component.dart';
-export 'loading_dialog.dart';
 export 'insert_quantity_textformfield.dart';
 export 'searchAgain.dart';
 export 'search_widget.dart';

@@ -91,7 +91,7 @@ class TechnicalSupportPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (isBusinessTime) {
-                          ShowAlertDialog.showAlertDialog(
+                          ShowAlertDialog.show(
                             context: context,
                             title: "Enviar mensagem no plantão?",
                             subtitle:
@@ -125,7 +125,7 @@ class TechnicalSupportPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (!isBusinessTime && urlOutsideBusinessTime != null) {
-                        ShowAlertDialog.showAlertDialog(
+                        ShowAlertDialog.show(
                           showCloseAlertDialogButton: true,
                           showConfirmAndCancelMessage: false,
                           context: context,

@@ -90,7 +90,7 @@ class ReceiptProvider with ChangeNotifier {
     if (isSubtract && _products[index].Quantidade_ProcRecebDocProEmb == -1) {
       _isLoadingUpdateQuantity = false;
       _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorMessageUpdateQuantity,
         context: context,
       );
@@ -101,7 +101,7 @@ class ReceiptProvider with ChangeNotifier {
         _products[index].Quantidade_ProcRecebDocProEmb != -1) {
       _isLoadingUpdateQuantity = false;
       _errorMessageUpdateQuantity = "A quantidade não pode ficar negativa!";
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorMessageUpdateQuantity,
         context: context,
       );
@@ -149,7 +149,7 @@ class ReceiptProvider with ChangeNotifier {
           isSubtract: isSubtract,
         );
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageUpdateQuantity,
           context: context,
         );
@@ -163,8 +163,8 @@ class ReceiptProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+          DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageUpdateQuantity,
         context: context,
       );
@@ -185,7 +185,7 @@ class ReceiptProvider with ChangeNotifier {
         _products[index].Quantidade_ProcRecebDocProEmb == -1) {
       //se a quantidade for igual à atual, não precisa fazer a requisição
       _errorMessageUpdateQuantity = "A quantidade já está nula";
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorMessageUpdateQuantity,
         context: context,
       );
@@ -224,7 +224,7 @@ class ReceiptProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageUpdateQuantity,
           context: context,
         );
@@ -232,8 +232,8 @@ class ReceiptProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
       _errorMessageUpdateQuantity =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+          DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageUpdateQuantity,
         context: context,
       );
@@ -279,7 +279,7 @@ class ReceiptProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageGetProducts = DefaultErrorMessage.ERROR;
     }
     _isLoadingProducts = false;
     notifyListeners();
@@ -325,8 +325,8 @@ class ReceiptProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessage = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessage,
         context: context,
       );
@@ -399,15 +399,15 @@ class ReceiptProvider with ChangeNotifier {
           isSearchingAgain: true,
         );
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageLiberate,
           context: context,
         );
       }
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
-      _errorMessageLiberate = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessageLiberate = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageLiberate,
         context: context,
       );

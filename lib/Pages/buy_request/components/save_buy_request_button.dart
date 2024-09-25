@@ -117,7 +117,7 @@ class _SaveBuyRequestButtonState extends State<SaveBuyRequestButton> {
                       onPressed: !_canSaveBuyRequest(buyRequestProvider)
                           ? null
                           : () async {
-                              ShowAlertDialog.showAlertDialog(
+                              ShowAlertDialog.show(
                                 context: context,
                                 title: "Salvar pedido",
                                 subtitle: "Deseja salvar o pedido?",

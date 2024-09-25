@@ -97,7 +97,7 @@ class _InsertQuantityState
                     inputFormatters: [LengthLimitingTextInputFormatter(10)],
                     onFieldSubmitted: (_) async {
                       if (_isValid()) {
-                        ShowAlertDialog.showAlertDialog(
+                        ShowAlertDialog.show(
                           context: context,
                           title: "Confirmar transferência",
                           function: () async {
@@ -153,7 +153,7 @@ class _InsertQuantityState
                             ? null
                             : () async {
                                 if (_isValid()) {
-                                  ShowAlertDialog.showAlertDialog(
+                                  ShowAlertDialog.show(
                                     context: context,
                                     title: "Confirmar transferência",
                                     function: () async {

@@ -370,7 +370,7 @@ class _CustomerRegisterPersonalDataPageState
                   backgroundColor: Colors.red,
                 ),
                 onPressed: () {
-                  ShowAlertDialog.showAlertDialog(
+                  ShowAlertDialog.show(
                     context: context,
                     title: "Limpar dados",
                     subtitle:

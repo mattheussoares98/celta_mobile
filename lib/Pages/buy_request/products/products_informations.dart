@@ -83,7 +83,7 @@ class ProductsInformations extends StatelessWidget {
                     buyRequestProvider.isLoadingInsertBuyRequest
                 ? null
                 : () {
-                    ShowAlertDialog.showAlertDialog(
+                    ShowAlertDialog.show(
                       context: context,
                       title: "Remover produto",
                       subtitle: "Remover produto do carrinho?",

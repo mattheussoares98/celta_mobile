@@ -35,7 +35,7 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
           onPressed: widget.receiptProvider.isLoadingLiberateCheck
               ? null
               : () async {
-                  ShowAlertDialog.showAlertDialog(
+                  ShowAlertDialog.show(
                     context: context,
                     title: "Liberar recebimento?",
                     subtitle:

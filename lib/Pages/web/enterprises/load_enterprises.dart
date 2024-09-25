@@ -20,8 +20,8 @@ class LoadEnterprises extends StatelessWidget {
             await webProvider.getAllClients();
 
             if (webProvider.errorMessageClients != "") {
-              ShowSnackbarMessage.showMessage(
-                message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
+              ShowSnackbarMessage.show(
+                message: DefaultErrorMessage.ERROR,
                 context: context,
               );
             }

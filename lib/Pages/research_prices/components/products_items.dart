@@ -115,7 +115,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                   isAssociatedProducts: widget.isAssociatedProducts,
                   product: product,
                   showErrorMessage: () {
-                    ShowSnackbarMessage.showMessage(
+                    ShowSnackbarMessage.show(
                       message:
                           researchPricesProvider.errorInsertConcurrentPrices,
                       context: context,
@@ -130,7 +130,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                               .selectedIndexNotAssociatedProducts = -1;
                     });
 
-                    ShowSnackbarMessage.showMessage(
+                    ShowSnackbarMessage.show(
                       message: "Preços inseridos com sucesso!",
                       context: context,
                       backgroundColor: Theme.of(context).colorScheme.primary,

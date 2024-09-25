@@ -148,7 +148,7 @@ class ResearchPricesProvider with ChangeNotifier {
       _errorAssociateConcurrentToResearch = SoapRequestResponse.errorMessage;
 
       if (_errorAssociateConcurrentToResearch.isNotEmpty) {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorAssociateConcurrentToResearch,
           context: context,
         );
@@ -198,7 +198,7 @@ class ResearchPricesProvider with ChangeNotifier {
       SoapRequestResponse.responseAsString;
       _errorGetResearchPrices = SoapRequestResponse.errorMessage;
     } catch (e) {
-      _errorGetResearchPrices = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorGetResearchPrices = DefaultErrorMessage.ERROR;
     }
 
     if (_errorGetResearchPrices == "") {
@@ -257,7 +257,7 @@ class ResearchPricesProvider with ChangeNotifier {
       _errorAddOrUpdateOfResearch = SoapRequestResponse.errorMessage;
 
       if (_errorAddOrUpdateOfResearch.isNotEmpty) {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorAddOrUpdateOfResearch,
           context: context,
         );
@@ -366,10 +366,10 @@ class ResearchPricesProvider with ChangeNotifier {
       }
     } catch (e) {
       _errorAddOrUpdateConcurrents =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     }
     if (_errorAddOrUpdateConcurrents == "") {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Concorrente cadastrado/alterado com sucesso!",
         backgroundColor: Colors.green,
         context: context,
@@ -377,7 +377,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
       _selectedConcurrent = null;
     } else {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorAddOrUpdateConcurrents,
         context: context,
       );
@@ -432,7 +432,7 @@ class ResearchPricesProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      _errorGetConcurrents = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorGetConcurrents = DefaultErrorMessage.ERROR;
     }
 
     _isLoadingGetConcurrents = false;
@@ -506,7 +506,7 @@ class ResearchPricesProvider with ChangeNotifier {
           (a, b) => a.ProductName.compareTo(b.ProductName),
         );
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorGetAssociatedsProducts,
           context: context,
         );
@@ -514,7 +514,7 @@ class ResearchPricesProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para obter os produtos: $e");
       _errorGetAssociatedsProducts =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingGetProducts = false;
       notifyListeners();
@@ -567,7 +567,7 @@ class ResearchPricesProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para obter os produtos: $e");
       _errorGetNotAssociatedsProducts =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingGetProducts = false;
       notifyListeners();
@@ -716,7 +716,7 @@ class ResearchPricesProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para obter os produtos: $e");
       _errorInsertConcurrentPrices =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingInsertConcurrentPrices = false;
       notifyListeners();

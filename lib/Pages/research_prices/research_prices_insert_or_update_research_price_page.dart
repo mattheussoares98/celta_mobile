@@ -55,7 +55,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
       return;
     }
 
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
         context: context,
         title: "Confirmar",
         subtitle: "Deseja confirmar o cadastro/alteração?",
@@ -68,7 +68,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
           );
 
           if (researchPricesProvider.errorAddOrUpdateOfResearch == "") {
-            ShowSnackbarMessage.showMessage(
+            ShowSnackbarMessage.show(
               message:
                   "${researchPricesProvider.selectedResearch == null ? "Cadastro" : "Alteração"}"
                   "${researchPricesProvider.selectedResearch == null ? " realizado" : " realizada"}"

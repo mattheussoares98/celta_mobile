@@ -89,7 +89,7 @@ class LoginProvider with ChangeNotifier {
         !ConvertString.isUrl(
           enterpriseNameOrUrlCCSController.text,
         )) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorMessage,
         context: context,
       );
@@ -111,7 +111,7 @@ class LoginProvider with ChangeNotifier {
       );
       _errorMessage = SoapRequestResponse.errorMessage;
       if (_errorMessage != "") {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessage,
           context: context,
         );
@@ -138,8 +138,8 @@ class LoginProvider with ChangeNotifier {
     } catch (e) {
       // _updateErrorMessage(e.toString());
       //print('deu erro no login: $e');
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessage = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessage,
         context: context,
       );

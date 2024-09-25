@@ -234,14 +234,14 @@ class _InsertPricesState
                 bool isValid = _formKey.currentState!.validate();
 
                 if (!isValid) {
-                  ShowSnackbarMessage.showMessage(
+                  ShowSnackbarMessage.show(
                     message: "Insira os preços corretamente!",
                     context: context,
                   );
                 } else {
                   if (_allFieldsAreEmpty()) {}
 
-                  ShowAlertDialog.showAlertDialog(
+                  ShowAlertDialog.show(
                     context: context,
                     title: _allFieldsAreEmpty()
                         ? "Zerar preços informados"

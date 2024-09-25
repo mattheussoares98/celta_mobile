@@ -183,7 +183,7 @@ class WebProvider with ChangeNotifier {
         password: password,
       );
     } catch (e) {
-      _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageClients = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -210,7 +210,7 @@ class WebProvider with ChangeNotifier {
 
       _orderEnterprisesByName();
     } catch (e) {
-      _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageClients = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -289,7 +289,7 @@ class WebProvider with ChangeNotifier {
         throw Exception();
       }
     } catch (e) {
-      _errorMessageSoapActions = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageSoapActions = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -344,14 +344,14 @@ class WebProvider with ChangeNotifier {
       _enterprises.removeWhere((element) => element.id == enterpriseId);
 
       Navigator.of(context).pop();
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Empresa excluída com sucesso",
         context: context,
         backgroundColor: Theme.of(context).colorScheme.primary,
       );
     } catch (e) {
-      ShowSnackbarMessage.showMessage(
-        message: DefaultErrorMessageToFindServer.ERROR_MESSAGE,
+      ShowSnackbarMessage.show(
+        message: DefaultErrorMessage.ERROR,
         context: context,
       );
     } finally {
@@ -390,13 +390,13 @@ class WebProvider with ChangeNotifier {
       );
 
       Navigator.of(context).pop();
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "URL alterada com sucesso",
         context: context,
         backgroundColor: Theme.of(context).colorScheme.primary,
       );
     } catch (e) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: e.toString(),
         context: context,
       );
@@ -490,13 +490,13 @@ class WebProvider with ChangeNotifier {
 
       Navigator.of(context).pop();
 
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Empresa adicionada com sucesso!",
         context: context,
         backgroundColor: Theme.of(context).colorScheme.primary,
       );
     } catch (e) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Ocorreu um erro não esperado para adicionar a empresa!",
         context: context,
       );
@@ -529,7 +529,7 @@ class WebProvider with ChangeNotifier {
       _enterprises[_indexOfSelectedEnterprise].modules![index] =
           newModules[index];
     } catch (e) {
-      _errorMessageClients = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageClients = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();

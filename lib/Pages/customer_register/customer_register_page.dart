@@ -128,7 +128,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         _selectedIndex = index;
       });
     } else {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: errorMessage,
         context: context,
       );
@@ -267,7 +267,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                                       .nameController.text.isEmpty
                               ? null
                               : () {
-                                  ShowAlertDialog.showAlertDialog(
+                                  ShowAlertDialog.show(
                                     context: context,
                                     title: "Apagar TODOS dados",
                                     subtitle:

@@ -44,7 +44,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     required double totalItemValue,
     required GetProductJsonModel product,
   }) {
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
       context: context,
       title: "Confirmar exclusão",
       subtitle: "Deseja excluir o produto do carrinho?",
@@ -97,7 +97,7 @@ class _ProductsItemsState extends State<ProductsItems> {
       });
     } else if (product.retailPracticedPrice == 0 &&
         product.wholePracticedPrice == 0) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message:
             "O preço de venda e atacado estão zerados! Utilize esse produto somente caso esteja utilizando modelo de pedido de vendas que utiliza o custo como preço!",
         context: context,
@@ -247,7 +247,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                     product: product,
                     addProductInCart: () async {
                       if (_totalItemValue == 0) {
-                        ShowSnackbarMessage.showMessage(
+                        ShowSnackbarMessage.show(
                           message: "O total dos itens está zerado!",
                           context: context,
                         );

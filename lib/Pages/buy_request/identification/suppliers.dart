@@ -25,7 +25,7 @@ class _SuplliersState extends State<Suplliers> {
     if (buyRequestProvider.selectedSupplier != null &&
         (buyRequestProvider.enterprisesCount > 0 ||
             buyRequestProvider.productsInCartCount > 0)) {
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
         context: context,
         title: "Alterar fornecedor",
         subtitle:
@@ -76,7 +76,7 @@ class _SuplliersState extends State<Suplliers> {
           isLoading: buyRequestProvider.isLoadingSupplier,
           onPressSearch: () async {
             if (buyRequestProvider.enterprisesCount > 0) {
-              ShowAlertDialog.showAlertDialog(
+              ShowAlertDialog.show(
                 context: context,
                 title: "Pesquisar fornecedores",
                 subtitle:

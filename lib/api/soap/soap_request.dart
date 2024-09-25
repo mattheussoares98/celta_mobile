@@ -117,14 +117,14 @@ class SoapRequest {
         }
       } else {
         SoapRequestResponse.errorMessage =
-            DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+            DefaultErrorMessage.ERROR;
         // print(response.body);
         throw Exception('Failed to load data');
       }
     } catch (e) {
       //print("erro para fazer a requisição http: $e");
       SoapRequestResponse.errorMessage =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     }
   }
 }

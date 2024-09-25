@@ -83,7 +83,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       padding: const EdgeInsets.only(left: 8.0),
       child: IconButton(
         onPressed: () {
-          ShowAlertDialog.showAlertDialog(
+          ShowAlertDialog.show(
             context: context,
             title: "Apagar TODOS dados",
             subtitle: "Deseja realmente limpar todos os dados do pedido?",

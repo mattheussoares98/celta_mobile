@@ -38,14 +38,14 @@ class _AddressComponentState extends State<AddressComponent> {
   }) async {
     if (!widget.canInsertMoreThanOneAddress &&
         addressProvider.addressesCount > 0) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message:
             "Não é possível inserir mais de um endereço! Remova o endereço informado para conseguir adicionar outro!",
         context: context,
       );
       return;
     } else if (addressProvider.cepController.text.length < 8) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "O CEP deve conter 8 dígitos!",
         context: context,
       );
@@ -62,7 +62,7 @@ class _AddressComponentState extends State<AddressComponent> {
         FocusScope.of(context).requestFocus(_numberFocusNode);
       });
     } else {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: addressProvider.errorMessageGetAddressByCep,
         context: context,
       );
@@ -387,7 +387,7 @@ class _AddressComponentState extends State<AddressComponent> {
                           style:
                               TextButton.styleFrom(backgroundColor: Colors.red),
                           onPressed: () {
-                            ShowAlertDialog.showAlertDialog(
+                            ShowAlertDialog.show(
                               context: context,
                               title: "Apagar dados digitados",
                               subtitle:
@@ -421,7 +421,7 @@ class _AddressComponentState extends State<AddressComponent> {
                                     addressProvider.addAddress();
                                     if (addressProvider.errorMessageAddAddres !=
                                         "") {
-                                      ShowSnackbarMessage.showMessage(
+                                      ShowSnackbarMessage.show(
                                         message: addressProvider
                                             .errorMessageAddAddres,
                                         context: context,
@@ -429,7 +429,7 @@ class _AddressComponentState extends State<AddressComponent> {
                                     }
                                     FocusScope.of(context).unfocus();
                                   } else {
-                                    ShowSnackbarMessage.showMessage(
+                                    ShowSnackbarMessage.show(
                                       message:
                                           "Insira os dados corretamente para salvar o endereço",
                                       context: context,

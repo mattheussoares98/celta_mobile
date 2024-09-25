@@ -27,7 +27,7 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
   }
 
   void _updateUrlCcs(WebProvider webProvider) {
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
       context: context,
       title: "Deseja realmente alterar a URL?",
       subtitle: "Nova URL: \n${urlCcsController.text}",
@@ -37,7 +37,7 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
             !urlCcsController.text.contains("//") ||
             !urlCcsController.text.contains("\.") ||
             !urlCcsController.text.toLowerCase().contains("ccs")) {
-          ShowSnackbarMessage.showMessage(
+          ShowSnackbarMessage.show(
               message:
                   "Viiixi, acho que essa URL tá errada hein... confirma aew",
               context: context);

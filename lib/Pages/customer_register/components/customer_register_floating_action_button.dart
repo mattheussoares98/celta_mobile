@@ -38,7 +38,7 @@ class _CustomerRegisterFloatingActionButtonState
                   widget.changeSelectedIndexToAddAddres();
                 });
               } else {
-                ShowAlertDialog.showAlertDialog(
+                ShowAlertDialog.show(
                   context: context,
                   title: "Cadastrar cliente",
                   subtitle: "Deseja confirmar o cadastro do cliente?",
@@ -51,13 +51,13 @@ class _CustomerRegisterFloatingActionButtonState
                         widget.changeFormKeysToInvalid();
                       });
 
-                      ShowSnackbarMessage.showMessage(
+                      ShowSnackbarMessage.show(
                         message: "Cliente inserido/atualizado com sucesso",
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         context: context,
                       );
                     } else {
-                      ShowSnackbarMessage.showMessage(
+                      ShowSnackbarMessage.show(
                         message:
                             customerRegisterProvider.errorMessageInsertCustomer,
                         context: context,

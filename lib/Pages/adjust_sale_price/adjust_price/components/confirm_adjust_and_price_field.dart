@@ -31,7 +31,7 @@ class _PriceFieldAndConfirmAdjustButtonState
     final GetProductJsonModel product = arguments["product"];
 
     if (!adjustSalePriceProvider.allObligatoryDataAreInformed()) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Selecione o tipo de preço e o tipo de venda",
         context: context,
       );
@@ -41,7 +41,7 @@ class _PriceFieldAndConfirmAdjustButtonState
     bool? isValid = formKey.currentState?.validate();
 
     if (isValid == true) {
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
           context: context,
           title: "Confirmar ajuste?",
           function: () async {
@@ -57,13 +57,13 @@ class _PriceFieldAndConfirmAdjustButtonState
 
             if (adjustSalePriceProvider.errorMessage == "") {
               Navigator.of(context).pop();
-              ShowSnackbarMessage.showMessage(
+              ShowSnackbarMessage.show(
                 message: "Ajuste confirmado com sucesso",
                 context: context,
                 backgroundColor: Theme.of(context).colorScheme.primary,
               );
             } else {
-              ShowSnackbarMessage.showMessage(
+              ShowSnackbarMessage.show(
                 message: adjustSalePriceProvider.errorMessage,
                 context: context,
               );

@@ -18,7 +18,7 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
   final _enterpriseFocusNode = FocusNode();
 
   void addEnterprise(WebProvider webProvider) {
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
         context: context,
         title: "Adicionar cliente?",
         subtitle:
@@ -29,7 +29,7 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
               !_urlCcsController.text.contains("//") ||
               !_urlCcsController.text.contains("\.") ||
               !_urlCcsController.text.toLowerCase().contains("ccs")) {
-            ShowSnackbarMessage.showMessage(
+            ShowSnackbarMessage.show(
               message: "Pelo jeito essa URL tá errada. Confirma aeeew",
               context: context,
             );

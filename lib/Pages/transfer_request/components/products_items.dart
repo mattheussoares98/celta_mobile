@@ -46,7 +46,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     required String enterpriseOriginCode,
     required String requestTypeCode,
   }) {
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
       context: context,
       title: "Confirmar exclusão",
       subtitle: "Deseja excluir o produto do carrinho?",
@@ -131,7 +131,7 @@ class _ProductsItemsState extends State<ProductsItems> {
 
                       if (selectedIndex != index) {
                         if (product.Value == 0) {
-                          ShowSnackbarMessage.showMessage(
+                          ShowSnackbarMessage.show(
                             message:
                                 "O preço está zerado. Por isso não é possível inserir a quantidade!",
                             context: context,
@@ -301,7 +301,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                       product: product,
                       addProductInCart: () async {
                         if (_totalItemValue == 0) {
-                          ShowSnackbarMessage.showMessage(
+                          ShowSnackbarMessage.show(
                             message: "O total dos itens está zerado!",
                             context: context,
                           );

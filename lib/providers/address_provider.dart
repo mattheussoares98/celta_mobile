@@ -171,7 +171,7 @@ class AddressProvider with ChangeNotifier {
       if (response["error"] != "") {
         _errorMessageGetAddressByCep = response["error"];
 
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message:
               "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
           context: context,

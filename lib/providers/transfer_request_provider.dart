@@ -464,7 +464,7 @@ class TransferRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print('deu erro para consultar os pedidos: $e');
-      _errorMessageRequestModel = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageRequestModel = DefaultErrorMessage.ERROR;
     }
     _isLoadingRequestModel = false;
     notifyListeners();
@@ -506,7 +506,7 @@ class TransferRequestProvider with ChangeNotifier {
     } catch (e) {
       //print('deu erro para consultar as empresas de origem: $e');
       _errorMessageOriginEnterprise =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     }
     _isLoadingOriginEnterprise = false;
     notifyListeners();
@@ -590,7 +590,7 @@ class TransferRequestProvider with ChangeNotifier {
     } catch (e) {
       //print('deu erro para consultar as empresas de destino: $e');
       _errorMessageDestinyEnterprise =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     }
     _isLoadingDestinyEnterprise = false;
     notifyListeners();
@@ -621,7 +621,7 @@ class TransferRequestProvider with ChangeNotifier {
       _errorMessageProducts = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print('deu erro para consultar os produtos: $e');
-      _errorMessageProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageProducts = DefaultErrorMessage.ERROR;
     }
     _isLoadingProducts = false;
     notifyListeners();
@@ -672,7 +672,7 @@ class TransferRequestProvider with ChangeNotifier {
           enterpriseDestinyCode: enterpriseDestinyCode,
         );
 
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "O pedido foi salvo com sucesso!",
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -692,7 +692,7 @@ class TransferRequestProvider with ChangeNotifier {
       } else {
         _isLoadingSaveTransferRequest = false;
 
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageSaveTransferRequest,
           context: context,
         );
@@ -700,8 +700,8 @@ class TransferRequestProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para salvar a transferência: $e");
       _errorMessageSaveTransferRequest =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+          DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageSaveTransferRequest,
         context: context,
       );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShowAlertDialog {
-  static showAlertDialog({
+  static show({
     required BuildContext context,
     required String title,
     required Function() function,

@@ -14,7 +14,7 @@ AppBar appBarEnterprise({
       actions: [
         TextButton.icon(
           onPressed: () {
-            ShowAlertDialog.showAlertDialog(
+            ShowAlertDialog.show(
               context: context,
               title: "Deseja realmente excluir a empresa?",
               subtitle:

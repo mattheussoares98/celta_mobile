@@ -51,20 +51,20 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
 
     if (_selectedIndex == 0) {
       if (!_hasSelectedBuyerAndRequestType() && (index == 1 || index == 2)) {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "Selecione um comprador e um modelo de pedido",
           context: context,
         );
         return;
       } else if ((index == 1 || index == 2) &&
           buyRequestProvider.selectedSupplier == null) {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "Selecione um fornecedor",
           context: context,
         );
         return;
       } else if ((index == 2) && !buyRequestProvider.hasSelectedEnterprise) {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "Selecione pelo menos uma empresa",
           context: context,
         );
@@ -74,7 +74,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
       if (buyRequestProvider.isLoadingEnterprises) {
         return;
       } else if (!buyRequestProvider.hasSelectedEnterprise && index == 2) {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "Selecione pelo menos uma empresa",
           context: context,
         );
@@ -85,7 +85,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
         if (buyRequestProvider.selectedBuyer == null ||
             buyRequestProvider.selectedRequestModel == null ||
             buyRequestProvider.selectedSupplier == null) {
-          ShowSnackbarMessage.showMessage(
+          ShowSnackbarMessage.show(
             message: "Informe os dados de identificação",
             context: context,
           );
@@ -93,7 +93,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
         }
       } else if (index == 2) {
         if (buyRequestProvider.hasSelectedEnterprise == false) {
-          ShowSnackbarMessage.showMessage(
+          ShowSnackbarMessage.show(
             message: "Selecione pelo menos uma empresa",
             context: context,
           );
@@ -207,7 +207,7 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                               buyRequestProvider.isLoadingInsertBuyRequest
                           ? null
                           : () {
-                              ShowAlertDialog.showAlertDialog(
+                              ShowAlertDialog.show(
                                 context: context,
                                 title: "Apagar todos dados",
                                 subtitle:

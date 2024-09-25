@@ -341,7 +341,7 @@ class BuyRequestProvider with ChangeNotifier {
     );
 
     if (containsProductInSelectedEnterprise) {
-      ShowAlertDialog.showAlertDialog(
+      ShowAlertDialog.show(
         context: context,
         subtitle:
             "Há produtos informados com a empresa que foi selecionada. Ao remover a seleção da empresa, os produtos dessa empresa serão removidos do pedido.\n\nDeseja realmente retirar a seleção da empresa?",
@@ -540,7 +540,7 @@ class BuyRequestProvider with ChangeNotifier {
       _updateProductWithProductCart();
       _orderProductsUpByPlu();
     } catch (e) {
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageGetProducts = DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingProducts = false;
       notifyListeners();
@@ -566,7 +566,7 @@ class BuyRequestProvider with ChangeNotifier {
       if (_errorMessageBuyer == "") {
         await _updateDataInDatabase();
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message:
               "Ocorreu um erro não esperado para consultar os compradores. Verifique a sua internet",
           context: context,
@@ -574,8 +574,8 @@ class BuyRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter os compradores: $e");
-      _errorMessageBuyer = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessageBuyer = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageBuyer,
         context: context,
       );
@@ -621,7 +621,7 @@ class BuyRequestProvider with ChangeNotifier {
         );
         await _updateDataInDatabase();
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message:
               "Ocorreu um erro não esperado para consultar os modelos de pedido. Verifique a sua internet",
           context: context,
@@ -629,8 +629,8 @@ class BuyRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter os modelos de pedido: $e");
-      _errorMessageRequestsType = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessageRequestsType = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageRequestsType,
         context: context,
       );
@@ -677,8 +677,8 @@ class BuyRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter os fornecedores: $e");
-      _errorMessageSupplier = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessageSupplier = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageSupplier,
         context: context,
       );
@@ -733,8 +733,8 @@ class BuyRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter as empresas: $e");
-      _errorMessageEnterprises = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessageEnterprises = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageEnterprises,
         context: context,
       );
@@ -875,7 +875,7 @@ class BuyRequestProvider with ChangeNotifier {
       _errorMessageInsertBuyRequest = SoapRequestResponse.errorMessage;
 
       if (_errorMessageInsertBuyRequest != "") {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageInsertBuyRequest,
           context: context,
         );
@@ -883,7 +883,7 @@ class BuyRequestProvider with ChangeNotifier {
         expandLastRequestSavedNumbers = false;
       } else {
         _updateLastRequestNumber();
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: SoapRequestResponse.responseAsString,
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -896,8 +896,8 @@ class BuyRequestProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para salvar o pedido: $e");
       _errorMessageInsertBuyRequest =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+          DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageInsertBuyRequest,
         context: context,
       );

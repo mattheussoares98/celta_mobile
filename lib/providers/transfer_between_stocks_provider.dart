@@ -159,7 +159,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição na nova forma de consulta: $e");
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageGetProducts = DefaultErrorMessage.ERROR;
     }
     _isLoadingProducts = false;
     notifyListeners();
@@ -216,7 +216,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição stockTypes: $e");
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorMessageTypeStockAndJustifications,
         context: context,
       );
@@ -238,8 +238,8 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
       _errorMessageTypeStockAndJustifications =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+          DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageTypeStockAndJustifications,
         context: context,
       );
@@ -258,7 +258,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     await _getJustificationsType(context);
 
     if (_errorMessageTypeStockAndJustifications != "") {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: _errorMessageTypeStockAndJustifications,
         context: context,
       );
@@ -304,15 +304,15 @@ class TransferBetweenStocksProvider with ChangeNotifier {
       }
 
       if (SoapRequestResponse.errorMessage != "") {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageAdjustStock,
           context: context,
         );
       }
     } catch (e) {
       //print("Erro para confirmar o ajuste: $e");
-      _errorMessageAdjustStock = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessageAdjustStock = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageAdjustStock,
         context: context,
       );

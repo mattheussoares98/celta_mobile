@@ -34,7 +34,7 @@ class AllStocks {
       ),
       onTap: () {
         if (!hasStocks) {
-          ShowSnackbarMessage.showMessage(
+          ShowSnackbarMessage.show(
             message:
                 "Entre em contato com o suporte técnico e solicite a atualização do sistema para conseguir visualizar todos estoques",
             context: context,

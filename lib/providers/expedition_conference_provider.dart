@@ -76,7 +76,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
             "Nenhum documento está no processo de conferência de produtos";
       }
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -119,7 +119,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
           .map((e) => ExpeditionControlProductModel.fromJson(e))
           .toList();
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -148,7 +148,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
       if (_errorMessageGetProducts != "") {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: _errorMessageGetProducts,
           context: NavigatorKey.navigatorKey.currentState!.context,
         );
@@ -160,8 +160,8 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      _errorMessageGetProducts = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
-      ShowSnackbarMessage.showMessage(
+      _errorMessageGetProducts = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
         message: _errorMessageGetProducts,
         context: NavigatorKey.navigatorKey.currentState!.context,
       );
@@ -182,7 +182,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         .indexWhere((e) => e.PriceLookUp == confirmedProduct.plu);
 
     if (indexOfConfirmedProductInPendingProducts == -1) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Esse produto não faz parte da conferência",
         context: NavigatorKey.navigatorKey.currentState!.context,
       );
@@ -209,7 +209,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       );
     }
     notifyListeners();
-    ShowSnackbarMessage.showMessage(
+    ShowSnackbarMessage.show(
       message: "Produto conferido",
       context: NavigatorKey.navigatorKey.currentState!.context,
       backgroundColor: Theme.of(NavigatorKey.navigatorKey.currentState!.context)
@@ -293,7 +293,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
               APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE,
         );
 
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "Conferência concluída com sucesso",
           context: NavigatorKey.navigatorKey.currentState!.context,
           backgroundColor:
@@ -306,7 +306,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       }
     } catch (e) {
       _errorMessageConfirmConference =
-          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+          DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -27,7 +27,7 @@ class EvaluationAndSuggestionsProvider with ChangeNotifier {
     try {
       // await FirebaseHelper.sendEvaluate();
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessage = DefaultErrorMessage.ERROR;
     }
     _isLoading = false;
   }

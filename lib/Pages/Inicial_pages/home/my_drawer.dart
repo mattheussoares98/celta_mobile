@@ -164,7 +164,7 @@ class MyDrawer extends StatelessWidget {
             drawerItem(
               context: context,
               onTap: () async {
-                ShowAlertDialog.showAlertDialog(
+                ShowAlertDialog.show(
                   context: context,
                   title: 'Deseja fazer o logout?',
                   function: () async {

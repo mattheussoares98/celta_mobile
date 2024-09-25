@@ -53,7 +53,7 @@ class _CustomerRegisterEmailsInformedsState
                     onPressed: customerRegisterProvider.isLoadingInsertCustomer
                         ? null
                         : () {
-                            ShowAlertDialog.showAlertDialog(
+                            ShowAlertDialog.show(
                               context: context,
                               title: "Excluir e-mail",
                               subtitle: "Deseja realmente excluir o e-mail?",

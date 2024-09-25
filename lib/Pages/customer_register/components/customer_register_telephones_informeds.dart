@@ -62,7 +62,7 @@ class _CustomerRegisterTelephonesInformedsState
                     onPressed: customerRegisterProvider.isLoadingInsertCustomer
                         ? null
                         : () {
-                            ShowAlertDialog.showAlertDialog(
+                            ShowAlertDialog.show(
                               context: context,
                               title: "Excluir telefone",
                               subtitle: "Deseja realmente excluir o telefone?",

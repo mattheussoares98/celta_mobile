@@ -37,7 +37,7 @@ class SendToPrintButton extends StatelessWidget {
               );
     
               if (priceConferenceProvider.errorSendToPrint != "") {
-                ShowSnackbarMessage.showMessage(
+                ShowSnackbarMessage.show(
                   message: priceConferenceProvider.errorSendToPrint,
                   context: context,
                 );

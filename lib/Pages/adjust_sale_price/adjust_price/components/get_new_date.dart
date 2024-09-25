@@ -22,7 +22,7 @@ Future<DateTime?> getNewDate({
     );
 
     if (newTime == null) {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Data não alterada",
         context: context,
       );
@@ -36,7 +36,7 @@ Future<DateTime?> getNewDate({
       );
 
       if (selectedDateTime.isBefore(now)) {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: "Horário anterior à data atual. Isso não é permitido",
           context: context,
         );

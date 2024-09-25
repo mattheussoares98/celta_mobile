@@ -34,13 +34,13 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
       if (customerRegisterProvider.errorMessageAddEmail == "") {
         FocusScope.of(context).unfocus();
       } else {
-        ShowSnackbarMessage.showMessage(
+        ShowSnackbarMessage.show(
           message: customerRegisterProvider.errorMessageAddEmail,
           context: context,
         );
       }
     } else {
-      ShowSnackbarMessage.showMessage(
+      ShowSnackbarMessage.show(
         message: "Digite um e-mail válido!",
         context: context,
       );

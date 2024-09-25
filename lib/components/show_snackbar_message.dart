@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShowSnackbarMessage {
-  static showMessage({
+  static show({
     required String message,
     required BuildContext context,
     String labelSnackBarAction = "",

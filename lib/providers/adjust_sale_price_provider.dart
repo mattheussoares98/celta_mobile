@@ -124,7 +124,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
 
       _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -173,7 +173,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
             "Não foram encontrados agendamentos para esse produto";
       }
     } catch (e) {
-      _errorMessageSchedule = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessageSchedule = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -320,7 +320,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
       );
       _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
-      _errorMessage = DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+      _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();

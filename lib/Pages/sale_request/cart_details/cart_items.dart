@@ -220,26 +220,23 @@ class _CartItemsState extends State<CartItems> {
                                                     controllerInDouble == 0
                                                 ? null
                                                 : () {
-                                                    ShowAlertDialog
-                                                        .showAlertDialog(
-                                                            context: context,
-                                                            title:
-                                                                "Atualizar o preço",
-                                                            subtitle:
-                                                                "Deseja realmente atualizar a quantidade e o preço?",
-                                                            function: () {
-                                                              updateProductInCart(
-                                                                saleRequestProvider:
-                                                                    saleRequestProvider,
-                                                                product:
-                                                                    product,
-                                                                index: index,
-                                                              );
+                                                    ShowAlertDialog.show(
+                                                        context: context,
+                                                        title:
+                                                            "Atualizar o preço",
+                                                        subtitle:
+                                                            "Deseja realmente atualizar a quantidade e o preço?",
+                                                        function: () {
+                                                          updateProductInCart(
+                                                            saleRequestProvider:
+                                                                saleRequestProvider,
+                                                            product: product,
+                                                            index: index,
+                                                          );
 
-                                                              FocusScope.of(
-                                                                      context)
-                                                                  .unfocus();
-                                                            });
+                                                          FocusScope.of(context)
+                                                              .unfocus();
+                                                        });
                                                   },
                                             child: const Text("ATUALIZAR"),
                                           ),
@@ -262,7 +259,7 @@ class _CartItemsState extends State<CartItems> {
                                                 widget.textEditingController,
                                             formKey: _formKey,
                                             onFieldSubmitted: () {
-                                              ShowAlertDialog.showAlertDialog(
+                                              ShowAlertDialog.show(
                                                 context: context,
                                                 title: "Atualizar o preço",
                                                 subtitle:
@@ -332,7 +329,7 @@ class _CartItemsState extends State<CartItems> {
                                       saleRequestProvider.isLoadingProcessCart
                                   ? null
                                   : () {
-                                      ShowAlertDialog.showAlertDialog(
+                                      ShowAlertDialog.show(
                                         context: context,
                                         title: "Limpar carrinho",
                                         subtitle:

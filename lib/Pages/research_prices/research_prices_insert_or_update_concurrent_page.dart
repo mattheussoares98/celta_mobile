@@ -52,7 +52,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     bool? isValid = _formKey.currentState?.validate();
     if (isValid == false) return;
 
-    ShowAlertDialog.showAlertDialog(
+    ShowAlertDialog.show(
         context: context,
         title: researchPricesProvider.selectedConcurrent == null
             ? "Cadastrar concorrente"
@@ -74,7 +74,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
             _observationController.clear();
             Navigator.of(context).pop();
           } else {
-            ShowSnackbarMessage.showMessage(
+            ShowSnackbarMessage.show(
               message: researchPricesProvider.errorAddOrUpdateConcurrents,
               context: context,
             );
