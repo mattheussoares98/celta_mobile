@@ -16,6 +16,9 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
+  String _errorMessageConfirmConference = "";
+  String get errorMessageConfirmConference => _errorMessageConfirmConference;
+
   List<ExpeditionControlModel> _expeditionControlsToConference = [];
   List<ExpeditionControlModel> get expeditionControlsToConference =>
       [..._expeditionControlsToConference];
@@ -161,7 +164,10 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     }
   }
 
-  void addConfirmedProduct(int indexOfSearchedProduct) {
+  Future<void> addConfirmedProduct({
+    required int indexOfSearchedProduct,
+    required int expeditionControlCode,
+  }) async {
     final confirmedProduct = _searchedProducts[indexOfSearchedProduct];
 
     final indexOfConfirmedProductInPendingProducts = _pendingProducts
@@ -201,6 +207,10 @@ class ExpeditionConferenceProvider with ChangeNotifier {
           .colorScheme
           .primary,
     );
+
+    if (_pendingProducts.isEmpty) {
+      await confirmConference(expeditionControlCode);
+    }
   }
 
   void _addOrSumQuantityInCheckedProducts(
@@ -234,6 +244,47 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         Name: checkedProduct.Name,
         Packing: checkedProduct.Packing,
       );
+    }
+  }
+
+  Future<void> confirmConference(int expeditionControlCode) async {
+    _errorMessageConfirmConference = "";
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final parameters = {
+        "CrossIdentity": UserData.crossIdentity,
+        "ExpeditionControlCode": expeditionControlCode,
+        "StepCode": 1,
+        "Confered": true,
+      };
+      await SoapRequest.soapPost(
+        parameters: parameters,
+        typeOfResponse: "ConfirmConferenceResponse",
+        SOAPAction: "ConfirmConference",
+        serviceASMX: "CeltaProductService.asmx",
+      );
+      _errorMessageConfirmConference = SoapRequestResponse.errorMessage;
+
+      if (_errorMessageConfirmConference.isNotEmpty) {
+        return;
+      } else {
+        Navigator.of(NavigatorKey.navigatorKey.currentState!.context).pop();
+        ShowSnackbarMessage.showMessage(
+          message: "Conferência concluída com sucesso",
+          context: NavigatorKey.navigatorKey.currentState!.context,
+          backgroundColor:
+              Theme.of(NavigatorKey.navigatorKey.currentState!.context)
+                  .colorScheme
+                  .primary,
+        );
+      }
+    } catch (e) {
+      _errorMessageConfirmConference =
+          DefaultErrorMessageToFindServer.ERROR_MESSAGE;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }

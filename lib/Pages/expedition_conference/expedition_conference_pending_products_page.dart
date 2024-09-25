@@ -29,6 +29,9 @@ class _ExpeditionConferencePendingProductsPageState
     ExpeditionConferenceProvider expeditionConferenceProvider,
     EnterpriseModel enterprise,
   ) async {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    ExpeditionControlModel expeditionControl = arguments["expeditionControl"];
+
     await expeditionConferenceProvider.getProducts(
       value: searchProductsController.text,
       enterpriseCode: enterprise.codigoInternoEmpresa,
@@ -38,11 +41,16 @@ class _ExpeditionConferencePendingProductsPageState
     if (expeditionConferenceProvider.searchedProducts.isEmpty) {
       return;
     } else if (expeditionConferenceProvider.searchedProducts.length == 1) {
-      expeditionConferenceProvider.addConfirmedProduct(0);
+      await expeditionConferenceProvider.addConfirmedProduct(
+        indexOfSearchedProduct: 0,
+        expeditionControlCode: expeditionControl.ExpeditionControlCode!,
+      );
     } else {
       showDialog(
         context: context,
-        builder: (context) => const ConfirmProductDialog(),
+        builder: (context) => ConfirmProductDialog(
+          expeditionControlCode: expeditionControl.ExpeditionControlCode!,
+        ),
       );
     }
     searchProductsController.clear();

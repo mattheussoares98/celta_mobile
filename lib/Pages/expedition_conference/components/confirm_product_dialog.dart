@@ -5,7 +5,11 @@ import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
 class ConfirmProductDialog extends StatelessWidget {
-  const ConfirmProductDialog({super.key});
+  final int expeditionControlCode;
+  const ConfirmProductDialog({
+    required this.expeditionControlCode,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +51,11 @@ class ConfirmProductDialog extends StatelessWidget {
                         expeditionConferenceProvider.searchedProducts[index];
 
                     return InkWell(
-                      onTap: () {
-                        expeditionConferenceProvider.addConfirmedProduct(index);
+                      onTap: () async {
+                        await expeditionConferenceProvider.addConfirmedProduct(
+                          indexOfSearchedProduct: index,
+                          expeditionControlCode: expeditionControlCode,
+                        );
                       },
                       child: Card(
                         child: Padding(

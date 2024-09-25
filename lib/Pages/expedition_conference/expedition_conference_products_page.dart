@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/expedition_control/expedition_control.dart';
 import '../../pages/expedition_conference/expedition_conference.dart';
 import '../../providers/providers.dart';
 
@@ -27,7 +28,8 @@ class _ExpeditionConferenceProductsPageState
         ExpeditionConferenceProvider expeditionConferenceProvider =
             Provider.of(context, listen: false);
         final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-        final expeditionControl = arguments["expeditionControl"];
+        ExpeditionControlModel expeditionControl =
+            arguments["expeditionControl"];
 
         await expeditionConferenceProvider.getPendingProducts(
           expeditionControlCode: expeditionControl.ExpeditionControlCode!,
