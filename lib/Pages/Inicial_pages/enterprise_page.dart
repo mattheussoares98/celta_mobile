@@ -17,7 +17,8 @@ class EnterprisePageState extends State<EnterprisePage> {
     final String nextRoute =
         ModalRoute.of(context)!.settings.arguments as String;
 
-    if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS) {
+    if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS &&
+        !enterpriseProvider.showedAdjustPriceAlert) {
       ShowAlertDialog.showAlertDialog(
         context: context,
         title: "Bem-vindo ao módulo de Alteração de preços!",
@@ -28,8 +29,10 @@ class EnterprisePageState extends State<EnterprisePage> {
         subtitle:
             "Este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá melhorar cada vez mais o aplicativo e adicionar novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
       );
+      enterpriseProvider.changeShowedAjustPriceAlert = true;
     } else if (nextRoute ==
-        APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE) {
+            APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE &&
+        !enterpriseProvider.showedExpeditionConferenteAlert) {
       ShowAlertDialog.showAlertDialog(
         context: context,
         title: "Bem-vindo ao módulo de Controle de Produtos (Expedição)!",
@@ -40,6 +43,7 @@ class EnterprisePageState extends State<EnterprisePage> {
         subtitle:
             "Este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá melhorar cada vez mais o aplicativo e adicionar novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
       );
+      enterpriseProvider.changeShowedExpeditionConferenteAlert = true;
     }
     await enterpriseProvider.getEnterprises();
   }
