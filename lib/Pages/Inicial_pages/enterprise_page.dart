@@ -20,6 +20,8 @@ class EnterprisePageState extends State<EnterprisePage> {
     if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS &&
         !enterpriseProvider.showedAdjustPriceAlert) {
       ShowAlertDialog.showAlertDialog(
+        contentPadding: const EdgeInsets.all(10),
+        insetPadding: const EdgeInsets.all(10),
         context: context,
         title: "Bem-vindo ao módulo de Alteração de preços!",
         function: () {},
@@ -34,6 +36,8 @@ class EnterprisePageState extends State<EnterprisePage> {
             APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE &&
         !enterpriseProvider.showedExpeditionConferenteAlert) {
       ShowAlertDialog.showAlertDialog(
+        contentPadding: const EdgeInsets.all(10),
+        insetPadding: const EdgeInsets.all(10),
         context: context,
         title: "Bem-vindo ao módulo de Controle de Produtos (Expedição)!",
         function: () {},

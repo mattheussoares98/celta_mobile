@@ -15,11 +15,15 @@ class ShowAlertDialog {
     bool? showConfirmAndCancelMessage = true,
     bool? showCloseAlertDialogButton = false,
     Widget? otherWidgetAction,
+    EdgeInsetsGeometry? contentPadding,
+    EdgeInsets? insetPadding,
   }) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+          insetPadding: insetPadding,
+          contentPadding: contentPadding,
           title: Text(
             title,
             textAlign: TextAlign.center,
