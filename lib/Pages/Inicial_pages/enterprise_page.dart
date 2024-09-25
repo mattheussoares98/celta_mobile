@@ -26,19 +26,19 @@ class EnterprisePageState extends State<EnterprisePage> {
         showCloseAlertDialogButton: true,
         subtitleSize: 17,
         subtitle:
-            "Estamos felizes em anunciar que este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá continuar melhorando o aplicativo e adicionando novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
+            "Este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá melhorar cada vez mais o aplicativo e adicionar novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
       );
     } else if (nextRoute ==
         APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE) {
       ShowAlertDialog.showAlertDialog(
         context: context,
-        title: "Bem-vindo ao módulo de Alteração de preços!",
+        title: "Bem-vindo ao módulo de Controle de Produtos (Expedição)!",
         function: () {},
         showConfirmAndCancelMessage: false,
         showCloseAlertDialogButton: true,
         subtitleSize: 17,
         subtitle:
-            "Estamos felizes em anunciar que este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá continuar melhorando o aplicativo e adicionando novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
+            "Este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá melhorar cada vez mais o aplicativo e adicionar novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
       );
     }
     await enterpriseProvider.getEnterprises();
