@@ -18,11 +18,13 @@ class ExpeditionConferencePendingProductsPage extends StatefulWidget {
 class _ExpeditionConferencePendingProductsPageState
     extends State<ExpeditionConferencePendingProductsPage> {
   final searchProductsController = TextEditingController();
+  final searchProductFocusNode = FocusNode();
 
   @override
   void dispose() {
     super.dispose();
     searchProductsController.dispose();
+    searchProductFocusNode.dispose();
   }
 
   Future<void> searchProduct(
@@ -36,16 +38,14 @@ class _ExpeditionConferencePendingProductsPageState
       value: searchProductsController.text,
       enterpriseCode: enterprise.codigoInternoEmpresa,
       configurationsProvider: ConfigurationsProvider(),
+      expeditionControlCode: expeditionControl.ExpeditionControlCode!,
     );
 
-    if (expeditionConferenceProvider.searchedProducts.isEmpty) {
-      return;
-    } else if (expeditionConferenceProvider.searchedProducts.length == 1) {
-      await expeditionConferenceProvider.addConfirmedProduct(
-        indexOfSearchedProduct: 0,
-        expeditionControlCode: expeditionControl.ExpeditionControlCode!,
-      );
-    } else {
+    if (expeditionConferenceProvider.errorMessageGetProducts.isEmpty) {
+      searchProductsController.clear();
+    }
+
+    if (expeditionConferenceProvider.searchedProducts.length > 1) {
       showDialog(
         context: context,
         builder: (context) => ConfirmProductDialog(
@@ -53,7 +53,6 @@ class _ExpeditionConferencePendingProductsPageState
         ),
       );
     }
-    searchProductsController.clear();
   }
 
   @override
@@ -82,7 +81,7 @@ class _ExpeditionConferencePendingProductsPageState
           useCamera: true,
           autofocus: true,
           showOnlyConfigurationOfSearchProducts: true,
-          searchProductFocusNode: FocusNode(),
+          searchProductFocusNode: searchProductFocusNode,
           searchProductController: searchProductsController,
           isLoading: expeditionConferenceProvider.isLoading,
           onPressSearch: expeditionConferenceProvider.pendingProducts.isEmpty

@@ -130,6 +130,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     required String value,
     required int enterpriseCode,
     required ConfigurationsProvider configurationsProvider,
+    required int expeditionControlCode,
   }) async {
     _isLoading = true;
     _errorMessageGetProducts = "";
@@ -150,6 +151,11 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         ShowSnackbarMessage.showMessage(
           message: _errorMessageGetProducts,
           context: NavigatorKey.navigatorKey.currentState!.context,
+        );
+      } else if (_searchedProducts.length == 1) {
+        await addConfirmedProduct(
+          indexOfSearchedProduct: 0,
+          expeditionControlCode: expeditionControlCode,
         );
       }
     } catch (e) {
@@ -266,9 +272,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       );
       _errorMessageConfirmConference = SoapRequestResponse.errorMessage;
 
-      if (_errorMessageConfirmConference.isNotEmpty) {
-        return;
-      } else {
+      if (_errorMessageConfirmConference.isEmpty) {
         Navigator.of(NavigatorKey.navigatorKey.currentState!.context).pop();
         ShowSnackbarMessage.showMessage(
           message: "Conferência concluída com sucesso",
