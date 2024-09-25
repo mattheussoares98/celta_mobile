@@ -460,7 +460,7 @@ class FirebaseHelper {
         value = await _getQuerySnapshot(
           collection: _clientsCollection,
           fieldToSearch: "enterpriseName",
-          isEqualTo: UserData.userName,
+          isEqualTo: UserData.enterpriseName,
         );
       }
 
