@@ -95,112 +95,115 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
-    return Stack(
-      children: [
-        PopScope(
-          canPop: !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-          onPopInvokedWithResult: (value, __){
-            if (value == true) {
-              researchPricesProvider.updateSelectedResearch(null);
-            }
-          },
-          child: Scaffold(
-            appBar: AppBar(
-              title: FittedBox(
-                child: Text(
-                  researchPricesProvider.selectedResearch == null
-                      ? "Cadastrar pesquisa"
-                      : "Alterar pesquisa",
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Stack(
+        children: [
+          PopScope(
+            canPop: !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
+            onPopInvokedWithResult: (value, __){
+              if (value == true) {
+                researchPricesProvider.updateSelectedResearch(null);
+              }
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: FittedBox(
+                  child: Text(
+                    researchPricesProvider.selectedResearch == null
+                        ? "Cadastrar pesquisa"
+                        : "Alterar pesquisa",
+                  ),
                 ),
               ),
-            ),
-            body: SingleChildScrollView(
-              primary: false,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        autofocus: true,
-                        focusNode: nameFocusNode,
-                        enabled: !researchPricesProvider
-                            .isLoadingAddOrUpdateOfResearch,
-                        controller: researchNameController,
-                        decoration: FormFieldHelper.decoration(
-                          isLoading: researchPricesProvider
+              body: SingleChildScrollView(
+                primary: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          autofocus: true,
+                          focusNode: nameFocusNode,
+                          enabled: !researchPricesProvider
                               .isLoadingAddOrUpdateOfResearch,
-                          context: context,
-                          labelText: 'Nome',
+                          controller: researchNameController,
+                          decoration: FormFieldHelper.decoration(
+                            isLoading: researchPricesProvider
+                                .isLoadingAddOrUpdateOfResearch,
+                            context: context,
+                            labelText: 'Nome',
+                          ),
+                          validator: (value) {
+                            if (value == null) {
+                              return "Digite o nome!";
+                            } else if (value.isEmpty) {
+                              return "Digite o nome!";
+                            } else if (value.length < 3) {
+                              return "Mínimo de 3 caracteres";
+                            }
+                            return null;
+                          },
+                          onFieldSubmitted: (_) async {
+                            FocusScope.of(context).requestFocus(
+                              observationFocusNode,
+                            );
+                          },
+                          style: FormFieldHelper.style(),
                         ),
-                        validator: (value) {
-                          if (value == null) {
-                            return "Digite o nome!";
-                          } else if (value.isEmpty) {
-                            return "Digite o nome!";
-                          } else if (value.length < 3) {
-                            return "Mínimo de 3 caracteres";
-                          }
-                          return null;
-                        },
-                        onFieldSubmitted: (_) async {
-                          FocusScope.of(context).requestFocus(
-                            observationFocusNode,
-                          );
-                        },
-                        style: FormFieldHelper.style(),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        focusNode: observationFocusNode,
-                        enabled: !researchPricesProvider
-                            .isLoadingAddOrUpdateOfResearch,
-                        controller: observationController,
-                        decoration: FormFieldHelper.decoration(
-                          isLoading: researchPricesProvider
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          focusNode: observationFocusNode,
+                          enabled: !researchPricesProvider
                               .isLoadingAddOrUpdateOfResearch,
-                          context: context,
-                          labelText: 'Observação',
+                          controller: observationController,
+                          decoration: FormFieldHelper.decoration(
+                            isLoading: researchPricesProvider
+                                .isLoadingAddOrUpdateOfResearch,
+                            context: context,
+                            labelText: 'Observação',
+                          ),
+                          onFieldSubmitted: (_) async {
+                            FocusScope.of(context).unfocus();
+                          },
+                          style: FormFieldHelper.style(),
                         ),
-                        onFieldSubmitted: (_) async {
-                          FocusScope.of(context).unfocus();
-                        },
-                        style: FormFieldHelper.style(),
-                      ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(200, 40),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(200, 40),
+                          ),
+                          onPressed: researchPricesProvider
+                                  .isLoadingAddOrUpdateOfResearch
+                              ? null
+                              : () async {
+                                  await _insertOrUpdateResearch(
+                                    researchPricesProvider,
+                                  );
+                                },
+                          child: Text(
+                            researchPricesProvider.selectedResearch == null
+                                ? "CADASTRAR"
+                                : "ALTERAR",
+                          ),
                         ),
-                        onPressed: researchPricesProvider
-                                .isLoadingAddOrUpdateOfResearch
-                            ? null
-                            : () async {
-                                await _insertOrUpdateResearch(
-                                  researchPricesProvider,
-                                );
-                              },
-                        child: Text(
-                          researchPricesProvider.selectedResearch == null
-                              ? "CADASTRAR"
-                              : "ALTERAR",
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-        loadingWidget(
-          message: researchPricesProvider.selectedResearch == null
-              ? "Cadastrando pesquisa..."
-              : "Alterando pesquisa...",
-          isLoading: researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-        )
-      ],
+          loadingWidget(
+            message: researchPricesProvider.selectedResearch == null
+                ? "Cadastrando pesquisa..."
+                : "Alterando pesquisa...",
+            isLoading: researchPricesProvider.isLoadingAddOrUpdateOfResearch,
+          )
+        ],
+      ),
     );
   }
 }

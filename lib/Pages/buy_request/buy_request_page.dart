@@ -111,152 +111,155 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: true);
 
-    return PopScope(
-      canPop: !buyRequestProvider.isLoadingInsertBuyRequest,
-      child: Stack(
-        children: [
-          Scaffold(
-            appBar: AppBar(
-              title: Text(
-                appBarTitles.elementAt(_selectedIndex),
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: PopScope(
+        canPop: !buyRequestProvider.isLoadingInsertBuyRequest,
+        child: Stack(
+          children: [
+            Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  appBarTitles.elementAt(_selectedIndex),
+                ),
+                actions: [const AppbarActions()],
               ),
-              actions: [const AppbarActions()],
-            ),
-            body: _pages.elementAt(_selectedIndex),
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              items: <BottomNavigationBarItem>[
-                const BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.info,
-                    size: 35,
+              body: _pages.elementAt(_selectedIndex),
+              bottomNavigationBar: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                items: <BottomNavigationBarItem>[
+                  const BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.info,
+                      size: 35,
+                    ),
+                    label: 'Identificação',
                   ),
-                  label: 'Identificação',
-                ),
-                const BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.business,
-                    size: 35,
+                  const BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.business,
+                      size: 35,
+                    ),
+                    label: 'Empresas',
                   ),
-                  label: 'Empresas',
-                ),
-                BottomNavigationBarItem(
-                  label: 'Produtos',
-                  icon: Stack(
-                    children: [
-                      const Icon(
-                        Icons.shopping_cart,
-                        size: 35,
-                      ),
-                      if (buyRequestProvider.productsInCartCount > 0)
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.red,
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: FittedBox(
-                                child: Text(
-                                  buyRequestProvider.productsInCartCount
-                                      .toString(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                  BottomNavigationBarItem(
+                    label: 'Produtos',
+                    icon: Stack(
+                      children: [
+                        const Icon(
+                          Icons.shopping_cart,
+                          size: 35,
+                        ),
+                        if (buyRequestProvider.productsInCartCount > 0)
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.red,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: FittedBox(
+                                  child: Text(
+                                    buyRequestProvider.productsInCartCount
+                                        .toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
+                              maxRadius: 9,
                             ),
-                            maxRadius: 9,
                           ),
-                        ),
-                    ],
-                  ),
-                ),
-                const BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.check_box_outlined,
-                    size: 35,
-                  ),
-                  label: 'Confirmação',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              selectedItemColor: Theme.of(context).colorScheme.primary,
-              onTap: (index) {
-                _onItemTapped(
-                  index: index,
-                  buyRequestProvider: buyRequestProvider,
-                );
-              },
-            ),
-            floatingActionButton: _selectedIndex != 3
-                ? null
-                : Padding(
-                    padding: const EdgeInsets.only(bottom: 50.0),
-                    child: FloatingActionButton(
-                      tooltip: "Limpar todos os dados do pedido",
-                      onPressed: (buyRequestProvider
-                                          .observationsController.text ==
-                                      "" &&
-                                  buyRequestProvider.selectedBuyer == null &&
-                                  buyRequestProvider.selectedRequestModel ==
-                                      null &&
-                                  buyRequestProvider.selectedSupplier ==
-                                      null) ||
-                              buyRequestProvider.isLoadingInsertBuyRequest
-                          ? null
-                          : () {
-                              ShowAlertDialog.show(
-                                context: context,
-                                title: "Apagar todos dados",
-                                subtitle:
-                                    "Deseja realmente apagar todos dados do pedido de compras?",
-                                function: () {
-                                  buyRequestProvider.clearAllData();
-                                },
-                              );
-                            },
-                      child: const Icon(Icons.delete, color: Colors.white),
-                      backgroundColor: (buyRequestProvider
-                                          .observationsController.text ==
-                                      "" &&
-                                  buyRequestProvider.selectedBuyer == null &&
-                                  buyRequestProvider.selectedRequestModel ==
-                                      null &&
-                                  buyRequestProvider.selectedSupplier ==
-                                      null) ||
-                              buyRequestProvider.isLoadingInsertBuyRequest
-                          ? Colors.grey.withOpacity(0.75)
-                          : Colors.red.withOpacity(0.75),
+                      ],
                     ),
                   ),
-          ),
-          loadingWidget(
-            message: "Consultando compradores...",
-            isLoading: buyRequestProvider.isLoadingBuyer,
-          ),
-          loadingWidget(
-            message: "Consultando modelos de pedido...",
-            isLoading: buyRequestProvider.isLoadingRequestsType,
-          ),
-          loadingWidget(
-            message: "Consultando fornecedores...",
-            isLoading: buyRequestProvider.isLoadingSupplier,
-          ),
-          loadingWidget(
-            message: "Consultando empresas...",
-            isLoading: buyRequestProvider.isLoadingEnterprises,
-          ),
-          loadingWidget(
-            message: "Consultando produtos...",
-            isLoading: buyRequestProvider.isLoadingProducts,
-          ),
-          loadingWidget(
-            message: "Salvando pedido...",
-            isLoading: buyRequestProvider.isLoadingInsertBuyRequest,
-          ),
-        ],
+                  const BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.check_box_outlined,
+                      size: 35,
+                    ),
+                    label: 'Confirmação',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Theme.of(context).colorScheme.primary,
+                onTap: (index) {
+                  _onItemTapped(
+                    index: index,
+                    buyRequestProvider: buyRequestProvider,
+                  );
+                },
+              ),
+              floatingActionButton: _selectedIndex != 3
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsets.only(bottom: 50.0),
+                      child: FloatingActionButton(
+                        tooltip: "Limpar todos os dados do pedido",
+                        onPressed: (buyRequestProvider
+                                            .observationsController.text ==
+                                        "" &&
+                                    buyRequestProvider.selectedBuyer == null &&
+                                    buyRequestProvider.selectedRequestModel ==
+                                        null &&
+                                    buyRequestProvider.selectedSupplier ==
+                                        null) ||
+                                buyRequestProvider.isLoadingInsertBuyRequest
+                            ? null
+                            : () {
+                                ShowAlertDialog.show(
+                                  context: context,
+                                  title: "Apagar todos dados",
+                                  subtitle:
+                                      "Deseja realmente apagar todos dados do pedido de compras?",
+                                  function: () {
+                                    buyRequestProvider.clearAllData();
+                                  },
+                                );
+                              },
+                        child: const Icon(Icons.delete, color: Colors.white),
+                        backgroundColor: (buyRequestProvider
+                                            .observationsController.text ==
+                                        "" &&
+                                    buyRequestProvider.selectedBuyer == null &&
+                                    buyRequestProvider.selectedRequestModel ==
+                                        null &&
+                                    buyRequestProvider.selectedSupplier ==
+                                        null) ||
+                                buyRequestProvider.isLoadingInsertBuyRequest
+                            ? Colors.grey.withOpacity(0.75)
+                            : Colors.red.withOpacity(0.75),
+                      ),
+                    ),
+            ),
+            loadingWidget(
+              message: "Consultando compradores...",
+              isLoading: buyRequestProvider.isLoadingBuyer,
+            ),
+            loadingWidget(
+              message: "Consultando modelos de pedido...",
+              isLoading: buyRequestProvider.isLoadingRequestsType,
+            ),
+            loadingWidget(
+              message: "Consultando fornecedores...",
+              isLoading: buyRequestProvider.isLoadingSupplier,
+            ),
+            loadingWidget(
+              message: "Consultando empresas...",
+              isLoading: buyRequestProvider.isLoadingEnterprises,
+            ),
+            loadingWidget(
+              message: "Consultando produtos...",
+              isLoading: buyRequestProvider.isLoadingProducts,
+            ),
+            loadingWidget(
+              message: "Salvando pedido...",
+              isLoading: buyRequestProvider.isLoadingInsertBuyRequest,
+            ),
+          ],
+        ),
       ),
     );
   }

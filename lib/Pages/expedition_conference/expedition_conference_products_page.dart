@@ -69,50 +69,53 @@ class _ExpeditionConferenceProductsPageState
     ExpeditionConferenceProvider expeditionConferenceProvider =
         Provider.of(context);
 
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: FittedBox(
-              child: Text(
-                appBarTitles[_selectedIndex],
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: FittedBox(
+                child: Text(
+                  appBarTitles[_selectedIndex],
+                ),
               ),
             ),
-          ),
-          body: PageView(
-            controller: _pageController,
-            onPageChanged: _onPageChanged,
-            children: _pages,
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            type: BottomNavigationBarType.fixed,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: BottomNavigationIcon(
-                  icon: Icons.error,
-                  quantity: expeditionConferenceProvider.pendingProducts.length,
+            body: PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              children: _pages,
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              type: BottomNavigationBarType.fixed,
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: BottomNavigationIcon(
+                    icon: Icons.error,
+                    quantity: expeditionConferenceProvider.pendingProducts.length,
+                  ),
+                  label: 'Produtos pendentes',
                 ),
-                label: 'Produtos pendentes',
-              ),
-              BottomNavigationBarItem(
-                icon: BottomNavigationIcon(
-                  icon: Icons.verified_rounded,
-                  quantity: expeditionConferenceProvider.checkedProducts.length,
+                BottomNavigationBarItem(
+                  icon: BottomNavigationIcon(
+                    icon: Icons.verified_rounded,
+                    quantity: expeditionConferenceProvider.checkedProducts.length,
+                  ),
+                  label: 'Produtos conferidos',
                 ),
-                label: 'Produtos conferidos',
-              ),
-            ],
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Colors.grey,
-            onTap: _onPageChanged,
+              ],
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              unselectedItemColor: Colors.grey,
+              onTap: _onPageChanged,
+            ),
           ),
-        ),
-        loadingWidget(
-          message: "Aguarde...",
-          isLoading: expeditionConferenceProvider.isLoading,
-        ),
-      ],
+          loadingWidget(
+            message: "Aguarde...",
+            isLoading: expeditionConferenceProvider.isLoading,
+          ),
+        ],
+      ),
     );
   }
 }

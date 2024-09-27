@@ -44,169 +44,172 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
-    return Stack(
-      children: [
-        PopScope(
-          canPop: !transferBetweenStocksProvider.isLoadingAdjustStock &&
-              !transferBetweenStocksProvider.isLoadingProducts &&
-              !transferBetweenStocksProvider
-                  .isLoadingTypeStockAndJustifications,
-          onPopInvokedWithResult: (value, __){
-            if (value == true) {
-              transferBetweenStocksProvider
-                  .clearProductsJustificationsStockTypesAndJsonAdjustStock();
-            }
-          },
-          child: Scaffold(
-            resizeToAvoidBottomInset: kIsWeb ? false : true,
-            appBar: AppBar(
-              title: const FittedBox(
-                child: Text(
-                  'TRANSFERÊNCIA ENTRE ESTOQUES',
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Stack(
+        children: [
+          PopScope(
+            canPop: !transferBetweenStocksProvider.isLoadingAdjustStock &&
+                !transferBetweenStocksProvider.isLoadingProducts &&
+                !transferBetweenStocksProvider
+                    .isLoadingTypeStockAndJustifications,
+            onPopInvokedWithResult: (value, __){
+              if (value == true) {
+                transferBetweenStocksProvider
+                    .clearProductsJustificationsStockTypesAndJsonAdjustStock();
+              }
+            },
+            child: Scaffold(
+              resizeToAvoidBottomInset: kIsWeb ? false : true,
+              appBar: AppBar(
+                title: const FittedBox(
+                  child: Text(
+                    'TRANSFERÊNCIA ENTRE ESTOQUES',
+                  ),
                 ),
               ),
-            ),
-            body: SingleChildScrollView(
-              primary: false,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Column(
-                    children: [
-                      SearchWidget(
-                        searchProductFocusNode: transferBetweenStocksProvider
-                            .consultProductFocusNode,
-                        isLoading: transferBetweenStocksProvider
-                                .isLoadingProducts ||
-                            transferBetweenStocksProvider.isLoadingAdjustStock,
-                        onPressSearch: () async {
+              body: SingleChildScrollView(
+                primary: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Column(
+                      children: [
+                        SearchWidget(
+                          searchProductFocusNode: transferBetweenStocksProvider
+                              .consultProductFocusNode,
+                          isLoading: transferBetweenStocksProvider
+                                  .isLoadingProducts ||
+                              transferBetweenStocksProvider.isLoadingAdjustStock,
+                          onPressSearch: () async {
+                            await transferBetweenStocksProvider.getProducts(
+                              enterpriseCode: enterprise.codigoInternoEmpresa,
+                              controllerText: _consultProductController.text,
+                              context: context,
+                              configurationsProvider: configurationsProvider,
+                            );
+      
+                            if (transferBetweenStocksProvider.productsCount > 0) {
+                              _consultProductController.clear();
+                            }
+                          },
+                          searchProductController: _consultProductController,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: JustificationsAndStocksDropwdownWidget(
+                                dropDownFormKey: _dropDownFormKey,
+                                keyJustifications: _keyJustifications,
+                                keyOriginStockType: _keyOriginStockType,
+                                keyDestinyStockType: _keyDestinyStockType,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.refresh,
+                                size: 30,
+                                color: transferBetweenStocksProvider
+                                            .isLoadingTypeStockAndJustifications ||
+                                        transferBetweenStocksProvider
+                                            .isLoadingAdjustStock ||
+                                        transferBetweenStocksProvider
+                                            .isLoadingProducts
+                                    ? Colors.grey
+                                    : Theme.of(context).colorScheme.primary,
+                              ),
+                              tooltip: "Consultar justificativas e estoques",
+                              onPressed: transferBetweenStocksProvider
+                                          .isLoadingTypeStockAndJustifications ||
+                                      transferBetweenStocksProvider
+                                          .isLoadingAdjustStock ||
+                                      transferBetweenStocksProvider
+                                          .isLoadingProducts
+                                  ? null
+                                  : () async {
+                                      await transferBetweenStocksProvider
+                                          .getStockTypeAndJustifications(context);
+      
+                                      Future.delayed(
+                                          const Duration(milliseconds: 500), () {
+                                        if (_keyJustifications.currentState !=
+                                                null &&
+                                            _keyOriginStockType.currentState !=
+                                                null &&
+                                            _keyDestinyStockType.currentState !=
+                                                null) {
+                                          _keyJustifications.currentState!
+                                              .reset();
+                                          _keyOriginStockType.currentState!
+                                              .reset();
+                                          _keyDestinyStockType.currentState!
+                                              .reset();
+                                        }
+                                      });
+                                    },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    if (transferBetweenStocksProvider.errorMessageGetProducts !=
+                        "")
+                      ErrorMessage(
+                        errorMessage:
+                            transferBetweenStocksProvider.errorMessageGetProducts,
+                      ),
+                    if (!transferBetweenStocksProvider.isLoadingProducts)
+                      ProductsItems(
+                        internalEnterpriseCode:
+                            enterprise.codigoInternoEmpresa,
+                        consultedProductController: _consultedProductController,
+                        dropDownFormKey: _dropDownFormKey,
+                        insertQuantityFormKey: _insertQuantityFormKey,
+                        getProductsWithCamera: () async {
+                          FocusScope.of(context).unfocus();
+                          _consultProductController.clear();
+      
+                          _consultProductController.text =
+                              await ScanBarCode.scanBarcode(context);
+      
+                          if (_consultProductController.text == "") {
+                            return;
+                          }
+      
                           await transferBetweenStocksProvider.getProducts(
                             enterpriseCode: enterprise.codigoInternoEmpresa,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,
                           );
-
+      
                           if (transferBetweenStocksProvider.productsCount > 0) {
                             _consultProductController.clear();
                           }
                         },
-                        searchProductController: _consultProductController,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: JustificationsAndStocksDropwdownWidget(
-                              dropDownFormKey: _dropDownFormKey,
-                              keyJustifications: _keyJustifications,
-                              keyOriginStockType: _keyOriginStockType,
-                              keyDestinyStockType: _keyDestinyStockType,
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.refresh,
-                              size: 30,
-                              color: transferBetweenStocksProvider
-                                          .isLoadingTypeStockAndJustifications ||
-                                      transferBetweenStocksProvider
-                                          .isLoadingAdjustStock ||
-                                      transferBetweenStocksProvider
-                                          .isLoadingProducts
-                                  ? Colors.grey
-                                  : Theme.of(context).colorScheme.primary,
-                            ),
-                            tooltip: "Consultar justificativas e estoques",
-                            onPressed: transferBetweenStocksProvider
-                                        .isLoadingTypeStockAndJustifications ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingAdjustStock ||
-                                    transferBetweenStocksProvider
-                                        .isLoadingProducts
-                                ? null
-                                : () async {
-                                    await transferBetweenStocksProvider
-                                        .getStockTypeAndJustifications(context);
-
-                                    Future.delayed(
-                                        const Duration(milliseconds: 500), () {
-                                      if (_keyJustifications.currentState !=
-                                              null &&
-                                          _keyOriginStockType.currentState !=
-                                              null &&
-                                          _keyDestinyStockType.currentState !=
-                                              null) {
-                                        _keyJustifications.currentState!
-                                            .reset();
-                                        _keyOriginStockType.currentState!
-                                            .reset();
-                                        _keyDestinyStockType.currentState!
-                                            .reset();
-                                      }
-                                    });
-                                  },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  if (transferBetweenStocksProvider.errorMessageGetProducts !=
-                      "")
-                    ErrorMessage(
-                      errorMessage:
-                          transferBetweenStocksProvider.errorMessageGetProducts,
-                    ),
-                  if (!transferBetweenStocksProvider.isLoadingProducts)
-                    ProductsItems(
-                      internalEnterpriseCode:
-                          enterprise.codigoInternoEmpresa,
-                      consultedProductController: _consultedProductController,
-                      dropDownFormKey: _dropDownFormKey,
-                      insertQuantityFormKey: _insertQuantityFormKey,
-                      getProductsWithCamera: () async {
-                        FocusScope.of(context).unfocus();
-                        _consultProductController.clear();
-
-                        _consultProductController.text =
-                            await ScanBarCode.scanBarcode(context);
-
-                        if (_consultProductController.text == "") {
-                          return;
-                        }
-
-                        await transferBetweenStocksProvider.getProducts(
-                          enterpriseCode: enterprise.codigoInternoEmpresa,
-                          controllerText: _consultProductController.text,
-                          context: context,
-                          configurationsProvider: configurationsProvider,
-                        );
-
-                        if (transferBetweenStocksProvider.productsCount > 0) {
-                          _consultProductController.clear();
-                        }
-                      },
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        loadingWidget(
-          message: 'Consultando produtos...',
-          isLoading: transferBetweenStocksProvider.isLoadingProducts,
-        ),
-        loadingWidget(
-          message: "Confirmando ajuste...",
-          isLoading: transferBetweenStocksProvider.isLoadingAdjustStock,
-        ),
-        loadingWidget(
-          message: "Consultando estoques e justificativas...",
-          isLoading:
-              transferBetweenStocksProvider.isLoadingTypeStockAndJustifications,
-        ),
-      ],
+          loadingWidget(
+            message: 'Consultando produtos...',
+            isLoading: transferBetweenStocksProvider.isLoadingProducts,
+          ),
+          loadingWidget(
+            message: "Confirmando ajuste...",
+            isLoading: transferBetweenStocksProvider.isLoadingAdjustStock,
+          ),
+          loadingWidget(
+            message: "Consultando estoques e justificativas...",
+            isLoading:
+                transferBetweenStocksProvider.isLoadingTypeStockAndJustifications,
+          ),
+        ],
+      ),
     );
   }
 }
