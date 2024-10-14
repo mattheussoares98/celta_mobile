@@ -28,15 +28,12 @@ class _WebLoginPageState extends State<WebLoginPage> {
     setState(() {
       isLoading = true;
     });
-    final userCredential = await FirebaseHelper.signIn(
+    
+    await FirebaseHelper.signIn(
       email: emailController.text,
       password: passwordController.text,
     );
 
-    if (userCredential != null) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(APPROUTES.WEB_HOME, (route) => false);
-    }
     setState(() {
       isLoading = false;
     });
@@ -64,11 +61,13 @@ class _WebLoginPageState extends State<WebLoginPage> {
               isLoading: false,
             );
           } else if (snapshot.hasData) {
-            Future.delayed(Duration.zero, () {
-              if (mounted) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    APPROUTES.WEB_HOME, (route) => false);
-              }
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              Future.delayed(Duration.zero, () {
+                if (mounted) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      APPROUTES.WEB_HOME, (route) => false);
+                }
+              });
             });
           }
 

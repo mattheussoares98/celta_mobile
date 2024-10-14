@@ -514,6 +514,15 @@ class WebProvider with ChangeNotifier {
     try {
       final client = _enterprises[_indexOfSelectedEnterprise];
 
+      if (client.id == null) {
+        ShowSnackbarMessage.show(
+          message:
+              "Esse cliente acabou de ser cadastrado e por isso está sem ID. Consulte os clientes novamente para editá-lo",
+          context: NavigatorKey.navigatorKey.currentState!.context,
+        );
+        return;
+      }
+
       final newModules = client.modules?.map((e) => e).toList();
       newModules![index] = ModuleModel(
         name: newModules[index].name,
