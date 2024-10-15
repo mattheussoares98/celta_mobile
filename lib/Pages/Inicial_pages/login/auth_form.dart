@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../api/api.dart';
+import '../../../pages/Inicial_pages/inicial_pages.dart';
 import '../../../providers/providers.dart';
-import '../../../components/components.dart';
-import '../../../utils/utils.dart';
 
 class AuthForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -28,10 +28,14 @@ class _AuthFormState extends State<AuthForm>
   final _passwordFocusNode = FocusNode();
   final _urlFocusNode = FocusNode();
 
-  Future<void> _submit({required LoginProvider loginProvider}) async {
-    bool isValid = widget.formKey.currentState!.validate();
+  bool allControllersAreFilled() {
+    return userController.text.isNotEmpty &&
+        enterpriseNameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty;
+  }
 
-    if (!isValid) {
+  Future<void> _doLogin(LoginProvider loginProvider) async {
+    if (widget.formKey.currentState!.validate() != true) {
       return;
     }
 
@@ -93,8 +97,6 @@ class _AuthFormState extends State<AuthForm>
     super.dispose();
   }
 
-  bool _passwordVisible = false;
-
   @override
   Widget build(BuildContext context) {
     LoginProvider loginProvider = Provider.of(context, listen: true);
@@ -124,145 +126,44 @@ class _AuthFormState extends State<AuthForm>
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    width: _animationWidth!.value,
-                    child: TextFormField(
-                      enabled: loginProvider.isLoading ? false : true,
-                      controller: userController,
-                      focusNode: _userFocusNode,
-                      onFieldSubmitted: (_) => FocusScope.of(context)
-                          .requestFocus(_passwordFocusNode),
-                      validator: (_name) {
-                        _name = userController.text;
-                        if (userController.text.trim().isEmpty) {
-                          return 'Preencha o nome';
-                        }
-
-                        userController.text = userController.text.trimRight();
-                        //fiz isso porque quando termina com espaço, a API retorna que a senha está
-                        //inválida ao invés do usuário inválido e ninguém cadastra usuário com
-                        //espaço no final do nome
-
-                        return null;
-                      },
-                      style: FormFieldStyle.style(),
-                      decoration: FormFieldDecoration.decoration(
-                        isLoading: loginProvider.isLoading,
-                        context: context,
-                        labelText: "Usuário",
-                      ),
-                    ),
+                  NameField(
+                    animationWidth: _animationWidth!,
+                    userController: userController,
+                    userFocusNode: _userFocusNode,
+                    passwordFocusNode: _passwordFocusNode,
+                    allControllersAreFilled: allControllersAreFilled(),
+                    doLogin: () async {
+                      await _doLogin(loginProvider);
+                    },
                   ),
                   const SizedBox(height: 10),
-                  SizedBox(
-                    width: _animationWidth!.value,
-                    child: TextFormField(
-                      controller: passwordController,
-                      enabled: loginProvider.isLoading ? false : true,
-                      focusNode: _passwordFocusNode,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).requestFocus(_urlFocusNode),
-                      style: FormFieldStyle.style(),
-                      validator: (_name) {
-                        _name = passwordController.text;
-                        if (passwordController.text.trim().isEmpty) {
-                          return 'Preencha a senha';
-                        }
-                        return null;
-                      },
-                      decoration: FormFieldDecoration.decoration(
-                        isLoading: loginProvider.isLoading,
-                        context: context,
-                        labelText: "Senha",
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                          icon: _passwordVisible
-                              ? Icon(
-                                  Icons.remove_red_eye,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )
-                              : const Icon(
-                                  Icons.visibility_off,
-                                ),
-                        ),
-                      ),
-                      obscureText: _passwordVisible ? false : true,
-                    ),
+                  PasswordField(
+                    animationWidth: _animationWidth!,
+                    passwordController: passwordController,
+                    passwordFocusNode: _passwordFocusNode,
+                    urlFocusNode: _urlFocusNode,
+                    allControllersAreFilled: allControllersAreFilled(),
+                    doLogin: () async {
+                      await _doLogin(loginProvider);
+                    },
                   ),
                   const SizedBox(height: 10),
-                  SizedBox(
-                    width: _animationWidth!.value,
-                    child: TextFormField(
-                      onChanged: (value) {
-                        loginProvider.changedEnterpriseNameOrUrlCcs = true;
-                      },
-                      enabled: loginProvider.isLoading ? false : true,
-                      controller: enterpriseNameController,
-                      onFieldSubmitted: (_) async {
-                        await _submit(loginProvider: loginProvider);
-                      },
-                      focusNode: _urlFocusNode,
-                      style: FormFieldStyle.style(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Digite o nome da empresa!';
-                        } else if (ConvertString.isUrl(value)) {
-                          return 'Login pelo CCS desabilitado!';
-                        }
-
-                        return null;
-                      },
-                      decoration: FormFieldDecoration.decoration(
-                        isLoading: loginProvider.isLoading,
-                        context: context,
-                        labelText: "Nome da empresa",
-                      ),
-                    ),
+                  EnterpriseField(
+                    enterpriseNameController: enterpriseNameController,
+                    doLogin: () async {
+                      await _doLogin(loginProvider);
+                    },
+                    animationWidth: _animationWidth!,
+                    urlFocusNode: _urlFocusNode,
                   ),
                   const SizedBox(height: 20),
-                  AnimatedBuilder(
-                    animation: _animationController!,
-                    builder: (context, widget) => ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(_animationWidth!.value, 60),
-                        backgroundColor: loginProvider.isLoading
-                            ? Colors.grey
-                            : Theme.of(context).colorScheme.primary,
-                        maximumSize: Size(_animationWidth!.value, 60),
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(_animationBorder!.value),
-                        ),
-                      ),
-                      onPressed: loginProvider.isLoading
-                          ? null
-                          : () async {
-                              await _submit(
-                                loginProvider: loginProvider,
-                              );
-                            },
-                      child: loginProvider.isLoading
-                          ? const CircularProgressIndicator(
-                              strokeWidth: 4,
-                              color: Colors.grey,
-                            )
-                          : const FittedBox(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Text(
-                                  'Login',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                    ),
+                  LoginButton(
+                    animationController: _animationController!,
+                    animationWidth: _animationWidth!,
+                    animationBorder: _animationBorder!,
+                    doLogin: () async {
+                      await _doLogin(loginProvider);
+                    },
                   ),
                 ],
               );
