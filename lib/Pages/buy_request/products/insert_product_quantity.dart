@@ -19,8 +19,7 @@ class InsertProductQuantity extends StatefulWidget {
       _BuyRequestInsertProductQuantity();
 }
 
-class _BuyRequestInsertProductQuantity
-    extends State<InsertProductQuantity> {
+class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
   bool _isValid() {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     buyRequestProvider.insertQuantityFormKey.currentState!.validate();
@@ -92,9 +91,13 @@ class _BuyRequestInsertProductQuantity
                       value: value,
                     ),
                     autovalidateMode: AutovalidateMode.always,
-                    validator:
-                        FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 2),
-                    decoration: FormFieldHelper.decoration(
+                    validator: (value) {
+                      return FormFieldValidations.number(
+                        value: value,
+                        maxDecimalPlaces: 2,
+                      );
+                    },
+                    decoration: FormFieldDecoration.decoration(
                       isLoading: buyRequestProvider.isLoadingProducts,
                       context: context,
                       labelText: 'Quantidade',
@@ -115,7 +118,7 @@ class _BuyRequestInsertProductQuantity
                         );
                       }
                     },
-                    style: FormFieldHelper.style(),
+                    style: FormFieldStyle.style(),
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -133,9 +136,11 @@ class _BuyRequestInsertProductQuantity
                       textController: buyRequestProvider.priceController,
                       value: value,
                     ),
-                    validator:
-                        FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 2),
-                    decoration: FormFieldHelper.decoration(
+                    validator: (value) => FormFieldValidations.number(
+                      value: value,
+                      maxDecimalPlaces: 2,
+                    ),
+                    decoration: FormFieldDecoration.decoration(
                       isLoading: false,
                       context: context,
                       labelText: 'Preço',
@@ -148,7 +153,7 @@ class _BuyRequestInsertProductQuantity
                         _updateProductInCart(widget.product);
                       }
                     },
-                    style: FormFieldHelper.style(),
+                    style: FormFieldStyle.style(),
                     keyboardType: TextInputType.number,
                   ),
                 ),

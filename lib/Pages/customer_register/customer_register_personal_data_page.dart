@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:cpf_cnpj_validator/cnpj_validator.dart';
-import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/address/address.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
 
@@ -82,7 +79,7 @@ class _CustomerRegisterPersonalDataPageState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            AddressFormField(
+            FormFieldWidget(
               enabled: true,
               focusNode: nameFocusNode,
               onChanged: (_) {
@@ -102,27 +99,11 @@ class _CustomerRegisterPersonalDataPageState
                 ),
               ),
               labelText: "Nome",
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'O nome é obrigatório';
-                } else {
-                  List<String> nameParts = value.split(' ');
-
-                  if (nameParts.length < 2) {
-                    return 'Informe o nome e o sobrenome';
-                  }
-
-                  if (nameParts[0].length < 3 || nameParts[1].length < 3) {
-                    return 'O nome e o sobrenome devem ter pelo menos 3 letras';
-                  }
-
-                  return null;
-                }
-              },
+              validator: FormFieldValidations.nameAndLastName,
               textEditingController: customerRegisterProvider.nameController,
               limitOfCaracters: 50,
             ),
-            AddressFormField(
+            FormFieldWidget(
               focusNode: cpfCnpjFocusNode,
               keyboardType: TextInputType.number,
               enabled: true,
@@ -144,41 +125,11 @@ class _CustomerRegisterPersonalDataPageState
                 FocusScope.of(context).requestFocus(reducedNameFocusNode);
               },
               labelText: "CPF/CNPJ",
-              validator: (String? cpfCnpj) {
-                if (cpfCnpj == null || cpfCnpj.isEmpty) {
-                  return "Informe o CPF ou CNPJ";
-                } else if (cpfCnpj.contains(" ") ||
-                    cpfCnpj.contains("\.") ||
-                    cpfCnpj.contains(",") ||
-                    cpfCnpj.contains("-")) {
-                  customerRegisterProvider.cpfCnpjController.text =
-                      customerRegisterProvider.cpfCnpjController.text
-                          .replaceAll(RegExp(r' '), '');
-                  return "Digite somente números!";
-                } else if (cpfCnpj.length == 11 &&
-                    CPFValidator.isValid(cpfCnpj)) {
-                  return null;
-                } else if (cpfCnpj.length == 11 &&
-                    !CPFValidator.isValid(cpfCnpj)) {
-                  return "CPF inválido!";
-                } else if (cpfCnpj.length == 14 &&
-                    CNPJValidator.isValid(cpfCnpj)) {
-                  return null;
-                } else if (cpfCnpj.length == 14 &&
-                    !CNPJValidator.isValid(cpfCnpj)) {
-                  return "CNPJ inválido!";
-                } else if (cpfCnpj.length < 11) {
-                  return "Quantidade de caracteres inválido";
-                } else if (cpfCnpj.length > 11 && cpfCnpj.length < 14) {
-                  return "Quantidade de caracteres inválido";
-                }
-
-                return "CPF/CNPJ inválido!";
-              },
+              validator: FormFieldValidations.cpfOrCnpj,
               textEditingController: customerRegisterProvider.cpfCnpjController,
               limitOfCaracters: 14,
             ),
-            AddressFormField(
+            FormFieldWidget(
               enabled: true,
               focusNode: reducedNameFocusNode,
               onChanged: (_) {
@@ -202,7 +153,7 @@ class _CustomerRegisterPersonalDataPageState
                   customerRegisterProvider.reducedNameController,
               limitOfCaracters: 25,
             ),
-            AddressFormField(
+            FormFieldWidget(
               keyboardType: TextInputType.number,
               enabled: true,
               focusNode: dateOfBirthFocusNode,

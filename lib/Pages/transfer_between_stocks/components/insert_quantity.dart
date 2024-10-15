@@ -126,8 +126,10 @@ class _InsertQuantityState
                         );
                       }
                     },
-                    validator: FormFieldHelper.validatorOfNumber(),
-                    decoration: FormFieldHelper.decoration(
+                    validator: (value) {
+          return FormFieldValidations.number(value: value);
+        },
+                    decoration: FormFieldDecoration.decoration(
                       isLoading: transferBetweenStocksProvider
                               .isLoadingProducts ||
                           transferBetweenStocksProvider
@@ -136,7 +138,7 @@ class _InsertQuantityState
                       context: context,
                       labelText: "Quantidade",
                     ),
-                    style: FormFieldHelper.style(),
+                    style: FormFieldStyle.style(),
                     keyboardType: TextInputType.number,
                   ),
                 ),

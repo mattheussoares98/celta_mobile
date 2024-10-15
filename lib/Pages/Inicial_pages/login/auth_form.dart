@@ -150,8 +150,8 @@ class _AuthFormState extends State<AuthForm>
 
                         return null;
                       },
-                      style: FormFieldHelper.style(),
-                      decoration: FormFieldHelper.decoration(
+                      style: FormFieldStyle.style(),
+                      decoration: FormFieldDecoration.decoration(
                         isLoading: loginProvider.isLoading,
                         context: context,
                         labelText: "Usuário",
@@ -167,7 +167,7 @@ class _AuthFormState extends State<AuthForm>
                       focusNode: _passwordFocusNode,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).requestFocus(_urlFocusNode),
-                      style: FormFieldHelper.style(),
+                      style: FormFieldStyle.style(),
                       validator: (_name) {
                         _name = loginProvider.passwordController.text;
                         if (loginProvider.passwordController.text
@@ -177,7 +177,7 @@ class _AuthFormState extends State<AuthForm>
                         }
                         return null;
                       },
-                      decoration: FormFieldHelper.decoration(
+                      decoration: FormFieldDecoration.decoration(
                         isLoading: loginProvider.isLoading,
                         context: context,
                         labelText: "Senha",
@@ -213,7 +213,7 @@ class _AuthFormState extends State<AuthForm>
                       onFieldSubmitted: (_) =>
                           _submit(loginProvider: loginProvider),
                       focusNode: _urlFocusNode,
-                      style: FormFieldHelper.style(),
+                      style: FormFieldStyle.style(),
                       validator: (_url) {
                         _url =
                             loginProvider.enterpriseNameOrUrlCCSController.text;
@@ -232,7 +232,7 @@ class _AuthFormState extends State<AuthForm>
                         // }
                         return null;
                       },
-                      decoration: FormFieldHelper.decoration(
+                      decoration: FormFieldDecoration.decoration(
                         isLoading: loginProvider.isLoading,
                         context: context,
                         labelText: "Nome da empresa ou CCS",

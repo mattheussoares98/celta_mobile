@@ -130,7 +130,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                           enabled: !researchPricesProvider
                               .isLoadingAddOrUpdateConcurrents,
                           controller: _nameController,
-                          decoration: FormFieldHelper.decoration(
+                          decoration: FormFieldDecoration.decoration(
                             isLoading: researchPricesProvider
                                 .isLoadingAddOrUpdateConcurrents,
                             context: context,
@@ -151,7 +151,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                               _observationFocusNode,
                             );
                           },
-                          style: FormFieldHelper.style(),
+                          style: FormFieldStyle.style(),
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
@@ -159,7 +159,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                           enabled: !researchPricesProvider
                               .isLoadingAddOrUpdateConcurrents,
                           controller: _observationController,
-                          decoration: FormFieldHelper.decoration(
+                          decoration: FormFieldDecoration.decoration(
                             isLoading: researchPricesProvider
                                 .isLoadingAddOrUpdateConcurrents,
                             context: context,
@@ -168,7 +168,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                           onFieldSubmitted: (_) async {
                             FocusScope.of(context).requestFocus();
                           },
-                          style: FormFieldHelper.style(),
+                          style: FormFieldStyle.style(),
                         ),
                         const SizedBox(height: 15),
                         Column(

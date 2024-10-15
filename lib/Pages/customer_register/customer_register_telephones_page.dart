@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/address/address.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
 import 'customer_register.dart';
@@ -71,7 +70,7 @@ class _CustomerRegisterTelephonePageState
               children: [
                 Expanded(
                   flex: 3,
-                  child: AddressFormField(
+                  child: FormFieldWidget(
                     keyboardType: TextInputType.number,
                     enabled: true,
                     focusNode: dddFocusNode,
@@ -98,7 +97,7 @@ class _CustomerRegisterTelephonePageState
                 ),
                 Expanded(
                   flex: 10,
-                  child: AddressFormField(
+                  child: FormFieldWidget(
                     keyboardType: TextInputType.number,
                     enabled: true,
                     focusNode: telephoneFocusNode,

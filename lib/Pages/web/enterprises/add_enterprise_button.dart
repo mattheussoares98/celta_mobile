@@ -85,7 +85,7 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
                                         .requestFocus(_urlCcsFocusNode);
                                   }
                                 },
-                                decoration: FormFieldHelper.decoration(
+                                decoration: FormFieldDecoration.decoration(
                                   isLoading: webProvider.isLoading,
                                   context: context,
                                   hintText: "Nome da empresa",
@@ -107,7 +107,7 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
                                     addEnterprise(webProvider);
                                   }
                                 },
-                                decoration: FormFieldHelper.decoration(
+                                decoration: FormFieldDecoration.decoration(
                                   isLoading: webProvider.isLoading,
                                   context: context,
                                   hintText: "http://127.0.0.1:9092/ccs",

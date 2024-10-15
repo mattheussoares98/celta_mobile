@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class FormFieldHelper {
+class FormFieldDecoration {
+  FormFieldDecoration._();
+
   static InputDecoration decoration({
     required bool isLoading,
     required BuildContext context,
@@ -77,57 +79,5 @@ class FormFieldHelper {
       suffixIcon: suffixIcon,
       hintText: hintText,
     );
-  }
-
-  static TextStyle style({double? fontSize}) {
-    return TextStyle(
-      height: 1,
-      fontSize: fontSize ?? 18,
-      color: Colors.black,
-      fontWeight: FontWeight.normal,
-    );
-  }
-
-  static String? Function(String?)? validatorOfNumber(
-      {int maxDecimalPlaces = 3, bool valueCanIsEmpty = false}) {
-    return (value) {
-      if (value!.isEmpty && !valueCanIsEmpty) {
-        return 'Digite uma quantidade';
-      } else if (value == '0' || value == '0.' || value == '0,') {
-        return 'Digite uma quantidade';
-      } else if (value.contains('.') && value.contains(',')) {
-        return 'Carácter inválido';
-      } else if (value.contains('-')) {
-        return 'Carácter inválido';
-      } else if (value.contains(' ')) {
-        return 'Carácter inválido';
-      } else if (value.characters
-              .toList()
-              .fold<int>(0, (t, e) => e == "." ? t + e.length : t + 0) >
-          1) {
-        // verifica se tem mais de um ponto
-        return 'Carácter inválido';
-      } else if (value.characters
-              .toList()
-              .fold<int>(0, (t, e) => e == "," ? t + e.length : t + 0) >
-          1) {
-        // verifica se tem mais de uma vírgula
-        return 'Carácter inválido';
-      } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == 0.0 &&
-          value.isNotEmpty && !valueCanIsEmpty) {
-        return "Digite uma quantidade";
-      } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
-          value.isNotEmpty && !valueCanIsEmpty) {
-        return "Digite uma quantidade";
-      }
-
-      // Adiciona a verificação do número máximo de casas decimais
-      List<String> parts = value.replaceAll(RegExp(r'\,'), '.').split('.');
-      if (parts.length > 1 && parts[1].length > maxDecimalPlaces) {
-        return '$maxDecimalPlaces casas decimais';
-      }
-
-      return null;
-    };
   }
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../pages/customer_register/components/components.dart';
+import '../../pages/customer_register/customer_register.dart';
 import '../components.dart';
 import '../../providers/providers.dart';
-import 'address_form_field.dart';
 
 class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
@@ -101,7 +100,7 @@ class _AddressComponentState extends State<AddressComponent> {
         key: widget.adressFormKey,
         child: Column(
           children: [
-            AddressFormField(
+            FormFieldWidget(
               keyboardType: TextInputType.number,
               enabled:
                   widget.isLoading == false && !addressProvider.isLoadingCep,
@@ -116,19 +115,7 @@ class _AddressComponentState extends State<AddressComponent> {
               labelText: "CEP",
               textEditingController: addressProvider.cepController,
               limitOfCaracters: 8,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return null;
-                } else if (value.length < 8) {
-                  return "Quantidade de números inválido!";
-                } else if (value.contains("\.") ||
-                    value.contains("\,") ||
-                    value.contains("\-") ||
-                    value.contains(" ")) {
-                  return "Digite somente números";
-                }
-                return null;
-              },
+              validator: FormFieldValidations.cpf,
               suffixWidget: TextButton(
                 child: addressProvider.isLoadingCep
                     ? const FittedBox(
@@ -172,7 +159,7 @@ class _AddressComponentState extends State<AddressComponent> {
             if (addressProvider.triedGetCep)
               Column(
                 children: [
-                  AddressFormField(
+                  FormFieldWidget(
                     enabled: widget.isLoading == false &&
                         !addressProvider.isLoadingCep,
                     focusNode: _adressFocusNode,
@@ -195,7 +182,7 @@ class _AddressComponentState extends State<AddressComponent> {
                   Row(
                     children: [
                       Expanded(
-                        child: AddressFormField(
+                        child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
                           focusNode: _districtFocusNode,
@@ -222,7 +209,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
-                        child: AddressFormField(
+                        child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
                           focusNode: _cityFocusNode,
@@ -306,7 +293,7 @@ class _AddressComponentState extends State<AddressComponent> {
                       ),
                       Expanded(
                         flex: 4,
-                        child: AddressFormField(
+                        child: FormFieldWidget(
                           keyboardType: TextInputType.number,
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
@@ -343,7 +330,7 @@ class _AddressComponentState extends State<AddressComponent> {
                   Row(
                     children: [
                       Expanded(
-                        child: AddressFormField(
+                        child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
                           focusNode: _complementFocusNode,
@@ -363,7 +350,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
-                        child: AddressFormField(
+                        child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
                           focusNode: _referenceFocusNode,

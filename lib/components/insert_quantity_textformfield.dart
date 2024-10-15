@@ -60,14 +60,16 @@ class _InsertQuantityTextFormFieldState
 
           widget.onChanged();
         },
-        validator: FormFieldHelper.validatorOfNumber(),
-        decoration: FormFieldHelper.decoration(
+        validator: (value) {
+          return FormFieldValidations.number(value: value);
+        },
+        decoration: FormFieldDecoration.decoration(
           isLoading: widget.isLoading,
           context: context,
           labelText: widget.labelText,
           hintText: widget.hintText,
         ),
-        style: FormFieldHelper.style(),
+        style: FormFieldStyle.style(),
         keyboardType: TextInputType.number,
       ),
     );

@@ -31,13 +31,13 @@ class EvaluationAndSuggestionsPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 3),
               child: TextField(
-                decoration: FormFieldHelper.decoration(
+                decoration: FormFieldDecoration.decoration(
                   isLoading: false,
                   context: context,
                   hintText: "Comentários e/ou sugestões para novos módulos",
                   labelText: "Comentários e/ou sugestões para novos módulos",
                 ),
-                style: FormFieldHelper.style(),
+                style: FormFieldStyle.style(),
               ),
             ),
             ElevatedButton(

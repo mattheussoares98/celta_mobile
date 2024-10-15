@@ -36,12 +36,12 @@ class _ObservationsState extends State<Observations> {
           },
           maxLines: null,
           maxLength: 1000,
-          decoration: FormFieldHelper.decoration(
+          decoration: FormFieldDecoration.decoration(
             isLoading: false,
             context: context,
             labelText: 'Observações',
           ),
-          style: FormFieldHelper.style(),
+          style: FormFieldStyle.style(),
         ),
       ),
     );

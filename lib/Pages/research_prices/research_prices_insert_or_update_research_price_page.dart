@@ -130,7 +130,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                           enabled: !researchPricesProvider
                               .isLoadingAddOrUpdateOfResearch,
                           controller: researchNameController,
-                          decoration: FormFieldHelper.decoration(
+                          decoration: FormFieldDecoration.decoration(
                             isLoading: researchPricesProvider
                                 .isLoadingAddOrUpdateOfResearch,
                             context: context,
@@ -151,7 +151,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                               observationFocusNode,
                             );
                           },
-                          style: FormFieldHelper.style(),
+                          style: FormFieldStyle.style(),
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
@@ -159,7 +159,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                           enabled: !researchPricesProvider
                               .isLoadingAddOrUpdateOfResearch,
                           controller: observationController,
-                          decoration: FormFieldHelper.decoration(
+                          decoration: FormFieldDecoration.decoration(
                             isLoading: researchPricesProvider
                                 .isLoadingAddOrUpdateOfResearch,
                             context: context,
@@ -168,7 +168,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                           onFieldSubmitted: (_) async {
                             FocusScope.of(context).unfocus();
                           },
-                          style: FormFieldHelper.style(),
+                          style: FormFieldStyle.style(),
                         ),
                         const SizedBox(height: 8),
                         ElevatedButton(

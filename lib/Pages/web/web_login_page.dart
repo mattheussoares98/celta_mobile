@@ -89,7 +89,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                       children: [
                         TextFormField(
                           controller: emailController,
-                          decoration: FormFieldHelper.decoration(
+                          decoration: FormFieldDecoration.decoration(
                             isLoading: false,
                             context: context,
                           ),
@@ -111,7 +111,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                           onFieldSubmitted: (_) async {
                             await login();
                           },
-                          decoration: FormFieldHelper.decoration(
+                          decoration: FormFieldDecoration.decoration(
                             isLoading: false,
                             context: context,
                           ),

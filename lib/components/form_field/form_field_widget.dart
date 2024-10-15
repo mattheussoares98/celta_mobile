@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../components.dart';
 
-class AddressFormField extends StatelessWidget {
+class FormFieldWidget extends StatelessWidget {
   final int? limitOfCaracters;
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
@@ -15,7 +15,7 @@ class AddressFormField extends StatelessWidget {
   final String labelText;
   final TextEditingController textEditingController;
   final bool enabled;
-  const AddressFormField({
+  const FormFieldWidget({
     this.onChanged,
     this.keyboardType,
     this.isDate,
@@ -54,8 +54,8 @@ class AddressFormField extends StatelessWidget {
         onFieldSubmitted: onFieldSubmitted,
         validator: validator ?? null,
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        style: FormFieldHelper.style(),
-        decoration: FormFieldHelper.decoration(
+        style: FormFieldStyle.style(),
+        decoration: FormFieldDecoration.decoration(
           isLoading: false,
           context: context,
           labelText: labelText,

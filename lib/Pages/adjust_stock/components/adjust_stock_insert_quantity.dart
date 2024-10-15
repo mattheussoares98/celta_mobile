@@ -110,8 +110,10 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                         );
                       }
                     },
-                    validator: FormFieldHelper.validatorOfNumber(),
-                    decoration: FormFieldHelper.decoration(
+                    validator: (value) {
+          return FormFieldValidations.number(value: value);
+        },
+                    decoration: FormFieldDecoration.decoration(
                       isLoading: adjustStockProvider.isLoadingProducts ||
                           adjustStockProvider
                               .isLoadingTypeStockAndJustifications ||
@@ -134,7 +136,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                         );
                       }
                     },
-                    style: FormFieldHelper.style(),
+                    style: FormFieldStyle.style(),
                     keyboardType: TextInputType.number,
                   ),
                 ),

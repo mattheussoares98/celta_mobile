@@ -24,12 +24,10 @@ class InsertPrices extends StatefulWidget {
   });
 
   @override
-  State<InsertPrices> createState() =>
-      _InsertPricesState();
+  State<InsertPrices> createState() => _InsertPricesState();
 }
 
-class _InsertPricesState
-    extends State<InsertPrices> {
+class _InsertPricesState extends State<InsertPrices> {
   Flexible personalizedField({
     required String label,
     required GlobalKey<FormState> key,
@@ -42,7 +40,7 @@ class _InsertPricesState
         focusNode: focusNode,
         key: key,
         controller: textEditingController,
-        decoration: FormFieldHelper.decoration(
+        decoration: FormFieldDecoration.decoration(
           isLoading: false,
           context: context,
           labelText: label,
@@ -60,11 +58,12 @@ class _InsertPricesState
           FocusScope.of(context).requestFocus(nextFocusOnSubmit);
         },
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: FormFieldHelper.validatorOfNumber(
+        validator: (value) => FormFieldValidations.number(
+          value: value,
           maxDecimalPlaces: 2,
           valueCanIsEmpty: true,
         ),
-        style: FormFieldHelper.style(),
+        style: FormFieldStyle.style(),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
       ),
     );

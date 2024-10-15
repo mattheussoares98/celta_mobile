@@ -89,7 +89,7 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
                 Expanded(
                   child: TextFormField(
                     controller: urlCcsController,
-                    decoration: FormFieldHelper.decoration(
+                    decoration: FormFieldDecoration.decoration(
                       isLoading: false,
                       context: context,
                     ),

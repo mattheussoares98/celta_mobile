@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/address/address.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
 import 'components/components.dart';
@@ -63,7 +62,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
         key: widget.emailFormKey,
         child: Column(
           children: [
-            AddressFormField(
+            FormFieldWidget(
               enabled: true,
               focusNode: emailFocusNode,
               onFieldSubmitted: (String? value) {

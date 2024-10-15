@@ -101,7 +101,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     return null;
                   }
                 },
-                decoration: FormFieldHelper.decoration(
+                decoration: FormFieldDecoration.decoration(
                   isLoading: widget.isLoading,
                   context: context,
                   labelText: widget.labelText,

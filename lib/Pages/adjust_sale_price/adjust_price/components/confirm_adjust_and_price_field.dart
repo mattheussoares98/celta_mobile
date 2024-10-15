@@ -95,18 +95,22 @@ class _PriceFieldAndConfirmAdjustButtonState
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: const TextInputType.numberWithOptions(),
                   inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                  style: FormFieldHelper.style(),
+                  style: FormFieldStyle.style(),
                   onFieldSubmitted: (value) async {
                     await confirmAdjust(adjustSalePriceProvider);
                   },
-                  decoration: FormFieldHelper.decoration(
+                  decoration: FormFieldDecoration.decoration(
                     isLoading: adjustSalePriceProvider.isLoading,
                     context: context,
                     hintText: "Preço",
                     labelText: "Preço",
                   ),
-                  validator:
-                      FormFieldHelper.validatorOfNumber(maxDecimalPlaces: 2),
+                  validator: (value) {
+                    return FormFieldValidations.number(
+                      value: value,
+                      maxDecimalPlaces: 2,
+                    );
+                  },
                 ),
               ),
             ),
