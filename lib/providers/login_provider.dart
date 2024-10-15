@@ -9,11 +9,6 @@ import '../components/components.dart';
 import '../utils/utils.dart';
 
 class LoginProvider with ChangeNotifier {
-  TextEditingController enterpriseNameOrUrlCCSController =
-      TextEditingController();
-  TextEditingController userController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
 
@@ -48,57 +43,44 @@ class LoginProvider with ChangeNotifier {
   Future<void> login({
     required String user,
     required String password,
-    required TextEditingController enterpriseNameOrUrlCCSController,
+    required TextEditingController enterpriseName,
     required BuildContext context,
   }) async {
     _errorMessage = '';
     _isLoading = true;
-    UserData.userName = user;
-    await PrefsInstance.setString(
-      prefsKeys: PrefsKeys.user,
-      value: UserData.userName,
-    );
     notifyListeners();
 
-    if (_changedEnterpriseNameOrUrlCcs) {
-      if (ConvertString.isUrl(enterpriseNameOrUrlCCSController.text)) {
-        if (enterpriseNameOrUrlCCSController.text.endsWith('/')) {
-          enterpriseNameOrUrlCCSController.text =
-              enterpriseNameOrUrlCCSController.text.substring(
-                  0, enterpriseNameOrUrlCCSController.text.length - 1);
-        }
-        UserData.urlCCS = enterpriseNameOrUrlCCSController.text;
-        UserData.enterpriseName = "";
-      }
-      _errorMessage =
-          await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
-        enterpriseNameOrUrlCCSController.text,
-      );
-
-      await PrefsInstance.setString(
-        prefsKeys: PrefsKeys.urlCCS,
-        value: UserData.urlCCS,
-      );
-      await PrefsInstance.setString(
-        prefsKeys: PrefsKeys.enterpriseName,
-        value: UserData.enterpriseName,
-      );
-    }
-
-    if (_errorMessage != "" &&
-        !ConvertString.isUrl(
-          enterpriseNameOrUrlCCSController.text,
-        )) {
-      ShowSnackbarMessage.show(
-        message: _errorMessage,
-        context: context,
-      );
-      _isLoading = false;
-      notifyListeners();
-      return;
-    }
-
     try {
+      UserData.userName = user;
+      await PrefsInstance.setString(
+        prefsKeys: PrefsKeys.user,
+        value: UserData.userName,
+      );
+
+      if (_changedEnterpriseNameOrUrlCcs) {
+        _errorMessage =
+            await FirebaseHelper.getUrlFromFirebaseAndReturnErrorIfHas(
+          enterpriseName.text,
+        );
+
+        if (_errorMessage != "") {
+          ShowSnackbarMessage.show(
+            message: _errorMessage,
+            context: context,
+          );
+          return;
+        }
+
+        await PrefsInstance.setString(
+          prefsKeys: PrefsKeys.urlCCS,
+          value: UserData.urlCCS,
+        );
+        await PrefsInstance.setString(
+          prefsKeys: PrefsKeys.enterpriseName,
+          value: UserData.enterpriseName,
+        );
+      }
+
       await SoapRequest.soapPost(
         parameters: {
           "user": user,
@@ -117,7 +99,6 @@ class LoginProvider with ChangeNotifier {
         );
       } else {
         Map resultAsMap = json.decode(SoapRequestResponse.responseAsString);
-        // Map resultAsMap = resultAsList.asMap();
 
         final myTransformer = Xml2Json();
         myTransformer
@@ -130,23 +111,20 @@ class LoginProvider with ChangeNotifier {
           prefsKeys: PrefsKeys.userIdentity,
           value: UserData.crossIdentity,
         );
-        await FirebaseHelper.addCcsClientInFirebase();
 
         _loginController?.add(true);
         _changedEnterpriseNameOrUrlCcs = false;
       }
     } catch (e) {
-      // _updateErrorMessage(e.toString());
-      //print('deu erro no login: $e');
       _errorMessage = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessage,
         context: context,
       );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   logout() async {

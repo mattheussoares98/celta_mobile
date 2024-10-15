@@ -118,8 +118,8 @@ class PrefsInstance {
     return mySoaps;
   }
 
-  static Future<void> restoreUserAndEnterpriseNameOrUrlCCS({
-    required TextEditingController enterpriseNameOrUrlCCSController,
+  static Future<void> updateUserAndEnterpriseName({
+    required TextEditingController enterpriseNameController,
     required TextEditingController userController,
   }) async {
     userController.text = await PrefsInstance.getString(PrefsKeys.user);
@@ -130,9 +130,9 @@ class PrefsInstance {
     );
 
     if (UserData.enterpriseName != "") {
-      enterpriseNameOrUrlCCSController.text = UserData.enterpriseName;
+      enterpriseNameController.text = UserData.enterpriseName;
     } else {
-      enterpriseNameOrUrlCCSController.text = UserData.urlCCS;
+      enterpriseNameController.text = UserData.urlCCS;
     }
   }
 }

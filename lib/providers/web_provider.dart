@@ -424,76 +424,14 @@ class WebProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessageClients = "";
     try {
-      final newEnterprise = FirebaseEnterpriseModel(
+      final newEnterprise = await FirebaseHelper.addNewEnterprise(
         enterpriseName: enterpriseName,
         urlCCS: urlCcs,
-        id: null,
-        usersInformations: null,
-        modules: [
-          ModuleModel(
-            module: Modules.adjustSalePrice.name,
-            enabled: false,
-            name: "Ajuste de preços",
-          ),
-          ModuleModel(
-            module: Modules.adjustStock.name,
-            enabled: true,
-            name: "Ajuste de estoques",
-          ),
-          ModuleModel(
-            module: Modules.buyRequest.name,
-            enabled: true,
-            name: "Pedido de compra",
-          ),
-          ModuleModel(
-            module: Modules.customerRegister.name,
-            enabled: true,
-            name: "Cadastro de cliente",
-          ),
-          ModuleModel(
-            module: Modules.inventory.name,
-            enabled: true,
-            name: "Inventário",
-          ),
-          ModuleModel(
-            module: Modules.priceConference.name,
-            enabled: true,
-            name: "Consulta de preços",
-          ),
-          ModuleModel(
-            module: Modules.productsConference.name,
-            enabled: true,
-            name: "Conferência de produtos (expedição)",
-          ),
-          ModuleModel(
-            module: Modules.receipt.name,
-            enabled: true,
-            name: "Recebimento",
-          ),
-          ModuleModel(
-            module: Modules.researchPrices.name,
-            enabled: true,
-            name: "Consulta de preços concorrentes",
-          ),
-          ModuleModel(
-            module: Modules.saleRequest.name,
-            enabled: true,
-            name: "Pedido de vendas",
-          ),
-          ModuleModel(
-            module: Modules.transferBetweenStocks.name,
-            enabled: true,
-            name: "Transferência entre estoques",
-          ),
-          ModuleModel(
-            module: Modules.transferRequest.name,
-            enabled: true,
-            name: "Pedido de transferência",
-          ),
-        ],
       );
 
-      await FirebaseHelper.addNewEnterprise(newEnterprise);
+      if (newEnterprise == null) {
+        throw Exception();
+      }
 
       _enterprises.add(newEnterprise);
       _orderEnterprisesByName();

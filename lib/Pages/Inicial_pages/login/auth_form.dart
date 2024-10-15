@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../api/api.dart';
 import '../../../providers/providers.dart';
 import '../../../components/components.dart';
+import '../../../utils/utils.dart';
 
 class AuthForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -20,12 +21,14 @@ class _AuthFormState extends State<AuthForm>
   AnimationController? _animationController;
   Animation<double>? _animationWidth;
   Animation<double>? _animationBorder;
-
+  final userController = TextEditingController();
+  final enterpriseNameController = TextEditingController();
+  final passwordController = TextEditingController();
   final _userFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _urlFocusNode = FocusNode();
 
-  _submit({required LoginProvider loginProvider}) async {
+  Future<void> _submit({required LoginProvider loginProvider}) async {
     bool isValid = widget.formKey.currentState!.validate();
 
     if (!isValid) {
@@ -33,21 +36,17 @@ class _AuthFormState extends State<AuthForm>
     }
 
     await loginProvider.login(
-      user: loginProvider.userController.text,
-      password: loginProvider.passwordController.text,
+      user: userController.text,
+      password: passwordController.text,
       context: context,
-      enterpriseNameOrUrlCCSController:
-          loginProvider.enterpriseNameOrUrlCCSController,
+      enterpriseName: enterpriseNameController,
     );
-
-    if (loginProvider.errorMessage == '') {
-      loginProvider.passwordController.clear();
-    }
   }
 
   @override
   void initState() {
     super.initState();
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -59,10 +58,7 @@ class _AuthFormState extends State<AuthForm>
     ).animate(
       CurvedAnimation(
         parent: _animationController!,
-        curve: const Interval(
-          0.7,
-          1,
-        ), //esse intervalo é o proporcional do tempo de animação, levando em conta que o tempo de animação é 1. Se a animação for de um segundo, vai executar a animação a partir de 0,6 do tempo de animação até 1 de animação
+        curve: const Interval(0.7, 1),
       ),
     );
   }
@@ -76,19 +72,24 @@ class _AuthFormState extends State<AuthForm>
     if (!isLoaded) {
       await loginProvider.verifyIsLogged();
 
-      await PrefsInstance.restoreUserAndEnterpriseNameOrUrlCCS(
-        enterpriseNameOrUrlCCSController:
-            loginProvider.enterpriseNameOrUrlCCSController,
-        userController: loginProvider.userController,
+      await PrefsInstance.updateUserAndEnterpriseName(
+        enterpriseNameController: enterpriseNameController,
+        userController: userController,
       );
 
       isLoaded = true;
     }
   }
 
-  @override //essa função serve para liberar qualquer tipo de memória que esteja sendo utilizado por esses FocusNode e Listner
+  @override
   void dispose() {
-    _animationController!.dispose();
+    _animationController?.dispose();
+    userController.dispose();
+    enterpriseNameController.dispose();
+    passwordController.dispose();
+    _userFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _urlFocusNode.dispose();
     super.dispose();
   }
 
@@ -104,14 +105,9 @@ class _AuthFormState extends State<AuthForm>
     ).animate(
       CurvedAnimation(
         parent: _animationController!,
-        curve: const Interval(
-          0,
-          0.7,
-        ), //esse intervalo é o proporcional do tempo de animação, levando em conta que o tempo de animação é 1.
+        curve: const Interval(0, 0.7),
       ),
-    ); //precisei colocar o _animationWidget aqui porque
-    //executando no initState da erro, pois o mediaquery ainda não havia
-    //conseguido pegar o tamanho da largura do dispositivo
+    );
 
     _animationController!.forward();
 
@@ -132,18 +128,17 @@ class _AuthFormState extends State<AuthForm>
                     width: _animationWidth!.value,
                     child: TextFormField(
                       enabled: loginProvider.isLoading ? false : true,
-                      controller: loginProvider.userController,
+                      controller: userController,
                       focusNode: _userFocusNode,
                       onFieldSubmitted: (_) => FocusScope.of(context)
                           .requestFocus(_passwordFocusNode),
                       validator: (_name) {
-                        _name = loginProvider.userController.text;
-                        if (loginProvider.userController.text.trim().isEmpty) {
+                        _name = userController.text;
+                        if (userController.text.trim().isEmpty) {
                           return 'Preencha o nome';
                         }
 
-                        loginProvider.userController.text =
-                            loginProvider.userController.text.trimRight();
+                        userController.text = userController.text.trimRight();
                         //fiz isso porque quando termina com espaço, a API retorna que a senha está
                         //inválida ao invés do usuário inválido e ninguém cadastra usuário com
                         //espaço no final do nome
@@ -162,17 +157,15 @@ class _AuthFormState extends State<AuthForm>
                   SizedBox(
                     width: _animationWidth!.value,
                     child: TextFormField(
-                      controller: loginProvider.passwordController,
+                      controller: passwordController,
                       enabled: loginProvider.isLoading ? false : true,
                       focusNode: _passwordFocusNode,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).requestFocus(_urlFocusNode),
                       style: FormFieldStyle.style(),
                       validator: (_name) {
-                        _name = loginProvider.passwordController.text;
-                        if (loginProvider.passwordController.text
-                            .trim()
-                            .isEmpty) {
+                        _name = passwordController.text;
+                        if (passwordController.text.trim().isEmpty) {
                           return 'Preencha a senha';
                         }
                         return null;
@@ -208,34 +201,25 @@ class _AuthFormState extends State<AuthForm>
                         loginProvider.changedEnterpriseNameOrUrlCcs = true;
                       },
                       enabled: loginProvider.isLoading ? false : true,
-                      controller:
-                          loginProvider.enterpriseNameOrUrlCCSController,
-                      onFieldSubmitted: (_) =>
-                          _submit(loginProvider: loginProvider),
+                      controller: enterpriseNameController,
+                      onFieldSubmitted: (_) async {
+                        await _submit(loginProvider: loginProvider);
+                      },
                       focusNode: _urlFocusNode,
                       style: FormFieldStyle.style(),
-                      validator: (_url) {
-                        _url =
-                            loginProvider.enterpriseNameOrUrlCCSController.text;
-                        if (loginProvider.enterpriseNameOrUrlCCSController.text
-                            .toLowerCase()
-                            .trim()
-                            .isEmpty) {
-                          return 'Digite o nome da empresa ou URL do CCS';
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Digite o nome da empresa!';
+                        } else if (ConvertString.isUrl(value)) {
+                          return 'Login pelo CCS desabilitado!';
                         }
-                        // else if (!loginProvider.enterpriseNameOrUrlCCSController.text
-                        //         .contains('http') ||
-                        //     !loginProvider.enterpriseNameOrUrlCCSController.text.contains('//') ||
-                        //     !loginProvider.enterpriseNameOrUrlCCSController.text.contains(':') ||
-                        //     !loginProvider.enterpriseNameOrUrlCCSController.text.contains('ccs')) {
-                        //   return 'URL inválida';
-                        // }
+
                         return null;
                       },
                       decoration: FormFieldDecoration.decoration(
                         isLoading: loginProvider.isLoading,
                         context: context,
-                        labelText: "Nome da empresa ou CCS",
+                        labelText: "Nome da empresa",
                       ),
                     ),
                   ),
@@ -256,9 +240,11 @@ class _AuthFormState extends State<AuthForm>
                       ),
                       onPressed: loginProvider.isLoading
                           ? null
-                          : () => _submit(
+                          : () async {
+                              await _submit(
                                 loginProvider: loginProvider,
-                              ),
+                              );
+                            },
                       child: loginProvider.isLoading
                           ? const CircularProgressIndicator(
                               strokeWidth: 4,

@@ -66,59 +66,47 @@ class FirebaseHelper {
 
   static Future<void> _updateCcsAndEnterpriseNameByDocument({
     required DocumentSnapshot documentSnapshot,
-    required String enterpriseNameOrurlCCSControllerText,
+    required String enterpriseNameControllerText,
   }) async {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
     if (data.containsKey('urlCCS')) {
-      enterpriseNameOrurlCCSControllerText = data['urlCCS'];
       UserData.urlCCS = data['urlCCS'];
     }
 
     if (data.containsKey('enterpriseName') &&
         data['enterpriseName'] != "undefined") {
-      enterpriseNameOrurlCCSControllerText = data['enterpriseName'];
+      enterpriseNameControllerText = data['enterpriseName'];
       UserData.enterpriseName = data['enterpriseName'];
     }
   }
 
   static Future<String> getUrlFromFirebaseAndReturnErrorIfHas(
-    String enterpriseNameOrurlCCSControllerText,
+    String enterpriseNameControllerText,
   ) async {
     String errorMessage = "";
-    enterpriseNameOrurlCCSControllerText = enterpriseNameOrurlCCSControllerText
+    enterpriseNameControllerText = enterpriseNameControllerText
         .toLowerCase()
         .replaceAll(RegExp(r'\s+'), ''); //remove espaços em branco
 
     QuerySnapshot? querySnapshot;
 
-    if (ConvertString.isUrl(enterpriseNameOrurlCCSControllerText)) {
-      querySnapshot = await _getQuerySnapshot(
-        collection: _clientsCollection,
-        fieldToSearch: 'urlCCS',
-        isEqualTo: enterpriseNameOrurlCCSControllerText,
-      );
-    }
-
-    if (querySnapshot == null) {
-      querySnapshot = await _getQuerySnapshot(
-        collection: _clientsCollection,
-        fieldToSearch: 'enterpriseName',
-        isEqualTo: enterpriseNameOrurlCCSControllerText,
-      );
-    }
+    querySnapshot = await _getQuerySnapshot(
+      collection: _clientsCollection,
+      fieldToSearch: 'enterpriseName',
+      isEqualTo: enterpriseNameControllerText,
+    );
 
     if (querySnapshot.size > 0) {
       await _updateCcsAndEnterpriseNameByDocument(
         documentSnapshot: querySnapshot.docs[0],
-        enterpriseNameOrurlCCSControllerText:
-            enterpriseNameOrurlCCSControllerText,
+        enterpriseNameControllerText: enterpriseNameControllerText,
       );
 
       errorMessage = "";
     } else {
       errorMessage =
-          "A empresa não foi encontrada no banco de dados. Entre em contato com o suporte e solicite a URL do CCS para fazer o login";
+          "A empresa não foi encontrada no banco de dados. Entre em contato com o suporte e peça para cadastrar a empresa";
     }
 
     return errorMessage;
@@ -176,37 +164,6 @@ class FirebaseHelper {
       } catch (e) {
         //print(e);
       }
-    }
-  }
-
-  static addCcsClientInFirebase() async {
-    FirebaseEnterpriseModel firebaseClientModel = FirebaseEnterpriseModel(
-      urlCCS: UserData.urlCCS,
-      id: null,
-      usersInformations: null,
-      modules: null,
-    );
-
-    QuerySnapshot? querySnapshotCcs;
-    QuerySnapshot? querySnapshotEnterpriseName;
-
-    querySnapshotEnterpriseName = await _getQuerySnapshot(
-      collection: _clientsCollection,
-      fieldToSearch: 'enterpriseName',
-      isEqualTo: UserData.enterpriseName,
-    );
-
-    querySnapshotCcs = await _getQuerySnapshot(
-      collection: _clientsCollection,
-      fieldToSearch: 'urlCCS',
-      isEqualTo: UserData.urlCCS,
-    );
-
-    if (querySnapshotCcs.size == 0 && querySnapshotEnterpriseName.size == 0) {
-      _clientsCollection
-          .add(firebaseClientModel.toJson())
-          .then((value) => value)
-          .catchError((error) => error);
     }
   }
 
@@ -418,15 +375,87 @@ class FirebaseHelper {
     }
   }
 
-  static Future<void> addNewEnterprise(
-    FirebaseEnterpriseModel clientModel,
-  ) async {
+  static Future<FirebaseEnterpriseModel?> addNewEnterprise({
+    required String enterpriseName,
+    required String urlCCS,
+  }) async {
     try {
-      await _clientsCollection
-          .doc(clientModel.enterpriseName)
-          .set(clientModel.toJson());
+      final newEnterprise = FirebaseEnterpriseModel(
+        enterpriseName: enterpriseName,
+        urlCCS: urlCCS,
+        id: null,
+        usersInformations: null,
+        modules: [
+          ModuleModel(
+            module: Modules.adjustSalePrice.name,
+            enabled: false,
+            name: "Ajuste de preços",
+          ),
+          ModuleModel(
+            module: Modules.adjustStock.name,
+            enabled: true,
+            name: "Ajuste de estoques",
+          ),
+          ModuleModel(
+            module: Modules.buyRequest.name,
+            enabled: true,
+            name: "Pedido de compra",
+          ),
+          ModuleModel(
+            module: Modules.customerRegister.name,
+            enabled: true,
+            name: "Cadastro de cliente",
+          ),
+          ModuleModel(
+            module: Modules.inventory.name,
+            enabled: true,
+            name: "Inventário",
+          ),
+          ModuleModel(
+            module: Modules.priceConference.name,
+            enabled: true,
+            name: "Consulta de preços",
+          ),
+          ModuleModel(
+            module: Modules.productsConference.name,
+            enabled: true,
+            name: "Conferência de produtos (expedição)",
+          ),
+          ModuleModel(
+            module: Modules.receipt.name,
+            enabled: true,
+            name: "Recebimento",
+          ),
+          ModuleModel(
+            module: Modules.researchPrices.name,
+            enabled: true,
+            name: "Consulta de preços concorrentes",
+          ),
+          ModuleModel(
+            module: Modules.saleRequest.name,
+            enabled: true,
+            name: "Pedido de vendas",
+          ),
+          ModuleModel(
+            module: Modules.transferBetweenStocks.name,
+            enabled: true,
+            name: "Transferência entre estoques",
+          ),
+          ModuleModel(
+            module: Modules.transferRequest.name,
+            enabled: true,
+            name: "Pedido de transferência",
+          ),
+        ],
+      );
+
+      await _clientsCollection.doc(enterpriseName).set(
+            newEnterprise.toJson(),
+          );
+
+      return newEnterprise;
     } catch (e) {
-      rethrow;
+      return null;
     }
   }
 
