@@ -8,9 +8,13 @@ import 'customer_register.dart';
 class CustomerRegisterTelephonePage extends StatefulWidget {
   final GlobalKey<FormState> telephoneFormKey;
   final Function validateTelephoneFormKey;
+  final TextEditingController telephoneController;
+  final TextEditingController dddController;
   const CustomerRegisterTelephonePage({
     required this.validateTelephoneFormKey,
     required this.telephoneFormKey,
+    required this.telephoneController,
+    required this.dddController,
     Key? key,
   }) : super(key: key);
 
@@ -29,9 +33,11 @@ class _CustomerRegisterTelephonePageState
   }) {
     bool isValid = widget.validateTelephoneFormKey();
 
-    if (isValid &&
-        customerRegisterProvider.telephoneController.text.isNotEmpty) {
-      customerRegisterProvider.addTelephone();
+    if (isValid && widget.telephoneController.text.isNotEmpty) {
+      customerRegisterProvider.addTelephone(
+        telephoneController: widget.telephoneController,
+        dddController: widget.dddController,
+      );
       if (customerRegisterProvider.errorMessageAddTelephone == "") {
         FocusScope.of(context).unfocus();
       } else {
@@ -61,7 +67,7 @@ class _CustomerRegisterTelephonePageState
         Provider.of(context, listen: true);
 
     return SingleChildScrollView(
-    primary: false, 
+      primary: false,
       child: Form(
         key: widget.telephoneFormKey,
         child: Column(
@@ -78,8 +84,7 @@ class _CustomerRegisterTelephonePageState
                       FocusScope.of(context).requestFocus(telephoneFocusNode);
                     },
                     labelText: "DDD",
-                    textEditingController:
-                        customerRegisterProvider.dddController,
+                    textEditingController: widget.dddController,
                     limitOfCaracters: 2,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
@@ -116,9 +121,8 @@ class _CustomerRegisterTelephonePageState
                       }
 
                       // Atualiza o valor formatado no controlador
-                      customerRegisterProvider.telephoneController.value =
-                          customerRegisterProvider.telephoneController.value
-                              .copyWith(
+                      widget.telephoneController.value =
+                          widget.telephoneController.value.copyWith(
                         text: value,
                         selection:
                             TextSelection.collapsed(offset: value.length),
@@ -131,7 +135,10 @@ class _CustomerRegisterTelephonePageState
                     },
                     suffixWidget: IconButton(
                         onPressed: () {
-                          customerRegisterProvider.clearTelephoneControllers();
+                          customerRegisterProvider.clearTelephoneControllers(
+                            telephoneController: widget.telephoneController,
+                            dddController: widget.dddController,
+                          );
                           FocusScope.of(context).requestFocus(dddFocusNode);
                         },
                         icon: const Icon(
@@ -139,8 +146,7 @@ class _CustomerRegisterTelephonePageState
                           color: Colors.red,
                         )),
                     labelText: "Telefone",
-                    textEditingController:
-                        customerRegisterProvider.telephoneController,
+                    textEditingController: widget.telephoneController,
                     limitOfCaracters: 10,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {

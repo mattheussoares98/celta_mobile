@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../providers/providers.dart';
 
 class ReducedNameField extends StatelessWidget {
   final FocusNode reducedNameFocusNode;
   final FocusNode dateOfBirthFocusNode;
   final void Function() validateFormKey;
+  final TextEditingController reducedNameController;
   const ReducedNameField({
     required this.reducedNameFocusNode,
     required this.dateOfBirthFocusNode,
     required this.validateFormKey,
+    required this.reducedNameController,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-
     return FormFieldWidget(
       enabled: true,
       focusNode: reducedNameFocusNode,
@@ -27,7 +25,7 @@ class ReducedNameField extends StatelessWidget {
       },
       suffixWidget: IconButton(
         onPressed: () {
-          customerRegisterProvider.reducedNameController.text = "";
+          reducedNameController.text = "";
           FocusScope.of(context).requestFocus(reducedNameFocusNode);
         },
         icon: const Icon(
@@ -39,7 +37,7 @@ class ReducedNameField extends StatelessWidget {
         FocusScope.of(context).requestFocus(dateOfBirthFocusNode);
       },
       labelText: "Nome reduzido",
-      textEditingController: customerRegisterProvider.reducedNameController,
+      textEditingController: reducedNameController,
       limitOfCaracters: 25,
     );
   }

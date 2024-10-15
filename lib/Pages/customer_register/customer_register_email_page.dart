@@ -8,9 +8,11 @@ import 'components/components.dart';
 class CustomerRegisterEmailPage extends StatefulWidget {
   final GlobalKey<FormState> emailFormKey;
   final Function validateAdressFormKey;
+  final TextEditingController emailController;
   const CustomerRegisterEmailPage({
     required this.validateAdressFormKey,
     required this.emailFormKey,
+    required this.emailController,
     Key? key,
   }) : super(key: key);
 
@@ -27,8 +29,8 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
   }) {
     bool isValid = widget.validateAdressFormKey();
 
-    if (isValid && customerRegisterProvider.emailController.text.isNotEmpty) {
-      customerRegisterProvider.addEmail();
+    if (isValid && widget.emailController.text.isNotEmpty) {
+      customerRegisterProvider.addEmail(widget.emailController);
 
       if (customerRegisterProvider.errorMessageAddEmail == "") {
         FocusScope.of(context).unfocus();
@@ -70,7 +72,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
               },
               suffixWidget: IconButton(
                   onPressed: () {
-                    customerRegisterProvider.clearEmailControllers();
+                    widget.emailController.clear();
                     FocusScope.of(context).requestFocus(emailFocusNode);
                   },
                   icon: const Icon(
@@ -78,7 +80,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
                     color: Colors.red,
                   )),
               labelText: "E-mail",
-              textEditingController: customerRegisterProvider.emailController,
+              textEditingController: widget.emailController,
               limitOfCaracters: 40,
               validator: (String? value) {
                 if (value == null || value.isEmpty) {

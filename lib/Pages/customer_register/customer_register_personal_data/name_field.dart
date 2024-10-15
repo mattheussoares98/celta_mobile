@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../providers/providers.dart';
 
 class NameField extends StatelessWidget {
   final FocusNode nameFocusNode;
   final FocusNode cpfCnpjFocusNode;
   final void Function() validateFormKey;
+  final TextEditingController nameController;
   const NameField({
     required this.nameFocusNode,
     required this.cpfCnpjFocusNode,
     required this.validateFormKey,
+    required this.nameController,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-
     return FormFieldWidget(
       enabled: true,
       focusNode: nameFocusNode,
@@ -30,7 +28,7 @@ class NameField extends StatelessWidget {
       },
       suffixWidget: IconButton(
         onPressed: () {
-          customerRegisterProvider.nameController.text = "";
+          nameController.text = "";
           FocusScope.of(context).requestFocus(nameFocusNode);
         },
         icon: const Icon(
@@ -40,7 +38,7 @@ class NameField extends StatelessWidget {
       ),
       labelText: "Nome",
       validator: FormFieldValidations.nameAndLastName,
-      textEditingController: customerRegisterProvider.nameController,
+      textEditingController: nameController,
       limitOfCaracters: 50,
     );
   }

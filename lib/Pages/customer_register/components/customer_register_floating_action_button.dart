@@ -7,9 +7,25 @@ import '../../../components/components.dart';
 class CustomerRegisterFloatingActionButton extends StatefulWidget {
   final Function changeSelectedIndexToAddAddres;
   final Function changeFormKeysToInvalid;
+  final TextEditingController nameController;
+  final TextEditingController reducedNameController;
+  final TextEditingController cpfCnpjController;
+  final TextEditingController dateOfBirthController;
+  final TextEditingController emailController;
+  final TextEditingController telephoneController;
+  final TextEditingController dddController;
+  final TextEditingController passwordController;
   const CustomerRegisterFloatingActionButton({
     required this.changeSelectedIndexToAddAddres,
     required this.changeFormKeysToInvalid,
+    required this.nameController,
+    required this.reducedNameController,
+    required this.cpfCnpjController,
+    required this.dateOfBirthController,
+    required this.emailController,
+    required this.telephoneController,
+    required this.dddController,
+    required this.passwordController,
     Key? key,
   }) : super(key: key);
 
@@ -26,10 +42,10 @@ class _CustomerRegisterFloatingActionButtonState
     AddressProvider addressProvider = Provider.of(context);
 
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       onTap: customerRegisterProvider.isLoadingInsertCustomer
           ? null
           : () async {
@@ -43,7 +59,17 @@ class _CustomerRegisterFloatingActionButtonState
                   title: "Cadastrar cliente",
                   subtitle: "Deseja confirmar o cadastro do cliente?",
                   function: () async {
-                    await customerRegisterProvider.insertCustomer(addressProvider);
+                    await customerRegisterProvider.insertCustomer(
+                      addressProvider: addressProvider,
+                      nameController: widget.nameController,
+                      reducedNameController: widget.reducedNameController,
+                      cpfCnpjController: widget.cpfCnpjController,
+                      dateOfBirthController: widget.dateOfBirthController,
+                      emailController: widget.emailController,
+                      telephoneController: widget.telephoneController,
+                      dddController: widget.dddController,
+                      passwordController: widget.passwordController,
+                    );
 
                     if (customerRegisterProvider.errorMessageInsertCustomer ==
                         "") {

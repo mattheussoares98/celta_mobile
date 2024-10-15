@@ -15,6 +15,7 @@ class FormFieldWidget extends StatelessWidget {
   final String labelText;
   final TextEditingController textEditingController;
   final bool enabled;
+  final bool? obscureText;
   const FormFieldWidget({
     this.onChanged,
     this.keyboardType,
@@ -24,6 +25,7 @@ class FormFieldWidget extends StatelessWidget {
     this.focusNode,
     this.validator,
     this.limitOfCaracters,
+    this.obscureText,
     required this.enabled,
     required this.textEditingController,
     required this.labelText,
@@ -38,8 +40,9 @@ class FormFieldWidget extends StatelessWidget {
         enabled: enabled,
         controller: textEditingController,
         keyboardType: keyboardType ?? TextInputType.name,
-        maxLines: null,
+        maxLines: 1,
         onChanged: onChanged,
+        obscureText: obscureText == true,
         inputFormatters: limitOfCaracters == null
             ? null
             : isDate != null

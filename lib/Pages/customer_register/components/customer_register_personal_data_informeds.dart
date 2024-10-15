@@ -5,8 +5,16 @@ import '../../../components/components.dart';
 
 class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
   final CustomerRegisterProvider customerRegisterProvider;
+  final TextEditingController nameController;
+  final TextEditingController cpfCnpjController;
+  final TextEditingController reducedNameController;
+  final TextEditingController dateOfBirthController;
   const CustomerRegisterPersonalDataInformeds({
     required this.customerRegisterProvider,
+    required this.nameController,
+    required this.cpfCnpjController,
+    required this.reducedNameController,
+    required this.dateOfBirthController,
     Key? key,
   }) : super(key: key);
 
@@ -30,27 +38,28 @@ class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
               children: [
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Nome",
-                  subtitle: customerRegisterProvider.nameController.text,
+                  subtitle: nameController.text,
                 ),
-                if (customerRegisterProvider.cpfCnpjController.text != "")
+                if (cpfCnpjController.text != "")
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "CPF/CNPJ",
-                    subtitle: customerRegisterProvider.cpfCnpjController.text,
+                    subtitle: cpfCnpjController.text,
                   ),
-                if (customerRegisterProvider.reducedNameController.text != "")
+                if (reducedNameController.text != "")
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Nome reduzido",
-                    subtitle: customerRegisterProvider.reducedNameController.text,
+                    subtitle: reducedNameController.text,
                   ),
-                if (customerRegisterProvider.dateOfBirthController.text != "")
+                if (dateOfBirthController.text != "")
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Data de nascimento",
-                    subtitle: customerRegisterProvider.dateOfBirthController.text,
+                    subtitle: dateOfBirthController.text,
                   ),
                 if (customerRegisterProvider.selectedSexDropDown.value != null)
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Sexo",
-                    subtitle: customerRegisterProvider.selectedSexDropDown.value,
+                    subtitle:
+                        customerRegisterProvider.selectedSexDropDown.value,
                   ),
               ],
             ),

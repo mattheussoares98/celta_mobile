@@ -8,9 +8,21 @@ import 'customer_register_personal_data.dart';
 class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final GlobalKey<FormState> personFormKey;
   final Function() validateFormKey;
+  final TextEditingController cpfCnpjController;
+  final TextEditingController nameController;
+  final TextEditingController passwordConfirmationController;
+  final TextEditingController passwordController;
+  final TextEditingController reducedNameController;
+  final TextEditingController dateOfBirthController;
   const CustomerRegisterPersonalDataPage({
     required this.personFormKey,
     required this.validateFormKey,
+    required this.cpfCnpjController,
+    required this.nameController,
+    required this.passwordConfirmationController,
+    required this.passwordController,
+    required this.reducedNameController,
+    required this.dateOfBirthController,
     Key? key,
   }) : super(key: key);
 
@@ -26,6 +38,8 @@ class _CustomerRegisterPersonalDataPageState
   final FocusNode cpfCnpjFocusNode = FocusNode();
   final FocusNode sexTypeFocusNode = FocusNode();
   final FocusNode dateOfBirthFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode passwordConfirmationFocusNode = FocusNode();
 
   ValueNotifier<String?> _selectedSexDropDown = ValueNotifier<String?>("");
 
@@ -47,14 +61,13 @@ class _CustomerRegisterPersonalDataPageState
     cpfCnpjFocusNode.dispose();
     sexTypeFocusNode.dispose();
     dateOfBirthFocusNode.dispose();
+    passwordFocusNode.dispose();
+    passwordConfirmationFocusNode.dispose();
   }
 
   bool cpfCnpjEnabled = true;
   void updateCpfCnpjEnabled() {
-    CustomerRegisterProvider customerRegisterProvider =
-        Provider.of(context, listen: false);
-
-    if (customerRegisterProvider.cpfCnpjController.text.length > 11) {
+    if (widget.cpfCnpjController.text.length > 11) {
       setState(() {
         cpfCnpjEnabled = false;
       });
@@ -80,22 +93,34 @@ class _CustomerRegisterPersonalDataPageState
               nameFocusNode: nameFocusNode,
               cpfCnpjFocusNode: cpfCnpjFocusNode,
               validateFormKey: widget.validateFormKey,
+              nameController: widget.nameController,
             ),
             CpfOrCnpjField(
               cpfCnpjFocusNode: cpfCnpjFocusNode,
               reducedNameFocusNode: reducedNameFocusNode,
               updateCpfCnpjEnabled: updateCpfCnpjEnabled,
               validateFormKey: widget.validateFormKey,
+              cpfCnpjController: widget.cpfCnpjController,
             ),
             ReducedNameField(
               reducedNameFocusNode: reducedNameFocusNode,
               dateOfBirthFocusNode: dateOfBirthFocusNode,
               validateFormKey: widget.validateFormKey,
+              reducedNameController: widget.reducedNameController,
             ),
             BirthField(
               dateOfBirthFocusNode: dateOfBirthFocusNode,
               sexTypeFocusNode: sexTypeFocusNode,
               validateFormKey: widget.validateFormKey,
+              dateOfBirthController: widget.dateOfBirthController,
+            ),
+            Password(
+              passwordFocusNode: passwordFocusNode,
+              passwordConfirmationFocusNode: passwordConfirmationFocusNode,
+              validateFormKey: widget.validateFormKey,
+              passwordConfirmationController:
+                  widget.passwordConfirmationController,
+              passwordController: widget.passwordController,
             ),
             if (cpfCnpjEnabled)
               SexType(
@@ -104,7 +129,12 @@ class _CustomerRegisterPersonalDataPageState
                 cpfCnpjEnabled: cpfCnpjEnabled,
                 validateFormKey: widget.validateFormKey,
               ),
-            const ClearData(),
+            ClearData(
+              nameController: widget.nameController,
+              cpfCnpjController: widget.cpfCnpjController,
+              reducedNameController: widget.reducedNameController,
+              dateOfBirthController: widget.dateOfBirthController,
+            ),
           ],
         ),
       ),

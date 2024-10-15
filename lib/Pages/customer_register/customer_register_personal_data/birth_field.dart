@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../providers/providers.dart';
 
 class BirthField extends StatelessWidget {
   final FocusNode dateOfBirthFocusNode;
   final FocusNode sexTypeFocusNode;
   final void Function() validateFormKey;
+  final TextEditingController dateOfBirthController;
 
   const BirthField({
     required this.dateOfBirthFocusNode,
     required this.sexTypeFocusNode,
     required this.validateFormKey,
+    required this.dateOfBirthController,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-
     return FormFieldWidget(
       keyboardType: TextInputType.number,
       enabled: true,
@@ -33,7 +31,7 @@ class BirthField extends StatelessWidget {
       },
       labelText: "Nascimento",
       isDate: true,
-      textEditingController: customerRegisterProvider.dateOfBirthController,
+      textEditingController: dateOfBirthController,
       limitOfCaracters: 10,
       suffixWidget: FittedBox(
         child: Row(
@@ -58,13 +56,13 @@ class BirthField extends StatelessWidget {
                   );
 
                   if (validityDate != null) {
-                    customerRegisterProvider.dateOfBirthController.text =
+                    dateOfBirthController.text =
                         DateFormat('dd/MM/yyyy').format(validityDate);
                   }
                 }),
             IconButton(
               onPressed: () {
-                customerRegisterProvider.dateOfBirthController.text = "";
+                dateOfBirthController.text = "";
                 FocusScope.of(context).requestFocus(dateOfBirthFocusNode);
               },
               icon: const Icon(

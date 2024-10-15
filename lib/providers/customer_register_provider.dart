@@ -8,13 +8,6 @@ import '../utils/utils.dart';
 import './address_provider.dart';
 
 class CustomerRegisterProvider with ChangeNotifier {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController cpfCnpjController = TextEditingController();
-  final TextEditingController reducedNameController = TextEditingController();
-  final TextEditingController dateOfBirthController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController telephoneController = TextEditingController();
-  final TextEditingController dddController = TextEditingController();
   final ValueNotifier<String?> _selectedSexDropDown =
       ValueNotifier<String?>(null);
 
@@ -63,16 +56,15 @@ class CustomerRegisterProvider with ChangeNotifier {
   bool _isLoadingInsertCustomer = false;
   bool get isLoadingInsertCustomer => _isLoadingInsertCustomer;
 
-  void clearEmailControllers() {
-    emailController.text = "";
-  }
-
-  void clearTelephoneControllers() {
+  void clearTelephoneControllers({
+    required TextEditingController telephoneController,
+    required TextEditingController dddController,
+  }) {
     telephoneController.text = "";
     dddController.text = "";
   }
 
-  void addEmail() {
+  void addEmail(TextEditingController emailController) {
     _errorMessageAddEmail = "";
     if (!_emails.contains(emailController.text)) {
       _emails.add(emailController.text);
@@ -85,8 +77,12 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addTelephone() {
+  void addTelephone({
+    required TextEditingController telephoneController,
+    required TextEditingController dddController,
+  }) {
     _errorMessageAddTelephone = "";
+
     Map<String, String> newTelephone = {
       "AreaCode": dddController.text,
       "PhoneNumber": telephoneController.text,
@@ -102,7 +98,10 @@ class CustomerRegisterProvider with ChangeNotifier {
 
     if (!hasEqualTelephone) {
       _telephones.add(newTelephone);
-      clearTelephoneControllers();
+      clearTelephoneControllers(
+        telephoneController: telephoneController,
+        dddController: dddController,
+      );
     } else {
       _errorMessageAddTelephone =
           "Esse telefone já existe na lista de telefones!";
@@ -120,20 +119,33 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearAllDataInformed(AddressProvider addressProvider) {
-    clearPersonalDataControllers();
-    clearEmailControllers();
-    clearTelephoneControllers();
-
+  void clearAllDataInformed({
+    required AddressProvider addressProvider,
+    required TextEditingController emailController,
+    required TextEditingController telephoneController,
+    required TextEditingController dddController,
+    required TextEditingController nameController,
+    required TextEditingController reducedNameController,
+    required TextEditingController cpfCnpjController,
+    required TextEditingController dateOfBirthController,
+  }) {
+    nameController.clear();
+    reducedNameController.clear();
+    cpfCnpjController.clear();
+    dateOfBirthController.clear();
+    emailController.clear();
+    telephoneController.clear();
+    dddController.clear();
     addressProvider.clearAddressControllers(clearCep: true);
     addressProvider.clearAddresses();
     _emails.clear();
     _telephones.clear();
+    _selectedSexDropDown.value = null;
 
     notifyListeners();
   }
 
-  String _formatDate() {
+  String _formatDate(TextEditingController dateOfBirthController) {
     DateFormat inputFormat = DateFormat("dd/MM/yyyy");
     DateFormat outputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.");
 
@@ -146,7 +158,12 @@ class CustomerRegisterProvider with ChangeNotifier {
   //   selectedSexDropDown.value = null;
   // }
 
-  void clearPersonalDataControllers() {
+  void clearPersonalDataControllers({
+    required TextEditingController nameController,
+    required TextEditingController reducedNameController,
+    required TextEditingController cpfCnpjController,
+    required TextEditingController dateOfBirthController,
+  }) {
     nameController.text = "";
     reducedNameController.text = "";
     cpfCnpjController.text = "";
@@ -155,12 +172,20 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void _updateJsonInsertCustomer(AddressProvider addressProvider) {
+  void _updateJsonInsertCustomer({
+    required AddressProvider addressProvider,
+    required TextEditingController nameController,
+    required TextEditingController reducedNameController,
+    required TextEditingController cpfCnpjController,
+    required TextEditingController dateOfBirthController,
+    required TextEditingController passwordController,
+  }) {
     _jsonInsertCustomer.clear();
     _jsonInsertCustomer = {
       "Name": nameController.text,
       "ReducedName": reducedNameController.text,
       "CpfCnpjNumber": cpfCnpjController.text,
+      "Password": passwordController.text,
       "PersonType": cpfCnpjController.text.length == 11 ? "F" : "J",
       "RegistrationNumber": "",
       "SexType": selectedSexDropDown.value != null
@@ -172,7 +197,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       "Covenants": null,
     };
     if (dateOfBirthController.text != "") {
-      _jsonInsertCustomer["DateOfBirth"] = _formatDate();
+      _jsonInsertCustomer["DateOfBirth"] = _formatDate(dateOfBirthController);
     }
   }
 
@@ -180,13 +205,31 @@ class CustomerRegisterProvider with ChangeNotifier {
     _isLoadingInsertCustomer = false;
   }
 
-  Future<void> insertCustomer(AddressProvider addressProvider) async {
+  Future<void> insertCustomer({
+    required AddressProvider addressProvider,
+    required TextEditingController nameController,
+    required TextEditingController reducedNameController,
+    required TextEditingController cpfCnpjController,
+    required TextEditingController dateOfBirthController,
+    required TextEditingController emailController,
+    required TextEditingController telephoneController,
+    required TextEditingController dddController,
+    required TextEditingController passwordController,
+  }) async {
     _isLoadingInsertCustomer = true;
     _errorMessageInsertCustomer = "";
     notifyListeners();
 
     try {
-      _updateJsonInsertCustomer(addressProvider);
+      _updateJsonInsertCustomer(
+        addressProvider: addressProvider,
+        nameController: nameController,
+        reducedNameController: reducedNameController,
+        cpfCnpjController: cpfCnpjController,
+        dateOfBirthController: dateOfBirthController,
+        passwordController: passwordController,
+      );
+
       String jsonInsertCustomerEncoded = json.encode(_jsonInsertCustomer);
       await SoapRequest.soapPost(
         parameters: {
@@ -202,14 +245,22 @@ class CustomerRegisterProvider with ChangeNotifier {
       _errorMessageInsertCustomer = SoapRequestResponse.errorMessage;
 
       if (_errorMessageInsertCustomer == "") {
-        clearAllDataInformed(addressProvider);
+        clearAllDataInformed(
+          addressProvider: addressProvider,
+          emailController: emailController,
+          telephoneController: telephoneController,
+          dddController: dddController,
+          nameController: nameController,
+          reducedNameController: reducedNameController,
+          cpfCnpjController: cpfCnpjController,
+          dateOfBirthController: dateOfBirthController,
+        );
         FirebaseHelper.addSoapCallInFirebase(
             firebaseCallEnum: FirebaseCallEnum.customerRegister);
       }
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');
-      _errorMessageInsertCustomer =
-          DefaultErrorMessage.ERROR;
+      _errorMessageInsertCustomer = DefaultErrorMessage.ERROR;
     } finally {}
     _isLoadingInsertCustomer = false;
     notifyListeners();

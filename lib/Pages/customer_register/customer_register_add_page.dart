@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../providers/providers.dart';
 import 'components/components.dart';
 
-class CustomerRegisterAddPage extends StatefulWidget {
-  const CustomerRegisterAddPage({Key? key}) : super(key: key);
+class CustomerRegisterAddPage extends StatelessWidget {
+  final TextEditingController nameController;
+  final TextEditingController cpfCnpjController;
+  final TextEditingController reducedNameController;
+  final TextEditingController dateOfBirthController;
+  const CustomerRegisterAddPage({
+    required this.nameController,
+    required this.cpfCnpjController,
+    required this.reducedNameController,
+    required this.dateOfBirthController,
+    Key? key,
+  }) : super(key: key);
 
-  @override
-  State<CustomerRegisterAddPage> createState() =>
-      _CustomerRegisterAddPageState();
-}
-
-class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider =
@@ -21,12 +24,16 @@ class _CustomerRegisterAddPageState extends State<CustomerRegisterAddPage> {
     AddressProvider addressProvider = Provider.of(context, listen: true);
 
     return SingleChildScrollView(
-    primary: false, 
+      primary: false,
       child: Column(
         children: [
-          if (customerRegisterProvider.nameController.text.isNotEmpty)
+          if (nameController.text.isNotEmpty)
             CustomerRegisterPersonalDataInformeds(
               customerRegisterProvider: customerRegisterProvider,
+              nameController: nameController,
+              cpfCnpjController: cpfCnpjController,
+              reducedNameController: reducedNameController,
+              dateOfBirthController: dateOfBirthController,
             ),
           if (addressProvider.addressesCount > 0)
             const CustomerRegisterAddressesInformeds(isLoading: false),

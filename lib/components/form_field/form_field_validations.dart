@@ -107,4 +107,14 @@ class FormFieldValidations {
 
     return "CPF/CNPJ inválido!";
   }
+
+  static String? minimumSize({
+    required String? value,
+    required int minimumSize,
+  }) {
+    if (value == null || value.isEmpty || value.length < minimumSize) {
+      return "Mínimo de $minimumSize caracteres";
+    }
+    return null;
+  }
 }

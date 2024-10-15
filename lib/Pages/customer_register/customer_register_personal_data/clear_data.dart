@@ -5,7 +5,17 @@ import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
 class ClearData extends StatelessWidget {
-  const ClearData({super.key});
+  final TextEditingController nameController;
+  final TextEditingController reducedNameController;
+  final TextEditingController cpfCnpjController;
+  final TextEditingController dateOfBirthController;
+  const ClearData({
+    required this.nameController,
+    required this.reducedNameController,
+    required this.cpfCnpjController,
+    required this.dateOfBirthController,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +33,12 @@ class ClearData extends StatelessWidget {
             title: "Limpar dados",
             subtitle: "Deseja realmente limpar todos dados pessoais digitados?",
             function: () {
-              customerRegisterProvider.clearPersonalDataControllers();
+              customerRegisterProvider.clearPersonalDataControllers(
+                nameController: nameController,
+                reducedNameController: reducedNameController,
+                cpfCnpjController: cpfCnpjController,
+                dateOfBirthController: dateOfBirthController,
+              );
             },
           );
         },
