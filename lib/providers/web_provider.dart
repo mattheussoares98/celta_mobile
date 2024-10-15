@@ -50,6 +50,8 @@ class WebProvider with ChangeNotifier {
     required List<SoapActionsModel> monthsData,
     required String enterpriseName,
   }) {
+    int adjustSalePrice = 0;
+    int productsConference = 0;
     int adjustStockConfirmQuantity = 0;
     int priceConferenceGetProductOrSendToPrint = 0;
     int inventoryEntryQuantity = 0;
@@ -64,6 +66,12 @@ class WebProvider with ChangeNotifier {
     int researchPricesInsertPrice = 0;
 
     for (var monthData in monthsData) {
+      if (monthData.adjustSalePrice != null) {
+        adjustSalePrice += monthData.adjustSalePrice!;
+      }
+      if (monthData.productsConference != null) {
+        productsConference += monthData.productsConference!;
+      }
       if (monthData.adjustStockConfirmQuantity != null) {
         adjustStockConfirmQuantity += monthData.adjustStockConfirmQuantity!;
       }
@@ -109,6 +117,8 @@ class WebProvider with ChangeNotifier {
       documentId: enterpriseName,
       datesUsed: [],
       users: [],
+      adjustSalePrice: adjustSalePrice == 0 ? null : adjustSalePrice,
+      productsConference: productsConference == 0 ? null : productsConference,
       adjustStockConfirmQuantity:
           adjustStockConfirmQuantity == 0 ? null : adjustStockConfirmQuantity,
       priceConferenceGetProductOrSendToPrint:

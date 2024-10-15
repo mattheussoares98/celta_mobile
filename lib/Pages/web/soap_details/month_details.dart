@@ -70,6 +70,12 @@ class MonthDetails extends StatelessWidget {
                       if (monthData?.researchPricesInsertPrice != null)
                         Text(
                             "Pesquisa de preços concorrentes: ${monthData?.researchPricesInsertPrice}"),
+                      if (monthData?.productsConference != null)
+                        Text(
+                            "Conferência de produtos: ${monthData?.productsConference}"),
+                      if (monthData?.adjustSalePrice != null)
+                        Text(
+                            "Ajuste de preços: ${monthData?.adjustSalePrice}"),
                       if (monthData != null &&
                           monthData?.users != null &&
                           showUsersAndDatesInformations)

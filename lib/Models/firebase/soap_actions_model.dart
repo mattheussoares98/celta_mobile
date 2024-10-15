@@ -3,6 +3,8 @@ class SoapActionsModel {
   final List<dynamic>? datesUsed;
   final List<dynamic>? users;
   final int? adjustStockConfirmQuantity;
+  final int? adjustSalePrice;
+  final int? productsConference;
   final int? priceConferenceGetProductOrSendToPrint;
   final int? inventoryEntryQuantity;
   final int? receiptEntryQuantity;
@@ -19,6 +21,8 @@ class SoapActionsModel {
     required this.documentId,
     required this.datesUsed,
     required this.users,
+    required this.adjustSalePrice,
+    required this.productsConference,
     required this.adjustStockConfirmQuantity,
     required this.priceConferenceGetProductOrSendToPrint,
     required this.inventoryEntryQuantity,
@@ -37,6 +41,8 @@ class SoapActionsModel {
         "documentId": documentId,
         "datesUsed": datesUsed,
         "users": users,
+        "adjustSalePrice": adjustSalePrice,
+        "productsConference": productsConference,
         "adjustStockConfirmQuantity": adjustStockConfirmQuantity,
         "priceConferenceGetProductOrSendToPrint":
             priceConferenceGetProductOrSendToPrint,
@@ -82,6 +88,8 @@ class SoapActionsModel {
         documentId: documentId,
         datesUsed: json["datesUsed"],
         users: json["users"],
+        adjustSalePrice: _sumValueIfHas(json["adjustSalePrice"]),
+        productsConference: _sumValueIfHas(json["productsConference"]),
         adjustStockConfirmQuantity:
             _sumValueIfHas(json["adjustStockConfirmQuantity"]),
         priceConferenceGetProductOrSendToPrint:
