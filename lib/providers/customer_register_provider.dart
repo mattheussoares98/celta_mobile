@@ -48,8 +48,6 @@ class CustomerRegisterProvider with ChangeNotifier {
   String _errorMessageAddTelephone = "";
   String get errorMessageAddTelephone => _errorMessageAddTelephone;
 
-  Map<String, dynamic> _jsonInsertCustomer = {};
-
   String _errorMessageInsertCustomer = "";
   String get errorMessageInsertCustomer => _errorMessageInsertCustomer;
 
@@ -128,6 +126,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     required TextEditingController reducedNameController,
     required TextEditingController cpfCnpjController,
     required TextEditingController dateOfBirthController,
+    required TextEditingController passwordController,
+    required TextEditingController passwordConfirmationController,
   }) {
     nameController.clear();
     reducedNameController.clear();
@@ -140,6 +140,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     addressProvider.clearAddresses();
     _emails.clear();
     _telephones.clear();
+    passwordController.clear();
+    passwordConfirmationController.clear();
     _selectedSexDropDown.value = null;
 
     notifyListeners();
@@ -172,7 +174,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void _updateJsonInsertCustomer({
+  Map<String, dynamic> _getJsonInsertCustomer({
     required AddressProvider addressProvider,
     required TextEditingController nameController,
     required TextEditingController reducedNameController,
@@ -180,8 +182,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     required TextEditingController dateOfBirthController,
     required TextEditingController passwordController,
   }) {
-    _jsonInsertCustomer.clear();
-    _jsonInsertCustomer = {
+    Map<String, dynamic> _jsonInsertCustomer = {
       "Name": nameController.text,
       "ReducedName": reducedNameController.text,
       "CpfCnpjNumber": cpfCnpjController.text,
@@ -199,6 +200,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     if (dateOfBirthController.text != "") {
       _jsonInsertCustomer["DateOfBirth"] = _formatDate(dateOfBirthController);
     }
+
+    return _jsonInsertCustomer;
   }
 
   changeIsLoadingInsertCustomer() {
@@ -215,13 +218,14 @@ class CustomerRegisterProvider with ChangeNotifier {
     required TextEditingController telephoneController,
     required TextEditingController dddController,
     required TextEditingController passwordController,
+    required TextEditingController passwordConfirmationController,
   }) async {
     _isLoadingInsertCustomer = true;
     _errorMessageInsertCustomer = "";
     notifyListeners();
 
     try {
-      _updateJsonInsertCustomer(
+      final jsonInsertCustomer = _getJsonInsertCustomer(
         addressProvider: addressProvider,
         nameController: nameController,
         reducedNameController: reducedNameController,
@@ -230,11 +234,10 @@ class CustomerRegisterProvider with ChangeNotifier {
         passwordController: passwordController,
       );
 
-      String jsonInsertCustomerEncoded = json.encode(_jsonInsertCustomer);
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "json": jsonInsertCustomerEncoded,
+          "json": json.encode(jsonInsertCustomer),
         },
         typeOfResponse: "InsertUpdateCustomerResponse",
         SOAPAction: "InsertUpdateCustomer",
@@ -254,6 +257,8 @@ class CustomerRegisterProvider with ChangeNotifier {
           reducedNameController: reducedNameController,
           cpfCnpjController: cpfCnpjController,
           dateOfBirthController: dateOfBirthController,
+          passwordController: passwordController,
+          passwordConfirmationController: passwordConfirmationController,
         );
         FirebaseHelper.addSoapCallInFirebase(
             firebaseCallEnum: FirebaseCallEnum.customerRegister);

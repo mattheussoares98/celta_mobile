@@ -15,6 +15,7 @@ class CustomerRegisterFloatingActionButton extends StatefulWidget {
   final TextEditingController telephoneController;
   final TextEditingController dddController;
   final TextEditingController passwordController;
+  final TextEditingController passwordConfirmationController;
   const CustomerRegisterFloatingActionButton({
     required this.changeSelectedIndexToAddAddres,
     required this.changeFormKeysToInvalid,
@@ -26,6 +27,7 @@ class CustomerRegisterFloatingActionButton extends StatefulWidget {
     required this.telephoneController,
     required this.dddController,
     required this.passwordController,
+    required this.passwordConfirmationController,
     Key? key,
   }) : super(key: key);
 
@@ -69,6 +71,8 @@ class _CustomerRegisterFloatingActionButtonState
                       telephoneController: widget.telephoneController,
                       dddController: widget.dddController,
                       passwordController: widget.passwordController,
+                      passwordConfirmationController:
+                          widget.passwordConfirmationController,
                     );
 
                     if (customerRegisterProvider.errorMessageInsertCustomer ==

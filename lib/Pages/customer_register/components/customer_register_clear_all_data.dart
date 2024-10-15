@@ -12,6 +12,8 @@ class CustomerRegisterClearAllData extends StatelessWidget {
   final TextEditingController reducedNameController;
   final TextEditingController cpfCnpjController;
   final TextEditingController dateOfBirthController;
+  final TextEditingController passwordController;
+  final TextEditingController passwordConfirmationController;
   const CustomerRegisterClearAllData({
     required this.nameController,
     required this.emailController,
@@ -20,6 +22,8 @@ class CustomerRegisterClearAllData extends StatelessWidget {
     required this.reducedNameController,
     required this.cpfCnpjController,
     required this.dateOfBirthController,
+    required this.passwordController,
+    required this.passwordConfirmationController,
     super.key,
   });
 
@@ -50,6 +54,9 @@ class CustomerRegisterClearAllData extends StatelessWidget {
                       cpfCnpjController: cpfCnpjController,
                       dateOfBirthController: dateOfBirthController,
                       nameController: nameController,
+                      passwordController: passwordController,
+                      passwordConfirmationController:
+                          passwordConfirmationController,
                     );
                   },
                 );

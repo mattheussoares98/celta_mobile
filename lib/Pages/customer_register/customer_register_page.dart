@@ -175,6 +175,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           reducedNameController: reducedNameController,
           cpfCnpjController: cpfCnpjController,
           dateOfBirthController: dateOfBirthController,
+          passwordConfirmationController: passwordConfirmationController,
+          passwordController: passwordController,
         );
       },
       child: GestureDetector(
@@ -221,6 +223,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                             reducedNameController: reducedNameController,
                             cpfCnpjController: cpfCnpjController,
                             dateOfBirthController: dateOfBirthController,
+                            passwordConfirmationController:
+                                passwordConfirmationController,
+                            passwordController: passwordController,
                           ),
                           CustomerRegisterFloatingActionButton(
                             nameController: nameController,
@@ -231,6 +236,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                             telephoneController: telephoneController,
                             dddController: dddController,
                             passwordController: passwordController,
+                            passwordConfirmationController:
+                                passwordConfirmationController,
                             changeSelectedIndexToAddAddres: () {
                               setState(() {
                                 _selectedIndex = 1;
