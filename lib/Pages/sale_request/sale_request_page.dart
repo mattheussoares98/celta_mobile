@@ -16,6 +16,8 @@ class SaleRequestPage extends StatefulWidget {
 
 class _SaleRequestPageState extends State<SaleRequestPage> {
   int _selectedIndex = 0;
+  final observationsController = TextEditingController();
+  final instructionsController = TextEditingController();
 
   static const List appBarTitles = [
     "Inserir produtos",
@@ -128,6 +130,13 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
   }
 
   @override
+  dispose() {
+    super.dispose();
+    observationsController.dispose();
+    instructionsController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider =
         Provider.of(context, listen: true);
@@ -147,6 +156,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         enterpriseCode: arguments["Code"],
         requestTypeCode: arguments["SaleRequestTypeCode"],
         keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,
+        observationsController: observationsController,
+        instructionsController: instructionsController,
       ),
     ];
     return GestureDetector(
@@ -157,7 +168,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             canPop: !saleRequestProvider.isLoadingSaveSaleRequest &&
                 !saleRequestProvider.isLoadingProcessCart &&
                 !saleRequestProvider.isLoadingProducts,
-            onPopInvokedWithResult: (value, __){
+            onPopInvokedWithResult: (value, __) {
               if (value == true) {
                 saleRequestProvider.clearProducts();
               }
@@ -210,8 +221,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                                     child: FittedBox(
                                       child: Text(
                                         cartProductsCount.toString(),
-                                        style:
-                                            const TextStyle(color: Colors.white),
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
                                     ),
                                   ),

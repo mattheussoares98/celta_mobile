@@ -9,10 +9,14 @@ class CartDetailsPage extends StatefulWidget {
   final int enterpriseCode;
   final int requestTypeCode;
   final bool keyboardIsOpen;
+  final TextEditingController observationsController;
+  final TextEditingController instructionsController;
   const CartDetailsPage({
     required this.enterpriseCode,
     required this.requestTypeCode,
     required this.keyboardIsOpen,
+    required this.observationsController,
+    required this.instructionsController,
     Key? key,
   }) : super(key: key);
 
@@ -22,15 +26,11 @@ class CartDetailsPage extends StatefulWidget {
 
 class _CartDetailsPageState extends State<CartDetailsPage> {
   final quantityController = TextEditingController();
-  final observationsController = TextEditingController();
-  final instructionsController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     quantityController.dispose();
-    observationsController.dispose();
-    instructionsController.dispose();
   }
 
   @override
@@ -67,8 +67,8 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                         .cartProductsCount(widget.enterpriseCode.toString()) >
                     0)
                   ObservationsAndInstructionsFields(
-                    observationsController: observationsController,
-                    instructionsController: instructionsController,
+                    observationsController: widget.observationsController,
+                    instructionsController: widget.instructionsController,
                   ),
                 CartItems(
                   enterpriseCode: widget.enterpriseCode,
@@ -83,8 +83,8 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
           SaveSaleRequestInformationsAndButton(
             enterpriseCode: widget.enterpriseCode,
             requestTypeCode: widget.requestTypeCode,
-            instructions: instructionsController.text,
-            observations: observationsController.text,
+            instructions: widget.instructionsController.text,
+            observations: widget.observationsController.text,
           ),
       ],
     );
