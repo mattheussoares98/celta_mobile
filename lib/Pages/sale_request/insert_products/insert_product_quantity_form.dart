@@ -1,8 +1,8 @@
-import '../../../models/soap/soap.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/utils.dart';
 import '../../../components/components.dart';
+import '../../../models/soap/soap.dart';
+import '../../../pages/sale_request/sale_request.dart';
 
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
@@ -142,7 +142,6 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
         Row(
           children: [
             Expanded(
-              flex: 10,
               child: InsertQuantityTextFormField(
                 focusNode: widget.insertQuantityFocusNode,
                 textEditingController: widget.searchProductController,
@@ -155,57 +154,10 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             ),
             const SizedBox(width: 5),
             Expanded(
-              flex: 10,
-              child: Container(
-                height: 60,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                  ),
-                  onPressed: addItemInCart,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(height: 5),
-                      Expanded(
-                        flex: 10,
-                        child: FittedBox(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const Text("Total: "),
-                              Text(
-                                ConvertString.convertToBRL(
-                                  widget.totalItemValue,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Expanded(
-                        flex: 8,
-                        child: FittedBox(
-                          child: Row(
-                            children: [
-                              Text(
-                                quantityToAdd == null
-                                    ? "ADICIONAR +1"
-                                    : "ADICIONAR",
-                                style: const TextStyle(fontSize: 17),
-                              ),
-                              const Icon(
-                                Icons.shopping_cart,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                    ],
-                  ),
-                ),
+              child: AddInCartButton(
+                quantityToAdd: quantityToAdd,
+                addItemInCart: addItemInCart,
+                totalItemValue: widget.totalItemValue,
               ),
             ),
           ],
