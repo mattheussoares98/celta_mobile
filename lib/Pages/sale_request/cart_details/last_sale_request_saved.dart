@@ -11,7 +11,6 @@ class LastSaleRequestSaved extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
       width: double.infinity,
       child: saleRequestProvider.lastSaleRequestSaved == ""
           ? null

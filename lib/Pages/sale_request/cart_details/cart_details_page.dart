@@ -37,52 +37,56 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          if (saleRequestProvider
-                  .cartProductsCount(widget.enterpriseCode.toString()) >
-              0)
-            ObservationsAndInstructionsFields(
-              observationsController: observationsController,
-              instructionsController: instructionsController,
-            ),
-          CartItems(
-            enterpriseCode: widget.enterpriseCode,
-            quantityController: quantityController,
-          ),
-          if (saleRequestProvider
-                  .cartProductsCount(widget.enterpriseCode.toString()) ==
-              0)
-            Expanded(
-              child: Container(
-                color: Colors.grey[200],
-                width: double.infinity,
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FittedBox(
-                      child: Text(
-                        "O carrinho está vazio",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 20,
-                          fontFamily: "OpenSans",
-                        ),
-                      ),
+    return Column(
+      children: [
+        if (saleRequestProvider
+                .cartProductsCount(widget.enterpriseCode.toString()) ==
+            0)
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              child: const Center(
+                child: FittedBox(
+                  child: Text(
+                    "O carrinho está vazio",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontFamily: "OpenSans",
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
-          if (widget.keyboardIsOpen)
-            SaveSaleRequestInformationsAndButton(
-              enterpriseCode: widget.enterpriseCode,
-              requestTypeCode: widget.requestTypeCode,
+          ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (saleRequestProvider
+                        .cartProductsCount(widget.enterpriseCode.toString()) >
+                    0)
+                  ObservationsAndInstructionsFields(
+                    observationsController: observationsController,
+                    instructionsController: instructionsController,
+                  ),
+                CartItems(
+                  enterpriseCode: widget.enterpriseCode,
+                  quantityController: quantityController,
+                ),
+                LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
+              ],
             ),
-        ],
-      ),
+          ),
+        ),
+        if (widget.keyboardIsOpen)
+          SaveSaleRequestInformationsAndButton(
+            enterpriseCode: widget.enterpriseCode,
+            requestTypeCode: widget.requestTypeCode,
+            instructions: instructionsController.text,
+            observations: observationsController.text,
+          ),
+      ],
     );
   }
 }

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'sale_request_cart_products_model.dart';
 
-
 class SaleRequestProcessCartModel {
   int ProductPackingCode;
   double Quantity;
@@ -89,7 +88,7 @@ class SaleRequestProcessCartModel {
     );
   }
 
-  static updateCartWithProcessCartResponse({
+  static void updateCartWithProcessCartResponse({
     required Map<String, dynamic> jsonSaleRequest,
     required String apiItemsResponse,
     required String enterpriseCode,

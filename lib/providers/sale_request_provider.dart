@@ -815,6 +815,8 @@ class SaleRequestProvider with ChangeNotifier {
     required String enterpriseCode,
     required int requestTypeCode,
     required BuildContext context,
+    required String instructions,
+    required String observations,
   }) async {
     _errorMessageSaveSaleRequest = "";
     _isLoadingSaveSaleRequest = true;
@@ -825,6 +827,8 @@ class SaleRequestProvider with ChangeNotifier {
     );
 
     _jsonSaleRequest["crossId"] = "${UserData.crossIdentity}";
+    _jsonSaleRequest["Observations"] = observations;
+    _jsonSaleRequest["Instructions"] = instructions;
     var jsonSaleRequestEncoded = json.encode(_jsonSaleRequest);
     try {
       await SoapRequest.soapPost(

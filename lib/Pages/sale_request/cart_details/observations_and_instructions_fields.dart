@@ -18,6 +18,7 @@ class ObservationsAndInstructionsFields extends StatelessWidget {
       child: Column(
         children: [
           TextField(
+            controller: observationsController,
             decoration: FormFieldDecoration.decoration(
               isLoading: false,
               context: context,
@@ -28,6 +29,7 @@ class ObservationsAndInstructionsFields extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           TextField(
+            controller: instructionsController,
             decoration: FormFieldDecoration.decoration(
               isLoading: false,
               context: context,

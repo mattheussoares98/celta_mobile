@@ -8,9 +8,13 @@ import '../../../utils/utils.dart';
 class SaveSaleRequestInformationsAndButton extends StatelessWidget {
   final int enterpriseCode;
   final int requestTypeCode;
+  final String instructions;
+  final String observations;
   const SaveSaleRequestInformationsAndButton({
     required this.enterpriseCode,
     required this.requestTypeCode,
+    required this.instructions,
+    required this.observations,
     super.key,
   });
 
@@ -77,6 +81,8 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
                     enterpriseCode: enterpriseCode.toString(),
                     requestTypeCode: requestTypeCode,
                     context: context,
+                    instructions: instructions,
+                    observations: observations,
                   );
                 },
               )
