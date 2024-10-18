@@ -21,56 +21,68 @@ class CartDetailsPage extends StatefulWidget {
 }
 
 class _CartDetailsPageState extends State<CartDetailsPage> {
-  TextEditingController _textEditingController = TextEditingController();
+  final quantityController = TextEditingController();
+  final observationsController = TextEditingController();
+  final instructionsController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    _textEditingController.dispose();
+    quantityController.dispose();
+    observationsController.dispose();
+    instructionsController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    SaleRequestProvider saleRequestProvider =
-        Provider.of(context, listen: true);
+    SaleRequestProvider saleRequestProvider = Provider.of(context);
 
-    return Column(
-      children: [
-        CartItems(
-          enterpriseCode: widget.enterpriseCode,
-          textEditingController: _textEditingController,
-        ),
-        if (saleRequestProvider
-                .cartProductsCount(widget.enterpriseCode.toString()) ==
-            0)
-          Expanded(
-            child: Container(
-              color: Colors.grey[200],
-              width: double.infinity,
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FittedBox(
-                    child: Text(
-                      "O carrinho está vazio",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 20,
-                        fontFamily: "OpenSans",
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          if (saleRequestProvider
+                  .cartProductsCount(widget.enterpriseCode.toString()) >
+              0)
+            ObservationsAndInstructionsFields(
+              observationsController: observationsController,
+              instructionsController: instructionsController,
+            ),
+          CartItems(
+            enterpriseCode: widget.enterpriseCode,
+            quantityController: quantityController,
+          ),
+          if (saleRequestProvider
+                  .cartProductsCount(widget.enterpriseCode.toString()) ==
+              0)
+            Expanded(
+              child: Container(
+                color: Colors.grey[200],
+                width: double.infinity,
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FittedBox(
+                      child: Text(
+                        "O carrinho está vazio",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 20,
+                          fontFamily: "OpenSans",
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
-        if (widget.keyboardIsOpen)
-          SaveSaleRequestInformationsAndButton(
-            enterpriseCode: widget.enterpriseCode,
-            requestTypeCode: widget.requestTypeCode,
-          ),
-      ],
+          LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
+          if (widget.keyboardIsOpen)
+            SaveSaleRequestInformationsAndButton(
+              enterpriseCode: widget.enterpriseCode,
+              requestTypeCode: widget.requestTypeCode,
+            ),
+        ],
+      ),
     );
   }
 }

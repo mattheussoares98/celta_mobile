@@ -31,6 +31,30 @@ class SaleRequestProvider with ChangeNotifier {
   String get errorMessageCustomer => _errorMessageCustomer;
   Map<String, List<SaleRequestCustomerModel>> _customers = {};
   Map<String, List<SaleRequestCustomerModel>> get customers => _customers;
+
+  bool _isLoadingProducts = false;
+  bool get isLoadingProducts => _isLoadingProducts;
+  String _errorMessageProducts = "";
+  String get errorMessageProducts => _errorMessageProducts;
+  List<GetProductJsonModel> _products = [];
+  List<GetProductJsonModel> get products => [..._products];
+  int get productsCount => _products.length;
+  var removedProduct;
+  int? indexOfRemovedProduct;
+
+  String _errorMessageSaveSaleRequest = "";
+  get errorMessageSaveSaleRequest => _errorMessageSaveSaleRequest;
+  bool _isLoadingSaveSaleRequest = false;
+  get isLoadingSaveSaleRequest => _isLoadingSaveSaleRequest;
+
+  String _errorMessageProcessCart = "";
+  get errorMessageProcessCart => _errorMessageProcessCart;
+  bool _isLoadingProcessCart = false;
+  get isLoadingProcessCart => _isLoadingProcessCart;
+
+  String _lastSaleRequestSaved = "";
+  String get lastSaleRequestSaved => _lastSaleRequestSaved;
+
   int customersCount(String enterpriseCode) {
     if (_customers[enterpriseCode] == null) {
       return 0;
@@ -80,16 +104,6 @@ class SaleRequestProvider with ChangeNotifier {
     return customerCode;
   }
 
-  bool _isLoadingProducts = false;
-  bool get isLoadingProducts => _isLoadingProducts;
-  String _errorMessageProducts = "";
-  String get errorMessageProducts => _errorMessageProducts;
-  List<GetProductJsonModel> _products = [];
-  List<GetProductJsonModel> get products => [..._products];
-  int get productsCount => _products.length;
-  var removedProduct;
-  int? indexOfRemovedProduct;
-
   Map<String, List<SaleRequestCartProductsModel>> _cartProducts = {};
   getCartProducts(int enterpriseCode) {
     return _cartProducts[enterpriseCode.toString()] ?? 0;
@@ -104,19 +118,6 @@ class SaleRequestProvider with ChangeNotifier {
       return _cartProducts[enterpriseCode]!.length;
     }
   }
-
-  String _errorMessageSaveSaleRequest = "";
-  get errorMessageSaveSaleRequest => _errorMessageSaveSaleRequest;
-  bool _isLoadingSaveSaleRequest = false;
-  get isLoadingSaveSaleRequest => _isLoadingSaveSaleRequest;
-
-  String _errorMessageProcessCart = "";
-  get errorMessageProcessCart => _errorMessageProcessCart;
-  bool _isLoadingProcessCart = false;
-  get isLoadingProcessCart => _isLoadingProcessCart;
-
-  String _lastSaleRequestSaved = "";
-  String get lastSaleRequestSaved => _lastSaleRequestSaved;
 
   void clearRequests() {
     _requests.clear();
@@ -877,8 +878,7 @@ class SaleRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para salvar o pedido: $e");
-      _errorMessageSaveSaleRequest =
-          DefaultErrorMessage.ERROR;
+      _errorMessageSaveSaleRequest = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageSaveSaleRequest,
         context: context,
