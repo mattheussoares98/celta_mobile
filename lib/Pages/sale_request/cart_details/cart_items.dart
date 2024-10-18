@@ -255,7 +255,7 @@ class _CartItemsState extends State<CartItems> {
                                                     .isLoadingProcessCart,
                                             lengthLimitingTextInputFormatter: 8,
                                             focusNode: _focusNode,
-                                            textEditingController:
+                                            productQuantityController:
                                                 widget.textEditingController,
                                             formKey: _formKey,
                                             onFieldSubmitted: () {

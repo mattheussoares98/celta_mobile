@@ -241,7 +241,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                   InsertProductQuantityForm(
                     insertQuantityFocusNode: _insertQuantityFocusNode,
                     enterpriseCode: widget.enterpriseCode,
-                    searchProductController: widget.consultedProductController,
+                    productQuantityController: widget.consultedProductController,
                     consultedProductFormKey: _consultedProductFormKey,
                     totalItemValue: _totalItemValue,
                     product: product,

@@ -6,16 +6,16 @@ import '../../../pages/sale_request/sale_request.dart';
 
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
-  final TextEditingController searchProductController;
+  final TextEditingController productQuantityController;
   final FocusNode insertQuantityFocusNode;
   final double totalItensInCart;
   final double totalItemValue;
   final GetProductJsonModel product;
-  final Function addProductInCart;
-  final Function updateTotalItemValue;
+  final void Function() addProductInCart;
+  final void Function() updateTotalItemValue;
   final int enterpriseCode;
   const InsertProductQuantityForm({
-    required this.searchProductController,
+    required this.productQuantityController,
     required this.insertQuantityFocusNode,
     required this.enterpriseCode,
     required this.consultedProductFormKey,
@@ -34,7 +34,7 @@ class InsertProductQuantityForm extends StatefulWidget {
 
 class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
   addItemInCart() {
-    if (widget.searchProductController.text.isEmpty) {
+    if (widget.productQuantityController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
       setState(() {
         widget.addProductInCart();
@@ -46,7 +46,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
     bool isValid = widget.consultedProductFormKey.currentState!.validate();
 
     double? controllerInDouble = double.tryParse(
-        widget.searchProductController.text.replaceAll(RegExp(r'\,'), '.'));
+        widget.productQuantityController.text.replaceAll(RegExp(r'\,'), '.'));
 
     if (controllerInDouble == null) {
       //se não conseguir converter, é porque vai adicionar uma unidade
@@ -64,9 +64,6 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
 
   @override
   Widget build(BuildContext context) {
-    double? quantityToAdd = double.tryParse(
-        widget.searchProductController.text.replaceAll(RegExp(r','), '.'));
-
     return Column(
       children: [
         const Divider(
@@ -76,62 +73,9 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
         Row(
           children: [
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    color: Theme.of(context).colorScheme.primary,
-                    onPressed: () {
-                      if (quantityToAdd == null) return;
-
-                      setState(() {
-                        if (quantityToAdd! <= 1) {
-                          widget.searchProductController.text = "";
-                          widget.searchProductController.clear();
-                        } else {
-                          quantityToAdd = quantityToAdd! - 1;
-                          widget.searchProductController.text = quantityToAdd!
-                              .toStringAsFixed(3)
-                              .replaceAll(RegExp(r'\.'), ',');
-                        }
-
-                        widget.updateTotalItemValue();
-                      });
-                    },
-                    icon: Icon(
-                      Icons.remove,
-                      color: widget.searchProductController.text.isEmpty
-                          ? Colors.grey
-                          : Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  IconButton(
-                    color: Theme.of(context).colorScheme.primary,
-                    onPressed: () {
-                      if (widget.searchProductController.text.isEmpty ||
-                          widget.searchProductController.text == "0") {
-                        widget.searchProductController.text = "1,000";
-                        widget.updateTotalItemValue();
-                      } else {
-                        double? quantityToAdd = double.tryParse(widget
-                            .searchProductController.text
-                            .replaceAll(RegExp(r','), '.'));
-
-                        if (quantityToAdd != null) {
-                          quantityToAdd++;
-
-                          widget.searchProductController.text = quantityToAdd
-                              .toStringAsFixed(3)
-                              .replaceAll(RegExp(r'\.'), ',');
-                        }
-                        widget.updateTotalItemValue();
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                    ),
-                  ),
-                ],
+              child: MoreOrLessQuantityButtons(
+                productQuantityController: widget.productQuantityController,
+                updateTotalItemValue: widget.updateTotalItemValue,
               ),
             ),
             Expanded(
@@ -144,7 +88,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             Expanded(
               child: InsertQuantityTextFormField(
                 focusNode: widget.insertQuantityFocusNode,
-                textEditingController: widget.searchProductController,
+                productQuantityController: widget.productQuantityController,
                 formKey: widget.consultedProductFormKey,
                 onChanged: widget.updateTotalItemValue,
                 onFieldSubmitted: addItemInCart,
@@ -155,7 +99,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             const SizedBox(width: 5),
             Expanded(
               child: AddInCartButton(
-                quantityToAdd: quantityToAdd,
+                productQuantityController: widget.productQuantityController,
                 addItemInCart: addItemInCart,
                 totalItemValue: widget.totalItemValue,
               ),

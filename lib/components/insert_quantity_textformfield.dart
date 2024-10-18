@@ -6,7 +6,7 @@ import 'components.dart';
 class InsertQuantityTextFormField extends StatefulWidget {
   final FocusNode focusNode;
   final bool isLoading;
-  final TextEditingController textEditingController;
+  final TextEditingController productQuantityController;
   final String labelText;
   final String hintText;
   final bool autoFocus;
@@ -17,7 +17,7 @@ class InsertQuantityTextFormField extends StatefulWidget {
   final bool canReceiveEmptyValue;
   const InsertQuantityTextFormField({
     required this.focusNode,
-    required this.textEditingController,
+    required this.productQuantityController,
     required this.formKey,
     required this.onChanged,
     required this.onFieldSubmitted,
@@ -45,7 +45,7 @@ class _InsertQuantityTextFormFieldState
         autofocus: widget.autoFocus,
         focusNode: widget.focusNode,
         enabled: widget.isLoading ? false : true,
-        controller: widget.textEditingController,
+        controller: widget.productQuantityController,
         inputFormatters: [
           LengthLimitingTextInputFormatter(
               widget.lengthLimitingTextInputFormatter)

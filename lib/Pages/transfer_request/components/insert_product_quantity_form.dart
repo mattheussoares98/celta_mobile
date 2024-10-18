@@ -149,7 +149,7 @@ class _InsertProductQuantityFormState
               flex: 10,
               child: InsertQuantityTextFormField(
                 focusNode: transferRequestProvider.consultedProductFocusNode,
-                textEditingController: widget.consultedProductController,
+                productQuantityController: widget.consultedProductController,
                 formKey: widget.consultedProductFormKey,
                 onChanged: () => {widget.updateTotalItemValue()},
                 onFieldSubmitted: () => addItemInCart(),
