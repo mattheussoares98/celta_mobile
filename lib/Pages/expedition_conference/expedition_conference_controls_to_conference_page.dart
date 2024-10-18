@@ -48,7 +48,8 @@ class _ExpeditionConferenceControlsToConferencePageState
       children: [
         Scaffold(
           appBar: AppBar(
-            title: const FittedBox(child: Text("Controles na etapa de conferência")),
+            title: const FittedBox(
+                child: Text("Controles na etapa de conferência")),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -60,25 +61,23 @@ class _ExpeditionConferenceControlsToConferencePageState
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (expeditionConferenceProvider.errorMessage != "" &&
-                    expeditionConferenceProvider
-                        .expeditionControlsToConference.isEmpty)
-                  searchAgain(
-                      errorMessage: expeditionConferenceProvider.errorMessage,
-                      request: () async {
-                        await expeditionConferenceProvider
-                            .getExpeditionControlsToConference(
-                          enterpriseCode: enterprise.codigoInternoEmpresa,
-                        );
-                      }),
-                const ExpeditionControlsToConferenceItems(),
-              ],
-            ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (expeditionConferenceProvider.errorMessage != "" &&
+                  expeditionConferenceProvider
+                      .expeditionControlsToConference.isEmpty)
+                searchAgain(
+                    errorMessage: expeditionConferenceProvider.errorMessage,
+                    request: () async {
+                      await expeditionConferenceProvider
+                          .getExpeditionControlsToConference(
+                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                      );
+                    }),
+              const Expanded(child: ExpeditionControlsToConferenceItems()),
+            ],
           ),
         ),
         loadingWidget(
