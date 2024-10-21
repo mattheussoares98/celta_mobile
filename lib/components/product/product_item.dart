@@ -7,11 +7,17 @@ import '../../../utils/utils.dart';
 class ProductItem extends StatelessWidget {
   final GetProductJsonModel product;
   final Widget componentAfterProductInformations;
-  final bool showCosts;
+  final bool? showCosts;
+  final bool? showLastBuyEntrance;
+  final bool? showPrice;
+  final bool? showWholeInformations;
   const ProductItem({
     required this.product,
     required this.componentAfterProductInformations,
-    required this.showCosts,
+    this.showPrice = true,
+    this.showWholeInformations = true,
+    this.showCosts,
+    this.showLastBuyEntrance,
     super.key,
   });
 
@@ -41,19 +47,21 @@ class ProductItem extends StatelessWidget {
                   pages: [
                     Stocks(product: product),
                     StockAddress(product: product),
-                    LastBuyEntrance(product: product),
-                    if (showCosts) Costs(product: product),
+                    if (showLastBuyEntrance == true)
+                      LastBuyEntrance(product: product),
+                    if (showCosts == true) Costs(product: product),
                   ],
                 ),
               ],
             ),
-            getTitleAndSubtitle(
-              value: product.retailPracticedPrice.toString(),
-              isPrice: true,
-              successMessage: "Preço de venda",
-              errorMessage: "Sem preço de venda",
-              context: context,
-            ),
+            if (showPrice == true)
+              getTitleAndSubtitle(
+                value: product.retailPracticedPrice.toString(),
+                isPrice: true,
+                successMessage: "Preço de venda",
+                errorMessage: "Sem preço de venda",
+                context: context,
+              ),
             TitleAndSubtitle.titleAndSubtitle(
               title: product.stocks!
                           .where(
@@ -66,21 +74,27 @@ class ProductItem extends StatelessWidget {
               subtitle: getStockValueMessage(product),
               subtitleColor: getStockSubtitleColor(context, product),
             ),
-            getTitleAndSubtitle(
-              isPrice: true,
-              value: product.wholePracticedPrice.toString(),
-              successMessage: "Preço de atacado",
-              errorMessage: "Sem preço de atacado",
-              context: context,
-            ),
-            getTitleAndSubtitle(
-              isPrice: false,
-              value: product.minimumWholeQuantity.toString(),
-              successMessage: "Qtd mín atacado",
-              errorMessage: "Sem qtd mín p/ atacado",
-              context: context,
-            ),
-            if (!product.liquidCost.toString().contains("-1") && showCosts)
+            if (showWholeInformations == true)
+              Column(
+                children: [
+                  getTitleAndSubtitle(
+                    isPrice: true,
+                    value: product.wholePracticedPrice.toString(),
+                    successMessage: "Preço de atacado",
+                    errorMessage: "Sem preço de atacado",
+                    context: context,
+                  ),
+                  getTitleAndSubtitle(
+                    isPrice: false,
+                    value: product.minimumWholeQuantity.toString(),
+                    successMessage: "Qtd mín atacado",
+                    errorMessage: "Sem qtd mín p/ atacado",
+                    context: context,
+                  ),
+                ],
+              ),
+            if (!product.liquidCost.toString().contains("-1") &&
+                showCosts == true)
               //quando o usuário não possui permissão para consultar o estoque, a API retorna "-1.0"
               getTitleAndSubtitle(
                 isPrice: true,

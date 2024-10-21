@@ -84,14 +84,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                 Flexible(
                   flex: 10,
                   child: TextFormField(
-                    // autofocus: true,
                     focusNode: adjustStockProvider.consultedProductFocusNode,
-                    enabled: adjustStockProvider.isLoadingProducts ||
-                            adjustStockProvider
-                                .isLoadingTypeStockAndJustifications ||
-                            adjustStockProvider.isLoadingAdjustStock
-                        ? false
-                        : true,
                     controller: widget.consultedProductController,
                     inputFormatters: [LengthLimitingTextInputFormatter(10)],
                     onChanged: (value) {
@@ -111,13 +104,10 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                       }
                     },
                     validator: (value) {
-          return FormFieldValidations.number(value: value);
-        },
+                      return FormFieldValidations.number(value: value);
+                    },
                     decoration: FormFieldDecoration.decoration(
-                      isLoading: adjustStockProvider.isLoadingProducts ||
-                          adjustStockProvider
-                              .isLoadingTypeStockAndJustifications ||
-                          adjustStockProvider.isLoadingAdjustStock,
+                      isLoading: false,
                       context: context,
                       labelText: 'Quantidade',
                     ),
@@ -148,53 +138,29 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                       minimumSize: const Size(double.infinity, 60),
                       maximumSize: const Size(double.infinity, 60),
                     ),
-                    onPressed: adjustStockProvider.isLoadingAdjustStock
-                        ? null
-                        : () async {
-                            if (_isValid()) {
-                              //print("formulários corretos. Pode salvar");
-                              ShowAlertDialog.show(
-                                context: context,
-                                title: "Confirmar ajuste",
-                                function: () async {
-                                  await confirmAdjustStock(
-                                    adjustStockProvider: adjustStockProvider,
-                                    configurationsProvider:
-                                        configurationsProvider,
-                                  );
-                                },
-                              );
-                            }
+                    onPressed: () async {
+                      if (_isValid()) {
+                        //print("formulários corretos. Pode salvar");
+                        ShowAlertDialog.show(
+                          context: context,
+                          title: "Confirmar ajuste",
+                          function: () async {
+                            await confirmAdjustStock(
+                              adjustStockProvider: adjustStockProvider,
+                              configurationsProvider: configurationsProvider,
+                            );
                           },
-                    child: adjustStockProvider.isLoadingAdjustStock
-                        ? FittedBox(
-                            child: Row(
-                              children: [
-                                const Text(
-                                  "AGUARDE",
-                                  style: const TextStyle(
-                                    fontSize: 50,
-                                  ),
-                                ),
-                                const SizedBox(width: 30),
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : const FittedBox(
-                            child: Text(
-                              "CONFIRMAR",
-                              style: const TextStyle(
-                                fontSize: 50,
-                              ),
-                            ),
-                          ),
+                        );
+                      }
+                    },
+                    child: const FittedBox(
+                      child: Text(
+                        "CONFIRMAR",
+                        style: const TextStyle(
+                          fontSize: 25,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],

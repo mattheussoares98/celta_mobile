@@ -31,77 +31,82 @@ class _OpenDialogProductInformationsState
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: Row(
-        children: [
-          Text(
-            widget.title,
-            style: TextStyle(
+    return Flexible(
+      child: InkWell(
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.title,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            const SizedBox(width: 3),
+            Icon(
+              Icons.info,
               color: Theme.of(context).colorScheme.primary,
             ),
-          ),
-          const SizedBox(width: 3),
-          Icon(
-            Icons.info,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ],
-      ),
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                contentPadding: const EdgeInsets.all(8),
-                insetPadding: const EdgeInsets.symmetric(
-                  vertical: 20,
-                  horizontal: 10,
-                ),
-                actionsPadding: const EdgeInsets.symmetric(
-                  vertical: 5,
-                  horizontal: 8,
-                ),
-                content: Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: PageView(
-                    controller: _pageController,
-                    children: widget.pages,
+          ],
+        ),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  contentPadding: const EdgeInsets.all(8),
+                  insetPadding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 10,
                   ),
-                ),
-                actions: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          for (var i = 0; i < widget.pages.length; i++)
-                            ActionButton(
-                              pageIndex: i,
-                              pageController: _pageController,
-                              textButton: widget.pages[i].moreInformationName,
+                  actionsPadding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 8,
+                  ),
+                  content: Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: PageView(
+                      controller: _pageController,
+                      children: widget.pages,
+                    ),
+                  ),
+                  actions: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            for (var i = 0; i < widget.pages.length; i++)
+                              ActionButton(
+                                pageIndex: i,
+                                pageController: _pageController,
+                                textButton: widget.pages[i].moreInformationName,
+                              ),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            "Fechar",
+                            style: TextStyle(
+                              color: Colors.red,
                             ),
-                        ],
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          "Fechar",
-                          style: TextStyle(
-                            color: Colors.red,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            });
-      },
+                      ],
+                    ),
+                  ],
+                );
+              });
+        },
+      ),
     );
   }
 }
