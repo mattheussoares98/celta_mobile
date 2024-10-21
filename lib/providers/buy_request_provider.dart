@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import '../api/api.dart';
 import '../components/components.dart';
 import '../models/buy_request/buy_request.dart';
+import '../models/soap/products/products.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
 class BuyRequestProvider with ChangeNotifier {
-  List<BuyRequestProductsModel> _products = [];
-  List<BuyRequestProductsModel> get products => [..._products];
+  List<GetProductJsonModel> _products = [];
+  List<GetProductJsonModel> get products => [..._products];
   bool _isLoadingProducts = false;
   bool get isLoadingProducts => _isLoadingProducts;
   String _errorMessageGetProducts = "";
@@ -98,8 +99,8 @@ class BuyRequestProvider with ChangeNotifier {
   String _errorMessageInsertBuyRequest = "";
   String get errorMessageInsertBuyRequest => _errorMessageInsertBuyRequest;
 
-  static List<BuyRequestProductsModel> _productsInCart = [];
-  List<BuyRequestProductsModel> get productsInCart => [..._productsInCart];
+  static List<GetProductJsonModel> _productsInCart = [];
+  List<GetProductJsonModel> get productsInCart => [..._productsInCart];
   int get productsInCartCount => _productsInCart.length;
 
   static TextEditingController _observationsController =
@@ -135,10 +136,10 @@ class BuyRequestProvider with ChangeNotifier {
     "Products": _productsInCart
         .map(
           (product) => BuyRequestCartProductModel(
-            EnterpriseCode: product.EnterpriseCode,
-            ProductPackingCode: product.ProductPackingCode,
-            Value: product.Value,
-            Quantity: product.quantity,
+            EnterpriseCode: product.enterpriseCode!,
+            ProductPackingCode: product.productPackingCode!,
+            Value: product.value!,
+            Quantity: product.quantity!,
             IncrementPercentageOrValue: "R\$",
             IncrementValue: 0,
             DiscountPercentageOrValue: "R\$",
@@ -150,7 +151,7 @@ class BuyRequestProvider with ChangeNotifier {
 
   double get totalCartPrice {
     double total = _productsInCart.fold(0, (previousValue, product) {
-      double productTotal = product.quantity * product.ValueTyped;
+      double productTotal = product.quantity! * product.valueTyped!;
       return previousValue + productTotal;
     });
 
@@ -293,11 +294,11 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   _restoreCartProducts(Map jsonInDatabase) {
-    List<BuyRequestProductsModel> cartProductsTemp = [];
+    List<GetProductJsonModel> cartProductsTemp = [];
 
     if (jsonInDatabase.containsKey("cartProducts")) {
       jsonInDatabase["cartProducts"].forEach((element) {
-        cartProductsTemp.add(BuyRequestProductsModel.fromJson(element));
+        cartProductsTemp.add(GetProductJsonModel.fromJson(element));
       });
       _productsInCart = cartProductsTemp;
     }
@@ -321,7 +322,7 @@ class BuyRequestProvider with ChangeNotifier {
     bool _containsProductWithTheEnterprise = false;
     if (enterprise.selected) {
       for (var x = 0; x < _productsInCart.length; x++) {
-        if (_productsInCart[x].EnterpriseCode == enterprise.Code) {
+        if (_productsInCart[x].enterpriseCode == enterprise.Code) {
           _containsProductWithTheEnterprise = true;
           break;
         }
@@ -362,10 +363,10 @@ class BuyRequestProvider with ChangeNotifier {
 
   _removeProductsByEnterpriseCode(int enterpriseCode) async {
     _productsInCart.removeWhere(
-      (element) => element.EnterpriseCode == enterpriseCode,
+      (element) => element.enterpriseCode == enterpriseCode,
     );
     _products.removeWhere(
-      (element) => element.EnterpriseCode == enterpriseCode,
+      (element) => element.enterpriseCode == enterpriseCode,
     );
     notifyListeners();
   }
@@ -431,10 +432,10 @@ class BuyRequestProvider with ChangeNotifier {
     _enterprisesSelecteds.clear();
   }
 
-  bool hasProductInCart(BuyRequestProductsModel product) {
+  bool hasProductInCart(GetProductJsonModel product) {
     int index = _productsInCart.indexWhere((cartProduct) =>
-        product.ProductPackingCode == cartProduct.ProductPackingCode &&
-        product.EnterpriseCode == cartProduct.EnterpriseCode);
+        product.productPackingCode == cartProduct.productPackingCode &&
+        product.enterpriseCode == cartProduct.enterpriseCode);
 
     if (index == -1) {
       return false;
@@ -450,10 +451,10 @@ class BuyRequestProvider with ChangeNotifier {
 
     for (int i = 0; i < _products.length; i++) {
       for (int j = 0; j < _productsInCart.length; j++) {
-        if (_products[i].ProductPackingCode ==
-                _productsInCart[j].ProductPackingCode &&
-            _products[i].EnterpriseCode == _productsInCart[j].EnterpriseCode) {
-          _products[i].ValueTyped = _productsInCart[j].ValueTyped;
+        if (_products[i].productPackingCode ==
+                _productsInCart[j].productPackingCode &&
+            _products[i].enterpriseCode == _productsInCart[j].enterpriseCode) {
+          _products[i].valueTyped = _productsInCart[j].valueTyped;
           _products[i].quantity = _productsInCart[j].quantity;
 
           break;
@@ -473,42 +474,42 @@ class BuyRequestProvider with ChangeNotifier {
 
   void orderUpByEnterprise() {
     _productsInCart
-        .sort((a, b) => a.EnterpriseCode.compareTo(b.EnterpriseCode));
+        .sort((a, b) => a.enterpriseCode!.compareTo(b.enterpriseCode!));
 
     notifyListeners();
   }
 
   void orderDownByEnterprise() {
     _productsInCart
-        .sort((a, b) => b.EnterpriseCode.compareTo(a.EnterpriseCode));
+        .sort((a, b) => b.enterpriseCode!.compareTo(a.enterpriseCode!));
 
     notifyListeners();
   }
 
   void _orderProductsUpByPlu() {
-    _products.sort((a, b) => a.PLU.compareTo(b.PLU));
+    _products.sort((a, b) => a.plu!.compareTo(b.plu!));
     notifyListeners();
   }
 
   void orderCartUpByName() {
-    _productsInCart.sort((a, b) => a.Name.compareTo(b.Name));
+    _productsInCart.sort((a, b) => a.name!.compareTo(b.name!));
     notifyListeners();
   }
 
   void orderCartDownByName() {
-    _productsInCart.sort((a, b) => b.Name.compareTo(a.Name));
+    _productsInCart.sort((a, b) => b.name!.compareTo(a.name!));
     notifyListeners();
   }
 
   void orderCartDownByTotalCost() {
     _productsInCart.sort((a, b) =>
-        (b.ValueTyped * b.quantity).compareTo(a.ValueTyped * a.quantity));
+        (b.valueTyped! * b.quantity!).compareTo(a.valueTyped! * a.quantity!));
     notifyListeners();
   }
 
   void orderCartUpByTotalCost() {
     _productsInCart.sort((a, b) =>
-        (a.ValueTyped * a.quantity).compareTo(b.ValueTyped * b.quantity));
+        (a.valueTyped! * a.quantity!).compareTo(b.valueTyped! * b.quantity!));
     notifyListeners();
   }
 
@@ -744,7 +745,7 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   void updateProductInCart({
-    required BuyRequestProductsModel product,
+    required GetProductJsonModel product,
   }) async {
     double price =
         double.parse(priceController.text.replaceAll(RegExp(r','), '.'));
@@ -752,11 +753,11 @@ class BuyRequestProvider with ChangeNotifier {
         double.parse(quantityController.text.replaceAll(RegExp(r','), '.'));
 
     product.quantity = quantity;
-    product.ValueTyped = price;
+    product.valueTyped = price;
 
     int indexOfCartProduct = _productsInCart.indexWhere((element) =>
-        element.EnterpriseCode == product.EnterpriseCode &&
-        element.ProductPackingCode == product.ProductPackingCode);
+        element.enterpriseCode == product.enterpriseCode &&
+        element.productPackingCode == product.productPackingCode);
 
     if (indexOfCartProduct == -1) {
       _productsInCart.add(product);
@@ -769,22 +770,22 @@ class BuyRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeProductFromCart(BuyRequestProductsModel product) async {
+  void removeProductFromCart(GetProductJsonModel product) async {
     int indexOfProduct = _products.indexWhere(
       (element) =>
-          element.ProductPackingCode == product.ProductPackingCode &&
-          element.EnterpriseCode == product.EnterpriseCode,
+          element.productPackingCode == product.productPackingCode &&
+          element.enterpriseCode == product.enterpriseCode,
     );
 
     if (indexOfProduct != -1) {
-      _products[indexOfProduct].ValueTyped = 0;
+      _products[indexOfProduct].valueTyped = 0;
       _products[indexOfProduct].quantity = 0;
     }
 
     _productsInCart.removeWhere(
       (element) =>
-          element.ProductPackingCode == product.ProductPackingCode &&
-          element.EnterpriseCode == product.EnterpriseCode,
+          element.productPackingCode == product.productPackingCode &&
+          element.enterpriseCode == product.enterpriseCode,
     );
 
     await _updateDataInDatabase();
@@ -795,10 +796,10 @@ class BuyRequestProvider with ChangeNotifier {
   List<BuyRequestCartProductModel> convertToCartProductModels() {
     return _productsInCart
         .map((product) => BuyRequestCartProductModel(
-              EnterpriseCode: product.EnterpriseCode,
-              ProductPackingCode: product.ProductPackingCode,
-              Value: product.Value,
-              Quantity: product.quantity,
+              EnterpriseCode: product.enterpriseCode!,
+              ProductPackingCode: product.productPackingCode!,
+              Value: product.value ?? 0,
+              Quantity: product.quantity ?? 1,
               IncrementPercentageOrValue:
                   "", // Coloque os valores apropriados aqui
               IncrementValue: 0.0, // Coloque os valores apropriados aqui
@@ -820,10 +821,10 @@ class BuyRequestProvider with ChangeNotifier {
     _jsonBuyRequest["Enterprises"] = _enterprisesSelecteds;
     _jsonBuyRequest["Products"] = _productsInCart
         .map((product) => BuyRequestCartProductModel(
-              EnterpriseCode: product.EnterpriseCode,
-              ProductPackingCode: product.ProductPackingCode,
-              Value: product.ValueTyped,
-              Quantity: product.quantity,
+              EnterpriseCode: product.enterpriseCode!,
+              ProductPackingCode: product.productPackingCode!,
+              Value: product.valueTyped!,
+              Quantity: product.quantity!,
               IncrementPercentageOrValue: "R\$",
               IncrementValue: 0,
               DiscountPercentageOrValue: "R\$",
@@ -895,8 +896,7 @@ class BuyRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para salvar o pedido: $e");
-      _errorMessageInsertBuyRequest =
-          DefaultErrorMessage.ERROR;
+      _errorMessageInsertBuyRequest = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageInsertBuyRequest,
         context: context,

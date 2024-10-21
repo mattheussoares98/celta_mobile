@@ -45,6 +45,8 @@ class GetProductJsonModel {
   List<StocksModel>? stocks;
   LastBuyEntranceModel? lastBuyEntrance;
   PriceCostModel? priceCost;
+  double? valueTyped = 0;
+  double? quantity = 0;
 
   GetProductJsonModel({
     required this.enterpriseCode,
@@ -87,6 +89,8 @@ class GetProductJsonModel {
     required this.alterationPriceForAllPackings,
     required this.isChildOfGrate,
     required this.priceCost,
+    this.valueTyped,
+    this.quantity,
   });
 
   GetProductJsonModel.fromJson(Map<String, dynamic> json) {

@@ -11,9 +11,11 @@ class ProductItem extends StatelessWidget {
   final bool? showLastBuyEntrance;
   final bool? showPrice;
   final bool? showWholeInformations;
+  final Widget? componentBeforeProductInformations;
   const ProductItem({
     required this.product,
     required this.componentAfterProductInformations,
+    this.componentBeforeProductInformations,
     this.showPrice = true,
     this.showWholeInformations = true,
     this.showCosts,
@@ -29,6 +31,8 @@ class ProductItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (componentBeforeProductInformations != null)
+              componentBeforeProductInformations!,
             TitleAndSubtitle.titleAndSubtitle(
               title: "Produto",
               subtitle:

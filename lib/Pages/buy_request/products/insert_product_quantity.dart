@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/buy_request/buy_request.dart';
+import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 import '../../../components/components.dart';
 
 class InsertProductQuantity extends StatefulWidget {
-  final BuyRequestProductsModel product;
+  final GetProductJsonModel product;
 
   const InsertProductQuantity({
     required this.product,
@@ -44,7 +44,7 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
     }
   }
 
-  void _updateProductInCart(BuyRequestProductsModel product) {
+  void _updateProductInCart(GetProductJsonModel product) {
     BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
     if (!_isValid()) {
       double? quantity = double.tryParse(

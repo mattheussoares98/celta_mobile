@@ -1,8 +1,9 @@
+import 'package:celta_inventario/components/components.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/buy_request/buy_request.dart';
+import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import 'products.dart';
@@ -20,7 +21,7 @@ class ProductsItems extends StatefulWidget {
 
 class _ProductsItemsState extends State<ProductsItems> {
   void _updatePriceControllerText(BuyRequestProvider buyRequestProvider) {
-    BuyRequestProductsModel product;
+    GetProductJsonModel product;
     if (widget.showOnlyCartProducts) {
       product = buyRequestProvider
           .productsInCart[buyRequestProvider.indexOfSelectedProduct];
@@ -31,7 +32,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     setState(() {
       buyRequestProvider.priceController.text =
           ConvertString.convertToBrazilianNumber(
-        practicedValue(product),
+        getPracticedValue(product),
         decimalHouses: 2,
       );
 
@@ -41,7 +42,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     });
   }
 
-  _changeFocusToSelectedProduct(BuyRequestProvider buyRequestProvider) {
+  void _changeFocusToSelectedProduct(BuyRequestProvider buyRequestProvider) {
     Future.delayed(const Duration(milliseconds: 300), () {
       FocusScope.of(context).requestFocus(
         buyRequestProvider.quantityFocusNode,
@@ -49,7 +50,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     });
   }
 
-  changeFocusAndUpdatePriceControllerText(
+  void changeFocusAndUpdatePriceControllerText(
     BuyRequestProvider buyRequestProvider,
   ) {
     _updatePriceControllerText(buyRequestProvider);
@@ -104,13 +105,13 @@ class _ProductsItemsState extends State<ProductsItems> {
     }
   }
 
-  String practicedValue(BuyRequestProductsModel product) {
-    if (product.ValueTyped != 0) {
-      return product.ValueTyped.toString();
-    } else if (product.Value == 0.0) {
-      return product.RealCost.toString();
+  String getPracticedValue(GetProductJsonModel product) {
+    if (product.valueTyped != 0) {
+      return product.valueTyped.toString();
+    } else if (product.value == 0.0) {
+      return product.realCost.toString();
     } else {
-      return product.Value.toString();
+      return product.value.toString();
     }
   }
 
@@ -118,72 +119,83 @@ class _ProductsItemsState extends State<ProductsItems> {
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
 
-    return Column(
-      mainAxisAlignment: buyRequestProvider.productsCount > 1 ||
-              (widget.showOnlyCartProducts &&
-                  buyRequestProvider.productsInCartCount > 1)
-          ? MainAxisAlignment.center
-          : MainAxisAlignment.start,
-      children: [
-        ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: widget.showOnlyCartProducts
-                ? buyRequestProvider.productsInCartCount
-                : buyRequestProvider.productsCount,
-            itemBuilder: (context, index) {
-              if (buyRequestProvider.productsCount == 1 &&
-                  !widget.showOnlyCartProducts) {
-                buyRequestProvider.indexOfSelectedProduct = index;
-                buyRequestProvider.priceController.text =
-                    practicedValue(buyRequestProvider.products[index]);
-              } else if (buyRequestProvider.productsCount == 0 &&
-                  !widget.showOnlyCartProducts) {
-                buyRequestProvider.indexOfSelectedProduct = -1;
-              }
-
-              final product = buyRequestProvider.products[index];
-
-              return GestureDetector(
-                onTap: buyRequestProvider.isLoadingProducts ||
-                        buyRequestProvider.isLoadingInsertBuyRequest
-                    ? null
-                    : () {
-                        setState(() {
-                          selectIndexAndFocus(
-                            buyRequestProvider: buyRequestProvider,
-                            index: index,
-                          );
-                        });
-                      },
-                child: Column(
-                  children: [
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            ProductsInformations(
-                              buyRequestProvider: buyRequestProvider,
-                              index: index,
-                              product: product,
-                              practicedValue: practicedValue(product),
-                            ),
-                            if (buyRequestProvider.indexOfSelectedProduct ==
-                                index)
-                              InsertProductQuantity(
-                                product: product,
-                              ),
-                          ],
-                        ),
-                      ),
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.showOnlyCartProducts
+            ? buyRequestProvider.productsInCartCount
+            : buyRequestProvider.productsCount,
+        itemBuilder: (context, index) {
+          if (buyRequestProvider.productsCount == 1 &&
+              !widget.showOnlyCartProducts) {
+            buyRequestProvider.indexOfSelectedProduct = index;
+            buyRequestProvider.priceController.text =
+                getPracticedValue(buyRequestProvider.products[index]);
+          } else if (buyRequestProvider.productsCount == 0 &&
+              !widget.showOnlyCartProducts) {
+            buyRequestProvider.indexOfSelectedProduct = -1;
+          }
+    
+          final product = buyRequestProvider.products[index];
+    
+          return GestureDetector(
+            onTap: buyRequestProvider.isLoadingProducts ||
+                    buyRequestProvider.isLoadingInsertBuyRequest
+                ? null
+                : () {
+                    setState(() {
+                      selectIndexAndFocus(
+                        buyRequestProvider: buyRequestProvider,
+                        index: index,
+                      );
+                    });
+                  },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ProductItem(
+                  product: product,
+                  showWholeInformations: false,
+                  showCosts: false,
+                  showPrice: false,
+                  showLastBuyEntrance: true,
+                  componentBeforeProductInformations:
+                      TitleAndSubtitle.titleAndSubtitle(
+                    fontSize: 20,
+                    subtitleColor: Colors.yellow[900],
+                    subtitle: _enterprisePersonalizedCodeAndName(
+                      buyRequestProvider: buyRequestProvider,
+                      product: product,
                     ),
-                  ],
+                  ),
+                  componentAfterProductInformations: Column(
+                    children: [
+                      CostsQuantityAndTotal(
+                        practicedValue: getPracticedValue(product),
+                        product: product,
+                        index: index,
+                      ),
+                      if (buyRequestProvider.indexOfSelectedProduct ==
+                          index)
+                        InsertProductQuantity(
+                          product: product,
+                        ),
+                    ],
+                  ),
                 ),
-              );
-            }),
-      ],
-    );
+              ],
+            ),
+          );
+        });
   }
+}
+
+String _enterprisePersonalizedCodeAndName({
+  required BuyRequestProvider buyRequestProvider,
+  required GetProductJsonModel product,
+}) {
+  var enterprise = buyRequestProvider.enterprises.firstWhere(
+    (element) => product.enterpriseCode == element.Code,
+  );
+
+  return "(${enterprise.PersonalizedCode}) - " + enterprise.Name;
 }

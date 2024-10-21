@@ -270,7 +270,7 @@ class SoapHelper {
     required int selectedRequestModelCode,
     required List<int> enterpriseCodes,
     required int selectedSupplierCode,
-    required List<BuyRequestProductsModel> products,
+    required List<GetProductJsonModel> products,
   }) async {
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
@@ -300,7 +300,7 @@ class SoapHelper {
         throw Exception();
       }
 
-      BuyRequestProductsModel.responseAsStringToBuyRequestProductsModel(
+      GetProductJsonModel.responseAsStringToGetProductJsonModel(
         responseAsString: SoapRequestResponse.responseAsString,
         listToAdd: products,
       );
