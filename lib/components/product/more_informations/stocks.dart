@@ -18,45 +18,89 @@ class Stocks extends StatelessWidget implements MoreInformationWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enterprises = _getEnterpriseNames(product.stocks);
+
     return product.stocks == null || product.stocks?.isEmpty == true
         ? const Center(
             child: Text("Não há estoques para esse produto"),
           )
         : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: product.stocks!.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        "ESTOQUES",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-              final stock = product.stocks![index - 1];
-
-              return TitleAndSubtitle.titleAndSubtitle(
-                title: stock.stockName,
-                subtitle: stock.stockQuantity.toString().toBrazilianNumber(3),
-                subtitleColor: _stockColor(
-                  stockQuantity: stock.stockQuantity.toString(),
-                  context: context,
+          shrinkWrap: true,
+          itemCount: enterprises.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return const Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: Text(
+                  "ESTOQUES",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               );
-            },
-          );
+            }
+        
+            final enterprise = enterprises[index - 1];
+        
+            final stocksByEnterprise = product.stocks!
+                .where((e) => e.enterprise == enterprise)
+                .toList();
+        
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: stocksByEnterprise.length + 1,
+              itemBuilder: (context, stockIndex) {
+                if (stockIndex == 0) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Divider(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          enterprise,
+                          style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+        
+                final stock = stocksByEnterprise[stockIndex - 1];
+        
+                return TitleAndSubtitle.titleAndSubtitle(
+                  title: stock.stockName,
+                  subtitle:
+                      stock.stockQuantity.toString().toBrazilianNumber(3),
+                  subtitleColor: _stockColor(
+                    stockQuantity: stock.stockQuantity.toString(),
+                    context: context,
+                  ),
+                );
+              },
+            );
+          },
+        );
   }
+}
+
+List<String> _getEnterpriseNames(List<StocksModel>? stocks) {
+  List<String> names = [];
+  if (stocks == null) {
+    return names;
+  }
+
+  for (var stock in stocks) {
+    if (!names.contains(stock.enterprise) && stock.enterprise != null) {
+      names.add(stock.enterprise!);
+    }
+  }
+  return names;
 }
 
 Color _stockColor({

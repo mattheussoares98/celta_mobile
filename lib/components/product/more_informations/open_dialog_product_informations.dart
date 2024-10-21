@@ -31,7 +31,7 @@ class _OpenDialogProductInformationsState
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       child: Row(
         children: [
           Text(
