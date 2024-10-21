@@ -59,50 +59,6 @@ class Stocks extends StatelessWidget implements MoreInformationWidget {
   }
 }
 
-Widget stocks({
-  required BuildContext context,
-  required GetProductJsonModel product,
-}) =>
-    product.stocks == null || product.stocks?.isEmpty == true
-        ? const Center(
-            child: Text("Não há estoques para esse produto"),
-          )
-        : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: product.stocks!.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const Column(
-                  children: [
-                    Divider(),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Text(
-                        "ESTOQUES",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-              final stock = product.stocks![index - 1];
-
-              return TitleAndSubtitle.titleAndSubtitle(
-                title: stock.stockName,
-                subtitle: stock.stockQuantity.toString().toBrazilianNumber(3),
-                subtitleColor: _stockColor(
-                  stockQuantity: stock.stockQuantity.toString(),
-                  context: context,
-                ),
-              );
-            },
-          );
-
 Color _stockColor({
   required String stockQuantity,
   required BuildContext context,
