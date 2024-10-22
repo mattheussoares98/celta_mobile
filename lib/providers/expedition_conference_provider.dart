@@ -131,6 +131,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     required int enterpriseCode,
     required ConfigurationsProvider configurationsProvider,
     required int expeditionControlCode,
+    required int stepCode,
   }) async {
     _isLoading = true;
     _errorMessageGetProducts = "";
@@ -157,6 +158,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
           indexOfSearchedProduct: 0,
           expeditionControlCode: expeditionControlCode,
           enterpriseCode: enterpriseCode,
+          stepCode: stepCode,
         );
       }
     } catch (e) {
@@ -175,6 +177,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     required int indexOfSearchedProduct,
     required int expeditionControlCode,
     required int enterpriseCode,
+    required int stepCode,
   }) async {
     final confirmedProduct = _searchedProducts[indexOfSearchedProduct];
 
@@ -226,6 +229,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       await confirmConference(
         expeditionControlCode: expeditionControlCode,
         enterpriseCode: enterpriseCode,
+        stepCode: stepCode,
       );
     }
   }
@@ -267,6 +271,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   Future<void> confirmConference({
     required int expeditionControlCode,
     required int enterpriseCode,
+    required int stepCode,
   }) async {
     _errorMessageConfirmConference = "";
     _isLoading = true;
@@ -275,7 +280,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       final parameters = {
         "CrossIdentity": UserData.crossIdentity,
         "ExpeditionControlCode": expeditionControlCode,
-        "StepCode": 1,
+        "StepCode": stepCode,
         "Confered": true,
       };
       await SoapRequest.soapPost(
@@ -305,8 +310,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         await getExpeditionControlsToConference(enterpriseCode: enterpriseCode);
       }
     } catch (e) {
-      _errorMessageConfirmConference =
-          DefaultErrorMessage.ERROR;
+      _errorMessageConfirmConference = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();

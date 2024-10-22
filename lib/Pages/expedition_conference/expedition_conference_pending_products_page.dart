@@ -42,6 +42,7 @@ class _ExpeditionConferencePendingProductsPageState
       enterpriseCode: enterprise.codigoInternoEmpresa,
       configurationsProvider: ConfigurationsProvider(),
       expeditionControlCode: expeditionControl.ExpeditionControlCode!,
+      stepCode: expeditionControl.StepCode!,
     );
 
     if (expeditionConferenceProvider.errorMessageGetProducts.isEmpty &&
@@ -55,6 +56,7 @@ class _ExpeditionConferencePendingProductsPageState
         builder: (context) => ConfirmProductDialog(
           expeditionControlCode: expeditionControl.ExpeditionControlCode!,
           enterpriseCode: enterprise.codigoInternoEmpresa,
+          stepCode: expeditionControl.StepCode!,
         ),
       );
     }
@@ -111,6 +113,7 @@ class _ExpeditionConferencePendingProductsPageState
               await expeditionConferenceProvider.confirmConference(
                 expeditionControlCode: expeditionControl.ExpeditionControlCode!,
                 enterpriseCode: enterprise.codigoInternoEmpresa,
+                stepCode: expeditionControl.StepCode!,
               );
             },
           ),
