@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class CustomerRegisterCovenantModel {
   final int? CodigoInterno_Convenio;
   final String? Codigo_Convenio;
@@ -245,4 +247,18 @@ class CustomerRegisterCovenantModel {
         "FlagEnderecoContemNumCobranca_Convenio":
             FlagEnderecoContemNumCobranca_Convenio,
       };
+
+  static void responseAsStringToModel({
+    required List<CustomerRegisterCovenantModel> listToAdd,
+    required String response,
+  }) {
+    try {
+      final List decoded = json.decode(response);
+      listToAdd.addAll(
+        decoded.map((e) => CustomerRegisterCovenantModel.fromJson(e)).toList(),
+      );
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

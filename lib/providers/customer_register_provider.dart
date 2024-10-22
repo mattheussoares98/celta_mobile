@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../api/api.dart';
+import '../models/customer_register/customer_register.dart';
 import '../utils/utils.dart';
 import './address_provider.dart';
 
@@ -23,6 +24,9 @@ class CustomerRegisterProvider with ChangeNotifier {
   List<Map<String, String>> _telephones = [];
   List<Map<String, String>> get telephones => [..._telephones];
   int get telephonesCount => _telephones.length;
+
+  List<CustomerRegisterCovenantModel> _covenants = [];
+  List<CustomerRegisterCovenantModel> get covenants => [..._covenants];
 
   bool _personFormKeyIsValid = false;
   bool get personFormKeyIsValid => _personFormKeyIsValid;
@@ -276,8 +280,13 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   Future<void> loadCovenants() async {
+    if (_covenants.isNotEmpty) {
+      //não precisa consultar novamente se já houver dados
+      return;
+    }
     _isLoading = true;
     _errorMessageLoadCovenants = "";
+    _covenants.clear();
     notifyListeners();
 
     try {
@@ -295,7 +304,12 @@ class CustomerRegisterProvider with ChangeNotifier {
 
       _errorMessageLoadCovenants = SoapRequestResponse.errorMessage;
 
-      if (_errorMessageLoadCovenants == "") {}
+      if (_errorMessageLoadCovenants == "") {
+        CustomerRegisterCovenantModel.responseAsStringToModel(
+          listToAdd: _covenants,
+          response: SoapRequestResponse.responseAsString,
+        );
+      }
     } catch (e) {
       _errorMessageLoadCovenants = DefaultErrorMessage.ERROR;
     } finally {
