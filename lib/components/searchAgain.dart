@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget searchAgain({
   required String errorMessage,
-  required Function request,
+  required Function() request,
   String message = "Consultar novamente",
 }) {
   return Column(

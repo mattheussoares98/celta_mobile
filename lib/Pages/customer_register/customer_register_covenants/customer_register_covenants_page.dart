@@ -1,7 +1,9 @@
+import 'package:celta_inventario/pages/customer_register/customer_register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
+import '../../../components/components.dart';
+import '../../../providers/providers.dart';
 
 class CustomerRegisterCovenantsPage extends StatefulWidget {
   const CustomerRegisterCovenantsPage({
@@ -31,11 +33,17 @@ class _CustomerRegisterCovenantsPageState
 
   @override
   Widget build(BuildContext context) {
-    // CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
-    return const Stack(
+    return Stack(
       children: [
-        Center(child: Text("Customer register covenant page")),
+        if (customerRegisterProvider.errorMessageLoadCovenants != "" ||
+            customerRegisterProvider.covenants.isEmpty)
+          searchAgain(
+            errorMessage: customerRegisterProvider.errorMessageLoadCovenants,
+            request: customerRegisterProvider.loadCovenants,
+          ),
+        const LoadedCovenants(),
       ],
     );
   }
