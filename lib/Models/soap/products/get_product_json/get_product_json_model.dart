@@ -137,6 +137,9 @@ class GetProductJsonModel {
     alterationPriceForAllPackings =
         json["AlterationPriceForAllPackings"] ?? false;
 
+    valueTyped = json["valueTyped"] ?? 0;
+    quantity = json["quantity"] ?? 0;
+
     if (json['StockByEnterpriseAssociateds'] != null) {
       stockByEnterpriseAssociateds = <StockByEnterpriseAssociatedsModel>[];
       json['StockByEnterpriseAssociateds'].forEach((v) {
@@ -193,6 +196,8 @@ class GetProductJsonModel {
     data['RealLiquidCost'] = this.realLiquidCost;
     data['FiscalCost'] = this.fiscalCost;
     data['FiscalLiquidCost'] = this.fiscalLiquidCost;
+    data['valueTyped'] = this.valueTyped;
+    data['quantity'] = this.quantity;
     data["markUpdateClassInAdjustSalePriceIndividual"] =
         this.markUpdateClassInAdjustSalePriceIndividual;
     data["inClass"] = this.inClass;

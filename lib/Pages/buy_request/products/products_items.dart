@@ -134,9 +134,11 @@ class _ProductsItemsState extends State<ProductsItems> {
               !widget.showOnlyCartProducts) {
             buyRequestProvider.indexOfSelectedProduct = -1;
           }
-    
-          final product = buyRequestProvider.products[index];
-    
+
+          final product = widget.showOnlyCartProducts
+              ? buyRequestProvider.productsInCart[index]
+              : buyRequestProvider.products[index];
+
           return GestureDetector(
             onTap: buyRequestProvider.isLoadingProducts ||
                     buyRequestProvider.isLoadingInsertBuyRequest
@@ -174,8 +176,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                         product: product,
                         index: index,
                       ),
-                      if (buyRequestProvider.indexOfSelectedProduct ==
-                          index)
+                      if (buyRequestProvider.indexOfSelectedProduct == index)
                         InsertProductQuantity(
                           product: product,
                         ),
