@@ -163,14 +163,17 @@ class _CustomerRegisterTelephonePageState
                 ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                _addTelephone(
-                  customerRegisterProvider: customerRegisterProvider,
-                );
-              },
-              child: const Text(
-                "Adicionar telefone",
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: ElevatedButton(
+                onPressed: () {
+                  _addTelephone(
+                    customerRegisterProvider: customerRegisterProvider,
+                  );
+                },
+                child: const Text(
+                  "Adicionar telefone",
+                ),
               ),
             ),
             if (customerRegisterProvider.telephonesCount > 0)

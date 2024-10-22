@@ -95,12 +95,15 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
                 return null;
               },
             ),
-            ElevatedButton(
-              onPressed: () {
-                addEmail(customerRegisterProvider: customerRegisterProvider);
-              },
-              child: const Text(
-                "Adicionar e-mail",
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: ElevatedButton(
+                onPressed: () {
+                  addEmail(customerRegisterProvider: customerRegisterProvider);
+                },
+                child: const Text(
+                  "Adicionar e-mail",
+                ),
               ),
             ),
             if (customerRegisterProvider.emailsCount > 0)
