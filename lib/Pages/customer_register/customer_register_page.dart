@@ -35,6 +35,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     "Endereços",
     "E-mails",
     "Telefones",
+    "Convênios",
     "Confirmação de dados",
   ];
 
@@ -67,6 +68,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       return customerRegisterProvider.telephoneFormKeyIsValid;
     }
     if (_selectedIndex == 4) {
+      return true;
+    } else if (_selectedIndex == 5) {
       return true;
     } else {
       return false;
@@ -154,6 +157,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         dddController: dddController,
         telephoneController: telephoneController,
       ),
+      const CustomerRegisterCovenantsPage(),
       CustomerRegisterAddPage(
         nameController: nameController,
         cpfCnpjController: cpfCnpjController,
@@ -211,7 +215,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                   selectedIndex: _selectedIndex,
                 ),
                 body: _pages.elementAt(_selectedIndex),
-                floatingActionButton: _selectedIndex == 4
+                floatingActionButton: _selectedIndex == 5
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

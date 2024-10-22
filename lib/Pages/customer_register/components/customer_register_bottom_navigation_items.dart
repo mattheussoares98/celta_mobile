@@ -81,6 +81,8 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
+      unselectedFontSize: 11,
+      selectedFontSize: 11,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: iconAccordingFormIsValid(
@@ -117,6 +119,14 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
                     customerRegisterProvider.telephonesCount > 0,
           ),
           label: 'Telefone',
+        ),
+        BottomNavigationBarItem(
+          icon: iconAccordingFormIsValid(
+            context: context,
+            icon: Icons.payment,
+            hasDataAndIsValid: true,
+          ),
+          label: 'Convênios',
         ),
         BottomNavigationBarItem(
           icon: iconAccordingFormIsValid(
