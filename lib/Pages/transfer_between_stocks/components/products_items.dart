@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/providers.dart';
 import '../../../models/soap/products/products.dart';
-import '../../../utils/utils.dart';
 import '../../../components/components.dart';
 import 'components.dart';
 
@@ -124,11 +123,7 @@ class _ProductsItemsState extends State<ProductsItems> {
 
             GetProductJsonModel product =
                 transferBetweenStocksProvider.products[index];
-            return InkWell(
-              focusColor: Colors.white.withOpacity(0),
-              hoverColor: Colors.white.withOpacity(0),
-              splashColor: Colors.white.withOpacity(0),
-              highlightColor: Colors.white.withOpacity(0),
+            return GestureDetector(
               onTap: transferBetweenStocksProvider
                           .isLoadingTypeStockAndJustifications ||
                       transferBetweenStocksProvider.isLoadingAdjustStock
@@ -145,78 +140,54 @@ class _ProductsItemsState extends State<ProductsItems> {
                         index: index,
                       );
                     },
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Nome",
-                        subtitle: product.name,
+              child: ProductItem(
+                product: product,
+                showPrice: false,
+                showWholeInformations: false,
+                componentAfterProductInformations: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        _selectedIndex == index
+                            ? Icons.arrow_drop_up
+                            : Icons.arrow_drop_down,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "PLU",
-                        subtitle: product.plu,
-                        otherWidget: AllStocks.allStocks(
-                          context: context,
-                          hasStocks: product.stocks!.length > 0,
-                          product: product,
-                          isLoading: transferBetweenStocksProvider
-                              .isLoadingAdjustStock,
-                        ),
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Embalagem",
-                        subtitle: product.packingQuantity,
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Estoque atual",
-                        subtitle: ConvertString.convertToBrazilianNumber(
-                          product.stocks!
-                              .where((element) =>
-                                  element.stockName == "Estoque Atual")
-                              .first
-                              .stockQuantity,
-                        ),
-                      ),
-                      if (transferBetweenStocksProvider.lastUpdatedQuantity !=
-                              "" &&
-                          // transferBetweenStocksProvider
-                          //         .indexOfLastProductChangedStockQuantity !=
-                          //     -1 &&
-                          transferBetweenStocksProvider
-                                  .indexOfLastProductChangedStockQuantity ==
-                              index)
-                        FittedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              "Última quantidade confirmada: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
-                              style: TextStyle(
-                                fontSize: 100,
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'BebasNeue',
-                                fontStyle: FontStyle.italic,
-                                letterSpacing: 1,
-                                wordSpacing: 4,
-                              ),
+                    ),
+                    if (transferBetweenStocksProvider.lastUpdatedQuantity !=
+                            "" &&
+                        transferBetweenStocksProvider
+                                .indexOfLastProductChangedStockQuantity ==
+                            index)
+                      FittedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Última quantidade confirmada: ${transferBetweenStocksProvider.lastUpdatedQuantity}",
+                            style: TextStyle(
+                              fontSize: 100,
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'BebasNeue',
+                              fontStyle: FontStyle.italic,
+                              letterSpacing: 1,
+                              wordSpacing: 4,
                             ),
                           ),
                         ),
-                      if (_selectedIndex == index)
-                        InsertQuantity(
-                          consultedProductController:
-                              widget.consultedProductController,
-                          dropDownFormKey: widget.dropDownFormKey,
-                          insertQuantityFormKey: widget.insertQuantityFormKey,
-                          internalEnterpriseCode: widget.internalEnterpriseCode,
-                          index: index,
-                          getProductsWithCamera: widget.getProductsWithCamera,
-                        ),
-                    ],
-                  ),
+                      ),
+                    if (_selectedIndex == index)
+                      InsertQuantity(
+                        consultedProductController:
+                            widget.consultedProductController,
+                        dropDownFormKey: widget.dropDownFormKey,
+                        insertQuantityFormKey: widget.insertQuantityFormKey,
+                        internalEnterpriseCode: widget.internalEnterpriseCode,
+                        index: index,
+                        getProductsWithCamera: widget.getProductsWithCamera,
+                      ),
+                  ],
                 ),
               ),
             );
