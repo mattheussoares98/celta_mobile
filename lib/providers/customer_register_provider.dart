@@ -28,6 +28,10 @@ class CustomerRegisterProvider with ChangeNotifier {
   List<CustomerRegisterCovenantModel> _covenants = [];
   List<CustomerRegisterCovenantModel> get covenants => [..._covenants];
 
+  List<CustomerRegisterBindedCovenantModel> _bindedCovenants = [];
+  List<CustomerRegisterBindedCovenantModel> get bindedCovenants =>
+      [..._bindedCovenants];
+
   bool _personFormKeyIsValid = false;
   bool get personFormKeyIsValid => _personFormKeyIsValid;
   set personFormKeyIsValid(bool newValue) {
@@ -316,5 +320,26 @@ class CustomerRegisterProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void bindCovenant({
+    required int index,
+    required double limit,
+  }) {
+    final covenant = _covenants[index];
+    _bindedCovenants.add(CustomerRegisterBindedCovenantModel(
+      customerRegisterCovenantModel: covenant,
+      limit: limit,
+    ));
+    _covenants.removeAt(index);
+    notifyListeners();
+  }
+
+  void unbindCovenant(int index) {
+    final bindedCovenant =
+        _bindedCovenants[index].customerRegisterCovenantModel;
+    _covenants.add(bindedCovenant);
+    _bindedCovenants.removeAt(index);
+    notifyListeners();
   }
 }

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
 class LimitAndBindCovenantButton extends StatefulWidget {
+  final int index;
   const LimitAndBindCovenantButton({
+    required this.index,
     super.key,
   });
 
@@ -17,10 +22,17 @@ class _LimitAndBindCovenantButtonState
   final controller = TextEditingController();
   final key = GlobalKey<FormState>();
 
-  void associateCovenant(GlobalKey<FormState> key) {
+  void associateCovenant(
+    GlobalKey<FormState> key,
+    CustomerRegisterProvider customerRegisterProvider,
+  ) {
     bool? isValid = key.currentState?.validate();
     if (isValid == true) {
-      debugPrint("Correto, pode inserir");
+      customerRegisterProvider.bindCovenant(
+        index: widget.index,
+        limit: controller.text.toDouble(),
+      );
+      controller.clear();
     }
   }
 
@@ -32,6 +44,8 @@ class _LimitAndBindCovenantButtonState
 
   @override
   Widget build(BuildContext context) {
+    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+
     return Form(
       key: key,
       child: Padding(
@@ -43,7 +57,7 @@ class _LimitAndBindCovenantButtonState
                 controller: controller,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onFieldSubmitted: (_) {
-                  associateCovenant(key);
+                  associateCovenant(key, customerRegisterProvider);
                 },
                 validator: (value) => FormFieldValidations.number(
                   value: value,
@@ -61,7 +75,7 @@ class _LimitAndBindCovenantButtonState
               child: Center(
                 child: TextButton(
                   onPressed: () {
-                    associateCovenant(key);
+                    associateCovenant(key, customerRegisterProvider);
                   },
                   child: const Text(
                     "Vincular convênio",
