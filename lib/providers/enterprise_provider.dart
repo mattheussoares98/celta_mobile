@@ -30,16 +30,14 @@ class EnterpriseProvider with ChangeNotifier {
   set changeShowedExpeditionConferenteAlert(_) =>
       _showedExpeditionConferenteAlert = true;
 
-  Future getEnterprises({
-    bool? isConsultingAgain = false,
-  }) async {
+  Future getEnterprises() async {
     if (_isLoading) {
       return;
     }
     _enterprises.clear();
     _errorMessage = '';
     _isLoading = true;
-    if (isConsultingAgain!) notifyListeners();
+    notifyListeners();
     //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
     //porque está sendo chamado dentro de um setState
 
@@ -87,5 +85,10 @@ class EnterpriseProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearEnterprises() {
+    _enterprises.clear();
+    notifyListeners();
   }
 }

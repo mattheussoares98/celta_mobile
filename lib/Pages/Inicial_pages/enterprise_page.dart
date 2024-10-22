@@ -73,55 +73,56 @@ class EnterprisePageState extends State<EnterprisePage> {
         ModalRoute.of(context)!.settings.arguments as String;
     //essa rota vem para essa página através de um parâmetro do ImageComponent
 
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              'EMPRESAS',
-            ),
-            actions: [
-              IconButton(
-                onPressed: enterpriseProvider.isLoading
-                    ? null
-                    : () async {
-                        await enterpriseProvider.getEnterprises(
-                          isConsultingAgain: true,
-                        );
-                      },
-                tooltip: "Consultar empresas",
-                icon: const Icon(Icons.refresh),
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        enterpriseProvider.clearEnterprises();
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'EMPRESAS',
               ),
-            ],
-          ),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              await enterpriseProvider.getEnterprises(
-                isConsultingAgain: true,
-              );
-            },
-            child: Column(
-              children: [
-                if (enterpriseProvider.errorMessage != '' &&
-                    !enterpriseProvider.isLoading)
-                  Expanded(
-                    child: searchAgain(
-                      errorMessage: enterpriseProvider.errorMessage,
-                      request: () async {
-                        setState(() {});
-                        await getEnterprises(enterpriseProvider);
-                      },
-                    ),
-                  ),
-                if (enterpriseProvider.errorMessage == "" &&
-                    !enterpriseProvider.isLoading)
-                  Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
+              actions: [
+                IconButton(
+                  onPressed: enterpriseProvider.isLoading
+                      ? null
+                      : () async {
+                          await enterpriseProvider.getEnterprises();
+                        },
+                  tooltip: "Consultar empresas",
+                  icon: const Icon(Icons.refresh),
+                ),
               ],
             ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await enterpriseProvider.getEnterprises();
+              },
+              child: Column(
+                children: [
+                  if (enterpriseProvider.errorMessage != '' &&
+                      !enterpriseProvider.isLoading)
+                    Expanded(
+                      child: searchAgain(
+                        errorMessage: enterpriseProvider.errorMessage,
+                        request: () async {
+                          setState(() {});
+                          await getEnterprises(enterpriseProvider);
+                        },
+                      ),
+                    ),
+                  if (enterpriseProvider.errorMessage == "" &&
+                      !enterpriseProvider.isLoading)
+                    Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
+                ],
+              ),
+            ),
           ),
-        ),
-        loadingWidget(enterpriseProvider.isLoading)
-      ],
+          loadingWidget(enterpriseProvider.isLoading)
+        ],
+      ),
     );
   }
 }
