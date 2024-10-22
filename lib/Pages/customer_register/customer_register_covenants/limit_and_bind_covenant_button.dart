@@ -33,6 +33,7 @@ class _LimitAndBindCovenantButtonState
         limit: controller.text.toDouble(),
       );
       controller.clear();
+      key.currentState?.reset();
     }
   }
 

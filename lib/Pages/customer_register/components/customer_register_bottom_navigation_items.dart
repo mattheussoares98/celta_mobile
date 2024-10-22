@@ -124,7 +124,7 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.payment,
-            hasDataAndIsValid: true,
+            hasDataAndIsValid: customerRegisterProvider.bindedCovenants.isNotEmpty,
           ),
           label: 'Convênios',
         ),

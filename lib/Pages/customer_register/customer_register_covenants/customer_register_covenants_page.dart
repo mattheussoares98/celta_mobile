@@ -35,15 +35,18 @@ class _CustomerRegisterCovenantsPageState
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
-    return Stack(
+    return Column(
       children: [
-        if (customerRegisterProvider.errorMessageLoadCovenants != "" ||
+        if (customerRegisterProvider.errorMessageLoadCovenants != "" &&
             customerRegisterProvider.covenants.isEmpty)
           searchAgain(
             errorMessage: customerRegisterProvider.errorMessageLoadCovenants,
             request: customerRegisterProvider.loadCovenants,
           ),
-        const LoadedCovenants(),
+        if (customerRegisterProvider.covenants.isNotEmpty)
+          const LoadedCovenants(),
+        if (customerRegisterProvider.bindedCovenants.isNotEmpty)
+          const BindedCovenants(),
       ],
     );
   }
