@@ -119,75 +119,79 @@ class _ProductsItemsState extends State<ProductsItems> {
   Widget build(BuildContext context) {
     BuyRequestProvider buyRequestProvider = Provider.of(context);
 
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: widget.showOnlyCartProducts
-            ? buyRequestProvider.productsInCartCount
-            : buyRequestProvider.productsCount,
-        itemBuilder: (context, index) {
-          if (buyRequestProvider.productsCount == 1 &&
-              !widget.showOnlyCartProducts) {
-            buyRequestProvider.indexOfSelectedProduct = index;
-            buyRequestProvider.priceController.text =
-                getPracticedValue(buyRequestProvider.products[index]);
-          } else if (buyRequestProvider.productsCount == 0 &&
-              !widget.showOnlyCartProducts) {
-            buyRequestProvider.indexOfSelectedProduct = -1;
-          }
-
-          final product = widget.showOnlyCartProducts
-              ? buyRequestProvider.productsInCart[index]
-              : buyRequestProvider.products[index];
-
-          return GestureDetector(
-            onTap: buyRequestProvider.isLoadingProducts ||
-                    buyRequestProvider.isLoadingInsertBuyRequest
-                ? null
-                : () {
-                    setState(() {
-                      selectIndexAndFocus(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 60),
+      child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: widget.showOnlyCartProducts
+              ? buyRequestProvider.productsInCartCount
+              : buyRequestProvider.productsCount,
+          itemBuilder: (context, index) {
+            if (buyRequestProvider.productsCount == 1 &&
+                !widget.showOnlyCartProducts) {
+              buyRequestProvider.indexOfSelectedProduct = index;
+              buyRequestProvider.priceController.text =
+                  getPracticedValue(buyRequestProvider.products[index]);
+            } else if (buyRequestProvider.productsCount == 0 &&
+                !widget.showOnlyCartProducts) {
+              buyRequestProvider.indexOfSelectedProduct = -1;
+            }
+      
+            final product = widget.showOnlyCartProducts
+                ? buyRequestProvider.productsInCart[index]
+                : buyRequestProvider.products[index];
+      
+            return GestureDetector(
+              onTap: buyRequestProvider.isLoadingProducts ||
+                      buyRequestProvider.isLoadingInsertBuyRequest
+                  ? null
+                  : () {
+                      setState(() {
+                        selectIndexAndFocus(
+                          buyRequestProvider: buyRequestProvider,
+                          index: index,
+                        );
+                      });
+                    },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ProductItem(
+                    product: product,
+                    showWholeInformations: false,
+                    showMargins: true,
+                    showCosts: false,
+                    showPrice: false,
+                    showLastBuyEntrance: true,
+                    componentBeforeProductInformations:
+                        TitleAndSubtitle.titleAndSubtitle(
+                      fontSize: 20,
+                      subtitleColor: Colors.yellow[900],
+                      subtitle: _enterprisePersonalizedCodeAndName(
                         buyRequestProvider: buyRequestProvider,
-                        index: index,
-                      );
-                    });
-                  },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ProductItem(
-                  product: product,
-                  showWholeInformations: false,
-                  showMargins: true,
-                  showCosts: false,
-                  showPrice: false,
-                  showLastBuyEntrance: true,
-                  componentBeforeProductInformations:
-                      TitleAndSubtitle.titleAndSubtitle(
-                    fontSize: 20,
-                    subtitleColor: Colors.yellow[900],
-                    subtitle: _enterprisePersonalizedCodeAndName(
-                      buyRequestProvider: buyRequestProvider,
-                      product: product,
+                        product: product,
+                      ),
+                    ),
+                    componentAfterProductInformations: Column(
+                      children: [
+                        CostsQuantityAndTotal(
+                          practicedValue: getPracticedValue(product),
+                          product: product,
+                          index: index,
+                        ),
+                        if (buyRequestProvider.indexOfSelectedProduct == index)
+                          InsertProductQuantity(
+                            product: product,
+                          ),
+                      ],
                     ),
                   ),
-                  componentAfterProductInformations: Column(
-                    children: [
-                      CostsQuantityAndTotal(
-                        practicedValue: getPracticedValue(product),
-                        product: product,
-                        index: index,
-                      ),
-                      if (buyRequestProvider.indexOfSelectedProduct == index)
-                        InsertProductQuantity(
-                          product: product,
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
+                ],
+              ),
+            );
+          }),
+    );
   }
 }
 

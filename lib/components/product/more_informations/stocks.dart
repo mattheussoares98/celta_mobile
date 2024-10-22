@@ -50,6 +50,7 @@ class Stocks extends StatelessWidget implements MoreInformationWidget {
         
             return ListView.builder(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: stocksByEnterprise.length + 1,
               itemBuilder: (context, stockIndex) {
                 if (stockIndex == 0) {

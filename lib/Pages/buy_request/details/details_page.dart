@@ -106,18 +106,15 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   if (buyRequestProvider.productsInCartCount > 0)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (buyRequestProvider.productsInCartCount > 2)
-                            const OrderProducts(),
-                          const ProductsItems(
-                            showOnlyCartProducts: true,
-                          ),
-                        ],
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (buyRequestProvider.productsInCartCount > 2)
+                          const OrderProducts(),
+                        const ProductsItems(
+                          showOnlyCartProducts: true,
+                        ),
+                      ],
                     ),
                 ],
               ),

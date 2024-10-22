@@ -34,6 +34,7 @@ class _LimitAndBindCovenantButtonState
       );
       controller.clear();
       key.currentState?.reset();
+      FocusScope.of(context).unfocus();
     }
   }
 
@@ -55,6 +56,8 @@ class _LimitAndBindCovenantButtonState
           children: [
             Expanded(
               child: TextFormField(
+                autofocus: false,
+                keyboardType: TextInputType.number,
                 controller: controller,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onFieldSubmitted: (_) {

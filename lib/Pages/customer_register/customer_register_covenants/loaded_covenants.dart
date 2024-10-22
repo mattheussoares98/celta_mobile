@@ -23,6 +23,7 @@ class LoadedCovenants extends StatelessWidget {
           ),
         ),
         ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: customerRegisterProvider.covenants.length,
           itemBuilder: (context, index) {

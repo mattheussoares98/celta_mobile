@@ -37,20 +37,25 @@ class _CustomerRegisterCovenantsPageState
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          if (customerRegisterProvider.errorMessageLoadCovenants != "" &&
-              customerRegisterProvider.covenants.isEmpty)
-            searchAgain(
-              errorMessage: customerRegisterProvider.errorMessageLoadCovenants,
-              request: customerRegisterProvider.loadCovenants,
-            ),
-          if (customerRegisterProvider.covenants.isNotEmpty)
-            const LoadedCovenants(),
-          if (customerRegisterProvider.bindedCovenants.isNotEmpty)
-            const BindedCovenants(),
-        ],
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (customerRegisterProvider.errorMessageLoadCovenants != "" &&
+                customerRegisterProvider.covenants.isEmpty)
+              searchAgain(
+                errorMessage: customerRegisterProvider.errorMessageLoadCovenants,
+                request: customerRegisterProvider.loadCovenants,
+              ),
+            if (customerRegisterProvider.covenants.isNotEmpty)
+              const LoadedCovenants(),
+            if (customerRegisterProvider.bindedCovenants.isNotEmpty)
+              const BindedCovenants(),
+          ],
+        ),
       ),
     );
   }

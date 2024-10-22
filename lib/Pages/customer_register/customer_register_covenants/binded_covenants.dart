@@ -14,6 +14,7 @@ class BindedCovenants extends StatelessWidget {
 
     return ListView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: customerRegisterProvider.bindedCovenants.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
