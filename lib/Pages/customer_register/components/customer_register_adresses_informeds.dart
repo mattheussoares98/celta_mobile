@@ -99,7 +99,7 @@ class _CustomerRegisterAddressesInformedsState
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
-                          customerRegisterProvider.isLoadingInsertCustomer
+                          customerRegisterProvider.isLoading
                               ? Colors.grey
                               : Colors.red,
                         ),
@@ -109,7 +109,7 @@ class _CustomerRegisterAddressesInformedsState
                             Size(double.infinity, 30)),
                       ),
                       onPressed:
-                          customerRegisterProvider.isLoadingInsertCustomer ||
+                          customerRegisterProvider.isLoading ||
                                   widget.isLoading
                               ? null
                               : () {

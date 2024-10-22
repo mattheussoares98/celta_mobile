@@ -48,7 +48,7 @@ class _CustomerRegisterFloatingActionButtonState
       hoverColor: Colors.white.withOpacity(0),
       splashColor: Colors.white.withOpacity(0),
       highlightColor: Colors.white.withOpacity(0),
-      onTap: customerRegisterProvider.isLoadingInsertCustomer
+      onTap: customerRegisterProvider.isLoading
           ? null
           : () async {
               if (addressProvider.addressesCount == 0) {
@@ -100,10 +100,10 @@ class _CustomerRegisterFloatingActionButtonState
       child: CircleAvatar(
         minRadius: 35,
         maxRadius: 35,
-        backgroundColor: customerRegisterProvider.isLoadingInsertCustomer
+        backgroundColor: customerRegisterProvider.isLoading
             ? Colors.grey[300]
             : Theme.of(context).colorScheme.primary,
-        child: customerRegisterProvider.isLoadingInsertCustomer
+        child: customerRegisterProvider.isLoading
             ? FittedBox(
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),

@@ -36,7 +36,7 @@ class CustomerRegisterClearAllData extends StatelessWidget {
       padding: const EdgeInsets.only(left: 30.0),
       child: FloatingActionButton(
         tooltip: "Limpar todos os dados do pedido",
-        onPressed: customerRegisterProvider.isLoadingInsertCustomer ||
+        onPressed: customerRegisterProvider.isLoading ||
                 nameController.text.isEmpty
             ? null
             : () {
@@ -62,7 +62,7 @@ class CustomerRegisterClearAllData extends StatelessWidget {
                 );
               },
         child: const Icon(Icons.delete, color: Colors.white),
-        backgroundColor: customerRegisterProvider.isLoadingInsertCustomer ||
+        backgroundColor: customerRegisterProvider.isLoading ||
                 nameController.text.isEmpty
             ? Colors.grey.withOpacity(0.75)
             : Colors.red.withOpacity(0.75),

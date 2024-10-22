@@ -142,7 +142,7 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
       currentIndex: selectedIndex,
       selectedItemColor: Theme.of(context).colorScheme.primary,
       unselectedItemColor: Colors.grey,
-      onTap: customerRegisterProvider.isLoadingInsertCustomer
+      onTap: customerRegisterProvider.isLoading
           ? null
           : (index) {
               _onItemTapped(

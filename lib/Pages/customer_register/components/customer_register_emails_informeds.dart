@@ -50,7 +50,7 @@ class _CustomerRegisterEmailsInformedsState
                     ),
                   ),
                   IconButton(
-                    onPressed: customerRegisterProvider.isLoadingInsertCustomer
+                    onPressed: customerRegisterProvider.isLoading
                         ? null
                         : () {
                             ShowAlertDialog.show(
@@ -65,7 +65,7 @@ class _CustomerRegisterEmailsInformedsState
                     icon: Icon(
                       Icons.delete,
                       size: 30,
-                      color: customerRegisterProvider.isLoadingInsertCustomer
+                      color: customerRegisterProvider.isLoading
                           ? Colors.grey
                           : Colors.red,
                     ),

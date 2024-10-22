@@ -45,14 +45,17 @@ class CustomerRegisterProvider with ChangeNotifier {
   String _errorMessageAddEmail = "";
   String get errorMessageAddEmail => _errorMessageAddEmail;
 
+  String _errorMessageLoadCovenants = "";
+  String get errorMessageLoadCovenants => _errorMessageLoadCovenants;
+
   String _errorMessageAddTelephone = "";
   String get errorMessageAddTelephone => _errorMessageAddTelephone;
 
   String _errorMessageInsertCustomer = "";
   String get errorMessageInsertCustomer => _errorMessageInsertCustomer;
 
-  bool _isLoadingInsertCustomer = false;
-  bool get isLoadingInsertCustomer => _isLoadingInsertCustomer;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   void clearTelephoneControllers({
     required TextEditingController telephoneController,
@@ -204,8 +207,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     return _jsonInsertCustomer;
   }
 
-  changeIsLoadingInsertCustomer() {
-    _isLoadingInsertCustomer = false;
+  void changeIsLoadingInsertCustomer() {
+    _isLoading = false;
   }
 
   Future<void> insertCustomer({
@@ -220,7 +223,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     required TextEditingController passwordController,
     required TextEditingController passwordConfirmationController,
   }) async {
-    _isLoadingInsertCustomer = true;
+    _isLoading = true;
     _errorMessageInsertCustomer = "";
     notifyListeners();
 
@@ -266,8 +269,38 @@ class CustomerRegisterProvider with ChangeNotifier {
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');
       _errorMessageInsertCustomer = DefaultErrorMessage.ERROR;
-    } finally {}
-    _isLoadingInsertCustomer = false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadCovenants() async {
+    _isLoading = true;
+    _errorMessageLoadCovenants = "";
     notifyListeners();
+
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "covenantData": "%",
+          "covenantDataType": 3, //approximate name
+        },
+        typeOfResponse: "GetCovenantJsonResponse",
+        SOAPAction: "GetCovenantJson",
+        serviceASMX: "CeltaCustomerService.asmx",
+        typeOfResult: "GetCovenantJsonResult",
+      );
+
+      _errorMessageLoadCovenants = SoapRequestResponse.errorMessage;
+
+      if (_errorMessageLoadCovenants == "") {}
+    } catch (e) {
+      _errorMessageLoadCovenants = DefaultErrorMessage.ERROR;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

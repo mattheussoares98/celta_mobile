@@ -95,7 +95,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   }) {
     if (_selectedIndex == 1 && _hasAdressInformed(addressProvider)) {
       return false;
-    } else if (customerRegisterProvider.isLoadingInsertCustomer) {
+    } else if (customerRegisterProvider.isLoading) {
       return false;
     } else {
       return true;
@@ -265,7 +265,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     : null,
               ),
               loadingWidget(addressProvider.isLoadingCep),
-              loadingWidget(customerRegisterProvider.isLoadingInsertCustomer),
+              loadingWidget(customerRegisterProvider.isLoading),
             ],
           ),
         ),
