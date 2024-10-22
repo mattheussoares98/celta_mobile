@@ -128,10 +128,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
               ),
             ),
           ),
-          loadingWidget(
-            message: "Aguarde...",
-            isLoading: adjustSalePriceProvider.isLoading,
-          )
+          loadingWidget(adjustSalePriceProvider.isLoading)
         ],
       ),
     );

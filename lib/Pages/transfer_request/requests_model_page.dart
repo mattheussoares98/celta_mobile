@@ -9,8 +9,7 @@ class RequestsModelPage extends StatefulWidget {
   const RequestsModelPage({Key? key}) : super(key: key);
 
   @override
-  State<RequestsModelPage> createState() =>
-      _RequestsModelPageState();
+  State<RequestsModelPage> createState() => _RequestsModelPageState();
 }
 
 class _RequestsModelPageState extends State<RequestsModelPage> {
@@ -34,7 +33,7 @@ class _RequestsModelPageState extends State<RequestsModelPage> {
     return Stack(
       children: [
         PopScope(
-          onPopInvokedWithResult: (value, __){
+          onPopInvokedWithResult: (value, __) {
             transferRequestProvider.clearRequestModels();
           },
           child: Scaffold(
@@ -84,10 +83,7 @@ class _RequestsModelPageState extends State<RequestsModelPage> {
             ),
           ),
         ),
-        loadingWidget(
-          message: 'Consultando modelos de pedido...',
-          isLoading: transferRequestProvider.isLoadingRequestModel,
-        ),
+        loadingWidget(transferRequestProvider.isLoadingRequestModel),
       ],
     );
   }

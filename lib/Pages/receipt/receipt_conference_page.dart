@@ -39,7 +39,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
           PopScope(
             canPop: !receiptProvider.isLoadingUpdateQuantity &&
                 !receiptProvider.isLoadingProducts,
-            onPopInvokedWithResult: (value, __){
+            onPopInvokedWithResult: (value, __) {
               if (value == true) {
                 receiptProvider.clearProducts();
               }
@@ -74,7 +74,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                             context: context,
                             isSearchAllCountedProducts: false,
                           );
-      
+
                           //não estava funcionando passar o productsCount como parâmetro
                           //para o "SearchProductWithEanPluOrNameWidget" para apagar o
                           //textEditingController após a consulta dos produtos se encontrar
@@ -92,7 +92,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                           receiptProvider.productsCount == 0)
                         Expanded(
                           child: ErrorMessage(
-                            errorMessage: receiptProvider.errorMessageGetProducts,
+                            errorMessage:
+                                receiptProvider.errorMessageGetProducts,
                           ),
                         ),
                       if (receiptProvider.errorMessageGetProducts == "" &&
@@ -101,10 +102,10 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                           getProductsWithCamera: () async {
                             FocusScope.of(context).unfocus();
                             _consultProductController.clear();
-      
+
                             _consultProductController.text =
                                 await ScanBarCode.scanBarcode(context);
-      
+
                             if (_consultProductController.text != "") {
                               await receiptProvider.getProducts(
                                 configurationsProvider: configurationsProvider,
@@ -114,13 +115,14 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                                 isSearchAllCountedProducts: false,
                               );
                             }
-      
+
                             if (receiptProvider.productsCount > 0) {
                               _consultProductController.clear();
                             }
                           },
                           docCode: arguments["grDocCode"],
-                          consultedProductController: _consultedProductController,
+                          consultedProductController:
+                              _consultedProductController,
                           consultProductController: _consultProductController,
                         ),
                     ],
@@ -138,14 +140,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
               ),
             ),
           ),
-          loadingWidget(
-            message: 'Consultando produtos',
-            isLoading: receiptProvider.isLoadingProducts,
-          ),
-          loadingWidget(
-            message: 'Atualizando quantidade',
-            isLoading: receiptProvider.isLoadingUpdateQuantity,
-          ),
+          loadingWidget(receiptProvider.isLoadingProducts),
+          loadingWidget(receiptProvider.isLoadingUpdateQuantity),
         ],
       ),
     );

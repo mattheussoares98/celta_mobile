@@ -51,7 +51,7 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
             ),
           ),
         ),
-        loadingWidget(message: "Aguarde...", isLoading: webProvider.isLoading),
+        loadingWidget(webProvider.isLoading),
       ],
     );
   }

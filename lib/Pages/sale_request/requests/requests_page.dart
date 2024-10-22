@@ -58,7 +58,7 @@ class _RequestsPageState extends State<RequestsPage> {
     return Stack(
       children: [
         PopScope(
-          onPopInvokedWithResult: (_, __){
+          onPopInvokedWithResult: (_, __) {
             saleRequestProvider.clearRequests();
           },
           child: Scaffold(
@@ -121,10 +121,7 @@ class _RequestsPageState extends State<RequestsPage> {
             ),
           ),
         ),
-        loadingWidget(
-          message: 'Consultando modelos de pedido',
-          isLoading: saleRequestProvider.isLoadingRequests,
-        ),
+        loadingWidget(saleRequestProvider.isLoadingRequests),
       ],
     );
   }

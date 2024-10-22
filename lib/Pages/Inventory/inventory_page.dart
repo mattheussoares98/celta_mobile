@@ -90,10 +90,7 @@ class _InventoryPageState extends State<InventoryPage> {
             ),
           ),
         ),
-        loadingWidget(
-          message: 'Consultando inventários',
-          isLoading: inventoryProvider.isLoadingInventorys,
-        ),
+        loadingWidget(inventoryProvider.isLoadingInventorys),
       ],
     );
   }

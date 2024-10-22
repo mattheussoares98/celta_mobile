@@ -79,8 +79,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                           request: () async {
                             setState(() {});
                             await receiptProvider.getReceipt(
-                              enterpriseCode:
-                                  enterprise.codigoInternoEmpresa,
+                              enterpriseCode: enterprise.codigoInternoEmpresa,
                               context: context,
                             );
                           }),
@@ -98,14 +97,8 @@ class _ReceiptPageState extends State<ReceiptPage> {
             ),
           ),
         ),
-        loadingWidget(
-          message: 'Consultando recebimentos...',
-          isLoading: receiptProvider.isLoadingReceipt,
-        ),
-        loadingWidget(
-          message: 'Liberando documento...',
-          isLoading: receiptProvider.isLoadingLiberateCheck,
-        ),
+        loadingWidget(receiptProvider.isLoadingReceipt),
+        loadingWidget(receiptProvider.isLoadingLiberateCheck),
       ],
     );
   }

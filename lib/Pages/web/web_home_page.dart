@@ -56,10 +56,7 @@ class _WebHomePageState extends State<WebHomePage> {
             ],
           ),
         ),
-        loadingWidget(
-          message: 'Aguarde...',
-          isLoading: webProvider.isLoading,
-        ),
+        loadingWidget(webProvider.isLoading),
       ],
     );
   }

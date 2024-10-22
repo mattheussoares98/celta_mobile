@@ -9,12 +9,10 @@ class OriginEnterprisePage extends StatefulWidget {
   const OriginEnterprisePage({Key? key}) : super(key: key);
 
   @override
-  State<OriginEnterprisePage> createState() =>
-      _OriginEnterprisePageState();
+  State<OriginEnterprisePage> createState() => _OriginEnterprisePageState();
 }
 
-class _OriginEnterprisePageState
-    extends State<OriginEnterprisePage> {
+class _OriginEnterprisePageState extends State<OriginEnterprisePage> {
   bool isLoaded = false;
   @override
   void didChangeDependencies() async {
@@ -41,7 +39,7 @@ class _OriginEnterprisePageState
     return Stack(
       children: [
         PopScope(
-          onPopInvokedWithResult: (_, __){
+          onPopInvokedWithResult: (_, __) {
             transferRequestProvider.clearOriginEnterprise();
           },
           child: Scaffold(
@@ -99,10 +97,7 @@ class _OriginEnterprisePageState
             ),
           ),
         ),
-        loadingWidget(
-          message: 'Consultando empresas de origem...',
-          isLoading: transferRequestProvider.isLoadingOriginEnterprise,
-        ),
+        loadingWidget(transferRequestProvider.isLoadingOriginEnterprise),
       ],
     );
   }

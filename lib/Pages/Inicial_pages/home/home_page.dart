@@ -314,10 +314,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        loadingWidget(
-          message: "Aguarde...",
-          isLoading: enterpriseProvider.isLoading,
-        ),
+        loadingWidget(enterpriseProvider.isLoading),
       ],
     );
   }

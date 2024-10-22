@@ -191,7 +191,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
       child: PopScope(
-        onPopInvokedWithResult: (value, __){
+        onPopInvokedWithResult: (value, __) {
           if (value == true) {
             inventoryProvider.clearProducts();
           }
@@ -252,8 +252,9 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                         );
                       },
                       isIndividual: _isIndividual,
-                      inventoryCountingCode: arguments["InventoryCountingsModel"]
-                          .codigoInternoInvCont,
+                      inventoryCountingCode:
+                          arguments["InventoryCountingsModel"]
+                              .codigoInternoInvCont,
                       productPackingCode: arguments["InventoryCountingsModel"]
                           .numeroContagemInvCont,
                       consultedProductController: _consultedProductController,
@@ -262,14 +263,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                 ],
               ),
             ),
-            loadingWidget(
-              message: "Consultando produtos...",
-              isLoading: inventoryProvider.isLoadingProducts,
-            ),
-            loadingWidget(
-              message: "Confirmando quantidade...",
-              isLoading: inventoryProvider.isLoadingQuantity,
-            ),
+            loadingWidget(inventoryProvider.isLoadingProducts),
+            loadingWidget(inventoryProvider.isLoadingQuantity),
           ],
         ),
       ),

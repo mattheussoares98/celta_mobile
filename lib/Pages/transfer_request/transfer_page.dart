@@ -91,7 +91,7 @@ class _TransferPageState extends State<TransferPage> {
           PopScope(
             canPop: !transferRequestProvider.isLoadingSaveTransferRequest &&
                 !transferRequestProvider.isLoadingProducts,
-            onPopInvokedWithResult: (value, __){
+            onPopInvokedWithResult: (value, __) {
               if (value == true) {
                 transferRequestProvider.clearProducts();
               }
@@ -142,7 +142,8 @@ class _TransferPageState extends State<TransferPage> {
                                   child: FittedBox(
                                     child: Text(
                                       cartProductsCount.toString(),
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -157,9 +158,11 @@ class _TransferPageState extends State<TransferPage> {
                             ConvertString.convertToBRL(
                               transferRequestProvider.getTotalCartPrice(
                                 enterpriseOriginCode:
-                                    arguments["enterpriseOriginCode"].toString(),
+                                    arguments["enterpriseOriginCode"]
+                                        .toString(),
                                 enterpriseDestinyCode:
-                                    arguments["enterpriseDestinyCode"].toString(),
+                                    arguments["enterpriseDestinyCode"]
+                                        .toString(),
                                 requestTypeCode:
                                     arguments["requestTypeCode"].toString(),
                               ),
@@ -231,14 +234,8 @@ class _TransferPageState extends State<TransferPage> {
               ),
             ),
           ),
-          loadingWidget(
-            message: "Consultando produtos...",
-            isLoading: transferRequestProvider.isLoadingProducts,
-          ),
-          loadingWidget(
-            message: "Salvando pedido...",
-            isLoading: transferRequestProvider.isLoadingSaveTransferRequest,
-          ),
+          loadingWidget(transferRequestProvider.isLoadingProducts),
+          loadingWidget(transferRequestProvider.isLoadingSaveTransferRequest),
         ],
       ),
     );

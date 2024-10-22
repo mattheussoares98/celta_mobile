@@ -53,7 +53,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                 !transferBetweenStocksProvider.isLoadingProducts &&
                 !transferBetweenStocksProvider
                     .isLoadingTypeStockAndJustifications,
-            onPopInvokedWithResult: (value, __){
+            onPopInvokedWithResult: (value, __) {
               if (value == true) {
                 transferBetweenStocksProvider
                     .clearProductsJustificationsStockTypesAndJsonAdjustStock();
@@ -80,9 +80,10 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                         SearchWidget(
                           searchProductFocusNode: transferBetweenStocksProvider
                               .consultProductFocusNode,
-                          isLoading: transferBetweenStocksProvider
-                                  .isLoadingProducts ||
-                              transferBetweenStocksProvider.isLoadingAdjustStock,
+                          isLoading:
+                              transferBetweenStocksProvider.isLoadingProducts ||
+                                  transferBetweenStocksProvider
+                                      .isLoadingAdjustStock,
                           onPressSearch: () async {
                             await transferBetweenStocksProvider.getProducts(
                               enterpriseCode: enterprise.codigoInternoEmpresa,
@@ -90,8 +91,9 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                               context: context,
                               configurationsProvider: configurationsProvider,
                             );
-      
-                            if (transferBetweenStocksProvider.productsCount > 0) {
+
+                            if (transferBetweenStocksProvider.productsCount >
+                                0) {
                               _consultProductController.clear();
                             }
                           },
@@ -130,10 +132,12 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                                   ? null
                                   : () async {
                                       await transferBetweenStocksProvider
-                                          .getStockTypeAndJustifications(context);
-      
+                                          .getStockTypeAndJustifications(
+                                              context);
+
                                       Future.delayed(
-                                          const Duration(milliseconds: 500), () {
+                                          const Duration(milliseconds: 500),
+                                          () {
                                         if (_keyJustifications.currentState !=
                                                 null &&
                                             _keyOriginStockType.currentState !=
@@ -157,34 +161,33 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                     if (transferBetweenStocksProvider.errorMessageGetProducts !=
                         "")
                       ErrorMessage(
-                        errorMessage:
-                            transferBetweenStocksProvider.errorMessageGetProducts,
+                        errorMessage: transferBetweenStocksProvider
+                            .errorMessageGetProducts,
                       ),
                     if (!transferBetweenStocksProvider.isLoadingProducts)
                       ProductsItems(
-                        internalEnterpriseCode:
-                            enterprise.codigoInternoEmpresa,
+                        internalEnterpriseCode: enterprise.codigoInternoEmpresa,
                         consultedProductController: _consultedProductController,
                         dropDownFormKey: _dropDownFormKey,
                         insertQuantityFormKey: _insertQuantityFormKey,
                         getProductsWithCamera: () async {
                           FocusScope.of(context).unfocus();
                           _consultProductController.clear();
-      
+
                           _consultProductController.text =
                               await ScanBarCode.scanBarcode(context);
-      
+
                           if (_consultProductController.text == "") {
                             return;
                           }
-      
+
                           await transferBetweenStocksProvider.getProducts(
                             enterpriseCode: enterprise.codigoInternoEmpresa,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,
                           );
-      
+
                           if (transferBetweenStocksProvider.productsCount > 0) {
                             _consultProductController.clear();
                           }
@@ -195,18 +198,10 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
               ),
             ),
           ),
+          loadingWidget(transferBetweenStocksProvider.isLoadingProducts),
+          loadingWidget(transferBetweenStocksProvider.isLoadingAdjustStock),
           loadingWidget(
-            message: 'Consultando produtos...',
-            isLoading: transferBetweenStocksProvider.isLoadingProducts,
-          ),
-          loadingWidget(
-            message: "Confirmando ajuste...",
-            isLoading: transferBetweenStocksProvider.isLoadingAdjustStock,
-          ),
-          loadingWidget(
-            message: "Consultando estoques e justificativas...",
-            isLoading:
-                transferBetweenStocksProvider.isLoadingTypeStockAndJustifications,
+            transferBetweenStocksProvider.isLoadingTypeStockAndJustifications,
           ),
         ],
       ),

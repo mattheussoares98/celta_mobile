@@ -234,30 +234,12 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                       ),
                     ),
             ),
-            loadingWidget(
-              message: "Consultando compradores...",
-              isLoading: buyRequestProvider.isLoadingBuyer,
-            ),
-            loadingWidget(
-              message: "Consultando modelos de pedido...",
-              isLoading: buyRequestProvider.isLoadingRequestsType,
-            ),
-            loadingWidget(
-              message: "Consultando fornecedores...",
-              isLoading: buyRequestProvider.isLoadingSupplier,
-            ),
-            loadingWidget(
-              message: "Consultando empresas...",
-              isLoading: buyRequestProvider.isLoadingEnterprises,
-            ),
-            loadingWidget(
-              message: "Consultando produtos...",
-              isLoading: buyRequestProvider.isLoadingProducts,
-            ),
-            loadingWidget(
-              message: "Salvando pedido...",
-              isLoading: buyRequestProvider.isLoadingInsertBuyRequest,
-            ),
+            loadingWidget(buyRequestProvider.isLoadingBuyer),
+            loadingWidget(buyRequestProvider.isLoadingRequestsType),
+            loadingWidget(buyRequestProvider.isLoadingSupplier),
+            loadingWidget(buyRequestProvider.isLoadingEnterprises),
+            loadingWidget(buyRequestProvider.isLoadingProducts),
+            loadingWidget(buyRequestProvider.isLoadingInsertBuyRequest),
           ],
         ),
       ),

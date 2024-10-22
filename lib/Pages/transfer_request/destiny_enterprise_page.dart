@@ -9,12 +9,10 @@ class DestinyEnterprisePage extends StatefulWidget {
   const DestinyEnterprisePage({Key? key}) : super(key: key);
 
   @override
-  State<DestinyEnterprisePage> createState() =>
-      _DestinyEnterprisePageState();
+  State<DestinyEnterprisePage> createState() => _DestinyEnterprisePageState();
 }
 
-class _DestinyEnterprisePageState
-    extends State<DestinyEnterprisePage> {
+class _DestinyEnterprisePageState extends State<DestinyEnterprisePage> {
   bool isLoaded = false;
   @override
   void didChangeDependencies() async {
@@ -42,7 +40,7 @@ class _DestinyEnterprisePageState
     return Stack(
       children: [
         PopScope(
-          onPopInvokedWithResult: (_, __){
+          onPopInvokedWithResult: (_, __) {
             transferRequestProvider.clearDestinyEnterprise();
           },
           child: Scaffold(
@@ -105,9 +103,7 @@ class _DestinyEnterprisePageState
             ),
           ),
         ),
-        loadingWidget(
-            message: 'Consultando empresas de destino...',
-            isLoading: transferRequestProvider.isLoadingDestinyEnterprise),
+        loadingWidget(transferRequestProvider.isLoadingDestinyEnterprise)
       ],
     );
   }

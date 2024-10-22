@@ -81,7 +81,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                               context: context,
                               configurationsProvider: configurationsProvider,
                             );
-      
+
                             if (adjustStockProvider.productsCount > 0) {
                               _consultProductController.clear();
                             }
@@ -111,12 +111,14 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                               tooltip: "Consultar justificativas e estoques",
                               onPressed: adjustStockProvider
                                           .isLoadingTypeStockAndJustifications ||
-                                      adjustStockProvider.isLoadingAdjustStock ||
+                                      adjustStockProvider
+                                          .isLoadingAdjustStock ||
                                       adjustStockProvider.isLoadingProducts
                                   ? null
                                   : () async {
                                       await adjustStockProvider
-                                          .getStockTypeAndJustifications(context);
+                                          .getStockTypeAndJustifications(
+                                              context);
                                     },
                             ),
                           ],
@@ -125,7 +127,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                     ),
                     if (adjustStockProvider.errorMessageGetProducts != "")
                       ErrorMessage(
-                        errorMessage: adjustStockProvider.errorMessageGetProducts,
+                        errorMessage:
+                            adjustStockProvider.errorMessageGetProducts,
                       ),
                     AdjustStockProductsItems(
                         internalEnterpriseCode: enterprise.codigoInternoEmpresa,
@@ -135,21 +138,21 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                         getProductWithCamera: () async {
                           FocusScope.of(context).unfocus();
                           _consultProductController.clear();
-      
+
                           _consultProductController.text =
                               await ScanBarCode.scanBarcode(context);
-      
+
                           if (_consultProductController.text == "") {
                             return;
                           }
-      
+
                           await adjustStockProvider.getProducts(
                             enterpriseCode: enterprise.codigoInternoEmpresa,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,
                           );
-      
+
                           if (adjustStockProvider.productsCount > 0) {
                             _consultProductController.clear();
                           }
@@ -159,18 +162,10 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
               ),
             ),
           ),
+          loadingWidget(adjustStockProvider.isLoadingProducts),
+          loadingWidget(adjustStockProvider.isLoadingAdjustStock),
           loadingWidget(
-            message: "Consultando produtos...",
-            isLoading: adjustStockProvider.isLoadingProducts,
-          ),
-          loadingWidget(
-            message: "Confirmando ajuste...",
-            isLoading: adjustStockProvider.isLoadingAdjustStock,
-          ),
-          loadingWidget(
-            message: "Consultando estoques e justificativas...",
-            isLoading: adjustStockProvider.isLoadingTypeStockAndJustifications,
-          ),
+              adjustStockProvider.isLoadingTypeStockAndJustifications),
         ],
       ),
     );

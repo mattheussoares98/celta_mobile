@@ -260,14 +260,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                       )
                     : null,
               ),
-              loadingWidget(
-                message: "Consultando CEP...",
-                isLoading: addressProvider.isLoadingCep,
-              ),
-              loadingWidget(
-                message: "Cadastrando cliente...",
-                isLoading: customerRegisterProvider.isLoadingInsertCustomer,
-              ),
+              loadingWidget(addressProvider.isLoadingCep),
+              loadingWidget(customerRegisterProvider.isLoadingInsertCustomer),
             ],
           ),
         ),

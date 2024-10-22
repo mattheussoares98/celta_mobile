@@ -314,22 +314,10 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
               ),
             ),
           ),
-          loadingWidget(
-            message: "Calculando preços...",
-            isLoading: saleRequestProvider.isLoadingProcessCart,
-          ),
-          loadingWidget(
-            message: "Salvando pedido...",
-            isLoading: saleRequestProvider.isLoadingSaveSaleRequest,
-          ),
-          loadingWidget(
-            message: "Consultando clientes...",
-            isLoading: saleRequestProvider.isLoadingCustomer,
-          ),
-          loadingWidget(
-            message: "Consultando produtos...",
-            isLoading: saleRequestProvider.isLoadingProducts,
-          ),
+          loadingWidget(saleRequestProvider.isLoadingProcessCart),
+          loadingWidget(saleRequestProvider.isLoadingSaveSaleRequest),
+          loadingWidget(saleRequestProvider.isLoadingCustomer),
+          loadingWidget(saleRequestProvider.isLoadingProducts),
         ],
       ),
     );

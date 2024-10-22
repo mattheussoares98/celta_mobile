@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-PopScope loadingWidget({
-  required String message,
-  required bool isLoading,
-}) {
+PopScope loadingWidget(bool isLoading) {
   return PopScope(
     canPop: !isLoading,
     child: Visibility(
@@ -26,10 +23,10 @@ PopScope loadingWidget({
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      message,
+                    const Text(
+                      "Aguarde...",
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
                         decoration: TextDecoration.none,

@@ -62,7 +62,7 @@ class _ResearchPricesProductsPageState
           PopScope(
             canPop: !researchPricesProvider.isLoadingGetProducts &&
                 !researchPricesProvider.isLoadingInsertConcurrentPrices,
-            onPopInvokedWithResult: (value, __){
+            onPopInvokedWithResult: (value, __) {
               if (value == true) {
                 researchPricesProvider.clearAssociatedsProducts();
                 researchPricesProvider.clearNotAssociatedsProducts();
@@ -109,14 +109,8 @@ class _ResearchPricesProductsPageState
               ),
             ),
           ),
-          loadingWidget(
-            message: "Consultando produto(s)...",
-            isLoading: researchPricesProvider.isLoadingGetProducts,
-          ),
-          loadingWidget(
-            message: "Confirmando preço(s)...",
-            isLoading: researchPricesProvider.isLoadingInsertConcurrentPrices,
-          ),
+          loadingWidget(researchPricesProvider.isLoadingGetProducts),
+          loadingWidget(researchPricesProvider.isLoadingInsertConcurrentPrices),
         ],
       ),
     );

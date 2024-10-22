@@ -93,14 +93,16 @@ class _ExpeditionConferenceProductsPageState
                 BottomNavigationBarItem(
                   icon: BottomNavigationIcon(
                     icon: Icons.error,
-                    quantity: expeditionConferenceProvider.pendingProducts.length,
+                    quantity:
+                        expeditionConferenceProvider.pendingProducts.length,
                   ),
                   label: 'Produtos pendentes',
                 ),
                 BottomNavigationBarItem(
                   icon: BottomNavigationIcon(
                     icon: Icons.verified_rounded,
-                    quantity: expeditionConferenceProvider.checkedProducts.length,
+                    quantity:
+                        expeditionConferenceProvider.checkedProducts.length,
                   ),
                   label: 'Produtos conferidos',
                 ),
@@ -110,10 +112,7 @@ class _ExpeditionConferenceProductsPageState
               onTap: _onPageChanged,
             ),
           ),
-          loadingWidget(
-            message: "Aguarde...",
-            isLoading: expeditionConferenceProvider.isLoading,
-          ),
+          loadingWidget(expeditionConferenceProvider.isLoading),
         ],
       ),
     );

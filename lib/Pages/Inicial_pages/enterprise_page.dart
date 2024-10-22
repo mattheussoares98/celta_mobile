@@ -120,10 +120,7 @@ class EnterprisePageState extends State<EnterprisePage> {
             ),
           ),
         ),
-        loadingWidget(
-          message: "Consultando empresas...",
-          isLoading: enterpriseProvider.isLoading,
-        )
+        loadingWidget(enterpriseProvider.isLoading)
       ],
     );
   }

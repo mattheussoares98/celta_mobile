@@ -80,10 +80,7 @@ class _ExpeditionConferenceControlsToConferencePageState
             ],
           ),
         ),
-        loadingWidget(
-          message: "Aguarde...",
-          isLoading: expeditionConferenceProvider.isLoading,
-        )
+        loadingWidget(expeditionConferenceProvider.isLoading)
       ],
     );
   }

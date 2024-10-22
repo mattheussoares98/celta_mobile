@@ -252,12 +252,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
               ),
             ),
           ),
-          loadingWidget(
-            message: researchPricesProvider.selectedConcurrent == null
-                ? "Cadastrando concorrente..."
-                : "Alterando concorrente...",
-            isLoading: researchPricesProvider.isLoadingAddOrUpdateConcurrents,
-          ),
+          loadingWidget(researchPricesProvider.isLoadingAddOrUpdateConcurrents),
         ],
       ),
     );

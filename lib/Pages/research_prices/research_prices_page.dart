@@ -57,7 +57,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
       onTap: FocusScope.of(context).unfocus,
       child: PopScope(
         canPop: !researchPricesProvider.isLoadingResearchPrices,
-        onPopInvokedWithResult: (value, __){
+        onPopInvokedWithResult: (value, __) {
           if (value == true) {
             researchPricesProvider.clearResearchPrices();
           }
@@ -81,10 +81,10 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                         Expanded(
                           child: SearchWidget(
                             searchProductController: searchController,
-                            isLoading:
-                                researchPricesProvider.isLoadingResearchPrices ||
-                                    researchPricesProvider
-                                        .isLoadingAddOrUpdateOfResearch,
+                            isLoading: researchPricesProvider
+                                    .isLoadingResearchPrices ||
+                                researchPricesProvider
+                                    .isLoadingAddOrUpdateOfResearch,
                             onPressSearch: () async {
                               await _getResearchPrices(
                                 notityListenersFromUpdate: true,
@@ -101,19 +101,19 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                         ),
                         FittedBox(
                           child: TextButton(
-                            onPressed:
-                                researchPricesProvider.isLoadingGetConcurrents ||
-                                        researchPricesProvider
-                                            .isLoadingAddOrUpdateOfResearch
-                                    ? null
-                                    : () async {
-                                        await _getResearchPrices(
-                                          notityListenersFromUpdate: true,
-                                          researchPricesProvider:
-                                              researchPricesProvider,
-                                          searchText: "%",
-                                        );
-                                      },
+                            onPressed: researchPricesProvider
+                                        .isLoadingGetConcurrents ||
+                                    researchPricesProvider
+                                        .isLoadingAddOrUpdateOfResearch
+                                ? null
+                                : () async {
+                                    await _getResearchPrices(
+                                      notityListenersFromUpdate: true,
+                                      researchPricesProvider:
+                                          researchPricesProvider,
+                                      searchText: "%",
+                                    );
+                                  },
                             child: Text(
                               "Consultar\ntodas",
                               textAlign: TextAlign.center,
@@ -133,7 +133,8 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                     if (researchPricesProvider.errorGetResearchPrices != "" &&
                         researchPricesProvider.researchPricesCount == 0)
                       ErrorMessage(
-                        errorMessage: researchPricesProvider.errorGetResearchPrices,
+                        errorMessage:
+                            researchPricesProvider.errorGetResearchPrices,
                       ),
                     if (!researchPricesProvider.isLoadingResearchPrices)
                       PricesItems(
@@ -151,14 +152,14 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                   messageButton: "criar\npesquisa".toUpperCase(),
                   onTap: () async {
                     researchPricesProvider.updateSelectedResearch(null);
-      
+
                     await Navigator.of(context).pushNamed(
                       APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
                       arguments: {
                         "enterpriseCode": enterprise.codigoInternoEmpresa,
                       },
                     );
-      
+
                     // if (createdNewResearch == true) {
                     //   await _getResearchPrices(
                     //     notityListenersFromUpdate: true,
@@ -168,14 +169,9 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                     // }
                   }),
             ),
+            loadingWidget(researchPricesProvider.isLoadingResearchPrices),
             loadingWidget(
-              message: 'Consultando pesquisas de preço...',
-              isLoading: researchPricesProvider.isLoadingResearchPrices,
-            ),
-            loadingWidget(
-              message: 'Adicionando/alterando concorrente...',
-              isLoading: researchPricesProvider.isLoadingAddOrUpdateConcurrents,
-            ),
+                researchPricesProvider.isLoadingAddOrUpdateConcurrents),
           ],
         ),
       ),

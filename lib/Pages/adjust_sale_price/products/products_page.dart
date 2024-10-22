@@ -86,10 +86,7 @@ class _AdjustSalePriceProductsPageState
                 ],
               ),
             ),
-            loadingWidget(
-              message: "Aguarde...",
-              isLoading: adjustSalePriceProvider.isLoading,
-            ),
+            loadingWidget(adjustSalePriceProvider.isLoading),
           ],
         ),
       ),

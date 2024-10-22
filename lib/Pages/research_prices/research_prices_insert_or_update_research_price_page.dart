@@ -101,7 +101,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
         children: [
           PopScope(
             canPop: !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-            onPopInvokedWithResult: (value, __){
+            onPopInvokedWithResult: (value, __) {
               if (value == true) {
                 researchPricesProvider.updateSelectedResearch(null);
               }
@@ -196,12 +196,7 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
               ),
             ),
           ),
-          loadingWidget(
-            message: researchPricesProvider.selectedResearch == null
-                ? "Cadastrando pesquisa..."
-                : "Alterando pesquisa...",
-            isLoading: researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-          )
+          loadingWidget(researchPricesProvider.isLoadingAddOrUpdateOfResearch)
         ],
       ),
     );

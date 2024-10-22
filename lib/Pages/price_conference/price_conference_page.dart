@@ -37,7 +37,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
       child: PopScope(
         canPop: !priceConferenceProvider.isLoading &&
             !priceConferenceProvider.isSendingToPrint,
-        onPopInvokedWithResult: (value, __)async{
+        onPopInvokedWithResult: (value, __) async {
           if (value == true) {
             priceConferenceProvider.clearProducts();
           }
@@ -65,7 +65,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                         controllerText: _consultProductController.text,
                         context: context,
                       );
-      
+
                       //não estava funcionando passar o productsCount como parâmetro
                       //para o "SearchProductWithEanPluOrNameWidget" para apagar o
                       //textEditingController após a consulta dos produtos se encontrar
@@ -95,12 +95,14 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                         shrinkWrap: true,
                         itemCount: priceConferenceProvider.products.length,
                         itemBuilder: (context, index) {
-                          final product = priceConferenceProvider.products[index];
-                      
+                          final product =
+                              priceConferenceProvider.products[index];
+
                           return ProductItem(
                             product: priceConferenceProvider.products[index],
                             showCosts: true,
-                            componentAfterProductInformations: SendToPrintButton(
+                            componentAfterProductInformations:
+                                SendToPrintButton(
                               internalEnterpriseCode:
                                   enterprise.codigoInternoEmpresa,
                               index: index,
@@ -119,14 +121,8 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                 ],
               ),
             ),
-            loadingWidget(
-              message: 'Consultando produtos...',
-              isLoading: priceConferenceProvider.isLoading,
-            ),
-            loadingWidget(
-              message: 'Marcando/desmarcando para impressão...',
-              isLoading: priceConferenceProvider.isSendingToPrint,
-            ),
+            loadingWidget(priceConferenceProvider.isLoading),
+            loadingWidget(priceConferenceProvider.isSendingToPrint),
           ],
         ),
       ),

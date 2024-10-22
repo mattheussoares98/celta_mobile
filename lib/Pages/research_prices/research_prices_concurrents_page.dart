@@ -52,7 +52,7 @@ class _ResearchPricesConcurrentsPageState
       child: PopScope(
         canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents &&
             !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-        onPopInvokedWithResult: (_, __)async{
+        onPopInvokedWithResult: (_, __) async {
           researchPricesProvider.updateSelectedConcurrent(concurrent: null);
           researchPricesProvider.clearConcurrents();
         },
@@ -137,7 +137,8 @@ class _ResearchPricesConcurrentsPageState
               floatingActionButton: floatingPersonalizedButton(
                 context: context,
                 researchPricesProvider: researchPricesProvider,
-                nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+                nextRoute:
+                    APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
                 isLoading: researchPricesProvider.isLoadingGetConcurrents ||
                     researchPricesProvider.isLoadingAddOrUpdateOfResearch,
                 messageButton: "criar\nconcorrente".toUpperCase(),
@@ -150,14 +151,9 @@ class _ResearchPricesConcurrentsPageState
                 },
               ),
             ),
+            loadingWidget(researchPricesProvider.isLoadingGetConcurrents),
             loadingWidget(
-              message: 'Pesquisando concorrentes...',
-              isLoading: researchPricesProvider.isLoadingGetConcurrents,
-            ),
-            loadingWidget(
-              message: 'Associando concorrente à pesquisa',
-              isLoading:
-                  researchPricesProvider.isLoadingAssociateConcurrentToResearch,
+              researchPricesProvider.isLoadingAssociateConcurrentToResearch,
             ),
           ],
         ),

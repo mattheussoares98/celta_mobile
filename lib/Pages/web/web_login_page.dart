@@ -28,7 +28,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
     setState(() {
       isLoading = true;
     });
-    
+
     await FirebaseHelper.signIn(
       email: emailController.text,
       password: passwordController.text,
@@ -56,10 +56,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
         future: FirebaseAuth.instance.authStateChanges().first,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return loadingWidget(
-              message: "Aguarde...",
-              isLoading: false,
-            );
+            return loadingWidget(false);
           } else if (snapshot.hasData) {
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               Future.delayed(Duration.zero, () {
@@ -136,10 +133,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                   ),
                 ),
               ),
-              loadingWidget(
-                message: "Efetuando login...",
-                isLoading: isLoading,
-              ),
+              loadingWidget(isLoading),
             ],
           );
         });
