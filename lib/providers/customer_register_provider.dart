@@ -215,6 +215,7 @@ class CustomerRegisterProvider with ChangeNotifier {
           .map(
             (e) => CustomerRegisterCustomerCovenantModel(
               Code: e.customerRegisterCovenantModel.Codigo_Convenio!.toInt(),
+              Matriculate: "99",
               LimitOfPurchase: e.limit,
             ).toJson(),
           )
