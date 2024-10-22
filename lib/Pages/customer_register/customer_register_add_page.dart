@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/providers.dart';
-import 'components/components.dart';
+import 'customer_register.dart';
 
 class CustomerRegisterAddPage extends StatelessWidget {
   final TextEditingController nameController;
@@ -41,6 +41,8 @@ class CustomerRegisterAddPage extends StatelessWidget {
             const CustomerRegisterEmailsInformeds(),
           if (customerRegisterProvider.telephonesCount > 0)
             const CustomerRegisterTelephonesInformeds(),
+          if (customerRegisterProvider.bindedCovenants.isNotEmpty)
+            const BindedCovenants(),
           const SizedBox(height: 100),
         ],
       ),

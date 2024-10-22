@@ -56,7 +56,12 @@ class BindedCovenants extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    customerRegisterProvider.unbindCovenant(index - 1);
+                    ShowAlertDialog.show(
+                        context: context,
+                        title: "Desvincular convênio?",
+                        function: () {
+                          customerRegisterProvider.unbindCovenant(index - 1);
+                        });
                   },
                   child: const Text("Desvincular convênio"),
                 )

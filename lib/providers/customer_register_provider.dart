@@ -154,6 +154,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     passwordController.clear();
     passwordConfirmationController.clear();
     _selectedSexDropDown.value = null;
+    _covenants.clear();
+    _bindedCovenants.clear();
 
     notifyListeners();
   }
@@ -208,6 +210,16 @@ class CustomerRegisterProvider with ChangeNotifier {
       "Addresses": addressProvider.addresses.map((e) => e.toJson()).toList(),
       "Covenants": null,
     };
+    if (_bindedCovenants.isNotEmpty) {
+      _jsonInsertCustomer["CustomerCovenants"] = _bindedCovenants
+          .map(
+            (e) => CustomerRegisterCustomerCovenantModel(
+              Code: e.customerRegisterCovenantModel.Codigo_Convenio!.toInt(),
+              LimitOfPurchase: e.limit,
+            ).toJson(),
+          )
+          .toList();
+    }
     if (dateOfBirthController.text != "") {
       _jsonInsertCustomer["DateOfBirth"] = _formatDate(dateOfBirthController);
     }

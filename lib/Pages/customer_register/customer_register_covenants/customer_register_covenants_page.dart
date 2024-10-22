@@ -26,7 +26,9 @@ class _CustomerRegisterCovenantsPageState
           context,
           listen: false,
         );
-        customerRegisterProvider.loadCovenants();
+        if (customerRegisterProvider.covenants.isEmpty) {
+          customerRegisterProvider.loadCovenants();
+        }
       }
     });
   }
@@ -35,19 +37,21 @@ class _CustomerRegisterCovenantsPageState
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
-    return Column(
-      children: [
-        if (customerRegisterProvider.errorMessageLoadCovenants != "" &&
-            customerRegisterProvider.covenants.isEmpty)
-          searchAgain(
-            errorMessage: customerRegisterProvider.errorMessageLoadCovenants,
-            request: customerRegisterProvider.loadCovenants,
-          ),
-        if (customerRegisterProvider.covenants.isNotEmpty)
-          const LoadedCovenants(),
-        if (customerRegisterProvider.bindedCovenants.isNotEmpty)
-          const BindedCovenants(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          if (customerRegisterProvider.errorMessageLoadCovenants != "" &&
+              customerRegisterProvider.covenants.isEmpty)
+            searchAgain(
+              errorMessage: customerRegisterProvider.errorMessageLoadCovenants,
+              request: customerRegisterProvider.loadCovenants,
+            ),
+          if (customerRegisterProvider.covenants.isNotEmpty)
+            const LoadedCovenants(),
+          if (customerRegisterProvider.bindedCovenants.isNotEmpty)
+            const BindedCovenants(),
+        ],
+      ),
     );
   }
 }
