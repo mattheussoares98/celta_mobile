@@ -11,6 +11,7 @@ class ProductItem extends StatelessWidget {
   final bool? showLastBuyEntrance;
   final bool? showPrice;
   final bool? showWholeInformations;
+  final bool? showMargins;
   final Widget? componentBeforeProductInformations;
   const ProductItem({
     required this.product,
@@ -20,6 +21,7 @@ class ProductItem extends StatelessWidget {
     this.showWholeInformations = true,
     this.showCosts,
     this.showLastBuyEntrance,
+    this.showMargins,
     super.key,
   });
 
@@ -54,6 +56,7 @@ class ProductItem extends StatelessWidget {
                     if (showLastBuyEntrance == true)
                       LastBuyEntrance(product: product),
                     if (showCosts == true) Costs(product: product),
+                    if (showMargins == true) Margins(product: product)
                   ],
                 ),
               ],

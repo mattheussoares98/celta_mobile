@@ -157,6 +157,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 ProductItem(
                   product: product,
                   showWholeInformations: false,
+                  showMargins: true,
                   showCosts: false,
                   showPrice: false,
                   showLastBuyEntrance: true,
