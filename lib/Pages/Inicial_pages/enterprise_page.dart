@@ -17,21 +17,22 @@ class EnterprisePageState extends State<EnterprisePage> {
     final String nextRoute =
         ModalRoute.of(context)!.settings.arguments as String;
 
-    if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS &&
-        !enterpriseProvider.showedAdjustPriceAlert) {
-      ShowAlertDialog.show(
-        contentPadding: const EdgeInsets.all(10),
-        insetPadding: const EdgeInsets.all(10),
-        context: context,
-        title: "Bem-vindo ao módulo de Alteração de preços!",
-        function: () {},
-        showConfirmAndCancelMessage: false,
-        showCloseAlertDialogButton: true,
-        subtitleSize: 17,
-        subtitle:
-            "Este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá melhorar cada vez mais o aplicativo e adicionar novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
-      );
-      enterpriseProvider.changeShowedAjustPriceAlert = true;
+    if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS) {
+      if (!enterpriseProvider.showedAdjustPriceAlert) {
+        ShowAlertDialog.show(
+          contentPadding: const EdgeInsets.all(10),
+          insetPadding: const EdgeInsets.all(10),
+          context: context,
+          title: "Bem-vindo ao módulo de Alteração de preços!",
+          function: () {},
+          showConfirmAndCancelMessage: false,
+          showCloseAlertDialogButton: true,
+          subtitleSize: 17,
+          subtitle:
+              "Este módulo estará disponível gratuitamente por um período de 30 dias. Após esse período, o acesso ao módulo será bloqueado e você precisará entrar em contato com o setor administrativo para solicitar a liberação, além de aceitar a cobrança associada.\nEssa iniciativa nos permitirá melhorar cada vez mais o aplicativo e adicionar novos recursos para você. Agradecemos sua compreensão e apoio!\nPara mais informações, entre em contato com nossa equipe de atendimento.\nAproveite o módulo!",
+        );
+        enterpriseProvider.changeShowedAjustPriceAlert = true;
+      }
     } else if (nextRoute ==
             APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE &&
         !enterpriseProvider.showedExpeditionConferenteAlert) {
@@ -49,7 +50,9 @@ class EnterprisePageState extends State<EnterprisePage> {
       );
       enterpriseProvider.changeShowedExpeditionConferenteAlert = true;
     }
-    await enterpriseProvider.getEnterprises();
+    await enterpriseProvider.getEnterprises(
+        verifyUserCanAdjustSalePrice:
+            nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS);
   }
 
   @override
@@ -62,6 +65,23 @@ class EnterprisePageState extends State<EnterprisePage> {
         await getEnterprises(enterpriseProvider);
       }
     });
+  }
+
+  bool canShowEnterprises({
+    required EnterpriseProvider enterpriseProvider,
+    required String nextRoute,
+  }) {
+    if (enterpriseProvider.isLoading) {
+      return false;
+    } else if (enterpriseProvider.errorMessage != "") {
+      return false;
+    } else if (enterpriseProvider.enterprises.isEmpty) {
+      return false;
+    } else if (nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS &&
+        !enterpriseProvider.userCanAdjustSalePrice) {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -102,20 +122,19 @@ class EnterprisePageState extends State<EnterprisePage> {
               },
               child: Column(
                 children: [
-                  if (enterpriseProvider.errorMessage != '' &&
-                      !enterpriseProvider.isLoading)
-                    Expanded(
-                      child: searchAgain(
-                        errorMessage: enterpriseProvider.errorMessage,
-                        request: () async {
-                          setState(() {});
-                          await getEnterprises(enterpriseProvider);
-                        },
-                      ),
+                  if (!enterpriseProvider.isLoading &&
+                      enterpriseProvider.errorMessage != '')
+                    searchAgain(
+                      errorMessage: enterpriseProvider.errorMessage,
+                      request: () async {
+                        await getEnterprises(enterpriseProvider);
+                      },
                     ),
-                  if (enterpriseProvider.errorMessage == "" &&
-                      !enterpriseProvider.isLoading)
-                    Expanded(child: EnterpriseItems(nextPageRoute: nextRoute)),
+                  if (canShowEnterprises(
+                    enterpriseProvider: enterpriseProvider,
+                    nextRoute: nextRoute,
+                  ))
+                    EnterpriseItems(nextPageRoute: nextRoute),
                 ],
               ),
             ),

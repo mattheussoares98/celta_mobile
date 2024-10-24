@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
@@ -30,7 +32,12 @@ class EnterpriseProvider with ChangeNotifier {
   set changeShowedExpeditionConferenteAlert(_) =>
       _showedExpeditionConferenteAlert = true;
 
-  Future getEnterprises() async {
+  bool _userCanAdjustSalePrice = false;
+  bool get userCanAdjustSalePrice => _userCanAdjustSalePrice;
+
+  Future<void> getEnterprises({
+    bool? verifyUserCanAdjustSalePrice,
+  }) async {
     if (_isLoading) {
       return;
     }
@@ -38,10 +45,15 @@ class EnterpriseProvider with ChangeNotifier {
     _errorMessage = '';
     _isLoading = true;
     notifyListeners();
-    //quando usa o notifylisteners ocorre um erro. Só está atualizando o código acima
-    //porque está sendo chamado dentro de um setState
 
     try {
+      if (verifyUserCanAdjustSalePrice == true) {
+        _userCanAdjustSalePrice = await _verifyUserCanAdjustSalePrice();
+        if (!_userCanAdjustSalePrice) {
+          return;
+        }
+      }
+
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
@@ -90,5 +102,35 @@ class EnterpriseProvider with ChangeNotifier {
   void clearEnterprises() {
     _enterprises.clear();
     notifyListeners();
+  }
+
+  Future<bool> _verifyUserCanAdjustSalePrice() async {
+    try {
+      final encoded = json.encode({
+        "CrossIdentity": UserData.crossIdentity,
+        // "ResourceCode": "609",
+        "RoutineInt": 8, //adjustSalePrice
+      });
+
+      await SoapRequest.soapPost(
+        parameters: {
+          "jsonParameters": encoded,
+        },
+        typeOfResponse: "UserCanAccessCrossResourceResponse",
+        SOAPAction: "UserCanAccessCrossResource",
+        serviceASMX: "CeltaSecurityService.asmx",
+        typeOfResult: "UserCanAccessCrossResourceResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        _errorMessage = SoapRequestResponse.errorMessage;
+        return false;
+      } else {
+        return json.decode(SoapRequestResponse.responseAsString)["CanAccess"];
+      }
+    } catch (e) {
+      _errorMessage = DefaultErrorMessage.ERROR;
+      return false;
+    }
   }
 }
