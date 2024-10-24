@@ -26,7 +26,7 @@ class CostsQuantityAndTotal extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           fontSize: 15,
           title: "Custo",
-          subtitle: ConvertString.convertToBRL(practicedValue),
+          subtitle: ConvertString.convertToBRL(practicedValue, decimalHouses: 4),
           subtitleColor:
               double.parse(practicedValue) == 0 ? Colors.red : Colors.green,
           otherWidget: Row(
@@ -80,6 +80,7 @@ class CostsQuantityAndTotal extends StatelessWidget {
                 fontSize: 15,
                 subtitle: ConvertString.convertToBRL(
                   product.valueTyped! * product.quantity!,
+                  decimalHouses: 4,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,
                 otherWidget: product.quantity == 0

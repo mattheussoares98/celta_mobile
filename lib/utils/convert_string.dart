@@ -1,9 +1,7 @@
-
-
 import 'package:intl/intl.dart';
 
 class ConvertString {
-  static String convertToBRL(dynamic value) {
+  static String convertToBRL(dynamic value, {int? decimalHouses = 2}) {
     value = value.toString();
 
     if (value.toString().contains(",")) {
@@ -19,7 +17,9 @@ class ConvertString {
 
     value = double.tryParse(value.toString())!;
 
-    final formatter = new NumberFormat("#,##0.00", "pt_BR");
+    final zeros = "".padRight(decimalHouses!, "0");
+
+    final formatter = new NumberFormat("#,##0.$zeros", "pt_BR");
     String newText = formatter.format(value) + "R\$";
 
     return newText;
@@ -43,14 +43,8 @@ class ConvertString {
     }
 
     value = double.tryParse(value.toString())!;
-
-    NumberFormat formatter = new NumberFormat("#,##0.000", "pt_BR");
-
-    if (decimalHouses == 1) {
-      formatter = new NumberFormat("#,##0.0", "pt_BR");
-    } else if (decimalHouses == 2) {
-      formatter = new NumberFormat("#,##0.00", "pt_BR");
-    }
+    final zeros = "".padRight(decimalHouses!, "0");
+    final formatter = new NumberFormat("#,##0.$zeros", "pt_BR");
 
     String newText = formatter.format(value);
 

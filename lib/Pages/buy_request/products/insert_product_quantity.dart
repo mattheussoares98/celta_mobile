@@ -131,19 +131,19 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                     enabled: !buyRequestProvider.isLoadingProducts &&
                         !buyRequestProvider.isLoadingInsertBuyRequest,
                     controller: buyRequestProvider.priceController,
-                    inputFormatters: [LengthLimitingTextInputFormatter(7)],
+                    inputFormatters: [LengthLimitingTextInputFormatter(10)],
                     onChanged: (value) => onChanged(
                       textController: buyRequestProvider.priceController,
                       value: value,
                     ),
                     validator: (value) => FormFieldValidations.number(
                       value: value,
-                      maxDecimalPlaces: 2,
+                      maxDecimalPlaces: 4,
                     ),
                     decoration: FormFieldDecoration.decoration(
                       isLoading: false,
                       context: context,
-                      labelText: 'Preço',
+                      labelText: 'Custo',
                     ),
                     onFieldSubmitted: (_) async {
                       if (buyRequestProvider.priceController.text.isEmpty) {

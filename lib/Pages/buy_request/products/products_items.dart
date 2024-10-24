@@ -20,7 +20,7 @@ class ProductsItems extends StatefulWidget {
 }
 
 class _ProductsItemsState extends State<ProductsItems> {
-  void _updatePriceControllerText(BuyRequestProvider buyRequestProvider) {
+  void _updateCostControllerText(BuyRequestProvider buyRequestProvider) {
     GetProductJsonModel product;
     if (widget.showOnlyCartProducts) {
       product = buyRequestProvider
@@ -33,12 +33,24 @@ class _ProductsItemsState extends State<ProductsItems> {
       buyRequestProvider.priceController.text =
           ConvertString.convertToBrazilianNumber(
         getPracticedValue(product),
-        decimalHouses: 2,
+        decimalHouses: 4,
       );
 
       buyRequestProvider.priceController.text = buyRequestProvider
           .priceController.text
           .replaceAll(RegExp(r'\.'), ',');
+
+      int pointQuantity =
+          ",".allMatches(buyRequestProvider.priceController.text).length;
+
+      for (var x = 1; x < pointQuantity; x++) {
+        if (x < pointQuantity && pointQuantity > 1) {
+          buyRequestProvider.priceController.text = buyRequestProvider
+              .priceController.text
+              .toString()
+              .replaceFirst(RegExp(r'\,'), '');
+        }
+      }
     });
   }
 
@@ -53,7 +65,7 @@ class _ProductsItemsState extends State<ProductsItems> {
   void changeFocusAndUpdatePriceControllerText(
     BuyRequestProvider buyRequestProvider,
   ) {
-    _updatePriceControllerText(buyRequestProvider);
+    _updateCostControllerText(buyRequestProvider);
     _changeFocusToSelectedProduct(buyRequestProvider);
   }
 
@@ -107,11 +119,11 @@ class _ProductsItemsState extends State<ProductsItems> {
 
   String getPracticedValue(GetProductJsonModel product) {
     if (product.valueTyped != 0) {
-      return product.valueTyped.toString();
+      return product.valueTyped!.toStringAsFixed(4);
     } else if (product.value == 0.0) {
-      return product.realCost.toString();
+      return product.realCost!.toStringAsFixed(4);
     } else {
-      return product.value.toString();
+      return product.value!.toStringAsFixed(4);
     }
   }
 
@@ -137,11 +149,11 @@ class _ProductsItemsState extends State<ProductsItems> {
                 !widget.showOnlyCartProducts) {
               buyRequestProvider.indexOfSelectedProduct = -1;
             }
-      
+
             final product = widget.showOnlyCartProducts
                 ? buyRequestProvider.productsInCart[index]
                 : buyRequestProvider.products[index];
-      
+
             return GestureDetector(
               onTap: buyRequestProvider.isLoadingProducts ||
                       buyRequestProvider.isLoadingInsertBuyRequest

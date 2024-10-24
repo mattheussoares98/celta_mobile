@@ -62,6 +62,7 @@ class _AppbarActionsState
             child: Text(
               ConvertString.convertToBRL(
                 buyRequestProvider.totalCartPrice.toString(),
+                decimalHouses: 4,
               ),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,

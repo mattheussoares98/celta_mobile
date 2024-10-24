@@ -97,6 +97,7 @@ class _SaveBuyRequestButtonState extends State<SaveBuyRequestButton> {
                         child: Text(
                           ConvertString.convertToBRL(
                             buyRequestProvider.totalCartPrice,
+                            decimalHouses: 4,
                           ),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
