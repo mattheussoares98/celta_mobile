@@ -21,7 +21,7 @@ class CpfOrCnpjField extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormFieldWidget(
       focusNode: cpfCnpjFocusNode,
-      keyboardType: TextInputType.number,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
       enabled: true,
       onChanged: (value) {
         updateCpfCnpjEnabled();

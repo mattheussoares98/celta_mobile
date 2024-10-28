@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -186,7 +187,13 @@ class FirebaseHelper {
       return;
     }
     await _firebaseMessaging.requestPermission();
-    final fcmToken = await _firebaseMessaging.getToken();
+    String? fcmToken;
+
+    if (Platform.isAndroid) {
+      fcmToken = await _firebaseMessaging.getToken();
+    } else if (Platform.isIOS) {
+      fcmToken = await _firebaseMessaging.getAPNSToken();
+    }
     print("Token: $fcmToken"); //precisa usar esse token pra fazer testes de
     // mensagens pelo site do firebase
     UserData.fcmToken = fcmToken;

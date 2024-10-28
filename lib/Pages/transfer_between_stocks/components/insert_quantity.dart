@@ -139,7 +139,7 @@ class _InsertQuantityState
                       labelText: "Quantidade",
                     ),
                     style: FormFieldStyle.style(),
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 5),

@@ -119,7 +119,7 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                       }
                     },
                     style: FormFieldStyle.style(),
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 3),
@@ -154,7 +154,7 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                       }
                     },
                     style: FormFieldStyle.style(),
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 5),

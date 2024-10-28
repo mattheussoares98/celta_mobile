@@ -77,7 +77,7 @@ class _CustomerRegisterTelephonePageState
                 Expanded(
                   flex: 3,
                   child: FormFieldWidget(
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     enabled: true,
                     focusNode: dddFocusNode,
                     onFieldSubmitted: (String? value) {
@@ -103,7 +103,7 @@ class _CustomerRegisterTelephonePageState
                 Expanded(
                   flex: 10,
                   child: FormFieldWidget(
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     enabled: true,
                     focusNode: telephoneFocusNode,
                     onChanged: (value) {

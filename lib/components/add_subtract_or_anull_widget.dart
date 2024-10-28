@@ -115,7 +115,8 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                         labelText: 'Quantidade',
                       ),
                       style: FormFieldStyle.style(),
-                      keyboardType: TextInputType.number,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                     ),
                   ),
                 ),

@@ -187,7 +187,7 @@
 //                     style: const TextStyle(
 //                       fontSize: 17,
 //                     ),
-//                     keyboardType: TextInputType.number,
+//                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
 //                   ),
 //                 ),
 //                 const SizedBox(width: 5),

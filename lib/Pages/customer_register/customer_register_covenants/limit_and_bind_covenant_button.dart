@@ -57,7 +57,7 @@ class _LimitAndBindCovenantButtonState
             Expanded(
               child: TextFormField(
                 autofocus: false,
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 controller: controller,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onFieldSubmitted: (_) {

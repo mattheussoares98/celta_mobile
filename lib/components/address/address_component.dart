@@ -101,7 +101,7 @@ class _AddressComponentState extends State<AddressComponent> {
         child: Column(
           children: [
             FormFieldWidget(
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               enabled:
                   widget.isLoading == false && !addressProvider.isLoadingCep,
               focusNode: _cepFocusNode,
@@ -294,7 +294,7 @@ class _AddressComponentState extends State<AddressComponent> {
                       Expanded(
                         flex: 4,
                         child: FormFieldWidget(
-                          keyboardType: TextInputType.number,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
                           focusNode: _numberFocusNode,

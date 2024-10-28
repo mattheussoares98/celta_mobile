@@ -7,10 +7,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
-import '../api/api.dart';
+import 'api/api.dart';
 
-import '../providers/providers.dart';
-import '../utils/utils.dart';
+import 'providers/providers.dart';
+import 'utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

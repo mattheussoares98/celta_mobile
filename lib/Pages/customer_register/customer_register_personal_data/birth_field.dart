@@ -20,7 +20,7 @@ class BirthField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      keyboardType: TextInputType.number,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
       enabled: true,
       focusNode: dateOfBirthFocusNode,
       onChanged: (_) {

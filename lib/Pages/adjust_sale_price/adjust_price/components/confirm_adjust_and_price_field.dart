@@ -93,7 +93,8 @@ class _PriceFieldAndConfirmAdjustButtonState
                 child: TextFormField(
                   controller: priceTextController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  keyboardType: const TextInputType.numberWithOptions(),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [LengthLimitingTextInputFormatter(10)],
                   style: FormFieldStyle.style(),
                   onFieldSubmitted: (value) async {

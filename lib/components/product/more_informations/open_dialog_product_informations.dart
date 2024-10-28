@@ -34,14 +34,13 @@ class _OpenDialogProductInformationsState
     return Flexible(
       child: InkWell(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Text(
-                widget.title,
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            Text(
+              widget.title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(width: 3),

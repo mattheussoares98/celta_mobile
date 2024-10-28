@@ -127,7 +127,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                       }
                     },
                     style: FormFieldStyle.style(),
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 5),

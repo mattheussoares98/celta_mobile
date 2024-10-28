@@ -70,7 +70,7 @@ class _InsertQuantityTextFormFieldState
           hintText: widget.hintText,
         ),
         style: FormFieldStyle.style(),
-        keyboardType: TextInputType.number,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
       ),
     );
   }

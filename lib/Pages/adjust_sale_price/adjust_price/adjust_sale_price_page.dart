@@ -58,6 +58,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       GetSchedulesPrices(
                         enterprise: enterprise,
@@ -108,7 +109,6 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                           }),
                       const Divider(),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           OpenDialogProductInformations(
                             product: product,
