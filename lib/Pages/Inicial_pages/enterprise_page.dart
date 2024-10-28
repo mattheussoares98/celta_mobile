@@ -116,26 +116,28 @@ class EnterprisePageState extends State<EnterprisePage> {
                 ),
               ],
             ),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                await enterpriseProvider.getEnterprises();
-              },
-              child: Column(
-                children: [
-                  if (!enterpriseProvider.isLoading &&
-                      enterpriseProvider.errorMessage != '')
-                    searchAgain(
-                      errorMessage: enterpriseProvider.errorMessage,
-                      request: () async {
-                        await getEnterprises(enterpriseProvider);
-                      },
-                    ),
-                  if (canShowEnterprises(
-                    enterpriseProvider: enterpriseProvider,
-                    nextRoute: nextRoute,
-                  ))
-                    EnterpriseItems(nextPageRoute: nextRoute),
-                ],
+            body: SingleChildScrollView(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await enterpriseProvider.getEnterprises();
+                },
+                child: Column(
+                  children: [
+                    if (!enterpriseProvider.isLoading &&
+                        enterpriseProvider.errorMessage != '')
+                      searchAgain(
+                        errorMessage: enterpriseProvider.errorMessage,
+                        request: () async {
+                          await getEnterprises(enterpriseProvider);
+                        },
+                      ),
+                    if (canShowEnterprises(
+                      enterpriseProvider: enterpriseProvider,
+                      nextRoute: nextRoute,
+                    ))
+                      EnterpriseItems(nextPageRoute: nextRoute),
+                  ],
+                ),
               ),
             ),
           ),

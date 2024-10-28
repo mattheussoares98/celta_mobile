@@ -19,47 +19,43 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
   Widget build(BuildContext context) {
     EnterpriseProvider enterpriseProvider = Provider.of(context, listen: true);
 
-    return Column(
-      children: [
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: enterpriseProvider.enterpriseCount,
-          itemBuilder: (ctx, index) {
-            return Card(
-              child: ListTile(
-                title: Text(
-                  enterpriseProvider.enterprises[index].nomeEmpresa,
-                  style: const TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                leading: Text(
-                  enterpriseProvider.enterprises[index].codigoEmpresa
-                      .toString(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'OpenSans',
-                  ),
-                ),
-                subtitle: Text(
-                  "Cnpj: " +
-                      enterpriseProvider.enterprises[index].cnpj.toString(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'OpenSans',
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(widget.nextPageRoute,
-                      arguments: enterpriseProvider.enterprises[index]);
-                },
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: enterpriseProvider.enterpriseCount,
+      itemBuilder: (ctx, index) {
+        return Card(
+          child: ListTile(
+            title: Text(
+              enterpriseProvider.enterprises[index].nomeEmpresa,
+              style: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-            );
-          },
-        ),
-      ],
+            ),
+            leading: Text(
+              enterpriseProvider.enterprises[index].codigoEmpresa
+                  .toString(),
+              style: const TextStyle(
+                color: Colors.black,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+            subtitle: Text(
+              "Cnpj: " +
+                  enterpriseProvider.enterprises[index].cnpj.toString(),
+              style: const TextStyle(
+                color: Colors.black,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(widget.nextPageRoute,
+                  arguments: enterpriseProvider.enterprises[index]);
+            },
+          ),
+        );
+      },
     );
   }
 }
