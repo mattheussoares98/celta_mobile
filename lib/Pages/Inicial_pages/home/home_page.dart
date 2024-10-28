@@ -159,7 +159,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
                           context: context,
-                          isNew: true,
                           moduleIsLiberated: getModuleIsEnabled(
                             enterpriseProvider,
                             Modules.adjustSalePrice,
@@ -181,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                         //   routine: 'Avaliação e sugestôes'.toUpperCase(),
                         //   route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
                         //   context: context,
-                        //   isNew: true,
+
                         //   moduleIsLiberated: true,
                         // ),
                         ImageComponent.image(
@@ -202,7 +201,6 @@ class _HomePageState extends State<HomePage> {
                           nextRoute: APPROUTES
                               .EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE,
                           context: context,
-                          isNew: true,
                           moduleIsLiberated: getModuleIsEnabled(
                             enterpriseProvider,
                             Modules.productsConference,

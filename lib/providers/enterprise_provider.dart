@@ -23,15 +23,6 @@ class EnterpriseProvider with ChangeNotifier {
   FirebaseEnterpriseModel? get firebaseEnterpriseModel =>
       _firebaseEnterpriseModel;
 
-  bool _showedAdjustPriceAlert = false;
-  bool get showedAdjustPriceAlert => _showedAdjustPriceAlert;
-  set changeShowedAjustPriceAlert(_) => _showedAdjustPriceAlert = true;
-
-  bool _showedExpeditionConferenteAlert = false;
-  bool get showedExpeditionConferenteAlert => _showedExpeditionConferenteAlert;
-  set changeShowedExpeditionConferenteAlert(_) =>
-      _showedExpeditionConferenteAlert = true;
-
   bool _userCanAdjustSalePrice = false;
   bool get userCanAdjustSalePrice => _userCanAdjustSalePrice;
 
