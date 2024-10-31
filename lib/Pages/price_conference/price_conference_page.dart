@@ -101,6 +101,8 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                           return ProductItem(
                             product: priceConferenceProvider.products[index],
                             showCosts: true,
+                            showLastBuyEntrance: true,
+                            showMargins: true,
                             componentAfterProductInformations:
                                 SendToPrintButton(
                               internalEnterpriseCode:

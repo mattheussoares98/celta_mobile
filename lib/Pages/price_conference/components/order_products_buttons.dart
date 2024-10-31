@@ -26,66 +26,73 @@ class _PriceConferenceOrderProductsButtonsState
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  color: Colors.white,
-                  onPressed: widget.priceConferenceProvider.isLoading ||
-                          widget.priceConferenceProvider.isSendingToPrint
-                      ? null
-                      : () {
-                          widget.priceConferenceProvider.orderByDownPrice();
-                        },
-                  icon: const Icon(
-                    Icons.arrow_upward,
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: IconButton(
+                      color: Colors.white,
+                      onPressed: widget.priceConferenceProvider.isLoading ||
+                              widget.priceConferenceProvider.isSendingToPrint
+                          ? null
+                          : () {
+                              widget.priceConferenceProvider.orderByDownPrice();
+                            },
+                      icon: const Icon(
+                        Icons.arrow_upward,
+                      ),
+                    ),
                   ),
-                ),
-                const Text("Preço"),
-                IconButton(
-                  color: Colors.white,
-                  onPressed: widget.priceConferenceProvider.isLoading ||
-                          widget.priceConferenceProvider.isSendingToPrint
-                      ? null
-                      : () {
-                          widget.priceConferenceProvider.orderByUpPrice();
-                        },
-                  icon: const Icon(
-                    Icons.arrow_downward,
+                  const FittedBox(child: Text("Preço")),
+                  Expanded(
+                    child: IconButton(
+                      color: Colors.white,
+                      onPressed: widget.priceConferenceProvider.isLoading ||
+                              widget.priceConferenceProvider.isSendingToPrint
+                          ? null
+                          : () {
+                              widget.priceConferenceProvider.orderByUpPrice();
+                            },
+                      icon: const Icon(
+                        Icons.arrow_downward,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  color: Colors.white,
-                  onPressed: widget.priceConferenceProvider.isLoading ||
-                          widget.priceConferenceProvider.isSendingToPrint
-                      ? null
-                      : () {
-                          widget.priceConferenceProvider.orderByDownName();
-                        },
-                  icon: const Icon(
-                    Icons.arrow_upward,
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: IconButton(
+                      color: Colors.white,
+                      onPressed: widget.priceConferenceProvider.isLoading ||
+                              widget.priceConferenceProvider.isSendingToPrint
+                          ? null
+                          : () {
+                              widget.priceConferenceProvider.orderByDownName();
+                            },
+                      icon: const Icon(
+                        Icons.arrow_upward,
+                      ),
+                    ),
                   ),
-                ),
-                const Text(
-                  "Nome",
-                  // style: TextStyle(color: ),
-                ),
-                IconButton(
-                  color: Colors.white,
-                  onPressed: widget.priceConferenceProvider.isLoading ||
-                          widget.priceConferenceProvider.isSendingToPrint
-                      ? null
-                      : () {
-                          widget.priceConferenceProvider.orderByUpName();
-                        },
-                  icon: const Icon(
-                    Icons.arrow_downward,
+                  const FittedBox(child: Text("Nome")),
+                  Expanded(
+                    child: IconButton(
+                      color: Colors.white,
+                      onPressed: widget.priceConferenceProvider.isLoading ||
+                              widget.priceConferenceProvider.isSendingToPrint
+                          ? null
+                          : () {
+                              widget.priceConferenceProvider.orderByUpName();
+                            },
+                      icon: const Icon(Icons.arrow_downward),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
