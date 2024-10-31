@@ -315,6 +315,7 @@ class SoapHelper {
     try {
       Map jsonGetBuyer = {
         "CrossIdentity": UserData.crossIdentity,
+        "RoutineInt": 2,
       };
 
       await SoapRequest.soapPost(
