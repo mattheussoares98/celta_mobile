@@ -20,6 +20,7 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
     EnterpriseProvider enterpriseProvider = Provider.of(context, listen: true);
 
     return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: enterpriseProvider.enterpriseCount,
       itemBuilder: (ctx, index) {
@@ -34,16 +35,14 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
               ),
             ),
             leading: Text(
-              enterpriseProvider.enterprises[index].codigoEmpresa
-                  .toString(),
+              enterpriseProvider.enterprises[index].codigoEmpresa.toString(),
               style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'OpenSans',
               ),
             ),
             subtitle: Text(
-              "Cnpj: " +
-                  enterpriseProvider.enterprises[index].cnpj.toString(),
+              "Cnpj: " + enterpriseProvider.enterprises[index].cnpj.toString(),
               style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'OpenSans',
