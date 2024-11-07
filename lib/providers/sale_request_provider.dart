@@ -170,21 +170,37 @@ class SaleRequestProvider with ChangeNotifier {
   }) {
     double _quantityToAdd = consultedProductController.text.toDouble();
 
+    final indexOfProductInCart =
+        _cartProducts[enterpriseCode]?.indexWhere((e) => e.PLU == product.plu);
+    SaleRequestCartProductsModel? productInCart;
+    if (indexOfProductInCart != null && indexOfProductInCart != -1) {
+      productInCart = _cartProducts[enterpriseCode]![indexOfProductInCart];
+    }
+
     if (_quantityToAdd <= 0) {
       _quantityToAdd = 1;
     }
 
-    double _totalItemValue = _quantityToAdd *
-        (product.wholePracticedPrice == 0 || product.wholePracticedPrice == null
-            ? product.retailPracticedPrice!
-            : product.wholePracticedPrice!);
+    double _totalItemValue;
+    _totalItemValue = _quantityToAdd * product.retailPracticedPrice!;
+
+    if (product.minimumWholeQuantity != null &&
+        product.minimumWholeQuantity! > 0 &&
+        product.wholePracticedPrice != null &&
+        product.wholePracticedPrice! > 0 &&
+        (productInCart != null &&
+            (productInCart.Quantity + _quantityToAdd >=
+                product.minimumWholeQuantity!))) {
+      _totalItemValue = _quantityToAdd * product.wholePracticedPrice!;
+    }
 
     _changeCursorToLastIndex(consultedProductController);
 
     return _totalItemValue;
   }
 
-  _changeCursorToLastIndex(TextEditingController consultedProductController) {
+  void _changeCursorToLastIndex(
+      TextEditingController consultedProductController) {
     consultedProductController.selection = TextSelection.collapsed(
       offset: consultedProductController.text.length,
     );
@@ -310,7 +326,7 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  getTotalItemPrice(SaleRequestCartProductsModel product) {
+  double getTotalItemPrice(SaleRequestCartProductsModel product) {
     if (product.TotalLiquid == 0) {
       return (product.Value * product.Quantity) -
           product.AutomaticDiscountValue;
