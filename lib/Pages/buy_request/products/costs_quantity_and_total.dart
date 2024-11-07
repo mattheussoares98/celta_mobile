@@ -26,7 +26,8 @@ class CostsQuantityAndTotal extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           fontSize: 15,
           title: "Custo",
-          subtitle: ConvertString.convertToBRL(practicedValue, decimalHouses: 4),
+          subtitle:
+              ConvertString.convertToBRL(practicedValue, decimalHouses: 4),
           subtitleColor:
               double.parse(practicedValue) == 0 ? Colors.red : Colors.green,
           otherWidget: Row(
@@ -42,7 +43,7 @@ class CostsQuantityAndTotal extends StatelessWidget {
               InkWell(
                 child: Icon(
                   Icons.delete,
-                  color: product.quantity! > 0 &&
+                  color: product.quantity > 0 &&
                           !buyRequestProvider.isLoadingInsertBuyRequest
                       ? Colors.red
                       : Colors.grey,
@@ -65,7 +66,7 @@ class CostsQuantityAndTotal extends StatelessWidget {
             ],
           ),
         ),
-        if (product.quantity! > 0)
+        if (product.quantity > 0)
           Column(
             children: [
               TitleAndSubtitle.titleAndSubtitle(
@@ -79,7 +80,7 @@ class CostsQuantityAndTotal extends StatelessWidget {
                 title: "Total",
                 fontSize: 15,
                 subtitle: ConvertString.convertToBRL(
-                  product.valueTyped! * product.quantity!,
+                  product.valueTyped! * product.quantity,
                   decimalHouses: 4,
                 ),
                 subtitleColor: Theme.of(context).colorScheme.primary,

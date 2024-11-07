@@ -253,7 +253,7 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                               lengthLimitingTextInputFormatter:
                                                   8,
                                               focusNode: _focusNode,
-                                              productQuantityController:
+                                              newQuantityController:
                                                   widget.textEditingController,
                                               formKey: _formKey,
                                               onFieldSubmitted: () {

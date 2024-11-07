@@ -6,7 +6,7 @@ import '../../../pages/sale_request/sale_request.dart';
 
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
-  final TextEditingController productQuantityController;
+  final TextEditingController newQuantityController;
   final FocusNode insertQuantityFocusNode;
   final double totalItensInCart;
   final double totalItemValue;
@@ -15,7 +15,7 @@ class InsertProductQuantityForm extends StatefulWidget {
   final void Function() updateTotalItemValue;
   final int enterpriseCode;
   const InsertProductQuantityForm({
-    required this.productQuantityController,
+    required this.newQuantityController,
     required this.insertQuantityFocusNode,
     required this.enterpriseCode,
     required this.consultedProductFormKey,
@@ -34,7 +34,7 @@ class InsertProductQuantityForm extends StatefulWidget {
 
 class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
   addItemInCart() {
-    if (widget.productQuantityController.text.isEmpty) {
+    if (widget.newQuantityController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
       setState(() {
         widget.addProductInCart();
@@ -46,7 +46,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
     bool isValid = widget.consultedProductFormKey.currentState!.validate();
 
     double? controllerInDouble = double.tryParse(
-        widget.productQuantityController.text.replaceAll(RegExp(r'\,'), '.'));
+        widget.newQuantityController.text.replaceAll(RegExp(r'\,'), '.'));
 
     if (controllerInDouble == null) {
       //se não conseguir converter, é porque vai adicionar uma unidade
@@ -74,7 +74,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
           children: [
             Expanded(
               child: MoreOrLessQuantityButtons(
-                productQuantityController: widget.productQuantityController,
+                newQuantityController: widget.newQuantityController,
                 updateTotalItemValue: widget.updateTotalItemValue,
               ),
             ),
@@ -88,7 +88,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             Expanded(
               child: InsertQuantityTextFormField(
                 focusNode: widget.insertQuantityFocusNode,
-                productQuantityController: widget.productQuantityController,
+                newQuantityController: widget.newQuantityController,
                 formKey: widget.consultedProductFormKey,
                 onChanged: widget.updateTotalItemValue,
                 onFieldSubmitted: addItemInCart,
@@ -99,7 +99,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             const SizedBox(width: 5),
             Expanded(
               child: AddInCartButton(
-                productQuantityController: widget.productQuantityController,
+                newQuantityController: widget.newQuantityController,
                 addItemInCart: addItemInCart,
                 totalItemValue: widget.totalItemValue,
               ),

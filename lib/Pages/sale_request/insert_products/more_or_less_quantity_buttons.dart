@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../utils/utils.dart';
 
 class MoreOrLessQuantityButtons extends StatefulWidget {
-  final TextEditingController productQuantityController;
+  final TextEditingController newQuantityController;
   final void Function() updateTotalItemValue;
   const MoreOrLessQuantityButtons({
-    required this.productQuantityController,
+    required this.newQuantityController,
     required this.updateTotalItemValue,
     super.key,
   });
@@ -25,26 +25,25 @@ class _MoreOrLessQuantityButtonsState extends State<MoreOrLessQuantityButtons> {
         IconButton(
           color: Theme.of(context).colorScheme.primary,
           onPressed: () {
-            double quantityToAdd =
-                widget.productQuantityController.text.toDouble();
-    
+            double quantityToAdd = widget.newQuantityController.text.toDouble();
+
             setState(() {
               if (quantityToAdd <= 1) {
-                widget.productQuantityController.text = "";
-                widget.productQuantityController.clear();
+                widget.newQuantityController.text = "";
+                widget.newQuantityController.clear();
               } else {
                 quantityToAdd = quantityToAdd - 1;
-                widget.productQuantityController.text = quantityToAdd
+                widget.newQuantityController.text = quantityToAdd
                     .toStringAsFixed(3)
                     .replaceAll(RegExp(r'\.'), ',');
               }
-    
+
               widget.updateTotalItemValue();
             });
           },
           icon: Icon(
             Icons.remove,
-            color: widget.productQuantityController.text.isEmpty
+            color: widget.newQuantityController.text.isEmpty
                 ? Colors.grey
                 : Theme.of(context).colorScheme.primary,
           ),
@@ -52,19 +51,19 @@ class _MoreOrLessQuantityButtonsState extends State<MoreOrLessQuantityButtons> {
         IconButton(
           color: Theme.of(context).colorScheme.primary,
           onPressed: () {
-            if (widget.productQuantityController.text.isEmpty ||
-                widget.productQuantityController.text == "0") {
-              widget.productQuantityController.text = "1,000";
+            if (widget.newQuantityController.text.isEmpty ||
+                widget.newQuantityController.text == "0") {
+              widget.newQuantityController.text = "1,000";
               widget.updateTotalItemValue();
             } else {
               double? parsedQuantity = double.tryParse(widget
-                  .productQuantityController.text
+                  .newQuantityController.text
                   .replaceAll(RegExp(r','), '.'));
-    
+
               if (parsedQuantity != null) {
                 parsedQuantity++;
-    
-                widget.productQuantityController.text = parsedQuantity
+
+                widget.newQuantityController.text = parsedQuantity
                     .toStringAsFixed(3)
                     .replaceAll(RegExp(r'\.'), ',');
               }

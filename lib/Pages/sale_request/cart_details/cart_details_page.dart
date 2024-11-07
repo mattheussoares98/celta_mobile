@@ -72,7 +72,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                   ),
                 CartItems(
                   enterpriseCode: widget.enterpriseCode,
-                  quantityController: quantityController,
+                  newQuantityController: quantityController,
                 ),
                 LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
               ],

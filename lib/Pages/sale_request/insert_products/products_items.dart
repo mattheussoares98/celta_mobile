@@ -7,13 +7,13 @@ import '../../../components/components.dart';
 import 'insert_products.dart';
 
 class ProductsItems extends StatefulWidget {
-  final TextEditingController consultedProductController;
+  final TextEditingController newQuantityController;
   final int enterpriseCode;
   final Function getProductsWithCamera;
 
   const ProductsItems({
     required this.getProductsWithCamera,
-    required this.consultedProductController,
+    required this.newQuantityController,
     required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
@@ -28,8 +28,8 @@ class _ProductsItemsState extends State<ProductsItems> {
   final _insertQuantityFocusNode = FocusNode();
 
   changeCursorToLastIndex() {
-    widget.consultedProductController.selection = TextSelection.collapsed(
-      offset: widget.consultedProductController.text.length,
+    widget.newQuantityController.selection = TextSelection.collapsed(
+      offset: widget.newQuantityController.text.length,
     );
   }
 
@@ -58,7 +58,7 @@ class _ProductsItemsState extends State<ProductsItems> {
           setState(() {
             totalItemValue = saleRequestProvider.getTotalItemValue(
               product: product,
-              consultedProductController: widget.consultedProductController,
+              newQuantityController: widget.newQuantityController,
               enterpriseCode: widget.enterpriseCode.toString(),
             );
           });
@@ -86,7 +86,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     required int index,
     required GetProductJsonModel product,
   }) {
-    widget.consultedProductController.text = "";
+    widget.newQuantityController.text = "";
 
     if (saleRequestProvider.productsCount == 1 ||
         saleRequestProvider.isLoadingProducts) {
@@ -147,7 +147,7 @@ class _ProductsItemsState extends State<ProductsItems> {
 
         double _totalItemValue = saleRequestProvider.getTotalItemValue(
           product: product,
-          consultedProductController: widget.consultedProductController,
+          newQuantityController: widget.newQuantityController,
           enterpriseCode: widget.enterpriseCode.toString(),
         );
 
@@ -241,7 +241,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                   InsertProductQuantityForm(
                     insertQuantityFocusNode: _insertQuantityFocusNode,
                     enterpriseCode: widget.enterpriseCode,
-                    productQuantityController: widget.consultedProductController,
+                    newQuantityController: widget.newQuantityController,
                     consultedProductFormKey: _consultedProductFormKey,
                     totalItemValue: _totalItemValue,
                     product: product,
@@ -253,8 +253,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                         );
                       }
                       saleRequestProvider.addProductInCart(
-                        consultedProductController:
-                            widget.consultedProductController,
+                        newQuantityController: widget.newQuantityController,
                         product: product,
                         enterpriseCode: widget.enterpriseCode.toString(),
                       );
@@ -271,8 +270,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                       setState(() {
                         _totalItemValue = saleRequestProvider.getTotalItemValue(
                           product: product,
-                          consultedProductController:
-                              widget.consultedProductController,
+                          newQuantityController: widget.newQuantityController,
                           enterpriseCode: widget.enterpriseCode.toString(),
                         );
                       });

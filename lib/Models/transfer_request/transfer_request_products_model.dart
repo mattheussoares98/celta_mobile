@@ -16,7 +16,7 @@ class TransferRequestProductsModel {
   final double ECommerceSalePrice;
   final double ECommerceOfferPrice;
   final double MinimumWholeQuantity;
-  final double BalanceStockSale;
+  final double? BalanceStockSale;
   final String StorageAreaAddress;
   final double Value;
   final List<dynamic> StockByEnterpriseAssociateds;

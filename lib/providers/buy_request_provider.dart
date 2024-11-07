@@ -139,7 +139,7 @@ class BuyRequestProvider with ChangeNotifier {
             EnterpriseCode: product.enterpriseCode!,
             ProductPackingCode: product.productPackingCode!,
             Value: product.value!,
-            Quantity: product.quantity!,
+            Quantity: product.quantity,
             IncrementPercentageOrValue: "R\$",
             IncrementValue: 0,
             DiscountPercentageOrValue: "R\$",
@@ -151,7 +151,7 @@ class BuyRequestProvider with ChangeNotifier {
 
   double get totalCartPrice {
     double total = _productsInCart.fold(0, (previousValue, product) {
-      double productTotal = product.quantity! * product.valueTyped!;
+      double productTotal = product.quantity * product.valueTyped!;
       return previousValue + productTotal;
     });
 
@@ -503,13 +503,13 @@ class BuyRequestProvider with ChangeNotifier {
 
   void orderCartDownByTotalCost() {
     _productsInCart.sort((a, b) =>
-        (b.valueTyped! * b.quantity!).compareTo(a.valueTyped! * a.quantity!));
+        (b.valueTyped! * b.quantity).compareTo(a.valueTyped! * a.quantity));
     notifyListeners();
   }
 
   void orderCartUpByTotalCost() {
     _productsInCart.sort((a, b) =>
-        (a.valueTyped! * a.quantity!).compareTo(b.valueTyped! * b.quantity!));
+        (a.valueTyped! * a.quantity).compareTo(b.valueTyped! * b.quantity));
     notifyListeners();
   }
 
@@ -799,7 +799,7 @@ class BuyRequestProvider with ChangeNotifier {
               EnterpriseCode: product.enterpriseCode!,
               ProductPackingCode: product.productPackingCode!,
               Value: product.value ?? 0,
-              Quantity: product.quantity ?? 1,
+              Quantity: product.quantity,
               IncrementPercentageOrValue:
                   "", // Coloque os valores apropriados aqui
               IncrementValue: 0.0, // Coloque os valores apropriados aqui
@@ -824,7 +824,7 @@ class BuyRequestProvider with ChangeNotifier {
               EnterpriseCode: product.enterpriseCode!,
               ProductPackingCode: product.productPackingCode!,
               Value: product.valueTyped!,
-              Quantity: product.quantity!,
+              Quantity: product.quantity,
               IncrementPercentageOrValue: "R\$",
               IncrementValue: 0,
               DiscountPercentageOrValue: "R\$",

@@ -21,7 +21,7 @@ class TransferRequestCartProductsModel {
   double ECommerceSalePrice;
   double ECommerceOfferPrice;
   double MinimumWholeQuantity;
-  double BalanceStockSale;
+  double? BalanceStockSale;
   String StorageAreaAddress;
   List<dynamic> StockByEnterpriseAssociateds;
 

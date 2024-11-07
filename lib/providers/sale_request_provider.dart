@@ -104,7 +104,7 @@ class SaleRequestProvider with ChangeNotifier {
     return customerCode;
   }
 
-  Map<String, List<SaleRequestCartProductsModel>> _cartProducts = {};
+  Map<String, List<GetProductJsonModel>> _cartProducts = {};
   getCartProducts(int enterpriseCode) {
     return _cartProducts[enterpriseCode.toString()] ?? 0;
   }
@@ -165,38 +165,70 @@ class SaleRequestProvider with ChangeNotifier {
 
   double getTotalItemValue({
     required GetProductJsonModel product,
-    required TextEditingController consultedProductController,
+    required TextEditingController? newQuantityController,
     required String enterpriseCode,
   }) {
-    double _quantityToAdd = consultedProductController.text.toDouble();
+    double totalQuantity = 1;
 
-    final indexOfProductInCart =
-        _cartProducts[enterpriseCode]?.indexWhere((e) => e.PLU == product.plu);
-    SaleRequestCartProductsModel? productInCart;
-    if (indexOfProductInCart != null && indexOfProductInCart != -1) {
-      productInCart = _cartProducts[enterpriseCode]![indexOfProductInCart];
+    if (newQuantityController != null &&
+        newQuantityController.text.isNotEmpty) {
+      totalQuantity = newQuantityController.text.toDouble();
     }
 
-    if (_quantityToAdd <= 0) {
-      _quantityToAdd = 1;
+    totalQuantity += getTotalItensInCart(
+      ProductPackingCode: product.productPackingCode!,
+      enterpriseCode: enterpriseCode,
+    );
+
+    double practicedPrice = getPracticedPrice(
+      quantityToAdd: totalQuantity,
+      product: product,
+      enterpriseCode: enterpriseCode,
+    );
+
+    if (newQuantityController != null) {
+      _changeCursorToLastIndex(newQuantityController);
     }
 
-    double _totalItemValue;
-    _totalItemValue = _quantityToAdd * product.retailPracticedPrice!;
+    return totalQuantity * practicedPrice;
+  }
 
+  double getNewPrice({
+    required GetProductJsonModel product,
+    required TextEditingController newQuantityController,
+    required String enterpriseCode,
+  }) {
+    double quantityToAdd = newQuantityController.text.isEmpty
+        ? 1
+        : newQuantityController.text.toDouble();
+
+    if (quantityToAdd <= 0) {
+      quantityToAdd = 1;
+    }
+
+    double price = getPracticedPrice(
+      enterpriseCode: enterpriseCode,
+      quantityToAdd: quantityToAdd,
+      product: product,
+    );
+
+    return quantityToAdd * price;
+  }
+
+  double getPracticedPrice({
+    required double quantityToAdd,
+    required GetProductJsonModel product,
+    required String enterpriseCode,
+  }) {
     if (product.minimumWholeQuantity != null &&
         product.minimumWholeQuantity! > 0 &&
         product.wholePracticedPrice != null &&
         product.wholePracticedPrice! > 0 &&
-        (productInCart != null &&
-            (productInCart.Quantity + _quantityToAdd >=
-                product.minimumWholeQuantity!))) {
-      _totalItemValue = _quantityToAdd * product.wholePracticedPrice!;
+        quantityToAdd >= product.minimumWholeQuantity!) {
+      return product.wholePracticedPrice!;
+    } else {
+      return product.retailPracticedPrice!;
     }
-
-    _changeCursorToLastIndex(consultedProductController);
-
-    return _totalItemValue;
   }
 
   void _changeCursorToLastIndex(
@@ -222,12 +254,11 @@ class SaleRequestProvider with ChangeNotifier {
     } else {
       Map cartProductsInDatabase = jsonDecode(cart);
 
-      List<SaleRequestCartProductsModel> cartProductsTemp = [];
+      List<GetProductJsonModel> cartProductsTemp = [];
       cartProductsInDatabase.forEach((key, value) {
         if (key == enterpriseCode) {
           value.forEach((element) {
-            cartProductsTemp
-                .add(SaleRequestCartProductsModel.fromJson(element));
+            cartProductsTemp.add(GetProductJsonModel.fromJson(element));
           });
         }
       });
@@ -239,48 +270,87 @@ class SaleRequestProvider with ChangeNotifier {
 
   void addProductInCart({
     required GetProductJsonModel product,
-    required TextEditingController consultedProductController,
+    required TextEditingController newQuantityController,
     required String enterpriseCode,
   }) async {
-    double quantity = consultedProductController.text.toDouble();
+    double quantity = 1;
+
+    if (newQuantityController.text.isNotEmpty) {
+      quantity = newQuantityController.text.toDouble();
+    }
 
     if (quantity <= 0) {
       quantity = 1;
     }
 
-    final productPrice = getTotalItemValue(
+    final indexOfProductInCart =
+        _cartProducts[enterpriseCode]?.indexWhere((e) => e.plu == product.plu);
+    double? quantityInCart;
+    if (indexOfProductInCart != null && indexOfProductInCart != -1) {
+      quantityInCart =
+          _cartProducts[enterpriseCode]![indexOfProductInCart].quantity;
+    }
+
+    final productPrice = getPracticedPrice(
+      quantityToAdd:
+          quantityInCart != null ? quantityInCart + quantity : quantity,
       product: product,
-      consultedProductController: consultedProductController,
       enterpriseCode: enterpriseCode,
     );
 
-    SaleRequestCartProductsModel cartProductsModel =
-        SaleRequestCartProductsModel(
-      ProductPackingCode: product.productPackingCode!,
-      Name: product.name!,
-      Quantity: quantity,
-      Value: productPrice,
+    GetProductJsonModel cartProductsModel = GetProductJsonModel(
+      productPackingCode: product.productPackingCode!,
+      name: product.name!,
+      quantity: quantity,
+      value: productPrice,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
       DiscountValue: 0.0,
-      ExpectedDeliveryDate: "\"${DateTime.now().toString()}\"",
-      ProductCode: product.productCode!,
-      PLU: product.plu!,
-      PackingQuantity: product.packingQuantity ?? "0",
-      RetailPracticedPrice: product.retailPracticedPrice ?? 0,
-      RetailSalePrice: product.retailSalePrice ?? 0,
-      RetailOfferPrice: product.retailOfferPrice ?? 0,
-      WholePracticedPrice: product.wholePracticedPrice ?? 0,
-      WholeSalePrice: product.wholeSalePrice ?? 0,
-      WholeOfferPrice: product.wholeOfferPrice ?? 0,
-      ECommercePracticedPrice: product.eCommercePracticedPrice ?? 0,
-      ECommerceSalePrice: product.eCommerceSalePrice ?? 0,
-      ECommerceOfferPrice: product.eCommerceOfferPrice ?? 0,
-      MinimumWholeQuantity: product.minimumWholeQuantity ?? 0,
-      BalanceStockSale: product.balanceStockSale ?? 0,
-      StorageAreaAddress: product.storageAreaAddress,
-      StockByEnterpriseAssociateds: product.stockByEnterpriseAssociateds,
+      // expectedDeliveryDate: "\"${DateTime.now().toString()}\"",
+      productCode: product.productCode!,
+      plu: product.plu!,
+      packingQuantity: product.packingQuantity ?? "0",
+      retailPracticedPrice: product.retailPracticedPrice ?? 0,
+      retailSalePrice: product.retailSalePrice ?? 0,
+      retailOfferPrice: product.retailOfferPrice ?? 0,
+      wholePracticedPrice: product.wholePracticedPrice ?? 0,
+      wholeSalePrice: product.wholeSalePrice ?? 0,
+      wholeOfferPrice: product.wholeOfferPrice ?? 0,
+      eCommercePracticedPrice: product.eCommercePracticedPrice ?? 0,
+      eCommerceSalePrice: product.eCommerceSalePrice ?? 0,
+      eCommerceOfferPrice: product.eCommerceOfferPrice ?? 0,
+      minimumWholeQuantity: product.minimumWholeQuantity ?? 0,
+      balanceStockSale: product.balanceStockSale ?? 0,
+      storageAreaAddress: product.storageAreaAddress,
+      stockByEnterpriseAssociateds: product.stockByEnterpriseAssociateds,
+      alterationPriceForAllPackings: product.alterationPriceForAllPackings,
+      balanceLabelQuantity: product.balanceLabelQuantity,
+      balanceLabelType: product.balanceLabelType,
+      enterpriseCode: product.enterpriseCode,
+      fiscalCost: product.fiscalCost,
+      fiscalLiquidCost: product.fiscalLiquidCost,
+      inClass: product.inClass,
+      isChildOfGrate: product.isChildOfGrate,
+      isFatherOfGrate: product.isFatherOfGrate,
+      lastBuyEntrance: product.lastBuyEntrance,
+      liquidCost: product.liquidCost,
+      liquidCostMidle: product.liquidCostMidle,
+      markUpdateClassInAdjustSalePriceIndividual:
+          product.markUpdateClassInAdjustSalePriceIndividual,
+      operationalCost: product.operationalCost,
+      pendantPrintLabel: product.pendantPrintLabel,
+      priceCost: product.priceCost,
+      realCost: product.realCost,
+      realLiquidCost: product.realLiquidCost,
+      replacementCost: product.replacementCost,
+      replacementCostMidle: product.replacementCostMidle,
+      stocks: product.stocks,
+      AutomaticDiscountPercentageOrValue:
+          product.AutomaticDiscountPercentageOrValue,
+      AutomaticDiscountValue: product.AutomaticDiscountValue,
+      TotalLiquid: product.TotalLiquid,
+      valueTyped: product.valueTyped,
     );
 
     if (alreadyContainsProduct(
@@ -288,10 +358,10 @@ class SaleRequestProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
     )) {
       int index = _cartProducts[enterpriseCode]!.indexWhere((element) =>
-          element.ProductPackingCode == product.productPackingCode);
+          element.productPackingCode == product.productPackingCode);
 
-      _cartProducts[enterpriseCode]![index].Quantity += quantity;
-      _cartProducts[enterpriseCode]![index].Value = productPrice;
+      _cartProducts[enterpriseCode]![index].quantity += quantity;
+      _cartProducts[enterpriseCode]![index].value = productPrice;
     } else {
       if (_cartProducts[enterpriseCode.toString()] != null) {
         _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);
@@ -301,9 +371,9 @@ class SaleRequestProvider with ChangeNotifier {
       }
     }
 
-    consultedProductController.text = "";
+    newQuantityController.text = "";
 
-    _changeCursorToLastIndex(consultedProductController);
+    _changeCursorToLastIndex(newQuantityController);
 
     await _updateCartInDatabase();
     notifyListeners();
@@ -317,40 +387,38 @@ class SaleRequestProvider with ChangeNotifier {
     required int index,
   }) async {
     _cartProducts[enterpriseCode]![index].TotalLiquid = quantity * value;
-    _cartProducts[enterpriseCode]![index].Quantity = quantity;
-    _cartProducts[enterpriseCode]![index].Value = value;
+    _cartProducts[enterpriseCode]![index].quantity = quantity;
+    _cartProducts[enterpriseCode]![index].value = value;
 
     await _updateCartInDatabase();
     notifyListeners();
   }
 
-  double getTotalItemPrice(SaleRequestCartProductsModel product) {
-    if (product.TotalLiquid == 0) {
-      return (product.Value * product.Quantity) -
-          product.AutomaticDiscountValue;
-    } else {
-      return product.TotalLiquid;
-    }
-  }
-
   double getTotalCartPrice(String enterpriseCode) {
-    double totalLiquid = 0;
     if (_cartProducts[enterpriseCode] == null) {
       return 0;
     } else {
+      double totalLiquid = 0;
       _cartProducts[enterpriseCode]!.forEach((element) {
-        if (element.TotalLiquid == 0) {
+        if (element.TotalLiquid != null && element.TotalLiquid! > 0) {
           //só terá o valor do TotalLiquid no produto quando processar o
           //carrinho. Se fechar o app e abrir novamente, esse valor estará
           //zerado e por isso precisa calcular conforme o que já tiver no banco
           //de dados
-          totalLiquid += (element.Value * element.Quantity) -
-              element.AutomaticDiscountValue;
+          totalLiquid += element.TotalLiquid!;
+
+          if (element.AutomaticDiscountValue != null &&
+              element.AutomaticDiscountValue! > 0) {
+            totalLiquid -= element.AutomaticDiscountValue!;
+          }
+        } else if (element.value != null && element.value! > 0) {
+          double price = element.value! * element.quantity;
+          totalLiquid += price;
+          print(totalLiquid);
         } else {
-          totalLiquid += element.TotalLiquid;
+          totalLiquid += element.TotalLiquid!;
         }
       });
-
       return totalLiquid;
     }
   }
@@ -397,7 +465,7 @@ class SaleRequestProvider with ChangeNotifier {
     //     (element) => element.ProductPackingCode == ProductPackingCode);
 
     indexOfRemovedProduct = _cartProducts[enterpriseCode]!.indexWhere(
-        (element) => element.ProductPackingCode == ProductPackingCode);
+        (element) => element.productPackingCode == ProductPackingCode);
 
     removedProduct =
         _cartProducts[enterpriseCode]!.removeAt(indexOfRemovedProduct!);
@@ -428,7 +496,7 @@ class SaleRequestProvider with ChangeNotifier {
       return false;
     } else {
       _cartProducts[enterpriseCode]!.forEach((element) {
-        if (ProductPackingCode == element.ProductPackingCode) {
+        if (ProductPackingCode == element.productPackingCode) {
           alreadyContainsProduct = true;
         }
       });
@@ -438,12 +506,11 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   String getDiscountDescription(
-    SaleRequestCartProductsModel saleRequestCartProductsModel,
+    GetProductJsonModel product,
   ) {
     String discountDescription = "";
     _jsonSaleRequest["Products"].forEach((element) {
-      if (element.ProductPackingCode ==
-          saleRequestCartProductsModel.ProductPackingCode) {
+      if (element.productPackingCode == product.productPackingCode) {
         discountDescription = element.DiscountDescription;
       }
     });
@@ -462,8 +529,8 @@ class SaleRequestProvider with ChangeNotifier {
     } else {
       _cartProducts[enterpriseCode]!.forEach((element) {
         // print(element["ProductPackingCode"]);
-        if (element.ProductPackingCode == ProductPackingCode) {
-          atualQuantity = element.Quantity;
+        if (element.productPackingCode == ProductPackingCode) {
+          atualQuantity = element.quantity;
         }
       });
 

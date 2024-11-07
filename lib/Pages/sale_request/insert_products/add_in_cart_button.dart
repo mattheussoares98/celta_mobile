@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../utils/utils.dart';
 
 class AddInCartButton extends StatelessWidget {
-  final TextEditingController productQuantityController;
+  final TextEditingController newQuantityController;
   final void Function() addItemInCart;
   final double totalItemValue;
   const AddInCartButton({
-    required this.productQuantityController,
+    required this.newQuantityController,
     required this.addItemInCart,
     required this.totalItemValue,
     super.key,
@@ -47,7 +47,7 @@ class AddInCartButton extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      productQuantityController.text.isEmpty
+                      newQuantityController.text.isEmpty
                           ? "ADICIONAR +1"
                           : "ADICIONAR",
                       style: const TextStyle(fontSize: 17),

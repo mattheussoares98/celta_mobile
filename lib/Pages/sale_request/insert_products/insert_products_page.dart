@@ -22,7 +22,7 @@ class InsertProductsPage extends StatefulWidget {
 class _InsertProductsPageState extends State<InsertProductsPage> {
   TextEditingController _searchProductTextEditingController =
       TextEditingController();
-  TextEditingController _consultedProductController = TextEditingController();
+  TextEditingController _newQuantityController = TextEditingController();
   FocusNode _searchProductFocusNode = FocusNode();
   FocusNode _consultedProductFocusNode = FocusNode();
 
@@ -30,7 +30,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
   void dispose() {
     super.dispose();
     _searchProductTextEditingController.dispose();
-    _consultedProductController.dispose();
+    _newQuantityController.dispose();
     _searchProductFocusNode.dispose();
     _consultedProductFocusNode.dispose();
   }
@@ -51,7 +51,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
               isLoading: saleRequestProvider.isLoadingProducts,
               autofocus: false,
               onPressSearch: () async {
-                _consultedProductController.clear();
+                _newQuantityController.clear();
 
                 await saleRequestProvider.getProducts(
                   context: context,
@@ -72,7 +72,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                 errorMessage: saleRequestProvider.errorMessageProducts,
               ),
             ProductsItems(
-                consultedProductController: _consultedProductController,
+                newQuantityController: _newQuantityController,
                 enterpriseCode: widget.enterpriseCode,
                 getProductsWithCamera: () async {
                   FocusScope.of(context).unfocus();

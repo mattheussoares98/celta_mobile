@@ -30,8 +30,7 @@ class InsertProductQuantityForm extends StatefulWidget {
       _InsertProductQuantityFormState();
 }
 
-class _InsertProductQuantityFormState
-    extends State<InsertProductQuantityForm> {
+class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
   addItemInCart() {
     if (widget.consultedProductController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
@@ -149,7 +148,7 @@ class _InsertProductQuantityFormState
               flex: 10,
               child: InsertQuantityTextFormField(
                 focusNode: transferRequestProvider.consultedProductFocusNode,
-                productQuantityController: widget.consultedProductController,
+                newQuantityController: widget.consultedProductController,
                 formKey: widget.consultedProductFormKey,
                 onChanged: () => {widget.updateTotalItemValue()},
                 onFieldSubmitted: () => addItemInCart(),

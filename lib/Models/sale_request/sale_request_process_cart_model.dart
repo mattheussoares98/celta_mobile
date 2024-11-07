@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'sale_request_cart_products_model.dart';
+import '../soap/soap.dart';
 
 class SaleRequestProcessCartModel {
   int ProductPackingCode;
@@ -32,15 +32,15 @@ class SaleRequestProcessCartModel {
   });
 
   static List<Map<String, dynamic>> cartProductsToProcessCart(
-    List<SaleRequestCartProductsModel> cartProducts,
+    List<GetProductJsonModel> cartProducts,
   ) {
     List<Map<String, dynamic>> processCartProducts = [];
 
     cartProducts.forEach((element) {
       processCartProducts.add({
-        "ProductPackingCode": element.ProductPackingCode,
-        "Quantity": element.Quantity,
-        "value": element.Value,
+        "ProductPackingCode": element.productPackingCode,
+        "Quantity": element.quantity,
+        "value": element.value,
         // "IncrementPercentageOrValue": element.IncrementPercentageOrValue,
         "IncrementValue": element.IncrementValue,
         // "DiscountPercentageOrValue": element.DiscountPercentageOrValue,
@@ -92,7 +92,7 @@ class SaleRequestProcessCartModel {
     required Map<String, dynamic> jsonSaleRequest,
     required String apiItemsResponse,
     required String enterpriseCode,
-    required List<SaleRequestCartProductsModel> cartProducts,
+    required List<GetProductJsonModel> cartProducts,
   }) {
     Map<String, dynamic> jsonData = json.decode(apiItemsResponse);
 
@@ -109,17 +109,17 @@ class SaleRequestProcessCartModel {
       );
 
       cartProducts.forEach((element) {
-        if (x["ProductPackingCode"] == element.ProductPackingCode) {
-          element.ProductPackingCode = x["ProductPackingCode"];
-          element.Quantity = x["Quantity"];
-          element.Value = x["Value"];
+        if (x["ProductPackingCode"] == element.productPackingCode) {
+          element.productPackingCode = x["ProductPackingCode"];
+          element.quantity = x["Quantity"];
+          element.value = x["Value"];
           element.IncrementPercentageOrValue =
               x["IncrementPercentageOrValue"] ?? "";
           element.IncrementValue = x["IncrementValue"];
           element.DiscountPercentageOrValue =
               x["DiscountPercentageOrValue"].toString();
           element.DiscountValue = x["DiscountValue"];
-          element.ExpectedDeliveryDate = x["ExpectedDeliveryDate"];
+          // element.ExpectedDeliveryDate = x["ExpectedDeliveryDate"];
           element.AutomaticDiscountPercentageOrValue =
               x["AutomaticDiscountPercentageOrValue"] ?? "";
           element.AutomaticDiscountValue = x["AutomaticDiscountValue"];

@@ -197,19 +197,21 @@ class _ProductsItemsState extends State<ProductsItems> {
                   //     product.MinimumWholeQuantity.toString(),
                   //   ),
                   // ),
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "Estoque de venda",
-                    subtitle: ConvertString.convertToBrazilianNumber(
-                      product.BalanceStockSale.toString(),
+                  if (product.BalanceStockSale != null)
+                    TitleAndSubtitle.titleAndSubtitle(
+                      title: "Estoque de venda",
+                      subtitle: product.BalanceStockSale!
+                          .toDouble()
+                          .toString()
+                          .toBrazilianNumber(),
+                      otherWidget: Icon(
+                        selectedIndex != index
+                            ? Icons.arrow_drop_down_sharp
+                            : Icons.arrow_drop_up_sharp,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 30,
+                      ),
                     ),
-                    otherWidget: Icon(
-                      selectedIndex != index
-                          ? Icons.arrow_drop_down_sharp
-                          : Icons.arrow_drop_up_sharp,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 30,
-                    ),
-                  ),
                   if (transferRequestProvider.alreadyContainsProduct(
                     ProductPackingCode: product.ProductPackingCode,
                     enterpriseOriginCode:

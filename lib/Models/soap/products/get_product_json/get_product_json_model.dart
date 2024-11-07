@@ -46,7 +46,16 @@ class GetProductJsonModel {
   LastBuyEntranceModel? lastBuyEntrance;
   PriceCostModel? priceCost;
   double? valueTyped = 0;
-  double? quantity = 0;
+  double quantity = 0;
+
+  String? IncrementPercentageOrValue; //vem somente quando processa o carrinho
+  double? IncrementValue; //vem somente quando processa o carrinho
+  String? DiscountPercentageOrValue; //vem somente quando processa o carrinho
+  double? DiscountValue; //vem somente quando processa o carrinho
+  String?
+      AutomaticDiscountPercentageOrValue; //vem somente quando processa o carrinho
+  double? AutomaticDiscountValue; //vem somente quando processa o carrinho
+  double? TotalLiquid; //vem somente quando processa o carrinho
 
   GetProductJsonModel({
     required this.enterpriseCode,
@@ -89,8 +98,15 @@ class GetProductJsonModel {
     required this.alterationPriceForAllPackings,
     required this.isChildOfGrate,
     required this.priceCost,
+    required this.quantity,
     this.valueTyped,
-    this.quantity,
+    this.IncrementPercentageOrValue,
+    this.IncrementValue,
+    this.DiscountPercentageOrValue,
+    this.DiscountValue,
+    this.AutomaticDiscountPercentageOrValue,
+    this.AutomaticDiscountValue,
+    this.TotalLiquid,
   });
 
   GetProductJsonModel.fromJson(Map<String, dynamic> json) {
@@ -139,6 +155,15 @@ class GetProductJsonModel {
 
     valueTyped = json["valueTyped"] ?? 0;
     quantity = json["quantity"] ?? 0;
+
+    IncrementPercentageOrValue = json["IncrementPercentageOrValue"];
+    IncrementValue = json["IncrementValue"];
+    DiscountPercentageOrValue = json["DiscountPercentageOrValue"];
+    DiscountValue = json["DiscountValue"];
+    AutomaticDiscountPercentageOrValue =
+        json["AutomaticDiscountPercentageOrValue"];
+    AutomaticDiscountValue = json["AutomaticDiscountValue"];
+    TotalLiquid = json["TotalLiquid"];
 
     if (json['StockByEnterpriseAssociateds'] != null) {
       stockByEnterpriseAssociateds = <StockByEnterpriseAssociatedsModel>[];
@@ -211,6 +236,14 @@ class GetProductJsonModel {
       data['Stocks'] = this.stocks!.map((v) => v.toJson()).toList();
     }
     data['LastBuyEntrance'] = this.lastBuyEntrance;
+    data["IncrementPercentageOrValue"] = this.IncrementPercentageOrValue;
+    data["IncrementValue"] = this.IncrementValue;
+    data["DiscountPercentageOrValue"] = this.DiscountPercentageOrValue;
+    data["DiscountValue"] = this.DiscountValue;
+    data["AutomaticDiscountPercentageOrValue"] =
+        this.AutomaticDiscountPercentageOrValue;
+    data["AutomaticDiscountValue"] = this.AutomaticDiscountValue;
+    data["TotalLiquid"] = this.TotalLiquid;
     return data;
   }
 

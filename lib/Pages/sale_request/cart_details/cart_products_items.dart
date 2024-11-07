@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/sale_request/sale_request.dart';
+import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
@@ -49,16 +49,16 @@ class CartProductsItems {
     required dynamic changeFocus,
     required BuildContext context,
     required int index,
-    required SaleRequestCartProductsModel product,
+    required GetProductJsonModel product,
     required int enterpriseCode,
     required int selectedIndex,
     required Function updateSelectedIndex,
   }) {
     return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+      focusColor: Colors.white.withOpacity(0),
+      hoverColor: Colors.white.withOpacity(0),
+      splashColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.white.withOpacity(0),
       onTap: saleRequestProvider.isLoadingSaveSaleRequest ||
               saleRequestProvider.isLoadingProcessCart
           ? null
@@ -107,9 +107,9 @@ class CartProductsItems {
                     children: [
                       Expanded(
                         child: Text(
-                          product.Name +
-                              " (${product.PackingQuantity})" +
-                              '\nplu: ${product.PLU}',
+                          product.name! +
+                              " (${product.packingQuantity})" +
+                              '\nplu: ${product.plu}',
                           style: const TextStyle(
                             fontFamily: 'OpenSans',
                             fontSize: 17,
@@ -132,7 +132,7 @@ class CartProductsItems {
                                   function: () {
                                     saleRequestProvider.removeProductFromCart(
                                       ProductPackingCode:
-                                          product.ProductPackingCode,
+                                          product.productPackingCode!,
                                       enterpriseCode: enterpriseCode.toString(),
                                     );
                                     if (selectedIndex == index) {
@@ -171,14 +171,15 @@ class CartProductsItems {
                             _titleAndSubtitle(
                               flex: 20,
                               title: "Qtd",
-                              subtitle: product.Quantity.toStringAsFixed(3)
+                              subtitle: product.quantity
+                                  .toStringAsFixed(3)
                                   .replaceAll(RegExp(r'\.'), ','),
                             ),
                             _titleAndSubtitle(
                               flex: 20,
                               title: "Preço",
                               subtitle: ConvertString.convertToBRL(
-                                product.Value.toString(),
+                                product.value.toString(),
                               ),
                             ),
                             const SizedBox(width: 5),
@@ -186,7 +187,7 @@ class CartProductsItems {
                               flex: 30,
                               title: "Total",
                               subtitle: ConvertString.convertToBRL(
-                                saleRequestProvider.getTotalItemPrice(product),
+                                product.value! * product.quantity,
                               ),
                             ),
                           ],
@@ -216,7 +217,8 @@ class CartProductsItems {
                       ),
                     ],
                   ),
-                  if (product.AutomaticDiscountValue > 0)
+                  if (product.AutomaticDiscountValue != null &&
+                      product.AutomaticDiscountValue! > 0)
                     Padding(
                       padding: const EdgeInsets.only(top: 5, bottom: 5),
                       child: Column(

@@ -2,17 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/sale_request/sale_request.dart';
+import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
 import 'cart_details.dart';
 
 class CartItems extends StatefulWidget {
-  final TextEditingController quantityController;
+  final TextEditingController newQuantityController;
   final int enterpriseCode;
   const CartItems({
-    required this.quantityController,
+    required this.newQuantityController,
     required this.enterpriseCode,
     Key? key,
   }) : super(key: key);
@@ -28,7 +28,7 @@ class _CartItemsState extends State<CartItems> {
 
   FocusNode _focusNode = FocusNode();
 
-  changeFocusToConsultedProductFocusNode({
+  void changeFocusToConsultedProductFocusNode({
     required SaleRequestProvider saleRequestProvider,
   }) {
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -40,7 +40,7 @@ class _CartItemsState extends State<CartItems> {
     });
   }
 
-  selectIndexAndFocus({
+  void selectIndexAndFocus({
     required int index,
     required SaleRequestProvider saleRequestProvider,
   }) async {
@@ -61,8 +61,8 @@ class _CartItemsState extends State<CartItems> {
     }
 
     if (_selectedIndex != index) {
-      widget.quantityController.text = "";
-      widget.quantityController.clear();
+      widget.newQuantityController.text = "";
+      widget.newQuantityController.clear();
 
       setState(() {
         _selectedIndex = index;
@@ -81,28 +81,13 @@ class _CartItemsState extends State<CartItems> {
     }
   }
 
-  String getNewPrice({
-    required SaleRequestCartProductsModel product,
-  }) {
-    double? controllerInDouble = double.tryParse(
-        widget.quantityController.text.replaceAll(RegExp(r'\,'), '.'));
-
-    if (controllerInDouble == null) {
-      return ConvertString.convertToBRL(0);
-    }
-
-    return ConvertString.convertToBRL(
-      product.RetailPracticedPrice * controllerInDouble,
-    );
-  }
-
-  updateProductInCart({
+  void updateProductInCart({
     required SaleRequestProvider saleRequestProvider,
-    required SaleRequestCartProductsModel product,
+    required GetProductJsonModel product,
     required int index,
   }) {
     double? controllerInDouble = double.tryParse(
-      widget.quantityController.text.replaceAll(RegExp(r'\,'), '.'),
+      widget.newQuantityController.text.replaceAll(RegExp(r'\,'), '.'),
     );
 
     bool? isValid = _formKey.currentState!.validate();
@@ -112,12 +97,16 @@ class _CartItemsState extends State<CartItems> {
     if (isValid) {
       saleRequestProvider.updateProductFromCart(
         enterpriseCode: widget.enterpriseCode.toString(),
-        productPackingCode: product.ProductPackingCode,
+        productPackingCode: product.productPackingCode!,
         quantity: controllerInDouble,
-        value: product.RetailPracticedPrice,
+        value: saleRequestProvider.getPracticedPrice(
+          quantityToAdd: controllerInDouble,
+          product: product,
+          enterpriseCode: widget.enterpriseCode.toString(),
+        ),
         index: index,
       );
-      widget.quantityController.clear();
+      widget.newQuantityController.clear();
       _selectedIndex = -1;
     }
   }
@@ -133,14 +122,13 @@ class _CartItemsState extends State<CartItems> {
       shrinkWrap: true,
       itemCount: cartProductsCount,
       itemBuilder: (context, index) {
-        var cartProducts = saleRequestProvider
-            .getCartProducts(widget.enterpriseCode);
-        SaleRequestCartProductsModel product = cartProducts[index];
+        var cartProducts =
+            saleRequestProvider.getCartProducts(widget.enterpriseCode);
+        GetProductJsonModel product = cartProducts[index];
         double? controllerInDouble = double.tryParse(
-          widget.quantityController.text
-              .replaceAll(RegExp(r'\,'), '.'),
+          widget.newQuantityController.text.replaceAll(RegExp(r'\,'), '.'),
         );
-      
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -171,33 +159,29 @@ class _CartItemsState extends State<CartItems> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
                                 flex: 55,
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     TitleAndSubtitle.titleAndSubtitle(
                                       title: "Preço venda",
-                                      subtitle:
-                                          ConvertString.convertToBRL(
-                                        product.RetailPracticedPrice,
+                                      subtitle: ConvertString.convertToBRL(
+                                        product.retailPracticedPrice,
                                       ),
                                     ),
                                     TitleAndSubtitle.titleAndSubtitle(
                                       title: "Mín. atacado",
-                                      subtitle:
-                                          product.MinimumWholeQuantity
-                                              .toString(),
+                                      subtitle: product.minimumWholeQuantity
+                                          .toString()
+                                          .toBrazilianNumber(),
                                     ),
                                     TitleAndSubtitle.titleAndSubtitle(
                                       title: "Preço atacado",
-                                      subtitle:
-                                          ConvertString.convertToBRL(
-                                        product.WholePracticedPrice,
+                                      subtitle: ConvertString.convertToBRL(
+                                        product.wholePracticedPrice,
                                       ),
                                     ),
                                   ],
@@ -209,15 +193,13 @@ class _CartItemsState extends State<CartItems> {
                                   style: ElevatedButton.styleFrom(
                                     fixedSize: const Size(300, 60),
                                   ),
-                                  onPressed: controllerInDouble ==
-                                              null ||
+                                  onPressed: controllerInDouble == null ||
                                           controllerInDouble == 0
                                       ? null
                                       : () {
                                           ShowAlertDialog.show(
                                               context: context,
-                                              title:
-                                                  "Atualizar o preço",
+                                              title: "Atualizar o preço",
                                               subtitle:
                                                   "Deseja realmente atualizar a quantidade e o preço?",
                                               function: () {
@@ -227,7 +209,7 @@ class _CartItemsState extends State<CartItems> {
                                                   product: product,
                                                   index: index,
                                                 );
-      
+
                                                 FocusScope.of(context)
                                                     .unfocus();
                                               });
@@ -245,21 +227,19 @@ class _CartItemsState extends State<CartItems> {
                                 child: InsertQuantityTextFormField(
                                   isLoading: saleRequestProvider
                                           .isLoadingSaveSaleRequest ||
-                                      saleRequestProvider
-                                          .isLoadingProcessCart,
+                                      saleRequestProvider.isLoadingProcessCart,
                                   lengthLimitingTextInputFormatter: 8,
                                   focusNode: _focusNode,
-                                  productQuantityController:
-                                      widget.quantityController,
                                   formKey: _formKey,
+                                  newQuantityController:
+                                      widget.newQuantityController,
                                   onFieldSubmitted: () {
                                     ShowAlertDialog.show(
                                       context: context,
                                       title: "Atualizar o preço",
                                       subtitle:
                                           "Deseja realmente atualizar a quantidade e o preço?",
-                                      function: () =>
-                                          updateProductInCart(
+                                      function: () => updateProductInCart(
                                         saleRequestProvider:
                                             saleRequestProvider,
                                         product: product,
@@ -270,8 +250,7 @@ class _CartItemsState extends State<CartItems> {
                                   onChanged: () {
                                     setState(() {});
                                   },
-                                  labelText:
-                                      "Digite a nova quantidade",
+                                  labelText: "Digite a nova quantidade",
                                   hintText: "Nova quantidade",
                                 ),
                               ),
@@ -291,9 +270,18 @@ class _CartItemsState extends State<CartItems> {
                                     ),
                                     FittedBox(
                                       child: Text(
-                                        getNewPrice(
-                                          product: product,
-                                        ),
+                                        saleRequestProvider
+                                            .getNewPrice(
+                                              product: product,
+                                              enterpriseCode: widget
+                                                  .enterpriseCode
+                                                  .toString(),
+                                              newQuantityController:
+                                                  widget.newQuantityController,
+                                            )
+                                            .toString()
+                                            .toBrazilianNumber()
+                                            .addBrazilianCoin(),
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -315,25 +303,23 @@ class _CartItemsState extends State<CartItems> {
                 ],
               ),
             ),
-            if (index == cartProductsCount - 1 &&
-                cartProductsCount > 1)
+            if (index == cartProductsCount - 1 && cartProductsCount > 1)
               TextButton(
-                onPressed:
-                    saleRequestProvider.isLoadingSaveSaleRequest ||
-                            saleRequestProvider.isLoadingProcessCart
-                        ? null
-                        : () {
-                            ShowAlertDialog.show(
-                              context: context,
-                              title: "Limpar carrinho",
-                              subtitle:
-                                  "Deseja realmente limpar todos produtos do carrinho?",
-                              function: () {
-                                saleRequestProvider.clearCart(
-                                    widget.enterpriseCode.toString());
-                              },
-                            );
+                onPressed: saleRequestProvider.isLoadingSaveSaleRequest ||
+                        saleRequestProvider.isLoadingProcessCart
+                    ? null
+                    : () {
+                        ShowAlertDialog.show(
+                          context: context,
+                          title: "Limpar carrinho",
+                          subtitle:
+                              "Deseja realmente limpar todos produtos do carrinho?",
+                          function: () {
+                            saleRequestProvider
+                                .clearCart(widget.enterpriseCode.toString());
                           },
+                        );
+                      },
                 child: const Text(
                   "Limpar carrinho",
                   style: TextStyle(
