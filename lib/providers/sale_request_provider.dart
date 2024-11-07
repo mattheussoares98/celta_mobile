@@ -248,21 +248,18 @@ class SaleRequestProvider with ChangeNotifier {
       quantity = 1;
     }
 
-    double productValue() {
-      if (product.wholePracticedPrice != null &&
-          product.wholePracticedPrice! > 0) {
-        return product.wholePracticedPrice!;
-      } else {
-        return product.retailPracticedPrice!;
-      }
-    }
+    final productPrice = getTotalItemValue(
+      product: product,
+      consultedProductController: consultedProductController,
+      enterpriseCode: enterpriseCode,
+    );
 
     SaleRequestCartProductsModel cartProductsModel =
         SaleRequestCartProductsModel(
       ProductPackingCode: product.productPackingCode!,
       Name: product.name!,
       Quantity: quantity,
-      Value: productValue(),
+      Value: productPrice,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
@@ -294,6 +291,7 @@ class SaleRequestProvider with ChangeNotifier {
           element.ProductPackingCode == product.productPackingCode);
 
       _cartProducts[enterpriseCode]![index].Quantity += quantity;
+      _cartProducts[enterpriseCode]![index].Value = productPrice;
     } else {
       if (_cartProducts[enterpriseCode.toString()] != null) {
         _cartProducts[enterpriseCode.toString()]?.add(cartProductsModel);
