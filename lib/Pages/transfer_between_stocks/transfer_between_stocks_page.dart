@@ -166,7 +166,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       ),
                     if (!transferBetweenStocksProvider.isLoadingProducts)
                       ProductsItems(
-                        internalEnterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.codigoInternoEmpresa,
                         consultedProductController: _consultedProductController,
                         dropDownFormKey: _dropDownFormKey,
                         insertQuantityFormKey: _insertQuantityFormKey,

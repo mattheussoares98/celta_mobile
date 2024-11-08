@@ -6,13 +6,13 @@ import '../../../providers/providers.dart';
 import 'components.dart';
 
 class AdjustStockProductsItems extends StatefulWidget {
-  final int internalEnterpriseCode;
+  final int enterpriseCode;
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductWithCamera;
   const AdjustStockProductsItems({
-    required this.internalEnterpriseCode,
+    required this.enterpriseCode,
     required this.getProductWithCamera,
     required this.consultedProductController,
     required this.dropDownFormKey,
@@ -120,6 +120,7 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                             );
                           },
                 child: ProductItem(
+                  enterpriseCode: widget.enterpriseCode,
                   product: product,
                   showCosts: false,
                   showLastBuyEntrance: false,
@@ -165,7 +166,7 @@ class _AdjustStockProductsItemsState extends State<AdjustStockProductsItems> {
                               widget.consultedProductController,
                           dropDownFormKey: widget.dropDownFormKey,
                           insertQuantityFormKey: widget.insertQuantityFormKey,
-                          internalEnterpriseCode: widget.internalEnterpriseCode,
+                          internalEnterpriseCode: widget.enterpriseCode,
                           index: index,
                           getProductWithCamera: widget.getProductWithCamera,
                           updateSelectedIndex: () {

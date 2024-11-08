@@ -170,6 +170,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ProductItem(
+                    enterpriseCode: product.enterpriseCode,
                     product: product,
                     showWholeInformations: false,
                     showMargins: true,

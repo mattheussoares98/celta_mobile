@@ -168,6 +168,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                   );
                 },
           child: ProductItem(
+            enterpriseCode: widget.enterpriseCode,
             product: product,
             showCosts: false,
             componentAfterProductInformations: Column(

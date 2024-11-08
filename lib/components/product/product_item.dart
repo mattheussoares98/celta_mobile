@@ -13,9 +13,11 @@ class ProductItem extends StatelessWidget {
   final bool? showWholeInformations;
   final bool? showMargins;
   final Widget? componentBeforeProductInformations;
+  final int? enterpriseCode;
   const ProductItem({
     required this.product,
     required this.componentAfterProductInformations,
+    required this.enterpriseCode,
     this.componentBeforeProductInformations,
     this.showPrice = true,
     this.showWholeInformations = true,
@@ -70,16 +72,12 @@ class ProductItem extends StatelessWidget {
                 context: context,
               ),
             TitleAndSubtitle.titleAndSubtitle(
-              title: product.stocks!
-                          .where(
-                              (element) => element.stockName == "Estoque Atual")
-                          .first
-                          .stockQuantity! >
-                      0
+              title: _getAtualStock(product, enterpriseCode) != null
                   ? "Estoque atual"
                   : null,
-              subtitle: getStockValueMessage(product),
-              subtitleColor: getStockSubtitleColor(context, product),
+              subtitle: _getStockValueMessage(product, enterpriseCode),
+              subtitleColor:
+                  _getStockSubtitleColor(context, product, enterpriseCode),
             ),
             if (showWholeInformations == true)
               Column(
@@ -118,6 +116,16 @@ class ProductItem extends StatelessWidget {
   }
 }
 
+StocksModel? _getAtualStock(GetProductJsonModel product, int? enterpriseCode) {
+  final atualStock = product.stocks!.where((element) =>
+      element.stockName == "Estoque Atual" &&
+      element.enterpriseCode == enterpriseCode);
+  if (atualStock.isNotEmpty && atualStock.first.stockQuantity != null) {
+    return atualStock.first;
+  }
+  return null;
+}
+
 Widget getTitleAndSubtitle({
   required String value,
   required String successMessage,
@@ -139,32 +147,28 @@ Widget getTitleAndSubtitle({
   );
 }
 
-String getStockValueMessage(GetProductJsonModel product) {
-  final currentStock = product.stocks!
-      .where((element) => element.stockName == "Estoque Atual")
-      .first
-      .stockQuantity;
-  if (currentStock == null || currentStock == 0) {
+String _getStockValueMessage(GetProductJsonModel product, int? enterpriseCode) {
+  final atualStock = _getAtualStock(product, enterpriseCode);
+
+  if (atualStock == null || atualStock.stockQuantity == 0) {
     return "Sem estoque atual";
-  } else if (currentStock >= 0) {
-    return ConvertString.convertToBrazilianNumber(currentStock);
+  } else if (atualStock.stockQuantity! >= 0) {
+    return atualStock.stockQuantity!.toString().toBrazilianNumber();
   } else {
     return "Estoque negativo: " +
-        ConvertString.convertToBrazilianNumber(currentStock);
+        atualStock.stockQuantity!.toString().toBrazilianNumber();
   }
 }
 
-Color getStockSubtitleColor(BuildContext context, GetProductJsonModel product) {
-  final currentStock = product.stocks!
-      .where((element) => element.stockName == "Estoque Atual")
-      .first
-      .stockQuantity;
+Color _getStockSubtitleColor(
+    BuildContext context, GetProductJsonModel product, int? enterpriseCode) {
+  final atualStock = _getAtualStock(product, enterpriseCode);
 
-  if (currentStock == null) {
+  if (atualStock == null) {
     return Colors.black;
-  } else if (currentStock == 0) {
+  } else if (atualStock.stockQuantity == 0) {
     return Colors.black;
-  } else if (currentStock > 0) {
+  } else if (atualStock.stockQuantity! > 0) {
     return Theme.of(context).colorScheme.primary;
   } else {
     return Colors.red;

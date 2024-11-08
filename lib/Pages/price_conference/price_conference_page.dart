@@ -99,6 +99,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                               priceConferenceProvider.products[index];
 
                           return ProductItem(
+                            enterpriseCode: enterprise.codigoInternoEmpresa,
                             product: priceConferenceProvider.products[index],
                             showCosts: true,
                             showLastBuyEntrance: true,

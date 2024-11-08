@@ -8,14 +8,14 @@ import '../../../components/components.dart';
 import 'components.dart';
 
 class ProductsItems extends StatefulWidget {
-  final int internalEnterpriseCode;
+  final int enterpriseCode;
   final TextEditingController consultedProductController;
   final GlobalKey<FormState> dropDownFormKey;
   final GlobalKey<FormState> insertQuantityFormKey;
   final Function getProductsWithCamera;
   const ProductsItems({
     required this.getProductsWithCamera,
-    required this.internalEnterpriseCode,
+    required this.enterpriseCode,
     required this.consultedProductController,
     required this.dropDownFormKey,
     required this.insertQuantityFormKey,
@@ -141,6 +141,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                       );
                     },
               child: ProductItem(
+                enterpriseCode: widget.enterpriseCode,
                 product: product,
                 showPrice: false,
                 showWholeInformations: false,
@@ -183,7 +184,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                             widget.consultedProductController,
                         dropDownFormKey: widget.dropDownFormKey,
                         insertQuantityFormKey: widget.insertQuantityFormKey,
-                        internalEnterpriseCode: widget.internalEnterpriseCode,
+                        internalEnterpriseCode: widget.enterpriseCode,
                         index: index,
                         getProductsWithCamera: widget.getProductsWithCamera,
                       ),

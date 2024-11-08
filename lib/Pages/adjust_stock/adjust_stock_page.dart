@@ -131,7 +131,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                             adjustStockProvider.errorMessageGetProducts,
                       ),
                     AdjustStockProductsItems(
-                        internalEnterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.codigoInternoEmpresa,
                         consultedProductController: _consultedProductController,
                         dropDownFormKey: _dropDownFormKey,
                         insertQuantityFormKey: _insertQuantityFormKey,
