@@ -22,7 +22,6 @@ class GetProductJsonModel {
   double? eCommerceSalePrice;
   double? eCommerceOfferPrice;
   double? minimumWholeQuantity;
-  double? balanceStockSale;
   String? storageAreaAddress;
   String? balanceLabelType;
   double? balanceLabelQuantity;
@@ -75,7 +74,6 @@ class GetProductJsonModel {
     required this.eCommerceSalePrice,
     required this.eCommerceOfferPrice,
     required this.minimumWholeQuantity,
-    required this.balanceStockSale,
     required this.storageAreaAddress,
     required this.balanceLabelType,
     required this.balanceLabelQuantity,
@@ -131,7 +129,6 @@ class GetProductJsonModel {
     eCommerceSalePrice = json['ECommerceSalePrice'];
     eCommerceOfferPrice = json['ECommerceOfferPrice'];
     minimumWholeQuantity = json['MinimumWholeQuantity'];
-    balanceStockSale = json['BalanceStockSale'];
     storageAreaAddress = json['StorageAreaAddress'];
     balanceLabelType = json['BalanceLabelType'];
     balanceLabelQuantity = json['BalanceLabelQuantity'];
@@ -207,7 +204,6 @@ class GetProductJsonModel {
     data['ECommerceSalePrice'] = this.eCommerceSalePrice;
     data['ECommerceOfferPrice'] = this.eCommerceOfferPrice;
     data['MinimumWholeQuantity'] = this.minimumWholeQuantity;
-    data['BalanceStockSale'] = this.balanceStockSale;
     data['StorageAreaAddress'] = this.storageAreaAddress;
     data['BalanceLabelType'] = this.balanceLabelType;
     data['BalanceLabelQuantity'] = this.balanceLabelQuantity;

@@ -321,7 +321,6 @@ class SaleRequestProvider with ChangeNotifier {
       eCommerceSalePrice: product.eCommerceSalePrice ?? 0,
       eCommerceOfferPrice: product.eCommerceOfferPrice ?? 0,
       minimumWholeQuantity: product.minimumWholeQuantity ?? 0,
-      balanceStockSale: product.balanceStockSale ?? 0,
       storageAreaAddress: product.storageAreaAddress,
       stockByEnterpriseAssociateds: product.stockByEnterpriseAssociateds,
       alterationPriceForAllPackings: product.alterationPriceForAllPackings,
