@@ -1,3 +1,4 @@
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -145,11 +146,16 @@ class _ProductsItemsState extends State<ProductsItems> {
           enterpriseCode: widget.enterpriseCode.toString(),
         );
 
-        double _totalItemValue = saleRequestProvider.getTotalItemValue(
-          product: product,
-          newQuantityController: widget.newQuantityController,
-          enterpriseCode: widget.enterpriseCode.toString(),
-        );
+        double newQuantity = widget.newQuantityController.text.toDouble() == -1
+            ? 1
+            : widget.newQuantityController.text.toDouble();
+
+        double _totalItemValue = saleRequestProvider.getPracticedPrice(
+              quantityToAdd: newQuantity + _totalItensInCart,
+              product: product,
+              enterpriseCode: widget.enterpriseCode.toString(),
+            ) *
+            newQuantity;
 
         return GestureDetector(
           onTap: saleRequestProvider.isLoadingProducts
