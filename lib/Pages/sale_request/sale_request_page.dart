@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../api/api.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
@@ -36,46 +37,6 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  bool _isLoaded = false;
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-
-    SaleRequestProvider saleRequestProvider = Provider.of(
-      context,
-      listen: false,
-    );
-
-    ConfigurationsProvider configurationsProvider = Provider.of(
-      context,
-      listen: false,
-    );
-
-    if (!_isLoaded) {
-      _isLoaded = true;
-      Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
-
-      await saleRequestProvider.restoreProducts(arguments["Code"].toString());
-      await saleRequestProvider.restorecustomers(arguments["Code"].toString());
-
-      int customersCount =
-          saleRequestProvider.customersCount(arguments["Code"].toString());
-      if (customersCount == 0) {
-        //logo que entra na tela de pedido de vendas, o app recupera os clientes
-        //que foram pesquisados e marcados. Caso consulte os clientes, vai
-        //apagar esses dados, por isso só pode pesquisar automaticamente quando
-        //entrar na página de pedido de vendas se não houver clientes
-        await saleRequestProvider.getCustomers(
-          context: context,
-          controllerText: "-1",
-          enterpriseCode: arguments["Code"].toString(),
-          searchOnlyDefaultCustomer: true,
-          configurationsProvider: configurationsProvider,
-        );
-      }
-    }
   }
 
   Widget _clearAllDataIcon(SaleRequestProvider saleRequestProvider) {
@@ -134,6 +95,64 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     super.dispose();
     observationsController.dispose();
     instructionsController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        await cleanSaleRequestBecauseVersionIncompatible();
+      }
+    });
+  }
+
+  Future<void> cleanSaleRequestBecauseVersionIncompatible() async {
+    //usado somente a partir da versão 2.5.7 porque mudou a forma como grava os produtos
+
+    bool isClean =
+        await PrefsInstance.getBool(prefsKeys: PrefsKeys.cleanSaleRequest);
+
+    if (!isClean) {
+      await PrefsInstance.removeKey(PrefsKeys.cart);
+      await PrefsInstance.setBool(
+          prefsKeys: PrefsKeys.cleanSaleRequest, value: true);
+    }
+    await restoreSaleRequest();
+  }
+
+  Future<void> restoreSaleRequest() async {
+    SaleRequestProvider saleRequestProvider = Provider.of(
+      context,
+      listen: false,
+    );
+
+    ConfigurationsProvider configurationsProvider = Provider.of(
+      context,
+      listen: false,
+    );
+
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+    await saleRequestProvider.restoreProducts(arguments["Code"].toString());
+    await saleRequestProvider.restorecustomers(arguments["Code"].toString());
+
+    int customersCount =
+        saleRequestProvider.customersCount(arguments["Code"].toString());
+    if (customersCount == 0) {
+      //logo que entra na tela de pedido de vendas, o app recupera os clientes
+      //que foram pesquisados e marcados. Caso consulte os clientes, vai
+      //apagar esses dados, por isso só pode pesquisar automaticamente quando
+      //entrar na página de pedido de vendas se não houver clientes
+      await saleRequestProvider.getCustomers(
+        context: context,
+        controllerText: "-1",
+        enterpriseCode: arguments["Code"].toString(),
+        searchOnlyDefaultCustomer: true,
+        configurationsProvider: configurationsProvider,
+      );
+    }
   }
 
   @override

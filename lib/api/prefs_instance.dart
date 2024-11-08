@@ -8,6 +8,7 @@ import '../utils/utils.dart';
 enum PrefsKeys {
   buyRequest,
   cart,
+  cleanSaleRequest,
   customers,
   enterpriseName,
   hasUnreadNotifications,
