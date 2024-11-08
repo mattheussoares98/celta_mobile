@@ -119,6 +119,7 @@ class _CartItemsState extends State<CartItems> {
         saleRequestProvider.cartProductsCount(widget.enterpriseCode.toString());
 
     return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: cartProductsCount,
       itemBuilder: (context, index) {
