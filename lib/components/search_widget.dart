@@ -30,7 +30,7 @@ class SearchWidget extends StatefulWidget {
     required this.isLoading,
     required this.onPressSearch,
     required this.searchProductFocusNode,
-    this.hintText = "PLU-EAN-NOME-%",
+    this.hintText = "PLU-EAN-NOME-%-BALANÇA",
     this.labelText = "Consultar produto",
     Key? key,
   }) : super(key: key);
@@ -75,7 +75,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.fromLTRB(4, 8, 0, 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

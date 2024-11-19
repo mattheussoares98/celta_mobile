@@ -98,23 +98,17 @@ class SoapHelper {
     required int routineTypeInt,
   }) async {
     try {
+      bool isBalanceCode =
+          searchValue.length == 13 && searchValue.startsWith("2");
+
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseCode,
-          "searchValue": searchValue,
+          "searchValue": isBalanceCode
+              ? searchValue.replaceFirst(RegExp(r'2'), '').replaceRange(5, null, '')
+              : searchValue,
           "searchTypeInt": getSearchTypeInt(configurationsProvider),
-          //   {
-          // Generic = 0,
-          // SaleRequest = 1,
-          // BuyRequest = 2,
-          // TransferRequest = 3,
-          // PriceConference = 4,
-          // AdjustStock = 5,
-          // GoodsReceiving = 6,
-          // ResearchOfPrice = 7,
-          // AdjustSalePrice = 8
-          //   }
           "routineTypeInt": routineTypeInt,
         },
         typeOfResponse: "GetProductJsonResponse",
@@ -122,6 +116,24 @@ class SoapHelper {
         SOAPAction: "GetProductJson",
         serviceASMX: "CeltaProductService.asmx",
       );
+
+      if (SoapRequestResponse.errorMessage != "" && isBalanceCode) {
+        await SoapRequest.soapPost(
+          parameters: {
+            "crossIdentity": UserData.crossIdentity,
+            "enterpriseCode": enterpriseCode,
+            "searchValue": isBalanceCode
+                ? searchValue.replaceFirst(RegExp(r'2'), '').replaceRange(5, null, '.')
+                : searchValue,
+            "searchTypeInt": getSearchTypeInt(configurationsProvider),
+            "routineTypeInt": routineTypeInt,
+          },
+          typeOfResponse: "GetProductJsonResponse",
+          typeOfResult: "GetProductJsonResult",
+          SOAPAction: "GetProductJson",
+          serviceASMX: "CeltaProductService.asmx",
+        );
+      }
 
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
