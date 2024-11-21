@@ -53,7 +53,7 @@ class EnterpriseProvider with ChangeNotifier {
         },
         typeOfResponse: "GetEnterprisesResponse",
         SOAPAction: "GetEnterprises",
-        serviceASMX: "CeltaEnterpriseService.asmx",
+        serviceASMX: "celtaenterpriseService.asmx",
         typeOfResult: "GetEnterprisesResult",
       );
 
