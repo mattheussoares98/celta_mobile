@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
+import '../models/enterprise/enterprise.dart';
 import '../models/soap/products/products.dart';
 import '../utils/utils.dart';
 import './providers.dart';
@@ -27,7 +28,7 @@ class PriceConferenceProvider with ChangeNotifier {
   }
 
   Future<void> _getProducts({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
@@ -53,7 +54,7 @@ class PriceConferenceProvider with ChangeNotifier {
     try {
       await SoapHelper.getProductJsonModel(
         listToAdd: _products,
-        enterpriseCode: enterpriseCode,
+        enterprise: enterprise,
         searchValue: controllerText,
         configurationsProvider: configurationsProvider,
         routineTypeInt: 4,
@@ -71,13 +72,13 @@ class PriceConferenceProvider with ChangeNotifier {
   final consultProductFocusNode = FocusNode();
 
   Future<void> getProduct({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String controllerText,
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
   }) async {
     await _getProducts(
-      enterpriseCode: enterpriseCode,
+      enterprise: enterprise,
       controllerText: controllerText,
       context: context,
       configurationsProvider: configurationsProvider,

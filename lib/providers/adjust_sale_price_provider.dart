@@ -104,7 +104,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
   }
 
   Future<void> getProducts({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
   }) async {
@@ -116,7 +116,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
     try {
       await SoapHelper.getProductJsonModel(
         listToAdd: _products,
-        enterpriseCode: enterpriseCode,
+        enterprise: enterprise,
         searchValue: searchValue,
         configurationsProvider: configurationsProvider,
         routineTypeInt: 8,

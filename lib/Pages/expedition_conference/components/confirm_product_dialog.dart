@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 
 class ConfirmProductDialog extends StatelessWidget {
   final int expeditionControlCode;
-  final int enterpriseCode;
+  final EnterpriseModel enterprise;
   final int stepCode;
   const ConfirmProductDialog({
     required this.expeditionControlCode,
-    required this.enterpriseCode,
+    required this.enterprise,
     required this.stepCode,
     super.key,
   });
@@ -59,7 +60,7 @@ class ConfirmProductDialog extends StatelessWidget {
                         await expeditionConferenceProvider.addConfirmedProduct(
                           indexOfSearchedProduct: index,
                           expeditionControlCode: expeditionControlCode,
-                          enterpriseCode: enterpriseCode,
+                          enterprise: enterprise,
                           stepCode: stepCode,
                         );
                       },

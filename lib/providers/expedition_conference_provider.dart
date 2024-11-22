@@ -5,6 +5,7 @@ import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import '../components/components.dart';
+import '../models/enterprise/enterprise.dart';
 import '../models/expedition_control/expedition_control.dart';
 import '../models/soap/soap.dart';
 import 'providers.dart';
@@ -37,7 +38,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   String get errorMessageGetProducts => _errorMessageGetProducts;
 
   Future<void> getExpeditionControlsToConference({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
   }) async {
     _errorMessage = "";
     _isLoading = true;
@@ -47,7 +48,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     try {
       final jsonFilters = {
         "CrossIdentity": UserData.crossIdentity,
-        "EnterpriseCode": enterpriseCode,
+        "EnterpriseCode": enterprise,
       };
 
       await SoapRequest.soapPost(
@@ -128,7 +129,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
 
   Future<void> getProducts({
     required String value,
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required ConfigurationsProvider configurationsProvider,
     required int expeditionControlCode,
     required int stepCode,
@@ -141,7 +142,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     try {
       await SoapHelper.getProductJsonModel(
         listToAdd: _searchedProducts,
-        enterpriseCode: enterpriseCode,
+        enterprise: enterprise,
         searchValue: value,
         configurationsProvider: configurationsProvider,
         routineTypeInt: 0,
@@ -157,7 +158,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         await addConfirmedProduct(
           indexOfSearchedProduct: 0,
           expeditionControlCode: expeditionControlCode,
-          enterpriseCode: enterpriseCode,
+          enterprise: enterprise,
           stepCode: stepCode,
         );
       }
@@ -176,7 +177,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
   Future<void> addConfirmedProduct({
     required int indexOfSearchedProduct,
     required int expeditionControlCode,
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required int stepCode,
   }) async {
     final confirmedProduct = _searchedProducts[indexOfSearchedProduct];
@@ -228,7 +229,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     if (_pendingProducts.isEmpty) {
       await confirmConference(
         expeditionControlCode: expeditionControlCode,
-        enterpriseCode: enterpriseCode,
+        enterprise: enterprise,
         stepCode: stepCode,
       );
     }
@@ -270,7 +271,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
 
   Future<void> confirmConference({
     required int expeditionControlCode,
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required int stepCode,
   }) async {
     _errorMessageConfirmConference = "";
@@ -307,7 +308,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
                   .primary,
         );
 
-        await getExpeditionControlsToConference(enterpriseCode: enterpriseCode);
+        await getExpeditionControlsToConference(enterprise: enterprise);
       }
     } catch (e) {
       _errorMessageConfirmConference = DefaultErrorMessage.ERROR;

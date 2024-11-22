@@ -86,7 +86,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                                       .isLoadingAdjustStock,
                           onPressSearch: () async {
                             await transferBetweenStocksProvider.getProducts(
-                              enterpriseCode: enterprise.Code,
+                              enterprise: enterprise,
                               controllerText: _consultProductController.text,
                               context: context,
                               configurationsProvider: configurationsProvider,
@@ -182,7 +182,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                           }
 
                           await transferBetweenStocksProvider.getProducts(
-                            enterpriseCode: enterprise.Code,
+                            enterprise: enterprise,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,

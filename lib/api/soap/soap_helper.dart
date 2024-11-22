@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../models/buy_request/buy_request.dart';
+import '../../models/enterprise/enterprise.dart';
 import '../../models/inventory/inventory.dart';
 import '../../models/soap/soap.dart';
 
@@ -92,22 +93,33 @@ class SoapHelper {
 
   static Future<void> getProductJsonModel({
     required List<GetProductJsonModel> listToAdd,
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
     required int routineTypeInt,
   }) async {
     try {
-      bool isBalanceCode =
-          searchValue.length == 13 && searchValue.startsWith("2");
+      bool searchByBalanceCode = searchValue.length == 13 &&
+          searchValue.startsWith("2") &&
+          enterprise.ProductCodeSizeOfBalanceLabel != null &&
+          enterprise.ProductCodeWithCheckerDigit != null;
+
+      String pluFromBalanceCode = "";
+
+      if (searchByBalanceCode) {
+        pluFromBalanceCode =
+            searchValue.replaceFirst(RegExp(r'2'), '').replaceRange(
+                  enterprise.ProductCodeSizeOfBalanceLabel!,
+                  null,
+                  enterprise.ProductCodeWithCheckerDigit == true ? "" : ".",
+                );
+      }
 
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": isBalanceCode
-              ? searchValue.replaceFirst(RegExp(r'2'), '').replaceRange(5, null, '')
-              : searchValue,
+          "enterpriseCode": enterprise.Code,
+          "searchValue": searchByBalanceCode ? pluFromBalanceCode : searchValue,
           "searchTypeInt": getSearchTypeInt(configurationsProvider),
           "routineTypeInt": routineTypeInt,
         },
@@ -117,13 +129,15 @@ class SoapHelper {
         serviceASMX: "CeltaProductService.asmx",
       );
 
-      if (SoapRequestResponse.errorMessage != "" && isBalanceCode) {
+      if (SoapRequestResponse.errorMessage != "" && searchByBalanceCode) {
         await SoapRequest.soapPost(
           parameters: {
             "crossIdentity": UserData.crossIdentity,
-            "enterpriseCode": enterpriseCode,
-            "searchValue": isBalanceCode
-                ? searchValue.replaceFirst(RegExp(r'2'), '').replaceRange(5, null, '.')
+            "enterpriseCode": enterprise.Code,
+            "searchValue": searchByBalanceCode
+                ? searchValue
+                    .replaceFirst(RegExp(r'2'), '')
+                    .replaceRange(5, null, '.')
                 : searchValue,
             "searchTypeInt": getSearchTypeInt(configurationsProvider),
             "routineTypeInt": routineTypeInt,

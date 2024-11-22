@@ -61,7 +61,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                     onPressSearch: () async {
                       await priceConferenceProvider.getProduct(
                         configurationsProvider: configurationsProvider,
-                        enterpriseCode: enterprise.Code,
+                        enterprise: enterprise,
                         controllerText: _consultProductController.text,
                         context: context,
                       );

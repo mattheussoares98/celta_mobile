@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
+import '../models/enterprise/enterprise.dart';
 import '../models/soap/soap.dart';
 import '../utils/utils.dart';
 import './providers.dart';
@@ -137,7 +138,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   Future<void> _getProducts({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String controllerText, //em string pq vem de um texfFormField
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
@@ -150,7 +151,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     try {
       await SoapHelper.getProductJsonModel(
         listToAdd: _products,
-        enterpriseCode: enterpriseCode,
+        enterprise: enterprise,
         searchValue: controllerText,
         configurationsProvider: configurationsProvider,
         routineTypeInt: 4,
@@ -166,7 +167,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
   }
 
   Future<void> getProducts({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String controllerText,
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
@@ -177,7 +178,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
 
     await _getProducts(
-      enterpriseCode: enterpriseCode,
+      enterprise: enterprise,
       controllerText: controllerText,
       context: context,
       configurationsProvider: configurationsProvider,

@@ -76,7 +76,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                               adjustStockProvider.isLoadingAdjustStock,
                           onPressSearch: () async {
                             await adjustStockProvider.getProducts(
-                              enterpriseCode: enterprise.Code,
+                              enterprise: enterprise,
                               controllerText: _consultProductController.text,
                               context: context,
                               configurationsProvider: configurationsProvider,
@@ -147,7 +147,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                           }
 
                           await adjustStockProvider.getProducts(
-                            enterpriseCode: enterprise.Code,
+                            enterprise: enterprise,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,

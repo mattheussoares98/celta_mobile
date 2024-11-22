@@ -19,7 +19,7 @@ class ExpeditionControlsToConferenceItems extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () async {
         await expeditionConferenceProvider.getExpeditionControlsToConference(
-          enterpriseCode: enterprise.Code,
+          enterprise: enterprise,
         );
       },
       child: ListView.builder(
