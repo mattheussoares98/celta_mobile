@@ -21,35 +21,18 @@ class EnterpriseModel {
     required this.participateEnterpriseGroup,
   });
 
-  static resultAsStringToEnterpriseModel({
-    required dynamic data,
-    required List listToAdd,
-  }) {
-    if (data == null) {
-      return;
-    }
-    List dataList = [];
-    if (data is Map) {
-      dataList.add(data);
-    } else {
-      dataList = data;
-    }
-
-    dataList.forEach((element) {
-      listToAdd.add(
-        EnterpriseModel(
-          codigoInternoEmpresa: int.parse(element['CodigoInterno_Empresa']),
-          codigoEmpresa: element['Codigo_Empresa'],
-          nomeEmpresa: element['Nome_Empresa'],
-          cnpj: element['Cnpj_Empresa'],
-          CodigoInternoVendaMobile_ModeloPedido:
-              element["CodigoInternoVendaMobile_ModeloPedido"] ?? "-1",
-          useEcommerceSale: element["FlagECommerce_Empresa"] == "1",
-          useRetailSale: element["FlagVarejo_Empresa"] == "1",
-          useWholeSale: element["FlagAtacado_Empresa"] == "1",
-          participateEnterpriseGroup: element["EnterpriseParticipateEnterpriseGroup"] == "1",
-        ),
+  factory EnterpriseModel.fromJson(Map<String, dynamic> json) =>
+      EnterpriseModel(
+        codigoInternoEmpresa: int.parse(json['CodigoInterno_Empresa']),
+        codigoEmpresa: json['Codigo_Empresa'],
+        nomeEmpresa: json['Nome_Empresa'],
+        cnpj: json['Cnpj_Empresa'],
+        CodigoInternoVendaMobile_ModeloPedido:
+            json["CodigoInternoVendaMobile_ModeloPedido"] ?? "-1",
+        useEcommerceSale: json["FlagECommerce_Empresa"] == "1",
+        useRetailSale: json["FlagVarejo_Empresa"] == "1",
+        useWholeSale: json["FlagAtacado_Empresa"] == "1",
+        participateEnterpriseGroup:
+            json["EnterpriseParticipateEnterpriseGroup"] == "1",
       );
-    });
-  }
 }

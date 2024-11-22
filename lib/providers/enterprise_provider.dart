@@ -57,10 +57,9 @@ class EnterpriseProvider with ChangeNotifier {
         typeOfResult: "GetEnterprisesResult",
       );
 
-      EnterpriseModel.resultAsStringToEnterpriseModel(
-        data: SoapRequestResponse.responseAsMap["Empresas"],
-        listToAdd: _enterprises,
-      );
+      _enterprises = (SoapRequestResponse.responseAsMap["Empresas"] as List)
+          .map((e) => EnterpriseModel.fromJson(e))
+          .toList();
 
       _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
