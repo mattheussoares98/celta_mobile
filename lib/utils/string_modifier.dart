@@ -19,6 +19,10 @@ extension StringModifier on String {
 
   double toDouble() {
     try {
+      if (this.isEmpty) {
+        return -1;
+      }
+
       String string = replaceAll(RegExp(r','), '.');
       final quantidadeDePontos = '.'.allMatches(string).length;
 
