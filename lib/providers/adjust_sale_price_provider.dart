@@ -219,7 +219,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
       );
     }
 
-    if (enterprise.participateEnterpriseGroup) {
+    if (enterprise.EnterpriseParticipateEnterpriseGroup == true) {
       _replicationParameters.add(
         ReplicationModel(
           replicationName: ReplicationNames.OperationalGrouping,

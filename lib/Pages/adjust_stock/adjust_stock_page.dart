@@ -76,7 +76,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                               adjustStockProvider.isLoadingAdjustStock,
                           onPressSearch: () async {
                             await adjustStockProvider.getProducts(
-                              enterpriseCode: enterprise.codigoInternoEmpresa,
+                              enterpriseCode: enterprise.Code,
                               controllerText: _consultProductController.text,
                               context: context,
                               configurationsProvider: configurationsProvider,
@@ -131,7 +131,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                             adjustStockProvider.errorMessageGetProducts,
                       ),
                     AdjustStockProductsItems(
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.Code,
                         consultedProductController: _consultedProductController,
                         dropDownFormKey: _dropDownFormKey,
                         insertQuantityFormKey: _insertQuantityFormKey,
@@ -147,7 +147,7 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                           }
 
                           await adjustStockProvider.getProducts(
-                            enterpriseCode: enterprise.codigoInternoEmpresa,
+                            enterpriseCode: enterprise.Code,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,

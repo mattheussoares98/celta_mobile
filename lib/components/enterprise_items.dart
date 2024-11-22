@@ -27,7 +27,7 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
         return Card(
           child: ListTile(
             title: Text(
-              enterpriseProvider.enterprises[index].nomeEmpresa,
+              enterpriseProvider.enterprises[index].Name,
               style: const TextStyle(
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
@@ -35,14 +35,14 @@ class _EnterpriseItemsState extends State<EnterpriseItems> {
               ),
             ),
             leading: Text(
-              enterpriseProvider.enterprises[index].codigoEmpresa.toString(),
+              enterpriseProvider.enterprises[index].PersonalizedCode.toString(),
               style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'OpenSans',
               ),
             ),
             subtitle: Text(
-              "Cnpj: " + enterpriseProvider.enterprises[index].cnpj.toString(),
+              "Cnpj: " + enterpriseProvider.enterprises[index].CnpjNumber.toString(),
               style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'OpenSans',

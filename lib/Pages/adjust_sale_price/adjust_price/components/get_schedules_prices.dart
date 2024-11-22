@@ -26,7 +26,7 @@ class GetSchedulesPrices extends StatelessWidget {
         TextButton(
           onPressed: () async {
             await adjustSalePriceProvider.getProductSchedules(
-              enterpriseCode: enterprise.codigoInternoEmpresa,
+              enterpriseCode: enterprise.Code,
               productCode: product.productCode!,
               productPackingCode: product.productPackingCode!,
             );

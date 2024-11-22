@@ -1,4 +1,3 @@
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +31,7 @@ class _RequestsPageState extends State<RequestsPage> {
     );
 
     if (!_isLoaded) {
-      if (enterprise.CodigoInternoVendaMobile_ModeloPedido == -1) {
+      if (enterprise.CodigoInternoVendaMobile_ModeloPedido == 0) {
         //significa que não possui um modelo de pedido de vendas padrão cadastrado no BS
         _hasDefaultRequestModel = false;
       } else {
@@ -40,7 +39,7 @@ class _RequestsPageState extends State<RequestsPage> {
       }
 
       await saleRequestProvider.getRequests(
-        enterpriseCode: enterprise.codigoInternoEmpresa,
+        enterpriseCode: enterprise.Code,
         context: context,
       );
       _isLoaded = true;
@@ -75,7 +74,7 @@ class _RequestsPageState extends State<RequestsPage> {
                       ? null
                       : () async {
                           await saleRequestProvider.getRequests(
-                            enterpriseCode: enterprise.codigoInternoEmpresa,
+                            enterpriseCode: enterprise.Code,
                             context: context,
                             isConsultingAgain: true,
                           );
@@ -87,7 +86,7 @@ class _RequestsPageState extends State<RequestsPage> {
             ),
             body: RefreshIndicator(
               onRefresh: () => saleRequestProvider.getRequests(
-                enterpriseCode: enterprise.codigoInternoEmpresa,
+                enterpriseCode: enterprise.Code,
                 context: context,
                 isConsultingAgain: true,
               ),
@@ -98,7 +97,7 @@ class _RequestsPageState extends State<RequestsPage> {
                   if (!saleRequestProvider.isLoadingRequests)
                     ModelsItems(
                       hasDefaultRequestModel: _hasDefaultRequestModel,
-                      enterpriseCode: enterprise.codigoInternoEmpresa,
+                      enterpriseCode: enterprise.Code,
                       saleRequestTypeCode: enterprise
                           .CodigoInternoVendaMobile_ModeloPedido.toInt(),
                     ),
@@ -110,7 +109,7 @@ class _RequestsPageState extends State<RequestsPage> {
                         request: () async {
                           setState(() {});
                           await saleRequestProvider.getRequests(
-                            enterpriseCode: enterprise.codigoInternoEmpresa,
+                            enterpriseCode: enterprise.Code,
                             context: context,
                           );
                         },

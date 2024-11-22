@@ -51,19 +51,19 @@ class EnterpriseProvider with ChangeNotifier {
           "simpleSearchValue": "",
           "requestTypeCode": 0,
         },
-        typeOfResponse: "GetEnterprisesResponse",
-        SOAPAction: "GetEnterprises",
+        typeOfResponse: "GetEnterprisesJsonResponse",
+        SOAPAction: "GetEnterprisesJson",
         serviceASMX: "celtaenterpriseService.asmx",
-        typeOfResult: "GetEnterprisesResult",
+        typeOfResult: "GetEnterprisesJsonResult",
       );
 
-      _enterprises = (SoapRequestResponse.responseAsMap["Empresas"] as List)
+      final decodedResponse = json.decode(SoapRequestResponse.responseAsString);
+      _enterprises = (decodedResponse as List)
           .map((e) => EnterpriseModel.fromJson(e))
           .toList();
 
       _errorMessage = SoapRequestResponse.errorMessage;
     } catch (e) {
-      //print("Erro para efetuar a requisição: $e");
       _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;

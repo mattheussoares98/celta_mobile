@@ -39,7 +39,7 @@ class _ExpeditionConferencePendingProductsPageState
 
     await expeditionConferenceProvider.getProducts(
       value: searchProductsController.text,
-      enterpriseCode: enterprise.codigoInternoEmpresa,
+      enterpriseCode: enterprise.Code,
       configurationsProvider: ConfigurationsProvider(),
       expeditionControlCode: expeditionControl.ExpeditionControlCode!,
       stepCode: expeditionControl.StepCode!,
@@ -55,7 +55,7 @@ class _ExpeditionConferencePendingProductsPageState
         context: context,
         builder: (context) => ConfirmProductDialog(
           expeditionControlCode: expeditionControl.ExpeditionControlCode!,
-          enterpriseCode: enterprise.codigoInternoEmpresa,
+          enterpriseCode: enterprise.Code,
           stepCode: expeditionControl.StepCode!,
         ),
       );
@@ -112,7 +112,7 @@ class _ExpeditionConferencePendingProductsPageState
             request: () async {
               await expeditionConferenceProvider.confirmConference(
                 expeditionControlCode: expeditionControl.ExpeditionControlCode!,
-                enterpriseCode: enterprise.codigoInternoEmpresa,
+                enterpriseCode: enterprise.Code,
                 stepCode: expeditionControl.StepCode!,
               );
             },

@@ -56,7 +56,7 @@ class _AdjustSalePriceProductsPageState
                     searchProductController: searchValueController,
                     onPressSearch: () async {
                       await adjustSalePriceProvider.getProducts(
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.Code,
                         searchValue: searchValueController.text,
                         configurationsProvider: configurationsProvider,
                       );

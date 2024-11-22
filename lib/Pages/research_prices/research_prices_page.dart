@@ -36,7 +36,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
     await researchPricesProvider.getResearchPrices(
       context: context,
       notifyListenersFromUpdate: notityListenersFromUpdate,
-      enterpriseCode: enterprise.codigoInternoEmpresa,
+      enterpriseCode: enterprise.Code,
       searchText: searchText,
     );
 
@@ -138,7 +138,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                       ),
                     if (!researchPricesProvider.isLoadingResearchPrices)
                       PricesItems(
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.Code,
                       ),
                   ],
                 ),
@@ -156,7 +156,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                     await Navigator.of(context).pushNamed(
                       APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
                       arguments: {
-                        "enterpriseCode": enterprise.codigoInternoEmpresa,
+                        "enterpriseCode": enterprise.Code,
                       },
                     );
 

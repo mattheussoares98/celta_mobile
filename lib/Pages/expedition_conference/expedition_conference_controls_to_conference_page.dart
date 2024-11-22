@@ -26,7 +26,7 @@ class _ExpeditionConferenceControlsToConferencePageState
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
     await expeditionConferenceProvider.getExpeditionControlsToConference(
-      enterpriseCode: enterprise.codigoInternoEmpresa,
+      enterpriseCode: enterprise.Code,
     );
   }
 
@@ -55,7 +55,7 @@ class _ExpeditionConferenceControlsToConferencePageState
                 onPressed: () async {
                   await expeditionConferenceProvider
                       .getExpeditionControlsToConference(
-                          enterpriseCode: enterprise.codigoInternoEmpresa);
+                          enterpriseCode: enterprise.Code);
                 },
                 icon: const Icon(Icons.refresh),
               ),
@@ -73,7 +73,7 @@ class _ExpeditionConferenceControlsToConferencePageState
                     request: () async {
                       await expeditionConferenceProvider
                           .getExpeditionControlsToConference(
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.Code,
                       );
                     }),
               const Expanded(child: ExpeditionControlsToConferenceItems()),

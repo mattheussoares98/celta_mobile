@@ -1,38 +1,43 @@
 class EnterpriseModel {
-  final int codigoInternoEmpresa;
-  final String codigoEmpresa;
-  final String nomeEmpresa;
-  final String cnpj;
-  final String CodigoInternoVendaMobile_ModeloPedido;
+  final int Code;
+  final int PersonalizedCode;
+  final String Name;
+  final int CnpjNumber;
+  final int CodigoInternoVendaMobile_ModeloPedido;
   final bool useRetailSale;
   final bool useWholeSale;
   final bool useEcommerceSale;
-  final bool participateEnterpriseGroup;
+  final bool? EnterpriseParticipateEnterpriseGroup;
+  final int? ProductCodeSizeOfBalanceLabel;
+  final bool? ProductCodeWithCheckerDigit;
 
   EnterpriseModel({
-    required this.codigoInternoEmpresa,
-    required this.codigoEmpresa,
-    required this.nomeEmpresa,
-    required this.cnpj,
+    required this.Code,
+    required this.PersonalizedCode,
+    required this.Name,
+    required this.CnpjNumber,
     required this.CodigoInternoVendaMobile_ModeloPedido,
     required this.useEcommerceSale,
     required this.useRetailSale,
     required this.useWholeSale,
-    required this.participateEnterpriseGroup,
+    required this.EnterpriseParticipateEnterpriseGroup,
+    required this.ProductCodeSizeOfBalanceLabel,
+    required this.ProductCodeWithCheckerDigit,
   });
 
   factory EnterpriseModel.fromJson(Map<String, dynamic> json) =>
       EnterpriseModel(
-        codigoInternoEmpresa: int.parse(json['CodigoInterno_Empresa']),
-        codigoEmpresa: json['Codigo_Empresa'],
-        nomeEmpresa: json['Nome_Empresa'],
-        cnpj: json['Cnpj_Empresa'],
-        CodigoInternoVendaMobile_ModeloPedido:
-            json["CodigoInternoVendaMobile_ModeloPedido"] ?? "-1",
-        useEcommerceSale: json["FlagECommerce_Empresa"] == "1",
-        useRetailSale: json["FlagVarejo_Empresa"] == "1",
-        useWholeSale: json["FlagAtacado_Empresa"] == "1",
-        participateEnterpriseGroup:
-            json["EnterpriseParticipateEnterpriseGroup"] == "1",
+        Code: json["Code"],
+        PersonalizedCode: int.parse(json['PersonalizedCode']),
+        Name: json['Name'],
+        CnpjNumber: int.parse(json['CnpjNumber']),
+        useEcommerceSale: json['SaleTypeECommerce'],
+        useRetailSale: json['SaleTypeRetail'],
+        useWholeSale: json['SaleTypeWholeSale'],
+        CodigoInternoVendaMobile_ModeloPedido: json["SaleRequestTypeCode"],
+        EnterpriseParticipateEnterpriseGroup:
+            json["EnterpriseParticipateEnterpriseGroup"],
+        ProductCodeSizeOfBalanceLabel: json["ProductCodeSizeOfBalanceLabel"],
+        ProductCodeWithCheckerDigit: json["ProductCodeWithCheckerDigit"],
       );
 }

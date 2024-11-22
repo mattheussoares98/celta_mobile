@@ -25,7 +25,7 @@ class _InventoryPageState extends State<InventoryPage> {
 
     if (!_isLoaded) {
       Provider.of<InventoryProvider>(context, listen: false).getInventory(
-        enterpriseCode: enterprise.codigoInternoEmpresa,
+        enterpriseCode: enterprise.Code,
         userIdentity: UserData.crossIdentity,
       );
       _isLoaded = true;
@@ -51,7 +51,7 @@ class _InventoryPageState extends State<InventoryPage> {
                     ? null
                     : () async {
                         await inventoryProvider.getInventory(
-                          enterpriseCode: enterprise.codigoInternoEmpresa,
+                          enterpriseCode: enterprise.Code,
                           userIdentity: UserData.crossIdentity,
                           isConsultingAgain: true,
                         );
@@ -64,7 +64,7 @@ class _InventoryPageState extends State<InventoryPage> {
           body: RefreshIndicator(
             onRefresh: () async {
               await inventoryProvider.getInventory(
-                enterpriseCode: enterprise.codigoInternoEmpresa,
+                enterpriseCode: enterprise.Code,
                 userIdentity: UserData.crossIdentity,
                 isConsultingAgain: true,
               );
@@ -77,7 +77,7 @@ class _InventoryPageState extends State<InventoryPage> {
                       errorMessage: inventoryProvider.errorMessage,
                       request: () async => setState(() {
                         inventoryProvider.getInventory(
-                          enterpriseCode: enterprise.codigoInternoEmpresa,
+                          enterpriseCode: enterprise.Code,
                           userIdentity: UserData.crossIdentity,
                         );
                       }),

@@ -86,7 +86,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                                       .isLoadingAdjustStock,
                           onPressSearch: () async {
                             await transferBetweenStocksProvider.getProducts(
-                              enterpriseCode: enterprise.codigoInternoEmpresa,
+                              enterpriseCode: enterprise.Code,
                               controllerText: _consultProductController.text,
                               context: context,
                               configurationsProvider: configurationsProvider,
@@ -166,7 +166,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                       ),
                     if (!transferBetweenStocksProvider.isLoadingProducts)
                       ProductsItems(
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.Code,
                         consultedProductController: _consultedProductController,
                         dropDownFormKey: _dropDownFormKey,
                         insertQuantityFormKey: _insertQuantityFormKey,
@@ -182,7 +182,7 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                           }
 
                           await transferBetweenStocksProvider.getProducts(
-                            enterpriseCode: enterprise.codigoInternoEmpresa,
+                            enterpriseCode: enterprise.Code,
                             controllerText: _consultProductController.text,
                             context: context,
                             configurationsProvider: configurationsProvider,

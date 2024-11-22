@@ -61,7 +61,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                     onPressSearch: () async {
                       await priceConferenceProvider.getProduct(
                         configurationsProvider: configurationsProvider,
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.Code,
                         controllerText: _consultProductController.text,
                         context: context,
                       );
@@ -99,14 +99,14 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                               priceConferenceProvider.products[index];
 
                           return ProductItem(
-                            enterpriseCode: enterprise.codigoInternoEmpresa,
+                            enterpriseCode: enterprise.Code,
                             product: priceConferenceProvider.products[index],
                             showCosts: true,
                             showLastBuyEntrance: true,
                             componentAfterProductInformations:
                                 SendToPrintButton(
                               internalEnterpriseCode:
-                                  enterprise.codigoInternoEmpresa,
+                                  enterprise.Code,
                               index: index,
                               productPackingCode: product.productPackingCode!,
                               etiquetaPendente: product.pendantPrintLabel,

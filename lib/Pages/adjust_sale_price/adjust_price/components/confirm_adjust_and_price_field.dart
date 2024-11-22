@@ -48,7 +48,7 @@ class _PriceFieldAndConfirmAdjustButtonState
             await adjustSalePriceProvider.confirmAdjust(
               productPackingCode: product.productPackingCode!,
               productCode: product.productCode!,
-              enterpriseCode: enterprise.codigoInternoEmpresa,
+              enterpriseCode: enterprise.Code,
               price: priceTextController.text.toDouble(),
               effectuationDateOffer: adjustSalePriceProvider.initialDate,
               effectuationDatePrice: adjustSalePriceProvider.initialDate,

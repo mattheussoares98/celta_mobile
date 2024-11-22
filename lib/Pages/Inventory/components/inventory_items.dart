@@ -33,7 +33,7 @@ class InventoryItems extends StatelessWidget {
                     arguments: {
                       "codigoInternoInventario": inventoryProvider
                           .inventorys[index].codigoInternoInventario,
-                      "codigoInternoEmpresa": arguments.codigoInternoEmpresa, //passando o código da empresa também porque vai precisar na tela de consulta de produtos
+                      "codigoInternoEmpresa": arguments.Code, //passando o código da empresa também porque vai precisar na tela de consulta de produtos
                     },
                   );
                 },

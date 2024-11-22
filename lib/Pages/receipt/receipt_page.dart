@@ -22,7 +22,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
     if (!isLoaded) {
       Provider.of<ReceiptProvider>(context, listen: true).getReceipt(
-        enterpriseCode: enterprise.codigoInternoEmpresa,
+        enterpriseCode: enterprise.Code,
         context: context,
       );
     }
@@ -50,7 +50,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       ? null
                       : () async {
                           await receiptProvider.getReceipt(
-                            enterpriseCode: enterprise.codigoInternoEmpresa,
+                            enterpriseCode: enterprise.Code,
                             context: context,
                             isSearchingAgain: true,
                           );
@@ -63,7 +63,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
             body: RefreshIndicator(
               onRefresh: () async {
                 await receiptProvider.getReceipt(
-                  enterpriseCode: enterprise.codigoInternoEmpresa,
+                  enterpriseCode: enterprise.Code,
                   context: context,
                   isSearchingAgain: true,
                 );
@@ -79,7 +79,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                           request: () async {
                             setState(() {});
                             await receiptProvider.getReceipt(
-                              enterpriseCode: enterprise.codigoInternoEmpresa,
+                              enterpriseCode: enterprise.Code,
                               context: context,
                             );
                           }),
@@ -88,7 +88,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       receiptProvider.errorMessage == '')
                     Expanded(
                       child: ReceiptItems(
-                        enterpriseCode: enterprise.codigoInternoEmpresa,
+                        enterpriseCode: enterprise.Code,
                         receiptProvider: receiptProvider,
                       ),
                     ),
