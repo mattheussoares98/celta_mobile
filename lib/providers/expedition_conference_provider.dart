@@ -48,7 +48,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     try {
       final jsonFilters = {
         "CrossIdentity": UserData.crossIdentity,
-        "EnterpriseCode": enterprise,
+        "EnterpriseCode": enterprise.Code,
       };
 
       await SoapRequest.soapPost(
