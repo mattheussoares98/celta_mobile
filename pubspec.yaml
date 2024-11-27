@@ -70,6 +70,16 @@ icons_launcher:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  msix: ^3.16.8 #dart run msix:create
+
+msix_config:
+  display_name: Celta Mobile
+  publisher_display_name: Celta Ware
+  identity_name: CeltaWare.Celtamobile
+  msix_version: 1.0.0.0
+  logo_path: "dev_assets/CeltaMobileLogo.png"
+  publisher: CN=9FD149D3-E81E-4537-8E61-2C8B386258B5
+  store: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
