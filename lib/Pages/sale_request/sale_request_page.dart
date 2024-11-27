@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../api/api.dart';
 import '../../components/components.dart';
+import '../../models/enterprise/enterprise.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'sale_request.dart';
@@ -41,6 +42,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
   Widget _clearAllDataIcon(SaleRequestProvider saleRequestProvider) {
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final EnterpriseModel enterprise = arguments["enterprise"];
 
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
@@ -51,7 +53,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
             title: "Apagar TODOS dados",
             subtitle: "Deseja realmente limpar todos os dados do pedido?",
             function: () {
-              saleRequestProvider.clearCart(arguments["Code"].toString());
+              saleRequestProvider.clearCart(enterprise.Code.toString());
             },
           );
         },
@@ -134,12 +136,13 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     );
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final EnterpriseModel enterprise = arguments["enterprise"];
 
-    await saleRequestProvider.restoreProducts(arguments["Code"].toString());
-    await saleRequestProvider.restorecustomers(arguments["Code"].toString());
+    await saleRequestProvider.restoreProducts(enterprise.Code.toString());
+    await saleRequestProvider.restorecustomers(enterprise.Code.toString());
 
     int customersCount =
-        saleRequestProvider.customersCount(arguments["Code"].toString());
+        saleRequestProvider.customersCount(enterprise.Code.toString());
     if (customersCount == 0) {
       //logo que entra na tela de pedido de vendas, o app recupera os clientes
       //que foram pesquisados e marcados. Caso consulte os clientes, vai
@@ -148,7 +151,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       await saleRequestProvider.getCustomers(
         context: context,
         controllerText: "-1",
-        enterpriseCode: arguments["Code"].toString(),
+        enterpriseCode: enterprise.Code.toString(),
         searchOnlyDefaultCustomer: true,
         configurationsProvider: configurationsProvider,
       );
@@ -161,18 +164,19 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         Provider.of(context, listen: true);
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final EnterpriseModel enterprise = arguments["enterprise"];
 
     int cartProductsCount =
-        saleRequestProvider.cartProductsCount(arguments["Code"].toString());
+        saleRequestProvider.cartProductsCount(enterprise.Code.toString());
 
     List<Widget> _pages = <Widget>[
       InsertProductsPage(
-        enterpriseCode: arguments["Code"],
+        enterprise: enterprise,
         requestTypeCode: arguments["SaleRequestTypeCode"],
       ),
-      InsertCustomerPage(enterpriseCode: arguments["Code"]),
+      InsertCustomerPage(enterpriseCode: enterprise.Code),
       CartDetailsPage(
-        enterpriseCode: arguments["Code"],
+        enterpriseCode: enterprise.Code,
         requestTypeCode: arguments["SaleRequestTypeCode"],
         keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,
         observationsController: observationsController,
@@ -256,7 +260,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                               ConvertString.convertToBRL(
                                 saleRequestProvider
                                     .getTotalCartPrice(
-                                        arguments["Code"].toString())
+                                        enterprise.Code.toString())
                                     .toString(),
                               ),
                               style: const TextStyle(

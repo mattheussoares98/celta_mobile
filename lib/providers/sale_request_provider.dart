@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
+import '../models/enterprise/enterprise.dart';
 import '../models/sale_request/sale_request.dart';
 import '../models/soap/soap.dart';
 import '../utils/utils.dart';
@@ -840,7 +841,7 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   Future<void> getProducts({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String controllerText,
     required BuildContext context,
     required ConfigurationsProvider configurationsProvider,
@@ -853,9 +854,10 @@ class SaleRequestProvider with ChangeNotifier {
 
     Map jsonGetProducts = {
       "CrossIdentity": UserData.crossIdentity,
-      "SearchValue": controllerText,
+      "SearchValue": SoapHelper.changeSearchValueIfIsBalanceCode(
+          controllerText, enterprise),
       "RequestTypeCode": requestTypeCode,
-      "EnterpriseCodes": [enterpriseCode],
+      "EnterpriseCodes": [enterprise.Code],
       "SearchTypeInt": SoapHelper.getSearchTypeInt(configurationsProvider),
       "RoutineInt": 1,
       // "SupplierCode": _selectedSupplier!.Code,

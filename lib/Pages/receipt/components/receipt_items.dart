@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/enterprise/enterprise.dart';
 import '../../../models/receipt/receipt.dart';
 import '../../../providers/providers.dart';
 import '../../../components/components.dart';
@@ -7,10 +8,10 @@ import 'components.dart';
 
 class ReceiptItems extends StatefulWidget {
   final ReceiptProvider receiptProvider;
-  final int enterpriseCode;
+  final EnterpriseModel enterprise;
   const ReceiptItems({
     required this.receiptProvider,
-    required this.enterpriseCode,
+    required this.enterprise,
     Key? key,
   }) : super(key: key);
 
@@ -94,7 +95,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                             numeroProcRecebDoc: receipt.Numero_ProcRecebDoc,
                             receiptProvider: widget.receiptProvider,
                             index: index,
-                            enterpriseCode: widget.enterpriseCode,
+                            enterprise: widget.enterprise,
                           ),
                       ],
                     ),

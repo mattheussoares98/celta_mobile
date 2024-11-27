@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
+import '../models/enterprise/enterprise.dart';
 import '../models/receipt/receipt.dart';
 import '../utils/utils.dart';
 import './providers.dart';
@@ -162,8 +163,7 @@ class ReceiptProvider with ChangeNotifier {
       _products[index].DataValidade_ProcRecebDocProEmb = validityDate;
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
-      _errorMessageUpdateQuantity =
-          DefaultErrorMessage.ERROR;
+      _errorMessageUpdateQuantity = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageUpdateQuantity,
         context: context,
@@ -231,8 +231,7 @@ class ReceiptProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
-      _errorMessageUpdateQuantity =
-          DefaultErrorMessage.ERROR;
+      _errorMessageUpdateQuantity = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageUpdateQuantity,
         context: context,
@@ -249,6 +248,7 @@ class ReceiptProvider with ChangeNotifier {
     required BuildContext context,
     required bool isSearchAllCountedProducts,
     required ConfigurationsProvider configurationsProvider,
+    required EnterpriseModel enterprise,
   }) async {
     _products.clear();
     _errorMessageGetProducts = "";
@@ -261,6 +261,7 @@ class ReceiptProvider with ChangeNotifier {
         searchValue: controllerText,
         docCode: docCode,
         isSearchAllCountedProducts: isSearchAllCountedProducts,
+        enterprise: enterprise,
       );
 
       _errorMessageGetProducts = SoapRequestResponse.errorMessage;
@@ -367,7 +368,7 @@ class ReceiptProvider with ChangeNotifier {
     required int grDocCode,
     required int index,
     required BuildContext context,
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
   }) async {
     _isLoadingLiberateCheck = true;
     _errorMessageLiberate = "";
@@ -394,7 +395,7 @@ class ReceiptProvider with ChangeNotifier {
       if (_errorMessageLiberate == "") {
         //quando da certo a liberação, precisa consultar novamente os documentos pra atualizar o status corretamente
         await getReceipt(
-          enterpriseCode: enterpriseCode,
+          enterpriseCode: enterprise.Code,
           context: context,
           isSearchingAgain: true,
         );

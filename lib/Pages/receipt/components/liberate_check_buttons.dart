@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
@@ -10,10 +11,10 @@ class LiberateCheckButtons extends StatefulWidget {
   final int index;
   final String emitterName;
   final String numeroProcRecebDoc;
-  final int enterpriseCode;
+  final EnterpriseModel enterprise;
   const LiberateCheckButtons({
     required this.grDocCode,
-    required this.enterpriseCode,
+    required this.enterprise,
     required this.emitterName,
     required this.numeroProcRecebDoc,
     required this.receiptProvider,
@@ -45,7 +46,7 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
                         grDocCode: widget.grDocCode,
                         index: widget.index,
                         context: context,
-                        enterpriseCode: widget.enterpriseCode,
+                        enterprise: widget.enterprise,
                       );
                     },
                   );
@@ -79,7 +80,7 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
                       "grDocCode": widget.grDocCode,
                       "numeroProcRecebDoc": widget.numeroProcRecebDoc,
                       "emitterName": widget.emitterName,
-                      "enterpriseCode": widget.enterpriseCode,
+                      "enterprise": widget.enterprise,
                     },
                   );
                 },

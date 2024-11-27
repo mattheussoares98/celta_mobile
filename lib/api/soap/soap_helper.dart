@@ -91,6 +91,30 @@ class SoapHelper {
     }
   }
 
+  static String changeSearchValueIfIsBalanceCode(
+    String searchValue,
+    EnterpriseModel enterprise,
+  ) {
+    bool searchByBalanceCode = searchValue.length == 13 &&
+        searchValue.startsWith("2") &&
+        enterprise.ProductCodeSizeOfBalanceLabel != null &&
+        enterprise.ProductCodeWithCheckerDigit != null;
+
+    String pluFromBalanceCode = "";
+
+    if (searchByBalanceCode) {
+      pluFromBalanceCode =
+          searchValue.replaceFirst(RegExp(r'2'), '').replaceRange(
+                enterprise.ProductCodeSizeOfBalanceLabel!,
+                null,
+                enterprise.ProductCodeWithCheckerDigit == true ? "" : ".",
+              );
+      return pluFromBalanceCode;
+    } else {
+      return searchValue;
+    }
+  }
+
   static Future<void> getProductJsonModel({
     required List<GetProductJsonModel> listToAdd,
     required EnterpriseModel enterprise,
@@ -99,27 +123,12 @@ class SoapHelper {
     required int routineTypeInt,
   }) async {
     try {
-      bool searchByBalanceCode = searchValue.length == 13 &&
-          searchValue.startsWith("2") &&
-          enterprise.ProductCodeSizeOfBalanceLabel != null &&
-          enterprise.ProductCodeWithCheckerDigit != null;
-
-      String pluFromBalanceCode = "";
-
-      if (searchByBalanceCode) {
-        pluFromBalanceCode =
-            searchValue.replaceFirst(RegExp(r'2'), '').replaceRange(
-                  enterprise.ProductCodeSizeOfBalanceLabel!,
-                  null,
-                  enterprise.ProductCodeWithCheckerDigit == true ? "" : ".",
-                );
-      }
-
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterprise.Code,
-          "searchValue": searchByBalanceCode ? pluFromBalanceCode : searchValue,
+          "searchValue":
+              changeSearchValueIfIsBalanceCode(searchValue, enterprise),
           "searchTypeInt": getSearchTypeInt(configurationsProvider),
           "routineTypeInt": routineTypeInt,
         },
@@ -128,26 +137,6 @@ class SoapHelper {
         SOAPAction: "GetProductJson",
         serviceASMX: "CeltaProductService.asmx",
       );
-
-      if (SoapRequestResponse.errorMessage != "" && searchByBalanceCode) {
-        await SoapRequest.soapPost(
-          parameters: {
-            "crossIdentity": UserData.crossIdentity,
-            "enterpriseCode": enterprise.Code,
-            "searchValue": searchByBalanceCode
-                ? searchValue
-                    .replaceFirst(RegExp(r'2'), '')
-                    .replaceRange(5, null, '.')
-                : searchValue,
-            "searchTypeInt": getSearchTypeInt(configurationsProvider),
-            "routineTypeInt": routineTypeInt,
-          },
-          typeOfResponse: "GetProductJsonResponse",
-          typeOfResult: "GetProductJsonResult",
-          SOAPAction: "GetProductJson",
-          serviceASMX: "CeltaProductService.asmx",
-        );
-      }
 
       if (SoapRequestResponse.errorMessage != "") {
         throw Exception();
@@ -185,7 +174,7 @@ class SoapHelper {
   }
 
   static Future<void> getProductInventory({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
     required int inventoryProcessCode,
@@ -196,8 +185,9 @@ class SoapHelper {
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterpriseCode,
-          "searchValue": searchValue,
+          "enterpriseCode": enterprise.Code,
+          "searchValue":
+              changeSearchValueIfIsBalanceCode(searchValue, enterprise),
           "searchTypeInt": getSearchTypeInt(configurationsProvider),
           "inventoryProcessCode": inventoryProcessCode,
           "inventoryCountingCode": inventoryCountingCode,
@@ -226,6 +216,7 @@ class SoapHelper {
     required String searchValue,
     required int docCode,
     required bool isSearchAllCountedProducts,
+    required EnterpriseModel enterprise,
   }) async {
     try {
       await SoapRequest.soapPost(
@@ -234,7 +225,8 @@ class SoapHelper {
           "searchTypeInt": isSearchAllCountedProducts
               ? 19
               : getSearchTypeInt(configurationsProvider),
-          "searchValue": searchValue,
+          "searchValue":
+              changeSearchValueIfIsBalanceCode(searchValue, enterprise),
           "grDocCode": docCode,
         },
         typeOfResponse: "GetProductResponse",
@@ -258,6 +250,7 @@ class SoapHelper {
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
     required List<TransferRequestProductsModel> products,
+    // required EnterpriseModel enterprise,
   }) async {
     try {
       await SoapRequest.soapPost(

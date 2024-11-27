@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/enterprise/enterprise.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
 class ReceiptConferencePage extends StatefulWidget {
-  const ReceiptConferencePage({Key? key}) : super(key: key);
+  const ReceiptConferencePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ReceiptConferencePage> createState() => _ReceiptConferencePageState();
@@ -31,6 +34,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final EnterpriseModel enterprise = arguments["enterprise"];
 
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
@@ -73,6 +77,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                             controllerText: _consultProductController.text,
                             context: context,
                             isSearchAllCountedProducts: false,
+                            enterprise: enterprise,
                           );
 
                           //não estava funcionando passar o productsCount como parâmetro
@@ -113,6 +118,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                                 controllerText: _consultProductController.text,
                                 context: context,
                                 isSearchAllCountedProducts: false,
+                                enterprise: enterprise,
                               );
                             }
 
@@ -134,6 +140,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                       left: 0,
                       child: ConsultProductWithoutEanButton(
                         docCode: arguments["grDocCode"],
+                        enterprise: enterprise,
                       ),
                     ),
                 ],

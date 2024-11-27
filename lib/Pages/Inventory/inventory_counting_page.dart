@@ -24,7 +24,7 @@ class _CountingPageState extends State<CountingPage> {
         children: [
           Expanded(
             child: CountingItems(
-              codigoInternoEmpresa: arguments["codigoInternoEmpresa"],
+              enterprise: arguments["enterprise"],
             ),
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/enterprise/enterprise.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
@@ -33,8 +34,10 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
   Future<void> _searchProduct({
     required InventoryProvider inventoryProvider,
     required ConfigurationsProvider configurationsProvider,
-    required dynamic arguments,
+    required EnterpriseModel enterprise,
   }) async {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
     _consultedProductController.clear();
 
     if (_consultProductController.text.isEmpty) {
@@ -47,7 +50,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     //se ler algum código, vai consultar o produto
     await inventoryProvider.getProducts(
       consultProductController: _consultProductController,
-      enterpriseCode: arguments["codigoInternoEmpresa"],
+      enterprise: arguments["enterprise"],
       context: context,
       isIndividual: _isIndividual,
       inventoryProcessCode:
@@ -69,6 +72,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
         arguments: arguments,
         indexOfProduct: 0,
         configurationsProvider: configurationsProvider,
+        enterprise: enterprise,
       );
     }
 
@@ -82,11 +86,12 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     }
   }
 
-  addQuantity({
+  Future<void> addQuantity({
     required InventoryProvider inventoryProvider,
     required ConfigurationsProvider configurationsProvider,
     required dynamic arguments,
     required int indexOfProduct,
+    required EnterpriseModel enterprise,
   }) async {
     await inventoryProvider.addQuantity(
       indexOfProduct: indexOfProduct,
@@ -102,8 +107,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
         configurationsProvider.autoScan?.value == true) {
       await _searchProduct(
         inventoryProvider: inventoryProvider,
-        arguments: arguments,
         configurationsProvider: configurationsProvider,
+        enterprise: enterprise,
       );
     }
   }
@@ -111,9 +116,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
   Widget searchButtonAndIndividualSwitch({
     required InventoryProvider inventoryProvider,
     required ConfigurationsProvider configurationsProvider,
+    required EnterpriseModel enterprise,
   }) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-
     return MediaQuery.of(context).size.width < 900
         ? Column(
             children: [
@@ -122,8 +126,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                 searchProduct: () async {
                   await _searchProduct(
                     inventoryProvider: inventoryProvider,
-                    arguments: arguments,
                     configurationsProvider: configurationsProvider,
+                    enterprise: enterprise,
                   );
                   if (inventoryProvider.productsCount > 0) {
                     setState(() {
@@ -166,8 +170,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                   searchProduct: () async {
                     await _searchProduct(
                       inventoryProvider: inventoryProvider,
-                      arguments: arguments,
                       configurationsProvider: configurationsProvider,
+                      enterprise: enterprise,
                     );
                     if (inventoryProvider.productsCount > 0) {
                       setState(() {
@@ -187,6 +191,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final enterprise = arguments["enterprise"];
 
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
@@ -218,8 +223,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                         onPressSearch: () async {
                           await _searchProduct(
                             inventoryProvider: inventoryProvider,
-                            arguments: arguments,
                             configurationsProvider: configurationsProvider,
+                            enterprise: enterprise,
                           );
                           if (inventoryProvider.productsCount > 0) {
                             setState(() {
@@ -233,6 +238,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                       searchButtonAndIndividualSwitch(
                         inventoryProvider: inventoryProvider,
                         configurationsProvider: configurationsProvider,
+                        enterprise: enterprise,
                       ),
                     ],
                   ),
@@ -247,8 +253,8 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                       getProducts: () async {
                         await _searchProduct(
                           inventoryProvider: inventoryProvider,
-                          arguments: arguments,
                           configurationsProvider: configurationsProvider,
+                          enterprise: enterprise,
                         );
                       },
                       isIndividual: _isIndividual,

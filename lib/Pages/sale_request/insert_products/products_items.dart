@@ -2,6 +2,7 @@ import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/enterprise/enterprise.dart';
 import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 import '../../../components/components.dart';
@@ -9,13 +10,13 @@ import 'insert_products.dart';
 
 class ProductsItems extends StatefulWidget {
   final TextEditingController newQuantityController;
-  final int enterpriseCode;
+  final EnterpriseModel enterprise;
   final Function getProductsWithCamera;
 
   const ProductsItems({
     required this.getProductsWithCamera,
     required this.newQuantityController,
-    required this.enterpriseCode,
+    required this.enterprise,
     Key? key,
   }) : super(key: key);
 
@@ -53,14 +54,14 @@ class _ProductsItemsState extends State<ProductsItems> {
         setState(() {
           saleRequestProvider.removeProductFromCart(
             ProductPackingCode: product.productPackingCode!,
-            enterpriseCode: widget.enterpriseCode.toString(),
+            enterpriseCode: widget.enterprise.Code.toString(),
           );
 
           setState(() {
             totalItemValue = saleRequestProvider.getTotalItemValue(
               product: product,
               newQuantityController: widget.newQuantityController,
-              enterpriseCode: widget.enterpriseCode.toString(),
+              enterpriseCode: widget.enterprise.Code.toString(),
             );
           });
         });
@@ -143,7 +144,7 @@ class _ProductsItemsState extends State<ProductsItems> {
         GetProductJsonModel product = saleRequestProvider.products[index];
         double _totalItensInCart = saleRequestProvider.getTotalItensInCart(
           ProductPackingCode: product.productPackingCode!,
-          enterpriseCode: widget.enterpriseCode.toString(),
+          enterpriseCode: widget.enterprise.Code.toString(),
         );
 
         double newQuantity = widget.newQuantityController.text.toDouble() == -1
@@ -153,7 +154,7 @@ class _ProductsItemsState extends State<ProductsItems> {
         double _totalItemValue = saleRequestProvider.getPracticedPrice(
               quantityToAdd: newQuantity + _totalItensInCart,
               product: product,
-              enterpriseCode: widget.enterpriseCode.toString(),
+              enterpriseCode: widget.enterprise.Code.toString(),
             ) *
             newQuantity;
 
@@ -168,7 +169,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                   );
                 },
           child: ProductItem(
-            enterpriseCode: widget.enterpriseCode,
+            enterpriseCode: widget.enterprise.Code,
             product: product,
             showCosts: false,
             componentAfterProductInformations: Column(
@@ -186,7 +187,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 ),
                 if (saleRequestProvider.alreadyContainsProduct(
                   ProductPackingCode: product.productPackingCode!,
-                  enterpriseCode: widget.enterpriseCode.toString(),
+                  enterpriseCode: widget.enterprise.Code.toString(),
                 ))
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -200,7 +201,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                                     ProductPackingCode:
                                         product.productPackingCode!,
                                     enterpriseCode:
-                                        widget.enterpriseCode.toString(),
+                                        widget.enterprise.Code.toString(),
                                   )
                                   .toStringAsFixed(3)
                                   .replaceAll(RegExp(r'\.'), ','),
@@ -247,7 +248,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                 if (_selectedIndex == index)
                   InsertProductQuantityForm(
                     insertQuantityFocusNode: _insertQuantityFocusNode,
-                    enterpriseCode: widget.enterpriseCode,
+                    enterpriseCode: widget.enterprise.Code,
                     newQuantityController: widget.newQuantityController,
                     consultedProductFormKey: _consultedProductFormKey,
                     totalItemValue: _totalItemValue,
@@ -262,7 +263,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                       saleRequestProvider.addProductInCart(
                         newQuantityController: widget.newQuantityController,
                         product: product,
-                        enterpriseCode: widget.enterpriseCode.toString(),
+                        enterpriseCode: widget.enterprise.Code.toString(),
                       );
                       setState(() {
                         _selectedIndex = -1;
@@ -278,7 +279,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                         _totalItemValue = saleRequestProvider.getTotalItemValue(
                           product: product,
                           newQuantityController: widget.newQuantityController,
-                          enterpriseCode: widget.enterpriseCode.toString(),
+                          enterpriseCode: widget.enterprise.Code.toString(),
                         );
                       });
                     },

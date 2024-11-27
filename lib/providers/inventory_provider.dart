@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
+import '../models/enterprise/enterprise.dart';
 import '../models/inventory/inventory.dart';
 import '../utils/utils.dart';
 import './providers.dart';
@@ -125,7 +126,7 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> _getProducts({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required int inventoryCountingCode,
     required int inventoryProcessCode,
     required String controllerText, //em string pq vem de um texfFormField
@@ -148,7 +149,7 @@ class InventoryProvider with ChangeNotifier {
 
     try {
       await SoapHelper.getProductInventory(
-        enterpriseCode: enterpriseCode,
+        enterprise: enterprise,
         searchValue: controllerText,
         configurationsProvider: configurationsProvider,
         inventoryProcessCode: inventoryProcessCode,
@@ -166,7 +167,7 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> getProducts({
-    required int enterpriseCode,
+    required EnterpriseModel enterprise,
     required int inventoryProcessCode,
     required BuildContext context,
     required bool isIndividual,
@@ -183,7 +184,7 @@ class InventoryProvider with ChangeNotifier {
 
     await _getProducts(
       controllerText: consultProductController.text,
-      enterpriseCode: enterpriseCode,
+      enterprise: enterprise,
       context: context,
       inventoryCountingCode: inventoryCountingCode,
       inventoryProcessCode: inventoryProcessCode,

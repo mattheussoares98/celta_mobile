@@ -1,3 +1,4 @@
+import '../../../models/enterprise/enterprise.dart';
 import '../../../models/sale_request/sale_request.dart';
 import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,11 @@ import '../../../components/components.dart';
 
 class ModelsItems extends StatefulWidget {
   final bool hasDefaultRequestModel;
-  final int enterpriseCode;
+  final EnterpriseModel enterprise;
   final int saleRequestTypeCode;
   const ModelsItems({
     required this.hasDefaultRequestModel,
-    required this.enterpriseCode,
+    required this.enterprise,
     required this.saleRequestTypeCode,
     Key? key,
   }) : super(key: key);
@@ -51,7 +52,7 @@ class _ModelsItemsState extends State<ModelsItems> {
                                 arguments: {
                                   "SaleRequestTypeCode":
                                       widget.saleRequestTypeCode,
-                                  "Code": widget.enterpriseCode,
+                                  "enterprise": widget.enterprise,
                                   "UseWholePrice": true,
                                   "UnitValueType": 1, //preço de venda praticado
                                 },
@@ -65,16 +66,16 @@ class _ModelsItemsState extends State<ModelsItems> {
 
                   return Card(
                     child: InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+                      focusColor: Colors.white.withOpacity(0),
+                      hoverColor: Colors.white.withOpacity(0),
+                      splashColor: Colors.white.withOpacity(0),
+                      highlightColor: Colors.white.withOpacity(0),
                       onTap: () {
                         saleRequestProvider.updatedCart = true;
                         Navigator.of(context).pushNamed(
                           APPROUTES.SALE_REQUEST,
                           arguments: {
-                            "Code": widget.enterpriseCode,
+                            "enterprise": widget.enterprise,
                             "SaleRequestTypeCode": request.Code,
                             "UseWholePrice": request.UseWholePrice == 1,
                             "UnitValueType": request.UnitValueType,

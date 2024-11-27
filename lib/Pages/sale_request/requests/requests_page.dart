@@ -97,7 +97,7 @@ class _RequestsPageState extends State<RequestsPage> {
                   if (!saleRequestProvider.isLoadingRequests)
                     ModelsItems(
                       hasDefaultRequestModel: _hasDefaultRequestModel,
-                      enterpriseCode: enterprise.Code,
+                      enterprise: enterprise,
                       saleRequestTypeCode: enterprise
                           .CodigoInternoVendaMobile_ModeloPedido.toInt(),
                     ),

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
 
 class CountingItems extends StatelessWidget {
-  final int codigoInternoEmpresa;
+  final EnterpriseModel enterprise;
   const CountingItems({
-    required this.codigoInternoEmpresa,
+    required this.enterprise,
     Key? key,
   }) : super(key: key);
 
@@ -25,17 +26,17 @@ class CountingItems extends StatelessWidget {
                 .getCountingsQuantity(arguments["codigoInternoInventario"]),
             itemBuilder: (ctx, index) {
               return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+                focusColor: Colors.white.withOpacity(0),
+                hoverColor: Colors.white.withOpacity(0),
+                splashColor: Colors.white.withOpacity(0),
+                highlightColor: Colors.white.withOpacity(0),
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.INVENTORY_PRODUCTS,
                     arguments: {
                       "InventoryCountingsModel": inventoryProvider.getCountings(
                           arguments["codigoInternoInventario"])[index],
-                      "codigoInternoEmpresa": codigoInternoEmpresa,
+                      "enterprise": enterprise,
                     },
                   );
                 },

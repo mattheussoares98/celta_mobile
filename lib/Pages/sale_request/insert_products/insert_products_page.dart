@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import 'insert_products.dart';
 
 class InsertProductsPage extends StatefulWidget {
-  final int enterpriseCode;
+  final EnterpriseModel enterprise;
   final int requestTypeCode;
   const InsertProductsPage({
-    required this.enterpriseCode,
+    required this.enterprise,
     required this.requestTypeCode,
     Key? key,
   }) : super(key: key);
@@ -56,7 +57,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                 await saleRequestProvider.getProducts(
                   context: context,
                   configurationsProvider: configurationsProvider,
-                  enterpriseCode: widget.enterpriseCode,
+                  enterprise: widget.enterprise,
                   controllerText: _searchProductTextEditingController.text,
                   requestTypeCode: widget.requestTypeCode,
                 );
@@ -73,7 +74,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
               ),
             ProductsItems(
                 newQuantityController: _newQuantityController,
-                enterpriseCode: widget.enterpriseCode,
+                enterprise: widget.enterprise,
                 getProductsWithCamera: () async {
                   FocusScope.of(context).unfocus();
                   _searchProductTextEditingController.clear();
@@ -88,7 +89,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                   await saleRequestProvider.getProducts(
                     configurationsProvider: configurationsProvider,
                     context: context,
-                    enterpriseCode: widget.enterpriseCode,
+                    enterprise: widget.enterprise,
                     controllerText: _searchProductTextEditingController.text,
                     requestTypeCode: widget.requestTypeCode,
                   );
