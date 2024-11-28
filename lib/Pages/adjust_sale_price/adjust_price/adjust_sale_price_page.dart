@@ -109,6 +109,7 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                           }),
                       const Divider(),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           OpenDialogProductInformations(
                             product: product,
