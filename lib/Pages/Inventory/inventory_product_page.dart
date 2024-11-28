@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +42,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
 
     _consultedProductController.clear();
 
-    if (_consultProductController.text.isEmpty) {
+    if (_consultProductController.text.isEmpty && !Platform.isWindows) {
       //se não digitar o ean ou plu, vai abrir a câmera
       _consultProductController.text = await ScanBarCode.scanBarcode(context);
     }
