@@ -416,7 +416,7 @@ class SaleRequestProvider with ChangeNotifier {
           totalLiquid += price;
           print(totalLiquid);
         } else {
-          totalLiquid += element.TotalLiquid!;
+          //preço do produto está zerado, não deve somar
         }
       });
       return totalLiquid;

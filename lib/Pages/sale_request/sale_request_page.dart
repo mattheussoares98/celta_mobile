@@ -168,6 +168,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     int cartProductsCount =
         saleRequestProvider.cartProductsCount(enterprise.Code.toString());
+    double totalCartPrice =
+        saleRequestProvider.getTotalCartPrice(enterprise.Code.toString());
 
     List<Widget> _pages = <Widget>[
       InsertProductsPage(
@@ -258,10 +260,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                             padding: const EdgeInsets.only(right: 5),
                             child: Text(
                               ConvertString.convertToBRL(
-                                saleRequestProvider
-                                    .getTotalCartPrice(
-                                        enterprise.Code.toString())
-                                    .toString(),
+                                totalCartPrice.toString(),
                               ),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
