@@ -74,4 +74,6 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.ADJUST_SALE_PRICE_PRODUCTS: (ctx) =>
           const AdjustSalePriceProductsPage(),
       APPROUTES.ADJUST_SALE_PRICE: (ctx) => const AdjustSalePricePage(),
+      APPROUTES.RECEIPT_PRODUCTS_WITHOUT_CADASTER: (ctx) =>
+          const ReceiptProductsWithoutCadasterPage(),
     };
