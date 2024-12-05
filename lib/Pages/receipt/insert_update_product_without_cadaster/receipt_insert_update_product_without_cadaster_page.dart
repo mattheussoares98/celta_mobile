@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
-import 'insert_product_without_cadaster.dart';
+import 'insert_update_product_without_cadaster.dart';
 
 class ReceiptInsertProductWithoutCadasterPage extends StatefulWidget {
   const ReceiptInsertProductWithoutCadasterPage({super.key});
