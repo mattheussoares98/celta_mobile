@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../providers/providers.dart';
+import 'components/components.dart';
 
 class ReceiptProductsWithoutCadasterPage extends StatefulWidget {
   const ReceiptProductsWithoutCadasterPage({super.key});
@@ -30,6 +31,7 @@ class _ReceiptProductsWithoutCadasterPageState
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
+    int docCode = ModalRoute.of(context)!.settings.arguments as int;
 
     return Stack(
       children: [
@@ -37,11 +39,11 @@ class _ReceiptProductsWithoutCadasterPageState
           appBar: AppBar(
             title: const FittedBox(child: Text("Produtos não encontrados")),
           ),
-          body: const Center(
-            child: Text(
-              "Produtos não encontrados",
-              //TODO show not found products when the list is empty
-            ),
+          body: Column(
+            children: [
+              InsertNotFoundProductButton(docCode: docCode),
+              const Expanded(child: Text("")),
+            ],
           ),
         ),
         loadingWidget(receiptProvider.isLoadingProductsWithoutCadaster),
