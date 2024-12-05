@@ -479,6 +479,7 @@ class ReceiptProvider with ChangeNotifier {
     required String ean,
     required String? observations,
     required double quantity,
+    required int? grDocProductWithoutCadasterCode,
     required BuildContext context,
   }) async {
     _isLoadingInsertProductsWithoutCadaster = true;
@@ -486,14 +487,20 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      final parameters = {
+        "crossIdentity": UserData.crossIdentity,
+        "grDocCode": grDocCode,
+        "ean": ean,
+        "observations": observations,
+        "quantity": quantity,
+      };
+      if (grDocProductWithoutCadasterCode != null) {
+        parameters["grDocProductWithoutCadasterCode"] =
+            grDocProductWithoutCadasterCode;
+      }
+
       await SoapRequest.soapPost(
-        parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "grDocCode": grDocCode,
-          "ean": ean,
-          "observations": observations,
-          "quantity": quantity,
-        },
+        parameters: parameters,
         typeOfResponse: "InsertProductWithoutCadasterResponse",
         SOAPAction: "InsertProductWithoutCadaster",
         serviceASMX: "CeltaGoodsReceivingService.asmx",

@@ -60,6 +60,7 @@ class _ReceiptInsertProductWithoutCadasterPageState
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
     bool isInserting = arguments["isInserting"];
     int docCode = arguments["docCode"];
+    ProductWithoutCadasterModel? product = arguments["product"];
 
     return Stack(
       children: [
@@ -104,6 +105,7 @@ class _ReceiptInsertProductWithoutCadasterPageState
                       observationsController: observationsController,
                       quantityController: quantityController,
                       isInserting: isInserting,
+                      product: product,
                     ),
                   ],
                 ),
