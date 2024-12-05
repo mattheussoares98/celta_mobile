@@ -33,79 +33,85 @@ class ProductsItems extends StatelessWidget {
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
 
-    return ListView.builder(
-      itemCount: receiptProvider.productsWithoutCadaster.length,
-      itemBuilder: (context, index) {
-        final product = receiptProvider.productsWithoutCadaster[index];
+    return RefreshIndicator(
+      onRefresh: () async {
+        await receiptProvider.getProductWithoutCadaster(docCode);
+      },
+      child: ListView.builder(
+        itemCount: receiptProvider.productsWithoutCadaster.length,
+        itemBuilder: (context, index) {
+          final product = receiptProvider.productsWithoutCadaster[index];
 
-        return InkWell(
-          onTap: () {
-            goToInsertUpdateProduct(product, context);
-          },
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        TitleAndSubtitle.titleAndSubtitle(
-                          title: "EAN",
-                          subtitle: product.Ean_ProcRecebProNaoIden,
-                        ),
-                        if (product.Obs_ProcRecebProNaoIden.isNotEmpty)
+          return InkWell(
+            onTap: () {
+              goToInsertUpdateProduct(product, context);
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
                           TitleAndSubtitle.titleAndSubtitle(
-                            title: "Observações",
-                            subtitle: product.Obs_ProcRecebProNaoIden,
+                            title: "EAN",
+                            subtitle: product.Ean_ProcRecebProNaoIden,
                           ),
-                        TitleAndSubtitle.titleAndSubtitle(
-                          title: "Quantidade",
-                          subtitle:
-                              product.Quantidade_ProcRecebProNaoIden.toString(),
-                        ),
-                      ],
+                          if (product.Obs_ProcRecebProNaoIden.isNotEmpty)
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Observações",
+                              subtitle: product.Obs_ProcRecebProNaoIden,
+                            ),
+                          TitleAndSubtitle.titleAndSubtitle(
+                            title: "Quantidade",
+                            subtitle: product.Quantidade_ProcRecebProNaoIden
+                                .toString(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      goToInsertUpdateProduct(product, context);
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
+                    IconButton(
+                      onPressed: () {
+                        goToInsertUpdateProduct(product, context);
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      ShowAlertDialog.show(
-                          context: context,
-                          title: "Remover produto",
-                          subtitle: "Deseja realmente remover o produto?",
-                          function: () async {
-                            await receiptProvider.deleteProductWithoutCadaster(
-                              grDocCode: docCode,
-                              grDocProductWithoutCadasterCode:
-                                  product.CodigoInterno_ProcRecebProNaoIden,
-                              context: context,
-                            );
-
-                            if (receiptProvider
-                                    .errorLoadProductsWithoutCadaster ==
-                                "") {
+                    IconButton(
+                      onPressed: () async {
+                        ShowAlertDialog.show(
+                            context: context,
+                            title: "Remover produto",
+                            subtitle: "Deseja realmente remover o produto?",
+                            function: () async {
                               await receiptProvider
-                                  .getProductWithoutCadaster(docCode);
-                            }
-                          });
-                    },
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                  ),
-                ],
+                                  .deleteProductWithoutCadaster(
+                                grDocCode: docCode,
+                                grDocProductWithoutCadasterCode:
+                                    product.CodigoInterno_ProcRecebProNaoIden,
+                                context: context,
+                              );
+
+                              if (receiptProvider
+                                      .errorLoadProductsWithoutCadaster ==
+                                  "") {
+                                await receiptProvider
+                                    .getProductWithoutCadaster(docCode);
+                              }
+                            });
+                      },
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

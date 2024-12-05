@@ -41,12 +41,7 @@ class _ConsultProductWithoutEanButtonState
                 enterprise: widget.enterprise,
               );
             },
-      child: Text(
-        receiptProvider.isLoadingProducts ||
-                receiptProvider.isLoadingUpdateQuantity
-            ? "Aguarde o término da consulta/alteração"
-            : "Consultar todos produtos do recebimento",
-      ),
+      child: const FittedBox(child: Text("Consultar todos")),
     );
   }
 }

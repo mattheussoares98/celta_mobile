@@ -18,7 +18,7 @@ class ProductsWithoutCadasterButton extends StatelessWidget {
           arguments: docCode,
         );
       },
-      child: const Text("Produtos não encontrados"),
+      child: const FittedBox(child: Text("Não encontrados")),
     );
   }
 }
