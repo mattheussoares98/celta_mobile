@@ -76,6 +76,30 @@ class ProductsItems extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
+                  IconButton(
+                    onPressed: () async {
+                      ShowAlertDialog.show(
+                          context: context,
+                          title: "Remover produto",
+                          subtitle: "Deseja realmente remover o produto?",
+                          function: () async {
+                            await receiptProvider.deleteProductWithoutCadaster(
+                              grDocCode: docCode,
+                              grDocProductWithoutCadasterCode:
+                                  product.CodigoInterno_ProcRecebProNaoIden,
+                              context: context,
+                            );
+
+                            if (receiptProvider
+                                    .errorLoadProductsWithoutCadaster ==
+                                "") {
+                              await receiptProvider
+                                  .getProductWithoutCadaster(docCode);
+                            }
+                          });
+                    },
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                  ),
                 ],
               ),
             ),

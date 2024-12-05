@@ -5,9 +5,11 @@ import '../../../../components/components.dart';
 class QuantityField extends StatelessWidget {
   final TextEditingController quantityController;
   final FocusNode quantityFocusNode;
+  final Future<void> Function() insertUpdateProduct;
   const QuantityField({
     required this.quantityController,
     required this.quantityFocusNode,
+    required this.insertUpdateProduct,
     super.key,
   });
 
@@ -32,8 +34,8 @@ class QuantityField extends StatelessWidget {
           ),
         ),
       ),
-      onFieldSubmitted: (_) {
-        //TODO save product
+      onFieldSubmitted: (_) async {
+        await insertUpdateProduct();
       },
       validator: (value) {
         return FormFieldValidations.number(value: value);

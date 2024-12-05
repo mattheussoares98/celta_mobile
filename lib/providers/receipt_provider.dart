@@ -508,9 +508,7 @@ class ReceiptProvider with ChangeNotifier {
 
       _errorInsertProductsWithoutCadaster = SoapRequestResponse.errorMessage;
 
-      if (_errorInsertProductsWithoutCadaster == "") {
-        //TODO treat return
-      } else {
+      if (_errorInsertProductsWithoutCadaster != "") {
         ShowSnackbarMessage.show(
           message: _errorInsertProductsWithoutCadaster,
           context: context,
@@ -526,6 +524,55 @@ class ReceiptProvider with ChangeNotifier {
     }
 
     _isLoadingInsertProductsWithoutCadaster = false;
+    notifyListeners();
+  }
+
+  Future<void> deleteProductWithoutCadaster({
+    required int grDocCode,
+    required int grDocProductWithoutCadasterCode,
+    required BuildContext context,
+  }) async {
+    _isLoadingProductsWithoutCadaster = true;
+    _errorLoadProductsWithoutCadaster = "";
+    notifyListeners();
+
+    try {
+      final parameters = {
+        "crossIdentity": UserData.crossIdentity,
+        "grDocCode": grDocCode,
+        "grDocProductWithoutCadasterCode": grDocProductWithoutCadasterCode,
+      };
+
+      await SoapRequest.soapPost(
+        parameters: parameters,
+        typeOfResponse: "DeleteProductWithoutCadasterResponse",
+        SOAPAction: "DeleteProductWithoutCadaster",
+        serviceASMX: "CeltaGoodsReceivingService.asmx",
+      );
+
+      _errorLoadProductsWithoutCadaster = SoapRequestResponse.errorMessage;
+      if (_errorLoadProductsWithoutCadaster != "") {
+        ShowSnackbarMessage.show(
+          message: _errorLoadProductsWithoutCadaster,
+          context: context,
+        );
+      } else {
+        ShowSnackbarMessage.show(
+          message: "Produto removido com sucesso",
+          context: context,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
+      }
+    } catch (e) {
+      //print("Erro para efetuar a requisição: $e");
+
+      ShowSnackbarMessage.show(
+        message: _errorLoadProductsWithoutCadaster,
+        context: context,
+      );
+    }
+
+    _isLoadingProductsWithoutCadaster = false;
     notifyListeners();
   }
 }

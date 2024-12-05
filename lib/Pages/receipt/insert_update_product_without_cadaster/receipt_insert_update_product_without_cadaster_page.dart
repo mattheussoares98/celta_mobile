@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 import 'insert_update_product_without_cadaster.dart';
 
 class ReceiptInsertProductWithoutCadasterPage extends StatefulWidget {
@@ -54,6 +55,41 @@ class _ReceiptInsertProductWithoutCadasterPageState
     quantityController.dispose();
   }
 
+  Future<void> insertUpdateProduct({
+    required ReceiptProvider receiptProvider,
+    required int docCode,
+    required ProductWithoutCadasterModel? product,
+    required bool isInserting,
+  }) async {
+    bool? isValid = formKey.currentState?.validate();
+
+    if (isValid != true) {
+      return;
+    }
+
+    await receiptProvider.insertUpdateProductWithoutCadaster(
+      grDocCode: docCode,
+      ean: eanController.text,
+      observations: observationsController.text,
+      quantity: quantityController.text.toDouble(),
+      context: context,
+      grDocProductWithoutCadasterCode:
+          product?.CodigoInterno_ProcRecebProNaoIden,
+    );
+
+    if (receiptProvider.errorInsertProductsWithoutCadaster == "") {
+      Navigator.of(context).pop();
+      ShowSnackbarMessage.show(
+        message: isInserting
+            ? "Produto inserido com sucesso"
+            : "Produto alterado com sucesso",
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      );
+      receiptProvider.getProductWithoutCadaster(docCode);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
@@ -70,9 +106,11 @@ class _ReceiptInsertProductWithoutCadasterPageState
           },
           child: Scaffold(
             appBar: AppBar(
-              title: const FittedBox(
+              title: FittedBox(
                 child: Text(
-                  "Inserir produto sem cadastro",
+                  isInserting
+                      ? "Inserir produto sem cadastro"
+                      : "Alterar produto sem cadastro",
                 ),
               ),
             ),
@@ -96,6 +134,14 @@ class _ReceiptInsertProductWithoutCadasterPageState
                     QuantityField(
                       quantityController: quantityController,
                       quantityFocusNode: quantityFocusNode,
+                      insertUpdateProduct: () async {
+                        await insertUpdateProduct(
+                          receiptProvider: receiptProvider,
+                          docCode: docCode,
+                          product: product,
+                          isInserting: isInserting,
+                        );
+                      },
                     ),
                     const SizedBox(height: 8),
                     InsertButton(
@@ -106,6 +152,14 @@ class _ReceiptInsertProductWithoutCadasterPageState
                       quantityController: quantityController,
                       isInserting: isInserting,
                       product: product,
+                      insertUpdateProduct: () async {
+                        await insertUpdateProduct(
+                          receiptProvider: receiptProvider,
+                          docCode: docCode,
+                          product: product,
+                          isInserting: isInserting,
+                        );
+                      },
                     ),
                   ],
                 ),
