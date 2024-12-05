@@ -24,32 +24,28 @@ class _ConsultProductWithoutEanButtonState
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
-    return Container(
-      width: double.infinity,
-      color: Theme.of(context).colorScheme.primary,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.white,
-        ),
-        onPressed: receiptProvider.isLoadingProducts ||
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+      ),
+      onPressed: receiptProvider.isLoadingProducts ||
+              receiptProvider.isLoadingUpdateQuantity
+          ? null
+          : () async {
+              await receiptProvider.getProducts(
+                docCode: widget.docCode,
+                context: context,
+                controllerText: "",
+                isSearchAllCountedProducts: true,
+                configurationsProvider: configurationsProvider,
+                enterprise: widget.enterprise,
+              );
+            },
+      child: Text(
+        receiptProvider.isLoadingProducts ||
                 receiptProvider.isLoadingUpdateQuantity
-            ? null
-            : () async {
-                await receiptProvider.getProducts(
-                  docCode: widget.docCode,
-                  context: context,
-                  controllerText: "",
-                  isSearchAllCountedProducts: true,
-                  configurationsProvider: configurationsProvider,
-                  enterprise: widget.enterprise,
-                );
-              },
-        child: Text(
-          receiptProvider.isLoadingProducts ||
-                  receiptProvider.isLoadingUpdateQuantity
-              ? "Aguarde o término da consulta/alteração"
-              : "Consultar todos produtos do recebimento",
-        ),
+            ? "Aguarde o término da consulta/alteração"
+            : "Consultar todos produtos do recebimento",
       ),
     );
   }

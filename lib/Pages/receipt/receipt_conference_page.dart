@@ -34,6 +34,7 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    int docCode = arguments["grDocCode"];
     final EnterpriseModel enterprise = arguments["enterprise"];
 
     return GestureDetector(
@@ -60,87 +61,94 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                   ),
                 ),
               ),
-              body: Stack(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SearchWidget(
-                        searchProductFocusNode:
-                            receiptProvider.consultProductFocusNode,
-                        isLoading: receiptProvider.isLoadingProducts ||
-                            receiptProvider.isLoadingUpdateQuantity,
-                        onPressSearch: () async {
-                          await receiptProvider.getProducts(
-                            configurationsProvider: configurationsProvider,
-                            docCode: arguments["grDocCode"],
-                            controllerText: _consultProductController.text,
-                            context: context,
-                            isSearchAllCountedProducts: false,
-                            enterprise: enterprise,
-                          );
+                  SearchWidget(
+                    searchProductFocusNode:
+                        receiptProvider.consultProductFocusNode,
+                    isLoading: receiptProvider.isLoadingProducts ||
+                        receiptProvider.isLoadingUpdateQuantity,
+                    onPressSearch: () async {
+                      await receiptProvider.getProducts(
+                        configurationsProvider: configurationsProvider,
+                        docCode: docCode,
+                        controllerText: _consultProductController.text,
+                        context: context,
+                        isSearchAllCountedProducts: false,
+                        enterprise: enterprise,
+                      );
 
-                          //não estava funcionando passar o productsCount como parâmetro
-                          //para o "SearchProductWithEanPluOrNameWidget" para apagar o
-                          //textEditingController após a consulta dos produtos se encontrar
-                          //algum produto
+                      //não estava funcionando passar o productsCount como parâmetro
+                      //para o "SearchProductWithEanPluOrNameWidget" para apagar o
+                      //textEditingController após a consulta dos produtos se encontrar
+                      //algum produto
+                      if (receiptProvider.productsCount > 0) {
+                        //se for maior que 0 significa que deu certo a consulta e
+                        //por isso pode apagar o que foi escrito no campo de
+                        //consulta
+                        _consultProductController.clear();
+                      }
+                    },
+                    searchProductController: _consultProductController,
+                  ),
+                  if (receiptProvider.errorMessageGetProducts != "" &&
+                      receiptProvider.productsCount == 0)
+                    Expanded(
+                      child: Center(
+                        child: ErrorMessage(
+                          errorMessage: receiptProvider.errorMessageGetProducts,
+                        ),
+                      ),
+                    ),
+                  if (receiptProvider.errorMessageGetProducts == "")
+                    Expanded(
+                      child: ConferenceProductsItems(
+                        getProductsWithCamera: () async {
+                          FocusScope.of(context).unfocus();
+                          _consultProductController.clear();
+
+                          _consultProductController.text =
+                              await ScanBarCode.scanBarcode(context);
+
+                          if (_consultProductController.text != "") {
+                            await receiptProvider.getProducts(
+                              configurationsProvider: configurationsProvider,
+                              docCode: docCode,
+                              controllerText: _consultProductController.text,
+                              context: context,
+                              isSearchAllCountedProducts: false,
+                              enterprise: enterprise,
+                            );
+                          }
+
                           if (receiptProvider.productsCount > 0) {
-                            //se for maior que 0 significa que deu certo a consulta e
-                            //por isso pode apagar o que foi escrito no campo de
-                            //consulta
                             _consultProductController.clear();
                           }
                         },
-                        searchProductController: _consultProductController,
+                        docCode: docCode,
+                        consultedProductController: _consultedProductController,
+                        consultProductController: _consultProductController,
                       ),
-                      if (receiptProvider.errorMessageGetProducts != "" &&
-                          receiptProvider.productsCount == 0)
-                        Expanded(
-                          child: ErrorMessage(
-                            errorMessage:
-                                receiptProvider.errorMessageGetProducts,
-                          ),
-                        ),
-                      if (receiptProvider.errorMessageGetProducts == "" &&
-                          receiptProvider.productsCount > 0)
-                        ConferenceProductsItems(
-                          getProductsWithCamera: () async {
-                            FocusScope.of(context).unfocus();
-                            _consultProductController.clear();
-
-                            _consultProductController.text =
-                                await ScanBarCode.scanBarcode(context);
-
-                            if (_consultProductController.text != "") {
-                              await receiptProvider.getProducts(
-                                configurationsProvider: configurationsProvider,
-                                docCode: arguments["grDocCode"],
-                                controllerText: _consultProductController.text,
-                                context: context,
-                                isSearchAllCountedProducts: false,
-                                enterprise: enterprise,
-                              );
-                            }
-
-                            if (receiptProvider.productsCount > 0) {
-                              _consultProductController.clear();
-                            }
-                          },
-                          docCode: arguments["grDocCode"],
-                          consultedProductController:
-                              _consultedProductController,
-                          consultProductController: _consultProductController,
-                        ),
-                    ],
-                  ),
+                    ),
                   if (MediaQuery.of(context).viewInsets.bottom == 0)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      left: 0,
-                      child: ConsultProductWithoutEanButton(
-                        docCode: arguments["grDocCode"],
-                        enterprise: enterprise,
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ConsultProductWithoutEanButton(
+                              docCode: docCode,
+                              enterprise: enterprise,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: ProductsWithoutCadasterButton(
+                              docCode: docCode,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                 ],

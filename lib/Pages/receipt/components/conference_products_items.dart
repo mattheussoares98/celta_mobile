@@ -29,7 +29,7 @@ class ConferenceProductsItems extends StatefulWidget {
 class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
   int _selectedIndex = -1;
 
-  updateQuantity({
+  Future<void> updateQuantity({
     required bool isSubtract,
     required int index,
     required ReceiptProvider receiptProvider,
@@ -69,7 +69,7 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
     }
   }
 
-  anullQuantity({
+  Future<void> anullQuantity({
     required int index,
     required ReceiptProvider receiptProvider,
     required ConfigurationsProvider configurationsProvider,
@@ -111,7 +111,7 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
     );
   }
 
-  changeFocusToConsultedProductFocusNode({
+  void changeFocusToConsultedProductFocusNode({
     required ReceiptProvider receiptProvider,
   }) {
     Future.delayed(const Duration(milliseconds: 300), () {
@@ -123,7 +123,7 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
     });
   }
 
-  selectIndexAndFocus({
+  void selectIndexAndFocus({
     required ReceiptProvider receiptProvider,
     required int index,
   }) {
@@ -189,230 +189,223 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
     ReceiptProvider receiptProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
 
-    return Expanded(
-      child: receiptProvider.productsCount <= 0
-          ? Container()
-          : ListView.builder(
-              itemCount: receiptProvider.productsCount,
-              itemBuilder: (context, index) {
-                if (!isChangedIndex && receiptProvider.productsCount == 1) {
-                  _selectedIndex = index;
-                  Future.delayed(const Duration(milliseconds: 100), () {
-                    //se não colocar em um future pra mudar o foco,
-                    //não funciona corretamente
-                    FocusScope.of(context).requestFocus(
-                      receiptProvider.consultedProductFocusNode,
-                    );
-                  });
-
-                  isChangedIndex = true;
-                }
-
-                final product = receiptProvider.products[index];
-
-                return InkWell(
-                  focusColor: Colors.white.withOpacity(0),
-                  hoverColor: Colors.white.withOpacity(0),
-                  splashColor: Colors.white.withOpacity(0),
-                  highlightColor: Colors.white.withOpacity(0),
-                  onTap: receiptProvider.isLoadingUpdateQuantity ||
-                          receiptProvider.isLoadingProducts
-                      ? null
-                      : () {
-                          selectIndexAndFocus(
-                            receiptProvider: receiptProvider,
-                            index: index,
-                          );
-                        },
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Nome",
-                            subtitle: product.Nome_Produto,
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "PLU",
-                            subtitle: product.CodigoPlu_ProEmb,
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Embalagem",
-                            subtitle: product.PackingQuantity,
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Quantidade contada",
-                            subtitle:
-                                product.Quantidade_ProcRecebDocProEmb == -1
-                                    ? "nula"
-                                    : ConvertString.convertToBrazilianNumber(
-                                        product.Quantidade_ProcRecebDocProEmb
-                                            .toString()),
-                            subtitleColor:
-                                Theme.of(context).colorScheme.primary,
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "Validade",
-                            subtitle:
-                                product.DataValidade_ProcRecebDocProEmb == ""
-                                    ? "Nenhuma"
-                                    : product.DataValidade_ProcRecebDocProEmb
-                                            .toString()
-                                        .replaceRange(10, null, ""),
-                            otherWidget: InkWell(
-                              focusColor: Colors.white.withOpacity(0),
-                              hoverColor: Colors.white.withOpacity(0),
-                              splashColor: Colors.white.withOpacity(0),
-                              highlightColor: Colors.white.withOpacity(0),
-                              onTap: receiptProvider.isLoadingUpdateQuantity ||
-                                      receiptProvider.isLoadingProducts
-                                  ? null
-                                  : () async {
-                                      DateTime? validityDate =
-                                          await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime.now().add(
-                                          const Duration(days: 3650),
-                                        ),
-                                        locale: const Locale('pt', 'BR'),
-                                      );
-
-                                      if (validityDate != null) {
-                                        setState(() {
-                                          product.DataValidade_ProcRecebDocProEmb =
-                                              validityDate.toIso8601String();
-                                        });
-                                      }
-                                    },
-                              child: receiptProvider.isLoadingUpdateQuantity
-                                  ? Row(
-                                      children: [
-                                        const Text("Alterando...  "),
-                                        Container(
-                                          child:
-                                              const CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: Colors.grey,
-                                          ),
-                                          height: 17,
-                                          width: 17,
-                                        ),
-                                      ],
-                                    )
-                                  : Text(
-                                      "Alterar validade",
-                                      style: TextStyle(
-                                        color: receiptProvider
-                                                    .isLoadingUpdateQuantity ||
-                                                receiptProvider
-                                                    .isLoadingProducts
-                                            ? Colors.black
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                        fontWeight: FontWeight.bold,
+    return receiptProvider.productsCount <= 0
+        ? Container()
+        : ListView.builder(
+            itemCount: receiptProvider.productsCount,
+            itemBuilder: (context, index) {
+              if (!isChangedIndex && receiptProvider.productsCount == 1) {
+                _selectedIndex = index;
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  //se não colocar em um future pra mudar o foco,
+                  //não funciona corretamente
+                  FocusScope.of(context).requestFocus(
+                    receiptProvider.consultedProductFocusNode,
+                  );
+                });
+        
+                isChangedIndex = true;
+              }
+        
+              final product = receiptProvider.products[index];
+        
+              return InkWell(
+                focusColor: Colors.white.withOpacity(0),
+                hoverColor: Colors.white.withOpacity(0),
+                splashColor: Colors.white.withOpacity(0),
+                highlightColor: Colors.white.withOpacity(0),
+                onTap: receiptProvider.isLoadingUpdateQuantity ||
+                        receiptProvider.isLoadingProducts
+                    ? null
+                    : () {
+                        selectIndexAndFocus(
+                          receiptProvider: receiptProvider,
+                          index: index,
+                        );
+                      },
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Nome",
+                          subtitle: product.Nome_Produto,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "PLU",
+                          subtitle: product.CodigoPlu_ProEmb,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Embalagem",
+                          subtitle: product.PackingQuantity,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Quantidade contada",
+                          subtitle: product.Quantidade_ProcRecebDocProEmb == -1
+                              ? "nula"
+                              : ConvertString.convertToBrazilianNumber(product
+                                  .Quantidade_ProcRecebDocProEmb.toString()),
+                          subtitleColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Validade",
+                          subtitle:
+                              product.DataValidade_ProcRecebDocProEmb == ""
+                                  ? "Nenhuma"
+                                  : product.DataValidade_ProcRecebDocProEmb
+                                          .toString()
+                                      .replaceRange(10, null, ""),
+                          otherWidget: InkWell(
+                            focusColor: Colors.white.withOpacity(0),
+                            hoverColor: Colors.white.withOpacity(0),
+                            splashColor: Colors.white.withOpacity(0),
+                            highlightColor: Colors.white.withOpacity(0),
+                            onTap: receiptProvider.isLoadingUpdateQuantity ||
+                                    receiptProvider.isLoadingProducts
+                                ? null
+                                : () async {
+                                    DateTime? validityDate =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime.now().add(
+                                        const Duration(days: 3650),
                                       ),
+                                      locale: const Locale('pt', 'BR'),
+                                    );
+        
+                                    if (validityDate != null) {
+                                      setState(() {
+                                        product.DataValidade_ProcRecebDocProEmb =
+                                            validityDate.toIso8601String();
+                                      });
+                                    }
+                                  },
+                            child: receiptProvider.isLoadingUpdateQuantity
+                                ? Row(
+                                    children: [
+                                      const Text("Alterando...  "),
+                                      Container(
+                                        child: const CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.grey,
+                                        ),
+                                        height: 17,
+                                        width: 17,
+                                      ),
+                                    ],
+                                  )
+                                : Text(
+                                    "Alterar validade",
+                                    style: TextStyle(
+                                      color: receiptProvider
+                                                  .isLoadingUpdateQuantity ||
+                                              receiptProvider.isLoadingProducts
+                                          ? Colors.black
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                            ),
+                                  ),
                           ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "EANs",
-                            subtitle: product.AllEans != ""
-                                ? product.AllEans
-                                : "Nenhum",
-                            otherWidget: Icon(
-                              _selectedIndex != index
-                                  ? Icons.arrow_drop_down_sharp
-                                  : Icons.arrow_drop_up_sharp,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 30,
-                            ),
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "EANs",
+                          subtitle: product.AllEans != ""
+                              ? product.AllEans
+                              : "Nenhum",
+                          otherWidget: Icon(
+                            _selectedIndex != index
+                                ? Icons.arrow_drop_down_sharp
+                                : Icons.arrow_drop_up_sharp,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 30,
                           ),
-                          if (_selectedIndex == index)
-                            //só aparece a quantidade contada se o usuário clicar
-                            //no produto para ele não saber quais produtos já
-                            //foram contados também só aparece a opção de inserir
-                            //a quantidade quando clica no produto
-                            Column(
-                              children: [
-                                const SizedBox(height: 10),
-                                AddSubtractOrAnullWidget(
-                                  onFieldSubmitted: () async {
-                                    await updateQuantity(
-                                      isSubtract: false,
-                                      index: index,
-                                      receiptProvider: receiptProvider,
-                                      quantityText: widget
-                                          .consultedProductController.text,
-                                      validityDate: product
-                                          .DataValidade_ProcRecebDocProEmb,
-                                      product: product,
-                                      configurationsProvider:
-                                          configurationsProvider,
-                                    );
-                                  },
-                                  addButtonText: "SOMAR E CONFIRMAR VALIDADE",
-                                  subtractButtonText:
-                                      "SUBTRAIR E\nCONFIRMAR\nVALIDADE",
-                                  consultedProductController:
-                                      widget.consultedProductController,
-                                  consultedProductFocusNode:
-                                      receiptProvider.consultedProductFocusNode,
-                                  isUpdatingQuantity:
-                                      receiptProvider.isLoadingUpdateQuantity,
-                                  isLoading:
-                                      receiptProvider.isLoadingUpdateQuantity ||
-                                          receiptProvider.isLoadingProducts,
-                                  addQuantityFunction: () async {
-                                    await updateQuantity(
-                                      isSubtract: false,
-                                      index: index,
-                                      receiptProvider: receiptProvider,
-                                      quantityText: widget
-                                          .consultedProductController.text,
-                                      validityDate: product
-                                          .DataValidade_ProcRecebDocProEmb,
-                                      product: product,
-                                      configurationsProvider:
-                                          configurationsProvider,
-                                    );
-                                  },
-                                  subtractQuantityFunction: () async {
-                                    await updateQuantity(
-                                      configurationsProvider:
-                                          configurationsProvider,
-                                      isSubtract: true,
-                                      index: index,
-                                      receiptProvider: receiptProvider,
-                                      quantityText: widget
-                                          .consultedProductController.text,
-                                      validityDate: product
-                                          .DataValidade_ProcRecebDocProEmb,
-                                      product: product,
-                                    );
-                                  },
-                                  anullFunction: () async {
-                                    await anullQuantity(
-                                      index: index,
-                                      receiptProvider: receiptProvider,
-                                      configurationsProvider:
-                                          configurationsProvider,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          const SizedBox(height: 5),
-                        ],
-                      ),
+                        ),
+                        if (_selectedIndex == index)
+                          //só aparece a quantidade contada se o usuário clicar
+                          //no produto para ele não saber quais produtos já
+                          //foram contados também só aparece a opção de inserir
+                          //a quantidade quando clica no produto
+                          Column(
+                            children: [
+                              const SizedBox(height: 10),
+                              AddSubtractOrAnullWidget(
+                                onFieldSubmitted: () async {
+                                  await updateQuantity(
+                                    isSubtract: false,
+                                    index: index,
+                                    receiptProvider: receiptProvider,
+                                    quantityText:
+                                        widget.consultedProductController.text,
+                                    validityDate:
+                                        product.DataValidade_ProcRecebDocProEmb,
+                                    product: product,
+                                    configurationsProvider:
+                                        configurationsProvider,
+                                  );
+                                },
+                                addButtonText: "SOMAR E CONFIRMAR VALIDADE",
+                                subtractButtonText:
+                                    "SUBTRAIR E\nCONFIRMAR\nVALIDADE",
+                                consultedProductController:
+                                    widget.consultedProductController,
+                                consultedProductFocusNode:
+                                    receiptProvider.consultedProductFocusNode,
+                                isUpdatingQuantity:
+                                    receiptProvider.isLoadingUpdateQuantity,
+                                isLoading:
+                                    receiptProvider.isLoadingUpdateQuantity ||
+                                        receiptProvider.isLoadingProducts,
+                                addQuantityFunction: () async {
+                                  await updateQuantity(
+                                    isSubtract: false,
+                                    index: index,
+                                    receiptProvider: receiptProvider,
+                                    quantityText:
+                                        widget.consultedProductController.text,
+                                    validityDate:
+                                        product.DataValidade_ProcRecebDocProEmb,
+                                    product: product,
+                                    configurationsProvider:
+                                        configurationsProvider,
+                                  );
+                                },
+                                subtractQuantityFunction: () async {
+                                  await updateQuantity(
+                                    configurationsProvider:
+                                        configurationsProvider,
+                                    isSubtract: true,
+                                    index: index,
+                                    receiptProvider: receiptProvider,
+                                    quantityText:
+                                        widget.consultedProductController.text,
+                                    validityDate:
+                                        product.DataValidade_ProcRecebDocProEmb,
+                                    product: product,
+                                  );
+                                },
+                                anullFunction: () async {
+                                  await anullQuantity(
+                                    index: index,
+                                    receiptProvider: receiptProvider,
+                                    configurationsProvider:
+                                        configurationsProvider,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        const SizedBox(height: 5),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
-    );
+                ),
+              );
+            },
+          );
   }
 }
