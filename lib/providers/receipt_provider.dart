@@ -4,6 +4,7 @@ import '../api/api.dart';
 import '../components/components.dart';
 import '../models/enterprise/enterprise.dart';
 import '../models/receipt/receipt.dart';
+import '../models/soap/soap.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -27,6 +28,10 @@ class ReceiptProvider with ChangeNotifier {
   List<ReceiptProductsModel> get products => _products;
   int get productsCount => _products.length;
   bool _isLoadingProducts = false;
+
+  List<ProductWithoutCadasterModel> _productsWithoutCadaster = [];
+  List<ProductWithoutCadasterModel> get productsWithoutCadaster =>
+      [..._productsWithoutCadaster];
 
   get isLoadingProducts => _isLoadingProducts;
   String _errorMessageGetProducts = "";
@@ -452,14 +457,17 @@ class ReceiptProvider with ChangeNotifier {
       );
 
       _errorLoadProductsWithoutCadaster = SoapRequestResponse.errorMessage;
-      SoapRequestResponse.responseAsString;
+      SoapRequestResponse.responseAsMap;
 
       if (_errorLoadProductsWithoutCadaster == "") {
-        //quando da certo a liberação, precisa consultar novamente os documentos pra atualizar o status corretamente
-        //TODO treat return
+        _productsWithoutCadaster = SoapRequestResponse
+            .responseAsMap["ProdutosSemCadastro"]
+            .map((e) => ProductWithoutCadasterModel.fromJson(e))
+            .toList()
+            .cast<ProductWithoutCadasterModel>();
       }
     } catch (e) {
-      //print("Erro para efetuar a requisição: $e");
+      // print("Erro para efetuar a requisição: $e");
     }
 
     _isLoadingProductsWithoutCadaster = false;

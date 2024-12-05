@@ -36,7 +36,7 @@ class QuantityField extends StatelessWidget {
         //TODO save product
       },
       validator: (value) {
-        return FormFieldValidations.number(value: value, maxDecimalPlaces: 2);
+        return FormFieldValidations.number(value: value);
       },
     );
   }

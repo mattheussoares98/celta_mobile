@@ -38,11 +38,24 @@ class _ReceiptProductsWithoutCadasterPageState
         Scaffold(
           appBar: AppBar(
             title: const FittedBox(child: Text("Produtos não encontrados")),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  await receiptProvider.getProductWithoutCadaster(docCode);
+                },
+                icon: const Icon(Icons.refresh),
+              ),
+            ],
           ),
           body: Column(
             children: [
+              Expanded(
+                child: ProductsItems(
+                  isInserting: true,
+                  docCode: docCode,
+                ),
+              ),
               InsertNotFoundProductButton(docCode: docCode),
-              const Expanded(child: Text("")),
             ],
           ),
         ),

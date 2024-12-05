@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../components/components.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 
@@ -10,12 +11,14 @@ class InsertButton extends StatelessWidget {
   final TextEditingController eanController;
   final TextEditingController observationsController;
   final TextEditingController quantityController;
+  final bool isInserting;
   const InsertButton({
     required this.formKey,
     required this.docCode,
     required this.eanController,
     required this.observationsController,
     required this.quantityController,
+    required this.isInserting,
     super.key,
   });
 
@@ -38,8 +41,18 @@ class InsertButton extends StatelessWidget {
           quantity: quantityController.text.toDouble(),
           context: context,
         );
+
+        if (receiptProvider.errorInsertProductsWithoutCadaster == "") {
+          Navigator.of(context).pop();
+          ShowSnackbarMessage.show(
+            message: "Produto inserido com sucesso",
+            context: context,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          );
+          receiptProvider.getProductWithoutCadaster(docCode);
+        }
       },
-      child: const Text("Inserir"),
+      child: Text(isInserting ? "Inserir" : "Alterar"),
     );
   }
 }
