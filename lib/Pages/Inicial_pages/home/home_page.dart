@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
 
           Gostaríamos de informá-lo sobre uma atualização importante em relação ao uso dos módulos (CeltaMobile) integrados ao nosso ERP. Com o objetivo de mantermos a qualidade e disponibilidade dos serviços oferecidos, passaremos a cobrar uma taxa para a utilização dos 12 módulos que compõem nosso App CELTA MOBILE, como inventário, alteração de preços, pedido de vendas, ajuste de estoque, entre outros.
 
-          A cobrança será efetivada a partir de 60 dias, com o valor de R\$ 20,00 por aplicativo ou a possibilidade de liberação de todos eles por R\$ 80,00 mensais. Esta medida é essencial para cobrir custos operacionais, como licenças para Google e Apple, bem como o serviço de nuvem onde nossas soluções operam.
+          A cobrança será efetivada a partir de janeiro de 2025, com o valor de R\$ 20,00 por módulo ou a possibilidade de liberação de todos eles por R\$ 80,00 mensais. Esta medida é essencial para cobrir custos operacionais, como licenças para Google e Apple, bem como o serviço de nuvem onde nossas soluções operam.
 
           Agradecemos pela compreensão e estamos à disposição para esclarecer quaisquer dúvidas. Trabalhamos para que você continue contando com nossos aplicativos e soluções de forma eficiente e com o melhor desempenho.
 
