@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/enterprise/enterprise.dart';
-import '../../../providers/providers.dart';
-import '../../../utils/utils.dart';
-import '../../../components/components.dart';
+import '../../../../models/enterprise/enterprise.dart';
+import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
+import '../../../../components/components.dart';
 
 class LiberateCheckButtons extends StatefulWidget {
   final int grDocCode;

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/components.dart';
-import '../../models/enterprise/enterprise.dart';
+import '../../../components/components.dart';
+import '../../../models/enterprise/enterprise.dart';
+import '../../../providers/providers.dart';
 import 'components/components.dart';
-import '../../providers/providers.dart';
 
-class ReceiptPage extends StatefulWidget {
-  const ReceiptPage({Key? key}) : super(key: key);
+class ReceiptsPage extends StatefulWidget {
+  const ReceiptsPage({Key? key}) : super(key: key);
 
   @override
-  State<ReceiptPage> createState() => _ReceiptPageState();
+  State<ReceiptsPage> createState() => _ReceiptsPageState();
 }
 
-class _ReceiptPageState extends State<ReceiptPage> {
+class _ReceiptsPageState extends State<ReceiptsPage> {
   bool isLoaded = false;
   @override
   void didChangeDependencies() {
@@ -45,19 +45,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                 'RECEBIMENTOS',
               ),
               actions: [
-                IconButton(
-                  onPressed: receiptProvider.isLoadingReceipt
-                      ? null
-                      : () async {
-                          await receiptProvider.getReceipt(
-                            enterpriseCode: enterprise.Code,
-                            context: context,
-                            isSearchingAgain: true,
-                          );
-                        },
-                  tooltip: "Consultar recebimentos",
-                  icon: const Icon(Icons.refresh),
-                ),
+                SearchReceiptButton(enterprise: enterprise),
               ],
             ),
             body: RefreshIndicator(
