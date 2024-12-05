@@ -20,12 +20,9 @@ class _ReceiptProductsWithoutCadasterPageState
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
-        int arguments = ModalRoute.of(context)!.settings.arguments as int;
+        int docCode = ModalRoute.of(context)!.settings.arguments as int;
         ReceiptProvider receiptProvider = Provider.of(context, listen: false);
-        await receiptProvider.getProductWithoutCadaster(
-          grDocCode: arguments,
-          context: context,
-        );
+        await receiptProvider.getProductWithoutCadaster(docCode);
       }
     });
   }
@@ -43,6 +40,7 @@ class _ReceiptProductsWithoutCadasterPageState
           body: const Center(
             child: Text(
               "Produtos não encontrados",
+              //TODO show not found products when the list is empty
             ),
           ),
         ),

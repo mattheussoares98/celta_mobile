@@ -425,10 +425,9 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getProductWithoutCadaster({
-    required int grDocCode,
-    required BuildContext context,
-  }) async {
+  Future<void> getProductWithoutCadaster(
+    int grDocCode,
+  ) async {
     _isLoadingProductsWithoutCadaster = true;
     _errorLoadProductsWithoutCadaster = "";
     notifyListeners();
@@ -449,6 +448,44 @@ class ReceiptProvider with ChangeNotifier {
 
       if (_errorLoadProductsWithoutCadaster == "") {
         //quando da certo a liberação, precisa consultar novamente os documentos pra atualizar o status corretamente
+        //TODO treat return
+      }
+    } catch (e) {
+      //print("Erro para efetuar a requisição: $e");
+    }
+
+    _isLoadingProductsWithoutCadaster = false;
+    notifyListeners();
+  }
+
+  Future<void> insertUpdateProductWithoutCadaster({
+    required int grDocCode,
+    required String ean,
+    required String? observations,
+    required double quantity,
+    required BuildContext context,
+  }) async {
+    _isLoadingProductsWithoutCadaster = true;
+    _errorLoadProductsWithoutCadaster = "";
+    notifyListeners();
+
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "grDocCode": grDocCode,
+          "ean": ean,
+          "observations": observations,
+          "quantity": quantity,
+        },
+        typeOfResponse: "InsertProductWithoutCadasterResponse",
+        SOAPAction: "InsertProductWithoutCadaster",
+        serviceASMX: "CeltaGoodsReceivingService.asmx",
+      );
+
+      _errorLoadProductsWithoutCadaster = SoapRequestResponse.errorMessage;
+
+      if (_errorLoadProductsWithoutCadaster == "") {
         //TODO treat return
       } else {
         ShowSnackbarMessage.show(
