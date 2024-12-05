@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/components.dart';
 import '../../providers/providers.dart';
 
 class ReceiptProductsWithoutCadasterPage extends StatefulWidget {
@@ -19,9 +20,10 @@ class _ReceiptProductsWithoutCadasterPageState
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
+        int arguments = ModalRoute.of(context)!.settings.arguments as int;
         ReceiptProvider receiptProvider = Provider.of(context, listen: false);
         await receiptProvider.getProductWithoutCadaster(
-          grDocCode: 1, //TODO obtain the code by arguments
+          grDocCode: arguments,
           context: context,
         );
       }
@@ -30,15 +32,22 @@ class _ReceiptProductsWithoutCadasterPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const FittedBox(child: Text("Produtos não encontrados")),
-      ),
-      body: const Center(
-        child: Text(
-          "Produtos não encontrador",
+    ReceiptProvider receiptProvider = Provider.of(context);
+
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: const FittedBox(child: Text("Produtos não encontrados")),
+          ),
+          body: const Center(
+            child: Text(
+              "Produtos não encontrados",
+            ),
+          ),
         ),
-      ),
+        loadingWidget(receiptProvider.isLoadingProductsWithoutCadaster),
+      ],
     );
   }
 }
