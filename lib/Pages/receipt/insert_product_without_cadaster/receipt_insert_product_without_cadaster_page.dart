@@ -33,8 +33,9 @@ class _ReceiptInsertProductWithoutCadasterPageState
 
   @override
   Widget build(BuildContext context) {
-    // ReceiptProvider receiptProvider = Provider.of(context);
-    // Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final docCode = arguments["docCode"];
+    // final isInserting = arguments["isInserting"];
 
     return GestureDetector(
       onTap: () {
@@ -48,9 +49,6 @@ class _ReceiptInsertProductWithoutCadasterPageState
             ),
           ),
         ),
-        // required String ean,
-        // required String? observations,
-        // required double quantity,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -71,6 +69,14 @@ class _ReceiptInsertProductWithoutCadasterPageState
                 QuantityField(
                   quantityController: quantityController,
                   quantityFocusNode: quantityFocusNode,
+                ),
+                const SizedBox(height: 8),
+                InsertButton(
+                  formKey: formKey,
+                  docCode: docCode,
+                  eanController: eanController,
+                  observationsController: observationsController,
+                  quantityController: quantityController,
                 ),
               ],
             ),

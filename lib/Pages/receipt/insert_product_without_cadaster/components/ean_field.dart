@@ -45,7 +45,15 @@ class EanField extends StatelessWidget {
         observationsFocusNode.requestFocus();
       },
       validator: (value) {
-        return FormFieldValidations.number(value: value);
+        if (value == null || value.isEmpty) {
+          return "Digite o EAN!";
+        } else if (value.length < 4) {
+          return "EAN inválido";
+        } else if (int.tryParse(value) == null) {
+          return "EAN inválido";
+        } else {
+          return null;
+        }
       },
     );
   }

@@ -43,6 +43,13 @@ class ReceiptProvider with ChangeNotifier {
   String get errorLoadProductsWithoutCadaster =>
       _errorLoadProductsWithoutCadaster;
 
+  bool _isLoadingInsertProductsWithoutCadaster = false;
+  bool get isLoadingInsertProductsWithoutCadaster =>
+      _isLoadingInsertProductsWithoutCadaster;
+  String _errorInsertProductsWithoutCadaster = "";
+  String get errorInsertProductsWithoutCadaster =>
+      _errorInsertProductsWithoutCadaster;
+
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
@@ -465,8 +472,8 @@ class ReceiptProvider with ChangeNotifier {
     required double quantity,
     required BuildContext context,
   }) async {
-    _isLoadingProductsWithoutCadaster = true;
-    _errorLoadProductsWithoutCadaster = "";
+    _isLoadingInsertProductsWithoutCadaster = true;
+    _errorInsertProductsWithoutCadaster = "";
     notifyListeners();
 
     try {
@@ -483,26 +490,26 @@ class ReceiptProvider with ChangeNotifier {
         serviceASMX: "CeltaGoodsReceivingService.asmx",
       );
 
-      _errorLoadProductsWithoutCadaster = SoapRequestResponse.errorMessage;
+      _errorInsertProductsWithoutCadaster = SoapRequestResponse.errorMessage;
 
-      if (_errorLoadProductsWithoutCadaster == "") {
+      if (_errorInsertProductsWithoutCadaster == "") {
         //TODO treat return
       } else {
         ShowSnackbarMessage.show(
-          message: _errorLoadProductsWithoutCadaster,
+          message: _errorInsertProductsWithoutCadaster,
           context: context,
         );
       }
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");
-      _errorLoadProductsWithoutCadaster = DefaultErrorMessage.ERROR;
+      _errorInsertProductsWithoutCadaster = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
-        message: _errorLoadProductsWithoutCadaster,
+        message: _errorInsertProductsWithoutCadaster,
         context: context,
       );
     }
 
-    _isLoadingProductsWithoutCadaster = false;
+    _isLoadingInsertProductsWithoutCadaster = false;
     notifyListeners();
   }
 }
