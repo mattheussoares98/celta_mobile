@@ -36,10 +36,17 @@ class ReceiptProvider with ChangeNotifier {
 
   get errorMessageUpdateQuantity => _errorMessageUpdateQuantity;
 
+  bool _isLoadingProductsWithoutCadaster = false;
+  bool get isLoadingProductsWithoutCadaster =>
+      _isLoadingProductsWithoutCadaster;
+  String _errorLoadProductsWithoutCadaster = "";
+  String get errorLoadProductsWithoutCadaster =>
+      _errorLoadProductsWithoutCadaster;
+
   var consultProductFocusNode = FocusNode();
   var consultedProductFocusNode = FocusNode();
 
-  clearProducts() {
+  void clearProducts() {
     _products = [];
     notifyListeners();
   }
@@ -74,7 +81,7 @@ class ReceiptProvider with ChangeNotifier {
   bool _isLoadingUpdateQuantity = false;
 
   get isLoadingUpdateQuantity => _isLoadingUpdateQuantity;
-  updateQuantity({
+  Future<void> updateQuantity({
     required int docCode,
     required int productgCode,
     required int productPackingCode,
@@ -174,7 +181,7 @@ class ReceiptProvider with ChangeNotifier {
     }
   }
 
-  anullQuantity({
+  Future<void> anullQuantity({
     required int docCode,
     required int productgCode,
     required int productPackingCode,
@@ -338,7 +345,7 @@ class ReceiptProvider with ChangeNotifier {
     }
   }
 
-  _treatStatusMessageAndColor() {
+  void _treatStatusMessageAndColor() {
     _receipts.forEach((element) {
       if (element.Status == "1") {
         element.Status = "Utilizado por uma entrada(Finalizado)";
@@ -364,7 +371,7 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  liberate({
+  Future<void> liberate({
     required int grDocCode,
     required int index,
     required BuildContext context,
@@ -415,6 +422,50 @@ class ReceiptProvider with ChangeNotifier {
     }
 
     _isLoadingLiberateCheck = false;
+    notifyListeners();
+  }
+
+  Future<void> getProductWithoutCadaster({
+    required int grDocCode,
+    required BuildContext context,
+  }) async {
+    _isLoadingProductsWithoutCadaster = true;
+    _errorLoadProductsWithoutCadaster = "";
+    notifyListeners();
+
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "grDocCode": grDocCode,
+        },
+        typeOfResponse: "GetProductProductWithoutCadasterResponse",
+        SOAPAction: "GetProductProductWithoutCadaster",
+        serviceASMX: "CeltaGoodsReceivingService.asmx",
+        typeOfResult: "GetProductProductWithoutCadasterResult",
+      );
+
+      _errorLoadProductsWithoutCadaster = SoapRequestResponse.errorMessage;
+
+      if (_errorLoadProductsWithoutCadaster == "") {
+        //quando da certo a liberação, precisa consultar novamente os documentos pra atualizar o status corretamente
+        //TODO treat return
+      } else {
+        ShowSnackbarMessage.show(
+          message: _errorLoadProductsWithoutCadaster,
+          context: context,
+        );
+      }
+    } catch (e) {
+      //print("Erro para efetuar a requisição: $e");
+      _errorLoadProductsWithoutCadaster = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
+        message: _errorLoadProductsWithoutCadaster,
+        context: context,
+      );
+    }
+
+    _isLoadingProductsWithoutCadaster = false;
     notifyListeners();
   }
 }
