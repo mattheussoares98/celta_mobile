@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/receipt/receipt.dart';
-import '../../../providers/providers.dart';
-import '../../../utils/utils.dart';
-import '../../../components/components.dart';
+import '../../../../models/receipt/receipt.dart';
+import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
+import '../../../../components/components.dart';
 
 class ConferenceProductsItems extends StatefulWidget {
   final int docCode;
@@ -203,12 +203,12 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
                     receiptProvider.consultedProductFocusNode,
                   );
                 });
-        
+
                 isChangedIndex = true;
               }
-        
+
               final product = receiptProvider.products[index];
-        
+
               return InkWell(
                 focusColor: Colors.white.withOpacity(0),
                 hoverColor: Colors.white.withOpacity(0),
@@ -275,7 +275,7 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
                                       ),
                                       locale: const Locale('pt', 'BR'),
                                     );
-        
+
                                     if (validityDate != null) {
                                       setState(() {
                                         product.DataValidade_ProcRecebDocProEmb =

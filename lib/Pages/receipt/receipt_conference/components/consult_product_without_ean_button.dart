@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/enterprise/enterprise.dart';
-import '../../../providers/providers.dart';
+import '../../../../models/enterprise/enterprise.dart';
+import '../../../../providers/providers.dart';
 
 class ConsultProductWithoutEanButton extends StatefulWidget {
   final int docCode;
