@@ -452,6 +452,7 @@ class ReceiptProvider with ChangeNotifier {
       );
 
       _errorLoadProductsWithoutCadaster = SoapRequestResponse.errorMessage;
+      SoapRequestResponse.responseAsString;
 
       if (_errorLoadProductsWithoutCadaster == "") {
         //quando da certo a liberação, precisa consultar novamente os documentos pra atualizar o status corretamente
