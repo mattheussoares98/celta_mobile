@@ -147,7 +147,7 @@ class _ResearchPricesConcurrentsPageState
                     concurrent: null,
                   );
                   Navigator.of(context).pushNamed(
-                      APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT);
+                      APPROUTES.RESERACH_PRICES_INSERT_UPDATE_CONCORRENT);
                 },
               ),
             ),

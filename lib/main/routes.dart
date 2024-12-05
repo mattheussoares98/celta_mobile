@@ -20,60 +20,59 @@ import '../pages/sale_request/sale_request.dart';
 import '../utils/utils.dart';
 
 Map<String, Widget Function(BuildContext)> routes() => {
+      APPROUTES.ADJUST_SALE_PRICE_PRODUCTS: (ctx) =>
+          const AdjustSalePriceProductsPage(),
+      APPROUTES.ADJUST_SALE_PRICE: (ctx) => const AdjustSalePricePage(),
+      APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
+      APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
+      APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
+      APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
+      APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
+      APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
       APPROUTES.EVALUATION_AND_SUGGESTIONS: (ctx) =>
           const EvaluationAndSuggestionsPage(),
-      APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
-      APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
-      APPROUTES.INVENTORY: (ctx) => const InventoryPage(),
-      APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
-      APPROUTES.INVENTORY_PRODUCTS: (ctx) => const InventoryProductsPage(),
-      APPROUTES.SPLASHPAGE: (ctx) => SplashPage(),
-      APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
-      APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
-      APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
-      APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
-      APPROUTES.ENTERPRISE: (ctx) => const EnterprisePage(),
       APPROUTES.EXPEDITION_CONFERENCE_PRODUCTS: (ctx) =>
           const ExpeditionConferenceProductsPage(),
       APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE: (ctx) =>
           const ExpeditionConferenceControlsToConferencePage(),
-      APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
+      APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
+      APPROUTES.INVENTORY: (ctx) => const InventoryPage(),
+      APPROUTES.INVENTORY_PRODUCTS: (ctx) => const InventoryProductsPage(),
+      APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
+      APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
+      APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
+      APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
+      APPROUTES.RECEIPT: (ctx) => const ReceiptPage(),
+      APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
+      APPROUTES.RECEIPT_INSERT_PRODUCT_WITHOUT_CADASTER: (ctx) => const ReceiptInsertProductWithoutCadasterPage(),
+      APPROUTES.RECEIPT_PRODUCTS_WITHOUT_CADASTER: (ctx) =>
+          const ReceiptProductsWithoutCadasterPage(),
+      APPROUTES.RESEARCH_PRICES: (ctx) => const ResearchPricesPage(),
+      APPROUTES.RESEARCH_PRICES_CONCURRENTS: (ctx) =>
+          const ResearchPricesConcurrentsPage(),
+      APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
+          const ResearchPricesProductsPage(),
+      APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE: (ctx) =>
+          const ResearchPricesInsertOrUpdateResearchPrice(),
+      APPROUTES.RESERACH_PRICES_INSERT_UPDATE_CONCORRENT: (ctx) =>
+          const ResearchPricesInsertOrUpdateConcurrentPage(),
       APPROUTES.SALE_REQUEST: (ctx) => const SaleRequestPage(),
       APPROUTES.SALE_REQUEST_MODEL: (ctx) => const RequestsPage(),
       APPROUTES.SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL: (ctx) =>
           const ManualDefaultRequestModelPage(),
-      APPROUTES.TRANSFER_REQUEST_MODEL: (ctx) => const RequestsModelPage(),
-      APPROUTES.TRANSFER_ORIGIN_ENTERPRISE: (ctx) =>
-          const OriginEnterprisePage(),
-      APPROUTES.TRANSFER_DESTINY_ENTERPRISE: (ctx) =>
-          const DestinyEnterprisePage(),
+      APPROUTES.SPLASHPAGE: (ctx) => SplashPage(),
+      APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
       APPROUTES.TRANSFER: (ctx) => const TransferPage(),
       APPROUTES.TRANSFER_BETWEEN_STOCK: (ctx) =>
           const TransferBetweenStockPage(),
-      // APPROUTES.TRANSFER_BETWEEN_PACKAGE: (ctx) =>
-      //     const TransferBetweenPackagePage(),
-      APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
-      APPROUTES.TECHNICAL_SUPPORT: (ctx) => const TechnicalSupportPage(),
-      APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
-      APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
-      APPROUTES.RESEARCH_PRICES: (ctx) => const ResearchPricesPage(),
-      APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE: (ctx) =>
-          const ResearchPricesInsertOrUpdateResearchPrice(),
-      APPROUTES.RESEARCH_PRICES_CONCURRENTS: (ctx) =>
-          const ResearchPricesConcurrentsPage(),
-      APPROUTES.RESERACH_PRICE_INSERT_UPDATE_CONCORRENT: (ctx) =>
-          const ResearchPricesInsertOrUpdateConcurrentPage(),
-      APPROUTES.RESEARCH_PRICES_INSERT_PRICE: (ctx) =>
-          const ResearchPricesProductsPage(),
-      APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
-      APPROUTES.WEB_LOGIN: (ctx) => const WebLoginPage(),
-      APPROUTES.WEB_HOME: (ctx) => const WebHomePage(),
+      APPROUTES.TRANSFER_DESTINY_ENTERPRISE: (ctx) =>
+          const DestinyEnterprisePage(),
+      APPROUTES.TRANSFER_ORIGIN_ENTERPRISE: (ctx) =>
+          const OriginEnterprisePage(),
+      APPROUTES.TRANSFER_REQUEST_MODEL: (ctx) => const RequestsModelPage(),
       APPROUTES.WEB_ENTERPRISE_DETAILS: (ctx) =>
           const WebEnterpriseDetailsPage(),
+      APPROUTES.WEB_LOGIN: (ctx) => const WebLoginPage(),
+      APPROUTES.WEB_HOME: (ctx) => const WebHomePage(),
       APPROUTES.WEB_SOAP_DETAILS: (ctx) => const SoapDetailsPage(),
-      APPROUTES.ADJUST_SALE_PRICE_PRODUCTS: (ctx) =>
-          const AdjustSalePriceProductsPage(),
-      APPROUTES.ADJUST_SALE_PRICE: (ctx) => const AdjustSalePricePage(),
-      APPROUTES.RECEIPT_PRODUCTS_WITHOUT_CADASTER: (ctx) =>
-          const ReceiptProductsWithoutCadasterPage(),
     };
