@@ -11,10 +11,9 @@ import '../../utils/utils.dart';
 import 'components.dart';
 
 class SearchWidget extends StatefulWidget {
-  final bool isLoading;
   final Function()? onPressSearch;
   final TextEditingController searchProductController;
-  final FocusNode searchProductFocusNode;
+  final FocusNode searchFocusNode;
   final String hintText;
   final String labelText;
   final bool useCamera;
@@ -27,9 +26,8 @@ class SearchWidget extends StatefulWidget {
     this.useCamera = true,
     this.showConfigurationsIcon = true,
     required this.searchProductController,
-    required this.isLoading,
     required this.onPressSearch,
-    required this.searchProductFocusNode,
+    required this.searchFocusNode,
     this.hintText = "PLU-EAN-NOME-%-BALANÇA",
     this.labelText = "Consultar produto",
     Key? key,
@@ -71,7 +69,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    FocusNode focusNode = widget.searchProductFocusNode;
+    FocusNode focusNode = widget.searchFocusNode;
     ConfigurationsProvider configurationsProvider =
         Provider.of(context, listen: true);
     return Padding(
@@ -84,7 +82,6 @@ class _SearchWidgetState extends State<SearchWidget> {
               key: _formKey,
               child: TextFormField(
                 focusNode: focusNode,
-                enabled: !widget.isLoading,
                 autofocus: widget.autofocus,
                 controller: widget.searchProductController,
                 // focusNode: _consultedProductFocusNode,
@@ -102,23 +99,20 @@ class _SearchWidgetState extends State<SearchWidget> {
                   }
                 },
                 decoration: FormFieldDecoration.decoration(
-                  isLoading: widget.isLoading,
                   context: context,
                   labelText: widget.labelText,
                   prefixIcon: IconButton(
-                    onPressed: widget.isLoading
-                        ? null
-                        : () {
-                            widget.searchProductController.clear();
+                    onPressed: () {
+                      widget.searchProductController.clear();
 
-                            Future.delayed(const Duration(), () {
-                              FocusScope.of(context).unfocus();
-                              FocusScope.of(context).requestFocus(focusNode);
-                            });
-                          },
-                    icon: Icon(
+                      Future.delayed(const Duration(), () {
+                        FocusScope.of(context).unfocus();
+                        FocusScope.of(context).requestFocus(focusNode);
+                      });
+                    },
+                    icon: const Icon(
                       Icons.delete,
-                      color: widget.isLoading ? Colors.grey : Colors.red,
+                      color: Colors.red,
                     ),
                   ),
                   hintText: _getHintText(configurationsProvider),
@@ -130,18 +124,16 @@ class _SearchWidgetState extends State<SearchWidget> {
                       children: [
                         if (kIsWeb)
                           TextButton(
-                            onPressed: widget.isLoading
-                                ? null
-                                : () async {
-                                    ClipboardData? clipboardData =
-                                        await Clipboard.getData('text/plain');
-                                    widget.searchProductController.text =
-                                        clipboardData?.text ?? '';
+                            onPressed: () async {
+                              ClipboardData? clipboardData =
+                                  await Clipboard.getData('text/plain');
+                              widget.searchProductController.text =
+                                  clipboardData?.text ?? '';
 
-                                    if (widget.onPressSearch != null) {
-                                      await widget.onPressSearch!();
-                                    }
-                                  },
+                              if (widget.onPressSearch != null) {
+                                await widget.onPressSearch!();
+                              }
+                            },
                             child: const Text(
                               "colar\ntexto",
                               style: TextStyle(
@@ -155,23 +147,18 @@ class _SearchWidgetState extends State<SearchWidget> {
                             hoverColor: Colors.white.withOpacity(0),
                             splashColor: Colors.white.withOpacity(0),
                             highlightColor: Colors.white.withOpacity(0),
-                            onTap:
-                                widget.isLoading || widget.onPressSearch == null
-                                    ? null
-                                    : () async {
-                                        if (!isValid()) {
-                                          return;
-                                        }
-                                        FocusScope.of(context).unfocus();
+                            onTap: () async {
+                              if (!isValid()) {
+                                return;
+                              }
+                              FocusScope.of(context).unfocus();
 
-                                        await widget.onPressSearch!();
-                                      },
+                              await widget.onPressSearch!();
+                            },
                             child: Icon(
                               Icons.search,
                               size: 35,
-                              color: widget.isLoading
-                                  ? Colors.grey
-                                  : Theme.of(context).primaryColor,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
@@ -185,19 +172,15 @@ class _SearchWidgetState extends State<SearchWidget> {
                                 hoverColor: Colors.white.withOpacity(0),
                                 splashColor: Colors.white.withOpacity(0),
                                 highlightColor: Colors.white.withOpacity(0),
-                                onTap: widget.isLoading
-                                    ? null
-                                    : () async {
-                                        await _openCamera();
-                                      },
+                                onTap: () async {
+                                  await _openCamera();
+                                },
                                 child: Icon(
                                   configurationsProvider.autoScan?.value == true
                                       ? Icons.camera_alt
                                       : Icons.camera_alt_outlined,
                                   size: 40,
-                                  color: widget.isLoading
-                                      ? Colors.grey
-                                      : Theme.of(context).primaryColor,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ),
@@ -210,7 +193,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   if (!isValid()) {
                     Future.delayed(const Duration(), () {
                       FocusScope.of(context)
-                          .requestFocus(widget.searchProductFocusNode);
+                          .requestFocus(widget.searchFocusNode);
                     });
                     return;
                   }
@@ -229,7 +212,6 @@ class _SearchWidgetState extends State<SearchWidget> {
           ),
           if (widget.showConfigurationsIcon)
             _enableConfigurationsDialog(
-              isLoading: widget.isLoading,
               configurationsProvider: configurationsProvider,
               showOnlyConfigurationOfSearchProducts:
                   widget.showOnlyConfigurationOfSearchProducts,
@@ -240,60 +222,53 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   _enableConfigurationsDialog({
-    required bool isLoading,
     required ConfigurationsProvider configurationsProvider,
     required bool showOnlyConfigurationOfSearchProducts,
   }) {
     return IconButton(
       icon: Icon(
         Icons.settings,
-        color: widget.isLoading
-            ? Colors.grey
-            : Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.primary,
       ),
-      onPressed: isLoading
-          ? null
-          : () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return StatefulBuilder(
-                    builder: (context, setState) {
-                      return AlertDialog(
-                        insetPadding:
-                            const EdgeInsets.symmetric(horizontal: 10),
-                        contentPadding: const EdgeInsets.all(8),
-                        title: const FittedBox(
-                          child: Text(
-                            "Configurações de pesquisa",
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        content: SingleChildScrollView(
-                          primary: false,
-                          child: ConfigurationsCheckbox(
-                            showOnlyConfigurationOfSearch:
-                                showOnlyConfigurationOfSearchProducts,
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Fechar',
-                                textAlign: TextAlign.center),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              );
-            },
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return AlertDialog(
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  contentPadding: const EdgeInsets.all(8),
+                  title: const FittedBox(
+                    child: Text(
+                      "Configurações de pesquisa",
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  content: SingleChildScrollView(
+                    primary: false,
+                    child: ConfigurationsCheckbox(
+                      showOnlyConfigurationOfSearch:
+                          showOnlyConfigurationOfSearchProducts,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Fechar', textAlign: TextAlign.center),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

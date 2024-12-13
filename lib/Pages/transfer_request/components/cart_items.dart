@@ -248,8 +248,6 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                           Expanded(
                                             flex: 55,
                                             child: InsertQuantityTextFormField(
-                                              isLoading: transferRequestProvider
-                                                  .isLoadingSaveTransferRequest,
                                               lengthLimitingTextInputFormatter:
                                                   8,
                                               focusNode: _focusNode,

@@ -1,6 +1,6 @@
 export './adjust_stock_provider.dart';
 export './adjust_sale_price_provider.dart';
-export './buy_quotation.dart';
+export 'buy_quotation_provider.dart';
 export './buy_request_provider.dart';
 export './configurations_provider.dart';
 export './customer_register_provider.dart';

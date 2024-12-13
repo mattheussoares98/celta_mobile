@@ -49,7 +49,6 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
           children: [
             SearchWidget(
               searchProductController: _searchProductTextEditingController,
-              isLoading: saleRequestProvider.isLoadingProducts,
               autofocus: false,
               onPressSearch: () async {
                 _newQuantityController.clear();
@@ -66,7 +65,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                   _searchProductTextEditingController.clear();
                 }
               },
-              searchProductFocusNode: _searchProductFocusNode,
+              searchFocusNode: _searchProductFocusNode,
             ),
             if (saleRequestProvider.errorMessageProducts != "")
               ErrorMessage(

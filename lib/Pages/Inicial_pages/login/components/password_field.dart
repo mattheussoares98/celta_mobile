@@ -53,7 +53,6 @@ class _PasswordFieldState extends State<PasswordField> {
           return null;
         },
         decoration: FormFieldDecoration.decoration(
-          isLoading: loginProvider.isLoading,
           context: context,
           labelText: "Senha",
           suffixIcon: IconButton(

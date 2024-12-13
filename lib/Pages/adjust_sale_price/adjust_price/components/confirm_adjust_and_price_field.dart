@@ -101,7 +101,6 @@ class _PriceFieldAndConfirmAdjustButtonState
                     await confirmAdjust(adjustSalePriceProvider);
                   },
                   decoration: FormFieldDecoration.decoration(
-                    isLoading: adjustSalePriceProvider.isLoading,
                     context: context,
                     hintText: "Preço",
                     labelText: "Preço",

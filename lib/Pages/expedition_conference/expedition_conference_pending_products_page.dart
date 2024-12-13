@@ -94,9 +94,8 @@ class _ExpeditionConferencePendingProductsPageState
           useCamera: true,
           autofocus: true,
           showOnlyConfigurationOfSearchProducts: true,
-          searchProductFocusNode: searchProductFocusNode,
+          searchFocusNode: searchProductFocusNode,
           searchProductController: searchProductsController,
-          isLoading: expeditionConferenceProvider.isLoading,
           onPressSearch: expeditionConferenceProvider.pendingProducts.isEmpty
               ? null
               : () async {

@@ -107,7 +107,6 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                       return FormFieldValidations.number(value: value);
                     },
                     decoration: FormFieldDecoration.decoration(
-                      isLoading: false,
                       context: context,
                       labelText: 'Quantidade',
                     ),
@@ -127,7 +126,8 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                       }
                     },
                     style: FormFieldStyle.style(),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 5),

@@ -76,10 +76,6 @@ class _ResearchPricesConcurrentsPageState
                           autofocus: false,
                           searchProductController:
                               searchConcurrentControllerText,
-                          isLoading:
-                              researchPricesProvider.isLoadingGetConcurrents ||
-                                  researchPricesProvider
-                                      .isLoadingAddOrUpdateOfResearch,
                           onPressSearch: () async {
                             await _getConcurrents(
                               researchPricesProvider: researchPricesProvider,
@@ -88,7 +84,7 @@ class _ResearchPricesConcurrentsPageState
                           },
                           hintText: "Nome ou código",
                           labelText: "Nome ou código",
-                          searchProductFocusNode: focusNodeSearch,
+                          searchFocusNode: focusNodeSearch,
                           useCamera: false,
                           showConfigurationsIcon: false,
                         ),

@@ -220,8 +220,6 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                     children: [
                       SearchWidget(
                         searchProductController: _consultProductController,
-                        isLoading: inventoryProvider.isLoadingProducts ||
-                            inventoryProvider.isLoadingQuantity,
                         onPressSearch: () async {
                           await _searchProduct(
                             inventoryProvider: inventoryProvider,
@@ -234,7 +232,7 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
                             });
                           }
                         },
-                        searchProductFocusNode:
+                        searchFocusNode:
                             inventoryProvider.consultProductFocusNode,
                       ),
                       searchButtonAndIndividualSwitch(

@@ -131,8 +131,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                               .isLoadingAddOrUpdateConcurrents,
                           controller: _nameController,
                           decoration: FormFieldDecoration.decoration(
-                            isLoading: researchPricesProvider
-                                .isLoadingAddOrUpdateConcurrents,
                             context: context,
                             labelText: 'Nome',
                           ),
@@ -160,8 +158,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                               .isLoadingAddOrUpdateConcurrents,
                           controller: _observationController,
                           decoration: FormFieldDecoration.decoration(
-                            isLoading: researchPricesProvider
-                                .isLoadingAddOrUpdateConcurrents,
                             context: context,
                             labelText: 'Observação',
                           ),

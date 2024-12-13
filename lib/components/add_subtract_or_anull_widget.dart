@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'components.dart';
 
 class AddSubtractOrAnullWidget extends StatefulWidget {
-  final bool isLoading;
   final bool isUpdatingQuantity;
   final FocusNode consultedProductFocusNode;
   final TextEditingController consultedProductController;
@@ -20,7 +19,6 @@ class AddSubtractOrAnullWidget extends StatefulWidget {
     required this.addQuantityFunction,
     required this.subtractQuantityFunction,
     required this.anullFunction,
-    required this.isLoading,
     required this.consultedProductController,
     required this.consultedProductFocusNode,
     required this.subtractButtonText,
@@ -92,12 +90,9 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                   child: Container(
                     child: TextFormField(
                       // autofocus: true,
-                      onFieldSubmitted: widget.isLoading
-                          ? null
-                          : (value) async {
-                              await widget.onFieldSubmitted();
-                            },
-                      enabled: widget.isLoading ? false : true,
+                      onFieldSubmitted: (value) async {
+                        await widget.onFieldSubmitted();
+                      },
                       controller: widget.consultedProductController,
                       focusNode: widget.consultedProductFocusNode,
                       inputFormatters: [LengthLimitingTextInputFormatter(10)],
@@ -110,7 +105,6 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                         return FormFieldValidations.number(value: value);
                       },
                       decoration: FormFieldDecoration.decoration(
-                        isLoading: widget.isLoading,
                         context: context,
                         labelText: 'Quantidade',
                       ),
@@ -129,15 +123,13 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                       minimumSize: const Size(double.infinity, 50),
                       maximumSize: const Size(double.infinity, 50),
                     ),
-                    onPressed: widget.isLoading
-                        ? null
-                        : () async {
-                            await widget.anullFunction();
-                          },
-                    child: FittedBox(
+                    onPressed: () async {
+                      await widget.anullFunction();
+                    },
+                    child: const FittedBox(
                       child: Text(
-                        widget.isLoading ? "AGUARDE" : "ANULAR",
-                        style: const TextStyle(
+                        "ANULAR",
+                        style: TextStyle(
                           fontSize: 50,
                         ),
                       ),

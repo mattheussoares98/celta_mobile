@@ -4,7 +4,6 @@ class FormFieldDecoration {
   FormFieldDecoration._();
 
   static InputDecoration decoration({
-    required bool isLoading,
     required BuildContext context,
     String? labelText,
     double? hintSize = 12,
@@ -23,12 +22,12 @@ class FormFieldDecoration {
       ),
       labelStyle: TextStyle(
         fontSize: labelSize,
-        color: isLoading ? Colors.grey : Theme.of(context).primaryColor,
+        color: Theme.of(context).primaryColor,
         fontWeight: FontWeight.normal,
         fontStyle: FontStyle.italic,
       ),
       floatingLabelStyle: TextStyle(
-        color: isLoading ? Colors.grey : Theme.of(context).primaryColor,
+        color: Theme.of(context).primaryColor,
         fontWeight: FontWeight.normal,
         fontSize: floatingLabelSize,
       ),

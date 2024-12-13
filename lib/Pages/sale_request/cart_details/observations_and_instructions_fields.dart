@@ -20,7 +20,7 @@ class ObservationsAndInstructionsFields extends StatelessWidget {
           TextField(
             controller: observationsController,
             decoration: FormFieldDecoration.decoration(
-              isLoading: false,
+              
               context: context,
               labelText: "Observações do pedido",
               hintText: "Observações do pedido",
@@ -31,7 +31,7 @@ class ObservationsAndInstructionsFields extends StatelessWidget {
           TextField(
             controller: instructionsController,
             decoration: FormFieldDecoration.decoration(
-              isLoading: false,
+              
               context: context,
               labelText: "Instruções do pedido",
               hintText: "Instruções do pedido",

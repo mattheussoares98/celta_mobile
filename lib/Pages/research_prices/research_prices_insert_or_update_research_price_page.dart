@@ -131,8 +131,6 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                               .isLoadingAddOrUpdateOfResearch,
                           controller: researchNameController,
                           decoration: FormFieldDecoration.decoration(
-                            isLoading: researchPricesProvider
-                                .isLoadingAddOrUpdateOfResearch,
                             context: context,
                             labelText: 'Nome',
                           ),
@@ -160,8 +158,6 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
                               .isLoadingAddOrUpdateOfResearch,
                           controller: observationController,
                           decoration: FormFieldDecoration.decoration(
-                            isLoading: researchPricesProvider
-                                .isLoadingAddOrUpdateOfResearch,
                             context: context,
                             labelText: 'Observação',
                           ),

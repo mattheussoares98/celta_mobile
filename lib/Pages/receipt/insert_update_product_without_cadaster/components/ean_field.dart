@@ -18,7 +18,7 @@ class EanField extends StatelessWidget {
       controller: eanController,
       keyboardType: const TextInputType.numberWithOptions(),
       decoration: FormFieldDecoration.decoration(
-        isLoading: false,
+        
         context: context,
         hintText: "EAN",
         labelText: "EAN",

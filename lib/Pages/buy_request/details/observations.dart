@@ -37,7 +37,6 @@ class _ObservationsState extends State<Observations> {
           maxLines: null,
           maxLength: 1000,
           decoration: FormFieldDecoration.decoration(
-            isLoading: false,
             context: context,
             labelText: 'Observações',
           ),

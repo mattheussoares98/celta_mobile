@@ -54,7 +54,6 @@ class NameField extends StatelessWidget {
         },
         style: FormFieldStyle.style(),
         decoration: FormFieldDecoration.decoration(
-          isLoading: loginProvider.isLoading,
           context: context,
           labelText: "Usuário",
         ),

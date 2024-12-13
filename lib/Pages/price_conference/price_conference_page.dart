@@ -54,10 +54,8 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   SearchWidget(
-                    searchProductFocusNode:
+                    searchFocusNode:
                         priceConferenceProvider.consultProductFocusNode,
-                    isLoading: priceConferenceProvider.isLoading ||
-                        priceConferenceProvider.isSendingToPrint,
                     onPressSearch: () async {
                       await priceConferenceProvider.getProduct(
                         configurationsProvider: configurationsProvider,
@@ -105,8 +103,7 @@ class _PriceConferencePageState extends State<PriceConferencePage> {
                             showLastBuyEntrance: true,
                             componentAfterProductInformations:
                                 SendToPrintButton(
-                              internalEnterpriseCode:
-                                  enterprise.Code,
+                              internalEnterpriseCode: enterprise.Code,
                               index: index,
                               productPackingCode: product.productPackingCode!,
                               etiquetaPendente: product.pendantPrintLabel,

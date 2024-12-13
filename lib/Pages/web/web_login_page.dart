@@ -87,7 +87,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                         TextFormField(
                           controller: emailController,
                           decoration: FormFieldDecoration.decoration(
-                            isLoading: false,
+                            
                             context: context,
                           ),
                           validator: (value) {
@@ -109,7 +109,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                             await login();
                           },
                           decoration: FormFieldDecoration.decoration(
-                            isLoading: false,
+                            
                             context: context,
                           ),
                           validator: (value) {

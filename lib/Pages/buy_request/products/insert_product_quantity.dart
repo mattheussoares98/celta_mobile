@@ -98,7 +98,6 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                       );
                     },
                     decoration: FormFieldDecoration.decoration(
-                      isLoading: buyRequestProvider.isLoadingProducts,
                       context: context,
                       labelText: 'Quantidade',
                     ),
@@ -141,7 +140,7 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                       maxDecimalPlaces: 4,
                     ),
                     decoration: FormFieldDecoration.decoration(
-                      isLoading: false,
+                      
                       context: context,
                       labelText: 'Custo',
                     ),

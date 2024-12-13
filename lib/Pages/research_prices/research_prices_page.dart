@@ -81,10 +81,6 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                         Expanded(
                           child: SearchWidget(
                             searchProductController: searchController,
-                            isLoading: researchPricesProvider
-                                    .isLoadingResearchPrices ||
-                                researchPricesProvider
-                                    .isLoadingAddOrUpdateOfResearch,
                             onPressSearch: () async {
                               await _getResearchPrices(
                                 notityListenersFromUpdate: true,
@@ -94,7 +90,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                             },
                             hintText: "Nome ou código",
                             labelText: "Nome ou código",
-                            searchProductFocusNode: _focusNode,
+                            searchFocusNode: _focusNode,
                             useCamera: false,
                             showConfigurationsIcon: false,
                           ),

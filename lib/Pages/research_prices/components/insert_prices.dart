@@ -41,7 +41,7 @@ class _InsertPricesState extends State<InsertPrices> {
         key: key,
         controller: textEditingController,
         decoration: FormFieldDecoration.decoration(
-          isLoading: false,
+          
           context: context,
           labelText: label,
           hintText: label,

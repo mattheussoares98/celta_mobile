@@ -357,9 +357,6 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
                                     receiptProvider.consultedProductFocusNode,
                                 isUpdatingQuantity:
                                     receiptProvider.isLoadingUpdateQuantity,
-                                isLoading:
-                                    receiptProvider.isLoadingUpdateQuantity ||
-                                        receiptProvider.isLoadingProducts,
                                 addQuantityFunction: () async {
                                   await updateQuantity(
                                     isSubtract: false,

@@ -294,8 +294,6 @@ class ProductsItemsState extends State<ProductsItems> {
                             index: index,
                           );
                         },
-                        isLoading:
-                            inventoryProvider.isLoadingQuantity ? true : false,
                         consultedProductController:
                             widget.consultedProductController,
                         consultedProductFocusNode:

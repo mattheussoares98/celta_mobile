@@ -73,7 +73,6 @@ class _SuplliersState extends State<Suplliers> {
           useCamera: false,
           autofocus: false,
           searchProductController: searchValueController,
-          isLoading: buyRequestProvider.isLoadingSupplier,
           onPressSearch: () async {
             if (buyRequestProvider.enterprisesCount > 0) {
               ShowAlertDialog.show(
@@ -89,7 +88,7 @@ class _SuplliersState extends State<Suplliers> {
               await getSuppliers(buyRequestProvider);
             }
           },
-          searchProductFocusNode: focusNodeConsultProduct,
+          searchFocusNode: focusNodeConsultProduct,
         ),
         ListView.builder(
           shrinkWrap: true,

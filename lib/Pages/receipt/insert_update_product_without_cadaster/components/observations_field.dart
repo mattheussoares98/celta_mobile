@@ -22,7 +22,7 @@ class ObservationsField extends StatelessWidget {
         quantityFocusNode.requestFocus();
       },
       decoration: FormFieldDecoration.decoration(
-        isLoading: false,
+        
         context: context,
         hintText: "Observações",
         labelText: "Observações",

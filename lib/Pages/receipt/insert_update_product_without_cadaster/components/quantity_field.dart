@@ -20,7 +20,7 @@ class QuantityField extends StatelessWidget {
       focusNode: quantityFocusNode,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: FormFieldDecoration.decoration(
-        isLoading: false,
+        
         context: context,
         hintText: "Quantidade",
         labelText: "Quantidade",

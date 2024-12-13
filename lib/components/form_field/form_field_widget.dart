@@ -59,7 +59,6 @@ class FormFieldWidget extends StatelessWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         style: FormFieldStyle.style(),
         decoration: FormFieldDecoration.decoration(
-          isLoading: false,
           context: context,
           labelText: labelText,
           suffixIcon: suffixWidget != null ? suffixWidget : null,

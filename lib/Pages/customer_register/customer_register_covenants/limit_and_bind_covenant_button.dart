@@ -68,7 +68,7 @@ class _LimitAndBindCovenantButtonState
                   maxDecimalPlaces: 2,
                 ),
                 decoration: FormFieldDecoration.decoration(
-                  isLoading: false,
+                  
                   context: context,
                   hintText: "Limite R\$",
                   labelText: "Limite R\$",

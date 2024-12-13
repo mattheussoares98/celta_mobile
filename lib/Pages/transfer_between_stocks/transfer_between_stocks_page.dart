@@ -78,12 +78,8 @@ class _TransferBetweenStockPageState extends State<TransferBetweenStockPage> {
                     Column(
                       children: [
                         SearchWidget(
-                          searchProductFocusNode: transferBetweenStocksProvider
+                          searchFocusNode: transferBetweenStocksProvider
                               .consultProductFocusNode,
-                          isLoading:
-                              transferBetweenStocksProvider.isLoadingProducts ||
-                                  transferBetweenStocksProvider
-                                      .isLoadingAdjustStock,
                           onPressSearch: () async {
                             await transferBetweenStocksProvider.getProducts(
                               enterprise: enterprise,

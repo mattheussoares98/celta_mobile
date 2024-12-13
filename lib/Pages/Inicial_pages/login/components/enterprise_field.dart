@@ -45,7 +45,6 @@ class EnterpriseField extends StatelessWidget {
           return null;
         },
         decoration: FormFieldDecoration.decoration(
-          isLoading: loginProvider.isLoading,
           context: context,
           labelText: "Nome da empresa",
         ),

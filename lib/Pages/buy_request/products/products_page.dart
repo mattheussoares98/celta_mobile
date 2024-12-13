@@ -58,7 +58,6 @@ class _ProductsPageState extends State<ProductsPage> {
             autofocus: false,
             showConfigurationsIcon: true,
             searchProductController: consultProductController,
-            isLoading: buyRequestProvider.isLoadingProducts,
             onPressSearch: () async {
               await buyRequestProvider.getProducts(
                 configurationsProvider: configurationsProvider,
@@ -69,7 +68,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 consultProductController.text = "";
               }
             },
-            searchProductFocusNode: buyRequestProvider.focusNodeConsultProduct,
+            searchFocusNode: buyRequestProvider.focusNodeConsultProduct,
           ),
           if (buyRequestProvider.errorMessageGetProducts != "")
             ErrorMessage(

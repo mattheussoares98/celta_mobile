@@ -70,10 +70,8 @@ class _AdjustStockPageState extends State<AdjustStockPage> {
                     Column(
                       children: [
                         SearchWidget(
-                          searchProductFocusNode:
+                          searchFocusNode:
                               adjustStockProvider.consultProductFocusNode,
-                          isLoading: adjustStockProvider.isLoadingProducts ||
-                              adjustStockProvider.isLoadingAdjustStock,
                           onPressSearch: () async {
                             await adjustStockProvider.getProducts(
                               enterprise: enterprise,

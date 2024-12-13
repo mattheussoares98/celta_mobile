@@ -65,10 +65,8 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SearchWidget(
-                    searchProductFocusNode:
+                    searchFocusNode:
                         receiptProvider.consultProductFocusNode,
-                    isLoading: receiptProvider.isLoadingProducts ||
-                        receiptProvider.isLoadingUpdateQuantity,
                     onPressSearch: () async {
                       await receiptProvider.getProducts(
                         configurationsProvider: configurationsProvider,

@@ -50,9 +50,8 @@ class _AdjustSalePriceProductsPageState
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   SearchWidget(
-                    searchProductFocusNode: searchFocusNode,
+                    searchFocusNode: searchFocusNode,
                     showOnlyConfigurationOfSearchProducts: true,
-                    isLoading: false,
                     searchProductController: searchValueController,
                     onPressSearch: () async {
                       await adjustSalePriceProvider.getProducts(

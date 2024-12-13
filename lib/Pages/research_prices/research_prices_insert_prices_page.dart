@@ -139,7 +139,7 @@ class _ResearchPricesInsertPricesPageState
             showConfigurationsIcon: true,
             showOnlyConfigurationOfSearchProducts: true,
             searchProductController: widget.searchProductController,
-            isLoading: false,
+            
             autofocus: false,
             onPressSearch: () async {
               await _getProducts(
@@ -148,7 +148,7 @@ class _ResearchPricesInsertPricesPageState
                 configurationsProvider: configurationsProvider,
               );
             },
-            searchProductFocusNode: _searchFocus,
+            searchFocusNode: _searchFocus,
           ),
           if (widget.isAssociatedProducts)
             FilterAssociatedsProducts(

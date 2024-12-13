@@ -24,12 +24,10 @@ class InsertQuantity extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<InsertQuantity> createState() =>
-      _InsertQuantityState();
+  State<InsertQuantity> createState() => _InsertQuantityState();
 }
 
-class _InsertQuantityState
-    extends State<InsertQuantity> {
+class _InsertQuantityState extends State<InsertQuantity> {
   bool _isValid() {
     widget.dropDownFormKey.currentState!.validate();
     widget.insertQuantityFormKey.currentState!.validate();
@@ -127,19 +125,15 @@ class _InsertQuantityState
                       }
                     },
                     validator: (value) {
-          return FormFieldValidations.number(value: value);
-        },
+                      return FormFieldValidations.number(value: value);
+                    },
                     decoration: FormFieldDecoration.decoration(
-                      isLoading: transferBetweenStocksProvider
-                              .isLoadingProducts ||
-                          transferBetweenStocksProvider
-                              .isLoadingTypeStockAndJustifications ||
-                          transferBetweenStocksProvider.isLoadingAdjustStock,
                       context: context,
                       labelText: "Quantidade",
                     ),
                     style: FormFieldStyle.style(),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 5),
