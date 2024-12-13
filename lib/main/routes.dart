@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../pages/buy_quotation/buy_quotation.dart';
 import '../pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
 import '../pages/expedition_conference/expedition_conference.dart';
 import '../pages/adjust_sale_price/adjust_sale_price.dart';
@@ -25,6 +26,7 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.ADJUST_SALE_PRICE: (ctx) => const AdjustSalePricePage(),
       APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
       APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
+      APPROUTES.BUY_QUOTATION: (ctx) => const BuyQuotationPage(),
       APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
       APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
       APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
@@ -44,7 +46,8 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),
       APPROUTES.RECEIPT: (ctx) => const ReceiptsPage(),
       APPROUTES.RECEIPT_CONFERENCE: (ctx) => const ReceiptConferencePage(),
-      APPROUTES.RECEIPT_INSERT_PRODUCT_WITHOUT_CADASTER: (ctx) => const ReceiptInsertProductWithoutCadasterPage(),
+      APPROUTES.RECEIPT_INSERT_PRODUCT_WITHOUT_CADASTER: (ctx) =>
+          const ReceiptInsertProductWithoutCadasterPage(),
       APPROUTES.RECEIPT_PRODUCTS_WITHOUT_CADASTER: (ctx) =>
           const ReceiptProductsWithoutCadasterPage(),
       APPROUTES.RESEARCH_PRICES: (ctx) => const ResearchPricesPage(),
