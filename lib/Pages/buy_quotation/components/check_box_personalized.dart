@@ -16,8 +16,9 @@ class CheckBoxPersonalized extends StatelessWidget {
     return InkWell(
       onTap: updateEnabled,
       child: Container(
+        padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
-          border: Border.all(),
+          border: Border.all(color: Colors.grey, width: 1),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Row(

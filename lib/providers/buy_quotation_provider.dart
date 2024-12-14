@@ -30,15 +30,15 @@ class BuyQuotationProvider with ChangeNotifier {
     required BuildContext context,
     required String valueToSearch,
     required bool searchByPersonalizedCode,
-    required DateTime initialDateOfCreation,
-    required DateTime finalDateOfCreation,
-    required DateTime initialDateOfLimit,
-    required DateTime finalDateOfLimit,
+    required DateTime? initialDateOfCreation,
+    required DateTime? finalDateOfCreation,
+    required DateTime? initialDateOfLimit,
+    required DateTime? finalDateOfLimit,
+    required int enterpriseCode,
     int? productCode,
     int? productPackingCode,
     int? supplierCode,
     int? buyerCode,
-    int? enterpriseCode,
     bool? inclusiveExpired,
   }) async {
     _isLoading = true;
@@ -48,14 +48,14 @@ class BuyQuotationProvider with ChangeNotifier {
       final filters = {
         "CrossIdentity": UserData.crossIdentity,
         "Complete": false,
-        "Data": valueToSearch,
+        "Data": valueToSearch.isEmpty ? "%" : valueToSearch,
         "DataType": searchByPersonalizedCode
             ? 2 // 2-Codigo personalizado
             : 1, //1-Codigo
-        "InitialDateOfCreation": initialDateOfCreation.toIso8601String(),
-        "FinalDateOfCreation": finalDateOfCreation.toIso8601String(),
-        "InitialDateOfLimit": initialDateOfLimit.toIso8601String(),
-        "FinalDateOfLimit": finalDateOfLimit.toIso8601String(),
+        "InitialDateOfCreation": initialDateOfCreation?.toIso8601String(),
+        "FinalDateOfCreation": finalDateOfCreation?.toIso8601String(),
+        "InitialDateOfLimit": initialDateOfLimit?.toIso8601String(),
+        "FinalDateOfLimit": finalDateOfLimit?.toIso8601String(),
         "ProductCode": productCode,
         "ProductPackingCode": productPackingCode,
         "SupplierCode": supplierCode,
@@ -72,6 +72,17 @@ class BuyQuotationProvider with ChangeNotifier {
         serviceASMX: "CeltaBuyRequestService.asmx",
         typeOfResult: "GetBuyQuotationJsonResult",
       );
+
+      _errorMessage = SoapRequestResponse.errorMessage;
+
+      if (_errorMessage != "") {
+        ShowSnackbarMessage.show(
+          message: _errorMessage,
+          context: context,
+        );
+      }
+      SoapRequestResponse.responseAsMap;
+      SoapRequestResponse.responseAsString;
     } catch (e) {
       debugPrint(e.toString());
       _errorMessage = DefaultErrorMessage.ERROR;

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/enterprise/enterprise.dart';
+import '../../providers/providers.dart';
 import 'components/components.dart';
 
 class BuyQuotationPage extends StatefulWidget {
@@ -13,12 +16,13 @@ class BuyQuotationPage extends StatefulWidget {
 class _BuyQuotationPageState extends State<BuyQuotationPage> {
   final searchController = TextEditingController();
   final searchFocusNode = FocusNode();
-  bool? searchByPersonalizedCode;
-  bool? searchByCode;
+  bool searchByPersonalizedCode = false;
+  bool? searchByCode = true;
   DateTime? initialDateOfCreation;
   DateTime? finalDateOfCreation;
   DateTime? initialDateOfLimit;
   DateTime? finalDateOfLimit;
+  bool inclusiveExpired = false;
 
   @override
   void dispose() {
@@ -55,83 +59,129 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Consulta de cotações"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchWidget(
-              searchProductController: searchController,
-              onPressSearch: () {},
-              searchFocusNode: searchFocusNode,
-              hintText:
-                  searchByCode == true ? "Código" : "Código personalizado",
-              labelText:
-                  searchByCode == true ? "Código" : "Código personalizado",
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: CheckBoxPersonalized(
-                    enabled: searchByCode == true,
-                    searchType: "Código",
-                    updateEnabled: updateSearchByCode,
+    BuyQuotationProvider buyQuotationProvider = Provider.of(context);
+    EnterpriseModel enterprise =
+        ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
+
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: const FittedBox(child: Text("Consulta de cotações")),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SearchWidget(
+                    searchProductController: searchController,
+                    onPressSearch: () {},
+                    searchFocusNode: searchFocusNode,
+                    hintText: searchByCode == true
+                        ? "Código"
+                        : "Código personalizado",
+                    labelText: searchByCode == true
+                        ? "Código"
+                        : "Código personalizado",
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: CheckBoxPersonalized(
-                    enabled: searchByPersonalizedCode == true,
-                    searchType: "Código personalizado",
-                    updateEnabled: updateSearchByPersonalizedCode,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CheckBoxPersonalized(
+                          enabled: searchByCode == true,
+                          searchType: "Código",
+                          updateEnabled: updateSearchByCode,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CheckBoxPersonalized(
+                          enabled: searchByPersonalizedCode == true,
+                          searchType: "Código personalizado",
+                          updateEnabled: updateSearchByPersonalizedCode,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  DateFilters(
+                    initialDateOfCreation: initialDateOfCreation,
+                    finalDateOfCreation: finalDateOfCreation,
+                    initialDateOfLimit: initialDateOfLimit,
+                    finalDateOfLimit: finalDateOfLimit,
+                    callSetState: () {
+                      setState(() {});
+                    },
+                    updateInitialDateOfCreation: (DateTime? date) {
+                      if (date != null) {
+                        initialDateOfCreation = date;
+                      } else {
+                        initialDateOfCreation = null;
+                      }
+                    },
+                    updateFinalDateOfCreation: (DateTime? date) {
+                      if (date != null) {
+                        finalDateOfCreation = date;
+                      } else {
+                        finalDateOfCreation = null;
+                      }
+                    },
+                    updateInitialDateOfLimit: (DateTime? date) {
+                      if (date != null) {
+                        initialDateOfLimit = date;
+                      } else {
+                        initialDateOfLimit = null;
+                      }
+                    },
+                    updateFinalDateOfLimit: (DateTime? date) {
+                      if (date != null) {
+                        finalDateOfLimit = date;
+                      } else {
+                        finalDateOfLimit = null;
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  InclusiveExpiredCheckbox(
+                    inclusiveExpired: inclusiveExpired,
+                    updateInclusiveExpired: () {
+                      setState(() {
+                        inclusiveExpired = !inclusiveExpired;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text("Filtrar produto"),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await buyQuotationProvider.getBuyQuotation(
+                        context: context,
+                        valueToSearch: searchController.text,
+                        searchByPersonalizedCode: searchByPersonalizedCode,
+                        initialDateOfCreation: initialDateOfCreation,
+                        finalDateOfCreation: finalDateOfCreation,
+                        initialDateOfLimit: initialDateOfLimit,
+                        finalDateOfLimit: finalDateOfLimit,
+                        enterpriseCode: enterprise.Code,
+                      );
+                    },
+                    child: const Text(
+                      "Pesquisar",
+                    ),
+                  ),
+                ],
+              ),
             ),
-            DateFilters(
-              initialDateOfCreation: initialDateOfCreation,
-              finalDateOfCreation: finalDateOfCreation,
-              initialDateOfLimit: initialDateOfLimit,
-              finalDateOfLimit: finalDateOfLimit,
-              callSetState: () {
-                setState(() {});
-              },
-              updateInitialDateOfCreation: (DateTime? date) {
-                if (date != null) {
-                  initialDateOfCreation = date;
-                } else {
-                  initialDateOfCreation = null;
-                }
-              },
-              updateFinalDateOfCreation: (DateTime? date) {
-                if (date != null) {
-                  finalDateOfCreation = date;
-                } else {
-                  finalDateOfCreation = null;
-                }
-              },
-              updateInitialDateOfLimit: (DateTime? date) {
-                if (date != null) {
-                  initialDateOfLimit = date;
-                } else {
-                  initialDateOfLimit = null;
-                }
-              },
-              updateFinalDateOfLimit: (DateTime? date) {
-                if (date != null) {
-                  finalDateOfLimit = date;
-                } else {
-                  finalDateOfLimit = null;
-                }
-              },
-            ),
-          ],
+          ),
         ),
-      ),
+        loadingWidget(buyQuotationProvider.isLoading),
+      ],
     );
   }
 }

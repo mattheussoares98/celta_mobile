@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../components/components.dart';
 
@@ -62,46 +63,60 @@ class DateFilters extends StatelessWidget {
     );
   }
 
-  TextButton datePickerButton({
+  Widget datePickerButton({
     required BuildContext context,
     required void Function(DateTime? date) updateDate,
     required String name,
     required DateTime? date,
     required void Function() callSetState,
   }) =>
-      TextButton.icon(
-        onPressed: () async {
-          final date = await GetNewDate.get(context: context);
-          updateDate(date);
-          callSetState();
-        },
-        label: Row(
-          children: [
-            Text(name, textAlign: TextAlign.start),
-            if (date != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Row(
-                  children: [
-                    Text(
-                      date.toIso8601String(),
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        updateDate(null);
-                        callSetState();
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-          ],
+      Container(
+        margin: const EdgeInsets.only(top: 8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey.withAlpha(50),
         ),
-        icon: const Icon(Icons.timer_outlined),
+        child: TextButton.icon(
+          onPressed: () async {
+            final date = await GetNewDate.get(context: context);
+            if (date != null) {
+              updateDate(date);
+              callSetState();
+            }
+          },
+          label: Row(
+            children: [
+              Expanded(child: Text(name, textAlign: TextAlign.start)),
+              if (date != null)
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          DateFormat('dd/MM/yyyy HH:mm').format(date),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          updateDate(null);
+                          callSetState();
+                        },
+                        child: const Icon(
+                          Icons.delete,
+                          size: 30,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          icon: const Icon(Icons.timer_outlined),
+        ),
       );
 }
