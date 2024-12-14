@@ -15,6 +15,10 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
   final searchFocusNode = FocusNode();
   bool? searchByPersonalizedCode;
   bool? searchByCode;
+  DateTime? initialDateOfCreation;
+  DateTime? finalDateOfCreation;
+  DateTime? initialDateOfLimit;
+  DateTime? finalDateOfLimit;
 
   @override
   void dispose() {
@@ -55,35 +59,78 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
       appBar: AppBar(
         title: const Text("Consulta de cotações"),
       ),
-      body: Column(
-        children: [
-          SearchWidget(
-            searchProductController: searchController,
-            onPressSearch: () {},
-            searchFocusNode: searchFocusNode,
-            hintText: searchByCode == true ? "Código" : "Código personalizado",
-            labelText: searchByCode == true ? "Código" : "Código personalizado",
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CheckBoxPersonalized(
-                  enabled: searchByCode == true,
-                  searchType: "Código",
-                  updateEnabled: updateSearchByCode,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SearchWidget(
+              searchProductController: searchController,
+              onPressSearch: () {},
+              searchFocusNode: searchFocusNode,
+              hintText:
+                  searchByCode == true ? "Código" : "Código personalizado",
+              labelText:
+                  searchByCode == true ? "Código" : "Código personalizado",
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: CheckBoxPersonalized(
+                    enabled: searchByCode == true,
+                    searchType: "Código",
+                    updateEnabled: updateSearchByCode,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: CheckBoxPersonalized(
-                  enabled: searchByPersonalizedCode == true,
-                  searchType: "Código personalizado",
-                  updateEnabled: updateSearchByPersonalizedCode,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: CheckBoxPersonalized(
+                    enabled: searchByPersonalizedCode == true,
+                    searchType: "Código personalizado",
+                    updateEnabled: updateSearchByPersonalizedCode,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            DateFilters(
+              initialDateOfCreation: initialDateOfCreation,
+              finalDateOfCreation: finalDateOfCreation,
+              initialDateOfLimit: initialDateOfLimit,
+              finalDateOfLimit: finalDateOfLimit,
+              callSetState: () {
+                setState(() {});
+              },
+              updateInitialDateOfCreation: (DateTime? date) {
+                if (date != null) {
+                  initialDateOfCreation = date;
+                } else {
+                  initialDateOfCreation = null;
+                }
+              },
+              updateFinalDateOfCreation: (DateTime? date) {
+                if (date != null) {
+                  finalDateOfCreation = date;
+                } else {
+                  finalDateOfCreation = null;
+                }
+              },
+              updateInitialDateOfLimit: (DateTime? date) {
+                if (date != null) {
+                  initialDateOfLimit = date;
+                } else {
+                  initialDateOfLimit = null;
+                }
+              },
+              updateFinalDateOfLimit: (DateTime? date) {
+                if (date != null) {
+                  finalDateOfLimit = date;
+                } else {
+                  finalDateOfLimit = null;
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
