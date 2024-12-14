@@ -1,0 +1,1 @@
+export './check_box_personalized.dart';

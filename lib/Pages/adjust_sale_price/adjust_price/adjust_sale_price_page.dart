@@ -1,9 +1,9 @@
-import 'package:celta_inventario/components/product/more_informations/prices.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../components/product/more_informations/prices.dart';
 import '../../../models/enterprise/enterprise.dart';
 import '../../../models/soap/products/products.dart';
 import '../../../providers/providers.dart';
@@ -96,13 +96,15 @@ class _AdjustSalePricePageState extends State<AdjustSalePricePage> {
                                   ),
                                 ),
                           updateInitialDate: () async {
-                            final newDate = await getNewDate(context: context);
+                            final newDate =
+                                await GetNewDate.get(context: context);
                             if (newDate != null) {
                               adjustSalePriceProvider.initialDate = newDate;
                             }
                           },
                           updateFinishDate: () async {
-                            final newDate = await getNewDate(context: context);
+                            final newDate =
+                                await GetNewDate.get(context: context);
                             if (newDate != null) {
                               adjustSalePriceProvider.finishDate = newDate;
                             }
