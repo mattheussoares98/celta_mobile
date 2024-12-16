@@ -16,7 +16,9 @@ class BuyQuotationPage extends StatefulWidget {
 
 class _BuyQuotationPageState extends State<BuyQuotationPage> {
   final searchController = TextEditingController();
+  final searchProductController = TextEditingController();
   final searchFocusNode = FocusNode();
+  final searchProductFocusNode = FocusNode();
   bool searchByPersonalizedCode = false;
   bool? searchByCode = true;
   DateTime? initialDateOfCreation;
@@ -29,7 +31,9 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
   void dispose() {
     super.dispose();
     searchController.dispose();
+    searchProductController.dispose();
     searchFocusNode.dispose();
+    searchProductFocusNode.dispose();
   }
 
   void updateSearchByCode() {
@@ -61,6 +65,7 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
@@ -158,16 +163,38 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text("Filtrar produto"),
+                  SearchWidget(
+                    configurations: [
+                      ConfigurationType.legacyCode,
+                      ConfigurationType.personalizedCode,
+                    ],
+                    searchProductController: searchProductController,
+                    onPressSearch: () async {
+                      await buyQuotationProvider.searchProduct(
+                        enterprise: enterprise,
+                        searchProductController: searchProductController,
+                        configurationsProvider: configurationsProvider,
+                        context: context,
+                      );
+
+                      if (buyQuotationProvider.searchedProducts.length > 1) {
+                        ShowAlertDialog.show(
+                            context: context,
+                            title: "Selecione um produto",
+                            function: () async {
+                              // buyQuotationProvider
+                              //     .updateFilteredProduct(product);
+                            });
+                      }
+                    },
+                    searchFocusNode: searchProductFocusNode,
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () async {
                       await buyQuotationProvider.getBuyQuotation(
                         context: context,
-                        valueToSearch: searchController.text,
+                        valueToSearch: searchProductController.text,
                         searchByPersonalizedCode: searchByPersonalizedCode,
                         initialDateOfCreation: initialDateOfCreation,
                         finalDateOfCreation: finalDateOfCreation,
