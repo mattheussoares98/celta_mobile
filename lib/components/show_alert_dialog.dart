@@ -13,6 +13,7 @@ class ShowAlertDialog {
     double? confirmMessageSize = 40,
     double? cancelMessageSize = 40,
     bool? showConfirmAndCancelMessage = true,
+    bool? canCloseClickingOut = true,
     bool? showCloseAlertDialogButton = false,
     Widget? otherWidgetAction,
     EdgeInsetsGeometry? contentPadding,
@@ -20,6 +21,7 @@ class ShowAlertDialog {
   }) {
     showDialog(
       context: context,
+      barrierDismissible: canCloseClickingOut == true,
       builder: (context) {
         return AlertDialog(
           insetPadding: insetPadding,

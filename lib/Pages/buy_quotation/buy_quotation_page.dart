@@ -65,7 +65,6 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
-    ConfigurationsProvider configurationsProvider = Provider.of(context);
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
@@ -163,31 +162,10 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  SearchWidget(
-                    configurations: [
-                      ConfigurationType.legacyCode,
-                      ConfigurationType.personalizedCode,
-                    ],
+                  FilterProduct(
+                    searchProductFocusNode: searchProductFocusNode,
                     searchProductController: searchProductController,
-                    onPressSearch: () async {
-                      await buyQuotationProvider.searchProduct(
-                        enterprise: enterprise,
-                        searchProductController: searchProductController,
-                        configurationsProvider: configurationsProvider,
-                        context: context,
-                      );
-
-                      if (buyQuotationProvider.searchedProducts.length > 1) {
-                        ShowAlertDialog.show(
-                            context: context,
-                            title: "Selecione um produto",
-                            function: () async {
-                              // buyQuotationProvider
-                              //     .updateFilteredProduct(product);
-                            });
-                      }
-                    },
-                    searchFocusNode: searchProductFocusNode,
+                    enterprise: enterprise,
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(

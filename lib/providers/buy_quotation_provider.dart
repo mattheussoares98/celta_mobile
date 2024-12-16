@@ -112,6 +112,8 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
+    _searchedProducts.clear();
+    _filteredProduct = null;
     notifyListeners();
 
     try {
@@ -140,6 +142,8 @@ class BuyQuotationProvider with ChangeNotifier {
           updateFilteredProduct(_searchedProducts[0]);
         }
       }
+
+      searchProductController.text = "";
     } catch (e) {
       ShowSnackbarMessage.show(
         message: e.toString(),
