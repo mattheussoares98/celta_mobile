@@ -6,6 +6,7 @@ import '../../models/configurations/configurations.dart';
 import '../../models/enterprise/enterprise.dart';
 import '../../models/expedition_control/expedition_control.dart';
 import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 import 'components/components.dart';
 
 class ExpeditionConferencePendingProductsPage extends StatefulWidget {
@@ -33,18 +34,30 @@ class _ExpeditionConferencePendingProductsPageState
   Future<void> searchProduct(
     ExpeditionConferenceProvider expeditionConferenceProvider,
     EnterpriseModel enterprise,
+    ConfigurationsProvider configurationsProvider,
   ) async {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     ExpeditionControlModel expeditionControl = arguments["expeditionControl"];
     EnterpriseModel enterprise = arguments["enterprise"];
 
     await expeditionConferenceProvider.getProducts(
-      value: searchProductsController.text,
-      enterprise: enterprise,
-      configurationsProvider: ConfigurationsProvider(),
-      expeditionControlCode: expeditionControl.ExpeditionControlCode!,
-      stepCode: expeditionControl.StepCode!,
-    );
+        value: searchProductsController.text,
+        enterprise: enterprise,
+        configurationsProvider: configurationsProvider,
+        expeditionControlCode: expeditionControl.ExpeditionControlCode!,
+        stepCode: expeditionControl.StepCode!,
+        searchAgainByCamera: () async {
+          searchProductsController.text =
+              await ScanBarCode.scanBarcode(context);
+
+          if (searchProductsController.text.isNotEmpty) {
+            await searchProduct(
+              expeditionConferenceProvider,
+              enterprise,
+              configurationsProvider,
+            );
+          }
+        });
 
     if (expeditionConferenceProvider.errorMessageGetProducts.isEmpty &&
         !disposedProductsController) {
@@ -73,6 +86,7 @@ class _ExpeditionConferencePendingProductsPageState
   Widget build(BuildContext context) {
     ExpeditionConferenceProvider expeditionConferenceProvider =
         Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
     final expeditionControl =
         arguments["expeditionControl"] as ExpeditionControlModel;
@@ -95,6 +109,7 @@ class _ExpeditionConferencePendingProductsPageState
           useCamera: true,
           autofocus: true,
           configurations: [
+            ConfigurationType.autoScan,
             ConfigurationType.legacyCode,
             ConfigurationType.personalizedCode,
           ],
@@ -103,7 +118,11 @@ class _ExpeditionConferencePendingProductsPageState
           onPressSearch: expeditionConferenceProvider.pendingProducts.isEmpty
               ? null
               : () async {
-                  await searchProduct(expeditionConferenceProvider, enterprise);
+                  await searchProduct(
+                    expeditionConferenceProvider,
+                    enterprise,
+                    configurationsProvider,
+                  );
                 },
         ),
         if (expeditionConferenceProvider

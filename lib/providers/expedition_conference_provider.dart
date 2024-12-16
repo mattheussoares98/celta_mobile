@@ -133,6 +133,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     required ConfigurationsProvider configurationsProvider,
     required int expeditionControlCode,
     required int stepCode,
+    required Future<void> Function() searchAgainByCamera,
   }) async {
     _isLoading = true;
     _errorMessageGetProducts = "";
@@ -161,6 +162,12 @@ class ExpeditionConferenceProvider with ChangeNotifier {
           enterprise: enterprise,
           stepCode: stepCode,
         );
+
+        if (_errorMessageGetProducts == "" &&
+            configurationsProvider.autoScan?.value == true &&
+            _pendingProducts.isNotEmpty) {
+          await searchAgainByCamera();
+        }
       }
     } catch (e) {
       _errorMessageGetProducts = DefaultErrorMessage.ERROR;
@@ -186,8 +193,9 @@ class ExpeditionConferenceProvider with ChangeNotifier {
         .indexWhere((e) => e.PriceLookUp == confirmedProduct.plu);
 
     if (indexOfConfirmedProductInPendingProducts == -1) {
+      _errorMessageGetProducts = "Esse produto não faz parte da conferência";
       ShowSnackbarMessage.show(
-        message: "Esse produto não faz parte da conferência",
+        message: _errorMessageGetProducts,
         context: NavigatorKey.navigatorKey.currentState!.context,
       );
       return;
