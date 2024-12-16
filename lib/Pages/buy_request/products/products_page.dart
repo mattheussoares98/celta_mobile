@@ -57,6 +57,7 @@ class _ProductsPageState extends State<ProductsPage> {
           SearchWidget(
             autofocus: false,
             showConfigurationsIcon: true,
+            configurations: [],
             searchProductController: consultProductController,
             onPressSearch: () async {
               await buyRequestProvider.getProducts(

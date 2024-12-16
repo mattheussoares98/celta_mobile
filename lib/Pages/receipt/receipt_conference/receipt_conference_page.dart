@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/configurations/configurations.dart';
 import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
@@ -65,8 +66,12 @@ class _ReceiptConferencePageState extends State<ReceiptConferencePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SearchWidget(
-                    searchFocusNode:
-                        receiptProvider.consultProductFocusNode,
+                    configurations: [
+                      ConfigurationType.autoScan,
+                      ConfigurationType.legacyCode,
+                      ConfigurationType.personalizedCode,
+                    ],
+                    searchFocusNode: receiptProvider.consultProductFocusNode,
                     onPressSearch: () async {
                       await receiptProvider.getProducts(
                         configurationsProvider: configurationsProvider,

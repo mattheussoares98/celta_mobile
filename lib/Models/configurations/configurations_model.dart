@@ -1,15 +1,22 @@
 class ConfigurationsModel {
-  bool showOnlyConfigurationOfSearchProducts;
+  ConfigurationType configurationType;
   String title;
   bool value;
   Function updateValue;
   String subtitle;
 
   ConfigurationsModel({
-    required this.showOnlyConfigurationOfSearchProducts,
+    required this.configurationType,
     required this.title,
     required this.value,
     required this.updateValue,
     required this.subtitle,
   });
+}
+
+enum ConfigurationType {
+  autoScan,
+  legacyCode,
+  personalizedCode,
+  personalizedCodeCustomer,
 }

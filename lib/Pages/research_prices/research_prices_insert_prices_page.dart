@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/configurations/configurations.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../components/components.dart';
@@ -129,7 +130,7 @@ class _ResearchPricesInsertPricesPageState
     ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return PopScope(
-      onPopInvokedWithResult: (_, __)async{
+      onPopInvokedWithResult: (_, __) async {
         researchPricesProvider.clearAssociatedsProducts();
         researchPricesProvider.clearNotAssociatedsProducts();
       },
@@ -137,9 +138,11 @@ class _ResearchPricesInsertPricesPageState
         children: [
           SearchWidget(
             showConfigurationsIcon: true,
-            showOnlyConfigurationOfSearchProducts: true,
+            configurations: [
+              ConfigurationType.legacyCode,
+              ConfigurationType.personalizedCode,
+            ],
             searchProductController: widget.searchProductController,
-            
             autofocus: false,
             onPressSearch: () async {
               await _getProducts(

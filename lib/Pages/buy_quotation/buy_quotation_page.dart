@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/configurations/configurations.dart';
 import '../../models/enterprise/enterprise.dart';
 import '../../providers/providers.dart';
 import 'components/components.dart';
@@ -79,6 +80,10 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                     searchProductController: searchController,
                     onPressSearch: () {},
                     searchFocusNode: searchFocusNode,
+                    configurations: [
+                      ConfigurationType.legacyCode,
+                      ConfigurationType.personalizedCode,
+                    ],
                     hintText: searchByCode == true
                         ? "Código"
                         : "Código personalizado",

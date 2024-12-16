@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/configurations/configurations.dart';
 import '../../models/enterprise/enterprise.dart';
 import '../../models/expedition_control/expedition_control.dart';
 import '../../providers/providers.dart';
@@ -93,7 +94,10 @@ class _ExpeditionConferencePendingProductsPageState
         SearchWidget(
           useCamera: true,
           autofocus: true,
-          showOnlyConfigurationOfSearchProducts: true,
+          configurations: [
+            ConfigurationType.legacyCode,
+            ConfigurationType.personalizedCode,
+          ],
           searchFocusNode: searchProductFocusNode,
           searchProductController: searchProductsController,
           onPressSearch: expeditionConferenceProvider.pendingProducts.isEmpty

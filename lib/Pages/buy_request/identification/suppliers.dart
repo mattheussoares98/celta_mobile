@@ -72,6 +72,7 @@ class _SuplliersState extends State<Suplliers> {
           labelText: "Consultar fornecedor",
           useCamera: false,
           autofocus: false,
+          configurations: [],
           searchProductController: searchValueController,
           onPressSearch: () async {
             if (buyRequestProvider.enterprisesCount > 0) {

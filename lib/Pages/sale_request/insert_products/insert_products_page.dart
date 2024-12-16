@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/configurations/configurations.dart';
 import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
@@ -48,6 +49,11 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
         child: Column(
           children: [
             SearchWidget(
+              configurations: [
+                ConfigurationType.autoScan,
+                ConfigurationType.legacyCode,
+                ConfigurationType.personalizedCode,
+              ],
               searchProductController: _searchProductTextEditingController,
               autofocus: false,
               onPressSearch: () async {

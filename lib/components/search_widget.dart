@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../pages/drawer/drawer.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
+import '../models/configurations/configurations.dart';
 import 'components.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -19,12 +20,12 @@ class SearchWidget extends StatefulWidget {
   final bool useCamera;
   final bool autofocus;
   final bool showConfigurationsIcon;
-  final bool showOnlyConfigurationOfSearchProducts;
+  final List<ConfigurationType> configurations;
   const SearchWidget({
     this.autofocus = true,
-    this.showOnlyConfigurationOfSearchProducts = false,
     this.useCamera = true,
     this.showConfigurationsIcon = true,
+    required this.configurations,
     required this.searchProductController,
     required this.onPressSearch,
     required this.searchFocusNode,
@@ -213,8 +214,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           if (widget.showConfigurationsIcon)
             _enableConfigurationsDialog(
               configurationsProvider: configurationsProvider,
-              showOnlyConfigurationOfSearchProducts:
-                  widget.showOnlyConfigurationOfSearchProducts,
+              configurations: widget.configurations,
             ),
         ],
       ),
@@ -223,7 +223,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   _enableConfigurationsDialog({
     required ConfigurationsProvider configurationsProvider,
-    required bool showOnlyConfigurationOfSearchProducts,
+    required List<ConfigurationType> configurations,
   }) {
     return IconButton(
       icon: Icon(
@@ -251,8 +251,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   content: SingleChildScrollView(
                     primary: false,
                     child: ConfigurationsCheckbox(
-                      showOnlyConfigurationOfSearch:
-                          showOnlyConfigurationOfSearchProducts,
+                      configurations: configurations,
                     ),
                   ),
                   actions: [

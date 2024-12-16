@@ -80,6 +80,7 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
                       children: [
                         Expanded(
                           child: SearchWidget(
+                            configurations: [],
                             searchProductController: searchController,
                             onPressSearch: () async {
                               await _getResearchPrices(

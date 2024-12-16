@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/configurations/configurations.dart';
 import 'configurations_checkbox.dart';
 
 class ConfigurationsPage extends StatefulWidget {
@@ -19,7 +20,12 @@ class _ConfigurationsPageState extends State<ConfigurationsPage> {
       body: const SingleChildScrollView(
         primary: false,
         child: ConfigurationsCheckbox(
-          showOnlyConfigurationOfSearch: false,
+          configurations: [
+            ConfigurationType.autoScan,
+            ConfigurationType.legacyCode,
+            ConfigurationType.personalizedCode,
+            ConfigurationType.personalizedCodeCustomer,
+          ],
         ),
       ),
     );

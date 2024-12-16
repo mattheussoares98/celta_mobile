@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/configurations/configurations.dart';
 import '../../providers/providers.dart';
 
 class ConfigurationsCheckbox extends StatefulWidget {
-  final bool showOnlyConfigurationOfSearch;
+  final List<ConfigurationType> configurations;
   const ConfigurationsCheckbox({
-    required this.showOnlyConfigurationOfSearch,
+    required this.configurations,
     Key? key,
   }) : super(key: key);
 
@@ -22,8 +23,7 @@ class _ConfigurationsCheckboxState extends State<ConfigurationsCheckbox> {
     return Column(
         children: configurationsProvider.configurations
             .map(
-              (e) => (!e.showOnlyConfigurationOfSearchProducts &&
-                      widget.showOnlyConfigurationOfSearch)
+              (e) => (!widget.configurations.contains(e.configurationType))
                   ? Container()
                   : Card(
                       child: InkWell(

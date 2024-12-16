@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/configurations/configurations.dart';
 import '../../../models/enterprise/enterprise_model.dart';
 import '../adjust_sale_price.dart';
 import '../../../providers/providers.dart';
@@ -51,7 +52,10 @@ class _AdjustSalePriceProductsPageState
                 children: [
                   SearchWidget(
                     searchFocusNode: searchFocusNode,
-                    showOnlyConfigurationOfSearchProducts: true,
+                    configurations: [
+                      ConfigurationType.legacyCode,
+                      ConfigurationType.personalizedCode,
+                    ],
                     searchProductController: searchValueController,
                     onPressSearch: () async {
                       await adjustSalePriceProvider.getProducts(

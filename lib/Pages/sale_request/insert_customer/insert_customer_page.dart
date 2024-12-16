@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/configurations/configurations.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import 'insert_customer.dart';
@@ -41,6 +42,9 @@ class _InsertCustomerPageState extends State<InsertCustomerPage> {
         child: Column(
           children: [
             SearchWidget(
+              configurations: [
+                ConfigurationType.personalizedCodeCustomer,
+              ],
               searchProductController: searchCustomerController,
               autofocus: false,
               onPressSearch: () async {

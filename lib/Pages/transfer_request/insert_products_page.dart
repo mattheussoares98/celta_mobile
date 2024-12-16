@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/configurations/configurations.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
@@ -48,6 +49,11 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
             SearchWidget(
               searchProductController: _searchProductTextEditingController,
               autofocus: false,
+              configurations: [
+                ConfigurationType.autoScan,
+                ConfigurationType.legacyCode,
+                ConfigurationType.personalizedCode,
+              ],
               onPressSearch: () async {
                 _consultedProductController.clear();
 
@@ -63,8 +69,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                   _searchProductTextEditingController.clear();
                 }
               },
-              searchFocusNode:
-                  transferRequestProvider.searchProductFocusNode,
+              searchFocusNode: transferRequestProvider.searchProductFocusNode,
             ),
             if (transferRequestProvider.errorMessageProducts != "")
               ErrorMessage(
