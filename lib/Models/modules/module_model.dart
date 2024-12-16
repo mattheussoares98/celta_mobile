@@ -2,6 +2,7 @@ enum Modules {
   adjustSalePrice,
   adjustStock,
   buyRequest,
+  buyQuotation,
   customerRegister,
   inventory,
   priceConference,

@@ -74,6 +74,18 @@ class _HomePageState extends State<HomePage> {
     EnterpriseProvider enterpriseProvider,
     Modules module,
   ) {
+    if (enterpriseProvider.firebaseEnterpriseModel == null ||
+        enterpriseProvider.firebaseEnterpriseModel?.modules == null) {
+      return false;
+    }
+
+    int elementIndex = enterpriseProvider.firebaseEnterpriseModel!.modules!
+        .indexWhere((e) => e.module == module.name);
+
+    if (elementIndex == -1) {
+      return false;
+    }
+
     return enterpriseProvider.firebaseEnterpriseModel?.modules
             ?.firstWhere((e) => e.module == module.name)
             .enabled ==
@@ -236,9 +248,10 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.BUY_QUOTATION,
                           context: context,
+                          isNew: true,
                           moduleIsLiberated: getModuleIsEnabled(
                             enterpriseProvider,
-                            Modules.priceConference,
+                            Modules.buyQuotation,
                           ),
                         ),
 
