@@ -22,11 +22,7 @@ class InventoryItems extends StatelessWidget {
           child: ListView.builder(
             itemCount: inventoryProvider.inventoryCount,
             itemBuilder: (context, index) {
-              return InkWell(
-                focusColor: Colors.white.withOpacity(0),
-                hoverColor: Colors.white.withOpacity(0),
-                splashColor: Colors.white.withOpacity(0),
-                highlightColor: Colors.white.withOpacity(0),
+              return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.COUNTINGS,

@@ -33,11 +33,7 @@ class _OriginEnterpriseItemsState
               itemBuilder: (context, index) {
                 TransferOriginEnterpriseModel originEnterprise =
                     transferRequestProvider.originEnterprises[index];
-                return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+                return GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER_DESTINY_ENTERPRISE,

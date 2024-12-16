@@ -72,11 +72,7 @@ class _CovenantsItemsState extends State<CovenantsItems> {
             //   updatedCovenantInFirstLoadPage = true;
             // }
 
-            return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+            return GestureDetector(
               onTap: () {
                 saleRequestProvider.updateSelectedCovenant(
                   enterpriseCode: widget.enterpriseCode,

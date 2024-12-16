@@ -229,8 +229,8 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                                     buyRequestProvider.selectedSupplier ==
                                         null) ||
                                 buyRequestProvider.isLoadingInsertBuyRequest
-                            ? Colors.grey.withOpacity(0.75)
-                            : Colors.red.withOpacity(0.75),
+                            ? Colors.grey.withAlpha(190)
+                            : Colors.red.withAlpha(190),
                       ),
                     ),
             ),

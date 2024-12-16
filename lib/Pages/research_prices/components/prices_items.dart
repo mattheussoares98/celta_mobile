@@ -31,11 +31,7 @@ class _PricesItemsState extends State<PricesItems> {
       itemBuilder: (context, index) {
         final research = researchPricesProvider.researchPrices[index];
 
-        return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+        return GestureDetector(
           onTap: () {
             researchPricesProvider.updateSelectedResearch(research);
             researchPricesProvider.loadAssociatedsConcurrents();

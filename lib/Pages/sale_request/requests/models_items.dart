@@ -65,11 +65,7 @@ class _ModelsItemsState extends State<ModelsItems> {
                       saleRequestProvider.requests[index - 1];
 
                   return Card(
-                    child: InkWell(
-                      focusColor: Colors.white.withOpacity(0),
-                      hoverColor: Colors.white.withOpacity(0),
-                      splashColor: Colors.white.withOpacity(0),
-                      highlightColor: Colors.white.withOpacity(0),
+                    child: GestureDetector(
                       onTap: () {
                         saleRequestProvider.updatedCart = true;
                         Navigator.of(context).pushNamed(

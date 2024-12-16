@@ -25,11 +25,7 @@ class CountingItems extends StatelessWidget {
             itemCount: inventoryProvider
                 .getCountingsQuantity(arguments["codigoInternoInventario"]),
             itemBuilder: (ctx, index) {
-              return InkWell(
-                focusColor: Colors.white.withOpacity(0),
-                hoverColor: Colors.white.withOpacity(0),
-                splashColor: Colors.white.withOpacity(0),
-                highlightColor: Colors.white.withOpacity(0),
+              return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     APPROUTES.INVENTORY_PRODUCTS,

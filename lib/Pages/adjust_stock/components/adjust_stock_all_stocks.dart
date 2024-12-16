@@ -11,11 +11,7 @@ class AdjustStockAllStocks {
     required GetProductJsonModel product,
     required bool isLoading,
   }) {
-    return InkWell(
-      focusColor: Colors.white.withOpacity(0),
-      hoverColor: Colors.white.withOpacity(0),
-      splashColor: Colors.white.withOpacity(0),
-      highlightColor: Colors.white.withOpacity(0),
+    return GestureDetector(
       child: Row(
         children: [
           Text(

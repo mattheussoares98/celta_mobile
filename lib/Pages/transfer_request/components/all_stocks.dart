@@ -10,11 +10,7 @@ class AllStocks {
     required bool hasStocks,
     required TransferRequestProductsModel product,
   }) {
-    return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+    return GestureDetector(
       child: Row(
         children: [
           Text(

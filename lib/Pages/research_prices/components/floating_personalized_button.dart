@@ -32,7 +32,7 @@ floatingPersonalizedButton({
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.7),
+            color: Colors.black.withAlpha(190),
             blurRadius: 10,
           ),
         ],

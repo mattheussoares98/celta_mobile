@@ -9,7 +9,7 @@ PopScope loadingWidget(bool isLoading) {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          color: Colors.black.withOpacity(0.7),
+          color: Colors.black.withAlpha(170),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

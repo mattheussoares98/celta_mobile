@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'components.dart';
 
 class ImageComponent {
-  static InkWell image({
+  static Widget image({
     required String imagePath,
     required String routine,
     required String route,
@@ -12,11 +12,7 @@ class ImageComponent {
     String? nextRoute,
     bool? isNew,
   }) {
-    return InkWell(
-      focusColor: Colors.white.withOpacity(0),
-      hoverColor: Colors.white.withOpacity(0),
-      splashColor: Colors.white.withOpacity(0),
-      highlightColor: Colors.white.withOpacity(0),
+    return GestureDetector(
       onTap: () {
         if (!moduleIsLiberated) {
           ShowSnackbarMessage.show(

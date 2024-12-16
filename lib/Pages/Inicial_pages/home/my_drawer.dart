@@ -16,11 +16,7 @@ class MyDrawer extends StatelessWidget {
     required Widget leading,
     Widget? subtitle,
   }) {
-    return InkWell(
-          focusColor: Colors.white.withOpacity(0),
-          hoverColor: Colors.white.withOpacity(0),
-          splashColor: Colors.white.withOpacity(0),
-          highlightColor: Colors.white.withOpacity(0),
+    return GestureDetector(
       onTap: onTap,
       child: Card(
         child: ListTile(

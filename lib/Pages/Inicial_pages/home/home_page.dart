@@ -242,18 +242,18 @@ class _HomePageState extends State<HomePage> {
                             Modules.priceConference,
                           ),
                         ),
-                        ImageComponent.image(
-                          imagePath: 'lib/assets/Images/buyQuotation.png',
-                          routine: 'Cotação de compras'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
-                          nextRoute: APPROUTES.BUY_QUOTATION,
-                          context: context,
-                          isNew: true,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.buyQuotation,
-                          ),
-                        ),
+                        // ImageComponent.image(
+                        //   imagePath: 'lib/assets/Images/buyQuotation.png',
+                        //   routine: 'Cotação de compras'.toUpperCase(),
+                        //   route: APPROUTES.ENTERPRISE,
+                        //   nextRoute: APPROUTES.BUY_QUOTATION,
+                        //   context: context,
+                        //   isNew: true,
+                        //   moduleIsLiberated: getModuleIsEnabled(
+                        //     enterpriseProvider,
+                        //     Modules.buyQuotation,
+                        //   ),
+                        // ),
 
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/inventory.png',

@@ -143,11 +143,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                             ),
                           ),
                         Flexible(
-                          child: InkWell(
-                            focusColor: Colors.white.withOpacity(0),
-                            hoverColor: Colors.white.withOpacity(0),
-                            splashColor: Colors.white.withOpacity(0),
-                            highlightColor: Colors.white.withOpacity(0),
+                          child: GestureDetector(
                             onTap: () async {
                               if (!isValid()) {
                                 return;
@@ -168,11 +164,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                           Flexible(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 5),
-                              child: InkWell(
-                                focusColor: Colors.white.withOpacity(0),
-                                hoverColor: Colors.white.withOpacity(0),
-                                splashColor: Colors.white.withOpacity(0),
-                                highlightColor: Colors.white.withOpacity(0),
+                              child: GestureDetector(
                                 onTap: () async {
                                   await _openCamera();
                                 },
