@@ -18,9 +18,13 @@ class BuyQuotationProvider with ChangeNotifier {
 
   List<GetProductJsonModel> _searchedProducts = [];
   List<GetProductJsonModel> get searchedProducts => [..._searchedProducts];
+  GetProductJsonModel? _selectedProduct;
+  GetProductJsonModel? get selectedProduct => _selectedProduct;
 
-  GetProductJsonModel? _filteredProduct;
-  GetProductJsonModel? get filteredProduct => _filteredProduct;
+  List<SupplierModel> _searchedSuppliers = [];
+  List<SupplierModel> get searchedSuppliers => [..._searchedSuppliers];
+  SupplierModel? _selectedSupplier;
+  SupplierModel? get selectedSupplier => _selectedSupplier;
 
   Future<void> insertUpdateBuyQuotation({
     required bool isInserting,
@@ -63,8 +67,8 @@ class BuyQuotationProvider with ChangeNotifier {
         "FinalDateOfCreation": finalDateOfCreation?.toIso8601String(),
         "InitialDateOfLimit": initialDateOfLimit?.toIso8601String(),
         "FinalDateOfLimit": finalDateOfLimit?.toIso8601String(),
-        "ProductCode": _filteredProduct?.productCode,
-        "ProductPackingCode": _filteredProduct?.productPackingCode,
+        "ProductCode": _selectedProduct?.productCode,
+        "ProductPackingCode": _selectedProduct?.productPackingCode,
         "SupplierCode": supplierCode,
         "BuyerCode": buyerCode,
         "EnterpriseCode": enterpriseCode,
@@ -111,7 +115,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
     _searchedProducts.clear();
-    _filteredProduct = null;
+    _selectedProduct = null;
     notifyListeners();
 
     try {
@@ -154,7 +158,53 @@ class BuyQuotationProvider with ChangeNotifier {
   }
 
   void updateFilteredProduct(GetProductJsonModel? product) {
-    _filteredProduct = product;
+    _searchedProducts.clear();
+    _selectedProduct = product;
     notifyListeners();
+  }
+
+  Future<void> getSupplier({
+    required BuildContext context,
+    required TextEditingController searchController,
+  }) async {
+    _isLoading = false;
+    _errorMessage = "";
+    _searchedSuppliers.clear();
+    _selectedSupplier = null;
+    notifyListeners();
+
+    try {
+      Map jsonGetSupplier = {
+        "CrossIdentity": UserData.crossIdentity,
+        "SearchValue": searchController.text,
+        "RoutineInt": 9,
+      };
+
+      await SoapRequest.soapPost(
+        parameters: {
+          "filters": json.encode(jsonGetSupplier),
+        },
+        serviceASMX: "CeltaSupplierService.asmx",
+        typeOfResponse: "GetSupplierJsonResponse",
+        SOAPAction: "GetSupplierJson",
+        typeOfResult: "GetSupplierJsonResult",
+      );
+
+      _errorMessage = SoapRequestResponse.errorMessage;
+
+      if (_errorMessage != "") {
+        ShowSnackbarMessage.show(message: _errorMessage, context: context);
+      } else {
+        _searchedSuppliers =
+            (json.decode(SoapRequestResponse.responseAsString) as List)
+                .map((e) => SupplierModel.fromJson(e))
+                .toList();
+      }
+    } catch (e) {
+      ShowSnackbarMessage.show(message: e.toString(), context: context);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

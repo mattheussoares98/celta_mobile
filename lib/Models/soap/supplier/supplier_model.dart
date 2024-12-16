@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-class BuyRequestSupplierModel {
+class SupplierModel {
   final int Code;
   final String Name;
   final String FantasizesName;
@@ -13,7 +11,7 @@ class BuyRequestSupplierModel {
   final List? Telephones;
   final List? Addresses;
 
-  BuyRequestSupplierModel({
+  SupplierModel({
     required this.Code,
     required this.Name,
     required this.FantasizesName,
@@ -27,33 +25,7 @@ class BuyRequestSupplierModel {
     this.Addresses,
   });
 
-  static responseAsStringToBuyRequestSupplierModel({
-    required String responseAsString,
-    required List listToAdd,
-  }) {
-    List responseAsList = json.decode(responseAsString.toString());
-    Map responseAsMap = responseAsList.asMap();
-
-    responseAsMap.forEach((id, data) {
-      listToAdd.add(
-        BuyRequestSupplierModel(
-          Code: data["Code"],
-          Name: data["Name"],
-          FantasizesName: data["FantasizesName"],
-          CnpjCpfNumber: data["CnpjCpfNumber"],
-          InscriptionRgNumber: data["InscriptionRgNumber"],
-          SupplierType: data["SupplierType"],
-          SupplierRegimeType: data["SupplierRegimeType"],
-          Date: data["Date"],
-          Addresses: data["Addresses"],
-          Emails: data["Emails"],
-          Telephones: data["Telephones"],
-        ),
-      );
-    });
-  }
-
-  toJson() => {
+  Map<String, dynamic> toJson() => {
         "Code": Code,
         "Name": Name,
         "FantasizesName": FantasizesName,
@@ -67,7 +39,7 @@ class BuyRequestSupplierModel {
         "Addresses": Addresses,
       };
 
-  static fromJson(Map json) => BuyRequestSupplierModel(
+  factory SupplierModel.fromJson(Map json) => SupplierModel(
         Code: json["Code"],
         Name: json["Name"],
         FantasizesName: json["FantasizesName"],

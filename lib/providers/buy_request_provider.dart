@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../api/api.dart';
 import '../components/components.dart';
 import '../models/buy_request/buy_request.dart';
-import '../models/soap/products/products.dart';
+import '../models/soap/soap.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -55,16 +55,16 @@ class BuyRequestProvider with ChangeNotifier {
     _updateDataInDatabase();
   }
 
-  List<BuyRequestSupplierModel> _suppliers = [];
-  List<BuyRequestSupplierModel> get suppliers => [..._suppliers];
+  List<SupplierModel> _suppliers = [];
+  List<SupplierModel> get suppliers => [..._suppliers];
   bool _isLoadingSupplier = false;
   bool get isLoadingSupplier => _isLoadingSupplier;
   String _errorMessageSupplier = "";
   String get errorMessageSupplier => _errorMessageSupplier;
   int get suppliersCount => _suppliers.length;
-  static BuyRequestSupplierModel? _selectedSupplier;
-  BuyRequestSupplierModel? get selectedSupplier => _selectedSupplier;
-  set selectedSupplier(BuyRequestSupplierModel? value) {
+  static SupplierModel? _selectedSupplier;
+  SupplierModel? get selectedSupplier => _selectedSupplier;
+  set selectedSupplier(SupplierModel? value) {
     _selectedSupplier = value;
 
     _clearEnterprisesAndSelectedEnterprises();
@@ -257,10 +257,10 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   _restoreSuppliersAndSelectedSuppliers(Map jsonInDatabase) {
-    List<BuyRequestSupplierModel> suppliersTemp = [];
+    List<SupplierModel> suppliersTemp = [];
     if (jsonInDatabase.containsKey("suppliers")) {
       jsonInDatabase["suppliers"].forEach((element) {
-        suppliersTemp.add(BuyRequestSupplierModel.fromJson(element));
+        suppliersTemp.add(SupplierModel.fromJson(element));
       });
       _suppliers = suppliersTemp;
     }
@@ -268,7 +268,7 @@ class BuyRequestProvider with ChangeNotifier {
     if (jsonInDatabase.containsKey("selectedSupplier") &&
         jsonInDatabase["selectedSupplier"] != null) {
       _selectedSupplier =
-          BuyRequestSupplierModel.fromJson(jsonInDatabase["selectedSupplier"]);
+          SupplierModel.fromJson(jsonInDatabase["selectedSupplier"]);
     }
   }
 
@@ -674,10 +674,10 @@ class BuyRequestProvider with ChangeNotifier {
       _errorMessageSupplier = SoapRequestResponse.errorMessage;
 
       if (_errorMessageSupplier == "") {
-        BuyRequestSupplierModel.responseAsStringToBuyRequestSupplierModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _suppliers,
-        );
+        _suppliers = (json.decode(SoapRequestResponse.responseAsString) as List)
+            .map((e) => SupplierModel.fromJson(e))
+            .toList();
+
         await _updateDataInDatabase();
       }
     } catch (e) {

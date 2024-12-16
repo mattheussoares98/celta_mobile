@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../models/buy_request/buy_request.dart';
+import '../../../models/soap/soap.dart';
 import '../../../providers/providers.dart';
 
 class Suplliers extends StatefulWidget {
@@ -20,7 +20,7 @@ class _SuplliersState extends State<Suplliers> {
   void updateSelectedSupplier({
     required int? value,
     required BuyRequestProvider buyRequestProvider,
-    required BuyRequestSupplierModel supplier,
+    required SupplierModel supplier,
   }) {
     if (buyRequestProvider.selectedSupplier != null &&
         (buyRequestProvider.enterprisesCount > 0 ||
@@ -104,8 +104,7 @@ class _SuplliersState extends State<Suplliers> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: buyRequestProvider.suppliersCount,
           itemBuilder: (context, index) {
-            BuyRequestSupplierModel supplier =
-                buyRequestProvider.suppliers[index];
+            SupplierModel supplier = buyRequestProvider.suppliers[index];
 
             return Card(
               child: RadioListTile(

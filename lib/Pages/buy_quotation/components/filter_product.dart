@@ -89,7 +89,7 @@ class FilterProduct extends StatelessWidget {
           },
           searchFocusNode: searchProductFocusNode,
         ),
-        if (buyQuotationProvider.filteredProduct != null)
+        if (buyQuotationProvider.selectedProduct != null)
           Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -97,11 +97,11 @@ class FilterProduct extends StatelessWidget {
                 children: [
                   TitleAndSubtitle.titleAndSubtitle(
                     subtitle:
-                        "${buyQuotationProvider.filteredProduct!.name} (${buyQuotationProvider.filteredProduct!.packingQuantity})",
+                        "${buyQuotationProvider.selectedProduct!.name} (${buyQuotationProvider.selectedProduct!.packingQuantity})",
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "PLU",
-                    subtitle: buyQuotationProvider.filteredProduct!.plu,
+                    subtitle: buyQuotationProvider.selectedProduct!.plu,
                     otherWidget: TextButton.icon(
                       onPressed: () {
                         buyQuotationProvider.updateFilteredProduct(null);
