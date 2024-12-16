@@ -17,8 +17,10 @@ class BuyQuotationPage extends StatefulWidget {
 class _BuyQuotationPageState extends State<BuyQuotationPage> {
   final searchController = TextEditingController();
   final searchProductController = TextEditingController();
+  final searchSupplierController = TextEditingController();
   final searchFocusNode = FocusNode();
   final searchProductFocusNode = FocusNode();
+  final searchSupplierFocusNode = FocusNode();
   bool searchByPersonalizedCode = false;
   bool? searchByCode = true;
   DateTime? initialDateOfCreation;
@@ -32,8 +34,10 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
     super.dispose();
     searchController.dispose();
     searchProductController.dispose();
+    searchSupplierController.dispose();
     searchFocusNode.dispose();
     searchProductFocusNode.dispose();
+    searchSupplierFocusNode.dispose();
   }
 
   void updateSearchByCode() {
@@ -165,6 +169,12 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                   FilterProduct(
                     searchProductFocusNode: searchProductFocusNode,
                     searchProductController: searchProductController,
+                    enterprise: enterprise,
+                  ),
+                  const SizedBox(height: 8),
+                  FilterSupplier(
+                    searchSupplierFocusNode: searchSupplierFocusNode,
+                    searchSupplierController: searchSupplierController,
                     enterprise: enterprise,
                   ),
                   const SizedBox(height: 8),

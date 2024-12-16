@@ -58,7 +58,7 @@ class FilterProduct extends StatelessWidget {
 
                         return InkWell(
                           onTap: () {
-                            buyQuotationProvider.updateFilteredProduct(product);
+                            buyQuotationProvider.updateSelectedProduct(product);
                             Navigator.of(context).pop();
                           },
                           child: Card(
@@ -104,7 +104,7 @@ class FilterProduct extends StatelessWidget {
                     subtitle: buyQuotationProvider.selectedProduct!.plu,
                     otherWidget: TextButton.icon(
                       onPressed: () {
-                        buyQuotationProvider.updateFilteredProduct(null);
+                        buyQuotationProvider.updateSelectedProduct(null);
                       },
                       icon: const Icon(
                         Icons.delete,

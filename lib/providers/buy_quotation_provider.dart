@@ -141,7 +141,7 @@ class BuyQuotationProvider with ChangeNotifier {
                 .toList();
 
         if (_searchedProducts.length == 1) {
-          updateFilteredProduct(_searchedProducts[0]);
+          updateSelectedProduct(_searchedProducts[0]);
         }
       }
 
@@ -157,9 +157,15 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  void updateFilteredProduct(GetProductJsonModel? product) {
+  void updateSelectedProduct(GetProductJsonModel? product) {
     _searchedProducts.clear();
     _selectedProduct = product;
+    notifyListeners();
+  }
+
+  void updateSelectedSupplier(SupplierModel? supplier) {
+    _searchedSuppliers.clear();
+    _selectedSupplier = supplier;
     notifyListeners();
   }
 
