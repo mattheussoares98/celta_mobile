@@ -404,6 +404,11 @@ class FirebaseHelper {
             name: "Ajuste de estoques",
           ),
           ModuleModel(
+            module: Modules.buyQuotation.name,
+            enabled: true,
+            name: "Cotação de compras",
+          ),
+          ModuleModel(
             module: Modules.buyRequest.name,
             enabled: true,
             name: "Pedido de compra",
@@ -521,19 +526,14 @@ class FirebaseHelper {
           {
             "modules": [
               ModuleModel(
-                module: Modules.adjustSalePrice.name,
-                enabled: true,
-                name: "Ajuste de preços",
-              ),
-              ModuleModel(
                 module: Modules.adjustStock.name,
                 enabled: true,
                 name: "Ajuste de estoques",
               ),
               ModuleModel(
-                module: Modules.buyRequest.name,
+                module: Modules.adjustSalePrice.name,
                 enabled: true,
-                name: "Pedido de compra",
+                name: "Ajuste de preços",
               ),
               ModuleModel(
                 module: Modules.customerRegister.name,
@@ -541,9 +541,9 @@ class FirebaseHelper {
                 name: "Cadastro de cliente",
               ),
               ModuleModel(
-                module: Modules.inventory.name,
+                module: Modules.productsConference.name,
                 enabled: true,
-                name: "Inventário",
+                name: "Conferência de produtos (expedição)",
               ),
               ModuleModel(
                 module: Modules.priceConference.name,
@@ -551,19 +551,29 @@ class FirebaseHelper {
                 name: "Consulta de preços",
               ),
               ModuleModel(
-                module: Modules.productsConference.name,
-                enabled: true,
-                name: "Conferência de produtos (expedição)",
-              ),
-              ModuleModel(
-                module: Modules.receipt.name,
-                enabled: true,
-                name: "Recebimento",
-              ),
-              ModuleModel(
                 module: Modules.researchPrices.name,
                 enabled: true,
                 name: "Consulta de preços concorrentes",
+              ),
+              ModuleModel(
+                module: Modules.buyQuotation.name,
+                enabled: true,
+                name: "Cotação de compras",
+              ),
+              ModuleModel(
+                module: Modules.inventory.name,
+                enabled: true,
+                name: "Inventário",
+              ),
+              ModuleModel(
+                module: Modules.buyRequest.name,
+                enabled: true,
+                name: "Pedido de compra",
+              ),
+              ModuleModel(
+                module: Modules.transferRequest.name,
+                enabled: true,
+                name: "Pedido de transferência",
               ),
               ModuleModel(
                 module: Modules.saleRequest.name,
@@ -571,14 +581,14 @@ class FirebaseHelper {
                 name: "Pedido de vendas",
               ),
               ModuleModel(
+                module: Modules.receipt.name,
+                enabled: true,
+                name: "Recebimento",
+              ),
+              ModuleModel(
                 module: Modules.transferBetweenStocks.name,
                 enabled: true,
                 name: "Transferência entre estoques",
-              ),
-              ModuleModel(
-                module: Modules.transferRequest.name,
-                enabled: true,
-                name: "Pedido de transferência",
               ),
             ].map((e) => e.toJson()).toList()
           },
