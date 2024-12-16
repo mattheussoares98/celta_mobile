@@ -212,8 +212,12 @@ class _BuyRequestPageState extends State<BuyRequestPage> {
                                 ShowAlertDialog.show(
                                   context: context,
                                   title: "Apagar todos dados",
-                                  subtitle:
+                                  content: const SingleChildScrollView(
+                                    child: Text(
                                       "Deseja realmente apagar todos dados do pedido de compras?",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                   function: () {
                                     buyRequestProvider.clearAllData();
                                   },

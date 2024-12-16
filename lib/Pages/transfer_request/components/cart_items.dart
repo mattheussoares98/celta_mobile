@@ -226,8 +226,15 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                                           context: context,
                                                           title:
                                                               "Atualizar o preço",
-                                                          subtitle:
+                                                          content:
+                                                              const SingleChildScrollView(
+                                                            child: Text(
                                                               "Deseja realmente atualizar a quantidade e o preço?",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
                                                           function: () {
                                                             updateProductInCart(
                                                               transferRequestProvider:
@@ -258,8 +265,14 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                                 ShowAlertDialog.show(
                                                   context: context,
                                                   title: "Atualizar o preço",
-                                                  subtitle:
+                                                  content:
+                                                      const SingleChildScrollView(
+                                                    child: Text(
                                                       "Deseja realmente atualizar a quantidade e o preço?",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
                                                   function: () =>
                                                       updateProductInCart(
                                                     transferRequestProvider:
@@ -332,8 +345,12 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                                   ShowAlertDialog.show(
                                     context: context,
                                     title: "Limpar carrinho",
-                                    subtitle:
+                                    content: const SingleChildScrollView(
+                                      child: Text(
                                         "Deseja realmente limpar todos produtos do carrinho?",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
                                     function: () {
                                       transferRequestProvider.clearCart(
                                         enterpriseOriginCode:

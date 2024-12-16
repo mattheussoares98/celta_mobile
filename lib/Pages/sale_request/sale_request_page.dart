@@ -51,7 +51,12 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
           ShowAlertDialog.show(
             context: context,
             title: "Apagar TODOS dados",
-            subtitle: "Deseja realmente limpar todos os dados do pedido?",
+            content: const SingleChildScrollView(
+              child: Text(
+                "Deseja realmente limpar todos os dados do pedido?",
+                textAlign: TextAlign.center,
+              ),
+            ),
             function: () {
               saleRequestProvider.clearCart(enterprise.Code.toString());
             },

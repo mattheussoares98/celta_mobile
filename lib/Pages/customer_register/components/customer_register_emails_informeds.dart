@@ -56,7 +56,12 @@ class _CustomerRegisterEmailsInformedsState
                             ShowAlertDialog.show(
                               context: context,
                               title: "Excluir e-mail",
-                              subtitle: "Deseja realmente excluir o e-mail?",
+                              content: const SingleChildScrollView(
+                                child: Text(
+                                  "Deseja realmente excluir o e-mail?",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                               function: () {
                                 customerRegisterProvider.removeEmail(index);
                               },

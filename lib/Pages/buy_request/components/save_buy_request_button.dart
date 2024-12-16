@@ -121,7 +121,12 @@ class _SaveBuyRequestButtonState extends State<SaveBuyRequestButton> {
                               ShowAlertDialog.show(
                                 context: context,
                                 title: "Salvar pedido",
-                                subtitle: "Deseja salvar o pedido?",
+                                content: const SingleChildScrollView(
+                                  child: Text(
+                                    "Deseja salvar o pedido?",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                                 function: () async {
                                   await buyRequestProvider
                                       .insertBuyRequest(context);

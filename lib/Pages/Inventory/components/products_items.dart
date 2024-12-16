@@ -41,9 +41,14 @@ class ProductsItemsState extends State<ProductsItems> {
       ShowAlertDialog.show(
           context: context,
           title: 'Confirmar quantidade?',
-          subtitle: isSubtract!
-              ? 'Quantidade digitada: -${ConvertString.convertToBrazilianNumber(quantity)}'
-              : 'Quantidade digitada: ${ConvertString.convertToBrazilianNumber(quantity)}',
+          content: SingleChildScrollView(
+            child: Text(
+              isSubtract!
+                  ? 'Quantidade digitada: -${ConvertString.convertToBrazilianNumber(quantity)}'
+                  : 'Quantidade digitada: ${ConvertString.convertToBrazilianNumber(quantity)}',
+              textAlign: TextAlign.center,
+            ),
+          ),
           function: () async {
             await inventoryProvider.addQuantity(
               indexOfProduct: indexOfProduct,

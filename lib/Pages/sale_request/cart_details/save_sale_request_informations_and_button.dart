@@ -54,8 +54,12 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
                 title: "Calcular preços?",
                 confirmMessage: "CALCULAR",
                 cancelMessage: "CANCELAR",
-                subtitle:
+                content: const SingleChildScrollView(
+                  child: Text(
                     "Os preços dos produtos devem ser calculados pelo CeltaBS devido a grande variedade de configurações que podem afetar o preço dos produtos (negociação de vendas, preço de oferta, preço de atacado, promoção, etc)",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 function: () async {
                   await saleRequestProvider.processCart(
                     context: context,
@@ -75,7 +79,12 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
               ShowAlertDialog.show(
                 context: context,
                 title: "Salvar pedido",
-                subtitle: "Deseja salvar o pedido?",
+                content: const SingleChildScrollView(
+                  child: Text(
+                    "Deseja salvar o pedido?",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 function: () async {
                   await saleRequestProvider.saveSaleRequest(
                     enterpriseCode: enterpriseCode.toString(),

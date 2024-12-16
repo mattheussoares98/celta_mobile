@@ -5,7 +5,7 @@ class ShowAlertDialog {
     required BuildContext context,
     required String title,
     required Function() function,
-    String? subtitle,
+    Widget? content,
     double? titleSize = 25,
     double? subtitleSize = 20,
     String? confirmMessage = "SIM",
@@ -33,17 +33,7 @@ class ShowAlertDialog {
               fontWeight: FontWeight.bold,
             ),
           ),
-          content: subtitle == null
-              ? null
-              : SingleChildScrollView(
-                  child: Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: subtitleSize,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+          content: content,
           actionsPadding: const EdgeInsets.all(10),
           actions: [
             if (showConfirmAndCancelMessage == true)

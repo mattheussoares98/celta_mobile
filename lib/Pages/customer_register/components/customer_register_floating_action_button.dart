@@ -55,7 +55,12 @@ class _CustomerRegisterFloatingActionButtonState
                 ShowAlertDialog.show(
                   context: context,
                   title: "Cadastrar cliente",
-                  subtitle: "Deseja confirmar o cadastro do cliente?",
+                  content: const SingleChildScrollView(
+                    child: Text(
+                      "Deseja confirmar o cadastro do cliente?",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                   function: () async {
                     await customerRegisterProvider.insertCustomer(
                       addressProvider: addressProvider,

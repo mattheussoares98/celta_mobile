@@ -36,36 +36,41 @@ class CustomerRegisterClearAllData extends StatelessWidget {
       padding: const EdgeInsets.only(left: 30.0),
       child: FloatingActionButton(
         tooltip: "Limpar todos os dados do pedido",
-        onPressed: customerRegisterProvider.isLoading ||
-                nameController.text.isEmpty
-            ? null
-            : () {
-                ShowAlertDialog.show(
-                  context: context,
-                  title: "Apagar TODOS dados",
-                  subtitle: "Deseja realmente limpar todos os dados do pedido?",
-                  function: () {
-                    customerRegisterProvider.clearAllDataInformed(
-                      addressProvider: addressProvider,
-                      emailController: emailController,
-                      telephoneController: telephoneController,
-                      dddController: dddController,
-                      reducedNameController: reducedNameController,
-                      cpfCnpjController: cpfCnpjController,
-                      dateOfBirthController: dateOfBirthController,
-                      nameController: nameController,
-                      passwordController: passwordController,
-                      passwordConfirmationController:
-                          passwordConfirmationController,
+        onPressed:
+            customerRegisterProvider.isLoading || nameController.text.isEmpty
+                ? null
+                : () {
+                    ShowAlertDialog.show(
+                      context: context,
+                      title: "Apagar TODOS dados",
+                      content: const SingleChildScrollView(
+                        child: Text(
+                          "Deseja realmente limpar todos os dados do pedido?",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      function: () {
+                        customerRegisterProvider.clearAllDataInformed(
+                          addressProvider: addressProvider,
+                          emailController: emailController,
+                          telephoneController: telephoneController,
+                          dddController: dddController,
+                          reducedNameController: reducedNameController,
+                          cpfCnpjController: cpfCnpjController,
+                          dateOfBirthController: dateOfBirthController,
+                          nameController: nameController,
+                          passwordController: passwordController,
+                          passwordConfirmationController:
+                              passwordConfirmationController,
+                        );
+                      },
                     );
                   },
-                );
-              },
         child: const Icon(Icons.delete, color: Colors.white),
-        backgroundColor: customerRegisterProvider.isLoading ||
-                nameController.text.isEmpty
-            ? Colors.grey.withAlpha(190)
-            : Colors.red.withAlpha(190),
+        backgroundColor:
+            customerRegisterProvider.isLoading || nameController.text.isEmpty
+                ? Colors.grey.withAlpha(190)
+                : Colors.red.withAlpha(190),
       ),
     );
   }

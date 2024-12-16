@@ -56,7 +56,12 @@ class CostsQuantityAndTotal extends StatelessWidget {
                         ShowAlertDialog.show(
                           context: context,
                           title: "Remover produto",
-                          subtitle: "Remover produto do carrinho?",
+                          content: const SingleChildScrollView(
+                            child: Text(
+                              "Remover produto do carrinho?",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                           function: () {
                             buyRequestProvider.removeProductFromCart(product);
                           },

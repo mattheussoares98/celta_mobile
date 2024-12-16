@@ -123,8 +123,12 @@ class CartProductsItems {
                                 ShowAlertDialog.show(
                                   context: context,
                                   title: "Remover item",
-                                  subtitle:
+                                  content: const SingleChildScrollView(
+                                    child: Text(
                                       "Deseja realmente remover o item do carrinho?",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                   function: () {
                                     transferRequestProvider
                                         .removeProductFromCart(

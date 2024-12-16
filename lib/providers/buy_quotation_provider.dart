@@ -57,10 +57,10 @@ class BuyQuotationProvider with ChangeNotifier {
       final filters = {
         "CrossIdentity": UserData.crossIdentity,
         "Complete": false,
-        "Data": valueToSearch.isEmpty ? "%" : valueToSearch,
-        "DataType": searchByPersonalizedCode
-            ? 2 // 2-Codigo personalizado
-            : 1, //1-Codigo
+        // "Data": valueToSearch.isEmpty ? "%" : valueToSearch,
+        // "DataType": searchByPersonalizedCode
+        //     ? 2 // 2-Codigo personalizado
+        //     : 1, //1-Codigo
         "InitialDateOfCreation": initialDateOfCreation?.toIso8601String(),
         "FinalDateOfCreation": finalDateOfCreation?.toIso8601String(),
         "InitialDateOfLimit": initialDateOfLimit?.toIso8601String(),

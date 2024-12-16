@@ -31,7 +31,12 @@ class ClearData extends StatelessWidget {
           ShowAlertDialog.show(
             context: context,
             title: "Limpar dados",
-            subtitle: "Deseja realmente limpar todos dados pessoais digitados?",
+            content: const SingleChildScrollView(
+              child: Text(
+                "Deseja realmente limpar todos dados pessoais digitados?",
+                textAlign: TextAlign.center,
+              ),
+            ),
             function: () {
               customerRegisterProvider.clearPersonalDataControllers(
                 nameController: nameController,

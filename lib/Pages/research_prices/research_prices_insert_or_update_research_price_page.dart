@@ -58,7 +58,12 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
     ShowAlertDialog.show(
         context: context,
         title: "Confirmar",
-        subtitle: "Deseja confirmar o cadastro/alteração?",
+        content: const SingleChildScrollView(
+          child: Text(
+            "Deseja confirmar o cadastro/alteração?",
+            textAlign: TextAlign.center,
+          ),
+        ),
         function: () async {
           await researchPricesProvider.addOrUpdateResearchOfPrice(
             context: context,

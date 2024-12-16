@@ -28,8 +28,12 @@ class _SuplliersState extends State<Suplliers> {
       ShowAlertDialog.show(
         context: context,
         title: "Alterar fornecedor",
-        subtitle:
+        content: const SingleChildScrollView(
+          child: Text(
             "Se você alterar o fornecedor, todas empresas e produtos serão removidos do pedido de compras.\n\nDeseja realmente alterar o fornecedor?",
+            textAlign: TextAlign.center,
+          ),
+        ),
         function: () {
           setState(() {
             _groupValue = value!;
@@ -79,8 +83,12 @@ class _SuplliersState extends State<Suplliers> {
               ShowAlertDialog.show(
                 context: context,
                 title: "Pesquisar fornecedores",
-                subtitle:
+                content: const SingleChildScrollView(
+                  child: Text(
                     "Se você consultar os fornecedores novamente, todas empresas e produtos serão removidos.\n\nDeseja realmente pesquisar novamente?",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 function: () async {
                   await getSuppliers(buyRequestProvider);
                 },

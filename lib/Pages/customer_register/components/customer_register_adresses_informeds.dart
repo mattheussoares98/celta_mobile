@@ -109,15 +109,18 @@ class _CustomerRegisterAddressesInformedsState
                             Size(double.infinity, 30)),
                       ),
                       onPressed:
-                          customerRegisterProvider.isLoading ||
-                                  widget.isLoading
+                          customerRegisterProvider.isLoading || widget.isLoading
                               ? null
                               : () {
                                   ShowAlertDialog.show(
                                     context: context,
                                     title: "Remover endereço",
-                                    subtitle:
+                                    content: const SingleChildScrollView(
+                                      child: Text(
                                         "Deseja realmente remover o endereço?",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
                                     function: () {
                                       addressProvider.removeAddress(index);
                                     },

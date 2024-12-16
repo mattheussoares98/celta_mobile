@@ -30,7 +30,12 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
     ShowAlertDialog.show(
       context: context,
       title: "Deseja realmente alterar a URL?",
-      subtitle: "Nova URL: \n${urlCcsController.text}",
+      content: SingleChildScrollView(
+        child: Text(
+          "Nova URL: \n${urlCcsController.text}",
+          textAlign: TextAlign.center,
+        ),
+      ),
       function: () async {
         if (!urlCcsController.text.toLowerCase().contains("http") ||
             !urlCcsController.text.contains(":") ||
@@ -90,7 +95,6 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
                   child: TextFormField(
                     controller: urlCcsController,
                     decoration: FormFieldDecoration.decoration(
-                      
                       context: context,
                     ),
                     onFieldSubmitted: (_) {

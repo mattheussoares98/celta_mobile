@@ -101,7 +101,8 @@ class _AddressComponentState extends State<AddressComponent> {
         child: Column(
           children: [
             FormFieldWidget(
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               enabled:
                   widget.isLoading == false && !addressProvider.isLoadingCep,
               focusNode: _cepFocusNode,
@@ -294,7 +295,8 @@ class _AddressComponentState extends State<AddressComponent> {
                       Expanded(
                         flex: 4,
                         child: FormFieldWidget(
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true),
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
                           focusNode: _numberFocusNode,
@@ -377,8 +379,12 @@ class _AddressComponentState extends State<AddressComponent> {
                             ShowAlertDialog.show(
                               context: context,
                               title: "Apagar dados digitados",
-                              subtitle:
+                              content: const SingleChildScrollView(
+                                child: Text(
                                   "Deseja apagar todos os dados preenchidos?",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                               function: () {
                                 addressProvider.clearAddressControllers(
                                     clearCep: true);

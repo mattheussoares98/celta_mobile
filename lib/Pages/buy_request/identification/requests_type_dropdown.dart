@@ -18,12 +18,10 @@ class RequestsTypeDropdown extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<RequestsTypeDropdown> createState() =>
-      _RequestsTypeDropdownState();
+  State<RequestsTypeDropdown> createState() => _RequestsTypeDropdownState();
 }
 
-class _RequestsTypeDropdownState
-    extends State<RequestsTypeDropdown> {
+class _RequestsTypeDropdownState extends State<RequestsTypeDropdown> {
   String? previousValue;
   String? atualValue;
 
@@ -49,8 +47,12 @@ class _RequestsTypeDropdownState
       ShowAlertDialog.show(
         context: context,
         title: "Alterar valor",
-        subtitle:
+        content: const SingleChildScrollView(
+          child: Text(
             "Se você alterar o modelo de pedido, todas empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
+            textAlign: TextAlign.center,
+          ),
+        ),
         function: () {
           widget.requestsKey.currentState?.reset();
 
@@ -81,8 +83,12 @@ class _RequestsTypeDropdownState
       ShowAlertDialog.show(
         context: context,
         title: "Consultar modelos",
-        subtitle:
+        content: const SingleChildScrollView(
+          child: Text(
             "Se você consultar os modelos, todas empresas e produtos serão removidos do pedido.\n\nDeseja realmente alterar o modelo de pedido?",
+            textAlign: TextAlign.center,
+          ),
+        ),
         function: () async {
           await buyRequestProvider.getRequestsType(
             context: context,

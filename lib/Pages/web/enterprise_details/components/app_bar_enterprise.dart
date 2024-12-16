@@ -17,8 +17,12 @@ AppBar appBarEnterprise({
             ShowAlertDialog.show(
               context: context,
               title: "Deseja realmente excluir a empresa?",
-              subtitle:
+              content: const SingleChildScrollView(
+                child: Text(
                   "Todos dados da empresa serão perdidos e não será possível recuperar!",
+                  textAlign: TextAlign.center,
+                ),
+              ),
               function: () async {
                 await webProvider.deleteEnterprise(
                   context: context,

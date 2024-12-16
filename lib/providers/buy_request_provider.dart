@@ -344,8 +344,12 @@ class BuyRequestProvider with ChangeNotifier {
     if (containsProductInSelectedEnterprise) {
       ShowAlertDialog.show(
         context: context,
-        subtitle:
+        content: const SingleChildScrollView(
+          child: Text(
             "Há produtos informados com a empresa que foi selecionada. Ao remover a seleção da empresa, os produtos dessa empresa serão removidos do pedido.\n\nDeseja realmente retirar a seleção da empresa?",
+            textAlign: TextAlign.center,
+          ),
+        ),
         title: "Remover produtos",
         function: () async {
           _updateSelectedEnterprise(enterprise);

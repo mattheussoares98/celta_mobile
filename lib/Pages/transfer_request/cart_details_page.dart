@@ -20,12 +20,10 @@ class CartDetailsPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CartDetailsPage> createState() =>
-      _CartDetailsPageState();
+  State<CartDetailsPage> createState() => _CartDetailsPageState();
 }
 
-class _CartDetailsPageState
-    extends State<CartDetailsPage> {
+class _CartDetailsPageState extends State<CartDetailsPage> {
   TextEditingController _textEditingController = TextEditingController();
 
   String textButtonMessage({
@@ -63,7 +61,12 @@ class _CartDetailsPageState
             ShowAlertDialog.show(
               context: context,
               title: "Salvar pedido de transferência",
-              subtitle: "Deseja salvar o pedido de transferência?",
+              content: const SingleChildScrollView(
+                child: Text(
+                  "Deseja salvar o pedido de transferência?",
+                  textAlign: TextAlign.center,
+                ),
+              ),
               function: () async {
                 await transferRequestProvider.saveTransferRequest(
                   enterpriseOriginCode: widget.enterpriseOriginCode,

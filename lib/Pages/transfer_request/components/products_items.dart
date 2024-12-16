@@ -49,7 +49,12 @@ class _ProductsItemsState extends State<ProductsItems> {
     ShowAlertDialog.show(
       context: context,
       title: "Confirmar exclusão",
-      subtitle: "Deseja excluir o produto do carrinho?",
+      content: const SingleChildScrollView(
+        child: Text(
+          "Deseja excluir o produto do carrinho?",
+          textAlign: TextAlign.center,
+        ),
+      ),
       function: () {
         setState(() {
           transferRequestProvider.removeProductFromCart(

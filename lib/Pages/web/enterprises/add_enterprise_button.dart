@@ -21,8 +21,12 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
     ShowAlertDialog.show(
         context: context,
         title: "Adicionar cliente?",
-        subtitle:
+        content: SingleChildScrollView(
+          child: Text(
             "Empresa: ${_enterpriseController.text}\nUrl: ${_urlCcsController.text}",
+            textAlign: TextAlign.center,
+          ),
+        ),
         function: () async {
           if (!_urlCcsController.text.toLowerCase().contains("http") ||
               !_urlCcsController.text.contains(":") ||

@@ -41,7 +41,6 @@ class _InsertPricesState extends State<InsertPrices> {
         key: key,
         controller: textEditingController,
         decoration: FormFieldDecoration.decoration(
-          
           context: context,
           labelText: label,
           hintText: label,
@@ -245,9 +244,14 @@ class _InsertPricesState extends State<InsertPrices> {
                     title: _allFieldsAreEmpty()
                         ? "Zerar preços informados"
                         : "Confirmar preços",
-                    subtitle: _allFieldsAreEmpty()
-                        ? "Deseja realmente zerar os preços informados"
-                        : "Deseja realmente confirmar os preços do concorrente?",
+                    content: SingleChildScrollView(
+                      child: Text(
+                        _allFieldsAreEmpty()
+                            ? "Deseja realmente zerar os preços informados"
+                            : "Deseja realmente confirmar os preços do concorrente?",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     function: () async {
                       await researchPricesProvider.insertConcurrentPrices(
                         isAssociatedProducts: widget.isAssociatedProducts,

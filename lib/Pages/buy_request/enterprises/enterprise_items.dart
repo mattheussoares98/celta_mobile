@@ -22,8 +22,12 @@ class EnterpriseItems extends StatelessWidget {
         ShowAlertDialog.show(
           context: context,
           title: "Consultar empresas",
-          subtitle:
+          content: const SingleChildScrollView(
+            child: Text(
               "Se consultar as empresas novamente, todos produtos serão removidos!\n\nDeseja realmente consultar as empresas novamente?",
+              textAlign: TextAlign.center,
+            ),
+          ),
           function: () async {
             await buyRequestProvider.getEnterprises(
               context: context,

@@ -65,7 +65,12 @@ class _CustomerRegisterTelephonesInformedsState
                             ShowAlertDialog.show(
                               context: context,
                               title: "Excluir telefone",
-                              subtitle: "Deseja realmente excluir o telefone?",
+                              content: const SingleChildScrollView(
+                                child: Text(
+                                  "Deseja realmente excluir o telefone?",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                               function: () {
                                 customerRegisterProvider.removeTelephone(index);
                               },

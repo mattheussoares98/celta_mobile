@@ -94,11 +94,15 @@ class TechnicalSupportPage extends StatelessWidget {
                           ShowAlertDialog.show(
                             context: context,
                             title: "Enviar mensagem no plantão?",
-                            subtitle:
+                            content: SingleChildScrollView(
+                              child: Text(
                                 "O PLANTÃO DEVE SER ACIONADO SOMENTE EM CASOS DE URGÊNCIA!\n\n" +
                                     "Ainda está em horário comercial. Só entre em contato com o plantão se hoje for feriado\n\n" +
                                     "Horário atual: $currentDate\n\n" +
                                     "Hoje é feriado?",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                             subtitleSize: 15,
                             function: () async => {
                               await UrlLauncher.searchAndLaunchUrl(
@@ -130,9 +134,13 @@ class TechnicalSupportPage extends StatelessWidget {
                           showConfirmAndCancelMessage: false,
                           context: context,
                           title: "Fora do horário comercial",
-                          subtitle:
+                          content: SingleChildScrollView(
+                            child: Text(
                               "Você está fora do horário comercial\n\nEntre em contato com o plantão\n\n" +
                                   "Horário atual: $currentDate\n\n",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                           subtitleSize: 15,
                           function: () {},
                         );
@@ -164,7 +172,7 @@ class TechnicalSupportPage extends StatelessWidget {
         title: const Text("Entrar em contato"),
       ),
       body: SingleChildScrollView(
-    primary: false, 
+        primary: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

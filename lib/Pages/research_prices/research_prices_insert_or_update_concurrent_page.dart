@@ -57,9 +57,14 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
         title: researchPricesProvider.selectedConcurrent == null
             ? "Cadastrar concorrente"
             : "Alterar concorrente",
-        subtitle: researchPricesProvider.selectedConcurrent == null
-            ? "Deseja realmente cadastrar o concorrente com os dados informados?"
-            : "Deseja realmente alterar o concorrente com os dados informados?",
+        content: SingleChildScrollView(
+          child: Text(
+            researchPricesProvider.selectedConcurrent == null
+                ? "Deseja realmente cadastrar o concorrente com os dados informados?"
+                : "Deseja realmente alterar o concorrente com os dados informados?",
+            textAlign: TextAlign.center,
+          ),
+        ),
         function: () async {
           await researchPricesProvider.addOrUpdateConcurrent(
             context: context,

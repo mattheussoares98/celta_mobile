@@ -39,8 +39,12 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
                   ShowAlertDialog.show(
                     context: context,
                     title: "Liberar recebimento?",
-                    subtitle:
+                    content: const SingleChildScrollView(
+                      child: Text(
                         "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     function: () async {
                       await widget.receiptProvider.liberate(
                         grDocCode: widget.grDocCode,

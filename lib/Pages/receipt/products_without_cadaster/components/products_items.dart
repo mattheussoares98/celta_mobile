@@ -85,7 +85,12 @@ class ProductsItems extends StatelessWidget {
                         ShowAlertDialog.show(
                             context: context,
                             title: "Remover produto",
-                            subtitle: "Deseja realmente remover o produto?",
+                            content: const SingleChildScrollView(
+                              child: Text(
+                                "Deseja realmente remover o produto?",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                             function: () async {
                               await receiptProvider
                                   .deleteProductWithoutCadaster(

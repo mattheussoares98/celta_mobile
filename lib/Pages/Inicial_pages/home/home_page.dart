@@ -51,7 +51,9 @@ class _HomePageState extends State<HomePage> {
           insetPadding: const EdgeInsets.all(4),
           contentPadding: const EdgeInsets.all(0),
           subtitleSize: 13,
-          subtitle: '''
+          content: const SingleChildScrollView(
+            child: Text(
+              '''
           Prezado(a) Cliente
 
           Gostaríamos de informá-lo sobre uma atualização importante em relação ao uso dos módulos (CeltaMobile) integrados ao nosso ERP. Com o objetivo de mantermos a qualidade e disponibilidade dos serviços oferecidos, passaremos a cobrar uma taxa para a utilização dos 12 módulos que compõem nosso App CELTA MOBILE, como inventário, alteração de preços, pedido de vendas, ajuste de estoque, entre outros.
@@ -63,6 +65,9 @@ class _HomePageState extends State<HomePage> {
           Atenciosamente,
           CeltaWare Sistemas
           ''',
+              textAlign: TextAlign.center,
+            ),
+          ),
           function: () async {},
           showConfirmAndCancelMessage: false,
         );
@@ -154,7 +159,12 @@ class _HomePageState extends State<HomePage> {
               ShowAlertDialog.show(
                 context: context,
                 title: "Fechar o aplicativo",
-                subtitle: "Deseja realmente fechar o aplicativo?",
+                content: const SingleChildScrollView(
+                  child: Text(
+                    "Deseja realmente fechar o aplicativo?",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 function: () {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                 },
