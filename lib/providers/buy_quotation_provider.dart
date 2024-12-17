@@ -169,7 +169,7 @@ class BuyQuotationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getSupplier({
+  Future<void> searchSupplier({
     required BuildContext context,
     required TextEditingController searchController,
   }) async {
@@ -179,13 +179,13 @@ class BuyQuotationProvider with ChangeNotifier {
     _selectedSupplier = null;
     notifyListeners();
 
-    try {
-      Map jsonGetSupplier = {
-        "CrossIdentity": UserData.crossIdentity,
-        "SearchValue": searchController.text,
-        "RoutineInt": 9,
-      };
+    Map jsonGetSupplier = {
+      "CrossIdentity": UserData.crossIdentity,
+      "SearchValue": searchController.text,
+      "RoutineInt": 9,
+    };
 
+    try {
       await SoapRequest.soapPost(
         parameters: {
           "filters": json.encode(jsonGetSupplier),

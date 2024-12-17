@@ -15,7 +15,7 @@ class SearchWidget extends StatefulWidget {
   final Function()? onPressSearch;
   final TextEditingController searchProductController;
   final FocusNode searchFocusNode;
-  final String hintText;
+  final String? hintText;
   final String labelText;
   final bool useCamera;
   final bool autofocus;
@@ -58,13 +58,13 @@ class _SearchWidgetState extends State<SearchWidget> {
     }
   }
 
-  String _getHintText(ConfigurationsProvider configurationsProvider) {
+  String? _getHintText(ConfigurationsProvider configurationsProvider) {
     if (configurationsProvider.legacyCode?.value == true) {
       return "Código legado";
     } else if (configurationsProvider.productPersonalizedCode?.value == true) {
       return "Código personalizado";
     } else {
-      return widget.hintText;
+      return widget.hintText ?? "PLU-EAN-NOME-%-BALANÇA";
     }
   }
 
