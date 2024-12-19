@@ -26,6 +26,11 @@ class BuyQuotationProvider with ChangeNotifier {
   SupplierModel? _selectedSupplier;
   SupplierModel? get selectedSupplier => _selectedSupplier;
 
+  List<BuyerModel> _searchedBuyers = [];
+  List<BuyerModel> get searchedBuyers => [..._searchedBuyers];
+  BuyerModel? _selectedBuyer;
+  BuyerModel? get selectedBuyer => _selectedBuyer;
+
   Future<void> insertUpdateBuyQuotation({
     required bool isInserting,
   }) async {
@@ -208,6 +213,32 @@ class BuyQuotationProvider with ChangeNotifier {
         if (_searchedSuppliers.length == 1) {
           _selectedSupplier = _searchedSuppliers[0];
         }
+      }
+    } catch (e) {
+      ShowSnackbarMessage.show(message: e.toString(), context: context);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> searchBuyer(BuildContext context) async {
+    _isLoading = false;
+    _errorMessage = "";
+    _searchedBuyers.clear();
+    _selectedBuyer = null;
+    notifyListeners();
+
+    try {
+      _searchedBuyers = await SoapHelper.getBuyers();
+
+      if (SoapRequestResponse.errorMessage != "") {
+        ShowSnackbarMessage.show(
+          message: SoapRequestResponse.errorMessage,
+          context: context,
+        );
+      } else if (_searchedBuyers.length == 1) {
+        _selectedBuyer = _searchedBuyers[0];
       }
     } catch (e) {
       ShowSnackbarMessage.show(message: e.toString(), context: context);
