@@ -213,7 +213,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     );
   }
 
-  _enableConfigurationsDialog({
+  Widget _enableConfigurationsDialog({
     required ConfigurationsProvider configurationsProvider,
     required List<ConfigurationType> configurations,
   }) {
@@ -226,36 +226,35 @@ class _SearchWidgetState extends State<SearchWidget> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return StatefulBuilder(
-              builder: (context, setState) {
-                return AlertDialog(
-                  insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  contentPadding: const EdgeInsets.all(8),
-                  title: const FittedBox(
-                    child: Text(
-                      "Configurações de pesquisa",
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                      ),
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: AlertDialog(
+                insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: const EdgeInsets.all(8),
+                title: const FittedBox(
+                  child: Text(
+                    "Configurações de pesquisa",
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  content: SingleChildScrollView(
-                    primary: false,
-                    child: ConfigurationsCheckbox(
-                      configurations: configurations,
-                    ),
+                ),
+                content: SingleChildScrollView(
+                  primary: false,
+                  child: ConfigurationsCheckbox(
+                    configurations: configurations,
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Fechar', textAlign: TextAlign.center),
-                    ),
-                  ],
-                );
-              },
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Fechar', textAlign: TextAlign.center),
+                  ),
+                ],
+              ),
             );
           },
         );

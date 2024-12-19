@@ -32,16 +32,25 @@ class _ConfigurationsCheckboxState extends State<ConfigurationsCheckbox> {
                         },
                         child: Column(
                           children: [
-                            CheckboxListTile(
-                              value: e.value,
-                              onChanged: (_) => {
-                                e.updateValue(),
-                              },
-                              title: Text(
-                                e.title,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 15),
-                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    e.title,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Checkbox(
+                                  value: e.value,
+                                  onChanged: (_) => {
+                                    e.updateValue(),
+                                  },
+                                ),
+                              ],
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
