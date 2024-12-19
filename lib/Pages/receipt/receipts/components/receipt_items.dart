@@ -61,9 +61,9 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                           subtitle: receipt.Numero_ProcRecebDoc,
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
-                          title: "Emitente",
+                          title: receipt.EmitterName == "" ? null : "Emitente",
                           subtitle: receipt.EmitterName == ""
-                              ? "Não há"
+                              ? "Sem emitente"
                               : receipt.EmitterName,
                         ),
                         if (receipt.Grupo != "-1")
@@ -72,6 +72,14 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                             subtitle: receipt.Grupo,
                             subtitleColor: Colors.amber,
                           ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: receipt.Observacoes_ProcRecebDoc != null
+                              ? "Observações"
+                              : null,
+                          subtitle: receipt.Observacoes_ProcRecebDoc != null
+                              ? receipt.Observacoes_ProcRecebDoc.toString()
+                              : "Sem observações",
+                        ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",
                           subtitle: receipt.Status.toString(),
