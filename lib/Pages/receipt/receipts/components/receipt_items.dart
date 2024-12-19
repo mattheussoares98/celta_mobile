@@ -79,6 +79,10 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                           subtitle: receipt.Observacoes_ProcRecebDoc != null
                               ? receipt.Observacoes_ProcRecebDoc.toString()
                               : "Sem observações",
+                          otherWidget: TextButton(
+                            onPressed: () async {},
+                            child: const Text("Alterar"),
+                          ),
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",
@@ -94,10 +98,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                         ),
                         if (selectedIndex == index)
                           LiberateCheckButtons(
-                            grDocCode: receipt.CodigoInterno_ProcRecebDoc,
-                            emitterName: receipt.EmitterName,
-                            numeroProcRecebDoc: receipt.Numero_ProcRecebDoc,
-                            receiptProvider: widget.receiptProvider,
+                            receipt: receipt,
                             index: index,
                             enterprise: widget.enterprise,
                           ),
