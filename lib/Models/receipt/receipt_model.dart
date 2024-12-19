@@ -6,6 +6,8 @@ class ReceiptModel {
   final String Numero_ProcRecebDoc;
   final String EmitterName;
   final String Grupo;
+  final String? Observacoes_ProcRecebDoc;
+  final String? DefaultObservations;
   dynamic Status; //ele vem como inteiro mas preciso tratar como string
   Color StatusColor;
 
@@ -15,6 +17,8 @@ class ReceiptModel {
     required this.Numero_ProcRecebDoc,
     required this.EmitterName,
     required this.Grupo,
+    required this.Observacoes_ProcRecebDoc,
+    required this.DefaultObservations,
     required this.Status,
     required this.StatusColor,
   });
@@ -28,5 +32,7 @@ class ReceiptModel {
         Grupo: json["Grupo"] ?? "-1",
         Status: json["Status"].toString(),
         StatusColor: Colors.black,
+        Observacoes_ProcRecebDoc: json["Observacoes_ProcRecebDoc"],
+        DefaultObservations: json["DefaultObservations"],
       );
 }
