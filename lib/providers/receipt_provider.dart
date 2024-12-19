@@ -9,7 +9,7 @@ import '../utils/utils.dart';
 import './providers.dart';
 
 class ReceiptProvider with ChangeNotifier {
-  final List<ReceiptModel> _receipts = [];
+  List<ReceiptModel> _receipts = [];
 
   List<ReceiptModel> get receipts => [..._receipts];
   int get receiptCount => _receipts.length;
@@ -338,10 +338,20 @@ class ReceiptProvider with ChangeNotifier {
       _errorMessage = SoapRequestResponse.errorMessage;
 
       if (_errorMessage == "") {
-        ReceiptModel.dataToReceiptModel(
-          data: SoapRequestResponse.responseAsMap["ProcRecebDocumentos"],
-          listToAdd: _receipts,
-        );
+        final response =
+            SoapRequestResponse.responseAsMap["ProcRecebDocumentos"];
+        if (response is Map) {
+          _receipts = [
+            ReceiptModel.fromJson(
+              SoapRequestResponse.responseAsMap["ProcRecebDocumentos"],
+            )
+          ];
+        } else {
+          _receipts =
+              (SoapRequestResponse.responseAsMap["ProcRecebDocumentos"] as List)
+                  .map((e) => ReceiptModel.fromJson(e))
+                  .toList();
+        }
       }
     } catch (e) {
       //print("Erro para efetuar a requisição: $e");

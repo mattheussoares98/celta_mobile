@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class ReceiptModel {
@@ -21,33 +19,14 @@ class ReceiptModel {
     required this.StatusColor,
   });
 
-  static dataToReceiptModel({
-    required dynamic data,
-    required List listToAdd,
-  }) {
-    if (data == null) {
-      return;
-    }
-    List dataList = [];
-    if (data is Map) {
-      dataList.add(data);
-    } else {
-      dataList = data;
-    }
-
-    dataList.forEach((element) {
-      listToAdd.add(
-        ReceiptModel(
-          CodigoInterno_ProcRecebDoc:
-              int.parse(element["CodigoInterno_ProcRecebDoc"]),
-          CodigoInterno_Empresa: int.parse(element["CodigoInterno_Empresa"]),
-          Numero_ProcRecebDoc: element["Numero_ProcRecebDoc"],
-          EmitterName: element["EmitterName"] ?? "",
-          Grupo: element["Grupo"] ?? "-1",
-          Status: element["Status"].toString(),
-          StatusColor: Colors.black,
-        ),
+  factory ReceiptModel.fromJson(Map json) => ReceiptModel(
+        CodigoInterno_ProcRecebDoc:
+            int.parse(json["CodigoInterno_ProcRecebDoc"]),
+        CodigoInterno_Empresa: int.parse(json["CodigoInterno_Empresa"]),
+        Numero_ProcRecebDoc: json["Numero_ProcRecebDoc"],
+        EmitterName: json["EmitterName"] ?? "",
+        Grupo: json["Grupo"] ?? "-1",
+        Status: json["Status"].toString(),
+        StatusColor: Colors.black,
       );
-    });
-  }
 }
