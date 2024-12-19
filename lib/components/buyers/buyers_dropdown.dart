@@ -36,6 +36,11 @@ class BuyersDropDown extends StatelessWidget {
               key: dropdownKey,
               value: value,
               disabledHint: Center(child: Text(disabledHintText)),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+              ),
               isExpanded: true,
               hint: Center(
                 child: Text(
@@ -61,10 +66,6 @@ class BuyersDropDown extends StatelessWidget {
                               child: Text(
                                 value.Name,
                               ),
-                            ),
-                            const Divider(
-                              height: 4,
-                              color: Colors.black,
                             ),
                           ],
                         ),

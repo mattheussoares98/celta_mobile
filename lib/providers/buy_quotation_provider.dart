@@ -222,6 +222,11 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
+  void updateSelectedBuyer(BuyerModel? buyer) {
+    _selectedBuyer = buyer;
+    notifyListeners();
+  }
+
   Future<void> searchBuyer(BuildContext context) async {
     _isLoading = false;
     _errorMessage = "";
