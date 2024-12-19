@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/components.dart';
+import '../../../../models/configurations/configurations.dart';
 import '../../../../models/enterprise/enterprise.dart';
 import '../../../../models/soap/products/products.dart';
 import '../../../../providers/providers.dart';
-import 'filter.dart';
 
 class FilterProduct extends StatelessWidget {
   final FocusNode searchProductFocusNode;
@@ -23,55 +23,110 @@ class FilterProduct extends StatelessWidget {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
 
-    return SearchItemToFilter(
-      focusNode: searchProductFocusNode,
-      controller: searchProductController,
-      enterprise: enterprise,
-      items: buyQuotationProvider.searchedProducts,
-      labelSearch: "Filtrar produto",
-      selectedItem: buyQuotationProvider.selectedProduct,
-      showConfigurationsIcon: true,
-      updateSelectedItem: (GetProductJsonModel item) {
-        buyQuotationProvider.updateSelectedProduct(item);
-      },
-      searchItems: () async {
-        buyQuotationProvider.searchProduct(
-          enterprise: enterprise,
+    return Column(
+      children: [
+        SearchWidget(
+          labelText: "Filtrar produto",
+          searchFocusNode: searchProductFocusNode,
+          configurations: [
+            ConfigurationType.legacyCode,
+            ConfigurationType.personalizedCode,
+          ],
+          showConfigurationsIcon: true,
           searchProductController: searchProductController,
-          configurationsProvider: configurationsProvider,
-          context: context,
-        );
-      },
-      itemWidgetToSelect: (GetProductJsonModel item) => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              TitleAndSubtitle.titleAndSubtitle(
-                subtitle: "${item.name} (${item.packingQuantity})",
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                  title: "PLU",
-                  subtitle: item.plu,
-                  otherWidget: buyQuotationProvider.selectedProduct == null
-                      ? null
-                      : TextButton.icon(
-                          onPressed: () {
-                            buyQuotationProvider.updateSelectedProduct(null);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                          label: const Text(
-                            "Remover filtro do produto",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        )),
-            ],
-          ),
+          onPressSearch: () async {
+            await buyQuotationProvider.searchProduct(
+              enterprise: enterprise,
+              searchProductController: searchProductController,
+              configurationsProvider: configurationsProvider,
+              context: context,
+            );
+
+            final searchedProducts = buyQuotationProvider.searchedProducts;
+            if (searchedProducts.isNotEmpty) {
+              searchProductController.clear();
+            }
+
+            if (searchedProducts.length > 1) {
+              ShowAlertDialog.show(
+                context: context,
+                title: "Selecione um item",
+                insetPadding: const EdgeInsets.symmetric(vertical: 8),
+                contentPadding: const EdgeInsets.all(0),
+                showConfirmAndCancelMessage: false,
+                showCloseAlertDialogButton: true,
+                canCloseClickingOut: false,
+                content: Scaffold(
+                  body: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: searchedProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = searchedProducts[index];
+
+                      return InkWell(
+                        onTap: () {
+                          buyQuotationProvider.updateSelectedProduct(product);
+
+                          Navigator.of(context).pop();
+                        },
+                        child: productItem(
+                          product: product,
+                          buyQuotationProvider: buyQuotationProvider,
+                          showRemoveFilter: false,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                function: () async {},
+              );
+            }
+          },
         ),
-      ),
+        productItem(
+          product: buyQuotationProvider.selectedProduct,
+          buyQuotationProvider: buyQuotationProvider,
+          showRemoveFilter: true,
+        )
+      ],
     );
   }
 }
+
+Widget productItem({
+  required GetProductJsonModel? product,
+  required BuyQuotationProvider buyQuotationProvider,
+  required bool showRemoveFilter,
+}) =>
+    product == null
+        ? const SizedBox()
+        : Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  TitleAndSubtitle.titleAndSubtitle(
+                    subtitle: "${product.name} (${product.packingQuantity})",
+                  ),
+                  TitleAndSubtitle.titleAndSubtitle(
+                    title: "PLU",
+                    subtitle: product.plu,
+                  ),
+                  if (showRemoveFilter)
+                    TextButton.icon(
+                      onPressed: () {
+                        buyQuotationProvider.updateSelectedProduct(null);
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      label: const Text(
+                        "Remover filtro do produto",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
