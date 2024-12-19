@@ -585,4 +585,43 @@ class ReceiptProvider with ChangeNotifier {
     _isLoadingProductsWithoutCadaster = false;
     notifyListeners();
   }
+
+  Future<void> updateObservations({
+    required String observations,
+    required int grDocCode,
+    required BuildContext context,
+  }) async {
+    _isLoadingLiberateCheck = true;
+    _errorMessageLiberate = "";
+    notifyListeners();
+
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "grDocCode": grDocCode,
+          "observations": observations,
+        },
+        typeOfResponse: "UpdateObservationsResponse",
+        SOAPAction: "UpdateObservations",
+        serviceASMX: "CeltaGoodsReceivingService.asmx",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        //quando da certo a liberação, precisa consultar novamente os documentos pra atualizar o status corretamente
+        ShowSnackbarMessage.show(
+          message: SoapRequestResponse.errorMessage,
+          context: context,
+        );
+      }
+    } catch (e) {
+      ShowSnackbarMessage.show(
+        message: SoapRequestResponse.errorMessage,
+        context: context,
+      );
+    }
+
+    _isLoadingLiberateCheck = false;
+    notifyListeners();
+  }
 }
