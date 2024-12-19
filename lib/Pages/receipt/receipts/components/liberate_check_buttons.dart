@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../models/enterprise/enterprise.dart';
+import '../../../../models/receipt/receipt.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 import '../../../../components/components.dart';
 
 class LiberateCheckButtons extends StatefulWidget {
-  final int grDocCode;
-  final ReceiptProvider receiptProvider;
+  final ReceiptModel receipt;
   final int index;
-  final String emitterName;
-  final String numeroProcRecebDoc;
   final EnterpriseModel enterprise;
   const LiberateCheckButtons({
-    required this.grDocCode,
+    required this.receipt,
     required this.enterprise,
-    required this.emitterName,
-    required this.numeroProcRecebDoc,
-    required this.receiptProvider,
     required this.index,
     Key? key,
   }) : super(key: key);
@@ -29,6 +25,8 @@ class LiberateCheckButtons extends StatefulWidget {
 class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
   @override
   Widget build(BuildContext context) {
+    ReceiptProvider receiptProvider = Provider.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -45,8 +43,8 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
                   ),
                 ),
                 function: () async {
-                  await widget.receiptProvider.liberate(
-                    grDocCode: widget.grDocCode,
+                  await receiptProvider.liberate(
+                    grDocCode: widget.receipt.CodigoInterno_ProcRecebDoc,
                     index: widget.index,
                     context: context,
                     enterprise: widget.enterprise,
@@ -64,9 +62,9 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
               Navigator.of(context).pushNamed(
                 APPROUTES.RECEIPT_CONFERENCE,
                 arguments: {
-                  "grDocCode": widget.grDocCode,
-                  "numeroProcRecebDoc": widget.numeroProcRecebDoc,
-                  "emitterName": widget.emitterName,
+                  "grDocCode": widget.receipt.CodigoInterno_ProcRecebDoc,
+                  "numeroProcRecebDoc": widget.receipt.Numero_ProcRecebDoc,
+                  "emitterName": widget.receipt.EmitterName,
                   "enterprise": widget.enterprise,
                 },
               );
