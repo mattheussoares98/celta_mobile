@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import '../../models/buy_request/buy_request.dart';
 import '../../models/enterprise/enterprise.dart';
 import '../../models/inventory/inventory.dart';
@@ -328,9 +330,7 @@ class SoapHelper {
     }
   }
 
-  static Future<void> getBuyers({
-    required List<BuyRequestBuyerModel> buyers,
-  }) async {
+  static Future<List<BuyRequestBuyerModel>> getBuyers() async {
     try {
       Map jsonGetBuyer = {
         "CrossIdentity": UserData.crossIdentity,
@@ -351,12 +351,12 @@ class SoapHelper {
         throw Exception();
       }
 
-      BuyRequestBuyerModel.responseAsStringToBuyRequestBuyerModel(
-        responseAsString: SoapRequestResponse.responseAsString,
-        listToAdd: buyers,
-      );
+      return (json.decode(SoapRequestResponse.responseAsString) as List)
+          .map((e) => BuyRequestBuyerModel.fromJson(e))
+          .toList();
     } catch (e) {
-      e;
+      debugPrint(e.toString());
+      return [];
     }
   }
 }

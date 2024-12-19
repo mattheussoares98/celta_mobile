@@ -564,7 +564,7 @@ class BuyRequestProvider with ChangeNotifier {
     if (isSearchingAgain!) notifyListeners();
 
     try {
-      await SoapHelper.getBuyers(buyers: _buyers);
+      _buyers = await SoapHelper.getBuyers();
 
       _errorMessageBuyer = SoapRequestResponse.errorMessage;
 

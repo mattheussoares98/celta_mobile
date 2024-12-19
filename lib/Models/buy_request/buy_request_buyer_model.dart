@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class BuyRequestBuyerModel {
   final int Code;
   final String PersonalizedCode;
@@ -21,41 +19,7 @@ class BuyRequestBuyerModel {
     required this.Buyer,
   });
 
-  static responseAsStringToBuyRequestBuyerModel({
-    required String responseAsString,
-    required List listToAdd,
-  }) {
-    List responseAsList = json.decode(responseAsString.toString());
-    Map responseAsMap = responseAsList.asMap();
-
-    responseAsMap.forEach((id, data) {
-      listToAdd.add(
-        BuyRequestBuyerModel(
-          Code: data["Code"],
-          PersonalizedCode: data["PersonalizedCode"],
-          Name: data["Name"],
-          NameReduced: data["NameReduced"],
-          CpfNumber: data["CpfNumber"],
-          RgNumber: data["RgNumber"],
-          Seller: data["Seller"],
-          Buyer: data["Buyer"],
-        ),
-      );
-    });
-  }
-
-  toJson() => {
-        "Code": Code,
-        "PersonalizedCode": PersonalizedCode,
-        "Name": Name,
-        "NameReduced": NameReduced,
-        "CpfNumber": CpfNumber,
-        "RgNumber": RgNumber,
-        "Seller": Seller,
-        "Buyer": Buyer,
-      };
-
-  static fromJson(Map json) => BuyRequestBuyerModel(
+  factory BuyRequestBuyerModel.fromJson(Map json) => BuyRequestBuyerModel(
         Code: json["Code"],
         PersonalizedCode: json["PersonalizedCode"],
         Name: json["Name"],
@@ -65,4 +29,15 @@ class BuyRequestBuyerModel {
         Seller: json["Seller"],
         Buyer: json["Buyer"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "Code": Code,
+        "PersonalizedCode": PersonalizedCode,
+        "Name": Name,
+        "NameReduced": NameReduced,
+        "CpfNumber": CpfNumber,
+        "RgNumber": RgNumber,
+        "Seller": Seller,
+        "Buyer": Buyer,
+      };
 }
