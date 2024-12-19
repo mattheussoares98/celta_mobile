@@ -17,16 +17,16 @@ class BuyRequestProvider with ChangeNotifier {
   String get errorMessageGetProducts => _errorMessageGetProducts;
   int get productsCount => _products.length;
 
-  List<BuyRequestBuyerModel> _buyers = [];
-  List<BuyRequestBuyerModel> get buyers => [..._buyers];
+  List<BuyerModel> _buyers = [];
+  List<BuyerModel> get buyers => [..._buyers];
   bool _isLoadingBuyer = false;
   bool get isLoadingBuyer => _isLoadingBuyer;
   String _errorMessageBuyer = "";
   String get errorMessageBuyer => _errorMessageBuyer;
   int get buyersCount => _buyers.length;
-  static BuyRequestBuyerModel? _selectedBuyer;
-  BuyRequestBuyerModel? get selectedBuyer => _selectedBuyer;
-  set selectedBuyer(BuyRequestBuyerModel? value) {
+  static BuyerModel? _selectedBuyer;
+  BuyerModel? get selectedBuyer => _selectedBuyer;
+  set selectedBuyer(BuyerModel? value) {
     _selectedBuyer = value;
     notifyListeners();
     _updateDataInDatabase();
@@ -225,10 +225,10 @@ class BuyRequestProvider with ChangeNotifier {
   }
 
   _restoreBuyersAndSelectedBuyer(Map jsonInDatabase) {
-    List<BuyRequestBuyerModel> buyersTemp = [];
+    List<BuyerModel> buyersTemp = [];
     if (jsonInDatabase.containsKey("buyers")) {
       jsonInDatabase["buyers"].forEach((element) {
-        buyersTemp.add(BuyRequestBuyerModel.fromJson(element));
+        buyersTemp.add(BuyerModel.fromJson(element));
       });
       _buyers = buyersTemp;
     }
@@ -236,7 +236,7 @@ class BuyRequestProvider with ChangeNotifier {
     if (jsonInDatabase.containsKey("selectedBuyer") &&
         jsonInDatabase["selectedBuyer"] != null) {
       _selectedBuyer =
-          BuyRequestBuyerModel.fromJson(jsonInDatabase["selectedBuyer"]);
+          BuyerModel.fromJson(jsonInDatabase["selectedBuyer"]);
     }
   }
 

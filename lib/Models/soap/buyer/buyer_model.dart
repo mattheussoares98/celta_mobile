@@ -1,4 +1,4 @@
-class BuyRequestBuyerModel {
+class BuyerModel {
   final int Code;
   final String PersonalizedCode;
   final String Name;
@@ -8,7 +8,7 @@ class BuyRequestBuyerModel {
   final bool Seller;
   final bool Buyer;
 
-  BuyRequestBuyerModel({
+  BuyerModel({
     required this.Code,
     required this.PersonalizedCode,
     required this.Name,
@@ -19,7 +19,7 @@ class BuyRequestBuyerModel {
     required this.Buyer,
   });
 
-  factory BuyRequestBuyerModel.fromJson(Map json) => BuyRequestBuyerModel(
+  factory BuyerModel.fromJson(Map json) => BuyerModel(
         Code: json["Code"],
         PersonalizedCode: json["PersonalizedCode"],
         Name: json["Name"],
