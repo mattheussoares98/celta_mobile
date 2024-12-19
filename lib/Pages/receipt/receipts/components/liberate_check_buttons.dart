@@ -33,79 +33,41 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-          onPressed: widget.receiptProvider.isLoadingLiberateCheck
-              ? null
-              : () async {
-                  ShowAlertDialog.show(
-                    context: context,
-                    title: "Liberar recebimento?",
-                    content: const SingleChildScrollView(
-                      child: Text(
-                        "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    function: () async {
-                      await widget.receiptProvider.liberate(
-                        grDocCode: widget.grDocCode,
-                        index: widget.index,
-                        context: context,
-                        enterprise: widget.enterprise,
-                      );
-                    },
-                  );
-                },
-          child: widget.receiptProvider.isLoadingLiberateCheck
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'AGUARDE...',
-                    ),
-                    const SizedBox(width: 7),
-                    Container(
-                      height: 20,
-                      width: 20,
-                      child: const CircularProgressIndicator(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                )
-              : const Text("Liberar"),
+          onPressed: () async {
+            ShowAlertDialog.show(
+              context: context,
+              title: "Liberar recebimento?",
+              content: const SingleChildScrollView(
+                child: Text(
+                  "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              function: () async {
+                await widget.receiptProvider.liberate(
+                  grDocCode: widget.grDocCode,
+                  index: widget.index,
+                  context: context,
+                  enterprise: widget.enterprise,
+                );
+              },
+            );
+          },
+          child: const Text("Liberar"),
         ),
         ElevatedButton(
-          onPressed: widget.receiptProvider.isLoadingLiberateCheck
-              ? null
-              : () {
-                  Navigator.of(context).pushNamed(
-                    APPROUTES.RECEIPT_CONFERENCE,
-                    arguments: {
-                      "grDocCode": widget.grDocCode,
-                      "numeroProcRecebDoc": widget.numeroProcRecebDoc,
-                      "emitterName": widget.emitterName,
-                      "enterprise": widget.enterprise,
-                    },
-                  );
-                },
-          child: widget.receiptProvider.isLoadingLiberateCheck
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'AGUARDE...',
-                    ),
-                    const SizedBox(width: 7),
-                    Container(
-                      height: 20,
-                      width: 20,
-                      child: const CircularProgressIndicator(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                )
-              : const Text("Conferir"),
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              APPROUTES.RECEIPT_CONFERENCE,
+              arguments: {
+                "grDocCode": widget.grDocCode,
+                "numeroProcRecebDoc": widget.numeroProcRecebDoc,
+                "emitterName": widget.emitterName,
+                "enterprise": widget.enterprise,
+              },
+            );
+          },
+          child: const Text("Conferir"),
         )
       ],
     );
