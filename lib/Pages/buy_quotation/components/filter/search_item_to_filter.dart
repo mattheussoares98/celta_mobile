@@ -47,6 +47,10 @@ class SearchItemToFilter<T> extends StatelessWidget {
           onPressSearch: () async {
             await searchItems();
 
+            if (items.isNotEmpty) {
+              controller.clear();
+            }
+
             if (items.length > 1) {
               ShowAlertDialog.show(
                   context: context,

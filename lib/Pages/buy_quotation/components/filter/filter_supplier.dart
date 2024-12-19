@@ -40,35 +40,39 @@ class FilterSupplier extends StatelessWidget {
         );
       },
       itemWidgetToSelect: (SupplierModel supplier) {
-        return Column(
-          children: [
-            TitleAndSubtitle.titleAndSubtitle(
-              subtitle: supplier.Name,
-              otherWidget: buyQuotationProvider.selectedSupplier == null
-                  ? null
-                  : TextButton.icon(
-                      onPressed: () {
-                        buyQuotationProvider.updateSelectedSupplier(null);
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      label: const Text(
-                        "Remover filtro do fornecedor",
-                        style: TextStyle(color: Colors.red),
-                      ),
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                TitleAndSubtitle.titleAndSubtitle(
+                  subtitle: supplier.Name,
+                ),
+                TitleAndSubtitle.titleAndSubtitle(
+                  title: "CNPJ",
+                  subtitle: supplier.CnpjCpfNumber,
+                ),
+                TitleAndSubtitle.titleAndSubtitle(
+                  title: "Código",
+                  subtitle: supplier.Code.toString(),
+                ),
+                if (buyQuotationProvider.selectedSupplier != null)
+                  TextButton.icon(
+                    onPressed: () {
+                      buyQuotationProvider.updateSelectedSupplier(null);
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
                     ),
+                    label: const Text(
+                      "Remover filtro do fornecedor",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  )
+              ],
             ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: "CNPJ",
-              subtitle: supplier.CnpjCpfNumber,
-            ),
-            TitleAndSubtitle.titleAndSubtitle(
-              title: "Código",
-              subtitle: supplier.Code.toString(),
-            ),
-          ],
+          ),
         );
       },
       selectedItem: buyQuotationProvider.selectedSupplier,

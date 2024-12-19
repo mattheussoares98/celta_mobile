@@ -59,10 +59,10 @@ class BuyQuotationProvider with ChangeNotifier {
       final filters = {
         "CrossIdentity": UserData.crossIdentity,
         "Complete": false,
-        // "Data": valueToSearch.isEmpty ? "%" : valueToSearch,
-        // "DataType": searchByPersonalizedCode
-        //     ? 2 // 2-Codigo personalizado
-        //     : 1, //1-Codigo
+        "Data": valueToSearch.isEmpty ? "%" : valueToSearch,
+        "DataType": searchByPersonalizedCode
+            ? 2 // 2-Codigo personalizado
+            : 1, //1-Codigo
         "InitialDateOfCreation": initialDateOfCreation?.toIso8601String(),
         "FinalDateOfCreation": finalDateOfCreation?.toIso8601String(),
         "InitialDateOfLimit": initialDateOfLimit?.toIso8601String(),
@@ -205,6 +205,9 @@ class BuyQuotationProvider with ChangeNotifier {
             (json.decode(SoapRequestResponse.responseAsString) as List)
                 .map((e) => SupplierModel.fromJson(e))
                 .toList();
+        if (_searchedSuppliers.length == 1) {
+          _selectedSupplier = _searchedSuppliers[0];
+        }
       }
     } catch (e) {
       ShowSnackbarMessage.show(message: e.toString(), context: context);

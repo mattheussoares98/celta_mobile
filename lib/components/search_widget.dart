@@ -29,7 +29,7 @@ class SearchWidget extends StatefulWidget {
     required this.searchProductController,
     required this.onPressSearch,
     required this.searchFocusNode,
-    this.hintText = "PLU-EAN-NOME-%-BALANÇA",
+    this.hintText,
     this.labelText = "Consultar produto",
     Key? key,
   }) : super(key: key);
@@ -59,12 +59,14 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   String? _getHintText(ConfigurationsProvider configurationsProvider) {
-    if (configurationsProvider.legacyCode?.value == true) {
+    if (widget.hintText != null) {
+      return widget.hintText!;
+    } else if (configurationsProvider.legacyCode?.value == true) {
       return "Código legado";
     } else if (configurationsProvider.productPersonalizedCode?.value == true) {
       return "Código personalizado";
     } else {
-      return widget.hintText ?? "PLU-EAN-NOME-%-BALANÇA";
+      return "PLU-EAN-NOME-%-BALANÇA";
     }
   }
 
