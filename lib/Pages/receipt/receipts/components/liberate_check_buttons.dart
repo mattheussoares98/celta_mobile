@@ -32,42 +32,47 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        ElevatedButton(
-          onPressed: () async {
-            ShowAlertDialog.show(
-              context: context,
-              title: "Liberar recebimento?",
-              content: const SingleChildScrollView(
-                child: Text(
-                  "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
-                  textAlign: TextAlign.center,
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () async {
+              ShowAlertDialog.show(
+                context: context,
+                title: "Liberar recebimento?",
+                content: const SingleChildScrollView(
+                  child: Text(
+                    "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              function: () async {
-                await widget.receiptProvider.liberate(
-                  grDocCode: widget.grDocCode,
-                  index: widget.index,
-                  context: context,
-                  enterprise: widget.enterprise,
-                );
-              },
-            );
-          },
-          child: const Text("Liberar"),
+                function: () async {
+                  await widget.receiptProvider.liberate(
+                    grDocCode: widget.grDocCode,
+                    index: widget.index,
+                    context: context,
+                    enterprise: widget.enterprise,
+                  );
+                },
+              );
+            },
+            child: const Text("Liberar"),
+          ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              APPROUTES.RECEIPT_CONFERENCE,
-              arguments: {
-                "grDocCode": widget.grDocCode,
-                "numeroProcRecebDoc": widget.numeroProcRecebDoc,
-                "emitterName": widget.emitterName,
-                "enterprise": widget.enterprise,
-              },
-            );
-          },
-          child: const Text("Conferir"),
+        const SizedBox(width: 8),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                APPROUTES.RECEIPT_CONFERENCE,
+                arguments: {
+                  "grDocCode": widget.grDocCode,
+                  "numeroProcRecebDoc": widget.numeroProcRecebDoc,
+                  "emitterName": widget.emitterName,
+                  "enterprise": widget.enterprise,
+                },
+              );
+            },
+            child: const Text("Conferir"),
+          ),
         )
       ],
     );
