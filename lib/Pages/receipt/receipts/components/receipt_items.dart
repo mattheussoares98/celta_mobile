@@ -21,6 +21,13 @@ class ReceiptItems extends StatefulWidget {
 
 class _ReceiptItemsState extends State<ReceiptItems> {
   int selectedIndex = -1;
+  final observationsController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    observationsController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,17 +79,9 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                             subtitle: receipt.Grupo,
                             subtitleColor: Colors.amber,
                           ),
-                        TitleAndSubtitle.titleAndSubtitle(
-                          title: receipt.Observacoes_ProcRecebDoc != null
-                              ? "Observações"
-                              : null,
-                          subtitle: receipt.Observacoes_ProcRecebDoc != null
-                              ? receipt.Observacoes_ProcRecebDoc.toString()
-                              : "Sem observações",
-                          otherWidget: TextButton(
-                            onPressed: () async {},
-                            child: const Text("Alterar"),
-                          ),
+                        Observations(
+                          receipt: receipt,
+                          observationsController: observationsController,
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",

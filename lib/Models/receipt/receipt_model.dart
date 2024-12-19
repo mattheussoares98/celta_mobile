@@ -23,16 +23,16 @@ class ReceiptModel {
     required this.StatusColor,
   });
 
-  factory ReceiptModel.fromJson(Map json) => ReceiptModel(
+  factory ReceiptModel.fromJson(Map map) => ReceiptModel(
         CodigoInterno_ProcRecebDoc:
-            int.parse(json["CodigoInterno_ProcRecebDoc"]),
-        CodigoInterno_Empresa: int.parse(json["CodigoInterno_Empresa"]),
-        Numero_ProcRecebDoc: json["Numero_ProcRecebDoc"],
-        EmitterName: json["EmitterName"] ?? "",
-        Grupo: json["Grupo"] ?? "-1",
-        Status: json["Status"].toString(),
+            int.parse(map["CodigoInterno_ProcRecebDoc"]),
+        CodigoInterno_Empresa: int.parse(map["CodigoInterno_Empresa"]),
+        Numero_ProcRecebDoc: map["Numero_ProcRecebDoc"],
+        EmitterName: map["EmitterName"] ?? "",
+        Grupo: map["Grupo"] ?? "-1",
+        Status: map["Status"].toString(),
         StatusColor: Colors.black,
-        Observacoes_ProcRecebDoc: json["Observacoes_ProcRecebDoc"],
-        DefaultObservations: json["DefaultObservations"],
+        Observacoes_ProcRecebDoc: map["Observacoes_ProcRecebDoc"],
+        DefaultObservations: map["DefaultObservations"],
       );
 }

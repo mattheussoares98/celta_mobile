@@ -5,13 +5,14 @@ class ShowAlertDialog {
     required BuildContext context,
     required String title,
     required Function() function,
+    bool? closeAutomaticallyOnConfirm = true,
     Widget? content,
     double? titleSize = 25,
     double? subtitleSize = 20,
     String? confirmMessage = "SIM",
     String? cancelMessage = "NÃO",
-    double? confirmMessageSize = 40,
-    double? cancelMessageSize = 40,
+    double? confirmMessageSize = 20,
+    double? cancelMessageSize = 20,
     bool? showConfirmAndCancelMessage = true,
     bool? canCloseClickingOut = true,
     bool? showCloseAlertDialogButton = false,
@@ -74,9 +75,11 @@ class ShowAlertDialog {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        function();
+                      onPressed: () async {
+                        await function();
+                        if (closeAutomaticallyOnConfirm == true) {
+                          Navigator.of(context).pop();
+                        }
                       },
                       child: FittedBox(
                         child: Text(
