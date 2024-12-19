@@ -12,6 +12,7 @@ class BuyersDropDown extends StatelessWidget {
   final void Function()? reloadBuyers;
   final void Function() onTap;
   final bool showRefreshIcon;
+  final bool enabled;
 
   const BuyersDropDown({
     required this.value,
@@ -23,6 +24,7 @@ class BuyersDropDown extends StatelessWidget {
     required this.showRefreshIcon,
     required this.onTap,
     this.validator,
+    this.enabled = true,
     Key? key,
   }) : super(key: key);
 
@@ -34,7 +36,9 @@ class BuyersDropDown extends StatelessWidget {
           child: Card(
             child: DropdownButtonFormField<BuyerModel>(
               key: dropdownKey,
-              value: value,
+              value: buyers.isEmpty
+                  ? value
+                  : buyers.firstWhere((e) => e.CpfNumber == value?.CpfNumber),
               disabledHint: Center(child: Text(disabledHintText)),
               decoration: const InputDecoration(
                 border: InputBorder.none,
@@ -56,6 +60,7 @@ class BuyersDropDown extends StatelessWidget {
               items: buyers
                   .map(
                     (value) => DropdownMenuItem(
+                      enabled: enabled,
                       value: value,
                       alignment: Alignment.center,
                       onTap: onTap,
