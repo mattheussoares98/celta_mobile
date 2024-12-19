@@ -28,6 +28,18 @@ class BuyersDropDown extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  BuyerModel? itemValue() {
+    final sameBuyer = buyers.where((e) => e.CpfNumber == value?.CpfNumber);
+
+    if (buyers.isEmpty) {
+      return value;
+    } else if (sameBuyer.isNotEmpty) {
+      return sameBuyer.first;
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -36,9 +48,7 @@ class BuyersDropDown extends StatelessWidget {
           child: Card(
             child: DropdownButtonFormField<BuyerModel>(
               key: dropdownKey,
-              value: buyers.isEmpty
-                  ? value
-                  : buyers.firstWhere((e) => e.CpfNumber == value?.CpfNumber),
+              value: itemValue(),
               disabledHint: Center(child: Text(disabledHintText)),
               decoration: const InputDecoration(
                 border: InputBorder.none,
