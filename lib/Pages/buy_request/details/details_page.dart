@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../components/buyers/buyers.dart';
 import '../../../providers/providers.dart';
 import '../components/components.dart';
 import '../enterprises/enterprises.dart';
@@ -69,10 +70,23 @@ class _DetailsPageState extends State<DetailsPage> {
                       fontSize: 17,
                     ),
                   ),
-                  BuyersDropwodn(
-                    buyersKey: buyersKey,
-                    enabledChangeBuyer: false,
+                  BuyersDropDown(
+                    enabled: false,
+                    value: buyRequestProvider.selectedBuyer,
+                    dropdownKey: buyersKey,
+                    disabledHintText: "Comprador",
+                    buyers: buyRequestProvider.buyers,
+                    onChanged: (value) {
+                      buyRequestProvider.selectedBuyer = value;
+                    },
+                    reloadBuyers: () async {
+                      await buyRequestProvider.getBuyers(
+                        isSearchingAgain: true,
+                        context: context,
+                      );
+                    },
                     showRefreshIcon: false,
+                    onTap: () {},
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),

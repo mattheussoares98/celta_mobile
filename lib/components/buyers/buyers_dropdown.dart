@@ -56,7 +56,7 @@ class BuyersDropDown extends StatelessWidget {
                 ),
               ),
               validator: validator,
-              onChanged: onChanged,
+              onChanged: enabled ? onChanged : null,
               items: buyers
                   .map(
                     (value) => DropdownMenuItem(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import 'identification.dart';
 
@@ -17,25 +18,21 @@ class IdentificationPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<IdentificationPage> createState() =>
-      _IdentificationPageState();
+  State<IdentificationPage> createState() => _IdentificationPageState();
 }
 
-class _IdentificationPageState
-    extends State<IdentificationPage> {
-  bool _isLoaded = false;
+class _IdentificationPageState extends State<IdentificationPage> {
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
+  initState() {
+    super.initState();
 
-    if (!_isLoaded) {
-      _isLoaded = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await restoreDataAndGetRequestsAndBuyers();
-    }
+    });
   }
 
   Future<void> restoreDataAndGetRequestsAndBuyers() async {
-    BuyRequestProvider buyRequestProvider = Provider.of(context);
+    BuyRequestProvider buyRequestProvider = Provider.of(context, listen: false);
 
     await buyRequestProvider.restoreDataByDatabase();
 
@@ -53,6 +50,7 @@ class _IdentificationPageState
 
   @override
   Widget build(BuildContext context) {
+    BuyRequestProvider buyRequestProvider = Provider.of(context);
     return SingleChildScrollView(
       primary: false,
       child: Padding(
@@ -65,7 +63,29 @@ class _IdentificationPageState
               isError: false,
               errorTitle: null,
             ),
-            BuyersDropwodn(buyersKey: widget.buyersKey),
+            BuyersDropDown(
+              value: buyRequestProvider.selectedBuyer,
+              dropdownKey: widget.buyersKey,
+              disabledHintText: "Comprador",
+              buyers: buyRequestProvider.buyers,
+              onChanged: (value) {
+                buyRequestProvider.selectedBuyer = value;
+              },
+              reloadBuyers: () async {
+                await buyRequestProvider.getBuyers(
+                  isSearchingAgain: true,
+                  context: context,
+                );
+              },
+              showRefreshIcon: true,
+              onTap: () {},
+              validator: (value) {
+                if (value == null) {
+                  return "Selecione um comprador";
+                }
+                return null;
+              },
+            ),
             const SizedBox(height: 20),
             const TitleComponent(
               title: "Modelo de pedido de compra",

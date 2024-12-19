@@ -1,4 +1,5 @@
 export 'address/address.dart';
+export 'buyers/buyers.dart';
 export 'date_time/date_time.dart';
 export 'form_field/form_field.dart';
 export 'product/product.dart';
