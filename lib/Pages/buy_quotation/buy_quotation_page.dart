@@ -28,18 +28,28 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
         EnterpriseModel enterprise =
             ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
-        await buyQuotationProvider.getBuyQuotation(
-          context: context,
-          valueToSearch: "%",
-          searchByPersonalizedCode: true,
-          initialDateOfCreation: null,
-          finalDateOfCreation: null,
-          initialDateOfLimit: null,
-          finalDateOfLimit: null,
-          enterpriseCode: enterprise.Code,
+        await searchAllBuyQuotations(
+          buyQuotationProvider: buyQuotationProvider,
+          enterprise: enterprise,
         );
       }
     });
+  }
+
+  Future<void> searchAllBuyQuotations({
+    required BuyQuotationProvider buyQuotationProvider,
+    required EnterpriseModel enterprise,
+  }) async {
+    await buyQuotationProvider.getBuyQuotation(
+      context: context,
+      valueToSearch: "%",
+      searchByPersonalizedCode: true,
+      initialDateOfCreation: null,
+      finalDateOfCreation: null,
+      initialDateOfLimit: null,
+      finalDateOfLimit: null,
+      enterpriseCode: enterprise.Code,
+    );
   }
 
   void updateShowFilterOptions() {
@@ -59,6 +69,17 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
         Scaffold(
           appBar: AppBar(
             title: const FittedBox(child: Text("Cotações")),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  searchAllBuyQuotations(
+                    buyQuotationProvider: buyQuotationProvider,
+                    enterprise: enterprise,
+                  );
+                },
+                icon: const Icon(Icons.replay),
+              ),
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(3),
@@ -74,7 +95,7 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                   const Divider(),
                   if (showFilterOptions)
                     AllFiltersOptions(enterprise: enterprise),
-                  const IncompleteItems(),
+                  IncompleteItems(enterprise: enterprise),
                 ],
               ),
             ),

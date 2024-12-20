@@ -2,14 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 
 class IncompleteItems extends StatelessWidget {
-  const IncompleteItems({super.key});
+  final EnterpriseModel enterprise;
+  const IncompleteItems({
+    required this.enterprise,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
+
+    if (buyQuotationProvider.incompletesBuyQuotations.length == 0) {
+      return TextButton.icon(
+        onPressed: () async {
+          await buyQuotationProvider.getBuyQuotation(
+            context: context,
+            valueToSearch: "%",
+            searchByPersonalizedCode: true,
+            enterpriseCode: enterprise.Code,
+          );
+        },
+        label: const Text(
+          "Consultar todas cotações",
+        ),
+        icon: const Icon(Icons.replay),
+      );
+    }
 
     return ListView.builder(
       shrinkWrap: true,
