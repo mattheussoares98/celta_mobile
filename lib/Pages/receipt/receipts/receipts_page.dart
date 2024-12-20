@@ -14,6 +14,7 @@ class ReceiptsPage extends StatefulWidget {
 }
 
 class _ReceiptsPageState extends State<ReceiptsPage> {
+  final observationsController = TextEditingController();
   bool isLoaded = false;
   @override
   void didChangeDependencies() {
@@ -30,8 +31,15 @@ class _ReceiptsPageState extends State<ReceiptsPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+    observationsController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ReceiptProvider receiptProvider = Provider.of(context, listen: true);
+    ReceiptProvider receiptProvider = Provider.of(context);
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
@@ -78,6 +86,7 @@ class _ReceiptsPageState extends State<ReceiptsPage> {
                       child: ReceiptItems(
                         enterprise: enterprise,
                         receiptProvider: receiptProvider,
+                        observationsController: observationsController,
                       ),
                     ),
                 ],
