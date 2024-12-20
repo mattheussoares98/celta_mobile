@@ -7,6 +7,7 @@ class GetNewDate {
 
   static Future<DateTime?> get({
     required BuildContext context,
+    bool? canInsertDateBeforeNow = false,
   }) async {
     DateTime now = DateTime.now();
 
@@ -38,7 +39,7 @@ class GetNewDate {
           newTime.minute,
         );
 
-        if (selectedDateTime.isBefore(now)) {
+        if (selectedDateTime.isBefore(now) && canInsertDateBeforeNow == false) {
           ShowSnackbarMessage.show(
             message: "Horário anterior à data atual. Isso não é permitido",
             context: context,

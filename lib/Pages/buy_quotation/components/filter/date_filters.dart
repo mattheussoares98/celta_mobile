@@ -37,6 +37,7 @@ class DateFilters extends StatelessWidget {
           updateDate: updateInitialDateOfCreation,
           name: "Data inicial de criação",
           date: initialDateOfCreation,
+          canInsertDateBeforeNow: true,
         ),
         datePickerButton(
           callSetState: callSetState,
@@ -44,6 +45,7 @@ class DateFilters extends StatelessWidget {
           updateDate: updateFinalDateOfCreation,
           name: "Data final de criação",
           date: finalDateOfCreation,
+          canInsertDateBeforeNow: false,
         ),
         datePickerButton(
           callSetState: callSetState,
@@ -51,6 +53,7 @@ class DateFilters extends StatelessWidget {
           updateDate: updateInitialDateOfLimit,
           name: "Data inicial de término",
           date: initialDateOfLimit,
+          canInsertDateBeforeNow: true,
         ),
         datePickerButton(
           callSetState: callSetState,
@@ -58,6 +61,7 @@ class DateFilters extends StatelessWidget {
           updateDate: updateFinalDateOfLimit,
           name: "Data final de término",
           date: finalDateOfLimit,
+          canInsertDateBeforeNow: true,
         ),
       ],
     );
@@ -69,6 +73,7 @@ class DateFilters extends StatelessWidget {
     required String name,
     required DateTime? date,
     required void Function() callSetState,
+    required bool canInsertDateBeforeNow,
   }) =>
       Container(
         margin: const EdgeInsets.only(top: 8),
@@ -79,7 +84,10 @@ class DateFilters extends StatelessWidget {
         ),
         child: TextButton.icon(
           onPressed: () async {
-            final date = await GetNewDate.get(context: context);
+            final date = await GetNewDate.get(
+              context: context,
+              canInsertDateBeforeNow: canInsertDateBeforeNow,
+            );
             if (date != null) {
               updateDate(date);
               callSetState();
