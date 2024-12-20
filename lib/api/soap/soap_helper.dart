@@ -78,6 +78,7 @@ class SoapHelper {
     //       GoodsReceiving = 6,
     //       ResearchOfPrice = 7,
     //       AdjustSalePrice = 8
+    //       BuyQuotation = 9
     //       Todos produtos contados no recebimento = 19,
     //   }
     if (configurationsProvider.legacyCode?.value == true) {

@@ -64,45 +64,50 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: const FittedBox(child: Text("Cotações")),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  searchAllBuyQuotations(
-                    buyQuotationProvider: buyQuotationProvider,
-                    enterprise: enterprise,
-                  );
-                },
-                icon: const Icon(Icons.replay),
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(3),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  FilterOrAddCotationsButtons(
-                    updateShowFilterOptions: updateShowFilterOptions,
-                    addQuotation: () {},
-                    showFilterOptions: showFilterOptions,
-                  ),
-                  const Divider(),
-                  if (showFilterOptions)
-                    AllFiltersOptions(enterprise: enterprise),
-                  IncompleteItems(enterprise: enterprise),
-                ],
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        buyQuotationProvider.doOnPopScreen();
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: const FittedBox(child: Text("Cotações")),
+              actions: [
+                IconButton(
+                  onPressed: () async {
+                    searchAllBuyQuotations(
+                      buyQuotationProvider: buyQuotationProvider,
+                      enterprise: enterprise,
+                    );
+                  },
+                  icon: const Icon(Icons.replay),
+                ),
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(3),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    FilterOrAddCotationsButtons(
+                      updateShowFilterOptions: updateShowFilterOptions,
+                      addQuotation: () {},
+                      showFilterOptions: showFilterOptions,
+                    ),
+                    const Divider(),
+                    if (showFilterOptions)
+                      AllFiltersOptions(enterprise: enterprise),
+                    IncompleteItems(enterprise: enterprise),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        loadingWidget(buyQuotationProvider.isLoading),
-      ],
+          loadingWidget(buyQuotationProvider.isLoading),
+        ],
+      ),
     );
   }
 }

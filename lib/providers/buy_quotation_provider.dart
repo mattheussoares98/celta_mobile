@@ -35,6 +35,15 @@ class BuyQuotationProvider with ChangeNotifier {
   List<BuyQuotationIncompleteModel> get incompletesBuyQuotations =>
       [..._incompletesBuyQuotations];
 
+  void doOnPopScreen() {
+    _searchedBuyers.clear();
+    _searchedProducts.clear();
+    _searchedSuppliers.clear();
+    _selectedBuyer = null;
+    _selectedProduct = null;
+    _selectedSupplier = null;
+  }
+
   Future<void> insertUpdateBuyQuotation({
     required bool isInserting,
   }) async {
