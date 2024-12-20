@@ -99,6 +99,9 @@ class BuyQuotationProvider with ChangeNotifier {
           message: _errorMessage,
           context: context,
         );
+      } else {
+        final teste = json
+            .decode(SoapRequestResponse.responseAsString.removeBreakLines());
       }
       SoapRequestResponse.responseAsMap;
       SoapRequestResponse.responseAsString;

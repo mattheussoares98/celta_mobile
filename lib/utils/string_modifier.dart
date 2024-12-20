@@ -53,4 +53,13 @@ extension StringModifier on String {
       return -1;
     }
   }
+
+  String removeBreakLines() {
+    String newValue = this;
+    newValue = newValue.replaceAll(RegExp(r'\\r\\'), '');
+    newValue = newValue.replaceAll(RegExp(r'\\n'), '');
+    newValue = newValue.replaceAll(RegExp(r'\\'), '');
+
+    return newValue;
+  }
 }
