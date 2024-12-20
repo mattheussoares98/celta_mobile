@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../soap/soap.dart';
+import '../../models/models.dart';
 
 class SaleRequestProcessCartModel {
   int ProductPackingCode;

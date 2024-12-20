@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../models/enterprise/enterprise.dart';
-import '../../../../models/receipt/receipt.dart';
+import '../../../../models/models.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 import '../../../../components/components.dart';

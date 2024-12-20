@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../soap.dart';
+import '../../models/models.dart';
 
 class GetJustificationsModel {
   final int CodigoInterno_JustMov; /*  37, */

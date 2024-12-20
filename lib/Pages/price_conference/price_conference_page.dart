@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/components.dart';
-import '../../models/configurations/configurations.dart';
-import '../../models/enterprise/enterprise.dart';
 import 'components/components.dart';
+import '../../components/components.dart';
+import '../../models/models.dart';
 import '../../providers/providers.dart';
 
 class PriceConferencePage extends StatefulWidget {

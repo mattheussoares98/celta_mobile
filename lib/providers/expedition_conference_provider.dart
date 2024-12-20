@@ -5,9 +5,7 @@ import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import '../components/components.dart';
-import '../models/enterprise/enterprise.dart';
-import '../models/expedition_control/expedition_control.dart';
-import '../models/soap/soap.dart';
+import '../models/models.dart';
 import 'providers.dart';
 
 class ExpeditionConferenceProvider with ChangeNotifier {

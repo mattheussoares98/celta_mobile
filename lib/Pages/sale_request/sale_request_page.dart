@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../api/api.dart';
 import '../../components/components.dart';
-import '../../models/enterprise/enterprise.dart';
+import '../../models/models.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'sale_request.dart';

@@ -1,6 +1,6 @@
 import 'package:celta_inventario/components/components.dart';
 import 'package:celta_inventario/models/enterprise/enterprise.dart';
-import 'package:celta_inventario/models/soap/products/products.dart';
+import 'package:celta_inventario/models/products/products.dart';
 import 'package:celta_inventario/providers/providers.dart';
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';

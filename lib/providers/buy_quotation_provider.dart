@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
-import '../models/enterprise/enterprise.dart';
-import '../models/soap/soap.dart';
+
+import '../models/models.dart';
 import '../utils/utils.dart';
 import 'providers.dart';
 
@@ -100,7 +100,7 @@ class BuyQuotationProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        final teste = json
+        /* final teste =  */json
             .decode(SoapRequestResponse.responseAsString.removeBreakLines());
       }
       SoapRequestResponse.responseAsMap;

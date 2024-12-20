@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
-import '../models/buy_request/buy_request.dart';
-import '../models/soap/soap.dart';
+import '../models/models.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -235,8 +234,7 @@ class BuyRequestProvider with ChangeNotifier {
 
     if (jsonInDatabase.containsKey("selectedBuyer") &&
         jsonInDatabase["selectedBuyer"] != null) {
-      _selectedBuyer =
-          BuyerModel.fromJson(jsonInDatabase["selectedBuyer"]);
+      _selectedBuyer = BuyerModel.fromJson(jsonInDatabase["selectedBuyer"]);
     }
   }
 

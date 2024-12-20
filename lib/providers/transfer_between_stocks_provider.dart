@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
-import '../models/enterprise/enterprise.dart';
-import '../models/soap/soap.dart';
+import '../models/models.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -238,8 +237,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
           SoapRequestResponse.errorMessage;
     } catch (e) {
       //print("Erro para efetuar a requisição justifications: $e");
-      _errorMessageTypeStockAndJustifications =
-          DefaultErrorMessage.ERROR;
+      _errorMessageTypeStockAndJustifications = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageTypeStockAndJustifications,
         context: context,

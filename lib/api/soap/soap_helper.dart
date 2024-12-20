@@ -2,11 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import '../../models/enterprise/enterprise.dart';
-import '../../models/inventory/inventory.dart';
-import '../../models/soap/soap.dart';
+import '../../models/models.dart';
 
-import '../../models/transfer_request/transfer_request.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'soap.dart';

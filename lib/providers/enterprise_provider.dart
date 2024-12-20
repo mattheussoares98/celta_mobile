@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
-import '../models/enterprise/enterprise.dart';
-import '../models/firebase/firebase.dart';
+import '../models/models.dart';
 import '../utils/utils.dart';
 
 class EnterpriseProvider with ChangeNotifier {

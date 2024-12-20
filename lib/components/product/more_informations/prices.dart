@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components.dart';
-import '../../../models/adjust_sale_price/adjust_sale_price.dart';
-import '../../../models/soap/soap.dart';
+import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 
 class Prices extends StatelessWidget implements MoreInformationWidget {

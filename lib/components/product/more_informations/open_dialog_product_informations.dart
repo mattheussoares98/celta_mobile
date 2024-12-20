@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/soap/soap.dart';
+import '../../../models/models.dart';
 import '../../components.dart';
 
 class OpenDialogProductInformations extends StatefulWidget {

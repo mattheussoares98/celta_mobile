@@ -2,34 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/components.dart';
-import '../../../../models/configurations/configurations.dart';
-import '../../../../models/enterprise/enterprise.dart';
+import '../../../../models/models.dart';
 import '../../../../providers/providers.dart';
 import 'filter.dart';
 
 class AllFiltersOptions extends StatefulWidget {
-  // final TextEditingController searchController;
-  // final TextEditingController searchProductController;
-  // final TextEditingController searchSupplierController;
-  // final FocusNode searchFocusNode;
-  // final FocusNode searchSupplierFocusNode;
-  // final FocusNode searchProductFocusNode;
-  // final bool searchByCode;
-  // final bool searchByPersonalizedCode;
-  // final void Function() updateSearchByCode;
-  // final void Function() updateSearchByPersonalizedCode;
-  // final DateTime? initialDateOfCreation;
-  // final DateTime? finalDateOfCreation;
-  // final DateTime? initialDateOfLimit;
-  // final DateTime? finalDateOfLimit;
-  // final void Function(DateTime? date) updateInitialDateOfCreation;
-  // final void Function(DateTime? date) updateFinalDateOfCreation;
-  // final void Function(DateTime? date) updateInitialDateOfLimit;
-  // final void Function(DateTime? date) updateFinalDateOfLimit;
-  // final void Function() callSetState;
-  // final bool inclusiveExpired;
   final EnterpriseModel enterprise;
-  // final void Function() updateInclusiveExpired;
   const AllFiltersOptions({
     required this.enterprise,
     super.key,

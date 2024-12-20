@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
-import '../../models/enterprise/enterprise.dart';
+import '../../models/models.dart';
 import '../../pages/expedition_conference/components/components.dart';
 import '../../providers/providers.dart';
 

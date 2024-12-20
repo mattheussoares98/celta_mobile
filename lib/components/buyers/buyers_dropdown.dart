@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/soap/soap.dart';
+import '../../models/models.dart';
 
 class BuyersDropDown extends StatelessWidget {
   final GlobalKey<FormFieldState> dropdownKey;

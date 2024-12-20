@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/components.dart';
-import '../../../../models/enterprise/enterprise.dart';
-import '../../../../models/soap/soap.dart';
+
+import '../../../../models/models.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 
