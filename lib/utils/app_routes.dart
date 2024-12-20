@@ -4,6 +4,7 @@ class APPROUTES {
   static const ADJUST_STOCK = '/ADJUST_STOCK';
   static const BUYERS = '/BUYERS';
   static const BUY_QUOTATION = '/BUY_QUOTATION';
+  static const BUY_QUOTATION_INSERT_UPDATE = '/BUY_QUOTATION_INSERT_UPDATE';
   static const CONFIGURATIONS = '/CONFIGURATIONS';
   static const COUNTINGS = '/COUNTINGS';
   static const CUSTOMER_REGISTER = '/CUSTOMER_REGISTER';

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
 class IncompleteItems extends StatelessWidget {
   final EnterpriseModel enterprise;
@@ -37,11 +38,16 @@ class IncompleteItems extends StatelessWidget {
       shrinkWrap: true,
       itemCount: buyQuotationProvider.incompletesBuyQuotations.length,
       itemBuilder: (context, index) {
-        final buyQuotation =
+        final incompleteQuotation =
             buyQuotationProvider.incompletesBuyQuotations[index];
 
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
+              arguments: incompleteQuotation,
+            );
+          },
           child: Card(
             child: Padding(
               padding: const EdgeInsets.all(8),
@@ -49,27 +55,27 @@ class IncompleteItems extends StatelessWidget {
                 children: [
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Code",
-                    subtitle: buyQuotation.Code.toString(),
+                    subtitle: incompleteQuotation.Code.toString(),
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Data de criação",
-                    subtitle: buyQuotation.DateOfCreation,
+                    subtitle: incompleteQuotation.DateOfCreation,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Data de limite",
-                    subtitle: buyQuotation.DateOfLimit,
+                    subtitle: incompleteQuotation.DateOfLimit,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Código personalizado",
-                    subtitle: buyQuotation.PersonalizedCode,
+                    subtitle: incompleteQuotation.PersonalizedCode,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
-                    title: buyQuotation.Observations?.isEmpty == true
+                    title: incompleteQuotation.Observations?.isEmpty == true
                         ? null
-                        : buyQuotation.Observations,
-                    subtitle: buyQuotation.Observations?.isEmpty == true
+                        : incompleteQuotation.Observations,
+                    subtitle: incompleteQuotation.Observations?.isEmpty == true
                         ? "Sem observações"
-                        : buyQuotation.Observations,
+                        : incompleteQuotation.Observations,
                   ),
                 ],
               ),

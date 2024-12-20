@@ -5,7 +5,7 @@ import '../../components/components.dart';
 
 import '../../models/models.dart';
 import '../../providers/providers.dart';
-import 'components/components.dart';
+import 'buy_quotation_components/buy_quotation_components.dart';
 
 class BuyQuotationPage extends StatefulWidget {
   const BuyQuotationPage({super.key});
@@ -93,7 +93,6 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                   children: [
                     FilterOrAddCotationsButtons(
                       updateShowFilterOptions: updateShowFilterOptions,
-                      addQuotation: () {},
                       showFilterOptions: showFilterOptions,
                     ),
                     const Divider(),

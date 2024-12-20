@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils/utils.dart';
+
 class FilterOrAddCotationsButtons extends StatelessWidget {
   final void Function() updateShowFilterOptions;
-  final void Function() addQuotation;
   final bool showFilterOptions;
 
   const FilterOrAddCotationsButtons({
     required this.updateShowFilterOptions,
-    required this.addQuotation,
     required this.showFilterOptions,
     super.key,
   });
@@ -37,7 +37,11 @@ class FilterOrAddCotationsButtons extends StatelessWidget {
               ),
             ),
             iconAlignment: IconAlignment.end,
-            onPressed: addQuotation,
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
+              );
+            },
           ),
         ),
       ],

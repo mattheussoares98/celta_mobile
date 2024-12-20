@@ -27,6 +27,8 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.ADJUST_STOCK: (ctx) => const AdjustStockPage(),
       APPROUTES.BUYERS: (ctx) => const BuyRequestPage(),
       APPROUTES.BUY_QUOTATION: (ctx) => const BuyQuotationPage(),
+      APPROUTES.BUY_QUOTATION_INSERT_UPDATE: (ctx) =>
+          const InsertUpdateBuyQuotationPage(),
       APPROUTES.COUNTINGS: (ctx) => const CountingPage(),
       APPROUTES.CUSTOMER_REGISTER: (ctx) => const CustomerRegisterPage(),
       APPROUTES.CONFIGURATIONS: (ctx) => const ConfigurationsPage(),
