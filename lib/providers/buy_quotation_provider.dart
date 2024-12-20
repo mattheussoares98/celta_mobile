@@ -60,6 +60,7 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
+    notifyListeners();
 
     try {
       final filters = {
@@ -110,6 +111,7 @@ class BuyQuotationProvider with ChangeNotifier {
       );
     } finally {
       _isLoading = false;
+      notifyListeners();
     }
   }
 
