@@ -61,7 +61,7 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
             title: const FittedBox(child: Text("Cotações")),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(3),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,6 +74,7 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                   const Divider(),
                   if (showFilterOptions)
                     AllFiltersOptions(enterprise: enterprise),
+                  const IncompleteItems(),
                 ],
               ),
             ),
