@@ -21,7 +21,7 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
   final searchFocusNode = FocusNode();
   final searchProductFocusNode = FocusNode();
   final searchSupplierFocusNode = FocusNode();
-  final GlobalKey<FormFieldState> buyersKey = GlobalKey();
+  // final GlobalKey<FormFieldState> buyersKey = GlobalKey();
   bool searchByPersonalizedCode = false;
   bool? searchByCode = true;
   DateTime? initialDateOfCreation;
@@ -178,8 +178,8 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                     searchSupplierController: searchSupplierController,
                     enterprise: enterprise,
                   ),
-                  const SizedBox(height: 8),
-                  FilterBuyer(buyersKey: buyersKey),
+                  // const SizedBox(height: 8),
+                  // FilterBuyer(buyersKey: buyersKey),
                   const SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () async {

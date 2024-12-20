@@ -54,7 +54,7 @@ class BuyQuotationProvider with ChangeNotifier {
     required DateTime? finalDateOfLimit,
     required int enterpriseCode,
     int? supplierCode,
-    int? buyerCode,
+    // int? buyerCode,
     bool? inclusiveExpired,
   }) async {
     _isLoading = true;
@@ -75,7 +75,8 @@ class BuyQuotationProvider with ChangeNotifier {
         "ProductCode": _selectedProduct?.productCode,
         "ProductPackingCode": _selectedProduct?.productPackingCode,
         "SupplierCode": supplierCode,
-        "BuyerCode": buyerCode,
+        "BuyerCode":
+            null, //se mandar o código 0, leva em consideração o funcionário vinculado ao usuário. Vou deixar sem esse filtro
         "EnterpriseCode": enterpriseCode,
         "InclusiveExpired": inclusiveExpired == true,
       };
