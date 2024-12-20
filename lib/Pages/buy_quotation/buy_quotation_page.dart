@@ -22,8 +22,8 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
   final searchProductFocusNode = FocusNode();
   final searchSupplierFocusNode = FocusNode();
   // final GlobalKey<FormFieldState> buyersKey = GlobalKey();
-  bool searchByPersonalizedCode = false;
-  bool? searchByCode = true;
+  bool searchByPersonalizedCode = true;
+  bool searchByCode = false;
   DateTime? initialDateOfCreation;
   DateTime? finalDateOfCreation;
   DateTime? initialDateOfLimit;
@@ -100,24 +100,12 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                         ? "Código"
                         : "Código personalizado",
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CheckBoxPersonalized(
-                          enabled: searchByCode == true,
-                          searchType: "Código",
-                          updateEnabled: updateSearchByCode,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: CheckBoxPersonalized(
-                          enabled: searchByPersonalizedCode == true,
-                          searchType: "Código personalizado",
-                          updateEnabled: updateSearchByPersonalizedCode,
-                        ),
-                      ),
-                    ],
+                  SearchByCodeOrPersonalizedCode(
+                    searchByCode: searchByCode,
+                    updateSearchByCode: updateSearchByCode,
+                    searchByPersonalizedCode: searchByPersonalizedCode,
+                    updateSearchByPersonalizedCode:
+                        updateSearchByPersonalizedCode,
                   ),
                   const SizedBox(height: 8),
                   DateFilters(
@@ -129,32 +117,16 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                       setState(() {});
                     },
                     updateInitialDateOfCreation: (DateTime? date) {
-                      if (date != null) {
-                        initialDateOfCreation = date;
-                      } else {
-                        initialDateOfCreation = null;
-                      }
+                      initialDateOfCreation = date;
                     },
                     updateFinalDateOfCreation: (DateTime? date) {
-                      if (date != null) {
-                        finalDateOfCreation = date;
-                      } else {
-                        finalDateOfCreation = null;
-                      }
+                      finalDateOfCreation = date;
                     },
                     updateInitialDateOfLimit: (DateTime? date) {
-                      if (date != null) {
-                        initialDateOfLimit = date;
-                      } else {
-                        initialDateOfLimit = null;
-                      }
+                      initialDateOfLimit = date;
                     },
                     updateFinalDateOfLimit: (DateTime? date) {
-                      if (date != null) {
-                        finalDateOfLimit = date;
-                      } else {
-                        finalDateOfLimit = null;
-                      }
+                      finalDateOfLimit = date;
                     },
                   ),
                   const SizedBox(height: 8),
