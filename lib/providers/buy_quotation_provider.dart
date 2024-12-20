@@ -73,7 +73,11 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
-    _incompletesBuyQuotations.clear();
+    if (complete == true) {
+      //TODO clear completeBuyQuotations
+    } else {
+      _incompletesBuyQuotations.clear();
+    }
     notifyListeners();
 
     try {
@@ -114,11 +118,14 @@ class BuyQuotationProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        _incompletesBuyQuotations = (json.decode(
-                    SoapRequestResponse.responseAsString.removeBreakLines())
-                as List)
-            .map((e) => BuyQuotationIncompleteModel.fromJson(e))
-            .toList();
+        if (complete == true) {
+        } else {
+          _incompletesBuyQuotations = (json.decode(
+                      SoapRequestResponse.responseAsString.removeBreakLines())
+                  as List)
+              .map((e) => BuyQuotationIncompleteModel.fromJson(e))
+              .toList();
+        }
       }
       SoapRequestResponse.responseAsMap;
       SoapRequestResponse.responseAsString;

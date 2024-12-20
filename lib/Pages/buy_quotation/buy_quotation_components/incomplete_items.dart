@@ -45,7 +45,10 @@ class IncompleteItems extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
-              arguments: incompleteQuotation,
+              arguments: {
+                "enterprise": enterprise,
+                "incompleteQuotation": incompleteQuotation,
+              },
             );
           },
           child: Card(
