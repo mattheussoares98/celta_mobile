@@ -56,6 +56,7 @@ class BuyQuotationProvider with ChangeNotifier {
     int? supplierCode,
     // int? buyerCode,
     bool? inclusiveExpired,
+    bool? complete = false,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -63,7 +64,7 @@ class BuyQuotationProvider with ChangeNotifier {
     try {
       final filters = {
         "CrossIdentity": UserData.crossIdentity,
-        "Complete": false,
+        "Complete": complete,
         "Data": valueToSearch.isEmpty ? "%" : valueToSearch,
         "DataType": searchByPersonalizedCode
             ? 2 // 2-Codigo personalizado
