@@ -35,6 +35,10 @@ class BuyQuotationProvider with ChangeNotifier {
   List<BuyQuotationIncompleteModel> get incompletesBuyQuotations =>
       [..._incompletesBuyQuotations];
 
+  List<BuyQuotationCompleteModel> _completeBuyQuotations = [];
+  List<BuyQuotationCompleteModel> get completeBuyQuotations =>
+      [..._completeBuyQuotations];
+
   void doOnPopScreen() {
     _searchedBuyers.clear();
     _searchedProducts.clear();
@@ -73,12 +77,13 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
+    notifyListeners();
+
     if (complete == true) {
-      //TODO clear completeBuyQuotations
+      _completeBuyQuotations.clear();
     } else {
       _incompletesBuyQuotations.clear();
     }
-    notifyListeners();
 
     try {
       final filters = {
@@ -119,6 +124,10 @@ class BuyQuotationProvider with ChangeNotifier {
         );
       } else {
         if (complete == true) {
+          _completeBuyQuotations =
+              (json.decode(SoapRequestResponse.responseAsString) as List)
+                  .map((e) => BuyQuotationCompleteModel.fromJson(e))
+                  .toList();
         } else {
           _incompletesBuyQuotations = (json.decode(
                       SoapRequestResponse.responseAsString.removeBreakLines())
@@ -129,6 +138,7 @@ class BuyQuotationProvider with ChangeNotifier {
       }
       SoapRequestResponse.responseAsMap;
       SoapRequestResponse.responseAsString;
+      //TODO não está retornando os fornecedores mesmo tendo fornecedores na cotação
     } catch (e) {
       debugPrint(e.toString());
       _errorMessage = DefaultErrorMessage.ERROR;
