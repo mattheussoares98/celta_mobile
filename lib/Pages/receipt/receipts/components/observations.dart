@@ -28,7 +28,7 @@ class Observations extends StatelessWidget {
           if (receipt.DefaultObservations != null) {
             observationsController.text = receipt.DefaultObservations!;
             observationsController.text =
-                observationsController.text.replaceAll(RegExp(r'\\r'), '');
+                observationsController.text.replaceAll(RegExp(r'\\r\\'), '');
             observationsController.text =
                 observationsController.text.replaceAll(RegExp(r'\\n'), '\n');
           }
