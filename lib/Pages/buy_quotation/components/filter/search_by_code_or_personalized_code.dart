@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'components.dart';
+import '../components.dart';
 
 class SearchByCodeOrPersonalizedCode extends StatelessWidget {
   final bool searchByCode;
