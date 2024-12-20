@@ -31,6 +31,31 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
   bool inclusiveExpired = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        BuyQuotationProvider buyQuotationProvider =
+            Provider.of(context, listen: false);
+        EnterpriseModel enterprise =
+            ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
+
+        await buyQuotationProvider.getBuyQuotation(
+          context: context,
+          valueToSearch: "%",
+          searchByPersonalizedCode: searchByPersonalizedCode,
+          initialDateOfCreation: initialDateOfCreation,
+          finalDateOfCreation: finalDateOfCreation,
+          initialDateOfLimit: initialDateOfLimit,
+          finalDateOfLimit: finalDateOfLimit,
+          enterpriseCode: enterprise.Code,
+        );
+      }
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
     searchController.dispose();
