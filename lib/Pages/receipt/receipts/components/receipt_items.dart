@@ -9,9 +9,11 @@ import 'components.dart';
 class ReceiptItems extends StatefulWidget {
   final ReceiptProvider receiptProvider;
   final EnterpriseModel enterprise;
+  final TextEditingController observationsController;
   const ReceiptItems({
     required this.receiptProvider,
     required this.enterprise,
+    required this.observationsController,
     Key? key,
   }) : super(key: key);
 
@@ -21,13 +23,7 @@ class ReceiptItems extends StatefulWidget {
 
 class _ReceiptItemsState extends State<ReceiptItems> {
   int selectedIndex = -1;
-  final observationsController = TextEditingController();
-
-  @override
-  void dispose() {
-    super.dispose();
-    observationsController.dispose();
-  }
+  int selectedChangeObservationsIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +36,7 @@ class _ReceiptItemsState extends State<ReceiptItems> {
               ReceiptModel receipt = widget.receiptProvider.receipts[index];
               return GestureDetector(
                 onTap: () {
-                  if (widget.receiptProvider.isLoadingLiberateCheck) {
-                    //não permite mudar o recebimento enquanto está carregando uma liberação
-                    return;
-                  }
+                  selectedChangeObservationsIndex = -1;
                   if (selectedIndex == index) {
                     setState(() {
                       selectedIndex = -1;
@@ -81,7 +74,19 @@ class _ReceiptItemsState extends State<ReceiptItems> {
                           ),
                         Observations(
                           receipt: receipt,
-                          observationsController: observationsController,
+                          observationsController: widget.observationsController,
+                          enterprise: widget.enterprise,
+                          showObservationsField:
+                              selectedChangeObservationsIndex == index,
+                          updateShowObservationsField: () {
+                            setState(() {
+                              if (selectedChangeObservationsIndex == index) {
+                                selectedChangeObservationsIndex = -1;
+                              } else {
+                                selectedChangeObservationsIndex = index;
+                              }
+                            });
+                          },
                         ),
                         TitleAndSubtitle.titleAndSubtitle(
                           title: "Status",

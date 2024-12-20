@@ -165,8 +165,6 @@ class MyDrawer extends StatelessWidget {
                   title: 'Deseja fazer o logout?',
                   function: () async {
                     await loginProvider.logout();
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        APPROUTES.LOGIN_OR_HOME_PAGE, (route) => false);
                   },
                 );
               },

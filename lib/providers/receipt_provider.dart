@@ -19,8 +19,8 @@ class ReceiptProvider with ChangeNotifier {
   bool _isLoadingLiberateCheck = false;
 
   bool get isLoadingLiberateCheck => _isLoadingLiberateCheck;
-  static String _errorMessage = '';
 
+  static String _errorMessage = '';
   String get errorMessage => _errorMessage;
   static String _errorMessageLiberate = '';
 
@@ -589,12 +589,13 @@ class ReceiptProvider with ChangeNotifier {
   Future<void> updateObservations({
     required String observations,
     required int grDocCode,
-    required BuildContext context,
+    required EnterpriseModel enterprise,
   }) async {
-    _isLoadingLiberateCheck = true;
+    _isLoadingReceipt = true;
     _errorMessageLiberate = "";
     notifyListeners();
 
+    final context = NavigatorKey.navigatorKey.currentState!.context;
     try {
       await SoapRequest.soapPost(
         parameters: {
@@ -613,15 +614,25 @@ class ReceiptProvider with ChangeNotifier {
           message: SoapRequestResponse.errorMessage,
           context: context,
         );
+      } else {
+        ShowSnackbarMessage.show(
+          message: "Observação alterada com sucesso",
+          context: context,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
+        await getReceipt(
+          enterpriseCode: enterprise.Code,
+          context: context,
+        );
       }
     } catch (e) {
       ShowSnackbarMessage.show(
         message: SoapRequestResponse.errorMessage,
         context: context,
       );
+    } finally {
+      _isLoadingReceipt = false;
+      notifyListeners();
     }
-
-    _isLoadingLiberateCheck = false;
-    notifyListeners();
   }
 }
