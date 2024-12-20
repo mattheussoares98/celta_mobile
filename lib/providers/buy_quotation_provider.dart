@@ -31,6 +31,10 @@ class BuyQuotationProvider with ChangeNotifier {
   BuyerModel? _selectedBuyer;
   BuyerModel? get selectedBuyer => _selectedBuyer;
 
+  List<BuyQuotationIncompleteModel> _incompletesBuyQuotations = [];
+  List<BuyQuotationIncompleteModel> get incompletesBuyQuotations =>
+      [..._incompletesBuyQuotations];
+
   Future<void> insertUpdateBuyQuotation({
     required bool isInserting,
   }) async {
@@ -60,6 +64,7 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
+    _incompletesBuyQuotations.clear();
     notifyListeners();
 
     try {
@@ -100,8 +105,11 @@ class BuyQuotationProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        /* final teste =  */json
-            .decode(SoapRequestResponse.responseAsString.removeBreakLines());
+        _incompletesBuyQuotations = (json.decode(
+                    SoapRequestResponse.responseAsString.removeBreakLines())
+                as List)
+            .map((e) => BuyQuotationIncompleteModel.fromJson(e))
+            .toList();
       }
       SoapRequestResponse.responseAsMap;
       SoapRequestResponse.responseAsString;
