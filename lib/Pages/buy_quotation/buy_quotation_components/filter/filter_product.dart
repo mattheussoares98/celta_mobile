@@ -82,7 +82,7 @@ class FilterProduct extends StatelessWidget {
           },
         ),
         productItem(
-          product: buyQuotationProvider.selectedProduct,
+          product: buyQuotationProvider.productToFilter,
           buyQuotationProvider: buyQuotationProvider,
           showRemoveFilter: true,
         )

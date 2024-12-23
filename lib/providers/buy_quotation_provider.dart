@@ -18,8 +18,8 @@ class BuyQuotationProvider with ChangeNotifier {
 
   List<GetProductJsonModel> _searchedProducts = [];
   List<GetProductJsonModel> get searchedProducts => [..._searchedProducts];
-  GetProductJsonModel? _selectedProduct;
-  GetProductJsonModel? get selectedProduct => _selectedProduct;
+  GetProductJsonModel? _productToFilter;
+  GetProductJsonModel? get productToFilter => _productToFilter;
 
   List<SupplierModel> _searchedSuppliers = [];
   List<SupplierModel> get searchedSuppliers => [..._searchedSuppliers];
@@ -46,7 +46,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _searchedProducts.clear();
     _searchedSuppliers.clear();
     _selectedBuyer = null;
-    _selectedProduct = null;
+    _productToFilter = null;
     _selectedSupplier = null;
   }
 
@@ -99,8 +99,8 @@ class BuyQuotationProvider with ChangeNotifier {
         "FinalDateOfCreation": finalDateOfCreation?.toIso8601String(),
         "InitialDateOfLimit": initialDateOfLimit?.toIso8601String(),
         "FinalDateOfLimit": finalDateOfLimit?.toIso8601String(),
-        "ProductCode": _selectedProduct?.productCode,
-        "ProductPackingCode": _selectedProduct?.productPackingCode,
+        "ProductCode": _productToFilter?.productCode,
+        "ProductPackingCode": _productToFilter?.productPackingCode,
         "SupplierCode": supplierCode,
         "BuyerCode":
             null, //se mandar o código 0, leva em consideração o funcionário vinculado ao usuário. Vou deixar sem esse filtro
@@ -164,7 +164,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
     _searchedProducts.clear();
-    _selectedProduct = null;
+    _productToFilter = null;
     notifyListeners();
 
     try {
@@ -208,7 +208,7 @@ class BuyQuotationProvider with ChangeNotifier {
 
   void updateSelectedProduct(GetProductJsonModel? product) {
     _searchedProducts.clear();
-    _selectedProduct = product;
+    _productToFilter = product;
     notifyListeners();
   }
 
