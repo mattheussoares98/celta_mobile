@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
+import 'insert_update_components.dart';
 
 class Products extends StatefulWidget {
   const Products({super.key});
@@ -182,76 +183,16 @@ class _ProductsState extends State<Products> {
                       ),
                     ),
                     if (selectedProductIndex == productIndex)
-                      Column(
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount:
-                                buyQuotationProvider.selectedEnterprises.length,
-                            itemBuilder: (context, index) {
-                              final enterprise = buyQuotationProvider
-                                  .selectedEnterprises[index];
-
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: TextFormField(
-                                  controller: controllers[index],
-                                  style: const TextStyle(fontSize: 14),
-                                  decoration: FormFieldDecoration.decoration(
-                                    context: context,
-                                    labelText: "Qtd ${enterprise.Name}",
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextButton(
-                                  onPressed: () {
-                                    updateSelectedIndex(
-                                      productIndex: productIndex,
-                                      buyQuotationProvider:
-                                          buyQuotationProvider,
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Cancelar",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: TextButton(
-                                  onPressed: () {
-                                    buyQuotationProvider.updateProductQuantity(
-                                      quantitys: controllers
-                                          .map((e) => e.text.toDouble())
-                                          .toList(),
-                                      productIndex: productIndex,
-                                    );
-                                    updateSelectedIndex(
-                                      productIndex: productIndex,
-                                      buyQuotationProvider:
-                                          buyQuotationProvider,
-                                    );
-                                  },
-                                  child: Text(
-                                    "Alterar",
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      UpdateQuantity(
+                        controllers: controllers,
+                        updateSelectedIndex: () {
+                          updateSelectedIndex(
+                            productIndex: productIndex,
+                            buyQuotationProvider: buyQuotationProvider,
+                          );
+                        },
+                        productIndex: productIndex,
+                      )
                   ],
                 ),
               ),
