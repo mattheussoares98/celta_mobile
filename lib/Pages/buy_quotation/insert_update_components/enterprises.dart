@@ -18,9 +18,15 @@ class Enterprises extends StatelessWidget {
         const Text("Empresas"),
         ListView.builder(
           shrinkWrap: true,
-          itemCount: enterpriseProvider.enterprises.length,
+          itemCount:
+              buyQuotationProvider.completeBuyQuotation?.Enterprises?.length,
           itemBuilder: (context, index) {
-            final enterprise = enterpriseProvider.enterprises[index];
+            final buyQuotationEnterprise =
+                buyQuotationProvider.completeBuyQuotation?.Enterprises?[index];
+
+            final enterprise = enterpriseProvider.enterprises.firstWhere((e) =>
+                e.CnpjNumber.toString() ==
+                buyQuotationEnterprise?.enterprise.CnpjNumber);
 
             return Container(
               margin: const EdgeInsets.only(bottom: 4),
