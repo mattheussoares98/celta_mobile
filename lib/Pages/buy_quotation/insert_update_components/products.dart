@@ -32,19 +32,39 @@ class Products extends StatelessWidget {
               decoration: BoxDecoration(
                 color: index % 2 == 0
                     ? Theme.of(context).primaryColor.withAlpha(30)
-                    : Colors.white,
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 0.2),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    product.Product!.Name.toString(),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TitleAndSubtitle.titleAndSubtitle(
+                          subtitle: product.Product!.Name.toString(),
+                        ),
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "PLU",
+                          subtitle: product.Product!.PLU,
+                        ),
+                      ],
+                    ),
                   ),
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "PLU",
-                    subtitle: product.Product!.PLU,
-                  ),
+                  IconButton(
+                    onPressed: () {
+                      ShowAlertDialog.show(
+                        context: context,
+                        title: "Remover produto?",
+                        function: () async {},
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                  )
                 ],
               ),
             );
