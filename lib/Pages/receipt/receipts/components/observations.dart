@@ -87,7 +87,7 @@ class Observations extends StatelessWidget {
                             function: () async {
                               await receiptProvider.updateObservations(
                                 observations: observationsController.text,
-                                grDocCode: receipt.CodigoInterno_ProcRecebDoc,
+                                receipt: receipt,
                                 enterprise: enterprise,
                               );
                             });

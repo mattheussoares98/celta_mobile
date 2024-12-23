@@ -586,7 +586,7 @@ class ReceiptProvider with ChangeNotifier {
 
   Future<void> updateObservations({
     required String observations,
-    required int grDocCode,
+    required ReceiptModel receipt,
     required EnterpriseModel enterprise,
   }) async {
     _isLoadingReceipt = true;
@@ -598,7 +598,7 @@ class ReceiptProvider with ChangeNotifier {
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "grDocCode": grDocCode,
+          "grDocCode": receipt.CodigoInterno_ProcRecebDoc,
           "observations": observations,
         },
         typeOfResponse: "UpdateObservationsResponse",
@@ -618,9 +618,18 @@ class ReceiptProvider with ChangeNotifier {
           context: context,
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
-        await getReceipt(
-          enterpriseCode: enterprise.Code,
-          context: context,
+
+        int index = _receipts.indexOf(receipt);
+        _receipts[index] = ReceiptModel(
+          Observacoes_ProcRecebDoc: observations,
+          CodigoInterno_ProcRecebDoc: receipt.CodigoInterno_ProcRecebDoc,
+          CodigoInterno_Empresa: receipt.CodigoInterno_Empresa,
+          Numero_ProcRecebDoc: receipt.Numero_ProcRecebDoc,
+          EmitterName: receipt.EmitterName,
+          Grupo: receipt.Grupo,
+          DefaultObservations: receipt.DefaultObservations,
+          Status: receipt.Status,
+          StatusColor: receipt.StatusColor,
         );
       }
     } catch (e) {

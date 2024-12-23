@@ -76,10 +76,10 @@ class ShowAlertDialog {
                         ),
                       ),
                       onPressed: () async {
-                        await function();
                         if (closeAutomaticallyOnConfirm == true) {
                           Navigator.of(context).pop();
                         }
+                        await function();
                       },
                       child: FittedBox(
                         child: Text(
