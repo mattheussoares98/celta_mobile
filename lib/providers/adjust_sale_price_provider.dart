@@ -112,11 +112,12 @@ class AdjustSalePriceProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getProductJsonModel(
+      await SoapHelper.getProductsJsonModel(
         listToAdd: _products,
         enterprise: enterprise,
         searchValue: searchValue,
         configurationsProvider: configurationsProvider,
+        enterprisesCodes: [enterprise.Code],
         routineTypeInt: 8,
       );
 

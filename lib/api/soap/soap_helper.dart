@@ -114,26 +114,39 @@ class SoapHelper {
     }
   }
 
-  static Future<void> getProductJsonModel({
+  static Future<void> getProductsJsonModel({
     required List<GetProductJsonModel> listToAdd,
     required EnterpriseModel enterprise,
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
     required int routineTypeInt,
+    required List<int> enterprisesCodes,
   }) async {
     try {
       await SoapRequest.soapPost(
+        // CrossIdentity = "CrossIdentity",
+        //             TopQuantity = 100,
+        //             RoutineInt = 0,
+        //             SearchValue = "SearchValue",
+        //             SearchType = SearchProduct.Dynamic,
+        //             RequestTypeCode = 0,
+        //             EnterpriseCodes = new List<int> { 1, 2 },
+        //             EnterpriseDestinyCode = 0,
+        //             SupplierCode = 0,
+        //             ResearchOfPriceFilters = new JsonProductResearchOfPriceFilters() { ResearchOfPriceCode = 1, ConcurrentCode = 2, OnlyAssociated = false }
         parameters: {
-          "crossIdentity": UserData.crossIdentity,
-          "enterpriseCode": enterprise.Code,
-          "searchValue":
-              changeSearchValueIfIsBalanceCode(searchValue, enterprise),
-          "searchTypeInt": getSearchTypeInt(configurationsProvider),
-          "routineTypeInt": routineTypeInt,
+          "filters": json.encode({
+            "CrossIdentity": UserData.crossIdentity,
+            "EnterpriseCodes": enterprisesCodes,
+            "SearchValue":
+                changeSearchValueIfIsBalanceCode(searchValue, enterprise),
+            "SearchType": getSearchTypeInt(configurationsProvider),
+            "RoutineInt": routineTypeInt,
+          }),
         },
-        typeOfResponse: "GetProductJsonResponse",
-        typeOfResult: "GetProductJsonResult",
-        SOAPAction: "GetProductJson",
+        typeOfResponse: "GetProductsJsonResponse",
+        typeOfResult: "GetProductsJsonResult",
+        SOAPAction: "GetProductsJson",
         serviceASMX: "CeltaProductService.asmx",
       );
 

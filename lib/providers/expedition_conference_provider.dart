@@ -139,11 +139,12 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getProductJsonModel(
+      await SoapHelper.getProductsJsonModel(
         listToAdd: _searchedProducts,
         enterprise: enterprise,
         searchValue: value,
         configurationsProvider: configurationsProvider,
+        enterprisesCodes: [enterprise.Code],
         routineTypeInt: 0,
       );
 

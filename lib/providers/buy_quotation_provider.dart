@@ -168,11 +168,12 @@ class BuyQuotationProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getProductJsonModel(
+      await SoapHelper.getProductsJsonModel(
         listToAdd: _searchedProducts,
         enterprise: enterprise,
         searchValue: searchProductController.text,
         configurationsProvider: configurationsProvider,
+        enterprisesCodes: [enterprise.Code],
         routineTypeInt: 9,
       );
 
