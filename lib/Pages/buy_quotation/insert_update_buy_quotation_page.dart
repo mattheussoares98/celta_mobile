@@ -38,7 +38,7 @@ class _InsertUpdateBuyQuotationPageState
 
         await loadCompleteBuyQuotation();
 
-        buyQuotationProvider.updateSelectedEnterprises(enterpriseProvider);
+        buyQuotationProvider.updateSelectedsValues(enterpriseProvider);
 
         if (buyQuotationProvider
                 .completeBuyQuotation!.Observations?.isNotEmpty ==

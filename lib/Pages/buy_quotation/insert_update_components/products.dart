@@ -15,17 +15,13 @@ class Products extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text("Produtos"),
+        if (buyQuotationProvider.selectedsProducts.length == 0)
+          const Text("Não há produtos na cotação"),
         ListView.builder(
           shrinkWrap: true,
-          itemCount:
-              buyQuotationProvider.completeBuyQuotation!.Products?.length,
+          itemCount: buyQuotationProvider.selectedsProducts.length,
           itemBuilder: (context, index) {
-            final product =
-                buyQuotationProvider.completeBuyQuotation!.Products?[index];
-
-            if (product == null) {
-              return const Text("Não há produtos na cotação");
-            }
+            final product = buyQuotationProvider.selectedsProducts[index];
 
             return Container(
               padding: const EdgeInsets.all(8),

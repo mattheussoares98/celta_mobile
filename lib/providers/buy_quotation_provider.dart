@@ -41,6 +41,10 @@ class BuyQuotationProvider with ChangeNotifier {
   List<EnterpriseModel> _selectedEnterprises = [];
   List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
 
+  List<BuyQuotationProductsModel> _selectedsProducts = [];
+  List<BuyQuotationProductsModel> get selectedsProducts =>
+      [..._selectedsProducts];
+
   void doOnPopScreen() {
     _searchedBuyers.clear();
     _searchedProducts.clear();
@@ -298,20 +302,27 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  void updateSelectedEnterprises(EnterpriseProvider enterpriseProvider) {
+  void updateSelectedsValues(EnterpriseProvider enterpriseProvider) {
     _selectedEnterprises.clear();
-    if (_completeBuyQuotation?.Enterprises == null) {
-      return;
+    _selectedsProducts.clear();
+
+    if (_completeBuyQuotation?.Enterprises != null &&
+        _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
+      _selectedEnterprises =
+          _completeBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
+        return enterpriseProvider.enterprises.firstWhere(
+          (e) =>
+              e.CnpjNumber.toString() ==
+              buyQuotationEnterprise.enterprise.CnpjNumber,
+        );
+      }).toList();
     }
 
-    _selectedEnterprises =
-        _completeBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
-      return enterpriseProvider.enterprises.firstWhere(
-        (e) =>
-            e.CnpjNumber.toString() ==
-            buyQuotationEnterprise.enterprise.CnpjNumber,
-      );
-    }).toList();
+    if (_completeBuyQuotation?.Products != null &&
+        _completeBuyQuotation?.Products!.isNotEmpty == true) {
+      _selectedsProducts =
+          _completeBuyQuotation!.Products!.map((product) => product).toList();
+    }
 
     notifyListeners();
   }
