@@ -3,21 +3,30 @@ import 'dart:convert';
 class BuyQuotationProductsModel {
   final int? Code;
   final _Product? Product;
+  final List<_ProductEnterprise>? ProductEnterprises;
 
   BuyQuotationProductsModel({
     required this.Code,
     required this.Product,
+    required this.ProductEnterprises,
   });
 
   factory BuyQuotationProductsModel.fromJson(Map data) =>
       BuyQuotationProductsModel(
         Code: data["Code"],
         Product: _Product.fromJson(data["Product"]),
+        ProductEnterprises: data["ProductEnterprises"] == null
+            ? null
+            : (json.decode(data["ProductEnterprises"]) as List)
+                .map((e) => _ProductEnterprise.fromJson(e))
+                .toList(),
       );
 
   Map<String, dynamic> toJson() => {
         "Code": Code,
         "Product": Product?.toJson(),
+        "ProductEnterprises":
+            ProductEnterprises?.map((e) => e.toJson()).toList(),
       };
 }
 
@@ -56,7 +65,6 @@ class _Product {
   final double? FiscalCost;
   final double? FiscalLiquidCost;
   final double? PriceCost;
-  final List<_ProductEnterprise>? productEnterprises;
   //  "StockByEnterpriseAssociateds":null,
   //  "Stocks":null,
   //  "LastBuyEntrance":null,
@@ -98,7 +106,6 @@ class _Product {
     required this.FiscalCost,
     required this.FiscalLiquidCost,
     required this.PriceCost,
-    required this.productEnterprises,
   });
 
   factory _Product.fromJson(Map data) => _Product(
@@ -137,11 +144,6 @@ class _Product {
         FiscalCost: data["FiscalCost"],
         FiscalLiquidCost: data["FiscalLiquidCost"],
         PriceCost: data["PriceCost"],
-        productEnterprises: data["productEnterprises"] == null
-            ? null
-            : (json.decode(data["productEnterprises"]) as List)
-                .map((e) => _ProductEnterprise.fromJson(e))
-                .toList(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -180,7 +182,6 @@ class _Product {
         "FiscalCost": FiscalCost,
         "FiscalLiquidCost": FiscalLiquidCost,
         "PriceCost": PriceCost,
-        "productEnterprises": productEnterprises,
       };
 }
 
