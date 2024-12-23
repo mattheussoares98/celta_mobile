@@ -36,6 +36,7 @@ class UpdateQuantity extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: TextFormField(
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   controller: controllers[index],
                   style: const TextStyle(fontSize: 14),
                   validator: (value) {
