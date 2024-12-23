@@ -10,6 +10,7 @@ class Enterprises extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
+    EnterpriseProvider enterpriseProvider = Provider.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -17,31 +18,57 @@ class Enterprises extends StatelessWidget {
         const Text("Empresas"),
         ListView.builder(
           shrinkWrap: true,
-          itemCount:
-              buyQuotationProvider.completeBuyQuotation!.Enterprises!.length,
+          itemCount: enterpriseProvider.enterprises.length,
           itemBuilder: (context, index) {
-            final enterprise =
-                buyQuotationProvider.completeBuyQuotation!.Enterprises![index];
+            final enterprise = enterpriseProvider.enterprises[index];
 
             return Container(
-              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
                 color: index % 2 == 0
                     ? Theme.of(context).primaryColor.withAlpha(30)
-                    : Colors.white,
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 0.2),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    enterprise.enterprise.Name.toString(),
+              child: InkWell(
+                onTap: () {
+                  buyQuotationProvider
+                      .addOrRemoveSelectedEnterprise(enterprise);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "Código",
+                              subtitle: enterprise.Code.toString(),
+                            ),
+                            TitleAndSubtitle.titleAndSubtitle(
+                              subtitle: enterprise.Name.toString(),
+                            ),
+                            TitleAndSubtitle.titleAndSubtitle(
+                              title: "CNPJ",
+                              subtitle: enterprise.CnpjNumber.toString(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Checkbox(
+                        value: buyQuotationProvider.selectedEnterprises
+                            .contains(enterprise),
+                        onChanged: (value) {
+                          buyQuotationProvider
+                              .addOrRemoveSelectedEnterprise(enterprise);
+                        },
+                      ),
+                    ],
                   ),
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "CNPJ",
-                    subtitle: enterprise.enterprise.CnpjNumber,
-                  ),
-                ],
+                ),
               ),
             );
           },

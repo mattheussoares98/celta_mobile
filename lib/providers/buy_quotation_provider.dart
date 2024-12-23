@@ -38,6 +38,9 @@ class BuyQuotationProvider with ChangeNotifier {
   BuyQuotationCompleteModel? _completeBuyQuotation;
   BuyQuotationCompleteModel? get completeBuyQuotation => _completeBuyQuotation;
 
+  List<EnterpriseModel> _selectedEnterprises = [];
+  List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
+
   void doOnPopScreen() {
     _searchedBuyers.clear();
     _searchedProducts.clear();
@@ -292,5 +295,32 @@ class BuyQuotationProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void updateSelectedEnterprises(EnterpriseProvider enterpriseProvider) {
+    _selectedEnterprises.clear();
+    if (_completeBuyQuotation?.Enterprises == null) {
+      return;
+    }
+
+    _selectedEnterprises =
+        _completeBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
+      return enterpriseProvider.enterprises.firstWhere(
+        (e) =>
+            e.CnpjNumber.toString() ==
+            buyQuotationEnterprise.enterprise.CnpjNumber,
+      );
+    }).toList();
+
+    notifyListeners();
+  }
+
+  void addOrRemoveSelectedEnterprise(EnterpriseModel enterprise) {
+    if (_selectedEnterprises.contains(enterprise)) {
+      _selectedEnterprises.remove(enterprise);
+    } else {
+      _selectedEnterprises.add(enterprise);
+    }
+    notifyListeners();
   }
 }

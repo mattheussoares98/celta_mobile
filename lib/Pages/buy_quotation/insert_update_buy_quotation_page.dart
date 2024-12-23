@@ -31,10 +31,15 @@ class _InsertUpdateBuyQuotationPageState
         //     "enterprise": enterprise,
         //     "incompleteQuotation": incompleteQuotation,
         //   }
-        await loadCompleteBuyQuotation();
-
+        EnterpriseProvider enterpriseProvider =
+            Provider.of(context, listen: false);
         BuyQuotationProvider buyQuotationProvider =
             Provider.of(context, listen: false);
+
+        await loadCompleteBuyQuotation();
+
+        buyQuotationProvider.updateSelectedEnterprises(enterpriseProvider);
+
         if (buyQuotationProvider
                 .completeBuyQuotation!.Observations?.isNotEmpty ==
             true) {
