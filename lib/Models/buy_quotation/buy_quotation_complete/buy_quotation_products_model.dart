@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class BuyQuotationProductsModel {
   final int? Code;
   final _Product? Product;
@@ -17,7 +15,7 @@ class BuyQuotationProductsModel {
         Product: _Product.fromJson(data["Product"]),
         ProductEnterprises: data["ProductEnterprises"] == null
             ? null
-            : (json.decode(data["ProductEnterprises"]) as List)
+            : (data["ProductEnterprises"] as List)
                 .map((e) => _ProductEnterprise.fromJson(e))
                 .toList(),
       );

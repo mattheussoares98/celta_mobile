@@ -41,7 +41,7 @@ class _InsertUpdateBuyQuotationPageState
         buyQuotationProvider.updateSelectedsValues(enterpriseProvider);
 
         if (buyQuotationProvider
-                .completeBuyQuotation!.Observations?.isNotEmpty ==
+                .completeBuyQuotation?.Observations?.isNotEmpty ==
             true) {
           observationsController.text =
               buyQuotationProvider.completeBuyQuotation!.Observations!;

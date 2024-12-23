@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../models/models.dart';
 import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
 class Products extends StatefulWidget {
   const Products({super.key});
@@ -54,7 +54,7 @@ class _ProductsState extends State<Products> {
 
   void updateSelectedIndex({
     required int productIndex,
-    required BuyQuotationProductsModel product,
+    required BuyQuotationProvider buyQuotationProvider,
   }) {
     if (selectedIndex == productIndex) {
       setState(() {
@@ -63,15 +63,39 @@ class _ProductsState extends State<Products> {
     } else {
       setState(() {
         selectedIndex = productIndex;
+        updateControllersQuantity(
+          productIndex: productIndex,
+          buyQuotationProvider: buyQuotationProvider,
+        );
       });
     }
+  }
 
-    if (product.Product?.productEnterprises == null) {
+  void updateControllersQuantity({
+    required int productIndex,
+    required BuyQuotationProvider buyQuotationProvider,
+  }) {
+    if (buyQuotationProvider
+            .selectedsProducts[productIndex].ProductEnterprises ==
+        null) {
       return;
     }
 
-    for (var enterprise in product.Product!.productEnterprises!) {
-      //TODO change controller value according writted quantity
+    for (var x = 0; x < buyQuotationProvider.selectedEnterprises.length; x++) {
+      //a quantidade de controllers é criado de acordo com a quantidade de empresas selecionadas
+      final enterprise = buyQuotationProvider.selectedEnterprises[x];
+
+      final productQuantity = buyQuotationProvider
+          .selectedsProducts[productIndex].ProductEnterprises!
+          .where((e) => e.EnterpriseCode == enterprise.Code)
+          .first
+          .Quantity;
+
+      if (productQuantity != null) {
+        controllers[x].text = productQuantity.toString().toBrazilianNumber(3);
+      } else {
+        controllers[x].text = "";
+      }
     }
   }
 
@@ -109,7 +133,7 @@ class _ProductsState extends State<Products> {
                       onTap: () {
                         updateSelectedIndex(
                           productIndex: index,
-                          product: product,
+                          buyQuotationProvider: buyQuotationProvider,
                         );
                       },
                       child: Column(
@@ -139,7 +163,7 @@ class _ProductsState extends State<Products> {
                                 onPressed: () {
                                   updateSelectedIndex(
                                     productIndex: index,
-                                    product: product,
+                                    buyQuotationProvider: buyQuotationProvider,
                                   );
                                 },
                                 label: const Text("Qtd"),
