@@ -35,9 +35,8 @@ class BuyQuotationProvider with ChangeNotifier {
   List<BuyQuotationIncompleteModel> get incompletesBuyQuotations =>
       [..._incompletesBuyQuotations];
 
-  List<BuyQuotationCompleteModel> _completeBuyQuotations = [];
-  List<BuyQuotationCompleteModel> get completeBuyQuotations =>
-      [..._completeBuyQuotations];
+  BuyQuotationCompleteModel? _completeBuyQuotation;
+  BuyQuotationCompleteModel? get completeBuyQuotation => _completeBuyQuotation;
 
   void doOnPopScreen() {
     _searchedBuyers.clear();
@@ -80,7 +79,7 @@ class BuyQuotationProvider with ChangeNotifier {
     notifyListeners();
 
     if (complete == true) {
-      _completeBuyQuotations.clear();
+      _completeBuyQuotation = null;
     } else {
       _incompletesBuyQuotations.clear();
     }
@@ -124,10 +123,11 @@ class BuyQuotationProvider with ChangeNotifier {
         );
       } else {
         if (complete == true) {
-          _completeBuyQuotations =
+          _completeBuyQuotation =
               (json.decode(SoapRequestResponse.responseAsString) as List)
                   .map((e) => BuyQuotationCompleteModel.fromJson(e))
-                  .toList();
+                  .toList()
+                  .first;
         } else {
           _incompletesBuyQuotations = (json.decode(
                       SoapRequestResponse.responseAsString.removeBreakLines())
