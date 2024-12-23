@@ -13,7 +13,7 @@ class Products extends StatefulWidget {
 }
 
 class _ProductsState extends State<Products> {
-  int? selectedIndex;
+  int? selectedProductIndex;
   List<TextEditingController> controllers = [];
 
   @override
@@ -56,13 +56,13 @@ class _ProductsState extends State<Products> {
     required int productIndex,
     required BuyQuotationProvider buyQuotationProvider,
   }) {
-    if (selectedIndex == productIndex) {
+    if (selectedProductIndex == productIndex) {
       setState(() {
-        selectedIndex = null;
+        selectedProductIndex = null;
       });
     } else {
       setState(() {
-        selectedIndex = productIndex;
+        selectedProductIndex = productIndex;
         updateControllersQuantity(
           productIndex: productIndex,
           buyQuotationProvider: buyQuotationProvider,
@@ -112,13 +112,14 @@ class _ProductsState extends State<Products> {
         ListView.builder(
           shrinkWrap: true,
           itemCount: buyQuotationProvider.selectedsProducts.length,
-          itemBuilder: (context, index) {
-            final product = buyQuotationProvider.selectedsProducts[index];
+          itemBuilder: (context, productIndex) {
+            final product =
+                buyQuotationProvider.selectedsProducts[productIndex];
 
             return Container(
               margin: const EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
-                color: index % 2 == 0
+                color: productIndex % 2 == 0
                     ? Theme.of(context).primaryColor.withAlpha(30)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
@@ -132,7 +133,7 @@ class _ProductsState extends State<Products> {
                     InkWell(
                       onTap: () {
                         updateSelectedIndex(
-                          productIndex: index,
+                          productIndex: productIndex,
                           buyQuotationProvider: buyQuotationProvider,
                         );
                       },
@@ -162,14 +163,14 @@ class _ProductsState extends State<Products> {
                               child: TextButton.icon(
                                 onPressed: () {
                                   updateSelectedIndex(
-                                    productIndex: index,
+                                    productIndex: productIndex,
                                     buyQuotationProvider: buyQuotationProvider,
                                   );
                                 },
                                 label: const Text("Qtd"),
                                 iconAlignment: IconAlignment.end,
                                 icon: Icon(
-                                  selectedIndex == index
+                                  selectedProductIndex == productIndex
                                       ? Icons.arrow_drop_up
                                       : Icons.arrow_drop_down,
                                   color: Theme.of(context).colorScheme.primary,
@@ -180,7 +181,7 @@ class _ProductsState extends State<Products> {
                         ],
                       ),
                     ),
-                    if (selectedIndex == index)
+                    if (selectedProductIndex == productIndex)
                       Column(
                         children: [
                           ListView.builder(
@@ -204,10 +205,50 @@ class _ProductsState extends State<Products> {
                               );
                             },
                           ),
-                          TextButton.icon(
-                            onPressed: () {},
-                            label: const Text("Confirmar qtd"),
-                            icon: const Icon(Icons.verified_rounded),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextButton(
+                                  onPressed: () {
+                                    updateSelectedIndex(
+                                      productIndex: productIndex,
+                                      buyQuotationProvider:
+                                          buyQuotationProvider,
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Cancelar",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: TextButton(
+                                  onPressed: () {
+                                    buyQuotationProvider.updateProductQuantity(
+                                      quantitys: controllers
+                                          .map((e) => e.text.toDouble())
+                                          .toList(),
+                                      productIndex: productIndex,
+                                    );
+                                    updateSelectedIndex(
+                                      productIndex: productIndex,
+                                      buyQuotationProvider:
+                                          buyQuotationProvider,
+                                    );
+                                  },
+                                  child: Text(
+                                    "Alterar",
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

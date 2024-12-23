@@ -1,7 +1,7 @@
 class BuyQuotationProductsModel {
   final int? Code;
   final _Product? Product;
-  final List<_ProductEnterprise>? ProductEnterprises;
+  final List<ProductEnterprise>? ProductEnterprises;
 
   BuyQuotationProductsModel({
     required this.Code,
@@ -16,7 +16,7 @@ class BuyQuotationProductsModel {
         ProductEnterprises: data["ProductEnterprises"] == null
             ? null
             : (data["ProductEnterprises"] as List)
-                .map((e) => _ProductEnterprise.fromJson(e))
+                .map((e) => ProductEnterprise.fromJson(e))
                 .toList(),
       );
 
@@ -183,18 +183,18 @@ class _Product {
       };
 }
 
-class _ProductEnterprise {
+class ProductEnterprise {
   final int? Code;
   final int? EnterpriseCode;
   final double? Quantity;
 
-  const _ProductEnterprise({
+  const ProductEnterprise({
     required this.Code,
     required this.EnterpriseCode,
     required this.Quantity,
   });
 
-  factory _ProductEnterprise.fromJson(Map data) => _ProductEnterprise(
+  factory ProductEnterprise.fromJson(Map data) => ProductEnterprise(
         Code: data["Code"],
         EnterpriseCode: data["EnterpriseCode"],
         Quantity: data["Quantity"],

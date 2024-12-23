@@ -335,4 +335,29 @@ class BuyQuotationProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void updateProductQuantity({
+    required List<double> quantitys,
+    required int productIndex,
+  }) {
+    final selectedProduct = _selectedsProducts[productIndex];
+
+    List<ProductEnterprise> newProductsEnterprise = [];
+
+    for (var x = 0; x < quantitys.length; x++) {
+      newProductsEnterprise.add(
+        ProductEnterprise(
+          Code: selectedProduct.ProductEnterprises?[x].Code,
+          EnterpriseCode: selectedProduct.ProductEnterprises?[x].EnterpriseCode,
+          Quantity: quantitys[x],
+        ),
+      );
+    }
+
+    _selectedsProducts[productIndex] = BuyQuotationProductsModel(
+      Code: selectedProduct.Code,
+      Product: selectedProduct.Product,
+      ProductEnterprises: newProductsEnterprise,
+    );
+  }
 }
