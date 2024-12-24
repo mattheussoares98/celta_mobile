@@ -77,7 +77,7 @@ class _ProductsState extends State<Products> {
     required BuyQuotationProvider buyQuotationProvider,
   }) {
     if (buyQuotationProvider
-            .selectedsProducts[productIndex].ProductEnterprises ==
+            .productsWithNewValues[productIndex].ProductEnterprises ==
         null) {
       return;
     }
@@ -87,7 +87,7 @@ class _ProductsState extends State<Products> {
       final enterprise = buyQuotationProvider.selectedEnterprises[x];
 
       final productQuantity = buyQuotationProvider
-          .selectedsProducts[productIndex].ProductEnterprises!
+          .productsWithNewValues[productIndex].ProductEnterprises!
           .where((e) => e.EnterpriseCode == enterprise.Code)
           .first
           .Quantity;
@@ -108,14 +108,14 @@ class _ProductsState extends State<Products> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text("Produtos"),
-        if (buyQuotationProvider.selectedsProducts.length == 0)
+        if (buyQuotationProvider.productsWithNewValues.length == 0)
           const Text("Não há produtos na cotação"),
         ListView.builder(
           shrinkWrap: true,
-          itemCount: buyQuotationProvider.selectedsProducts.length,
+          itemCount: buyQuotationProvider.productsWithNewValues.length,
           itemBuilder: (context, productIndex) {
             final product =
-                buyQuotationProvider.selectedsProducts[productIndex];
+                buyQuotationProvider.productsWithNewValues[productIndex];
 
             return Container(
               margin: const EdgeInsets.only(bottom: 4),

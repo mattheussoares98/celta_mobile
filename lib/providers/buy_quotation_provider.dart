@@ -41,9 +41,9 @@ class BuyQuotationProvider with ChangeNotifier {
   List<EnterpriseModel> _selectedEnterprises = [];
   List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
 
-  List<BuyQuotationProductsModel> _selectedsProducts = [];
-  List<BuyQuotationProductsModel> get selectedsProducts =>
-      [..._selectedsProducts];
+  List<BuyQuotationProductsModel> _productsWithNewValues = [];
+  List<BuyQuotationProductsModel> get productsWithNewValues =>
+      [..._productsWithNewValues];
 
   void doOnPopScreen() {
     _searchedBuyers.clear();
@@ -304,7 +304,7 @@ class BuyQuotationProvider with ChangeNotifier {
 
   void updateSelectedsValues(EnterpriseProvider enterpriseProvider) {
     _selectedEnterprises.clear();
-    _selectedsProducts.clear();
+    _productsWithNewValues.clear();
 
     if (_completeBuyQuotation?.Enterprises != null &&
         _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
@@ -320,7 +320,7 @@ class BuyQuotationProvider with ChangeNotifier {
 
     if (_completeBuyQuotation?.Products != null &&
         _completeBuyQuotation?.Products!.isNotEmpty == true) {
-      _selectedsProducts =
+      _productsWithNewValues =
           _completeBuyQuotation!.Products!.map((product) => product).toList();
     }
 
@@ -340,7 +340,7 @@ class BuyQuotationProvider with ChangeNotifier {
     required List<double> quantitys,
     required int productIndex,
   }) {
-    final selectedProduct = _selectedsProducts[productIndex];
+    final selectedProduct = _productsWithNewValues[productIndex];
 
     List<ProductEnterprise> newProductsEnterprise = [];
 
@@ -354,7 +354,7 @@ class BuyQuotationProvider with ChangeNotifier {
       );
     }
 
-    _selectedsProducts[productIndex] = BuyQuotationProductsModel(
+    _productsWithNewValues[productIndex] = BuyQuotationProductsModel(
       Code: selectedProduct.Code,
       Product: selectedProduct.Product,
       ProductEnterprises: newProductsEnterprise,
