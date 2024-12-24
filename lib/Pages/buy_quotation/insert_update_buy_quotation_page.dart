@@ -135,7 +135,7 @@ class _InsertUpdateBuyQuotationPageState
                         const Enterprises(),
                         const Divider(),
                         if (enterprise != null)
-                          Products(enterprise: enterprise),
+                          InsertUpdateProductsItems(enterprise: enterprise),
                       ],
                     ),
                 ],
