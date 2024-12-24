@@ -36,21 +36,23 @@ class UpdateQuantity extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: TextFormField(
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   controller: controllers[index],
                   style: const TextStyle(fontSize: 14),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  maxLength: 11,
                   validator: (value) {
-                    if (value == null || value.isEmpty == true) {
-                      return null;
-                    } else if (value.toDouble() == -1) {
-                      return "Número inválido";
-                    } else {
-                      return null;
-                    }
+                    return FormFieldValidations.number(
+                      maxDecimalPlaces: 3,
+                      valueCanIsEmpty: true,
+                      value: value,
+                    );
                   },
                   decoration: FormFieldDecoration.decoration(
                     context: context,
                     labelText: "Qtd ${enterprise.Name}",
+                    showCounterText: false,
                   ),
                 ),
               );

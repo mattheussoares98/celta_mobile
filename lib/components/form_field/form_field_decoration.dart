@@ -13,8 +13,10 @@ class FormFieldDecoration {
     String? hintText,
     Widget? prefixIcon,
     Widget? suffixIcon,
+    bool? showCounterText = true,
   }) {
     return InputDecoration(
+      counterText: showCounterText == true ? null : "",
       labelText: labelText,
       hintStyle: TextStyle(
         fontSize: hintSize,

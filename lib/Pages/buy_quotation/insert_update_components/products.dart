@@ -93,7 +93,7 @@ class _ProductsState extends State<Products> {
           .Quantity;
 
       if (productQuantity != null) {
-        controllers[x].text = productQuantity.toString().toBrazilianNumber(3);
+        controllers[x].text = productQuantity.toString().toBrazilianNumber(3).replaceAll(RegExp(r'\.'), '');
       } else {
         controllers[x].text = "";
       }
