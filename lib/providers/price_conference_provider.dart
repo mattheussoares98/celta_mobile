@@ -51,8 +51,7 @@ class PriceConferenceProvider with ChangeNotifier {
     }
 
     try {
-      await SoapHelper.getProductsJsonModel(
-        listToAdd: _products,
+      _products = await SoapHelper.getProductsJsonModel(
         enterprise: enterprise,
         searchValue: controllerText,
         configurationsProvider: configurationsProvider,

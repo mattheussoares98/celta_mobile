@@ -172,8 +172,7 @@ class BuyQuotationProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getProductsJsonModel(
-        listToAdd: _searchedProducts,
+      _searchedProducts = await SoapHelper.getProductsJsonModel(
         enterprise: enterprise,
         searchValue: searchProductController.text,
         configurationsProvider: configurationsProvider,

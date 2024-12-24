@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../../../models/models.dart';
 
 import 'get_product_json.dart';
@@ -241,16 +239,5 @@ class GetProductJsonModel {
     data["AutomaticDiscountValue"] = this.AutomaticDiscountValue;
     data["TotalLiquid"] = this.TotalLiquid;
     return data;
-  }
-
-  static responseAsStringToGetProductJsonModel({
-    required String responseAsString,
-    required List listToAdd,
-  }) {
-    List parsed = json.decode(responseAsString);
-
-    listToAdd.addAll(
-      parsed.map((e) => GetProductJsonModel.fromJson(e)).toList(),
-    );
   }
 }

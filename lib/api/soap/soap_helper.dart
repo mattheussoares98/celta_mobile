@@ -114,8 +114,7 @@ class SoapHelper {
     }
   }
 
-  static Future<void> getProductsJsonModel({
-    required List<GetProductJsonModel> listToAdd,
+  static Future<List<GetProductJsonModel>> getProductsJsonModel({
     required EnterpriseModel enterprise,
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
@@ -154,12 +153,12 @@ class SoapHelper {
         throw Exception();
       }
 
-      GetProductJsonModel.responseAsStringToGetProductJsonModel(
-        responseAsString: SoapRequestResponse.responseAsString,
-        listToAdd: listToAdd,
-      );
+      return (json.decode(SoapRequestResponse.responseAsString) as List)
+          .map((e) => GetProductJsonModel.fromJson(e))
+          .toList();
     } catch (e) {
       e;
+      return [];
     }
   }
 
@@ -331,10 +330,9 @@ class SoapHelper {
         throw Exception();
       }
 
-      GetProductJsonModel.responseAsStringToGetProductJsonModel(
-        responseAsString: SoapRequestResponse.responseAsString,
-        listToAdd: products,
-      );
+      products = (json.decode(SoapRequestResponse.responseAsString) as List)
+          .map((e) => GetProductJsonModel.fromJson(e))
+          .toList();
     } catch (e) {
       e;
     }

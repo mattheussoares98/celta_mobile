@@ -851,38 +851,16 @@ class SaleRequestProvider with ChangeNotifier {
     _isLoadingProducts = true;
     notifyListeners();
 
-    Map jsonGetProducts = {
-      "CrossIdentity": UserData.crossIdentity,
-      "SearchValue": SoapHelper.changeSearchValueIfIsBalanceCode(
-          controllerText, enterprise),
-      "RequestTypeCode": requestTypeCode,
-      "EnterpriseCodes": [enterprise.Code],
-      "SearchTypeInt": SoapHelper.getSearchTypeInt(configurationsProvider),
-      "RoutineInt": 1,
-      // "SupplierCode": _selectedSupplier!.Code,
-      // "EnterpriseDestinyCode": 0,
-      // "SearchType": 0,
-      // "Routine": 0,
-    };
-
     try {
-      await SoapRequest.soapPost(
-        parameters: {
-          "filters": json.encode(jsonGetProducts),
-        },
-        typeOfResponse: "GetProductsJsonResponse",
-        SOAPAction: "GetProductsJson",
-        serviceASMX: "CeltaProductService.asmx",
-        typeOfResult: "GetProductsJsonResult",
+      _products = await SoapHelper.getProductsJsonModel(
+        enterprise: enterprise,
+        searchValue: controllerText,
+        configurationsProvider: configurationsProvider,
+        routineTypeInt: 1,
+        enterprisesCodes: [enterprise.Code],
       );
 
       _errorMessageProducts = SoapRequestResponse.errorMessage;
-      if (_errorMessageProducts == "") {
-        GetProductJsonModel.responseAsStringToGetProductJsonModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _products,
-        );
-      }
     } catch (e) {
       //print("Erro para obter os produtos: $e");
       _errorMessageProducts = DefaultErrorMessage.ERROR;

@@ -147,8 +147,7 @@ class AdjustStockProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getProductsJsonModel(
-        listToAdd: _products,
+      _products = await SoapHelper.getProductsJsonModel(
         enterprise: enterprise,
         searchValue: controllerText,
         configurationsProvider: configurationsProvider,
