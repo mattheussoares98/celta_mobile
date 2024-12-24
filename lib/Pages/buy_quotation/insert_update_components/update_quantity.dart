@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 
 class UpdateQuantity extends StatelessWidget {
@@ -18,6 +19,24 @@ class UpdateQuantity extends StatelessWidget {
   });
 
   static final _formKey = GlobalKey<FormState>();
+
+  void selectTextOfController(EnterpriseModel enterprise) {
+    controllers
+        .where((e) => e.keys.first == enterprise.Code)
+        .first
+        .values
+        .first
+        .selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: controllers
+          .where((e) => e.keys.first == enterprise.Code)
+          .first
+          .values
+          .first
+          .text
+          .length,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +55,9 @@ class UpdateQuantity extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: TextFormField(
+                  onTap: () {
+                    selectTextOfController(enterprise);
+                  },
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   controller: controllers
