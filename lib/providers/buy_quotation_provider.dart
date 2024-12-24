@@ -337,7 +337,14 @@ class BuyQuotationProvider with ChangeNotifier {
     if (_selectedEnterprises.contains(enterprise)) {
       _selectedEnterprises.remove(enterprise);
     } else {
-      _selectedEnterprises.add(enterprise);
+      int index = _completeBuyQuotation!.Enterprises!
+          .indexWhere((e) => e.enterprise.Code == enterprise.Code);
+
+      if (index > _selectedEnterprises.length) {
+        _selectedEnterprises.add(enterprise);
+      } else {
+        _selectedEnterprises.insert(index, enterprise);
+      }
     }
     notifyListeners();
   }
