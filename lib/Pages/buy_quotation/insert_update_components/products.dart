@@ -20,7 +20,7 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   int? selectedProductIndex;
-  List<TextEditingController> controllers = [];
+  List<Map<int, TextEditingController>> controllers = [];
   final searchProductController = TextEditingController();
   final searchFocusNode = FocusNode();
 
@@ -47,18 +47,18 @@ class _ProductsState extends State<Products> {
   }
 
   void createControllers(BuyQuotationProvider buyQuotationProvider) {
-    if (buyQuotationProvider.selectedEnterprises.isEmpty) {
+    if (buyQuotationProvider.selectedEnterprises.isEmpty == true) {
       return;
     } else {
       controllers = buyQuotationProvider.selectedEnterprises
-          .map((e) => TextEditingController())
+          .map((e) => {e.Code: TextEditingController()})
           .toList();
     }
   }
 
   void disposeControllers() {
     for (var controller in controllers) {
-      controller.dispose();
+      controller.values.first.dispose();
     }
   }
 
@@ -76,39 +76,9 @@ class _ProductsState extends State<Products> {
         updateControllersQuantity(
           productIndex: productIndex,
           buyQuotationProvider: buyQuotationProvider,
+          controllers: controllers,
         );
       });
-    }
-  }
-
-  void updateControllersQuantity({
-    required int productIndex,
-    required BuyQuotationProvider buyQuotationProvider,
-  }) {
-    if (buyQuotationProvider
-            .productsWithNewValues[productIndex].ProductEnterprises ==
-        null) {
-      return;
-    }
-
-    for (var x = 0; x < buyQuotationProvider.selectedEnterprises.length; x++) {
-      //a quantidade de controllers é criado de acordo com a quantidade de empresas selecionadas
-      final enterprise = buyQuotationProvider.selectedEnterprises[x];
-
-      final productQuantity = buyQuotationProvider
-          .productsWithNewValues[productIndex].ProductEnterprises!
-          .where((e) => e.EnterpriseCode == enterprise.Code)
-          .first
-          .Quantity;
-
-      if (productQuantity != null) {
-        controllers[x].text = productQuantity
-            .toString()
-            .toBrazilianNumber(3)
-            .replaceAll(RegExp(r'\.'), '');
-      } else {
-        controllers[x].text = "";
-      }
     }
   }
 
@@ -230,7 +200,9 @@ class _ProductsState extends State<Products> {
                                   context: context,
                                   title: "Remover produto?",
                                   function: () async {
-                                    buyQuotationProvider.removeProductWithNewValue(productIndex);
+                                    buyQuotationProvider
+                                        .removeProductWithNewValue(
+                                            productIndex);
                                   },
                                 );
                               },
@@ -285,5 +257,48 @@ class _ProductsState extends State<Products> {
         ),
       ],
     );
+  }
+}
+
+void updateControllersQuantity({
+  required int productIndex,
+  required BuyQuotationProvider buyQuotationProvider,
+  required List<Map<int, TextEditingController>> controllers,
+}) {
+  if (buyQuotationProvider
+          .productsWithNewValues[productIndex].ProductEnterprises ==
+      null) {
+    return;
+  }
+
+  for (var x = 0; x < buyQuotationProvider.selectedEnterprises.length; x++) {
+    //a quantidade de controllers é criado de acordo com a quantidade de empresas selecionadas
+    final enterprise = buyQuotationProvider.selectedEnterprises[x];
+
+    final productQuantity = buyQuotationProvider
+        .productsWithNewValues[productIndex].ProductEnterprises!
+        .where((e) => e.EnterpriseCode == enterprise.Code)
+        .first
+        .Quantity;
+
+    if (productQuantity != null) {
+      final index =
+          controllers.indexWhere((e) => e.keys.first == enterprise.Code);
+
+      if (index == -1) {
+        continue;
+      }
+      controllers[index].values.first.text = productQuantity
+          .toString()
+          .toBrazilianNumber(3)
+          .replaceAll(RegExp(r'\.'), '');
+    } else {
+      controllers
+          .where((e) => e.keys.first == enterprise.Code)
+          .first
+          .values
+          .first
+          .text = "";
+    }
   }
 }

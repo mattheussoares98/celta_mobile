@@ -6,7 +6,7 @@ import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
 class UpdateQuantity extends StatelessWidget {
-  final List<TextEditingController> controllers;
+  final List<Map<int, TextEditingController>> controllers;
   final void Function() updateSelectedIndex;
   final int productIndex;
 
@@ -38,7 +38,11 @@ class UpdateQuantity extends StatelessWidget {
                 child: TextFormField(
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  controller: controllers[index],
+                  controller: controllers
+                      .where((e) => e.keys.first == enterprise.Code)
+                      .first
+                      .values
+                      .first,
                   style: const TextStyle(fontSize: 14),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   maxLength: 11,
@@ -81,8 +85,9 @@ class UpdateQuantity extends StatelessWidget {
                     }
 
                     buyQuotationProvider.updateProductQuantity(
-                      quantitys:
-                          controllers.map((e) => e.text.toDouble()).toList(),
+                      quantitys: controllers
+                          .map((e) => e.values.first.text.toDouble())
+                          .toList(),
                       productIndex: productIndex,
                     );
                     updateSelectedIndex();
