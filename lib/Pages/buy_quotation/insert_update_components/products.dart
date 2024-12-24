@@ -229,7 +229,9 @@ class _ProductsState extends State<Products> {
                                 ShowAlertDialog.show(
                                   context: context,
                                   title: "Remover produto?",
-                                  function: () async {},
+                                  function: () async {
+                                    buyQuotationProvider.removeProductWithNewValue(productIndex);
+                                  },
                                 );
                               },
                               icon: const Icon(

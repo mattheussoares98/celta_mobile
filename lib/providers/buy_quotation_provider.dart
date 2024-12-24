@@ -529,5 +529,8 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  
+  void removeProductWithNewValue(int index) {
+    _productsWithNewValues.removeAt(index);
+    notifyListeners();
+  }
 }
