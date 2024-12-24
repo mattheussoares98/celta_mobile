@@ -9,7 +9,7 @@ import '../buy_quotation.dart';
 class InsertUpdateProductItem extends StatelessWidget {
   final int productIndex;
   final int? selectedProductIndex;
-  final void Function() updateSelectedIndex;
+  final void Function()? updateSelectedIndex;
   final BuyQuotationProductsModel product;
   final List<Map<int, TextEditingController>> controllers;
   final List<Map<int, FocusNode>> focusNodes;

@@ -8,7 +8,7 @@ import '../../../providers/providers.dart';
 
 class UpdateQuantity extends StatelessWidget {
   final List<Map<int, TextEditingController>> controllers;
-  final void Function() updateSelectedIndex;
+  final void Function()? updateSelectedIndex;
   final int productIndex;
   final List<Map<int, FocusNode>> focusNodes;
 
@@ -87,7 +87,9 @@ class UpdateQuantity extends StatelessWidget {
                             .toList(),
                         productIndex: productIndex,
                       );
-                      updateSelectedIndex();
+                      if (updateSelectedIndex != null) {
+                        updateSelectedIndex!();
+                      }
                     }
                   },
                   style: const TextStyle(fontSize: 14),
@@ -137,7 +139,9 @@ class UpdateQuantity extends StatelessWidget {
                           .toList(),
                       productIndex: productIndex,
                     );
-                    updateSelectedIndex();
+                    if (updateSelectedIndex != null) {
+                      updateSelectedIndex!();
+                    }
                   },
                   child: Text(
                     "Alterar",

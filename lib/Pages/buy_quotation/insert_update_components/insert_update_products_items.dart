@@ -115,13 +115,16 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
             return InsertUpdateProductItem(
               productIndex: productIndex,
               selectedProductIndex: selectedProductIndex,
-              updateSelectedIndex: () {
-                updateSelectedIndex(
-                  productIndex: productIndex,
-                  buyQuotationProvider: buyQuotationProvider,
-                );
-                focusNodes[0].values.first.requestFocus();
-              },
+              updateSelectedIndex:
+                  buyQuotationProvider.selectedEnterprises.isEmpty
+                      ? null
+                      : () {
+                          updateSelectedIndex(
+                            productIndex: productIndex,
+                            buyQuotationProvider: buyQuotationProvider,
+                          );
+                          focusNodes[0].values.first.requestFocus();
+                        },
               product: product,
               controllers: controllers,
               focusNodes: focusNodes,
