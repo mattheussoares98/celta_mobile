@@ -32,14 +32,13 @@ class FormFieldValidations {
         1) {
       // verifica se tem mais de uma vírgula
       return 'Carácter inválido';
-    } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == 0.0 &&
-        value.isNotEmpty &&
-        !valueCanIsEmpty) {
-      return "Digite uma quantidade";
     } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
         value.isNotEmpty &&
         !valueCanIsEmpty) {
       return "Digite uma quantidade";
+    } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
+        value.isNotEmpty) {
+      return "Número inválido";
     }
 
     // Adiciona a verificação do número máximo de casas decimais
