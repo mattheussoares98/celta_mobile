@@ -120,6 +120,7 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
                   productIndex: productIndex,
                   buyQuotationProvider: buyQuotationProvider,
                 );
+                focusNodes[0].values.first.requestFocus();
               },
               product: product,
               controllers: controllers,
