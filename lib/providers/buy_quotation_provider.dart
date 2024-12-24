@@ -63,11 +63,68 @@ class BuyQuotationProvider with ChangeNotifier {
 
   Future<void> insertUpdateBuyQuotation({
     required bool isInserting,
+    required String? observations,
+    required String? dateOfCreation,
+    required String? dateOfLimit,
   }) async {
     _isLoading = true;
     _errorMessage = "";
 
-    try {} catch (e) {
+    try {
+      final products = _productsWithNewValues.map((e) => e.toJson()).toList();
+      final enterprises = _selectedEnterprises.map((e) {
+        if (isInserting) {
+          return {
+            "Code": 0,
+            /*0=Inserção | Preenchido=Alteração*/
+            "Enterprise": {"Code": e.Code}
+          };
+        } else {
+          return {
+            "Code": _completeBuyQuotation!.Enterprises!
+                .firstWhere((element) => element.enterprise.Code == e.Code)
+                .Code,
+            /*0=Inserção | Preenchido=Alteração*/
+            "Enterprise": {"Code": e.Code}
+          };
+        }
+      }).toList();
+
+      final filters = {
+        "CrossIdentity": UserData.crossIdentity,
+        "Code": isInserting ? 0 : _completeBuyQuotation?.Code,
+        /*0=Inserção | Preenchido=Alteração*/
+        "DateOfCreation": dateOfCreation,
+        "DateOfLimit": dateOfLimit,
+        "Observations": observations,
+        "Buyer": {"Code": _completeBuyQuotation?.Buyer.Code},
+        "Enterprises": enterprises,
+        "Products": products,
+      };
+      await SoapRequest.soapPost(
+        parameters: {
+          "json": json.encode(filters),
+        },
+        typeOfResponse: "GetBuyQuotationJsonResponse",
+        SOAPAction: "GetBuyQuotationJson",
+        serviceASMX: "CeltaBuyRequestService.asmx",
+        typeOfResult: "GetBuyQuotationJsonResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        ShowSnackbarMessage.show(
+          message: SoapRequestResponse.errorMessage,
+          context: NavigatorKey.navigatorKey.currentContext!,
+        );
+      } else {
+        ShowSnackbarMessage.show(
+            message: SoapRequestResponse.errorMessage,
+            context: NavigatorKey.navigatorKey.currentContext!,
+            backgroundColor: Theme.of(NavigatorKey.navigatorKey.currentContext!)
+                .colorScheme
+                .primary);
+      }
+    } catch (e) {
       debugPrint(e.toString());
     } finally {
       _isLoading = false;
