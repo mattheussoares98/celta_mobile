@@ -12,12 +12,14 @@ class InsertUpdateProductItem extends StatelessWidget {
   final void Function() updateSelectedIndex;
   final BuyQuotationProductsModel product;
   final List<Map<int, TextEditingController>> controllers;
+  final List<Map<int, FocusNode>> focusNodes;
   const InsertUpdateProductItem({
     required this.productIndex,
     required this.selectedProductIndex,
     required this.updateSelectedIndex,
     required this.product,
     required this.controllers,
+    required this.focusNodes,
     super.key,
   });
 
@@ -90,6 +92,7 @@ class InsertUpdateProductItem extends StatelessWidget {
             if (selectedProductIndex == productIndex)
               UpdateQuantity(
                 controllers: controllers,
+                focusNodes: focusNodes,
                 updateSelectedIndex: updateSelectedIndex,
                 productIndex: productIndex,
               )

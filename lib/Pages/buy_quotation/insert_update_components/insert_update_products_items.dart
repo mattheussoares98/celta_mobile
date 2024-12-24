@@ -21,6 +21,7 @@ class InsertUpdateProductsItems extends StatefulWidget {
 class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
   int? selectedProductIndex;
   List<Map<int, TextEditingController>> controllers = [];
+  List<Map<int, FocusNode>> focusNodes = [];
   final searchProductController = TextEditingController();
   final searchFocusNode = FocusNode();
 
@@ -33,7 +34,7 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
         BuyQuotationProvider buyQuotationProvider =
             Provider.of(context, listen: false);
 
-        createControllers(buyQuotationProvider);
+        createControllersAndFocusNode(buyQuotationProvider);
       }
     });
   }
@@ -41,24 +42,31 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
   @override
   void dispose() {
     super.dispose();
-    disposeControllers();
+    disposeControllersAndFocusNodes();
     searchProductController.dispose();
     searchFocusNode.dispose();
   }
 
-  void createControllers(BuyQuotationProvider buyQuotationProvider) {
+  void createControllersAndFocusNode(
+      BuyQuotationProvider buyQuotationProvider) {
     if (buyQuotationProvider.selectedEnterprises.isEmpty == true) {
       return;
     } else {
       controllers = buyQuotationProvider.selectedEnterprises
           .map((e) => {e.Code: TextEditingController()})
           .toList();
+      focusNodes = buyQuotationProvider.selectedEnterprises
+          .map((e) => {e.Code: FocusNode()})
+          .toList();
     }
   }
 
-  void disposeControllers() {
+  void disposeControllersAndFocusNodes() {
     for (var controller in controllers) {
       controller.values.first.dispose();
+    }
+    for (var focusNode in focusNodes) {
+      focusNode.values.first.dispose();
     }
   }
 
@@ -115,6 +123,7 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
               },
               product: product,
               controllers: controllers,
+              focusNodes: focusNodes,
             );
           },
         ),

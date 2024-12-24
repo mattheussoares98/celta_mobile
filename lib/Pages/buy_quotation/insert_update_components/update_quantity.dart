@@ -10,11 +10,13 @@ class UpdateQuantity extends StatelessWidget {
   final List<Map<int, TextEditingController>> controllers;
   final void Function() updateSelectedIndex;
   final int productIndex;
+  final List<Map<int, FocusNode>> focusNodes;
 
   const UpdateQuantity({
     required this.controllers,
     required this.updateSelectedIndex,
     required this.productIndex,
+    required this.focusNodes,
     super.key,
   });
 
@@ -65,6 +67,29 @@ class UpdateQuantity extends StatelessWidget {
                       .first
                       .values
                       .first,
+                  focusNode: focusNodes
+                      .where((e) => e.keys.first == enterprise.Code)
+                      .first
+                      .values
+                      .first,
+                  onFieldSubmitted: (_) {
+                    int nextFocusNodeIndex = focusNodes.indexWhere((element) =>
+                            element.keys.first == enterprise.Code) +
+                        1;
+
+                    if (nextFocusNodeIndex < focusNodes.length) {
+                      FocusScope.of(context).requestFocus(
+                          focusNodes[nextFocusNodeIndex].values.first);
+                    } else {
+                      buyQuotationProvider.updateProductQuantity(
+                        quantitys: controllers
+                            .map((e) => e.values.first.text.toDouble())
+                            .toList(),
+                        productIndex: productIndex,
+                      );
+                      updateSelectedIndex();
+                    }
+                  },
                   style: const TextStyle(fontSize: 14),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   maxLength: 11,
