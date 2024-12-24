@@ -92,7 +92,7 @@ class _InsertUpdateBuyQuotationPageState
     Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
     BuyQuotationIncompleteModel? incompleteModel =
         arguments?["incompleteQuotation"];
-    // EnterpriseModel? enterprise = arguments?["enterprise"];
+    EnterpriseModel? enterprise = arguments?["enterprise"];
 
     return Stack(
       children: [
@@ -134,7 +134,8 @@ class _InsertUpdateBuyQuotationPageState
                         const Divider(),
                         const Enterprises(),
                         const Divider(),
-                        const Products(),
+                        if (enterprise != null)
+                          Products(enterprise: enterprise),
                       ],
                     ),
                 ],

@@ -1,6 +1,6 @@
 class BuyQuotationProductsModel {
   final int? Code;
-  final _Product? Product;
+  final ProductModel? Product;
   final List<ProductEnterprise>? ProductEnterprises;
 
   BuyQuotationProductsModel({
@@ -12,7 +12,7 @@ class BuyQuotationProductsModel {
   factory BuyQuotationProductsModel.fromJson(Map data) =>
       BuyQuotationProductsModel(
         Code: data["Code"],
-        Product: _Product.fromJson(data["Product"]),
+        Product: ProductModel.fromJson(data["Product"]),
         ProductEnterprises: data["ProductEnterprises"] == null
             ? null
             : (data["ProductEnterprises"] as List)
@@ -28,7 +28,7 @@ class BuyQuotationProductsModel {
       };
 }
 
-class _Product {
+class ProductModel {
   final int? EnterpriseCode;
   final int? ProductCode;
   final int? ProductPackingCode;
@@ -69,7 +69,7 @@ class _Product {
   //  "StorageAreaAddress":null,
   //  "BalanceLabelType":null,
 
-  const _Product({
+  const ProductModel({
     required this.EnterpriseCode,
     required this.ProductCode,
     required this.ProductPackingCode,
@@ -106,7 +106,7 @@ class _Product {
     required this.PriceCost,
   });
 
-  factory _Product.fromJson(Map data) => _Product(
+  factory ProductModel.fromJson(Map data) => ProductModel(
         EnterpriseCode: data["EnterpriseCode"],
         ProductCode: data["ProductCode"],
         ProductPackingCode: data["ProductPackingCode"],

@@ -46,6 +46,12 @@ class BuyQuotationProvider with ChangeNotifier {
   List<BuyQuotationProductsModel> get productsWithNewValues =>
       [..._productsWithNewValues];
 
+  List<GetProductJsonModel> _searchedProductsToAdd = [];
+  List<GetProductJsonModel> get searchedProductsToAdd =>
+      [..._searchedProductsToAdd];
+  GetProductJsonModel? _productToAdd;
+  GetProductJsonModel? get productToAdd => _productToAdd;
+
   void doOnPopScreen() {
     _searchedBuyers.clear();
     _searchedProductsToFilter.clear();
@@ -360,4 +366,168 @@ class BuyQuotationProvider with ChangeNotifier {
       ProductEnterprises: newProductsEnterprise,
     );
   }
+
+  Future<void> searchProductsToAdd({
+    required EnterpriseModel enterprise,
+    required TextEditingController searchProductController,
+    required ConfigurationsProvider configurationsProvider,
+    required BuildContext context,
+  }) async {
+    _isLoading = true;
+    _errorMessage = "";
+    _searchedProductsToAdd.clear();
+    _productToAdd = null;
+    notifyListeners();
+
+    try {
+      _searchedProductsToAdd = await SoapHelper.getProductsJsonModel(
+        enterprise: enterprise,
+        searchValue: searchProductController.text,
+        configurationsProvider: configurationsProvider,
+        enterprisesCodes: [enterprise.Code],
+        routineTypeInt: 9,
+      );
+
+      _errorMessage = SoapRequestResponse.errorMessage;
+
+      if (_errorMessage != "") {
+        ShowSnackbarMessage.show(
+          message: _errorMessage,
+          context: context,
+        );
+      } else {
+        _searchedProductsToAdd =
+            (json.decode(SoapRequestResponse.responseAsString) as List)
+                .map((e) => GetProductJsonModel.fromJson(e))
+                .toList();
+
+        if (_searchedProductsToAdd.length == 1) {
+          _productToAdd = _searchedProductsToAdd[0];
+          await getEnterprisesCodesByAProduct(
+            plu: _productToAdd!.plu!,
+            enterprise: enterprise,
+            configurationsProvider: configurationsProvider,
+          );
+        }
+      }
+
+      searchProductController.text = "";
+    } catch (e) {
+      ShowSnackbarMessage.show(
+        message: e.toString(),
+        context: context,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getEnterprisesCodesByAProduct({
+    required String plu,
+    required EnterpriseModel enterprise,
+    required ConfigurationsProvider configurationsProvider,
+  }) async {
+    _isLoading = true;
+    _errorMessage = "";
+    _productToAdd = null;
+    notifyListeners();
+
+    try {
+      if (_productsWithNewValues.map((e) => e.Product?.PLU).contains(plu)) {
+        ShowSnackbarMessage.show(
+          message: "Produto já adicionado",
+          context: NavigatorKey.navigatorKey.currentContext!,
+        );
+        return;
+      }
+      _searchedProductsToAdd = await SoapHelper.getProductsJsonModel(
+        enterprise: enterprise,
+        searchValue: plu,
+        configurationsProvider: configurationsProvider,
+        enterprisesCodes: _selectedEnterprises.map((e) => e.Code).toList(),
+        routineTypeInt: 9,
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        ShowSnackbarMessage.show(
+          message: _errorMessage,
+          context: NavigatorKey.navigatorKey.currentContext!,
+        );
+      }
+      final enterpriseCodes =
+          (json.decode(SoapRequestResponse.responseAsString) as List)
+              .map((e) => GetProductJsonModel.fromJson(e).enterpriseCode!)
+              .toList();
+
+      _productToAdd =
+          (json.decode(SoapRequestResponse.responseAsString) as List)
+              .map((e) => GetProductJsonModel.fromJson(e))
+              .toList()[0];
+
+      _productsWithNewValues.insert(
+        0,
+        BuyQuotationProductsModel(
+          Code: 0,
+          Product: ProductModel(
+            EnterpriseCode: _productToAdd?.enterpriseCode,
+            ProductCode: _productToAdd?.productCode,
+            ProductPackingCode: _productToAdd?.productPackingCode,
+            PLU: _productToAdd?.plu,
+            Name: _productToAdd?.name,
+            PackingQuantity: _productToAdd?.packingQuantity,
+            PendantPrintLabel: _productToAdd?.pendantPrintLabel,
+            AlterationPriceForAllPackings:
+                _productToAdd?.alterationPriceForAllPackings,
+            IsFatherOfGrate: _productToAdd?.isFatherOfGrate,
+            IsChildOfGrate: _productToAdd?.isChildOfGrate,
+            InClass: _productToAdd?.inClass,
+            MarkUpdateClassInAdjustSalePriceIndividual:
+                _productToAdd?.markUpdateClassInAdjustSalePriceIndividual,
+            Value: _productToAdd?.value,
+            BalanceLabelQuantity: _productToAdd?.balanceLabelQuantity,
+            RetailPracticedPrice: _productToAdd?.retailPracticedPrice,
+            RetailSalePrice: _productToAdd?.retailSalePrice,
+            RetailOfferPrice: _productToAdd?.retailOfferPrice,
+            WholePracticedPrice: _productToAdd?.wholePracticedPrice,
+            WholeSalePrice: _productToAdd?.wholeSalePrice,
+            WholeOfferPrice: _productToAdd?.wholeOfferPrice,
+            ECommercePracticedPrice: _productToAdd?.eCommercePracticedPrice,
+            ECommerceSalePrice: _productToAdd?.eCommerceSalePrice,
+            ECommerceOfferPrice: _productToAdd?.eCommerceOfferPrice,
+            MinimumWholeQuantity: _productToAdd?.minimumWholeQuantity,
+            OperationalCost: _productToAdd?.operationalCost,
+            ReplacementCost: _productToAdd?.replacementCost,
+            ReplacementCostMidle: _productToAdd?.replacementCostMidle,
+            LiquidCost: _productToAdd?.liquidCost,
+            LiquidCostMidle: _productToAdd?.liquidCostMidle,
+            RealCost: _productToAdd?.realCost,
+            RealLiquidCost: _productToAdd?.realLiquidCost,
+            FiscalCost: _productToAdd?.fiscalCost,
+            FiscalLiquidCost: _productToAdd?.fiscalLiquidCost,
+            PriceCost: _productToAdd?.priceCost?.LiquidCost,
+          ),
+          ProductEnterprises: enterpriseCodes
+              .map(
+                (e) => ProductEnterprise(
+                  Code: 0,
+                  EnterpriseCode: e,
+                  Quantity: 0,
+                ),
+              )
+              .toList(),
+        ),
+      );
+    } catch (e) {
+      ShowSnackbarMessage.show(
+        message: e.toString(),
+        context: NavigatorKey.navigatorKey.currentContext!,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  
 }

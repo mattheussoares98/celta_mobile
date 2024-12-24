@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import 'insert_update_components.dart';
 
 class Products extends StatefulWidget {
-  const Products({super.key});
+  final EnterpriseModel enterprise;
+  const Products({
+    required this.enterprise,
+    super.key,
+  });
 
   @override
   State<Products> createState() => _ProductsState();
@@ -16,6 +21,8 @@ class Products extends StatefulWidget {
 class _ProductsState extends State<Products> {
   int? selectedProductIndex;
   List<TextEditingController> controllers = [];
+  final searchProductController = TextEditingController();
+  final searchFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -35,6 +42,8 @@ class _ProductsState extends State<Products> {
   void dispose() {
     super.dispose();
     disposeControllers();
+    searchProductController.dispose();
+    searchFocusNode.dispose();
   }
 
   void createControllers(BuyQuotationProvider buyQuotationProvider) {
@@ -93,7 +102,10 @@ class _ProductsState extends State<Products> {
           .Quantity;
 
       if (productQuantity != null) {
-        controllers[x].text = productQuantity.toString().toBrazilianNumber(3).replaceAll(RegExp(r'\.'), '');
+        controllers[x].text = productQuantity
+            .toString()
+            .toBrazilianNumber(3)
+            .replaceAll(RegExp(r'\.'), '');
       } else {
         controllers[x].text = "";
       }
@@ -103,11 +115,81 @@ class _ProductsState extends State<Products> {
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text("Produtos"),
+        SearchWidget(
+          configurations: [
+            ConfigurationType.legacyCode,
+            ConfigurationType.personalizedCode,
+          ],
+          labelText: "Adicionar produto",
+          searchProductController: searchProductController,
+          onPressSearch: () async {
+            await buyQuotationProvider.searchProductsToAdd(
+              enterprise: widget.enterprise,
+              searchProductController: searchProductController,
+              configurationsProvider: configurationsProvider,
+              context: context,
+            );
+
+            if (buyQuotationProvider.searchedProductsToAdd.length > 1 &&
+                buyQuotationProvider.productToAdd == null) {
+              ShowAlertDialog.show(
+                context: context,
+                title: "Selecione um produto",
+                contentPadding: const EdgeInsets.all(3),
+                insetPadding: const EdgeInsets.all(3),
+                showConfirmAndCancelMessage: false,
+                canCloseClickingOut: false,
+                showCloseAlertDialogButton: true,
+                content: Scaffold(
+                  body: ListView.builder(
+                    itemCount:
+                        buyQuotationProvider.searchedProductsToAdd.length,
+                    itemBuilder: (context, index) {
+                      final product =
+                          buyQuotationProvider.searchedProductsToAdd[index];
+
+                      return InkWell(
+                        onTap: () async {
+                          Navigator.of(context).pop();
+                          await buyQuotationProvider
+                              .getEnterprisesCodesByAProduct(
+                            plu: product.plu!,
+                            enterprise: widget.enterprise,
+                            configurationsProvider: configurationsProvider,
+                          );
+                        },
+                        child: Card(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              TitleAndSubtitle.titleAndSubtitle(
+                                subtitle:
+                                    "${product.name} (${product.packingQuantity})",
+                              ),
+                              TitleAndSubtitle.titleAndSubtitle(
+                                title: "PLU",
+                                subtitle: product.plu,
+                              ),
+                            ],
+                          ),
+                        )),
+                      );
+                    },
+                  ),
+                ),
+                function: () async {},
+              );
+            }
+          },
+          searchFocusNode: searchFocusNode,
+        ),
         if (buyQuotationProvider.productsWithNewValues.length == 0)
           const Text("Não há produtos na cotação"),
         ListView.builder(
