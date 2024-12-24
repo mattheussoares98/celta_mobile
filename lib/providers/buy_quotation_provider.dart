@@ -16,8 +16,9 @@ class BuyQuotationProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  List<GetProductJsonModel> _searchedProducts = [];
-  List<GetProductJsonModel> get searchedProducts => [..._searchedProducts];
+  List<GetProductJsonModel> _searchedProductsToFilter = [];
+  List<GetProductJsonModel> get searchedProductsToFilter =>
+      [..._searchedProductsToFilter];
   GetProductJsonModel? _productToFilter;
   GetProductJsonModel? get productToFilter => _productToFilter;
 
@@ -47,7 +48,7 @@ class BuyQuotationProvider with ChangeNotifier {
 
   void doOnPopScreen() {
     _searchedBuyers.clear();
-    _searchedProducts.clear();
+    _searchedProductsToFilter.clear();
     _searchedSuppliers.clear();
     _selectedBuyer = null;
     _productToFilter = null;
@@ -159,7 +160,7 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  Future<void> searchProduct({
+  Future<void> searchProductToFilter({
     required EnterpriseModel enterprise,
     required TextEditingController searchProductController,
     required ConfigurationsProvider configurationsProvider,
@@ -167,12 +168,12 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
-    _searchedProducts.clear();
+    _searchedProductsToFilter.clear();
     _productToFilter = null;
     notifyListeners();
 
     try {
-      _searchedProducts = await SoapHelper.getProductsJsonModel(
+      _searchedProductsToFilter = await SoapHelper.getProductsJsonModel(
         enterprise: enterprise,
         searchValue: searchProductController.text,
         configurationsProvider: configurationsProvider,
@@ -188,13 +189,13 @@ class BuyQuotationProvider with ChangeNotifier {
           context: context,
         );
       } else {
-        _searchedProducts =
+        _searchedProductsToFilter =
             (json.decode(SoapRequestResponse.responseAsString) as List)
                 .map((e) => GetProductJsonModel.fromJson(e))
                 .toList();
 
-        if (_searchedProducts.length == 1) {
-          updateSelectedProduct(_searchedProducts[0]);
+        if (_searchedProductsToFilter.length == 1) {
+          updateSelectedProductToFilter(_searchedProductsToFilter[0]);
         }
       }
 
@@ -210,8 +211,8 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  void updateSelectedProduct(GetProductJsonModel? product) {
-    _searchedProducts.clear();
+  void updateSelectedProductToFilter(GetProductJsonModel? product) {
+    _searchedProductsToFilter.clear();
     _productToFilter = product;
     notifyListeners();
   }

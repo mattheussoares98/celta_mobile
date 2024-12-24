@@ -33,14 +33,14 @@ class FilterProduct extends StatelessWidget {
           showConfigurationsIcon: true,
           searchProductController: searchProductController,
           onPressSearch: () async {
-            await buyQuotationProvider.searchProduct(
+            await buyQuotationProvider.searchProductToFilter(
               enterprise: enterprise,
               searchProductController: searchProductController,
               configurationsProvider: configurationsProvider,
               context: context,
             );
 
-            final searchedProducts = buyQuotationProvider.searchedProducts;
+            final searchedProducts = buyQuotationProvider.searchedProductsToFilter;
             if (searchedProducts.isNotEmpty) {
               searchProductController.clear();
             }
@@ -63,7 +63,7 @@ class FilterProduct extends StatelessWidget {
 
                       return InkWell(
                         onTap: () {
-                          buyQuotationProvider.updateSelectedProduct(product);
+                          buyQuotationProvider.updateSelectedProductToFilter(product);
 
                           Navigator.of(context).pop();
                         },
@@ -113,7 +113,7 @@ Widget productItem({
                   if (showRemoveFilter)
                     TextButton.icon(
                       onPressed: () {
-                        buyQuotationProvider.updateSelectedProduct(null);
+                        buyQuotationProvider.updateSelectedProductToFilter(null);
                       },
                       icon: const Icon(
                         Icons.delete,
