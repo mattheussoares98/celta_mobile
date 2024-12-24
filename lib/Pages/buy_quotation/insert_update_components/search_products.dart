@@ -56,7 +56,7 @@ class SearchProducts extends StatelessWidget {
                   return InkWell(
                     onTap: () async {
                       Navigator.of(context).pop();
-                      await buyQuotationProvider.getEnterprisesCodesByAProduct(
+                      await buyQuotationProvider.insertNewProductInProductsWithNewValues(
                         plu: product.plu!,
                         enterprise: enterprise,
                         configurationsProvider: configurationsProvider,

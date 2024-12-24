@@ -105,10 +105,10 @@ class BuyQuotationProvider with ChangeNotifier {
         parameters: {
           "json": json.encode(filters),
         },
-        typeOfResponse: "GetBuyQuotationJsonResponse",
-        SOAPAction: "GetBuyQuotationJson",
+        typeOfResponse: "InsertUpdateBuyQuotationResponse",
+        SOAPAction: "InsertUpdateBuyQuotation",
         serviceASMX: "CeltaBuyRequestService.asmx",
-        typeOfResult: "GetBuyQuotationJsonResult",
+        typeOfResult: "InsertUpdateBuyQuotationResult",
       );
 
       if (SoapRequestResponse.errorMessage != "") {
@@ -118,16 +118,22 @@ class BuyQuotationProvider with ChangeNotifier {
         );
       } else {
         ShowSnackbarMessage.show(
-            message: SoapRequestResponse.errorMessage,
-            context: NavigatorKey.navigatorKey.currentContext!,
-            backgroundColor: Theme.of(NavigatorKey.navigatorKey.currentContext!)
-                .colorScheme
-                .primary);
+          message: "Alteração realizada com sucesso",
+          context: NavigatorKey.navigatorKey.currentContext!,
+          backgroundColor: Theme.of(NavigatorKey.navigatorKey.currentContext!)
+              .colorScheme
+              .primary,
+        );
       }
     } catch (e) {
       debugPrint(e.toString());
+      ShowSnackbarMessage.show(
+        message: SoapRequestResponse.errorMessage,
+        context: NavigatorKey.navigatorKey.currentContext!,
+      );
     } finally {
       _isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -467,7 +473,7 @@ class BuyQuotationProvider with ChangeNotifier {
 
         if (_searchedProductsToAdd.length == 1) {
           _productToAdd = _searchedProductsToAdd[0];
-          await getEnterprisesCodesByAProduct(
+          await insertNewProductInProductsWithNewValues(
             plu: _productToAdd!.plu!,
             enterprise: enterprise,
             configurationsProvider: configurationsProvider,
@@ -487,7 +493,7 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getEnterprisesCodesByAProduct({
+  Future<void> insertNewProductInProductsWithNewValues({
     required String plu,
     required EnterpriseModel enterprise,
     required ConfigurationsProvider configurationsProvider,
