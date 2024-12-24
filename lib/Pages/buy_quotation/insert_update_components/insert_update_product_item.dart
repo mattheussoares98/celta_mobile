@@ -1,9 +1,9 @@
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../models/models.dart';
+import '../../../providers/providers.dart';
 import '../buy_quotation.dart';
 
 class InsertUpdateProductItem extends StatelessWidget {
@@ -43,6 +43,10 @@ class InsertUpdateProductItem extends StatelessWidget {
               onTap: updateSelectedIndex,
               child: Column(
                 children: [
+                  ProductQuantityByEnterprise(
+                    product: product,
+                    productIndex: productIndex,
+                  ),
                   TitleAndSubtitle.titleAndSubtitle(
                     subtitle: product.Product!.Name.toString(),
                     otherWidget: IconButton(
