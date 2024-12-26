@@ -61,7 +61,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _selectedSupplier = null;
   }
 
-  Future<void> insertUpdateBuyQuotation({
+  Future<bool> insertUpdateBuyQuotation({
     required bool isInserting,
     required String? observations,
     required String? dateOfCreation,
@@ -116,6 +116,7 @@ class BuyQuotationProvider with ChangeNotifier {
           message: SoapRequestResponse.errorMessage,
           context: NavigatorKey.navigatorKey.currentContext!,
         );
+        return false;
       } else {
         ShowSnackbarMessage.show(
           message: "Alteração realizada com sucesso",
@@ -124,6 +125,7 @@ class BuyQuotationProvider with ChangeNotifier {
               .colorScheme
               .primary,
         );
+        return true;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -131,6 +133,7 @@ class BuyQuotationProvider with ChangeNotifier {
         message: SoapRequestResponse.errorMessage,
         context: NavigatorKey.navigatorKey.currentContext!,
       );
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();

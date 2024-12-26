@@ -122,7 +122,8 @@ class _InsertUpdateBuyQuotationPageState
                       context: context,
                       title: "Salvar?",
                       function: () async {
-                        await buyQuotationProvider.insertUpdateBuyQuotation(
+                        bool updated =
+                            await buyQuotationProvider.insertUpdateBuyQuotation(
                           isInserting: incompleteModel == null,
                           observations: observationsController.text.isNotEmpty
                               ? observationsController.text
@@ -133,6 +134,10 @@ class _InsertUpdateBuyQuotationPageState
                           dateOfLimit: buyQuotationProvider.completeBuyQuotation
                               ?.DateOfLimit, //TODO create option to change the date
                         );
+
+                        if (updated) {
+                          Navigator.of(context).pop();
+                        }
                       });
                 },
                 icon: const Icon(
