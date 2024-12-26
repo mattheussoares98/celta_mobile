@@ -33,7 +33,7 @@ class InsertProductQuantityForm extends StatefulWidget {
 }
 
 class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
-  addItemInCart() {
+  void addItemInCart() {
     if (widget.newQuantityController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
       setState(() {
@@ -68,20 +68,6 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
       children: [
         const Divider(
           color: Colors.grey,
-          height: 3,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: MoreOrLessQuantityButtons(
-                newQuantityController: widget.newQuantityController,
-                updateTotalItemValue: widget.updateTotalItemValue,
-              ),
-            ),
-            Expanded(
-              child: Container(),
-            ),
-          ],
         ),
         Row(
           children: [
@@ -97,12 +83,10 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
               ),
             ),
             const SizedBox(width: 5),
-            Expanded(
-              child: AddInCartButton(
-                newQuantityController: widget.newQuantityController,
-                addItemInCart: addItemInCart,
-                totalItemValue: widget.totalItemValue,
-              ),
+            AddInCartButton(
+              newQuantityController: widget.newQuantityController,
+              addItemInCart: addItemInCart,
+              totalItemValue: widget.totalItemValue,
             ),
           ],
         ),

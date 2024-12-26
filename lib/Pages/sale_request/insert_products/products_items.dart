@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -87,12 +89,12 @@ class _ProductsItemsState extends State<ProductsItems> {
     });
   }
 
-  selectIndexAndFocus({
+  void selectIndexAndFocus({
     required SaleRequestProvider saleRequestProvider,
     required int index,
     required GetProductJsonModel product,
   }) {
-    widget.newQuantityController.text = "";
+    widget.newQuantityController.text = "1";
 
     if (saleRequestProvider.productsCount == 1 ||
         saleRequestProvider.isLoadingProducts) {
@@ -162,131 +164,141 @@ class _ProductsItemsState extends State<ProductsItems> {
             ) *
             newQuantity;
 
-        return GestureDetector(
-          onTap: saleRequestProvider.isLoadingProducts
-              ? null
-              : () {
-                  selectIndexAndFocus(
-                    saleRequestProvider: saleRequestProvider,
-                    index: index,
-                    product: product,
-                  );
-                },
+        return InkWell(
+          onTap: () {
+            selectIndexAndFocus(
+              saleRequestProvider: saleRequestProvider,
+              index: index,
+              product: product,
+            );
+          },
           child: ProductItem(
             enterpriseCode: widget.enterprise.Code,
             product: product,
             showCosts: false,
             componentAfterProductInformations: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                Column(
                   children: [
-                    Icon(
-                      _selectedIndex == index
-                          ? Icons.arrow_drop_up_sharp
-                          : Icons.arrow_drop_down_sharp,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                  ],
-                ),
-                if (saleRequestProvider.alreadyContainsProduct(
-                  ProductPackingCode: product.productPackingCode!,
-                  enterpriseCode: widget.enterprise.Code.toString(),
-                ))
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: Text(
-                          "Qtd no carrinho: " +
-                              saleRequestProvider
-                                  .getTotalItensInCart(
-                                    ProductPackingCode:
-                                        product.productPackingCode!,
-                                    enterpriseCode:
-                                        widget.enterprise.Code.toString(),
-                                  )
-                                  .toStringAsFixed(3)
-                                  .replaceAll(RegExp(r'\.'), ','),
-                          style: TextStyle(
-                            color: _totalItensInCart > 0
-                                ? Colors.red
-                                : Colors.grey,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        flex: 4,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          onPressed: _totalItensInCart > 0
-                              ? () => removeProduct(
-                                    saleRequestProvider: saleRequestProvider,
-                                    totalItemValue: _totalItemValue,
-                                    product: product,
-                                  )
-                              : null,
-                          child: const FittedBox(
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Remover ",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                ),
-                              ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(
+                          _selectedIndex == index
+                              ? Icons.arrow_drop_up_sharp
+                              : Icons.arrow_drop_down_sharp,
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      ],
+                    ),
+                    if (saleRequestProvider.alreadyContainsProduct(
+                      ProductPackingCode: product.productPackingCode!,
+                      enterpriseCode: widget.enterprise.Code.toString(),
+                    ))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 7,
+                            child: Text(
+                              "Qtd no carrinho: " +
+                                  saleRequestProvider
+                                      .getTotalItensInCart(
+                                        ProductPackingCode:
+                                            product.productPackingCode!,
+                                        enterpriseCode:
+                                            widget.enterprise.Code.toString(),
+                                      )
+                                      .toStringAsFixed(3)
+                                      .replaceAll(RegExp(r'\.'), ','),
+                              style: TextStyle(
+                                color: _totalItensInCart > 0
+                                    ? Colors.red
+                                    : Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            flex: 4,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              onPressed: _totalItensInCart > 0
+                                  ? () => removeProduct(
+                                        saleRequestProvider:
+                                            saleRequestProvider,
+                                        totalItemValue: _totalItemValue,
+                                        product: product,
+                                      )
+                                  : null,
+                              child: const FittedBox(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Remover ",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                  ],
+                ),
                 if (_selectedIndex == index)
-                  InsertProductQuantityForm(
-                    insertQuantityFocusNode: _insertQuantityFocusNode,
-                    enterpriseCode: widget.enterprise.Code,
-                    newQuantityController: widget.newQuantityController,
-                    consultedProductFormKey: _consultedProductFormKey,
-                    totalItemValue: _totalItemValue,
-                    product: product,
-                    addProductInCart: () async {
-                      if (_totalItemValue == 0) {
-                        ShowSnackbarMessage.show(
-                          message: "O total dos itens está zerado!",
-                          context: context,
-                        );
-                      }
-                      saleRequestProvider.addProductInCart(
-                        newQuantityController: widget.newQuantityController,
-                        product: product,
-                        enterpriseCode: widget.enterprise.Code.toString(),
-                      );
-                      setState(() {
-                        _selectedIndex = -1;
-                      });
-
-                      if (configurationsProvider.autoScan?.value == true) {
-                        await widget.getProductsWithCamera();
-                      }
+                  InkWell(
+                    onTap: () {
+                      debugPrint("Função só pra não remover a seleção do produto quando clicar nesse componente");
                     },
-                    totalItensInCart: _totalItensInCart,
-                    updateTotalItemValue: () {
-                      setState(() {
-                        _totalItemValue = saleRequestProvider.getTotalItemValue(
-                          product: product,
+                    child: InsertProductQuantityForm(
+                      insertQuantityFocusNode: _insertQuantityFocusNode,
+                      enterpriseCode: widget.enterprise.Code,
+                      newQuantityController: widget.newQuantityController,
+                      consultedProductFormKey: _consultedProductFormKey,
+                      totalItemValue: _totalItemValue,
+                      product: product,
+                      addProductInCart: () async {
+                        if (_totalItemValue == 0) {
+                          ShowSnackbarMessage.show(
+                            message: "O total dos itens está zerado!",
+                            context: context,
+                          );
+                        }
+                        saleRequestProvider.addProductInCart(
                           newQuantityController: widget.newQuantityController,
+                          product: product,
                           enterpriseCode: widget.enterprise.Code.toString(),
                         );
-                      });
-                    },
+                        setState(() {
+                          _selectedIndex = -1;
+                        });
+
+                        if (configurationsProvider.autoScan?.value == true &&
+                            !Platform.isWindows) {
+                          await widget.getProductsWithCamera();
+                        }
+                      },
+                      totalItensInCart: _totalItensInCart,
+                      updateTotalItemValue: () {
+                        setState(() {
+                          _totalItemValue =
+                              saleRequestProvider.getTotalItemValue(
+                            product: product,
+                            newQuantityController: widget.newQuantityController,
+                            enterpriseCode: widget.enterprise.Code.toString(),
+                          );
+                        });
+                      },
+                    ),
                   ),
               ],
             ),

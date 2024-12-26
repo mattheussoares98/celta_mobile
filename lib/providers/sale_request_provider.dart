@@ -186,10 +186,6 @@ class SaleRequestProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
     );
 
-    if (newQuantityController != null) {
-      _changeCursorToLastIndex(newQuantityController);
-    }
-
     return totalQuantity * practicedPrice;
   }
 
@@ -231,12 +227,12 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  void _changeCursorToLastIndex(
-      TextEditingController consultedProductController) {
-    consultedProductController.selection = TextSelection.collapsed(
-      offset: consultedProductController.text.length,
-    );
-  }
+  // void _changeCursorToLastIndex(
+  //     TextEditingController consultedProductController) {
+  //   consultedProductController.selection = TextSelection.collapsed(
+  //     offset: consultedProductController.text.length,
+  //   );
+  // }
 
   _updateCartInDatabase() async {
     await PrefsInstance.setObject(
@@ -371,8 +367,6 @@ class SaleRequestProvider with ChangeNotifier {
     }
 
     newQuantityController.text = "";
-
-    _changeCursorToLastIndex(newQuantityController);
 
     await _updateCartInDatabase();
     notifyListeners();

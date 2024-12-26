@@ -15,51 +15,39 @@ class AddInCartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+    return InkWell(
+      onTap: totalItemValue < 0.01 ? null : addItemInCart,
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).colorScheme.primary,
         ),
-        onPressed: addItemInCart,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 5),
-            Expanded(
-              flex: 10,
-              child: FittedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Text("Total: "),
-                    Text(
-                      ConvertString.convertToBRL(totalItemValue),
-                    ),
-                  ],
+            FittedBox(
+              child: Text(
+                totalItemValue < 0.01
+                    ? ConvertString.convertToBRL("0")
+                    : ConvertString.convertToBRL(totalItemValue),
+                style: const TextStyle(
+                  fontSize: 17,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            const SizedBox(height: 5),
-            Expanded(
-              flex: 8,
-              child: FittedBox(
-                child: Row(
-                  children: [
-                    Text(
-                      newQuantityController.text.isEmpty
-                          ? "ADICIONAR +1"
-                          : "ADICIONAR",
-                      style: const TextStyle(fontSize: 17),
-                    ),
-                    const Icon(
-                      Icons.shopping_cart,
-                    ),
-                  ],
+            const FittedBox(
+              child: Text(
+                "ADICIONAR",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            const SizedBox(height: 5),
           ],
         ),
       ),
