@@ -367,4 +367,47 @@ class SoapHelper {
       return [];
     }
   }
+
+  static Future<bool> userCanAccessResource({
+    required int resourceCode,
+    required int routineInt,
+  }) async {
+    //  {
+    //       Generic = 0,
+    //       SaleRequest = 1,
+    //       BuyRequest = 2,
+    //       TransferRequest = 3,
+    //       PriceConference = 4,
+    //       AdjustStock = 5,
+    //       GoodsReceiving = 6,
+    //       ResearchOfPrice = 7,
+    //       AdjustSalePrice = 8
+    //       BuyQuotation = 9
+    //   }
+    try {
+      final encoded = json.encode({
+        "CrossIdentity": UserData.crossIdentity,
+        "ResourceCode": resourceCode,
+        "RoutineInt": routineInt,
+      });
+
+      await SoapRequest.soapPost(
+        parameters: {
+          "jsonParameters": encoded,
+        },
+        typeOfResponse: "UserCanAccessCrossResourceResponse",
+        SOAPAction: "UserCanAccessCrossResource",
+        serviceASMX: "CeltaSecurityService.asmx",
+        typeOfResult: "UserCanAccessCrossResourceResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        return false;
+      } else {
+        return json.decode(SoapRequestResponse.responseAsString)["CanAccess"];
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

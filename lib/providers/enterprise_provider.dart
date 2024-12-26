@@ -38,8 +38,13 @@ class EnterpriseProvider with ChangeNotifier {
 
     try {
       if (verifyUserCanAdjustSalePrice == true) {
-        _userCanAdjustSalePrice = await _verifyUserCanAdjustSalePrice();
+        _userCanAdjustSalePrice = await SoapHelper.userCanAccessResource(
+          resourceCode: 609,
+          routineInt: 8,
+        );
+
         if (!_userCanAdjustSalePrice) {
+          _errorMessage = "O usuário não possui permissão para alterar preços";
           return;
         }
       }
@@ -91,35 +96,5 @@ class EnterpriseProvider with ChangeNotifier {
   void clearEnterprises() {
     _enterprises.clear();
     notifyListeners();
-  }
-
-  Future<bool> _verifyUserCanAdjustSalePrice() async {
-    try {
-      final encoded = json.encode({
-        "CrossIdentity": UserData.crossIdentity,
-        // "ResourceCode": "609",
-        "RoutineInt": 8, //adjustSalePrice
-      });
-
-      await SoapRequest.soapPost(
-        parameters: {
-          "jsonParameters": encoded,
-        },
-        typeOfResponse: "UserCanAccessCrossResourceResponse",
-        SOAPAction: "UserCanAccessCrossResource",
-        serviceASMX: "CeltaSecurityService.asmx",
-        typeOfResult: "UserCanAccessCrossResourceResult",
-      );
-
-      if (SoapRequestResponse.errorMessage != "") {
-        _errorMessage = SoapRequestResponse.errorMessage;
-        return false;
-      } else {
-        return json.decode(SoapRequestResponse.responseAsString)["CanAccess"];
-      }
-    } catch (e) {
-      _errorMessage = DefaultErrorMessage.ERROR;
-      return false;
-    }
   }
 }
