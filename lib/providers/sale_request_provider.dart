@@ -407,7 +407,7 @@ class SaleRequestProvider with ChangeNotifier {
         } else if (element.value != null && element.value! > 0) {
           double price = element.value! * element.quantity;
           totalLiquid += price;
-          print(totalLiquid);
+          // print(totalLiquid);
         } else {
           //preço do produto está zerado, não deve somar
         }
