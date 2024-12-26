@@ -8,6 +8,7 @@ class GetNewDate {
   static Future<DateTime?> get({
     required BuildContext context,
     bool? canInsertDateBeforeNow = false,
+    bool insertHoursAndMinutes = true,
   }) async {
     DateTime now = DateTime.now();
 
@@ -18,6 +19,10 @@ class GetNewDate {
       lastDate: now.add(const Duration(days: 1825)),
       locale: const Locale('pt', 'BR'),
     );
+
+    if (!insertHoursAndMinutes) {
+      return validityDate;
+    }
 
     if (validityDate != null) {
       TimeOfDay? newTime = await showTimePicker(

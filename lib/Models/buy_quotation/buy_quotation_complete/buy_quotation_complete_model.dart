@@ -7,7 +7,7 @@ class BuyQuotationCompleteModel {
   final String? DateOfLimit;
   final String? PersonalizedCode;
   final String? Observations;
-  final BuyQuotationBuyerModel Buyer;
+  final BuyQuotationBuyerModel? Buyer;
   final List<BuyQuotationEnterpriseModel>? Enterprises;
   final List<BuyQuotationProductsModel>? Products;
 

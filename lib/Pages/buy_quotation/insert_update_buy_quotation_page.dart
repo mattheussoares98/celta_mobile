@@ -129,10 +129,9 @@ class _InsertUpdateBuyQuotationPageState
                               ? observationsController.text
                               : null,
                           dateOfCreation: buyQuotationProvider
-                              .completeBuyQuotation
-                              ?.DateOfCreation, //TODO create option to change the date
-                          dateOfLimit: buyQuotationProvider.completeBuyQuotation
-                              ?.DateOfLimit, //TODO create option to change the date
+                              .completeBuyQuotation?.DateOfCreation,
+                          dateOfLimit: buyQuotationProvider
+                              .completeBuyQuotation?.DateOfLimit,
                         );
 
                         if (updated) {

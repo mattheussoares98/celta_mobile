@@ -97,7 +97,7 @@ class BuyQuotationProvider with ChangeNotifier {
         "DateOfCreation": dateOfCreation,
         "DateOfLimit": dateOfLimit,
         "Observations": observations,
-        "Buyer": {"Code": _completeBuyQuotation?.Buyer.Code},
+        "Buyer": {"Code": _completeBuyQuotation?.Buyer?.Code},
         "Enterprises": enterprises,
         "Products": products,
       };
@@ -604,6 +604,28 @@ class BuyQuotationProvider with ChangeNotifier {
 
   void removeProductWithNewValue(int index) {
     _productsWithNewValues.removeAt(index);
+    notifyListeners();
+  }
+
+  void updateDates({
+    DateTime? dateOfLimit,
+    DateTime? dateOfCreation,
+  }) {
+    _completeBuyQuotation = BuyQuotationCompleteModel(
+      DateOfLimit: dateOfLimit != null
+          ? dateOfLimit.toIso8601String()
+          : _completeBuyQuotation?.DateOfLimit,
+      DateOfCreation: dateOfCreation != null
+          ? dateOfCreation.toIso8601String()
+          : _completeBuyQuotation?.DateOfCreation,
+      CrossIdentity: UserData.crossIdentity,
+      Code: _completeBuyQuotation?.Code,
+      PersonalizedCode: _completeBuyQuotation?.PersonalizedCode,
+      Observations: _completeBuyQuotation?.Observations,
+      Buyer: _completeBuyQuotation?.Buyer,
+      Enterprises: _completeBuyQuotation?.Enterprises,
+      Products: _completeBuyQuotation?.Products,
+    );
     notifyListeners();
   }
 }
