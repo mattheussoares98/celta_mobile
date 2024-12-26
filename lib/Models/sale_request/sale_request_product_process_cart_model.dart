@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../../models/models.dart';
 
-class SaleRequestProcessCartModel {
+class SaleRequestProductProcessCartModel {
   int? ProductPackingCode;
   double? Quantity;
   double? Value;
@@ -17,7 +17,7 @@ class SaleRequestProcessCartModel {
   String? ExpectedDeliveryDate;
   String? Observations;
 
-  SaleRequestProcessCartModel({
+  SaleRequestProductProcessCartModel({
     required this.ProductPackingCode,
     required this.AutomaticDiscountPercentageOrValue,
     required this.AutomaticDiscountValue,
@@ -36,41 +36,44 @@ class SaleRequestProcessCartModel {
   static List<Map<String, dynamic>> cartProductsToProcessCart(
     List<GetProductJsonModel> cartProducts,
   ) {
-    List<Map<String, dynamic>> processCartProducts = [];
-
-    cartProducts.forEach((element) {
-      processCartProducts.add({
-        "ProductPackingCode": element.productPackingCode,
-        "Quantity": element.quantity,
-        "value": element.value,
-        // "IncrementPercentageOrValue": element.IncrementPercentageOrValue,
-        "IncrementValue": element.IncrementValue,
-        // "DiscountPercentageOrValue": element.DiscountPercentageOrValue,
-        "DiscountValue": element.DiscountValue,
-      });
-    });
-
-    return processCartProducts;
+    return cartProducts
+        .map((e) => {
+              "ProductPackingCode": e.plu,
+              "Quantity": e.quantity,
+              "Value": e.value,
+              "TotalLiquid": e.TotalLiquid,
+              "IncrementPercentageOrValue": e.IncrementPercentageOrValue,
+              "IncrementValue": e.IncrementValue,
+              "DiscountPercentageOrValue": e.DiscountPercentageOrValue,
+              "DiscountValue": e.DiscountValue,
+              "AutomaticDiscountPercentageOrValue":
+                  e.AutomaticDiscountPercentageOrValue,
+              "AutomaticDiscountValue": e.AutomaticDiscountValue,
+            })
+        .toList();
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'ProductPackingCode': ProductPackingCode,
-      'Quantity': Quantity,
-      'value': Value,
-      // 'IncrementPercentageOrValue': IncrementPercentageOrValue,
-      'IncrementValue': IncrementValue,
-      // // 'DiscountPercentageOrValue': DiscountPercentageOrValue,
-      'DiscountValue': DiscountValue,
-      // "AutomaticDiscountPercentageOrValue": AutomaticDiscountPercentageOrValue,
+      "ProductPackingCode": ProductPackingCode,
+      "AutomaticDiscountPercentageOrValue": AutomaticDiscountPercentageOrValue,
       "AutomaticDiscountValue": AutomaticDiscountValue,
       "TotalLiquid": TotalLiquid,
-      // 'ExpectedDeliveryDate': ExpectedDeliveryDate,
+      "Quantity": Quantity,
+      "Value": Value,
+      "IncrementPercentageOrValue": IncrementPercentageOrValue,
+      "IncrementValue": IncrementValue,
+      "DiscountPercentageOrValue": DiscountPercentageOrValue,
+      "DiscountValue": DiscountValue,
+      "DiscountDescription": DiscountDescription,
+      "ExpectedDeliveryDate": ExpectedDeliveryDate,
+      "Observations": Observations,
     };
   }
 
-  factory SaleRequestProcessCartModel.fromJson(Map<String, dynamic> json) {
-    return SaleRequestProcessCartModel(
+  factory SaleRequestProductProcessCartModel.fromJson(
+      Map<String, dynamic> json) {
+    return SaleRequestProductProcessCartModel(
       ProductPackingCode: json['ProductPackingCode'],
       Quantity: json['Quantity'],
       Value: json['Value'],
@@ -105,7 +108,7 @@ class SaleRequestProcessCartModel {
 
     jsonData["Products"].forEach((x) {
       jsonSaleRequest["Products"].add(
-        SaleRequestProcessCartModel.fromJson(x),
+        SaleRequestProductProcessCartModel.fromJson(x),
       );
 
       cartProducts.forEach((element) {

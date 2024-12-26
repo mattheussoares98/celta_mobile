@@ -601,7 +601,7 @@ class SaleRequestProvider with ChangeNotifier {
 
     try {
       List processCartItems =
-          SaleRequestProcessCartModel.cartProductsToProcessCart(
+          SaleRequestProductProcessCartModel.cartProductsToProcessCart(
         _cartProducts[enterpriseCode.toString()]!,
       );
 
@@ -630,7 +630,7 @@ class SaleRequestProvider with ChangeNotifier {
       _errorMessageProcessCart = SoapRequestResponse.errorMessage;
 
       if (_errorMessageProcessCart == "") {
-        SaleRequestProcessCartModel.updateCartWithProcessCartResponse(
+        SaleRequestProductProcessCartModel.updateCartWithProcessCartResponse(
           jsonSaleRequest: _jsonSaleRequest,
           apiItemsResponse: SoapRequestResponse.responseAsString,
           enterpriseCode: enterpriseCode.toString(),
