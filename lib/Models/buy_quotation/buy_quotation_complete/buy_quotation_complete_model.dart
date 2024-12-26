@@ -11,13 +11,6 @@ class BuyQuotationCompleteModel {
   final List<BuyQuotationEnterpriseModel>? Enterprises;
   final List<BuyQuotationProductsModel>? Products;
 
-//TODO add suppliersModel
-  //  {
-
-  //    "Suppliers":null,
-
-  //  }
-
   const BuyQuotationCompleteModel({
     required this.CrossIdentity,
     required this.Code,
