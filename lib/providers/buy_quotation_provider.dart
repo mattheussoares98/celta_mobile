@@ -215,7 +215,6 @@ class BuyQuotationProvider with ChangeNotifier {
       }
       SoapRequestResponse.responseAsMap;
       SoapRequestResponse.responseAsString;
-      //TODO não está retornando os fornecedores mesmo tendo fornecedores na cotação
     } catch (e) {
       debugPrint(e.toString());
       _errorMessage = DefaultErrorMessage.ERROR;
@@ -524,6 +523,7 @@ class BuyQuotationProvider with ChangeNotifier {
           message: _errorMessage,
           context: NavigatorKey.navigatorKey.currentContext!,
         );
+        return;
       }
       final enterpriseCodes =
           (json.decode(SoapRequestResponse.responseAsString) as List)
