@@ -55,7 +55,7 @@ class SaleRequestProductProcessCartModel {
     return {
       "ProductPackingCode": ProductPackingCode,
       "AutomaticDiscountPercentageOrValue": AutomaticDiscountPercentageOrValue,
-      "AutomaticDiscountValue": AutomaticDiscountValue,
+      "AutomaticDiscountValue": AutomaticDiscountValue ?? 0,
       "TotalLiquid": TotalLiquid,
       "Quantity": Quantity,
       "Value": Value,
@@ -64,7 +64,7 @@ class SaleRequestProductProcessCartModel {
       "DiscountPercentageOrValue": DiscountPercentageOrValue,
       "DiscountValue": DiscountValue,
       "DiscountDescription": DiscountDescription,
-      "ExpectedDeliveryDate": ExpectedDeliveryDate,
+      "ExpectedDeliveryDate": DateTime.now().toIso8601String(),
       "Observations": Observations,
     };
   }
@@ -88,4 +88,23 @@ class SaleRequestProductProcessCartModel {
           json["AutomaticDiscountPercentageOrValue"],
     );
   }
+
+  factory SaleRequestProductProcessCartModel.fromGetProductJsonModel(
+          GetProductJsonModel product) =>
+      SaleRequestProductProcessCartModel(
+        ProductPackingCode: product.productPackingCode,
+        AutomaticDiscountPercentageOrValue:
+            product.AutomaticDiscountPercentageOrValue,
+        AutomaticDiscountValue: product.AutomaticDiscountValue,
+        TotalLiquid: product.TotalLiquid,
+        Quantity: product.quantity,
+        Value: product.value,
+        IncrementPercentageOrValue: product.IncrementPercentageOrValue,
+        IncrementValue: product.IncrementValue,
+        DiscountPercentageOrValue: product.DiscountPercentageOrValue,
+        DiscountValue: product.DiscountValue,
+        DiscountDescription: null,
+        ExpectedDeliveryDate: null,
+        Observations: null,
+      );
 }

@@ -395,7 +395,18 @@ class SaleRequestProvider with ChangeNotifier {
     _cartProducts[enterpriseCode]![index].quantity = quantity;
     _cartProducts[enterpriseCode]![index].value = value;
 
-    //TODO create here the transformation of salerequest
+    saleRequestProcessCart = SaleRequestProcessCartModel(
+      crossId: UserData.crossIdentity,
+      EnterpriseCode: saleRequestProcessCart?.EnterpriseCode,
+      RequestTypeCode: saleRequestProcessCart?.RequestTypeCode,
+      SellerCode: saleRequestProcessCart?.SellerCode,
+      CovenantCode: saleRequestProcessCart?.CovenantCode,
+      CustomerCode: saleRequestProcessCart?.CustomerCode,
+      Products: _cartProducts[enterpriseCode]!
+          .map((e) =>
+              SaleRequestProductProcessCartModel.fromGetProductJsonModel(e))
+          .toList(),
+    );
 
     await _updateCartInDatabase(
       updateToNeedProcessCartAgain: updateToNeedProcessCartAgain,
