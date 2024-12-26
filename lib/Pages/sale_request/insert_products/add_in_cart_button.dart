@@ -16,12 +16,15 @@ class AddInCartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: totalItemValue < 0.01 ? null : addItemInCart,
+      onTap:
+          newQuantityController.text.toDouble() < 0.001 ? null : addItemInCart,
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.primary,
+          color: newQuantityController.text.toDouble() < 0.001
+              ? Colors.grey
+              : Theme.of(context).colorScheme.primary,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
