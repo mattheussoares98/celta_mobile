@@ -46,7 +46,7 @@ class CartProductsItems {
 
   static Widget saleRequestCartProductsItems({
     required SaleRequestProvider saleRequestProvider,
-    required dynamic changeFocus,
+    required void Function() changeFocus,
     required BuildContext context,
     required int index,
     required GetProductJsonModel product,
@@ -54,13 +54,8 @@ class CartProductsItems {
     required int selectedIndex,
     required Function updateSelectedIndex,
   }) {
-    return GestureDetector(
-      onTap: saleRequestProvider.isLoadingSaveSaleRequest ||
-              saleRequestProvider.isLoadingProcessCart
-          ? null
-          : () async {
-              await changeFocus();
-            },
+    return InkWell(
+      onTap: changeFocus,
       child: Padding(
         padding: const EdgeInsets.only(left: 3, top: 4),
         child: Row(
