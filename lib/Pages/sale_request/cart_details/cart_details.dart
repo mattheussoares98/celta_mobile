@@ -6,4 +6,4 @@ export 'observations_and_instructions_fields.dart';
 export './product_informations.dart';
 export './quantitys_and_prices.dart';
 export 'save_sale_request_informations_and_button.dart';
-export './update_quantity.dart';
+export 'update_quantity_and_manual_price.dart';

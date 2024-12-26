@@ -19,10 +19,10 @@ class SaleRequestProvider with ChangeNotifier {
   get requests => [..._requests];
   get requestsCount => _requests.length;
 
-  bool _updatedCart = true;
-  bool get updatedCart => _updatedCart;
-  set updatedCart(bool) {
-    _updatedCart = true;
+  bool _needProcessCart = true;
+  bool get needProcessCart => _needProcessCart;
+  set needProcessCart(bool) {
+    _needProcessCart = true;
   }
 
   bool _isLoadingCustomer = false;
@@ -193,6 +193,7 @@ class SaleRequestProvider with ChangeNotifier {
     required GetProductJsonModel product,
     required TextEditingController newQuantityController,
     required String enterpriseCode,
+    TextEditingController? manualWrittedPriceController,
   }) {
     double quantityToAdd = newQuantityController.text.isEmpty
         ? 1
@@ -200,6 +201,12 @@ class SaleRequestProvider with ChangeNotifier {
 
     if (quantityToAdd <= 0) {
       quantityToAdd = 1;
+    }
+
+    if (manualWrittedPriceController != null &&
+        manualWrittedPriceController.text.isNotEmpty &&
+        manualWrittedPriceController.text.toDouble() > 0) {
+      return quantityToAdd * manualWrittedPriceController.text.toDouble();
     }
 
     double price = getPracticedPrice(
@@ -241,7 +248,7 @@ class SaleRequestProvider with ChangeNotifier {
     );
 
     if (updateToNeedProcessCartAgain) {
-      _updatedCart = true;
+      _needProcessCart = true;
     }
   }
 
@@ -376,7 +383,6 @@ class SaleRequestProvider with ChangeNotifier {
   }
 
   Future<void> updateProductFromCart({
-    required int productPackingCode,
     required double quantity,
     required double value,
     required String enterpriseCode,
@@ -432,12 +438,12 @@ class SaleRequestProvider with ChangeNotifier {
     "Products": [],
   };
 
-  clearProducts() {
+  void clearProducts() {
     _products.clear();
     notifyListeners();
   }
 
-  clearCart(String enterpriseCode) async {
+  Future<void> clearCart(String enterpriseCode) async {
     if (_cartProducts[enterpriseCode] != null) {
       _cartProducts[enterpriseCode]!.clear();
     }
@@ -445,7 +451,7 @@ class SaleRequestProvider with ChangeNotifier {
     await _clearcustomers(enterpriseCode);
     clearProducts();
     await PrefsInstance.removeKey(PrefsKeys.cart);
-    _updatedCart = true;
+    _needProcessCart = true;
 
     await _getCustomersOldSearch(
       searchTypeInt: 2, //exactCode
@@ -631,7 +637,7 @@ class SaleRequestProvider with ChangeNotifier {
           cartProducts: _cartProducts[enterpriseCode.toString()]!,
         );
 
-        _updatedCart = false;
+        _needProcessCart = false;
       } else {
         ShowSnackbarMessage.show(
           message: _errorMessageProcessCart,
@@ -660,7 +666,7 @@ class SaleRequestProvider with ChangeNotifier {
     });
     _customers[enterpriseCode]?[index].selected = value;
 
-    _updatedCart = true;
+    _needProcessCart = true;
 
     _customers[enterpriseCode]?.forEach((element) {
       element.Covenants.forEach((element) {
@@ -688,7 +694,7 @@ class SaleRequestProvider with ChangeNotifier {
 
     _updateCustomerInDatabase();
 
-    _updatedCart = true;
+    _needProcessCart = true;
   }
 
   Future<void> getCustomers({

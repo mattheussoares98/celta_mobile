@@ -43,7 +43,7 @@ class _ModelsItemsState extends State<ModelsItems> {
                       onTap: saleRequestProvider.isLoadingRequests
                           ? null
                           : () {
-                              saleRequestProvider.updatedCart = true;
+                              saleRequestProvider.needProcessCart = true;
                               Navigator.of(context).pushNamed(
                                 widget.hasDefaultRequestModel
                                     ? APPROUTES.SALE_REQUEST
@@ -67,7 +67,7 @@ class _ModelsItemsState extends State<ModelsItems> {
                   return Card(
                     child: GestureDetector(
                       onTap: () {
-                        saleRequestProvider.updatedCart = true;
+                        saleRequestProvider.needProcessCart = true;
                         Navigator.of(context).pushNamed(
                           APPROUTES.SALE_REQUEST,
                           arguments: {

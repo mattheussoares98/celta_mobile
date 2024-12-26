@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../api/api.dart';
 import '../../../providers/providers.dart';
 import 'cart_details.dart';
 
@@ -25,12 +26,20 @@ class CartDetailsPage extends StatefulWidget {
 }
 
 class _CartDetailsPageState extends State<CartDetailsPage> {
-  final quantityController = TextEditingController();
+  bool userCanChangePrices = false;
 
   @override
-  void dispose() {
-    super.dispose();
-    quantityController.dispose();
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        userCanChangePrices = await SoapHelper.userCanAccessResource(
+          resourceCode: 666,
+          routineInt: 1,
+        );
+      }
+    });
   }
 
   @override
@@ -72,7 +81,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                   ),
                 CartItems(
                   enterpriseCode: widget.enterpriseCode,
-                  newQuantityController: quantityController,
+                  userCanChangePrices: userCanChangePrices,
                 ),
                 LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
               ],

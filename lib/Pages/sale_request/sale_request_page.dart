@@ -195,13 +195,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
       child: Stack(
         children: [
           PopScope(
-            canPop: !saleRequestProvider.isLoadingSaveSaleRequest &&
-                !saleRequestProvider.isLoadingProcessCart &&
-                !saleRequestProvider.isLoadingProducts,
             onPopInvokedWithResult: (value, __) {
-              if (value == true) {
-                saleRequestProvider.clearProducts();
-              }
+              saleRequestProvider.clearProducts();
             },
             child: Scaffold(
               resizeToAvoidBottomInset: kIsWeb ? false : true,

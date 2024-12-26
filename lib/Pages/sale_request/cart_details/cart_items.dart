@@ -6,11 +6,11 @@ import '../../../providers/providers.dart';
 import 'cart_details.dart';
 
 class CartItems extends StatefulWidget {
-  final TextEditingController newQuantityController;
   final int enterpriseCode;
+  final bool userCanChangePrices;
   const CartItems({
-    required this.newQuantityController,
     required this.enterpriseCode,
+    required this.userCanChangePrices,
     Key? key,
   }) : super(key: key);
 
@@ -22,11 +22,13 @@ class _CartItemsState extends State<CartItems> {
   int _selectedIndex = -1;
   GlobalKey<FormState> _quantityFormKey = GlobalKey<FormState>();
   FocusNode _quantityFocusNode = FocusNode();
+  final newQuantityController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     _quantityFocusNode.dispose();
+    newQuantityController.dispose();
   }
 
   void changeFocusToConsultedProductFocusNode({
@@ -46,8 +48,8 @@ class _CartItemsState extends State<CartItems> {
     required SaleRequestProvider saleRequestProvider,
   }) async {
     if (_selectedIndex != index) {
-      widget.newQuantityController.text = "";
-      widget.newQuantityController.clear();
+      newQuantityController.text = "";
+      newQuantityController.clear();
 
       setState(() {
         _selectedIndex = index;
@@ -63,37 +65,6 @@ class _CartItemsState extends State<CartItems> {
       setState(() {
         _selectedIndex = -1;
       });
-    }
-  }
-
-  void updateProductInCart({
-    required SaleRequestProvider saleRequestProvider,
-    required GetProductJsonModel product,
-    required int index,
-  }) {
-    double? controllerInDouble = double.tryParse(
-      widget.newQuantityController.text.replaceAll(RegExp(r'\,'), '.'),
-    );
-
-    bool? isValid = _quantityFormKey.currentState!.validate();
-
-    if (controllerInDouble == null || controllerInDouble == 0) return;
-
-    if (isValid) {
-      saleRequestProvider.updateProductFromCart(
-        enterpriseCode: widget.enterpriseCode.toString(),
-        productPackingCode: product.productPackingCode!,
-        quantity: controllerInDouble,
-        updateToNeedProcessCartAgain: false,
-        value: saleRequestProvider.getPracticedPrice(
-          quantityToAdd: controllerInDouble,
-          product: product,
-          enterpriseCode: widget.enterpriseCode.toString(),
-        ),
-        index: index,
-      );
-      widget.newQuantityController.clear();
-      _selectedIndex = -1;
     }
   }
 
@@ -113,7 +84,7 @@ class _CartItemsState extends State<CartItems> {
             saleRequestProvider.getCartProducts(widget.enterpriseCode);
         GetProductJsonModel product = cartProducts[index];
         double? controllerInDouble = double.tryParse(
-          widget.newQuantityController.text.replaceAll(RegExp(r'\,'), '.'),
+          newQuantityController.text.replaceAll(RegExp(r'\,'), '.'),
         );
 
         return Column(
@@ -151,22 +122,22 @@ class _CartItemsState extends State<CartItems> {
                     ),
                   ),
                   if (_selectedIndex == index)
-                    UpdateQuantity(
+                    UpdateQuantityAndManualPrice(
                       product: product,
+                      productIndex: index,
+                      clearSelectedIndex: () {
+                        setState(() {
+                          _selectedIndex = -1;
+                        });
+                      },
+                      userCanChangePrices: widget.userCanChangePrices,
                       controllerInDouble: controllerInDouble,
                       callSetState: () {
                         setState(() {});
                       },
-                      updateProductInCart: () {
-                        updateProductInCart(
-                          saleRequestProvider: saleRequestProvider,
-                          product: product,
-                          index: index,
-                        );
-                      },
                       quantityFocusNode: _quantityFocusNode,
                       quantityFormKey: _quantityFormKey,
-                      newQuantityController: widget.newQuantityController,
+                      newQuantityController: newQuantityController,
                       enterpriseCode: widget.enterpriseCode,
                     ),
                 ],

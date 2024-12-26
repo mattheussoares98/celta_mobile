@@ -28,7 +28,7 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
               .getSelectedCustomerCode(enterpriseCode.toString()) ==
           -1) {
         return "INFORME O CLIENTE";
-      } else if (saleRequestProvider.updatedCart) {
+      } else if (saleRequestProvider.needProcessCart) {
         return "CALCULAR PREÇOS";
       } else {
         return "SALVAR PEDIDO";
@@ -47,7 +47,7 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
               .cartProductsCount(enterpriseCode.toString()) ==
           0) {
         return null;
-      } else if (saleRequestProvider.updatedCart) {
+      } else if (saleRequestProvider.needProcessCart) {
         return () => {
               ShowAlertDialog.show(
                 context: context,
@@ -178,39 +178,18 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ElevatedButton(
                       onPressed: saveSaleRequestFunction(saleRequestProvider),
-                      child: saleRequestProvider.isLoadingSaveSaleRequest ||
-                              saleRequestProvider.isLoadingProcessCart
-                          ? FittedBox(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(saleRequestProvider
-                                          .isLoadingSaveSaleRequest
-                                      ? "SALVANDO PEDIDO   "
-                                      : "CALCULANDO PREÇOS   "),
-                                  Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: const CircularProgressIndicator(
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FittedBox(
-                                child: Text(
-                                  textButtonMessage(saleRequestProvider),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FittedBox(
+                          child: Text(
+                            textButtonMessage(saleRequestProvider),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
                             ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

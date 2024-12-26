@@ -3,18 +3,19 @@ import 'dart:convert';
 import '../../models/models.dart';
 
 class SaleRequestProcessCartModel {
-  int ProductPackingCode;
-  double Quantity;
-  double Value;
-  String IncrementPercentageOrValue; //"R$"" ou "%"
-  String DiscountPercentageOrValue; //"R$"" ou "%"
-  double IncrementValue;
-  String AutomaticDiscountPercentageOrValue; //"R$"" ou "%"
-  double AutomaticDiscountValue;
-  double TotalLiquid;
-  double DiscountValue;
-  String DiscountDescription;
-  // String ExpectedDeliveryDate;
+  int? ProductPackingCode;
+  double? Quantity;
+  double? Value;
+  double? TotalLiquid;
+  String? IncrementPercentageOrValue; //"R$"" ou "%"
+  double? IncrementValue;
+  String? DiscountPercentageOrValue; //"R$"" ou "%"
+  double? DiscountValue;
+  String? DiscountDescription;
+  String? AutomaticDiscountPercentageOrValue; //"R$"" ou "%"
+  double? AutomaticDiscountValue;
+  String? ExpectedDeliveryDate;
+  String? Observations;
 
   SaleRequestProcessCartModel({
     required this.ProductPackingCode,
@@ -28,7 +29,8 @@ class SaleRequestProcessCartModel {
     required this.DiscountPercentageOrValue,
     required this.DiscountValue,
     required this.DiscountDescription,
-    // required this.ExpectedDeliveryDate,
+    required this.ExpectedDeliveryDate,
+    required this.Observations,
   });
 
   static List<Map<String, dynamic>> cartProductsToProcessCart(
@@ -77,14 +79,12 @@ class SaleRequestProcessCartModel {
       DiscountDescription: json["DiscountDescription"] ?? "",
       AutomaticDiscountValue: json["AutomaticDiscountValue"] ?? 0,
       TotalLiquid: json["TotalLiquid"],
-
-      IncrementPercentageOrValue:
-          '', //na api retorna "R$" de padrão e esse caracter especial está dando problema depois pra calcular o preço dos produtos de novo. Como não está usando essa questão, por enquanto vou deixar dessa forma
-      DiscountPercentageOrValue:
-          '', //na api retorna "R$" de padrão e esse caracter especial está dando problema depois pra calcular o preço dos produtos de novo. Como não está usando essa questão, por enquanto vou deixar dessa forma
+      ExpectedDeliveryDate: json['ExpectedDeliveryDate'],
+      Observations: json["Observations"],
+      IncrementPercentageOrValue: json["IncrementPercentageOrValue"],
+      DiscountPercentageOrValue: json["DiscountPercentageOrValue"],
       AutomaticDiscountPercentageOrValue:
-          '', //na api retorna "R$" de padrão e esse caracter especial está dando problema depois pra calcular o preço dos produtos de novo. Como não está usando essa questão, por enquanto vou deixar dessa forma
-      // ExpectedDeliveryDate: json['ExpectedDeliveryDate'],
+          json["AutomaticDiscountPercentageOrValue"],
     );
   }
 
