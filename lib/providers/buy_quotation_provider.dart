@@ -94,10 +94,12 @@ class BuyQuotationProvider with ChangeNotifier {
         "CrossIdentity": UserData.crossIdentity,
         "Code": isInserting ? 0 : _completeBuyQuotation?.Code,
         /*0=Inserção | Preenchido=Alteração*/
-        "DateOfCreation": dateOfCreation,
+        "DateOfCreation": dateOfCreation ?? DateTime.now().toIso8601String(),
         "DateOfLimit": dateOfLimit,
         "Observations": observations,
-        "Buyer": {"Code": _completeBuyQuotation?.Buyer?.Code},
+        "Buyer": _completeBuyQuotation?.Buyer == null
+            ? null
+            : {"Code": _completeBuyQuotation?.Buyer?.Code},
         "Enterprises": enterprises,
         "Products": products,
       };
@@ -373,26 +375,34 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  void updateSelectedsValues(EnterpriseProvider enterpriseProvider) {
+  void updateSelectedsValues({
+    required EnterpriseProvider enterpriseProvider,
+    required bool isInserting,
+  }) {
     _selectedEnterprises.clear();
     _productsWithNewValues.clear();
 
-    if (_completeBuyQuotation?.Enterprises != null &&
-        _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
-      _selectedEnterprises =
-          _completeBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
-        return enterpriseProvider.enterprises.firstWhere(
-          (e) =>
-              e.CnpjNumber.toString() ==
-              buyQuotationEnterprise.enterprise.CnpjNumber,
-        );
-      }).toList();
-    }
+    if (isInserting) {
+      _completeBuyQuotation = null;
+      _selectedEnterprises = enterpriseProvider.enterprises;
+    } else {
+      if (_completeBuyQuotation?.Enterprises != null &&
+          _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
+        _selectedEnterprises =
+            _completeBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
+          return enterpriseProvider.enterprises.firstWhere(
+            (e) =>
+                e.CnpjNumber.toString() ==
+                buyQuotationEnterprise.enterprise.CnpjNumber,
+          );
+        }).toList();
+      }
 
-    if (_completeBuyQuotation?.Products != null &&
-        _completeBuyQuotation?.Products!.isNotEmpty == true) {
-      _productsWithNewValues =
-          _completeBuyQuotation!.Products!.map((product) => product).toList();
+      if (_completeBuyQuotation?.Products != null &&
+          _completeBuyQuotation?.Products!.isNotEmpty == true) {
+        _productsWithNewValues =
+            _completeBuyQuotation!.Products!.map((product) => product).toList();
+      }
     }
 
     notifyListeners();

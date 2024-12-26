@@ -94,6 +94,7 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                     FilterOrAddCotationsButtons(
                       updateShowFilterOptions: updateShowFilterOptions,
                       showFilterOptions: showFilterOptions,
+                      enterprise: enterprise,
                     ),
                     const Divider(),
                     if (showFilterOptions)

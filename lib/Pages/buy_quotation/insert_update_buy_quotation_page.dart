@@ -38,7 +38,15 @@ class _InsertUpdateBuyQuotationPageState
 
         await loadCompleteBuyQuotation();
 
-        buyQuotationProvider.updateSelectedsValues(enterpriseProvider);
+        Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
+        BuyQuotationIncompleteModel? incompleteModel =
+            arguments?["incompleteQuotation"];
+        bool isInserting = incompleteModel == null;
+
+        buyQuotationProvider.updateSelectedsValues(
+          enterpriseProvider: enterpriseProvider,
+          isInserting: isInserting,
+        );
 
         if (buyQuotationProvider
                 .completeBuyQuotation?.Observations?.isNotEmpty ==
@@ -63,7 +71,8 @@ class _InsertUpdateBuyQuotationPageState
         arguments?["incompleteQuotation"];
 
     EnterpriseModel? enterprise = arguments?["enterprise"];
-    if (incompleteModel == null || enterprise == null) {
+    bool isInserting = incompleteModel == null;
+    if (isInserting || enterprise == null) {
       return;
     }
 
@@ -93,6 +102,7 @@ class _InsertUpdateBuyQuotationPageState
     BuyQuotationIncompleteModel? incompleteModel =
         arguments?["incompleteQuotation"];
     EnterpriseModel? enterprise = arguments?["enterprise"];
+    bool isInserting = incompleteModel == null;
 
     return Stack(
       children: [
@@ -114,7 +124,7 @@ class _InsertUpdateBuyQuotationPageState
                 Icons.arrow_back,
               ),
             ),
-            title: Text(incompleteModel == null ? "Inserindo" : "Alterando"),
+            title: Text(isInserting ? "Inserindo" : "Alterando"),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -124,7 +134,7 @@ class _InsertUpdateBuyQuotationPageState
                       function: () async {
                         bool updated =
                             await buyQuotationProvider.insertUpdateBuyQuotation(
-                          isInserting: incompleteModel == null,
+                          isInserting: isInserting,
                           observations: observationsController.text.isNotEmpty
                               ? observationsController.text
                               : null,
@@ -151,38 +161,39 @@ class _InsertUpdateBuyQuotationPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (buyQuotationProvider.completeBuyQuotation == null)
+                  if (buyQuotationProvider.completeBuyQuotation == null &&
+                      incompleteModel != null)
                     TextButton(
                       onPressed: () async {
                         await loadCompleteBuyQuotation();
                       },
                       child: const Text("Pesquisar novamente"),
                     ),
-                  if (buyQuotationProvider.completeBuyQuotation != null)
-                    Column(
-                      children: [
-                        SimpleInformations(
-                          observationsController: observationsController,
-                          newObservation: newObservation,
-                          observationsFocusNode: observationsFocusNode,
-                          showEditObservationFormField:
-                              showEditObservationFormField,
-                          updateObservation: updateObservation,
-                          updateShowEditObservationFormField: () {
-                            setState(() {
-                              showEditObservationFormField =
-                                  !showEditObservationFormField;
-                            });
-                            observationsFocusNode.requestFocus();
-                          },
-                        ),
-                        const Divider(),
-                        const Enterprises(),
-                        const Divider(),
-                        if (enterprise != null)
-                          InsertUpdateProductsItems(enterprise: enterprise),
-                      ],
-                    ),
+                  Column(
+                    children: [
+                      SimpleInformations(
+                        isInserting: isInserting,
+                        observationsController: observationsController,
+                        newObservation: newObservation,
+                        observationsFocusNode: observationsFocusNode,
+                        showEditObservationFormField:
+                            showEditObservationFormField,
+                        updateObservation: updateObservation,
+                        updateShowEditObservationFormField: () {
+                          setState(() {
+                            showEditObservationFormField =
+                                !showEditObservationFormField;
+                          });
+                          observationsFocusNode.requestFocus();
+                        },
+                      ),
+                      const Divider(),
+                      const Enterprises(),
+                      const Divider(),
+                      if (enterprise != null)
+                        InsertUpdateProductsItems(enterprise: enterprise),
+                    ],
+                  ),
                 ],
               ),
             ),

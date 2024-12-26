@@ -11,6 +11,7 @@ class SimpleInformations extends StatelessWidget {
   final bool showEditObservationFormField;
   final FocusNode observationsFocusNode;
   final void Function() updateObservation;
+  final bool isInserting;
 
   const SimpleInformations({
     required this.observationsController,
@@ -19,13 +20,15 @@ class SimpleInformations extends StatelessWidget {
     required this.showEditObservationFormField,
     required this.observationsFocusNode,
     required this.updateObservation,
+    required this.isInserting,
     super.key,
   });
 
   String getObservationsValue(BuyQuotationProvider buyQuotationProvider) {
-    if (buyQuotationProvider.completeBuyQuotation!.Observations?.isEmpty ==
-            true &&
-        newObservation == null) {
+    if (buyQuotationProvider.completeBuyQuotation?.Observations == null ||
+        buyQuotationProvider.completeBuyQuotation?.Observations?.isEmpty ==
+                true &&
+            newObservation == null) {
       return "Sem observações";
     } else if (newObservation != null) {
       return newObservation!;
@@ -40,17 +43,20 @@ class SimpleInformations extends StatelessWidget {
 
     return Column(
       children: [
-        TitleAndSubtitle.titleAndSubtitle(
-          title: "Código",
-          subtitle: buyQuotationProvider.completeBuyQuotation!.Code.toString(),
-        ),
-        TitleAndSubtitle.titleAndSubtitle(
-          title: "Comprador",
-          subtitle: buyQuotationProvider.completeBuyQuotation!.Buyer?.Name,
-        ),
+        if (!isInserting)
+          TitleAndSubtitle.titleAndSubtitle(
+            title: "Código",
+            subtitle:
+                buyQuotationProvider.completeBuyQuotation?.Code.toString(),
+          ),
+        if (!isInserting)
+          TitleAndSubtitle.titleAndSubtitle(
+            title: "Comprador",
+            subtitle: buyQuotationProvider.completeBuyQuotation?.Buyer?.Name,
+          ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data de criação",
-          subtitle: buyQuotationProvider.completeBuyQuotation!.DateOfCreation
+          subtitle: buyQuotationProvider.completeBuyQuotation?.DateOfCreation
               .toString(),
           otherWidget: InkWell(
             onTap: () async {
@@ -71,7 +77,7 @@ class SimpleInformations extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data limite",
           subtitle:
-              buyQuotationProvider.completeBuyQuotation!.DateOfLimit.toString(),
+              buyQuotationProvider.completeBuyQuotation?.DateOfLimit.toString(),
           otherWidget: InkWell(
             onTap: () async {
               final newDate = await GetNewDate.get(
@@ -90,13 +96,13 @@ class SimpleInformations extends StatelessWidget {
         ),
         TitleAndSubtitle.titleAndSubtitle(
           title: buyQuotationProvider
-                          .completeBuyQuotation!.Observations?.isEmpty ==
+                          .completeBuyQuotation?.Observations?.isEmpty ==
                       true &&
                   observationsController.text.isEmpty
               ? null
               : "Observações",
           subtitle: buyQuotationProvider
-                          .completeBuyQuotation!.Observations?.isEmpty ==
+                          .completeBuyQuotation?.Observations?.isEmpty ==
                       true &&
                   observationsController.text.isEmpty
               ? "Sem observações"

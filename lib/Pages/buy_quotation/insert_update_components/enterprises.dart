@@ -10,7 +10,6 @@ class Enterprises extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
-    EnterpriseProvider enterpriseProvider = Provider.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -18,15 +17,9 @@ class Enterprises extends StatelessWidget {
         const Text("Empresas"),
         ListView.builder(
           shrinkWrap: true,
-          itemCount:
-              buyQuotationProvider.completeBuyQuotation?.Enterprises?.length,
+          itemCount: buyQuotationProvider.selectedEnterprises.length,
           itemBuilder: (context, index) {
-            final buyQuotationEnterprise =
-                buyQuotationProvider.completeBuyQuotation?.Enterprises?[index];
-
-            final enterprise = enterpriseProvider.enterprises.firstWhere((e) =>
-                e.CnpjNumber.toString() ==
-                buyQuotationEnterprise?.enterprise.CnpjNumber);
+            final enterprise = buyQuotationProvider.selectedEnterprises[index];
 
             return Container(
               margin: const EdgeInsets.only(bottom: 4),

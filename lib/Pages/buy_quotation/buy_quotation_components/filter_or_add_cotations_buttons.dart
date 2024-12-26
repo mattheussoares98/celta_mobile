@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/models.dart';
 import '../../../utils/utils.dart';
 
 class FilterOrAddCotationsButtons extends StatelessWidget {
   final void Function() updateShowFilterOptions;
   final bool showFilterOptions;
+  final EnterpriseModel enterprise;
 
   const FilterOrAddCotationsButtons({
     required this.updateShowFilterOptions,
     required this.showFilterOptions,
+    required this.enterprise,
     super.key,
   });
 
@@ -40,6 +43,9 @@ class FilterOrAddCotationsButtons extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pushNamed(
                 APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
+                arguments: {
+                  "enterprise": enterprise,
+                },
               );
             },
           ),
