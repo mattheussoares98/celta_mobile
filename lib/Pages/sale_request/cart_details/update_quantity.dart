@@ -34,6 +34,20 @@ class UpdateQuantity extends StatefulWidget {
 
 class _UpdateQuantityState extends State<UpdateQuantity> {
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        widget.newQuantityController.text = widget.product.quantity
+            .toString()
+            .toBrazilianNumber()
+            .replaceAll(RegExp(r'\.'), '');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
 
@@ -96,19 +110,7 @@ class _UpdateQuantityState extends State<UpdateQuantity> {
                   focusNode: widget.quantityFocusNode,
                   formKey: widget.quantityFormKey,
                   newQuantityController: widget.newQuantityController,
-                  onFieldSubmitted: () {
-                    ShowAlertDialog.show(
-                      context: context,
-                      title: "Atualizar o preço",
-                      content: const SingleChildScrollView(
-                        child: Text(
-                          "Deseja realmente atualizar a quantidade e o preço?",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      function: widget.updateProductInCart,
-                    );
-                  },
+                  onFieldSubmitted: widget.updateProductInCart,
                   onChanged: widget.callSetState,
                   labelText: "Digite a nova quantidade",
                   hintText: "Nova quantidade",
