@@ -84,6 +84,7 @@ class _CartItemsState extends State<CartItems> {
         enterpriseCode: widget.enterpriseCode.toString(),
         productPackingCode: product.productPackingCode!,
         quantity: controllerInDouble,
+        updateToNeedProcessCartAgain: false,
         value: saleRequestProvider.getPracticedPrice(
           quantityToAdd: controllerInDouble,
           product: product,

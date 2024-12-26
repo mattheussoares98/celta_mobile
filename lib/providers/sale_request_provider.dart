@@ -234,12 +234,15 @@ class SaleRequestProvider with ChangeNotifier {
   //   );
   // }
 
-  _updateCartInDatabase() async {
+  _updateCartInDatabase({bool updateToNeedProcessCartAgain = true}) async {
     await PrefsInstance.setObject(
       prefsKeys: PrefsKeys.cart,
       object: _cartProducts,
     );
-    _updatedCart = true;
+
+    if (updateToNeedProcessCartAgain) {
+      _updatedCart = true;
+    }
   }
 
   restoreProducts(String enterpriseCode) async {
@@ -378,12 +381,15 @@ class SaleRequestProvider with ChangeNotifier {
     required double value,
     required String enterpriseCode,
     required int index,
+    bool updateToNeedProcessCartAgain = true,
   }) async {
     _cartProducts[enterpriseCode]![index].TotalLiquid = quantity * value;
     _cartProducts[enterpriseCode]![index].quantity = quantity;
     _cartProducts[enterpriseCode]![index].value = value;
 
-    await _updateCartInDatabase();
+    await _updateCartInDatabase(
+      updateToNeedProcessCartAgain: updateToNeedProcessCartAgain,
+    );
     notifyListeners();
   }
 
