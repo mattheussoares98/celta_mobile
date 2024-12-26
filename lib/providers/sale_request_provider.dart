@@ -888,7 +888,7 @@ class SaleRequestProvider with ChangeNotifier {
     FirebaseHelper.addSoapCallInFirebase(
       firebaseCallEnum: FirebaseCallEnum.saleRequestSave,
     );
-
+//TODO afeter my brother treats save products with different prices, test if works using a user that has permission to change prices, and a user that dont have permission to change prices
     try {
       await SoapRequest.soapPost(
         parameters: {
