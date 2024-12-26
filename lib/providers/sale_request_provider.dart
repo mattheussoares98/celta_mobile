@@ -55,6 +55,8 @@ class SaleRequestProvider with ChangeNotifier {
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
 
+  SaleRequestProcessCartModel? saleRequestProcessCart;
+
   int customersCount(String enterpriseCode) {
     if (_customers[enterpriseCode] == null) {
       return 0;
@@ -393,6 +395,8 @@ class SaleRequestProvider with ChangeNotifier {
     _cartProducts[enterpriseCode]![index].quantity = quantity;
     _cartProducts[enterpriseCode]![index].value = value;
 
+    //TODO create here the transformation of salerequest
+
     await _updateCartInDatabase(
       updateToNeedProcessCartAgain: updateToNeedProcessCartAgain,
     );
@@ -427,16 +431,6 @@ class SaleRequestProvider with ChangeNotifier {
       return totalLiquid;
     }
   }
-
-  Map<String, dynamic> _jsonSaleRequest = {
-    "crossId": UserData.crossIdentity,
-    "EnterpriseCode": 0,
-    "RequestTypeCode": 0,
-    "SellerCode": 0,
-    "CovenantCode": 0,
-    "CustomerCode": 0,
-    "Products": [],
-  };
 
   void clearProducts() {
     _products.clear();
@@ -510,17 +504,13 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  String getDiscountDescription(
+  String? getDiscountDescription(
     GetProductJsonModel product,
   ) {
-    String discountDescription = "";
-    _jsonSaleRequest["Products"].forEach((element) {
-      if (element.productPackingCode == product.productPackingCode) {
-        discountDescription = element.DiscountDescription;
-      }
-    });
-
-    return discountDescription;
+    return saleRequestProcessCart?.Products
+        ?.where((e) => e.ProductPackingCode == product.productPackingCode)
+        .first
+        .DiscountDescription;
   }
 
   double getTotalItensInCart({
@@ -630,11 +620,8 @@ class SaleRequestProvider with ChangeNotifier {
       _errorMessageProcessCart = SoapRequestResponse.errorMessage;
 
       if (_errorMessageProcessCart == "") {
-        SaleRequestProductProcessCartModel.updateCartWithProcessCartResponse(
-          jsonSaleRequest: _jsonSaleRequest,
-          apiItemsResponse: SoapRequestResponse.responseAsString,
-          enterpriseCode: enterpriseCode.toString(),
-          cartProducts: _cartProducts[enterpriseCode.toString()]!,
+        saleRequestProcessCart = SaleRequestProcessCartModel.fromJson(
+          json.decode(SoapRequestResponse.responseAsString),
         );
 
         _needProcessCart = false;
@@ -891,15 +878,11 @@ class SaleRequestProvider with ChangeNotifier {
       firebaseCallEnum: FirebaseCallEnum.saleRequestSave,
     );
 
-    _jsonSaleRequest["crossId"] = "${UserData.crossIdentity}";
-    _jsonSaleRequest["Observations"] = observations;
-    _jsonSaleRequest["Instructions"] = instructions;
-    var jsonSaleRequestEncoded = json.encode(_jsonSaleRequest);
     try {
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "json": jsonSaleRequestEncoded,
+          "json": json.encode(saleRequestProcessCart?.toJson()),
           "printerName": "",
         },
         typeOfResponse: "InsertResponse",

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../../models/models.dart';
 
 class SaleRequestProductProcessCartModel {
@@ -38,17 +36,17 @@ class SaleRequestProductProcessCartModel {
   ) {
     return cartProducts
         .map((e) => {
-              "ProductPackingCode": e.plu,
+              "ProductPackingCode": e.productPackingCode,
               "Quantity": e.quantity,
               "Value": e.value,
-              "TotalLiquid": e.TotalLiquid,
-              "IncrementPercentageOrValue": e.IncrementPercentageOrValue,
-              "IncrementValue": e.IncrementValue,
-              "DiscountPercentageOrValue": e.DiscountPercentageOrValue,
-              "DiscountValue": e.DiscountValue,
+              "TotalLiquid": e.quantity * e.value!,
+              "IncrementPercentageOrValue": e.IncrementPercentageOrValue ?? 0,
+              "IncrementValue": e.IncrementValue ?? 0,
+              "DiscountPercentageOrValue": e.DiscountPercentageOrValue ?? 0,
+              "DiscountValue": e.DiscountValue ?? 0,
               "AutomaticDiscountPercentageOrValue":
-                  e.AutomaticDiscountPercentageOrValue,
-              "AutomaticDiscountValue": e.AutomaticDiscountValue,
+                  e.AutomaticDiscountPercentageOrValue ?? 0,
+              "AutomaticDiscountValue": e.AutomaticDiscountValue ?? 0,
             })
         .toList();
   }
@@ -89,50 +87,5 @@ class SaleRequestProductProcessCartModel {
       AutomaticDiscountPercentageOrValue:
           json["AutomaticDiscountPercentageOrValue"],
     );
-  }
-
-  static void updateCartWithProcessCartResponse({
-    required Map<String, dynamic> jsonSaleRequest,
-    required String apiItemsResponse,
-    required String enterpriseCode,
-    required List<GetProductJsonModel> cartProducts,
-  }) {
-    Map<String, dynamic> jsonData = json.decode(apiItemsResponse);
-
-    jsonSaleRequest["Products"].clear();
-    jsonSaleRequest["EnterpriseCode"] = jsonData["EnterpriseCode"];
-    jsonSaleRequest["RequestTypeCode"] = jsonData["RequestTypeCode"];
-    jsonSaleRequest["SellerCode"] = jsonData["SellerCode"];
-    jsonSaleRequest["CustomerCode"] = jsonData["CustomerCode"];
-    jsonSaleRequest["CovenantCode"] = jsonData["CovenantCode"];
-
-    jsonData["Products"].forEach((x) {
-      jsonSaleRequest["Products"].add(
-        SaleRequestProductProcessCartModel.fromJson(x),
-      );
-
-      cartProducts.forEach((element) {
-        if (x["ProductPackingCode"] == element.productPackingCode) {
-          element.productPackingCode = x["ProductPackingCode"];
-          element.quantity = x["Quantity"];
-          element.value = x["Value"];
-          element.IncrementPercentageOrValue =
-              x["IncrementPercentageOrValue"] ?? "";
-          element.IncrementValue = x["IncrementValue"];
-          element.DiscountPercentageOrValue =
-              x["DiscountPercentageOrValue"].toString();
-          element.DiscountValue = x["DiscountValue"];
-          // element.ExpectedDeliveryDate = x["ExpectedDeliveryDate"];
-          element.AutomaticDiscountPercentageOrValue =
-              x["AutomaticDiscountPercentageOrValue"] ?? "";
-          element.AutomaticDiscountValue = x["AutomaticDiscountValue"];
-          element.TotalLiquid = x["TotalLiquid"];
-          element.AutomaticDiscountPercentageOrValue =
-              x["AutomaticDiscountPercentageOrValue"] ?? "";
-          element.AutomaticDiscountValue = x["AutomaticDiscountValue"];
-          element.TotalLiquid = x["TotalLiquid"];
-        }
-      });
-    });
   }
 }
