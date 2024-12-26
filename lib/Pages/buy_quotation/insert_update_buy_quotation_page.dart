@@ -94,88 +94,98 @@ class _InsertUpdateBuyQuotationPageState
         arguments?["incompleteQuotation"];
     EnterpriseModel? enterprise = arguments?["enterprise"];
 
-    return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        //TODO create alert dialog to confirm exit page and clear all writted data
-      },
-      child: Stack(
-        children: [
-          Scaffold(
-            appBar: AppBar(
-              title: Text(incompleteModel == null ? "Inserindo" : "Alterando"),
-              actions: [
-                IconButton(
-                  onPressed: () async {
-                    ShowAlertDialog.show(
-                        context: context,
-                        title: "Salvar?",
-                        function: () async {
-                          await buyQuotationProvider.insertUpdateBuyQuotation(
-                            isInserting: incompleteModel == null,
-                            observations: observationsController.text.isNotEmpty
-                                ? observationsController.text
-                                : null,
-                            dateOfCreation: buyQuotationProvider
-                                .completeBuyQuotation
-                                ?.DateOfCreation, //TODO create option to change the date
-                            dateOfLimit: buyQuotationProvider
-                                .completeBuyQuotation
-                                ?.DateOfLimit, //TODO create option to change the date
-                          );
-                        });
-                  },
-                  icon: const Icon(
-                    Icons.save,
-                  ),
-                ),
-              ],
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                ShowAlertDialog.show(
+                    context: context,
+                    title: "Deseja realmente sair?",
+                    content: const Text(
+                      "Se alguma alteração não foi salva, ela será perdida se você sair da tela",
+                    ),
+                    function: () {
+                      Navigator.of(context).pop();
+                    });
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+              ),
             ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (buyQuotationProvider.completeBuyQuotation == null)
-                      TextButton(
-                        onPressed: () async {
-                          await loadCompleteBuyQuotation();
-                        },
-                        child: const Text("Pesquisar novamente"),
-                      ),
-                    if (buyQuotationProvider.completeBuyQuotation != null)
-                      Column(
-                        children: [
-                          SimpleInformations(
-                            observationsController: observationsController,
-                            newObservation: newObservation,
-                            observationsFocusNode: observationsFocusNode,
-                            showEditObservationFormField:
-                                showEditObservationFormField,
-                            updateObservation: updateObservation,
-                            updateShowEditObservationFormField: () {
-                              setState(() {
-                                showEditObservationFormField =
-                                    !showEditObservationFormField;
-                              });
-                              observationsFocusNode.requestFocus();
-                            },
-                          ),
-                          const Divider(),
-                          const Enterprises(),
-                          const Divider(),
-                          if (enterprise != null)
-                            InsertUpdateProductsItems(enterprise: enterprise),
-                        ],
-                      ),
-                  ],
+            title: Text(incompleteModel == null ? "Inserindo" : "Alterando"),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  ShowAlertDialog.show(
+                      context: context,
+                      title: "Salvar?",
+                      function: () async {
+                        await buyQuotationProvider.insertUpdateBuyQuotation(
+                          isInserting: incompleteModel == null,
+                          observations: observationsController.text.isNotEmpty
+                              ? observationsController.text
+                              : null,
+                          dateOfCreation: buyQuotationProvider
+                              .completeBuyQuotation
+                              ?.DateOfCreation, //TODO create option to change the date
+                          dateOfLimit: buyQuotationProvider.completeBuyQuotation
+                              ?.DateOfLimit, //TODO create option to change the date
+                        );
+                      });
+                },
+                icon: const Icon(
+                  Icons.save,
                 ),
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (buyQuotationProvider.completeBuyQuotation == null)
+                    TextButton(
+                      onPressed: () async {
+                        await loadCompleteBuyQuotation();
+                      },
+                      child: const Text("Pesquisar novamente"),
+                    ),
+                  if (buyQuotationProvider.completeBuyQuotation != null)
+                    Column(
+                      children: [
+                        SimpleInformations(
+                          observationsController: observationsController,
+                          newObservation: newObservation,
+                          observationsFocusNode: observationsFocusNode,
+                          showEditObservationFormField:
+                              showEditObservationFormField,
+                          updateObservation: updateObservation,
+                          updateShowEditObservationFormField: () {
+                            setState(() {
+                              showEditObservationFormField =
+                                  !showEditObservationFormField;
+                            });
+                            observationsFocusNode.requestFocus();
+                          },
+                        ),
+                        const Divider(),
+                        const Enterprises(),
+                        const Divider(),
+                        if (enterprise != null)
+                          InsertUpdateProductsItems(enterprise: enterprise),
+                      ],
+                    ),
+                ],
               ),
             ),
           ),
-          loadingWidget(buyQuotationProvider.isLoading),
-        ],
-      ),
+        ),
+        loadingWidget(buyQuotationProvider.isLoading),
+      ],
     );
   }
 }
