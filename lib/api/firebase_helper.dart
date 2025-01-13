@@ -395,7 +395,7 @@ class FirebaseHelper {
         modules: [
           ModuleModel(
             module: Modules.adjustSalePrice.name,
-            enabled: false,
+            enabled: true,
             name: "Ajuste de preços",
           ),
           ModuleModel(
