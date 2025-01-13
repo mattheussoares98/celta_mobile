@@ -126,32 +126,9 @@ class _InsertUpdateBuyQuotationPageState
             ),
             title: Text(isInserting ? "Inserindo" : "Alterando"),
             actions: [
-              IconButton(
-                onPressed: () async {
-                  ShowAlertDialog.show(
-                      context: context,
-                      title: "Salvar?",
-                      function: () async {
-                        bool updated =
-                            await buyQuotationProvider.insertUpdateBuyQuotation(
-                          isInserting: isInserting,
-                          observations: observationsController.text.isNotEmpty
-                              ? observationsController.text
-                              : null,
-                          dateOfCreation: buyQuotationProvider
-                              .completeBuyQuotation?.DateOfCreation,
-                          dateOfLimit: buyQuotationProvider
-                              .completeBuyQuotation?.DateOfLimit,
-                        );
-
-                        if (updated) {
-                          Navigator.of(context).pop();
-                        }
-                      });
-                },
-                icon: const Icon(
-                  Icons.save,
-                ),
+              SaveButton(
+                isInserting: isInserting,
+                observationsController: observationsController,
               ),
             ],
           ),
