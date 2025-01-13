@@ -100,12 +100,15 @@ class _InsertUpdateBuyQuotationPageState
 
     EnterpriseModel? enterprise = arguments?["enterprise"];
     bool isInserting = incompleteModel == null;
-    if (isInserting || enterprise == null) {
-      return;
-    }
 
     BuyQuotationProvider buyQuotationProvider =
         Provider.of(context, listen: false);
+
+    await buyQuotationProvider.getBuyers(context: context);
+
+    if (isInserting || enterprise == null) {
+      return;
+    }
 
     await buyQuotationProvider.getBuyQuotation(
       context: context,

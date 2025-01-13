@@ -49,11 +49,28 @@ class SimpleInformations extends StatelessWidget {
             subtitle:
                 buyQuotationProvider.completeBuyQuotation?.Code.toString(),
           ),
-        if (!isInserting)
-          TitleAndSubtitle.titleAndSubtitle(
-            title: "Comprador",
-            subtitle: buyQuotationProvider.completeBuyQuotation?.Buyer?.Name,
+        TitleAndSubtitle.titleAndSubtitle(
+          title: "Comprador",
+          subtitle: buyQuotationProvider.selectedBuyer?.Name,
+          otherWidget: PopupMenuButton(
+            tooltip: "Alterar comprador",
+            child: Icon(
+              Icons.edit,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            itemBuilder: (_) {
+              return buyQuotationProvider.buyers
+                  .map(
+                    (e) => PopupMenuItem(
+                      value: e,
+                      child: Text(e.Name),
+                      onTap: () => buyQuotationProvider.updateSelectedBuyer(e),
+                    ),
+                  )
+                  .toList();
+            },
           ),
+        ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data de criação",
           subtitle: buyQuotationProvider.completeBuyQuotation?.DateOfCreation

@@ -56,6 +56,9 @@ class BuyQuotationProvider with ChangeNotifier {
   GetProductJsonModel? _productToAdd;
   GetProductJsonModel? get productToAdd => _productToAdd;
 
+  List<BuyerModel> _buyers = [];
+  List<BuyerModel> get buyers => [..._buyers];
+
   void doOnPopScreen() {
     _searchedBuyers.clear();
     _searchedProductsToFilter.clear();
@@ -101,9 +104,7 @@ class BuyQuotationProvider with ChangeNotifier {
         "DateOfCreation": dateOfCreation ?? DateTime.now().toIso8601String(),
         "DateOfLimit": dateOfLimit,
         "Observations": observations,
-        "Buyer": _completeBuyQuotation?.Buyer == null
-            ? null
-            : {"Code": _completeBuyQuotation?.Buyer?.Code},
+        "Buyer": {"Code": _selectedBuyer?.Code},
         "Enterprises": enterprises,
         "Products": products,
       };
@@ -392,6 +393,7 @@ class BuyQuotationProvider with ChangeNotifier {
       _selectedEnterprises.addAll(enterpriseProvider.enterprises);
       _enterprisesAlreadyAddedInBuyQuotation
           .addAll(enterpriseProvider.enterprises);
+      _selectedBuyer = null;
     } else {
       if (_completeBuyQuotation?.Enterprises != null &&
           _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
@@ -406,6 +408,13 @@ class BuyQuotationProvider with ChangeNotifier {
 
         _selectedEnterprises.addAll(enterprises);
         _enterprisesAlreadyAddedInBuyQuotation.addAll(enterprises);
+
+        int indexOfBuyer = _buyers.indexWhere(
+          (e) => e.Code == _completeBuyQuotation?.Buyer?.Code,
+        );
+        if (indexOfBuyer != -1) {
+          _selectedBuyer = _buyers[indexOfBuyer];
+        }
       }
 
       if (_completeBuyQuotation?.Products != null &&
@@ -647,5 +656,39 @@ class BuyQuotationProvider with ChangeNotifier {
       Products: _completeBuyQuotation?.Products,
     );
     notifyListeners();
+  }
+
+  Future<void> getBuyers({
+    required BuildContext context,
+  }) async {
+    _errorMessage = "";
+    _isLoading = true;
+    _buyers.clear();
+    _selectedBuyer = null;
+    notifyListeners();
+
+    try {
+      _buyers = await SoapHelper.getBuyers();
+
+      _errorMessage = SoapRequestResponse.errorMessage;
+
+      if (_errorMessage != "") {
+        ShowSnackbarMessage.show(
+          message:
+              "Ocorreu um erro não esperado para consultar os compradores. Verifique a sua internet",
+          context: context,
+        );
+      }
+    } catch (e) {
+      //print("Erro para obter os compradores: $e");
+      _errorMessage = DefaultErrorMessage.ERROR;
+      ShowSnackbarMessage.show(
+        message: _errorMessage,
+        context: context,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }
