@@ -20,6 +20,8 @@ class _InsertUpdateBuyQuotationPageState
   final observationsController = TextEditingController();
   static String? newObservation;
   final observationsFocusNode = FocusNode();
+  List<Map<int, TextEditingController>> controllers = [];
+  List<Map<int, FocusNode>> focusNodes = [];
 
   @override
   void initState() {
@@ -54,8 +56,33 @@ class _InsertUpdateBuyQuotationPageState
           observationsController.text =
               buyQuotationProvider.completeBuyQuotation!.Observations!;
         }
+
+        createControllersAndFocusNode(buyQuotationProvider);
       }
     });
+  }
+
+  void createControllersAndFocusNode(
+      BuyQuotationProvider buyQuotationProvider) {
+    if (buyQuotationProvider.selectedEnterprises.isEmpty == true) {
+      return;
+    } else {
+      controllers = buyQuotationProvider.selectedEnterprises
+          .map((e) => {e.Code: TextEditingController()})
+          .toList();
+      focusNodes = buyQuotationProvider.selectedEnterprises
+          .map((e) => {e.Code: FocusNode()})
+          .toList();
+    }
+  }
+
+  void disposeControllersAndFocusNodes() {
+    for (var controller in controllers) {
+      controller.values.first.dispose();
+    }
+    for (var focusNode in focusNodes) {
+      focusNode.values.first.dispose();
+    }
   }
 
   @override
@@ -63,6 +90,7 @@ class _InsertUpdateBuyQuotationPageState
     super.dispose();
     observationsController.dispose();
     observationsFocusNode.dispose();
+    disposeControllersAndFocusNodes();
   }
 
   Future<void> loadCompleteBuyQuotation() async {
@@ -168,7 +196,11 @@ class _InsertUpdateBuyQuotationPageState
                       const Enterprises(),
                       const Divider(),
                       if (enterprise != null)
-                        InsertUpdateProductsItems(enterprise: enterprise),
+                        InsertUpdateProductsItems(
+                          enterprise: enterprise,
+                          controllers: controllers,
+                          focusNodes: focusNodes,
+                        ),
                     ],
                   ),
                 ],

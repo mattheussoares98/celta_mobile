@@ -8,8 +8,12 @@ import '../buy_quotation.dart';
 
 class InsertUpdateProductsItems extends StatefulWidget {
   final EnterpriseModel enterprise;
+  final List<Map<int, TextEditingController>> controllers;
+  final List<Map<int, FocusNode>> focusNodes;
   const InsertUpdateProductsItems({
     required this.enterprise,
+    required this.controllers,
+    required this.focusNodes,
     super.key,
   });
 
@@ -20,54 +24,14 @@ class InsertUpdateProductsItems extends StatefulWidget {
 
 class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
   int? selectedProductIndex;
-  List<Map<int, TextEditingController>> controllers = [];
-  List<Map<int, FocusNode>> focusNodes = [];
   final searchProductController = TextEditingController();
   final searchFocusNode = FocusNode();
 
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        BuyQuotationProvider buyQuotationProvider =
-            Provider.of(context, listen: false);
-
-        createControllersAndFocusNode(buyQuotationProvider);
-      }
-    });
-  }
-
-  @override
   void dispose() {
     super.dispose();
-    disposeControllersAndFocusNodes();
     searchProductController.dispose();
     searchFocusNode.dispose();
-  }
-
-  void createControllersAndFocusNode(
-      BuyQuotationProvider buyQuotationProvider) {
-    if (buyQuotationProvider.selectedEnterprises.isEmpty == true) {
-      return;
-    } else {
-      controllers = buyQuotationProvider.selectedEnterprises
-          .map((e) => {e.Code: TextEditingController()})
-          .toList();
-      focusNodes = buyQuotationProvider.selectedEnterprises
-          .map((e) => {e.Code: FocusNode()})
-          .toList();
-    }
-  }
-
-  void disposeControllersAndFocusNodes() {
-    for (var controller in controllers) {
-      controller.values.first.dispose();
-    }
-    for (var focusNode in focusNodes) {
-      focusNode.values.first.dispose();
-    }
   }
 
   void updateSelectedIndex({
@@ -84,7 +48,7 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
         updateControllersQuantity(
           productIndex: productIndex,
           buyQuotationProvider: buyQuotationProvider,
-          controllers: controllers,
+          controllers: widget.controllers,
         );
       });
     }
@@ -123,11 +87,11 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
                             productIndex: productIndex,
                             buyQuotationProvider: buyQuotationProvider,
                           );
-                          focusNodes[0].values.first.requestFocus();
+                          widget.focusNodes[0].values.first.requestFocus();
                         },
               product: product,
-              controllers: controllers,
-              focusNodes: focusNodes,
+              controllers: widget.controllers,
+              focusNodes: widget.focusNodes,
             );
           },
         ),

@@ -389,8 +389,9 @@ class BuyQuotationProvider with ChangeNotifier {
 
     if (isInserting) {
       _completeBuyQuotation = null;
-      _selectedEnterprises = enterpriseProvider.enterprises;
-      _enterprisesAlreadyAddedInBuyQuotation = enterpriseProvider.enterprises;
+      _selectedEnterprises.addAll(enterpriseProvider.enterprises);
+      _enterprisesAlreadyAddedInBuyQuotation
+          .addAll(enterpriseProvider.enterprises);
     } else {
       if (_completeBuyQuotation?.Enterprises != null &&
           _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
