@@ -42,6 +42,10 @@ class BuyQuotationProvider with ChangeNotifier {
   List<EnterpriseModel> _selectedEnterprises = [];
   List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
 
+  List<EnterpriseModel> _enterprisesAlreadyAddedInBuyQuotation = [];
+  List<EnterpriseModel> get enterprisesAlreadyAddedInBuyQuotation =>
+      [..._enterprisesAlreadyAddedInBuyQuotation];
+
   List<BuyQuotationProductsModel> _productsWithNewValues = [];
   List<BuyQuotationProductsModel> get productsWithNewValues =>
       [..._productsWithNewValues];
@@ -380,15 +384,17 @@ class BuyQuotationProvider with ChangeNotifier {
     required bool isInserting,
   }) {
     _selectedEnterprises.clear();
+    _enterprisesAlreadyAddedInBuyQuotation.clear();
     _productsWithNewValues.clear();
 
     if (isInserting) {
       _completeBuyQuotation = null;
       _selectedEnterprises = enterpriseProvider.enterprises;
+      _enterprisesAlreadyAddedInBuyQuotation = enterpriseProvider.enterprises;
     } else {
       if (_completeBuyQuotation?.Enterprises != null &&
           _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
-        _selectedEnterprises =
+        final enterprises =
             _completeBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
           return enterpriseProvider.enterprises.firstWhere(
             (e) =>
@@ -396,6 +402,9 @@ class BuyQuotationProvider with ChangeNotifier {
                 buyQuotationEnterprise.enterprise.CnpjNumber,
           );
         }).toList();
+
+        _selectedEnterprises.addAll(enterprises);
+        _enterprisesAlreadyAddedInBuyQuotation.addAll(enterprises);
       }
 
       if (_completeBuyQuotation?.Products != null &&
