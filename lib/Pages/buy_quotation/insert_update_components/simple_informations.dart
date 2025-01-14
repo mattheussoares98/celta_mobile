@@ -75,21 +75,21 @@ class SimpleInformations extends StatelessWidget {
           title: "Data de criação",
           subtitle: buyQuotationProvider.completeBuyQuotation?.DateOfCreation
               .toString(),
-          otherWidget: InkWell(
-            onTap: () async {
-              final newDate = await GetNewDate.get(
-                context: context,
-              );
+          // otherWidget: InkWell(
+          //   onTap: () async {
+          //     final newDate = await GetNewDate.get(
+          //       context: context,
+          //     );
 
-              if (newDate != null) {
-                buyQuotationProvider.updateDates(dateOfCreation: newDate);
-              }
-            },
-            child: Icon(
-              Icons.edit,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
+          //     if (newDate != null) {
+          //       buyQuotationProvider.updateDates(dateOfCreation: newDate);
+          //     }
+          //   },
+          //   child: Icon(
+          //     Icons.edit,
+          //     color: Theme.of(context).colorScheme.primary,
+          //   ),
+          // ),
         ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data limite",
