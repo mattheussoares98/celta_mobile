@@ -192,43 +192,54 @@ class _UpdateQuantityAndManualPriceState
                       Column(
                         children: [
                           const SizedBox(height: 8),
-                          TextFormField(
-                            enabled: !saleRequestProvider.needProcessCart,
-                            controller: manualPriceController,
-                            style: FormFieldStyle.style(),
-                            onFieldSubmitted: (_) {
-                              updateProductInCart(
-                                saleRequestProvider: saleRequestProvider,
-                                product: widget.product,
-                                index: widget.productIndex,
-                              );
-                            },
-                            onChanged: (_) {
-                              widget.callSetState();
-                            },
-                            onTap: () {
-                              manualPriceController.selection = TextSelection(
-                                baseOffset: 0,
-                                extentOffset: manualPriceController.text.length,
-                              );
-                            },
-                            decoration: FormFieldDecoration.decoration(
-                              context: context,
-                              suffixIcon: IconButton(
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  enabled: !saleRequestProvider.needProcessCart,
+                                  controller: manualPriceController,
+                                  style: FormFieldStyle.style(),
+                                  onFieldSubmitted: (_) {
+                                    updateProductInCart(
+                                      saleRequestProvider: saleRequestProvider,
+                                      product: widget.product,
+                                      index: widget.productIndex,
+                                    );
+                                  },
+                                  onChanged: (_) {
+                                    widget.callSetState();
+                                  },
+                                  onTap: () {
+                                    manualPriceController.selection =
+                                        TextSelection(
+                                      baseOffset: 0,
+                                      extentOffset:
+                                          manualPriceController.text.length,
+                                    );
+                                  },
+                                  decoration: FormFieldDecoration.decoration(
+                                    context: context,
+                                    hintText:
+                                        saleRequestProvider.needProcessCart
+                                            ? "Calcule os preços"
+                                            : "Preço manual R\$",
+                                    labelText:
+                                        saleRequestProvider.needProcessCart
+                                            ? "Calcule os preços"
+                                            : "Preço manual R\$",
+                                  ),
+                                ),
+                              ),
+                              IconButton(
                                 onPressed: () {},
                                 icon: Icon(
                                   Icons.info,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
-                                tooltip: "Essa opção aparece somente quando o usuário possui permissão para alterar preços no pedido de vendas",
-                              ),
-                              hintText: saleRequestProvider.needProcessCart
-                                  ? "Calcule os preços"
-                                  : "Preço manual R\$",
-                              labelText: saleRequestProvider.needProcessCart
-                                  ? "Calcule os preços"
-                                  : "Preço manual R\$",
-                            ),
+                                tooltip:
+                                    "Essa opção aparece somente quando o usuário possui permissão para alterar preços no pedido de vendas",
+                              )
+                            ],
                           ),
                         ],
                       ),
