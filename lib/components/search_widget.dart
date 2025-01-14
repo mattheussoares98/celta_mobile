@@ -96,7 +96,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 },
                 validator: (value) {
                   if (value!.isEmpty || value == "") {
-                    return widget.hintText;
+                    return widget.hintText ?? "Digite algo";
                   } else {
                     return null;
                   }
