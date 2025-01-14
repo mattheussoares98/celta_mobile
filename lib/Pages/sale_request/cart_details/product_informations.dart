@@ -32,20 +32,13 @@ class ProductInformations extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 12,
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Colors.transparent,
                 child: FittedBox(
                   child: Text(
                     (index + 1).toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 0),
-                          blurRadius: 2.0,
-                          color: Colors.grey,
-                        ),
-                      ],
                     ),
                   ),
                 ),
