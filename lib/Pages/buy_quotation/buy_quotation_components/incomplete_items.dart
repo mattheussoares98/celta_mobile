@@ -25,6 +25,7 @@ class IncompleteItems extends StatelessWidget {
             valueToSearch: "%",
             searchByPersonalizedCode: true,
             enterpriseCode: enterprise.Code,
+            searchAll: true,
           );
         },
         label: const Text(

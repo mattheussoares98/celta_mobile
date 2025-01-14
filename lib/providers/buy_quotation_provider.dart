@@ -160,6 +160,7 @@ class BuyQuotationProvider with ChangeNotifier {
     // int? buyerCode,
     bool? inclusiveExpired,
     bool? complete = false,
+    bool? searchAll,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -183,8 +184,9 @@ class BuyQuotationProvider with ChangeNotifier {
         "FinalDateOfCreation": finalDateOfCreation?.toIso8601String(),
         "InitialDateOfLimit": initialDateOfLimit?.toIso8601String(),
         "FinalDateOfLimit": finalDateOfLimit?.toIso8601String(),
-        "ProductCode": _productToFilter?.productCode,
-        "ProductPackingCode": _productToFilter?.productPackingCode,
+        "ProductCode": searchAll == true ? null : _productToFilter?.productCode,
+        "ProductPackingCode":
+            searchAll == true ? null : _productToFilter?.productPackingCode,
         "SupplierCode": supplierCode,
         "BuyerCode":
             null, //se mandar o código 0, leva em consideração o funcionário vinculado ao usuário. Vou deixar sem esse filtro
