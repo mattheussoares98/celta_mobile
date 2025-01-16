@@ -36,7 +36,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
       if (mounted) {
         userCanChangePrices = await SoapHelper.userCanAccessResource(
           resourceCode: 666,
-          routineInt: 1,
+          routineInt: 0,
         );
       }
     });
