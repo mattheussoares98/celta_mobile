@@ -70,11 +70,11 @@ class _UpdateQuantityAndManualPriceState
     manualPriceController.dispose();
   }
 
-  void updateProductInCart({
+  Future<void> updateProductInCart({
     required SaleRequestProvider saleRequestProvider,
     required GetProductJsonModel product,
     required int index,
-  }) {
+  }) async {
     double? controllerInDouble = double.tryParse(
       widget.newQuantityController.text.replaceAll(RegExp(r'\,'), '.'),
     );
@@ -85,10 +85,8 @@ class _UpdateQuantityAndManualPriceState
 
     if (isValid) {
       double productValue;
-      if (widget.userCanChangePrices) {
-        productValue = double.tryParse(
-          manualPriceController.text.replaceAll(RegExp(r'\,'), '.'),
-        )!;
+      if (widget.userCanChangePrices && manualPriceController.text.isNotEmpty) {
+        productValue = manualPriceController.text.toDouble();
       } else {
         productValue = saleRequestProvider.getPracticedPrice(
           quantityToAdd: controllerInDouble,
@@ -97,10 +95,10 @@ class _UpdateQuantityAndManualPriceState
         );
       }
 
-      saleRequestProvider.updateProductFromCart(
+      await saleRequestProvider.updateProductFromCart(
         enterpriseCode: widget.enterpriseCode.toString(),
         quantity: controllerInDouble,
-        updateToNeedProcessCartAgain: widget.userCanChangePrices ? false : true,
+        updateToNeedProcessCartAgain: true,
         value: productValue,
         index: index,
       );
@@ -196,7 +194,6 @@ class _UpdateQuantityAndManualPriceState
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                  enabled: !saleRequestProvider.needProcessCart,
                                   controller: manualPriceController,
                                   style: FormFieldStyle.style(),
                                   onFieldSubmitted: (_) {
@@ -219,14 +216,8 @@ class _UpdateQuantityAndManualPriceState
                                   },
                                   decoration: FormFieldDecoration.decoration(
                                     context: context,
-                                    hintText:
-                                        saleRequestProvider.needProcessCart
-                                            ? "Calcule os preços"
-                                            : "Preço manual R\$",
-                                    labelText:
-                                        saleRequestProvider.needProcessCart
-                                            ? "Calcule os preços"
-                                            : "Preço manual R\$",
+                                    hintText: "Preço manual R\$",
+                                    labelText: "Preço manual R\$",
                                   ),
                                 ),
                               ),

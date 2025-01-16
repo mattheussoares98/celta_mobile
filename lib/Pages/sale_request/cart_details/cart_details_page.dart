@@ -2,7 +2,6 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../api/api.dart';
 import '../../../providers/providers.dart';
 import 'cart_details.dart';
 
@@ -12,12 +11,14 @@ class CartDetailsPage extends StatefulWidget {
   final bool keyboardIsOpen;
   final TextEditingController observationsController;
   final TextEditingController instructionsController;
+  final bool userCanChangePrices;
   const CartDetailsPage({
     required this.enterpriseCode,
     required this.requestTypeCode,
     required this.keyboardIsOpen,
     required this.observationsController,
     required this.instructionsController,
+    required this.userCanChangePrices,
     Key? key,
   }) : super(key: key);
 
@@ -26,22 +27,6 @@ class CartDetailsPage extends StatefulWidget {
 }
 
 class _CartDetailsPageState extends State<CartDetailsPage> {
-  bool userCanChangePrices = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (mounted) {
-        userCanChangePrices = await SoapHelper.userCanAccessResource(
-          resourceCode: 666,
-          routineInt: 0,
-        );
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
@@ -81,7 +66,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                   ),
                 CartItems(
                   enterpriseCode: widget.enterpriseCode,
-                  userCanChangePrices: userCanChangePrices,
+                  userCanChangePrices: widget.userCanChangePrices,
                 ),
                 LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
               ],
@@ -94,6 +79,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
             requestTypeCode: widget.requestTypeCode,
             instructions: widget.instructionsController.text,
             observations: widget.observationsController.text,
+            userCanChangePrices: widget.userCanChangePrices,
           ),
       ],
     );

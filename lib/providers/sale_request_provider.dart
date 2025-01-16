@@ -874,6 +874,32 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
+  bool allProductsHasPrice({
+    required BuildContext context,
+    required String enterpriseCode,
+  }) {
+    bool allProductsHasPrice = true;
+
+    if (_cartProducts[enterpriseCode] == null) {
+      return false;
+    } else {
+      _cartProducts[enterpriseCode]!
+                  .indexWhere((e) => e.value == null || e.value == 0) ==
+              -1
+          ? allProductsHasPrice = true
+          : allProductsHasPrice = false;
+
+      if (!allProductsHasPrice) {
+        ShowSnackbarMessage.show(
+          message: "Não é possível salvar produtos sem preço!",
+          context: context,
+        );
+      }
+
+      return allProductsHasPrice;
+    }
+  }
+
   Future<void> saveSaleRequest({
     required String enterpriseCode,
     required int requestTypeCode,
@@ -881,6 +907,10 @@ class SaleRequestProvider with ChangeNotifier {
     required String instructions,
     required String observations,
   }) async {
+    if (!allProductsHasPrice(
+        context: context, enterpriseCode: enterpriseCode)) {
+      return;
+    }
     _errorMessageSaveSaleRequest = "";
     _isLoadingSaveSaleRequest = true;
     notifyListeners();
@@ -914,8 +944,7 @@ class SaleRequestProvider with ChangeNotifier {
 
         Match? match = regex.firstMatch(SoapRequestResponse
             .responseAsString); // Encontrar o primeiro match na string
-        SoapRequestResponse.responseAsMap;
-        SoapRequestResponse.responseAsString;
+
         if (match != null) {
           _lastSaleRequestSaved = "Último pedido salvo: " + match.group(1)!;
         } else {

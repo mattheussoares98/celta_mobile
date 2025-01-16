@@ -20,6 +20,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
   int _selectedIndex = 0;
   final observationsController = TextEditingController();
   final instructionsController = TextEditingController();
+  bool userCanChangePrices = false;
 
   static const List appBarTitles = [
     "Inserir produtos",
@@ -111,6 +112,11 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
         await cleanSaleRequestBecauseVersionIncompatible();
+        userCanChangePrices = await SoapHelper.userCanAccessResource(
+          resourceCode: 666,
+          routineInt: 0,
+        );
+        setState(() {});
       }
     });
   }
@@ -188,6 +194,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,
         observationsController: observationsController,
         instructionsController: instructionsController,
+        userCanChangePrices: userCanChangePrices,
       ),
     ];
     return GestureDetector(
