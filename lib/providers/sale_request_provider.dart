@@ -126,10 +126,19 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _updateCustomerInDatabase() async {
+  Future<void> _updateCustomerInDatabase() async {
     await PrefsInstance.setObject(
       prefsKeys: PrefsKeys.customers,
-      object: _customers,
+      object: _customers.map((key, value) {
+        return MapEntry(
+          key,
+          value
+              .map((e) => e)
+              .toList()
+              .where((x) => x.selected || x.Code == 1)
+              .toList(),
+        );
+      }),
     );
   }
 
