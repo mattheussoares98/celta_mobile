@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../../api/api.dart';
 import '../../../components/components.dart';
-import '../../../models/modules/modules.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import 'my_drawer.dart';
@@ -44,28 +43,6 @@ class _HomePageState extends State<HomePage> {
         await enterpriseProvider.getFirebaseEnterpriseModel();
       }
     });
-  }
-
-  bool getModuleIsEnabled(
-    EnterpriseProvider enterpriseProvider,
-    Modules module,
-  ) {
-    if (enterpriseProvider.firebaseEnterpriseModel == null ||
-        enterpriseProvider.firebaseEnterpriseModel?.modules == null) {
-      return false;
-    }
-
-    int elementIndex = enterpriseProvider.firebaseEnterpriseModel!.modules!
-        .indexWhere((e) => e.module == module.name);
-
-    if (elementIndex == -1) {
-      return false;
-    }
-
-    return enterpriseProvider.firebaseEnterpriseModel?.modules
-            ?.firstWhere((e) => e.module == module.name)
-            .enabled ==
-        true;
   }
 
   @override
@@ -165,10 +142,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.adjustSalePrice,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/adjustStock.png',
@@ -176,10 +149,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.ADJUST_STOCK,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.adjustStock,
-                          ),
                         ),
                         // ImageComponent.image(
                         //   imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
@@ -194,10 +163,6 @@ class _HomePageState extends State<HomePage> {
                           routine: 'Cadastro de clientes'.toUpperCase(),
                           route: APPROUTES.CUSTOMER_REGISTER,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.customerRegister,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/productsConference.png',
@@ -207,10 +172,6 @@ class _HomePageState extends State<HomePage> {
                           nextRoute: APPROUTES
                               .EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.productsConference,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/consultPrice.png',
@@ -218,10 +179,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.PRICE_CONFERENCE,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.priceConference,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/buyQuotation.png',
@@ -230,10 +187,6 @@ class _HomePageState extends State<HomePage> {
                           nextRoute: APPROUTES.BUY_QUOTATION,
                           context: context,
                           isNew: true,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.buyQuotation,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/inventory.png',
@@ -241,10 +194,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.INVENTORY,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.inventory,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/buyRequest.png',
@@ -252,10 +201,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.BUYERS,
                           // nextRoute: APPROUTES.BUYERS,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.buyRequest,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/transfer.png',
@@ -263,10 +208,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.TRANSFER_REQUEST_MODEL,
                           nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.transferRequest,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/saleRequest.png',
@@ -274,10 +215,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.SALE_REQUEST_MODEL,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.saleRequest,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath:
@@ -286,10 +223,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.RESEARCH_PRICES,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.researchPrices,
-                          ),
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/receipt.jpg',
@@ -297,10 +230,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.RECEIPT,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.receipt,
-                          ),
                         ),
 
                         ImageComponent.image(
@@ -310,10 +239,6 @@ class _HomePageState extends State<HomePage> {
                           route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
                           context: context,
-                          moduleIsLiberated: getModuleIsEnabled(
-                            enterpriseProvider,
-                            Modules.transferBetweenStocks,
-                          ),
                         ),
                         // ImageComponent.image(
                         //   imagePath: 'lib/assets/Images/transferBetweenStocks.jpg',

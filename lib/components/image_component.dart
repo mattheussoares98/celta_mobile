@@ -1,31 +1,20 @@
 import 'package:flutter/material.dart';
 
-import 'components.dart';
-
 class ImageComponent {
   static Widget image({
     required String imagePath,
     required String routine,
     required String route,
     required BuildContext context,
-    required bool moduleIsLiberated,
     String? nextRoute,
     bool? isNew,
   }) {
     return GestureDetector(
       onTap: () {
-        if (!moduleIsLiberated) {
-          ShowSnackbarMessage.show(
-            message:
-                "Esse módulo não está liberado. Entre em contato com o setor administrativo",
-            context: context,
-          );
-        } else {
-          Navigator.of(context).pushNamed(
-            route,
-            arguments: nextRoute,
-          );
-        }
+        Navigator.of(context).pushNamed(
+          route,
+          arguments: nextRoute,
+        );
       },
       child: Card(
         child: Stack(

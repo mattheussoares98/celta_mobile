@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/providers.dart';
-import '../../web.dart';
 
 class ModulesItems extends StatelessWidget {
   const ModulesItems({super.key});
@@ -24,7 +23,7 @@ class ModulesItems extends StatelessWidget {
         ListView.separated(
           itemCount: webProvider
                   .enterprises[webProvider.indexOfSelectedEnterprise]
-                  .modules
+                  .subEnterprises
                   ?.length ??
               0,
           separatorBuilder: (context, index) {
@@ -32,15 +31,12 @@ class ModulesItems extends StatelessWidget {
           },
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            final item = webProvider
-                .enterprises[webProvider.indexOfSelectedEnterprise]
-                .modules![index];
+            // final item = webProvider
+            //     .enterprises[webProvider.indexOfSelectedEnterprise]
+            //     .subEnterprises?[index];
 
-            return EnableOrDisableModule(
-              enabled: item.enabled,
-              moduleName: item.name,
-              index: index,
-            );
+            return SizedBox();
+            //TODO create new ListView.builder for subenterprises
           },
         ),
       ],

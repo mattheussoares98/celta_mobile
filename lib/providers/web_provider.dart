@@ -398,8 +398,7 @@ class WebProvider with ChangeNotifier {
         urlCCS: newUrlCcs,
         usersInformations: oldClient.usersInformations,
         enterpriseName: oldClient.enterpriseName,
-        modules: oldClient.modules,
-        cnpjs: oldClient.cnpjs,
+        subEnterprises: oldClient.subEnterprises,
       );
 
       Navigator.of(context).pop();
@@ -476,20 +475,21 @@ class WebProvider with ChangeNotifier {
         return;
       }
 
-      final newModules = client.modules?.map((e) => e).toList();
-      newModules![index] = ModuleModel(
-        name: newModules[index].name,
-        enabled: !newModules[index].enabled,
-        module: newModules[index].module,
-      );
+      //TODO create new form to update modules
+      // final newModules = client.modules?.map((e) => e).toList();
+      // newModules![index] = ModuleModel(
+      //   name: newModules[index].name,
+      //   enabled: !newModules[index].enabled,
+      //   module: newModules[index].module,
+      // );
 
-      await FirebaseHelper.enableOrDisableModule(
-        client: client,
-        updatedModules: newModules,
-      );
+      // await FirebaseHelper.enableOrDisableModule(
+      //   client: client,
+      //   updatedModules: newModules,
+      // );
 
-      _enterprises[_indexOfSelectedEnterprise].modules![index] =
-          newModules[index];
+      // _enterprises[_indexOfSelectedEnterprise].modules![index] =
+      //     newModules[index];
     } catch (e) {
       _errorMessageClients = DefaultErrorMessage.ERROR;
     } finally {
@@ -499,14 +499,15 @@ class WebProvider with ChangeNotifier {
   }
 
   void updateValue(int index) {
-    final oldValue = _enterprises[_indexOfSelectedEnterprise].modules![index];
-    ModuleModel newValue = ModuleModel(
-      name: oldValue.name,
-      enabled: !oldValue.enabled,
-      module: oldValue.module,
-    );
-    _enterprises[_indexOfSelectedEnterprise].modules![index] = newValue;
-    notifyListeners();
+    // TODO create new form to update modules
+    // final oldValue = _enterprises[_indexOfSelectedEnterprise].modules![index];
+    // ModuleModel newValue = ModuleModel(
+    //   name: oldValue.name,
+    //   enabled: !oldValue.enabled,
+    //   module: oldValue.module,
+    // );
+    // _enterprises[_indexOfSelectedEnterprise].modules![index] = newValue;
+    // notifyListeners();
   }
 
   // FirebaseEnterpriseModel getUpdatedClient(

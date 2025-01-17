@@ -6,23 +6,20 @@ class FirebaseEnterpriseModel {
   final String urlCCS;
   final String? id;
   final List<UserInformationsModel>? usersInformations;
-  final List<ModuleModel>? modules;
-  final List<CnpjModel> cnpjs;
+  final List<SubEnterpriseModel>? subEnterprises;
   FirebaseEnterpriseModel({
     this.enterpriseName = "undefined",
     required this.id,
     required this.urlCCS,
     required this.usersInformations,
-    required this.modules,
-    required this.cnpjs,
+    required this.subEnterprises,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
       'urlCCS': urlCCS.toLowerCase().removeWhiteSpaces(),
-      'modules': modules?.map((e) => e.toJson()).toList(),
-      'cnpjs': cnpjs.map((e) => e.toJson()).toList(),
+      'subEnterprises': subEnterprises?.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -31,15 +28,11 @@ class FirebaseEnterpriseModel {
     required String id,
   }) {
     var newClient = FirebaseEnterpriseModel(
-      cnpjs: json["cnpjs"]
-              ?.map((e) => CnpjModel.fromJson(e))
-              .toList()
-              .cast<CnpjModel>() ??
-          <CnpjModel>[],
-      modules: json["modules"] == null
+      subEnterprises: json["subEnterprises"] == null
           ? []
-          : json["modules"]
-              .map<ModuleModel>((e) => ModuleModel.fromJson(e))
+          : json["subEnterprises"]
+              .map<SubEnterpriseModel>(
+                  (element) => SubEnterpriseModel.fromJson(element))
               .toList(),
       urlCCS: json["urlCCS"] ?? json["urlCCSWeb"],
       enterpriseName: json["enterpriseName"],
