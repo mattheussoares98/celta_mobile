@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../components/components.dart';
-import '../../models/firebase/firebase.dart';
 import '../../utils/utils.dart';
 import '../api/api.dart';
-import '../models/modules/modules.dart';
+import '../models/models.dart';
 
 enum Months {
   AtualMonth,
@@ -46,8 +45,8 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> _cnpjsToAdd = [];
-  List<String> get cnpjsToAdd => _cnpjsToAdd;
+  List<CnpjModel> _cnpjsToAdd = [];
+  List<CnpjModel> get cnpjsToAdd => _cnpjsToAdd;
 
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
@@ -424,7 +423,7 @@ class WebProvider with ChangeNotifier {
     required BuildContext context,
     required String enterpriseName,
     required String urlCcs,
-    required List<String> cnpjs,
+    required List<CnpjModel> cnpjs,
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
@@ -432,7 +431,7 @@ class WebProvider with ChangeNotifier {
       final newEnterprise = await FirebaseHelper.addNewEnterprise(
         enterpriseName: enterpriseName,
         urlCCS: urlCcs,
-        cnpj: urlCcs,
+        cnpjs: cnpjs,
       );
 
       if (newEnterprise == null) {
@@ -560,7 +559,10 @@ class WebProvider with ChangeNotifier {
   //   );
   // }
 
-  void addNewCnpj(String cnpj) {
+  void addNewCnpj(CnpjModel cnpj) {
+    if (_cnpjsToAdd.indexWhere((e) => e.cnpj == cnpj.cnpj) != -1) {
+      return;
+    }
     _cnpjsToAdd.add(cnpj);
     notifyListeners();
   }

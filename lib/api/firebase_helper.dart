@@ -10,9 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
-import '../models/firebase/firebase.dart';
 import '../firebase_options.dart';
-import '../models/modules/modules.dart';
+import '../models/models.dart';
 import '../providers/providers.dart';
 import '../utils/utils.dart';
 import './api.dart';
@@ -385,7 +384,7 @@ class FirebaseHelper {
   static Future<FirebaseEnterpriseModel?> addNewEnterprise({
     required String enterpriseName,
     required String urlCCS,
-    required String cnpj,
+    required List<CnpjModel> cnpjs,
   }) async {
     try {
       final newEnterprise = FirebaseEnterpriseModel(
@@ -393,7 +392,7 @@ class FirebaseHelper {
         urlCCS: urlCCS,
         id: null,
         usersInformations: null,
-        cnpjs: [cnpj],
+        cnpjs: cnpjs,
         modules: [
           ModuleModel(
             module: Modules.adjustSalePrice.name,

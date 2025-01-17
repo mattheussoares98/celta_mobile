@@ -3,6 +3,7 @@ export './adjust_sale_price/adjust_sale_price.dart';
 export './buy_quotation/buy_quotation.dart';
 export './buy_request/buy_request.dart';
 export './buyer/buyer.dart';
+export './cnpj/cnpj.dart';
 export './configurations/configurations.dart';
 export './customer_register/customer_register.dart';
 export './enterprise/enterprise.dart';

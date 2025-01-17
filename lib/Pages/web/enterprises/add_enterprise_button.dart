@@ -15,9 +15,11 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
   final _enterpriseController = TextEditingController();
   final _urlCcsController = TextEditingController();
   final _cnpjController = TextEditingController();
+  final _surnameController = TextEditingController();
   final _ccsFocusNode = FocusNode();
   final _enterpriseFocusNode = FocusNode();
   final _cnpjFocusNode = FocusNode();
+  final _surnameFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -26,9 +28,11 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
     _enterpriseController.dispose();
     _urlCcsController.dispose();
     _cnpjController.dispose();
+    _surnameController.dispose();
     _ccsFocusNode.dispose();
     _enterpriseFocusNode.dispose();
     _cnpjFocusNode.dispose();
+    _surnameFocusNode.dispose();
   }
 
   Future<void> addEnterprise(WebProvider webProvider) async {
@@ -77,9 +81,11 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
                               ccsFocusNode: _ccsFocusNode,
                               cnpjFocusNode: _cnpjFocusNode,
                             ),
-                            CnpjInput(
+                            CnpjAndSurnameInput(
                               cnpjController: _cnpjController,
                               cnpjFocusNode: _cnpjFocusNode,
+                              surnameController: _surnameController,
+                              surnameFocusNode: _surnameFocusNode,
                             ),
                             TextButton(
                               onPressed: () async {

@@ -1,5 +1,4 @@
-import 'firebase.dart';
-import '../modules/modules.dart';
+import '../models.dart';
 import '../../utils/utils.dart';
 
 class FirebaseEnterpriseModel {
@@ -8,7 +7,7 @@ class FirebaseEnterpriseModel {
   final String? id;
   final List<UserInformationsModel>? usersInformations;
   final List<ModuleModel>? modules;
-  final List<String> cnpjs;
+  final List<CnpjModel> cnpjs;
   FirebaseEnterpriseModel({
     this.enterpriseName = "undefined",
     required this.id,
@@ -23,7 +22,7 @@ class FirebaseEnterpriseModel {
       'enterpriseName': enterpriseName.toLowerCase().removeWhiteSpaces(),
       'urlCCS': urlCCS.toLowerCase().removeWhiteSpaces(),
       'modules': modules?.map((e) => e.toJson()).toList(),
-      'cnpjs': cnpjs.map((e) => e.toLowerCase().removeWhiteSpaces()).toList(),
+      'cnpjs': cnpjs.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -32,7 +31,11 @@ class FirebaseEnterpriseModel {
     required String id,
   }) {
     var newClient = FirebaseEnterpriseModel(
-      cnpjs: json["cnpjs"]?.map((e) => e.toString()).toList().cast<String>() ?? <String>[],
+      cnpjs: json["cnpjs"]
+              ?.map((e) => CnpjModel.fromJson(e))
+              .toList()
+              .cast<CnpjModel>() ??
+          <CnpjModel>[],
       modules: json["modules"] == null
           ? []
           : json["modules"]
