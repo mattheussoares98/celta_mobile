@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../providers/providers.dart';
 import 'components/components.dart';
-import 'enterprises.dart';
 
 class EnterprisesPage extends StatelessWidget {
   const EnterprisesPage({super.key});

@@ -80,11 +80,15 @@ class CnpjAndSurnameInput extends StatelessWidget {
                         }
                         webProvider.addNewCnpj(
                           CnpjModel(
-                              surname: value,
-                              cnpj: cnpjController.text.toInt()),
+                            surname: value,
+                            cnpj: cnpjController.text.toInt(),
+                          ),
                         );
                         surnameController.clear();
                         cnpjController.clear();
+                        Future.delayed(Duration.zero, () {
+                          cnpjFocusNode.requestFocus();
+                        });
                       }
                     },
                     decoration: FormFieldDecoration.decoration(
