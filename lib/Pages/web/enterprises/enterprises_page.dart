@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../../../providers/providers.dart';
+import 'components/components.dart';
 import 'enterprises.dart';
 
 class EnterprisesPage extends StatelessWidget {
@@ -17,13 +18,13 @@ class EnterprisesPage extends StatelessWidget {
         title: webProvider.enterprises.isEmpty
             ? null
             : FittedBox(
-              child: Text(
+                child: Text(
                   "${webProvider.enterprises.length} empresas cadastradas",
                   style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
-            ),
+              ),
         actions: [
           const AddEnterpriseButton(),
           IconButton(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/components.dart';
-import '../../../providers/providers.dart';
-import '../../../utils/utils.dart';
+import '../../../../components/components.dart';
+import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
 
 class LoadEnterprises extends StatelessWidget {
   final WebProvider webProvider;

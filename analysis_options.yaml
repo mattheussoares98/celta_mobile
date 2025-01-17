@@ -23,6 +23,9 @@ linter:
   # producing the lint.
   rules:
     prefer_const_constructors : true
+analyzer:
+  errors:
+    prefer_const_constructors: ignore
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
 # Additional information about this file can be found at

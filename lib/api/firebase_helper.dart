@@ -385,6 +385,7 @@ class FirebaseHelper {
   static Future<FirebaseEnterpriseModel?> addNewEnterprise({
     required String enterpriseName,
     required String urlCCS,
+    required String cnpj,
   }) async {
     try {
       final newEnterprise = FirebaseEnterpriseModel(
@@ -392,6 +393,7 @@ class FirebaseHelper {
         urlCCS: urlCCS,
         id: null,
         usersInformations: null,
+        cnpjs: [cnpj],
         modules: [
           ModuleModel(
             module: Modules.adjustSalePrice.name,
@@ -463,6 +465,7 @@ class FirebaseHelper {
 
       await _clientsCollection.doc(enterpriseName).set(
             newEnterprise.toJson(),
+            SetOptions(merge: true),
           );
 
       return newEnterprise;

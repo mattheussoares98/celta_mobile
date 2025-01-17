@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../components/components.dart';
 import '../../../providers/web_provider.dart';
+import 'components/components.dart';
 
 class AddEnterpriseButton extends StatefulWidget {
   const AddEnterpriseButton({super.key});
@@ -14,46 +14,36 @@ class AddEnterpriseButton extends StatefulWidget {
 class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
   final _enterpriseController = TextEditingController();
   final _urlCcsController = TextEditingController();
-  final _urlCcsFocusNode = FocusNode();
+  final _cnpjController = TextEditingController();
+  final _ccsFocusNode = FocusNode();
   final _enterpriseFocusNode = FocusNode();
-
-  void addEnterprise(WebProvider webProvider) {
-    ShowAlertDialog.show(
-        context: context,
-        title: "Adicionar cliente?",
-        content: SingleChildScrollView(
-          child: Text(
-            "Empresa: ${_enterpriseController.text}\nUrl: ${_urlCcsController.text}",
-            textAlign: TextAlign.center,
-          ),
-        ),
-        function: () async {
-          if (!_urlCcsController.text.toLowerCase().contains("http") ||
-              !_urlCcsController.text.contains(":") ||
-              !_urlCcsController.text.contains("//") ||
-              !_urlCcsController.text.contains("\.") ||
-              !_urlCcsController.text.toLowerCase().contains("ccs")) {
-            ShowSnackbarMessage.show(
-              message: "Pelo jeito essa URL tá errada. Confirma aeeew",
-              context: context,
-            );
-          } else {
-            await webProvider.addNewEnterprise(
-              context: context,
-              enterpriseName: _enterpriseController.text,
-              urlCcs: _urlCcsController.text,
-            );
-          }
-        });
-  }
+  final _cnpjFocusNode = FocusNode();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
     _enterpriseController.dispose();
     _urlCcsController.dispose();
-    _urlCcsFocusNode.dispose();
+    _cnpjController.dispose();
+    _ccsFocusNode.dispose();
     _enterpriseFocusNode.dispose();
+    _cnpjFocusNode.dispose();
+  }
+
+  Future<void> addEnterprise(WebProvider webProvider) async {
+    bool? isValid = _formKey.currentState?.validate();
+
+    if (isValid != true) {
+      return;
+    }
+
+    await webProvider.addNewEnterprise(
+      context: context,
+      enterpriseName: _enterpriseController.text,
+      urlCcs: _urlCcsController.text,
+      cnpjs: webProvider.cnpjsToAdd,
+    );
   }
 
   @override
@@ -61,65 +51,39 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
     WebProvider webProvider = Provider.of(context);
 
     return IconButton(
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                content: Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  width: MediaQuery.of(context).size.width,
+      icon: const Icon(Icons.add),
+      onPressed: () async {
+        await showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                width: MediaQuery.of(context).size.width,
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     children: [
                       Expanded(
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-                              child: TextFormField(
-                                autofocus: true,
-                                controller: _enterpriseController,
-                                focusNode: _enterpriseFocusNode,
-                                onFieldSubmitted: (value) {
-                                  if (value.isEmpty == true) {
-                                    FocusScope.of(context)
-                                        .requestFocus(_enterpriseFocusNode);
-                                  } else {
-                                    FocusScope.of(context)
-                                        .requestFocus(_urlCcsFocusNode);
-                                  }
-                                },
-                                decoration: FormFieldDecoration.decoration(
-                                  context: context,
-                                  hintText: "Nome da empresa",
-                                  labelText: "Nome da empresa",
-                                ),
-                              ),
+                            EnterpriseNameInput(
+                              enterpriseController: _enterpriseController,
+                              enterpriseFocusNode: _enterpriseFocusNode,
+                              ccsFocusNode: _ccsFocusNode,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                controller: _urlCcsController,
-                                focusNode: _urlCcsFocusNode,
-                                onFieldSubmitted: (_) {
-                                  if (_enterpriseController.text.isEmpty ==
-                                      true) {
-                                    FocusScope.of(context)
-                                        .requestFocus(_enterpriseFocusNode);
-                                  } else {
-                                    addEnterprise(webProvider);
-                                  }
-                                },
-                                decoration: FormFieldDecoration.decoration(
-                                  context: context,
-                                  hintText: "http://127.0.0.1:9092/ccs",
-                                  labelText: "Url do CCS",
-                                ),
-                              ),
+                            CcsUrlInput(
+                              urlCcsController: _urlCcsController,
+                              ccsFocusNode: _ccsFocusNode,
+                              cnpjFocusNode: _cnpjFocusNode,
+                            ),
+                            CnpjInput(
+                              cnpjController: _cnpjController,
+                              cnpjFocusNode: _cnpjFocusNode,
                             ),
                             TextButton(
                               onPressed: () async {
-                                addEnterprise(webProvider);
+                                await addEnterprise(webProvider);
                               },
                               child: const Text("Adicionar"),
                             ),
@@ -135,10 +99,15 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
                     ],
                   ),
                 ),
-              );
-            });
+              ),
+            );
+          },
+        );
+        _enterpriseController.clear();
+        _urlCcsController.clear();
+        _cnpjController.clear();
+        webProvider.clearCnpjs();
       },
-      icon: const Icon(Icons.add),
     );
   }
 }

@@ -1,5 +1,7 @@
 // import 'dart:io';
 
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +56,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     );
 
     Future.delayed(const Duration(seconds: 3), () {
-      if (kIsWeb /* || Platform.isWindows */) {
+      if (kIsWeb /* TODO remove that */ || Platform.isWindows) {
         Navigator.of(context)
             .pushNamedAndRemoveUntil(APPROUTES.WEB_LOGIN, (route) => false);
       } else {

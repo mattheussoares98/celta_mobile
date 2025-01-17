@@ -46,6 +46,9 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> _cnpjsToAdd = [];
+  List<String> get cnpjsToAdd => _cnpjsToAdd;
+
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
     required String enterpriseName,
@@ -397,6 +400,7 @@ class WebProvider with ChangeNotifier {
         usersInformations: oldClient.usersInformations,
         enterpriseName: oldClient.enterpriseName,
         modules: oldClient.modules,
+        cnpjs: oldClient.cnpjs,
       );
 
       Navigator.of(context).pop();
@@ -420,6 +424,7 @@ class WebProvider with ChangeNotifier {
     required BuildContext context,
     required String enterpriseName,
     required String urlCcs,
+    required List<String> cnpjs,
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
@@ -427,6 +432,7 @@ class WebProvider with ChangeNotifier {
       final newEnterprise = await FirebaseHelper.addNewEnterprise(
         enterpriseName: enterpriseName,
         urlCCS: urlCcs,
+        cnpj: urlCcs,
       );
 
       if (newEnterprise == null) {
@@ -510,7 +516,7 @@ class WebProvider with ChangeNotifier {
   // ) {
   //   return FirebaseEnterpriseModel(
   //     id: client.id,
-  //     urlCCS: client.urlCCS,
+  //     cnpj: client.urlCCS,
   //     usersInformations: client.usersInformations,
   //     enterpriseName: client.enterpriseName,
   //     modules: ModuleModel(
@@ -553,4 +559,19 @@ class WebProvider with ChangeNotifier {
   //     ),
   //   );
   // }
+
+  void addNewCnpj(String cnpj) {
+    _cnpjsToAdd.add(cnpj);
+    notifyListeners();
+  }
+
+  void removeCnpj(int index) {
+    _cnpjsToAdd.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearCnpjs() {
+    _cnpjsToAdd.clear();
+    notifyListeners();
+  }
 }
