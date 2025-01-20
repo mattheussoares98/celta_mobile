@@ -21,6 +21,8 @@ import '../pages/sale_request/sale_request.dart';
 import '../utils/utils.dart';
 
 Map<String, Widget Function(BuildContext)> routes() => {
+      APPROUTES.ADD_UPDATE_SUB_ENTERPRISE: (ctx) =>
+          const AddUpdateSubEnterprisePage(),
       APPROUTES.ADJUST_SALE_PRICE_PRODUCTS: (ctx) =>
           const AdjustSalePriceProductsPage(),
       APPROUTES.ADJUST_SALE_PRICE: (ctx) => const AdjustSalePricePage(),
