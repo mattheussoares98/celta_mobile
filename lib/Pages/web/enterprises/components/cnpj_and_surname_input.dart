@@ -59,7 +59,18 @@ class CnpjAndSurnameInput extends StatelessWidget {
                   child: TextFormField(
                     controller: cnpjController,
                     focusNode: cnpjFocusNode,
-                    validator: FormFieldValidations.cpfOrCnpj,
+                    validator: (value) {
+                      if (value != null &&
+                          webProvider
+                                  .enterprises[
+                                      webProvider.indexOfSelectedEnterprise]
+                                  .subEnterprises!
+                                  .indexWhere((e) => e.cnpj == value.toInt()) !=
+                              -1) {
+                        return "CNPJ já adicionado";
+                      }
+                      return FormFieldValidations.cpfOrCnpj(value);
+                    },
                     onFieldSubmitted: (value) async {
                       if (value.isEmpty) {
                         Future.delayed(Duration.zero, () {
