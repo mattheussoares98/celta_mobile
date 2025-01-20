@@ -429,14 +429,11 @@ class WebProvider with ChangeNotifier {
       if (hasSelectedEnterprise) {
         final enterprise = _enterprises[_indexOfSelectedEnterprise];
 
-        if (enterprise.subEnterprises
-                ?.indexWhere((e) => e.cnpj == subEnterpriseToAdd?.cnpj) !=
-            -1) {
-          ShowSnackbarMessage.show(
-            message: "Já existe uma sub empresa com esse CNPJ",
-            context: context,
-          );
-          return;
+        int? indexOfSubgEnterprise = enterprise.subEnterprises
+            ?.indexWhere((e) => e.cnpj == subEnterpriseToAdd?.cnpj);
+        if (indexOfSubgEnterprise != -1) {
+          enterprise.subEnterprises![indexOfSubgEnterprise!] =
+              subEnterpriseToAdd!;
         }
 
         newEnterprise = FirebaseEnterpriseModel(
@@ -447,7 +444,7 @@ class WebProvider with ChangeNotifier {
           subEnterprises: enterprise.subEnterprises,
         );
 
-        if (subEnterpriseToAdd != null) {
+        if (subEnterpriseToAdd != null && indexOfSubgEnterprise == -1) {
           newEnterprise.subEnterprises!.add(subEnterpriseToAdd);
         }
       } else {
@@ -479,7 +476,7 @@ class WebProvider with ChangeNotifier {
       Navigator.of(context).pop();
 
       ShowSnackbarMessage.show(
-        message: "Empresa adicionada com sucesso!",
+        message: "Empresa adicionada/alterada com sucesso!",
         context: context,
         backgroundColor: Theme.of(context).colorScheme.primary,
       );

@@ -24,73 +24,145 @@ class _AddUpdateSubEnterprisePageState
   final _cnpjFocusNode = FocusNode();
   final _surnameFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
-  final modules = [
-    ModuleModel(
-      module: Modules.adjustSalePrice.name,
-      enabled: true,
-      name: "Ajuste de preços",
-    ),
-    ModuleModel(
-      module: Modules.adjustStock.name,
-      enabled: true,
-      name: "Ajuste de estoques",
-    ),
-    ModuleModel(
-      module: Modules.buyQuotation.name,
-      enabled: true,
-      name: "Cotação de compras",
-    ),
-    ModuleModel(
-      module: Modules.buyRequest.name,
-      enabled: true,
-      name: "Pedido de compra",
-    ),
-    ModuleModel(
-      module: Modules.customerRegister.name,
-      enabled: true,
-      name: "Cadastro de cliente",
-    ),
-    ModuleModel(
-      module: Modules.inventory.name,
-      enabled: true,
-      name: "Inventário",
-    ),
-    ModuleModel(
-      module: Modules.priceConference.name,
-      enabled: true,
-      name: "Consulta de preços",
-    ),
-    ModuleModel(
-      module: Modules.productsConference.name,
-      enabled: true,
-      name: "Conferência de produtos (expedição)",
-    ),
-    ModuleModel(
-      module: Modules.receipt.name,
-      enabled: true,
-      name: "Recebimento",
-    ),
-    ModuleModel(
-      module: Modules.researchPrices.name,
-      enabled: true,
-      name: "Consulta de preços concorrentes",
-    ),
-    ModuleModel(
-      module: Modules.saleRequest.name,
-      enabled: true,
-      name: "Pedido de vendas",
-    ),
-    ModuleModel(
-      module: Modules.transferBetweenStocks.name,
-      enabled: true,
-      name: "Transferência entre estoques",
-    ),
-    ModuleModel(
-      module: Modules.transferRequest.name,
-      enabled: true,
-      name: "Pedido de transferência",
-    ),
-  ];
+  List<ModuleModel> modules = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      SubEnterpriseModel? selectedSubEnterprise =
+          ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
+
+      if (selectedSubEnterprise != null) {
+        _cnpjController.text = selectedSubEnterprise.cnpj.toString();
+        _surnameController.text = selectedSubEnterprise.surname.toString();
+      }
+
+      setState(() {
+        modules = [
+          ModuleModel(
+            module: Modules.adjustSalePrice.name,
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.adjustSalePrice.name)
+                    .first
+                    .enabled ??
+                false,
+            name: "Ajuste de preços",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.adjustStock.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.adjustStock.name,
+            name: "Ajuste de estoques",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.buyQuotation.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.buyQuotation.name,
+            name: "Cotação de compras",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.buyRequest.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.buyRequest.name,
+            name: "Pedido de compra",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.customerRegister.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.customerRegister.name,
+            name: "Cadastro de cliente",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.inventory.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.inventory.name,
+            name: "Inventário",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.priceConference.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.priceConference.name,
+            name: "Consulta de preços",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.productsConference.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.productsConference.name,
+            name: "Conferência de produtos (expedição)",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.receipt.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.receipt.name,
+            name: "Recebimento",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.researchPrices.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.researchPrices.name,
+            name: "Consulta de preços concorrentes",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.saleRequest.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.saleRequest.name,
+            name: "Pedido de vendas",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where(
+                        (e) => e.module == Modules.transferBetweenStocks.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.transferBetweenStocks.name,
+            name: "Transferência entre estoques",
+          ),
+          ModuleModel(
+            enabled: selectedSubEnterprise?.modules
+                    ?.where((e) => e.module == Modules.transferRequest.name)
+                    .first
+                    .enabled ??
+                false,
+            module: Modules.transferRequest.name,
+            name: "Pedido de transferência",
+          ),
+        ];
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -127,6 +199,8 @@ class _AddUpdateSubEnterprisePageState
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
+    SubEnterpriseModel? selectedSubEnterprise =
+        ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
 
     return Scaffold(
       appBar: AppBar(),
@@ -196,7 +270,9 @@ class _AddUpdateSubEnterprisePageState
                       onPressed: () async {
                         await addUpdateEnterprise(webProvider);
                       },
-                      child: const Text("Adicionar"),
+                      child: Text(selectedSubEnterprise != null
+                          ? "Alterar"
+                          : "Adicionar"),
                     ),
                   ),
                 ],

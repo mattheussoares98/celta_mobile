@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../components/components.dart';
 import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
 import '../../components/components.dart';
 
 class SubEnterprisesItems extends StatelessWidget {
@@ -43,7 +44,12 @@ class SubEnterprisesItems extends StatelessWidget {
                   .subEnterprises?[index];
 
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    APPROUTES.ADD_UPDATE_SUB_ENTERPRISE,
+                    arguments: item,
+                  );
+                },
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8),
