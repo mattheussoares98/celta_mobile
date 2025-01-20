@@ -386,8 +386,9 @@ class FirebaseHelper {
   }) async {
     try {
       final newEnterprise = FirebaseEnterpriseModel(
-        enterpriseName: enterpriseToAdd.enterpriseName,
-        urlCCS: enterpriseToAdd.urlCCS,
+        enterpriseName:
+            enterpriseToAdd.enterpriseName.removeWhiteSpaces().toLowerCase(),
+        urlCCS: enterpriseToAdd.urlCCS.removeWhiteSpaces().toLowerCase(),
         id: enterpriseToAdd.id,
         usersInformations: enterpriseToAdd.usersInformations,
         subEnterprises: enterpriseToAdd.subEnterprises!
