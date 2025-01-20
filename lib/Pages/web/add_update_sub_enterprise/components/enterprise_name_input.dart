@@ -16,7 +16,7 @@ class EnterpriseNameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
         autofocus: true,
         controller: enterpriseController,

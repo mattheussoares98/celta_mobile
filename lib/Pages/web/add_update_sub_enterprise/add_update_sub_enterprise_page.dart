@@ -1,4 +1,3 @@
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -119,7 +118,7 @@ class _AddUpdateSubEnterprisePageState
       urlCcsController: _urlCcsController,
       subEnterpriseToAdd: SubEnterpriseModel(
         modules: modules,
-        cnpj: _cnpjController.text.toInt(),
+        cnpj: _cnpjController.text,
         surname: _surnameController.text,
       ),
     );

@@ -2,7 +2,7 @@ import '../models.dart';
 
 class SubEnterpriseModel {
   final List<ModuleModel>? modules;
-  final int? cnpj;
+  final String? cnpj;
   final String? surname;
 
   const SubEnterpriseModel({
