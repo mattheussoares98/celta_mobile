@@ -420,24 +420,37 @@ class WebProvider with ChangeNotifier {
 
   Future<void> addNewEnterprise({
     required BuildContext context,
-    required String enterpriseName,
-    required String urlCcs,
+    required TextEditingController enterpriseNameController,
+    required TextEditingController urlCcsController,
     required List<CnpjModel> cnpjs,
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
     try {
+      bool hasSelectedEnterprise = _indexOfSelectedEnterprise != -1;
+
       final newEnterprise = await FirebaseHelper.addNewEnterprise(
-        enterpriseName: enterpriseName,
-        urlCCS: urlCcs,
+        enterpriseName: hasSelectedEnterprise
+            ? _enterprises[_indexOfSelectedEnterprise].enterpriseName
+            : enterpriseNameController.text,
+        urlCCS: hasSelectedEnterprise
+            ? _enterprises[_indexOfSelectedEnterprise].urlCCS
+            : urlCcsController.text,
         cnpjs: cnpjs,
+        selectedEnterprise: hasSelectedEnterprise
+            ? _enterprises[_indexOfSelectedEnterprise]
+            : null,
       );
 
       if (newEnterprise == null) {
         throw Exception();
       }
 
-      _enterprises.add(newEnterprise);
+      if (_indexOfSelectedEnterprise == -1) {
+        _enterprises.add(newEnterprise);
+      } else {
+        _enterprises[_indexOfSelectedEnterprise] = newEnterprise;
+      }
       _orderEnterprisesByName();
 
       Navigator.of(context).pop();

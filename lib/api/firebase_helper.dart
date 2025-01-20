@@ -385,13 +385,14 @@ class FirebaseHelper {
     required String enterpriseName,
     required String urlCCS,
     required List<CnpjModel> cnpjs,
+    required FirebaseEnterpriseModel? selectedEnterprise,
   }) async {
     try {
       final newEnterprise = FirebaseEnterpriseModel(
         enterpriseName: enterpriseName,
         urlCCS: urlCCS,
-        id: null,
-        usersInformations: null,
+        id: selectedEnterprise?.id,
+        usersInformations: selectedEnterprise?.usersInformations,
         subEnterprises: cnpjs
             .map(
               (e) => SubEnterpriseModel(
@@ -468,6 +469,12 @@ class FirebaseHelper {
             )
             .toList(),
       );
+
+      if (selectedEnterprise != null &&
+          selectedEnterprise.subEnterprises != null) {
+        newEnterprise.subEnterprises!
+            .addAll(selectedEnterprise.subEnterprises!);
+      }
 
       await _clientsCollection.doc(enterpriseName).set(
             newEnterprise.toJson(),

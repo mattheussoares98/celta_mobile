@@ -42,14 +42,14 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
   Future<void> addEnterprise(WebProvider webProvider) async {
     bool? isValid = _formKey.currentState?.validate();
 
-    if (isValid != true) {
+    if (isValid != true || webProvider.cnpjsToAdd.isEmpty) {
       return;
     }
 
     await webProvider.addNewEnterprise(
       context: context,
-      enterpriseName: _enterpriseController.text,
-      urlCcs: _urlCcsController.text,
+      enterpriseNameController: _enterpriseController,
+      urlCcsController: _urlCcsController,
       cnpjs: webProvider.cnpjsToAdd,
     );
   }
@@ -71,65 +71,68 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
         await showDialog(
           context: context,
           builder: (_) {
-            return AlertDialog(
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                width: MediaQuery.of(context).size.width,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            if (!widget.isAddingNewCnpj)
-                              EnterpriseNameInput(
-                                enterpriseController: _enterpriseController,
-                                enterpriseFocusNode: _enterpriseFocusNode,
-                                ccsFocusNode: _ccsFocusNode,
-                              ),
-                            if (!widget.isAddingNewCnpj)
-                              CcsUrlInput(
-                                urlCcsController: _urlCcsController,
-                                ccsFocusNode: _ccsFocusNode,
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: AlertDialog(
+                content: Container(
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  width: MediaQuery.of(context).size.width,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              if (!widget.isAddingNewCnpj)
+                                EnterpriseNameInput(
+                                  enterpriseController: _enterpriseController,
+                                  enterpriseFocusNode: _enterpriseFocusNode,
+                                  ccsFocusNode: _ccsFocusNode,
+                                ),
+                              if (!widget.isAddingNewCnpj)
+                                CcsUrlInput(
+                                  urlCcsController: _urlCcsController,
+                                  ccsFocusNode: _ccsFocusNode,
+                                  cnpjFocusNode: _cnpjFocusNode,
+                                ),
+                              CnpjAndSurnameInput(
+                                cnpjController: _cnpjController,
                                 cnpjFocusNode: _cnpjFocusNode,
+                                surnameController: _surnameController,
+                                surnameFocusNode: _surnameFocusNode,
                               ),
-                            CnpjAndSurnameInput(
-                              cnpjController: _cnpjController,
-                              cnpjFocusNode: _cnpjFocusNode,
-                              surnameController: _surnameController,
-                              surnameFocusNode: _surnameFocusNode,
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  "Cancelar",
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  await addEnterprise(webProvider);
+                                },
+                                child: const Text("Adicionar"),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                "Cancelar",
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await addEnterprise(webProvider);
-                              },
-                              child: const Text("Adicionar"),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
