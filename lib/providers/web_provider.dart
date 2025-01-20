@@ -503,58 +503,6 @@ class WebProvider with ChangeNotifier {
     }
   }
 
-  Future<void> enableOrDisableModule(int index) async {
-    _isLoading = true;
-    _errorMessageClients = "";
-    notifyListeners();
-
-    try {
-      final client = _enterprises[_indexOfSelectedEnterprise];
-
-      if (client.id == null) {
-        ShowSnackbarMessage.show(
-          message:
-              "Esse cliente acabou de ser cadastrado e por isso está sem ID. Consulte os clientes novamente para editá-lo",
-          context: NavigatorKey.navigatorKey.currentState!.context,
-        );
-        return;
-      }
-
-      //TODO create new form to update modules
-      // final newModules = client.modules?.map((e) => e).toList();
-      // newModules![index] = ModuleModel(
-      //   name: newModules[index].name,
-      //   enabled: !newModules[index].enabled,
-      //   module: newModules[index].module,
-      // );
-
-      // await FirebaseHelper.enableOrDisableModule(
-      //   client: client,
-      //   updatedModules: newModules,
-      // );
-
-      // _enterprises[_indexOfSelectedEnterprise].modules![index] =
-      //     newModules[index];
-    } catch (e) {
-      _errorMessageClients = DefaultErrorMessage.ERROR;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  void updateValue(int index) {
-    // TODO create new form to update modules
-    // final oldValue = _enterprises[_indexOfSelectedEnterprise].modules![index];
-    // ModuleModel newValue = ModuleModel(
-    //   name: oldValue.name,
-    //   enabled: !oldValue.enabled,
-    //   module: oldValue.module,
-    // );
-    // _enterprises[_indexOfSelectedEnterprise].modules![index] = newValue;
-    // notifyListeners();
-  }
-
   // FirebaseEnterpriseModel getUpdatedClient(
   //   Modules module,
   //   FirebaseEnterpriseModel client,
