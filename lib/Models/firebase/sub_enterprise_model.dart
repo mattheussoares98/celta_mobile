@@ -16,7 +16,7 @@ class SubEnterpriseModel {
                 ?.map((e) => ModuleModel.fromJson(e))
                 .toList()
                 .cast<ModuleModel>() ??
-            <CnpjModel>[],
+            <ModuleModel>[],
         cnpj: data["cnpj"],
         surname: data["surname"],
       );

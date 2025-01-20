@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../components/components.dart';
 import '../../../../providers/providers.dart';
 import '../../components/components.dart';
 
@@ -57,7 +58,14 @@ class ModulesItems extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          ShowAlertDialog.show(
+                              context: context,
+                              title: "Remover sub empresa?",
+                              function: () async {
+                                await webProvider.removeSubEnterprise(index);
+                              });
+                        },
                         icon: Icon(
                           Icons.delete,
                           color: Colors.red,

@@ -45,8 +45,8 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<CnpjModel> _cnpjsToAdd = [];
-  List<CnpjModel> get cnpjsToAdd => _cnpjsToAdd;
+  List<SubEnterpriseModel> _subEnterprisesToAdd = [];
+  List<SubEnterpriseModel> get subEnterprises => _subEnterprisesToAdd;
 
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
@@ -418,38 +418,52 @@ class WebProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addNewEnterprise({
+  Future<void> addUpdateEnterprise({
     required BuildContext context,
     required TextEditingController enterpriseNameController,
     required TextEditingController urlCcsController,
-    required List<CnpjModel> cnpjs,
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
     try {
       bool hasSelectedEnterprise = _indexOfSelectedEnterprise != -1;
+      FirebaseEnterpriseModel? newEnterprise;
 
-      final newEnterprise = await FirebaseHelper.addNewEnterprise(
-        enterpriseName: hasSelectedEnterprise
-            ? _enterprises[_indexOfSelectedEnterprise].enterpriseName
-            : enterpriseNameController.text,
-        urlCCS: hasSelectedEnterprise
-            ? _enterprises[_indexOfSelectedEnterprise].urlCCS
-            : urlCcsController.text,
-        cnpjs: cnpjs,
-        selectedEnterprise: hasSelectedEnterprise
-            ? _enterprises[_indexOfSelectedEnterprise]
-            : null,
+      if (hasSelectedEnterprise) {
+        final enterprise = _enterprises[_indexOfSelectedEnterprise];
+        newEnterprise = FirebaseEnterpriseModel(
+          enterpriseName: enterprise.enterpriseName,
+          id: enterprise.id,
+          urlCCS: enterprise.urlCCS,
+          usersInformations: enterprise.usersInformations,
+          subEnterprises: enterprise.subEnterprises,
+        );
+
+        if (_subEnterprisesToAdd.isNotEmpty) {
+          newEnterprise.subEnterprises!.addAll(_subEnterprisesToAdd);
+        }
+      } else {
+        newEnterprise = FirebaseEnterpriseModel(
+          id: null,
+          enterpriseName: enterpriseNameController.text,
+          urlCCS: urlCcsController.text,
+          usersInformations: null,
+          subEnterprises: subEnterprises,
+        );
+      }
+
+      final updatedEnterprise = await FirebaseHelper.addUpdateEnterprise(
+        enterpriseToAdd: newEnterprise,
       );
 
-      if (newEnterprise == null) {
+      if (updatedEnterprise == null) {
         throw Exception();
       }
 
       if (_indexOfSelectedEnterprise == -1) {
-        _enterprises.add(newEnterprise);
+        _enterprises.add(updatedEnterprise);
       } else {
-        _enterprises[_indexOfSelectedEnterprise] = newEnterprise;
+        _enterprises[_indexOfSelectedEnterprise] = updatedEnterprise;
       }
       _orderEnterprisesByName();
 
@@ -573,8 +587,8 @@ class WebProvider with ChangeNotifier {
   //   );
   // }
 
-  void addNewCnpj(CnpjModel cnpj) {
-    if (_cnpjsToAdd.indexWhere((e) => e.cnpj == cnpj.cnpj) != -1) {
+  void addNewCnpj(SubEnterpriseModel cnpj) {
+    if (_subEnterprisesToAdd.indexWhere((e) => e.cnpj == cnpj.cnpj) != -1) {
       return;
     } else if (_enterprises[_indexOfSelectedEnterprise]
             .subEnterprises!
@@ -582,17 +596,48 @@ class WebProvider with ChangeNotifier {
         -1) {
       return;
     }
-    _cnpjsToAdd.add(cnpj);
+    _subEnterprisesToAdd.add(cnpj);
     notifyListeners();
   }
 
   void removeCnpj(int index) {
-    _cnpjsToAdd.removeAt(index);
+    _subEnterprisesToAdd.removeAt(index);
     notifyListeners();
   }
 
   void clearCnpjs() {
-    _cnpjsToAdd.clear();
+    _subEnterprisesToAdd.clear();
     notifyListeners();
+  }
+
+  Future<void> removeSubEnterprise(index) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      if (_indexOfSelectedEnterprise == -1 ||
+          _enterprises[_indexOfSelectedEnterprise].subEnterprises == null) {
+        throw Exception();
+      }
+
+      var selectedEnterprise = _enterprises[_indexOfSelectedEnterprise];
+      selectedEnterprise.subEnterprises!.removeAt(index);
+
+      final updatedEnterprise = await FirebaseHelper.addUpdateEnterprise(
+        enterpriseToAdd: selectedEnterprise,
+      );
+
+      if (updatedEnterprise != null) {
+        _enterprises[_indexOfSelectedEnterprise] = updatedEnterprise;
+      }
+    } catch (e) {
+      ShowSnackbarMessage.show(
+        message: DefaultErrorMessage.ERROR,
+        context: NavigatorKey.navigatorKey.currentState!.context,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

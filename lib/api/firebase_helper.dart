@@ -381,102 +381,27 @@ class FirebaseHelper {
     }
   }
 
-  static Future<FirebaseEnterpriseModel?> addNewEnterprise({
-    required String enterpriseName,
-    required String urlCCS,
-    required List<CnpjModel> cnpjs,
-    required FirebaseEnterpriseModel? selectedEnterprise,
+  static Future<FirebaseEnterpriseModel?> addUpdateEnterprise({
+    required FirebaseEnterpriseModel enterpriseToAdd,
   }) async {
     try {
       final newEnterprise = FirebaseEnterpriseModel(
-        enterpriseName: enterpriseName,
-        urlCCS: urlCCS,
-        id: selectedEnterprise?.id,
-        usersInformations: selectedEnterprise?.usersInformations,
-        subEnterprises: cnpjs
+        enterpriseName: enterpriseToAdd.enterpriseName,
+        urlCCS: enterpriseToAdd.urlCCS,
+        id: enterpriseToAdd.id,
+        usersInformations: enterpriseToAdd.usersInformations,
+        subEnterprises: enterpriseToAdd.subEnterprises!
             .map(
               (e) => SubEnterpriseModel(
                 cnpj: e.cnpj,
                 surname: e.surname,
-                modules: [
-                  ModuleModel(
-                    module: Modules.adjustSalePrice.name,
-                    enabled: true,
-                    name: "Ajuste de preços",
-                  ),
-                  ModuleModel(
-                    module: Modules.adjustStock.name,
-                    enabled: true,
-                    name: "Ajuste de estoques",
-                  ),
-                  ModuleModel(
-                    module: Modules.buyQuotation.name,
-                    enabled: true,
-                    name: "Cotação de compras",
-                  ),
-                  ModuleModel(
-                    module: Modules.buyRequest.name,
-                    enabled: true,
-                    name: "Pedido de compra",
-                  ),
-                  ModuleModel(
-                    module: Modules.customerRegister.name,
-                    enabled: true,
-                    name: "Cadastro de cliente",
-                  ),
-                  ModuleModel(
-                    module: Modules.inventory.name,
-                    enabled: true,
-                    name: "Inventário",
-                  ),
-                  ModuleModel(
-                    module: Modules.priceConference.name,
-                    enabled: true,
-                    name: "Consulta de preços",
-                  ),
-                  ModuleModel(
-                    module: Modules.productsConference.name,
-                    enabled: true,
-                    name: "Conferência de produtos (expedição)",
-                  ),
-                  ModuleModel(
-                    module: Modules.receipt.name,
-                    enabled: true,
-                    name: "Recebimento",
-                  ),
-                  ModuleModel(
-                    module: Modules.researchPrices.name,
-                    enabled: true,
-                    name: "Consulta de preços concorrentes",
-                  ),
-                  ModuleModel(
-                    module: Modules.saleRequest.name,
-                    enabled: true,
-                    name: "Pedido de vendas",
-                  ),
-                  ModuleModel(
-                    module: Modules.transferBetweenStocks.name,
-                    enabled: true,
-                    name: "Transferência entre estoques",
-                  ),
-                  ModuleModel(
-                    module: Modules.transferRequest.name,
-                    enabled: true,
-                    name: "Pedido de transferência",
-                  ),
-                ],
+                modules: e.modules,
               ),
             )
             .toList(),
       );
 
-      if (selectedEnterprise != null &&
-          selectedEnterprise.subEnterprises != null) {
-        newEnterprise.subEnterprises!
-            .addAll(selectedEnterprise.subEnterprises!);
-      }
-
-      await _clientsCollection.doc(enterpriseName).set(
+      await _clientsCollection.doc(enterpriseToAdd.enterpriseName).set(
             newEnterprise.toJson(),
             SetOptions(merge: true),
           );

@@ -1,1 +1,0 @@
-export './cnpj_model.dart';

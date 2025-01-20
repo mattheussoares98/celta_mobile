@@ -22,7 +22,7 @@ class CnpjAndSurnameInput extends StatelessWidget {
 
   static final cnpjFormKey = GlobalKey<FormState>();
 
-  void addCnpj(WebProvider webProvider) {
+  void addSubEnterprise(WebProvider webProvider) {
     bool? isValid = cnpjFormKey.currentState?.validate();
 
     if (isValid != true) {
@@ -30,10 +30,76 @@ class CnpjAndSurnameInput extends StatelessWidget {
     }
 
     webProvider.addNewCnpj(
-      CnpjModel(
-        surname: surnameController.text,
-        cnpj: cnpjController.text.toInt(),
-      ),
+      SubEnterpriseModel(
+          surname: surnameController.text,
+          cnpj: cnpjController.text.toInt(),
+          modules: [
+            ModuleModel(
+              module: Modules.adjustSalePrice.name,
+              enabled: true,
+              name: "Ajuste de preços",
+            ),
+            ModuleModel(
+              module: Modules.adjustStock.name,
+              enabled: true,
+              name: "Ajuste de estoques",
+            ),
+            ModuleModel(
+              module: Modules.buyQuotation.name,
+              enabled: true,
+              name: "Cotação de compras",
+            ),
+            ModuleModel(
+              module: Modules.buyRequest.name,
+              enabled: true,
+              name: "Pedido de compra",
+            ),
+            ModuleModel(
+              module: Modules.customerRegister.name,
+              enabled: true,
+              name: "Cadastro de cliente",
+            ),
+            ModuleModel(
+              module: Modules.inventory.name,
+              enabled: true,
+              name: "Inventário",
+            ),
+            ModuleModel(
+              module: Modules.priceConference.name,
+              enabled: true,
+              name: "Consulta de preços",
+            ),
+            ModuleModel(
+              module: Modules.productsConference.name,
+              enabled: true,
+              name: "Conferência de produtos (expedição)",
+            ),
+            ModuleModel(
+              module: Modules.receipt.name,
+              enabled: true,
+              name: "Recebimento",
+            ),
+            ModuleModel(
+              module: Modules.researchPrices.name,
+              enabled: true,
+              name: "Consulta de preços concorrentes",
+            ),
+            ModuleModel(
+              module: Modules.saleRequest.name,
+              enabled: true,
+              name: "Pedido de vendas",
+            ),
+            ModuleModel(
+              module: Modules.transferBetweenStocks.name,
+              enabled: true,
+              name: "Transferência entre estoques",
+            ),
+            ModuleModel(
+              module: Modules.transferRequest.name,
+              enabled: true,
+              name: "Pedido de transferência",
+            ),
+          ]),
     );
     surnameController.clear();
     cnpjController.clear();
@@ -99,7 +165,7 @@ class CnpjAndSurnameInput extends StatelessWidget {
                       return null;
                     },
                     onFieldSubmitted: (value) {
-                      addCnpj(webProvider);
+                      addSubEnterprise(webProvider);
                     },
                     decoration: FormFieldDecoration.decoration(
                       context: context,
@@ -110,7 +176,7 @@ class CnpjAndSurnameInput extends StatelessWidget {
                 ),
                 TextButton.icon(
                   onPressed: () {
-                    addCnpj(webProvider);
+                    addSubEnterprise(webProvider);
                   },
                   label: Text("Adicionar"),
                   icon: Icon(
@@ -124,14 +190,14 @@ class CnpjAndSurnameInput extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 5),
             child: Text(
-              webProvider.cnpjsToAdd.isEmpty
+              webProvider.subEnterprises.isEmpty
                   ? "Adicione pelo menos um CNPJ"
                   : "CNPJs adicionados",
             ),
           ),
           Card(
             child: ListView.builder(
-              itemCount: webProvider.cnpjsToAdd.length,
+              itemCount: webProvider.subEnterprises.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return Container(
@@ -147,10 +213,11 @@ class CnpjAndSurnameInput extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Row(
                             children: [
-                              Text(
-                                  webProvider.cnpjsToAdd[index].surname + " -"),
+                              Text((webProvider.subEnterprises[index].surname ??
+                                      "") +
+                                  " -"),
                               const SizedBox(width: 8),
-                              Text(webProvider.cnpjsToAdd[index].cnpj
+                              Text(webProvider.subEnterprises[index].cnpj
                                   .toString()),
                             ],
                           ),

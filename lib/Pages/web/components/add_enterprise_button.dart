@@ -39,18 +39,17 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
     _surnameFocusNode.dispose();
   }
 
-  Future<void> addEnterprise(WebProvider webProvider) async {
+  Future<void> addUpdateEnterprise(WebProvider webProvider) async {
     bool? isValid = _formKey.currentState?.validate();
 
-    if (isValid != true || webProvider.cnpjsToAdd.isEmpty) {
+    if (isValid != true || webProvider.subEnterprises.isEmpty) {
       return;
     }
 
-    await webProvider.addNewEnterprise(
+    await webProvider.addUpdateEnterprise(
       context: context,
       enterpriseNameController: _enterpriseController,
       urlCcsController: _urlCcsController,
-      cnpjs: webProvider.cnpjsToAdd,
     );
   }
 
@@ -124,7 +123,7 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  await addEnterprise(webProvider);
+                                  await addUpdateEnterprise(webProvider);
                                 },
                                 child: const Text("Adicionar"),
                               ),
