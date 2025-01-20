@@ -5,7 +5,11 @@ import '../../../../providers/web_provider.dart';
 import 'components.dart';
 
 class AddEnterpriseButton extends StatefulWidget {
-  const AddEnterpriseButton({super.key});
+  final bool isAddingNewCnpj;
+  const AddEnterpriseButton({
+    super.key,
+    this.isAddingNewCnpj = false,
+  });
 
   @override
   State<AddEnterpriseButton> createState() => _AddEnterpriseButtonState();
@@ -54,8 +58,15 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
 
-    return IconButton(
-      icon: const Icon(Icons.add),
+    return TextButton.icon(
+      icon: Icon(
+        Icons.add,
+        color: widget.isAddingNewCnpj
+            ? Theme.of(context).colorScheme.primary
+            : Colors.white,
+      ),
+      label: Text(widget.isAddingNewCnpj ? "Adicionar CNPJ" : ""),
+      iconAlignment: IconAlignment.end,
       onPressed: () async {
         await showDialog(
           context: context,
@@ -71,36 +82,52 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
                       Expanded(
                         child: Column(
                           children: [
-                            EnterpriseNameInput(
-                              enterpriseController: _enterpriseController,
-                              enterpriseFocusNode: _enterpriseFocusNode,
-                              ccsFocusNode: _ccsFocusNode,
-                            ),
-                            CcsUrlInput(
-                              urlCcsController: _urlCcsController,
-                              ccsFocusNode: _ccsFocusNode,
-                              cnpjFocusNode: _cnpjFocusNode,
-                            ),
+                            if (!widget.isAddingNewCnpj)
+                              EnterpriseNameInput(
+                                enterpriseController: _enterpriseController,
+                                enterpriseFocusNode: _enterpriseFocusNode,
+                                ccsFocusNode: _ccsFocusNode,
+                              ),
+                            if (!widget.isAddingNewCnpj)
+                              CcsUrlInput(
+                                urlCcsController: _urlCcsController,
+                                ccsFocusNode: _ccsFocusNode,
+                                cnpjFocusNode: _cnpjFocusNode,
+                              ),
                             CnpjAndSurnameInput(
                               cnpjController: _cnpjController,
                               cnpjFocusNode: _cnpjFocusNode,
                               surnameController: _surnameController,
                               surnameFocusNode: _surnameFocusNode,
                             ),
-                            TextButton(
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                "Cancelar",
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton(
                               onPressed: () async {
                                 await addEnterprise(webProvider);
                               },
                               child: const Text("Adicionar"),
                             ),
-                          ],
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("Cancelar"),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -112,6 +139,7 @@ class _AddEnterpriseButtonState extends State<AddEnterpriseButton> {
         _enterpriseController.clear();
         _urlCcsController.clear();
         _cnpjController.clear();
+        _surnameController.clear();
         webProvider.clearCnpjs();
       },
     );

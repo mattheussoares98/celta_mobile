@@ -561,7 +561,12 @@ class WebProvider with ChangeNotifier {
   // }
 
   void addNewCnpj(CnpjModel cnpj) {
-    if (_cnpjsToAdd.indexWhere((e) => e.cnpj == cnpj.cnpj) != -1) {
+    if (_cnpjsToAdd.indexWhere((e) => e.cnpj == cnpj.cnpj) != -1 ||
+        (enterprises[_indexOfSelectedEnterprise].subEnterprises != null &&
+            enterprises[_indexOfSelectedEnterprise]
+                    .subEnterprises!
+                    .indexWhere((x) => x.cnpj == cnpj.cnpj) !=
+                1)) {
       return;
     }
     _cnpjsToAdd.add(cnpj);

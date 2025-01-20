@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/providers.dart';
+import '../../enterprises/components/components.dart';
 
 class ModulesItems extends StatelessWidget {
   const ModulesItems({super.key});
@@ -13,30 +14,68 @@ class ModulesItems extends StatelessWidget {
     return Column(
       children: [
         const Divider(),
-        const Text(
-          "Módulos habilitados e desabilitados",
-          style: const TextStyle(
-            fontFamily: "BebasNeue",
-            fontSize: 30,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: const Text(
+                "Módulos habilitados e desabilitados",
+                style: const TextStyle(
+                  fontFamily: "BebasNeue",
+                  fontSize: 30,
+                ),
+              ),
+            ),
+            AddEnterpriseButton(isAddingNewCnpj: true),
+          ],
         ),
-        ListView.separated(
+        ListView.builder(
           itemCount: webProvider
                   .enterprises[webProvider.indexOfSelectedEnterprise]
                   .subEnterprises
                   ?.length ??
               0,
-          separatorBuilder: (context, index) {
-            return const Divider(height: 3);
-          },
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            // final item = webProvider
-            //     .enterprises[webProvider.indexOfSelectedEnterprise]
-            //     .subEnterprises?[index];
+            final item = webProvider
+                .enterprises[webProvider.indexOfSelectedEnterprise]
+                .subEnterprises?[index];
 
-            return SizedBox();
-            //TODO create new ListView.builder for subenterprises
+            return InkWell(
+              onTap: () {},
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Apelido: ${item?.surname}"),
+                            Text("Cnpj: ${item?.cnpj}"),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.edit,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
           },
         ),
       ],

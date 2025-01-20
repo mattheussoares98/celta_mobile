@@ -22,6 +22,26 @@ class CnpjAndSurnameInput extends StatelessWidget {
 
   static final cnpjFormKey = GlobalKey<FormState>();
 
+  void addCnpj(WebProvider webProvider) {
+    bool? isValid = cnpjFormKey.currentState?.validate();
+
+    if (isValid != true) {
+      return;
+    }
+
+    webProvider.addNewCnpj(
+      CnpjModel(
+        surname: surnameController.text,
+        cnpj: cnpjController.text.toInt(),
+      ),
+    );
+    surnameController.clear();
+    cnpjController.clear();
+    Future.delayed(Duration.zero, () {
+      cnpjFocusNode.requestFocus();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
@@ -67,35 +87,24 @@ class CnpjAndSurnameInput extends StatelessWidget {
                       }
                       return null;
                     },
-                    onFieldSubmitted: (value) async {
-                      bool? isValid = cnpjFormKey.currentState?.validate();
-                      if (value.isEmpty) {
-                        surnameFocusNode.requestFocus();
-                      } else {
-                        if (isValid != true) {
-                          Future.delayed(Duration.zero, () {
-                            surnameFocusNode.requestFocus();
-                          });
-                          return;
-                        }
-                        webProvider.addNewCnpj(
-                          CnpjModel(
-                            surname: value,
-                            cnpj: cnpjController.text.toInt(),
-                          ),
-                        );
-                        surnameController.clear();
-                        cnpjController.clear();
-                        Future.delayed(Duration.zero, () {
-                          cnpjFocusNode.requestFocus();
-                        });
-                      }
+                    onFieldSubmitted: (value) {
+                      addCnpj(webProvider);
                     },
                     decoration: FormFieldDecoration.decoration(
                       context: context,
                       hintText: "Apelido",
                       labelText: "Apelido",
                     ),
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    addCnpj(webProvider);
+                  },
+                  label: Text("Adicionar"),
+                  icon: Icon(
+                    Icons.verified_sharp,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ],
