@@ -428,6 +428,17 @@ class WebProvider with ChangeNotifier {
 
       if (hasSelectedEnterprise) {
         final enterprise = _enterprises[_indexOfSelectedEnterprise];
+
+        if (enterprise.subEnterprises
+                ?.indexWhere((e) => e.cnpj == subEnterpriseToAdd?.cnpj) !=
+            -1) {
+          ShowSnackbarMessage.show(
+            message: "Já existe uma sub empresa com esse CNPJ",
+            context: context,
+          );
+          return;
+        }
+
         newEnterprise = FirebaseEnterpriseModel(
           enterpriseName: enterprise.enterpriseName,
           id: enterprise.id,
