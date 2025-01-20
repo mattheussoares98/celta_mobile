@@ -3,8 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
-import '../components/components.dart';
-import '../enterprises/components/components.dart';
+import 'components/components.dart';
 
 class AddUpdateSubEnterprisePage extends StatefulWidget {
   const AddUpdateSubEnterprisePage({super.key});

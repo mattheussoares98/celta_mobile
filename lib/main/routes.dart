@@ -4,6 +4,8 @@ import '../pages/buy_quotation/buy_quotation.dart';
 import '../pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
 import '../pages/expedition_conference/expedition_conference.dart';
 import '../pages/adjust_sale_price/adjust_sale_price.dart';
+import '../pages/web/add_update_sub_enterprise/add_update_sub_enterprise.dart';
+import '../pages/web/enterprise_details/enterprise_details.dart';
 import '../pages/web/web.dart';
 import '../pages/adjust_stock/adjust_stock.dart';
 import '../pages/buy_request/buy_request.dart';
