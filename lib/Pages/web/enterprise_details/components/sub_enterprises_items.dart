@@ -2,12 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/components.dart';
+import '../../../../models/models.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 import '../../components/components.dart';
 
 class SubEnterprisesItems extends StatelessWidget {
   const SubEnterprisesItems({super.key});
+
+  void goToAddOrEditSubEnterprisePage({
+    required SubEnterpriseModel? item,
+    required BuildContext context,
+  }) {
+    Navigator.of(context).pushNamed(
+      APPROUTES.ADD_UPDATE_SUB_ENTERPRISE,
+      arguments: item,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +56,7 @@ class SubEnterprisesItems extends StatelessWidget {
 
               return InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    APPROUTES.ADD_UPDATE_SUB_ENTERPRISE,
-                    arguments: item,
-                  );
+                  goToAddOrEditSubEnterprisePage(item: item, context: context);
                 },
                 child: Card(
                   child: Padding(
@@ -63,10 +71,10 @@ class SubEnterprisesItems extends StatelessWidget {
                               Text("Cnpj: ${item?.cnpj}"),
                               if (item?.modules != null)
                                 Builder(builder: (context) {
-                                  final disabledModules = item!.modules!
-                                      .where((x) => x.enabled == false);
-
-                                  if (disabledModules.isEmpty)
+                                  final disabledModules = item?.modules!
+                                      .where((e) => !e.enabled)
+                                      .toList();
+                                  if (disabledModules?.isEmpty == true) {
                                     return Text(
                                       "Todos módulos estão habilitados",
                                       style: TextStyle(
@@ -75,21 +83,22 @@ class SubEnterprisesItems extends StatelessWidget {
                                             .primary,
                                       ),
                                     );
-                                  return FittedBox(
-                                    child: Row(
-                                      children: disabledModules
-                                          .map(
-                                            (e) => FittedBox(
-                                              child: Text(
-                                                e.name + "; ",
-                                                style: TextStyle(
-                                                  color: Colors.red,
-                                                ),
-                                              ),
+                                  }
+                                  return Wrap(
+                                    children: item!.modules!
+                                        .map(
+                                          (e) => Text(
+                                            e.name + "; ",
+                                            style: TextStyle(
+                                              color: e.enabled
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                  : Colors.red,
                                             ),
-                                          )
-                                          .toList(),
-                                    ),
+                                          ),
+                                        )
+                                        .toList(),
                                   );
                                 }),
                             ],
@@ -111,7 +120,12 @@ class SubEnterprisesItems extends StatelessWidget {
                         ),
                         SizedBox(width: 10),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            goToAddOrEditSubEnterprisePage(
+                              item: item,
+                              context: context,
+                            );
+                          },
                           icon: Icon(
                             Icons.edit,
                             color: Theme.of(context).colorScheme.primary,
