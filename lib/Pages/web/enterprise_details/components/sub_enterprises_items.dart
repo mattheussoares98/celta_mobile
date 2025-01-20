@@ -5,8 +5,8 @@ import '../../../../components/components.dart';
 import '../../../../providers/providers.dart';
 import '../../components/components.dart';
 
-class ModulesItems extends StatelessWidget {
-  const ModulesItems({super.key});
+class SubEnterprisesItems extends StatelessWidget {
+  const SubEnterprisesItems({super.key});
 
   @override
   Widget build(BuildContext context) {

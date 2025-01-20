@@ -41,7 +41,7 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EditUrlCcs(client: client),
-                    const ModulesItems(),
+                    const SubEnterprisesItems(),
                     const SizedBox(height: 20),
                     // if (client.usersInformations == null)
                     //   const Text(
