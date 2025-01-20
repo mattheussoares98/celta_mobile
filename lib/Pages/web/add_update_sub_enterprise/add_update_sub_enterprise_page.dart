@@ -184,10 +184,14 @@ class _AddUpdateSubEnterprisePageState
       return;
     }
 
+    SubEnterpriseModel? selectedSubEnterprise =
+        ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
+
     await webProvider.addUpdateEnterprise(
       context: context,
       enterpriseNameController: _enterpriseController,
       urlCcsController: _urlCcsController,
+      isAddinSubEnterprise: selectedSubEnterprise == null,
       subEnterpriseToAdd: SubEnterpriseModel(
         modules: modules,
         cnpj: _cnpjController.text,

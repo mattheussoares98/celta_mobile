@@ -419,6 +419,7 @@ class WebProvider with ChangeNotifier {
     required TextEditingController enterpriseNameController,
     required TextEditingController urlCcsController,
     required SubEnterpriseModel? subEnterpriseToAdd,
+    required bool isAddinSubEnterprise,
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
@@ -428,6 +429,17 @@ class WebProvider with ChangeNotifier {
 
       if (hasSelectedEnterprise) {
         final enterprise = _enterprises[_indexOfSelectedEnterprise];
+
+        if (isAddinSubEnterprise &&
+            enterprise.subEnterprises!
+                    .indexWhere((e) => e.cnpj == subEnterpriseToAdd?.cnpj) !=
+                -1) {
+          ShowSnackbarMessage.show(
+            message: "Já existe uma empresa com esse CNPJ cadastrado",
+            context: context,
+          );
+          return;
+        }
 
         int? indexOfSubgEnterprise = enterprise.subEnterprises
             ?.indexWhere((e) => e.cnpj == subEnterpriseToAdd?.cnpj);
