@@ -427,6 +427,19 @@ class WebProvider with ChangeNotifier {
       bool hasSelectedEnterprise = _indexOfSelectedEnterprise != -1;
       FirebaseEnterpriseModel? newEnterprise;
 
+      if (_enterprises.indexWhere((e) =>
+              e.enterpriseName ==
+              enterpriseNameController.text
+                  .toLowerCase()
+                  .removeWhiteSpaces()) !=
+          -1) {
+        ShowSnackbarMessage.show(
+          message: "Já existe uma empresa com esse nome cadastrado",
+          context: context,
+        );
+        return;
+      }
+
       if (hasSelectedEnterprise) {
         final enterprise = _enterprises[_indexOfSelectedEnterprise];
 
