@@ -45,8 +45,8 @@ class WebProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<SubEnterpriseModel> _subEnterprisesToAdd = [];
-  List<SubEnterpriseModel> get subEnterprises => _subEnterprisesToAdd;
+  SubEnterpriseModel? _subEnterpriseToAdd;
+  SubEnterpriseModel? get subEnterpriseToAdd => _subEnterpriseToAdd;
 
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
@@ -439,8 +439,8 @@ class WebProvider with ChangeNotifier {
           subEnterprises: enterprise.subEnterprises,
         );
 
-        if (_subEnterprisesToAdd.isNotEmpty) {
-          newEnterprise.subEnterprises!.addAll(_subEnterprisesToAdd);
+        if (_subEnterpriseToAdd != null) {
+          newEnterprise.subEnterprises!.add(_subEnterpriseToAdd!);
         }
       } else {
         newEnterprise = FirebaseEnterpriseModel(
@@ -448,7 +448,8 @@ class WebProvider with ChangeNotifier {
           enterpriseName: enterpriseNameController.text,
           urlCCS: urlCcsController.text,
           usersInformations: null,
-          subEnterprises: subEnterprises,
+          subEnterprises:
+              subEnterpriseToAdd != null ? [subEnterpriseToAdd!] : null,
         );
       }
 
@@ -586,29 +587,6 @@ class WebProvider with ChangeNotifier {
   //     ),
   //   );
   // }
-
-  void addNewCnpj(SubEnterpriseModel cnpj) {
-    if (_subEnterprisesToAdd.indexWhere((e) => e.cnpj == cnpj.cnpj) != -1) {
-      return;
-    } else if (_enterprises[_indexOfSelectedEnterprise]
-            .subEnterprises!
-            .indexWhere((e) => e.cnpj == cnpj.cnpj) !=
-        -1) {
-      return;
-    }
-    _subEnterprisesToAdd.add(cnpj);
-    notifyListeners();
-  }
-
-  void removeCnpj(int index) {
-    _subEnterprisesToAdd.removeAt(index);
-    notifyListeners();
-  }
-
-  void clearCnpjs() {
-    _subEnterprisesToAdd.clear();
-    notifyListeners();
-  }
 
   Future<void> removeSubEnterprise(index) async {
     try {
