@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../components/components.dart';
+import '../../../../models/models.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 
@@ -22,6 +23,8 @@ class CnpjAndSurnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
+    SubEnterpriseModel? selectedSubEnterprise =
+        ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -34,6 +37,7 @@ class CnpjAndSurnameInput extends StatelessWidget {
                 child: TextFormField(
                   controller: cnpjController,
                   focusNode: cnpjFocusNode,
+                  enabled: selectedSubEnterprise == null,
                   validator: (value) {
                     if (value != null &&
                         webProvider.indexOfSelectedEnterprise != -1 &&
