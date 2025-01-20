@@ -19,7 +19,7 @@ class ModulesItems extends StatelessWidget {
           children: [
             Expanded(
               child: const Text(
-                "Módulos habilitados e desabilitados",
+                "Sub empresas",
                 style: const TextStyle(
                   fontFamily: "BebasNeue",
                   fontSize: 30,
