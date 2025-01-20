@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/providers.dart';
-import '../../enterprises/components/components.dart';
+import '../../components/components.dart';
 
 class ModulesItems extends StatelessWidget {
   const ModulesItems({super.key});

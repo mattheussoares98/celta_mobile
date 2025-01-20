@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../../../providers/providers.dart';
+import '../components/components.dart';
 import 'components/components.dart';
 
 class EnterprisesPage extends StatelessWidget {

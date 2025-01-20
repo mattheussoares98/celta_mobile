@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../providers/web_provider.dart';
-import 'components.dart';
+import '../../../providers/web_provider.dart';
+import '../enterprises/components/components.dart';
 
 class AddEnterpriseButton extends StatefulWidget {
   final bool isAddingNewCnpj;
