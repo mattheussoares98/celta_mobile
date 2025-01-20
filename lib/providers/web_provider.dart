@@ -44,9 +44,6 @@ class WebProvider with ChangeNotifier {
     _indexOfSelectedEnterprise = newValue;
   }
 
-  SubEnterpriseModel? _subEnterpriseToAdd;
-  SubEnterpriseModel? get subEnterpriseToAdd => _subEnterpriseToAdd;
-
   SoapActionsModel _sumMonthRequests({
     required List<SoapActionsModel> monthsData,
     required String enterpriseName,
@@ -421,6 +418,7 @@ class WebProvider with ChangeNotifier {
     required BuildContext context,
     required TextEditingController enterpriseNameController,
     required TextEditingController urlCcsController,
+    required SubEnterpriseModel? subEnterpriseToAdd,
   }) async {
     _isLoading = true;
     _errorMessageClients = "";
@@ -438,8 +436,8 @@ class WebProvider with ChangeNotifier {
           subEnterprises: enterprise.subEnterprises,
         );
 
-        if (_subEnterpriseToAdd != null) {
-          newEnterprise.subEnterprises!.add(_subEnterpriseToAdd!);
+        if (subEnterpriseToAdd != null) {
+          newEnterprise.subEnterprises!.add(subEnterpriseToAdd);
         }
       } else {
         newEnterprise = FirebaseEnterpriseModel(
@@ -448,7 +446,7 @@ class WebProvider with ChangeNotifier {
           urlCCS: urlCcsController.text,
           usersInformations: null,
           subEnterprises:
-              subEnterpriseToAdd != null ? [subEnterpriseToAdd!] : null,
+              subEnterpriseToAdd != null ? [subEnterpriseToAdd] : null,
         );
       }
 
