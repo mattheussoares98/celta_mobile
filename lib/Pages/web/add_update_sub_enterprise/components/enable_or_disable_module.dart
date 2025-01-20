@@ -23,13 +23,19 @@ class _EnableOrDisableModuleState extends State<EnableOrDisableModule> {
       itemCount: widget.modules.length,
       itemBuilder: (context, index) {
         final module = widget.modules[index];
-        return SwitchListTile(
-          dense: true,
-          value: module.enabled == true,
-          title: Text(module.name),
-          onChanged: (_) {
-            widget.updateEnabled(index);
-          },
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: SwitchListTile(
+            dense: true,
+            value: module.enabled == true,
+            title: Text(module.name),
+            tileColor: module.enabled == true
+                ? Theme.of(context).colorScheme.primary.withAlpha(100)
+                : Colors.red.withAlpha(100),
+            onChanged: (_) {
+              widget.updateEnabled(index);
+            },
+          ),
         );
       },
     );

@@ -24,29 +24,34 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
 
     return Stack(
       children: [
-        Scaffold(
-          appBar: appBarEnterprise(
-            context: context,
-            client: client,
-            webProvider: webProvider,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  EditUrlCcs(client: client),
-                  const ModulesItems(),
-                  const SizedBox(height: 20),
-                  // if (client.usersInformations == null)
-                  //   const Text(
-                  //     "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
-                  //     textAlign: TextAlign.center,
-                  //   ),
-                  // if (client.usersInformations?.isNotEmpty == true)
-                  //   UsersList(client: client)
-                ],
+        PopScope(
+          onPopInvokedWithResult: (didPop, result) {
+            webProvider.indexOfSelectedEnterprise = -1;
+          },
+          child: Scaffold(
+            appBar: appBarEnterprise(
+              context: context,
+              client: client,
+              webProvider: webProvider,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    EditUrlCcs(client: client),
+                    const ModulesItems(),
+                    const SizedBox(height: 20),
+                    // if (client.usersInformations == null)
+                    //   const Text(
+                    //     "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
+                    //     textAlign: TextAlign.center,
+                    //   ),
+                    // if (client.usersInformations?.isNotEmpty == true)
+                    //   UsersList(client: client)
+                  ],
+                ),
               ),
             ),
           ),

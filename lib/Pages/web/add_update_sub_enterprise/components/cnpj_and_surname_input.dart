@@ -21,20 +21,6 @@ class CnpjAndSurnameInput extends StatelessWidget {
 
   static final cnpjFormKey = GlobalKey<FormState>();
 
-  void addSubEnterprise(WebProvider webProvider) {
-    bool? isValid = cnpjFormKey.currentState?.validate();
-
-    if (isValid != true) {
-      return;
-    }
-
-    surnameController.clear();
-    cnpjController.clear();
-    Future.delayed(Duration.zero, () {
-      cnpjFocusNode.requestFocus();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
@@ -91,24 +77,12 @@ class CnpjAndSurnameInput extends StatelessWidget {
                       }
                       return null;
                     },
-                    onFieldSubmitted: (value) {
-                      addSubEnterprise(webProvider);
-                    },
+                    onFieldSubmitted: (value) {},
                     decoration: FormFieldDecoration.decoration(
                       context: context,
                       hintText: "Apelido",
                       labelText: "Apelido",
                     ),
-                  ),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    addSubEnterprise(webProvider);
-                  },
-                  label: Text("Adicionar"),
-                  icon: Icon(
-                    Icons.verified_sharp,
-                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ],

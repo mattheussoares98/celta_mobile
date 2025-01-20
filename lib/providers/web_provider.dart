@@ -42,7 +42,6 @@ class WebProvider with ChangeNotifier {
   int get indexOfSelectedEnterprise => _indexOfSelectedEnterprise;
   set indexOfSelectedEnterprise(int newValue) {
     _indexOfSelectedEnterprise = newValue;
-    notifyListeners();
   }
 
   SubEnterpriseModel? _subEnterpriseToAdd;
