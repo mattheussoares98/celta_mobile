@@ -6,11 +6,11 @@ import '../../../../providers/providers.dart';
 
 AppBar appBarEnterprise({
   required BuildContext context,
-  required FirebaseEnterpriseModel client,
+  required FirebaseEnterpriseModel? client,
   required WebProvider webProvider,
 }) =>
     AppBar(
-      title: Text(client.enterpriseName),
+      title: Text(client?.enterpriseName ?? ""),
       actions: [
         TextButton.icon(
           onPressed: () {
@@ -26,7 +26,7 @@ AppBar appBarEnterprise({
               function: () async {
                 await webProvider.deleteEnterprise(
                   context: context,
-                  enterpriseId: client.id ?? "",
+                  enterpriseId: client?.id ?? "",
                 );
               },
             );

@@ -16,7 +16,7 @@ class CcsUrlInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(bottom: 8),
       child: TextFormField(
         controller: urlCcsController,
         focusNode: ccsFocusNode,
@@ -36,7 +36,7 @@ class CcsUrlInput extends StatelessWidget {
               !value.contains("//") ||
               !value.contains("\.") ||
               !value.toLowerCase().contains("ccs")) {
-            return "Pelo jeito essa URL tá errada. Confirma aeeew";
+            return "URL inválida";
           }
           return null;
         },

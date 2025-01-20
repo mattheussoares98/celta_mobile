@@ -29,93 +29,95 @@ class SubEnterprisesItems extends StatelessWidget {
             AddEnterpriseButton(isAddingNewCnpj: true),
           ],
         ),
-        ListView.builder(
-          itemCount: webProvider
+        if (webProvider.indexOfSelectedEnterprise != -1)
+          ListView.builder(
+            itemCount: webProvider
+                    .enterprises[webProvider.indexOfSelectedEnterprise]
+                    .subEnterprises
+                    ?.length ??
+                0,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final item = webProvider
                   .enterprises[webProvider.indexOfSelectedEnterprise]
-                  .subEnterprises
-                  ?.length ??
-              0,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final item = webProvider
-                .enterprises[webProvider.indexOfSelectedEnterprise]
-                .subEnterprises?[index];
+                  .subEnterprises?[index];
 
-            return InkWell(
-              onTap: () {},
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Apelido: ${item?.surname}"),
-                            Text("Cnpj: ${item?.cnpj}"),
-                            if (item?.modules != null)
-                              Builder(builder: (context) {
-                                final disabledModules = item!.modules!
-                                    .where((x) => x.enabled == false);
+              return InkWell(
+                onTap: () {},
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Apelido: ${item?.surname}"),
+                              Text("Cnpj: ${item?.cnpj}"),
+                              if (item?.modules != null)
+                                Builder(builder: (context) {
+                                  final disabledModules = item!.modules!
+                                      .where((x) => x.enabled == false);
 
-                                if (disabledModules.isEmpty)
-                                  return Text(
-                                    "Todos módulos estão habilitados",
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  );
-                                return FittedBox(
-                                  child: Row(
-                                    children: disabledModules
-                                        .map(
-                                          (e) => FittedBox(
-                                            child: Text(
-                                              e.name + "; ",
-                                              style: TextStyle(
-                                                color: Colors.red,
+                                  if (disabledModules.isEmpty)
+                                    return Text(
+                                      "Todos módulos estão habilitados",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    );
+                                  return FittedBox(
+                                    child: Row(
+                                      children: disabledModules
+                                          .map(
+                                            (e) => FittedBox(
+                                              child: Text(
+                                                e.name + "; ",
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                );
-                              }),
-                          ],
+                                          )
+                                          .toList(),
+                                    ),
+                                  );
+                                }),
+                            ],
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          ShowAlertDialog.show(
-                              context: context,
-                              title: "Remover sub empresa?",
-                              function: () async {
-                                await webProvider.removeSubEnterprise(index);
-                              });
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.red,
+                        IconButton(
+                          onPressed: () async {
+                            ShowAlertDialog.show(
+                                context: context,
+                                title: "Remover sub empresa?",
+                                function: () async {
+                                  await webProvider.removeSubEnterprise(index);
+                                });
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 10),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.edit,
-                          color: Theme.of(context).colorScheme.primary,
+                        SizedBox(width: 10),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.edit,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          ),
       ],
     );
   }

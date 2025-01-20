@@ -15,12 +15,23 @@ class WebEnterpriseDetailsPage extends StatefulWidget {
 }
 
 class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
+  FirebaseEnterpriseModel? client;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WebProvider webProvider = Provider.of(context, listen: false);
+      setState(() {
+        client = webProvider.enterprises[webProvider.indexOfSelectedEnterprise];
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
-
-    FirebaseEnterpriseModel client =
-        webProvider.enterprises[webProvider.indexOfSelectedEnterprise];
 
     return Stack(
       children: [
@@ -40,7 +51,7 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    EditUrlCcs(client: client),
+                    if (client != null) EditUrlCcs(client: client!),
                     const SubEnterprisesItems(),
                     const SizedBox(height: 20),
                     // if (client.usersInformations == null)

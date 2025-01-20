@@ -25,16 +25,32 @@ class _EnableOrDisableModuleState extends State<EnableOrDisableModule> {
         final module = widget.modules[index];
         return Padding(
           padding: const EdgeInsets.only(bottom: 4),
-          child: SwitchListTile(
-            dense: true,
-            value: module.enabled == true,
-            title: Text(module.name),
-            tileColor: module.enabled == true
-                ? Theme.of(context).colorScheme.primary.withAlpha(100)
-                : Colors.red.withAlpha(100),
-            onChanged: (_) {
-              widget.updateEnabled(index);
-            },
+          child: Container(
+            decoration: BoxDecoration(
+              color: module.enabled == true
+                  ? Theme.of(context).colorScheme.primary.withAlpha(100)
+                  : Colors.red.withAlpha(100),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: InkWell(
+                onTap: () {
+                  widget.updateEnabled(index);
+                },
+                child: Row(
+                  children: [
+                    Expanded(child: Text(module.name)),
+                    Switch(
+                      value: module.enabled == true,
+                      onChanged: (_) {
+                        widget.updateEnabled(index);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         );
       },

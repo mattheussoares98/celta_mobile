@@ -19,74 +19,70 @@ class CnpjAndSurnameInput extends StatelessWidget {
     super.key,
   });
 
-  static final cnpjFormKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
 
-    return Form(
-      key: cnpjFormKey,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: cnpjController,
-                    focusNode: cnpjFocusNode,
-                    validator: (value) {
-                      if (value != null &&
-                          webProvider
-                                  .enterprises[
-                                      webProvider.indexOfSelectedEnterprise]
-                                  .subEnterprises!
-                                  .indexWhere((e) => e.cnpj == value.toInt()) !=
-                              -1) {
-                        return "CNPJ já adicionado";
-                      }
-                      return FormFieldValidations.cpfOrCnpj(value);
-                    },
-                    onFieldSubmitted: (value) async {
-                      if (value.isEmpty) {
-                        Future.delayed(Duration.zero, () {
-                          cnpjFocusNode.requestFocus();
-                        });
-                      } else {
-                        surnameFocusNode.requestFocus();
-                      }
-                    },
-                    decoration: FormFieldDecoration.decoration(
-                      context: context,
-                      hintText: "Somente números",
-                      labelText: "CNPJ",
-                    ),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: cnpjController,
+                  focusNode: cnpjFocusNode,
+                  validator: (value) {
+                    if (value != null &&
+                        webProvider.indexOfSelectedEnterprise != -1 &&
+                        webProvider
+                                .enterprises[
+                                    webProvider.indexOfSelectedEnterprise]
+                                .subEnterprises!
+                                .indexWhere((e) => e.cnpj == value.toInt()) !=
+                            -1) {
+                      return "CNPJ já adicionado";
+                    }
+                    return FormFieldValidations.cpfOrCnpj(value);
+                  },
+                  onFieldSubmitted: (value) async {
+                    if (value.isEmpty) {
+                      Future.delayed(Duration.zero, () {
+                        cnpjFocusNode.requestFocus();
+                      });
+                    } else {
+                      surnameFocusNode.requestFocus();
+                    }
+                  },
+                  decoration: FormFieldDecoration.decoration(
+                    context: context,
+                    hintText: "Somente números",
+                    labelText: "CNPJ",
                   ),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextFormField(
-                    controller: surnameController,
-                    focusNode: surnameFocusNode,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Campo obrigatório";
-                      }
-                      return null;
-                    },
-                    onFieldSubmitted: (value) {},
-                    decoration: FormFieldDecoration.decoration(
-                      context: context,
-                      hintText: "Apelido",
-                      labelText: "Apelido",
-                    ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextFormField(
+                  controller: surnameController,
+                  focusNode: surnameFocusNode,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Campo obrigatório";
+                    }
+                    return null;
+                  },
+                  onFieldSubmitted: (value) {},
+                  decoration: FormFieldDecoration.decoration(
+                    context: context,
+                    hintText: "Apelido",
+                    labelText: "Apelido",
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
