@@ -139,21 +139,18 @@ class _HomePageState extends State<HomePage> {
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/adjustPrice.png',
                           routine: 'Alteração de preços'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
                           context: context,
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/adjustStock.png',
                           routine: 'Ajuste de estoque'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.ADJUST_STOCK,
                           context: context,
                         ),
                         // ImageComponent.image(
                         //   imagePath: 'lib/assets/Images/LogoCeltaTransparente.png',
                         //   routine: 'Avaliação e sugestôes'.toUpperCase(),
-                        //   route: APPROUTES.EVALUATION_AND_SUGGESTIONS,
                         //   context: context,
 
                         //   moduleIsLiberated: true,
@@ -161,14 +158,14 @@ class _HomePageState extends State<HomePage> {
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/newClient.png',
                           routine: 'Cadastro de clientes'.toUpperCase(),
-                          route: APPROUTES.CUSTOMER_REGISTER,
                           context: context,
+                          onlyForValidateModule: true,
+                          nextRoute: APPROUTES.CUSTOMER_REGISTER,
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/productsConference.png',
                           routine: 'Conferência de produtos (expedição)'
                               .toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES
                               .EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE,
                           context: context,
@@ -176,14 +173,12 @@ class _HomePageState extends State<HomePage> {
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/consultPrice.png',
                           routine: 'Consulta de preços'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.PRICE_CONFERENCE,
                           context: context,
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/buyQuotation.png',
                           routine: 'Cotação de compras'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.BUY_QUOTATION,
                           context: context,
                           isNew: true,
@@ -191,28 +186,26 @@ class _HomePageState extends State<HomePage> {
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/inventory.png',
                           routine: 'Inventário'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.INVENTORY,
                           context: context,
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/buyRequest.png',
                           routine: 'Pedido de compras'.toUpperCase(),
-                          route: APPROUTES.BUYERS,
-                          // nextRoute: APPROUTES.BUYERS,
+                          nextRoute: APPROUTES.BUYERS,
                           context: context,
+                          onlyForValidateModule: true,
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/transfer.png',
                           routine: 'Pedido de transferência'.toUpperCase(),
-                          route: APPROUTES.TRANSFER_REQUEST_MODEL,
-                          nextRoute: APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
+                          nextRoute: APPROUTES.TRANSFER_REQUEST_MODEL,
                           context: context,
+                          onlyForValidateModule: true,
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/saleRequest.png',
                           routine: 'Pedido de vendas'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.SALE_REQUEST_MODEL,
                           context: context,
                         ),
@@ -220,14 +213,12 @@ class _HomePageState extends State<HomePage> {
                           imagePath:
                               'lib/assets/Images/searchConcurrentPrice.png',
                           routine: 'Preços concorrentes'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.RESEARCH_PRICES,
                           context: context,
                         ),
                         ImageComponent.image(
                           imagePath: 'lib/assets/Images/receipt.jpg',
                           routine: 'Recebimento de mercadorias'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.RECEIPT,
                           context: context,
                         ),
@@ -236,14 +227,12 @@ class _HomePageState extends State<HomePage> {
                           imagePath:
                               'lib/assets/Images/transferBetweenStocks.png',
                           routine: 'Transferência entre estoques'.toUpperCase(),
-                          route: APPROUTES.ENTERPRISE,
                           nextRoute: APPROUTES.TRANSFER_BETWEEN_STOCK,
                           context: context,
                         ),
                         // ImageComponent.image(
                         //   imagePath: 'lib/assets/Images/transferBetweenStocks.jpg',
                         //   routine: 'Transferência entre embalagens'.toUpperCase(),
-                        //   route: APPROUTES.ENTERPRISE,
                         //   nextRoute: APPROUTES.TRANSFER_BETWEEN_PACKAGE,
                         //   context: context,
                         // ),

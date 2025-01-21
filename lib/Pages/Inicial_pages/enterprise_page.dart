@@ -14,12 +14,11 @@ class EnterprisePage extends StatefulWidget {
 
 class EnterprisePageState extends State<EnterprisePage> {
   Future<void> getEnterprises(EnterpriseProvider enterpriseProvider) async {
-    final String nextRoute =
-        ModalRoute.of(context)!.settings.arguments as String;
+    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     await enterpriseProvider.getEnterprises(
       verifyUserCanAdjustSalePrice:
-          nextRoute == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
+          arguments["nextRoute"] == APPROUTES.ADJUST_SALE_PRICE_PRODUCTS,
     );
   }
 
@@ -37,7 +36,7 @@ class EnterprisePageState extends State<EnterprisePage> {
 
   bool canShowEnterprises({
     required EnterpriseProvider enterpriseProvider,
-    required String nextRoute,
+    required String? nextRoute,
   }) {
     if (enterpriseProvider.isLoading) {
       return false;
@@ -57,9 +56,9 @@ class EnterprisePageState extends State<EnterprisePage> {
     EnterpriseProvider enterpriseProvider =
         Provider.of<EnterpriseProvider>(context, listen: true);
 
-    final String nextRoute =
-        ModalRoute.of(context)!.settings.arguments as String;
-    //essa rota vem para essa página através de um parâmetro do ImageComponent
+    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    String nextRoute = arguments["nextRoute"];
+    bool? onlyForValidateModule = arguments["onlyForValidateModule"];
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
@@ -69,8 +68,12 @@ class EnterprisePageState extends State<EnterprisePage> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: const Text(
-                'EMPRESAS',
+              title: FittedBox(
+                child: Text(
+                  onlyForValidateModule == true
+                      ? 'VALIDANOD SE O MÓDULO ESTÁ HABILITADO'
+                      : 'EMPRESAS',
+                ),
               ),
               actions: [
                 IconButton(

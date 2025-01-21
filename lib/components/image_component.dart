@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
+import '../utils/utils.dart';
+
 class ImageComponent {
   static Widget image({
     required String imagePath,
     required String routine,
-    required String route,
     required BuildContext context,
-    String? nextRoute,
+    required String nextRoute,
     bool? isNew,
+    bool? onlyForValidateModule,
   }) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed(
-          route,
-          arguments: nextRoute,
+          APPROUTES.ENTERPRISE,
+          arguments: {
+            "nextRoute": nextRoute,
+            "onlyForValidateModule": onlyForValidateModule,
+          },
         );
       },
       child: Card(
