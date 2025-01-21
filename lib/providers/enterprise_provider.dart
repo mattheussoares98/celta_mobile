@@ -18,7 +18,7 @@ class EnterpriseProvider with ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  FirebaseEnterpriseModel? _firebaseEnterpriseModel;
+  static FirebaseEnterpriseModel? _firebaseEnterpriseModel;
   FirebaseEnterpriseModel? get firebaseEnterpriseModel =>
       _firebaseEnterpriseModel;
 
@@ -75,7 +75,7 @@ class EnterpriseProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getFirebaseEnterpriseModel() async {
+  Future<void> updateFirebaseEnterpriseModel() async {
     _errorMessage = "";
     _isLoading = true;
     _firebaseEnterpriseModel = null;

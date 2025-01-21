@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         ConfigurationsProvider configurationsProvider =
             Provider.of(context, listen: false);
         await configurationsProvider.restoreConfigurations();
-        await enterpriseProvider.getFirebaseEnterpriseModel();
+        await enterpriseProvider.updateFirebaseEnterpriseModel();
       }
     });
   }
@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                 if (enterpriseProvider.firebaseEnterpriseModel == null)
                   searchAgain(
                     errorMessage: enterpriseProvider.errorMessage,
-                    request: enterpriseProvider.getFirebaseEnterpriseModel,
+                    request: enterpriseProvider.updateFirebaseEnterpriseModel,
                   ),
                 if (enterpriseProvider.firebaseEnterpriseModel != null)
                   Expanded(

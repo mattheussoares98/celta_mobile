@@ -16,18 +16,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   Animation<double>? _animationOpacity;
   Animation? _animationScale;
 
-  Future<void> initFirebaseMessageAndGetLocalNotifications() async {
-    NotificationsProvider notificationsProvider =
-        Provider.of(context, listen: false);
-    await FirebaseHelper.initNotifications(notificationsProvider);
-  }
-
-  @override
-  void initState() {
-    initFirebaseMessageAndGetLocalNotifications();
-
-    super.initState();
-
+  void initAnimations() {
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -51,6 +40,15 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       ),
     );
 
+    _animationController!.forward();
+  }
+
+  Future<void> delayedInitializations() async {
+    NotificationsProvider notificationsProvider =
+        Provider.of(context, listen: false);
+
+    await FirebaseHelper.initNotifications(notificationsProvider);
+
     Future.delayed(const Duration(seconds: 3), () {
       if (kIsWeb) {
         Navigator.of(context)
@@ -63,6 +61,18 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    initAnimations();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        await delayedInitializations();
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _animationController!.dispose();
     super.dispose();
@@ -70,8 +80,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _animationController!.forward();
-
     return Scaffold(
       body: Center(
         child: AnimatedBuilder(
