@@ -516,55 +516,52 @@ class WebProvider with ChangeNotifier {
     }
   }
 
-  // FirebaseEnterpriseModel getUpdatedClient(
-  //   Modules module,
-  //   FirebaseEnterpriseModel client,
-  // ) {
-  //   return FirebaseEnterpriseModel(
-  //     id: client.id,
-  //     cnpj: client.urlCCS,
-  //     usersInformations: client.usersInformations,
-  //     enterpriseName: client.enterpriseName,
-  //     modules: ModuleModel(
-  //       adjustSalePrice: module == Modules.adjustSalePrice
-  //           ? !client.modules!.adjustSalePrice
-  //           : client.modules!.adjustSalePrice,
-  //       adjustStock: module == Modules.adjustStock
-  //           ? !client.modules!.adjustStock
-  //           : client.modules!.adjustStock,
-  //       buyRequest: module == Modules.buyRequest
-  //           ? !client.modules!.buyRequest
-  //           : client.modules!.buyRequest,
-  //       customerRegister: module == Modules.customerRegister
-  //           ? !client.modules!.customerRegister
-  //           : client.modules!.customerRegister,
-  //       inventory: module == Modules.inventory
-  //           ? !client.modules!.inventory
-  //           : client.modules!.inventory,
-  //       priceConference: module == Modules.priceConference
-  //           ? !client.modules!.priceConference
-  //           : client.modules!.priceConference,
-  //       productsConference: module == Modules.productsConference
-  //           ? !client.modules!.productsConference
-  //           : client.modules!.productsConference,
-  //       receipt: module == Modules.receipt
-  //           ? !client.modules!.receipt
-  //           : client.modules!.receipt,
-  //       researchPrices: module == Modules.researchPrices
-  //           ? !client.modules!.researchPrices
-  //           : client.modules!.researchPrices,
-  //       saleRequest: module == Modules.saleRequest
-  //           ? !client.modules!.saleRequest
-  //           : client.modules!.saleRequest,
-  //       transferBetweenStocks: module == Modules.transferBetweenStocks
-  //           ? !client.modules!.transferBetweenStocks
-  //           : client.modules!.transferBetweenStocks,
-  //       transferRequest: module == Modules.transferRequest
-  //           ? !client.modules!.transferRequest
-  //           : client.modules!.transferRequest,
-  //     ),
-  //   );
-  // }
+  Future<void> updateModulesInAllSubEnterprises(
+    List<ModuleModel> modules,
+  ) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      final selectedEnterprise = _enterprises[_indexOfSelectedEnterprise];
+      final enterpriseToAdd = FirebaseEnterpriseModel(
+        enterpriseName: selectedEnterprise.enterpriseName,
+        id: selectedEnterprise.id,
+        urlCCS: selectedEnterprise.urlCCS,
+        usersInformations: selectedEnterprise.usersInformations,
+        subEnterprises: selectedEnterprise.subEnterprises
+            ?.map(
+              (e) => SubEnterpriseModel(
+                modules: modules,
+                cnpj: e.cnpj,
+                surname: e.surname,
+              ),
+            )
+            .toList(),
+      );
+
+      final updatedEnterprise = await FirebaseHelper.addUpdateEnterprise(
+        enterpriseToAdd: enterpriseToAdd,
+      );
+
+      if (updatedEnterprise == null) {
+        throw Exception();
+      } else {
+        final context = NavigatorKey.navigatorKey.currentState!.context;
+        _enterprises[_indexOfSelectedEnterprise] = updatedEnterprise;
+        Navigator.of(context).pop();
+        ShowSnackbarMessage.show(
+          message: "Módulos atualizados com sucesso",
+          context: context,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
+      }
+    } catch (e) {
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> removeSubEnterprise(index) async {
     try {

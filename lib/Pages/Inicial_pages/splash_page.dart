@@ -50,7 +50,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     await FirebaseHelper.initNotifications(notificationsProvider);
 
     Future.delayed(const Duration(seconds: 3), () {
-      if (kIsWeb) {
+      if (kIsWeb || 1 == 1 /* TODO remove this */) {
         Navigator.of(context)
             .pushNamedAndRemoveUntil(APPROUTES.WEB_LOGIN, (route) => false);
       } else {

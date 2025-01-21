@@ -387,8 +387,8 @@ class FirebaseHelper {
     try {
       final newEnterprise = FirebaseEnterpriseModel(
         enterpriseName:
-            enterpriseToAdd.enterpriseName.removeWhiteSpaces().toLowerCase(),
-        urlCCS: enterpriseToAdd.urlCCS.removeWhiteSpaces().toLowerCase(),
+            enterpriseToAdd.enterpriseName.toLowerCase().removeWhiteSpaces(),
+        urlCCS: enterpriseToAdd.urlCCS.toLowerCase().removeWhiteSpaces(),
         id: enterpriseToAdd.id,
         usersInformations: enterpriseToAdd.usersInformations,
         subEnterprises: enterpriseToAdd.subEnterprises!
@@ -402,7 +402,7 @@ class FirebaseHelper {
             .toList(),
       );
 
-      await _clientsCollection.doc(enterpriseToAdd.enterpriseName).set(
+      await _clientsCollection.doc(newEnterprise.enterpriseName).set(
             newEnterprise.toJson(),
             SetOptions(merge: true),
           );

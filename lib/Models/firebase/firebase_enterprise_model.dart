@@ -8,7 +8,7 @@ class FirebaseEnterpriseModel {
   final List<UserInformationsModel>? usersInformations;
   final List<SubEnterpriseModel>? subEnterprises;
   FirebaseEnterpriseModel({
-    this.enterpriseName = "undefined",
+    required this.enterpriseName,
     required this.id,
     required this.urlCCS,
     required this.usersInformations,

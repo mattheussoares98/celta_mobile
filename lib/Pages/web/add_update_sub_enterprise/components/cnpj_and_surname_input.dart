@@ -23,8 +23,8 @@ class CnpjAndSurnameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
-    SubEnterpriseModel? selectedSubEnterprise =
-        ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
+    Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
+    SubEnterpriseModel? selectedSubEnterprise = arguments?["selectedSubEnterprise"];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),

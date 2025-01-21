@@ -11,12 +11,16 @@ class SubEnterprisesItems extends StatelessWidget {
   const SubEnterprisesItems({super.key});
 
   void goToAddOrEditSubEnterprisePage({
-    required SubEnterpriseModel? item,
+    required SubEnterpriseModel? selectedSubEnterprise,
     required BuildContext context,
+    required bool updatingAllSubenterprises,
   }) {
     Navigator.of(context).pushNamed(
       APPROUTES.ADD_UPDATE_SUB_ENTERPRISE,
-      arguments: item,
+      arguments: {
+        "selectedSubEnterprise": selectedSubEnterprise,
+        "updatingAllSubenterprises": updatingAllSubenterprises,
+      },
     );
   }
 
@@ -56,7 +60,11 @@ class SubEnterprisesItems extends StatelessWidget {
 
               return InkWell(
                 onTap: () {
-                  goToAddOrEditSubEnterprisePage(item: item, context: context);
+                  goToAddOrEditSubEnterprisePage(
+                    selectedSubEnterprise: item,
+                    context: context,
+                    updatingAllSubenterprises: false,
+                  );
                 },
                 child: Card(
                   child: Padding(
@@ -122,8 +130,9 @@ class SubEnterprisesItems extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             goToAddOrEditSubEnterprisePage(
-                              item: item,
+                              selectedSubEnterprise: item,
                               context: context,
+                              updatingAllSubenterprises: false,
                             );
                           },
                           icon: Icon(
@@ -137,6 +146,27 @@ class SubEnterprisesItems extends StatelessWidget {
                 ),
               );
             },
+          ),
+        if (webProvider.enterprises.isNotEmpty &&
+            webProvider.indexOfSelectedEnterprise != -1 &&
+            webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
+                    .subEnterprises?.length !=
+                null &&
+            webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
+                    .subEnterprises!.length >
+                1)
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: TextButton(
+              onPressed: () {
+                goToAddOrEditSubEnterprisePage(
+                  selectedSubEnterprise: null,
+                  context: context,
+                  updatingAllSubenterprises: true,
+                );
+              },
+              child: Text("Deixar módulos iguais em todas sub empresas"),
+            ),
           ),
       ],
     );

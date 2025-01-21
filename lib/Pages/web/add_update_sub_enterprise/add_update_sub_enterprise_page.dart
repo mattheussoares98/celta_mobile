@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../components/components.dart';
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 import 'components/components.dart';
@@ -31,8 +32,9 @@ class _AddUpdateSubEnterprisePageState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
       SubEnterpriseModel? selectedSubEnterprise =
-          ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
+          arguments?["selectedSubEnterprise"];
 
       if (selectedSubEnterprise != null) {
         _cnpjController.text = selectedSubEnterprise.cnpj.toString();
@@ -184,107 +186,145 @@ class _AddUpdateSubEnterprisePageState
       return;
     }
 
-    SubEnterpriseModel? selectedSubEnterprise =
-        ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
+    Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
 
-    await webProvider.addUpdateEnterprise(
-      context: context,
-      enterpriseNameController: _enterpriseController,
-      urlCcsController: _urlCcsController,
-      isAddinSubEnterprise: selectedSubEnterprise == null,
-      subEnterpriseToAdd: SubEnterpriseModel(
-        modules: modules,
-        cnpj: _cnpjController.text,
-        surname: _surnameController.text,
-      ),
-    );
+    SubEnterpriseModel? selectedSubEnterprise =
+        arguments?["selectedSubEnterprise"];
+    bool updatingAllSubenterprises =
+        arguments?["updatingAllSubenterprises"] ?? false;
+
+    if (updatingAllSubenterprises) {
+      ShowAlertDialog.show(
+          context: context,
+          title: 'Atualizar todas empresas',
+          content: Text(
+              "Deseja realmente igualar todos módulos em todas as sub empresas?"),
+          function: () async {
+            await webProvider.updateModulesInAllSubEnterprises(modules);
+          });
+    } else {
+      await webProvider.addUpdateEnterprise(
+        context: context,
+        enterpriseNameController: _enterpriseController,
+        urlCcsController: _urlCcsController,
+        isAddinSubEnterprise: selectedSubEnterprise == null,
+        subEnterpriseToAdd: SubEnterpriseModel(
+          modules: modules,
+          cnpj: _cnpjController.text,
+          surname: _surnameController.text,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
+    Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
     SubEnterpriseModel? selectedSubEnterprise =
-        ModalRoute.of(context)!.settings.arguments as SubEnterpriseModel?;
+        arguments?["selectedSubEnterprise"];
+    bool updatingAllSubenterprises =
+        arguments?["updatingAllSubenterprises"] ?? false;
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      if (webProvider.indexOfSelectedEnterprise == -1)
-                        EnterpriseNameInput(
-                          enterpriseController: _enterpriseController,
-                          enterpriseFocusNode: _enterpriseFocusNode,
-                          ccsFocusNode: _ccsFocusNode,
-                        ),
-                      if (webProvider.indexOfSelectedEnterprise == -1)
-                        CcsUrlInput(
-                          urlCcsController: _urlCcsController,
-                          ccsFocusNode: _ccsFocusNode,
-                          cnpjFocusNode: _cnpjFocusNode,
-                        ),
-                      CnpjAndSurnameInput(
-                        cnpjController: _cnpjController,
-                        cnpjFocusNode: _cnpjFocusNode,
-                        surnameController: _surnameController,
-                        surnameFocusNode: _surnameFocusNode,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: FittedBox(
+              child: Text(
+                updatingAllSubenterprises
+                    ? "Atualizando todas sub empresas"
+                    : selectedSubEnterprise == null
+                        ? "Adicionando sub empresa"
+                        : "Editando sub empresa",
+              ),
+            ),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          if (webProvider.indexOfSelectedEnterprise == -1)
+                            EnterpriseNameInput(
+                              enterpriseController: _enterpriseController,
+                              enterpriseFocusNode: _enterpriseFocusNode,
+                              ccsFocusNode: _ccsFocusNode,
+                            ),
+                          if (webProvider.indexOfSelectedEnterprise == -1)
+                            CcsUrlInput(
+                              urlCcsController: _urlCcsController,
+                              ccsFocusNode: _ccsFocusNode,
+                              cnpjFocusNode: _cnpjFocusNode,
+                            ),
+                          if (!updatingAllSubenterprises)
+                            CnpjAndSurnameInput(
+                              cnpjController: _cnpjController,
+                              cnpjFocusNode: _cnpjFocusNode,
+                              surnameController: _surnameController,
+                              surnameFocusNode: _surnameFocusNode,
+                            ),
+                          EnableOrDisableModule(
+                            modules: modules,
+                            updateEnabled: (index) {
+                              final oldModule = modules[index];
+                              setState(() {
+                                modules[index] = ModuleModel(
+                                  name: oldModule.name,
+                                  enabled: !oldModule.enabled,
+                                  module: oldModule.module,
+                                );
+                              });
+                            },
+                          ),
+                        ],
                       ),
-                      EnableOrDisableModule(
-                        modules: modules,
-                        updateEnabled: (index) {
-                          final oldModule = modules[index];
-                          setState(() {
-                            modules[index] = ModuleModel(
-                              name: oldModule.name,
-                              enabled: !oldModule.enabled,
-                              module: oldModule.module,
-                            );
-                          });
-                        },
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            "Cancelar",
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await addUpdateEnterprise(webProvider);
+                          },
+                          child: Text(
+                            updatingAllSubenterprises
+                                ? "Alterando todas sub empresas"
+                                : selectedSubEnterprise == null
+                                    ? "Adicionando sub empresa"
+                                    : "Alterar",
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        "Cancelar",
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        await addUpdateEnterprise(webProvider);
-                      },
-                      child: Text(selectedSubEnterprise != null
-                          ? "Alterar"
-                          : "Adicionar"),
-                    ),
-                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+        loadingWidget(webProvider.isLoading),
+      ],
     );
   }
 }
