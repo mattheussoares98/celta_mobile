@@ -25,9 +25,9 @@ class _WebHomePageState extends State<WebHomePage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (mounted) {
-        setState(() {});
-      }
+      await Provider.of<WebProvider>(context, listen: false).getAllClients();
+      await Provider.of<WebProvider>(context, listen: false)
+          .getLastThreeMonthsSoapActions();
     });
   }
 

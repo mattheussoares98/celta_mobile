@@ -6,22 +6,8 @@ import '../../../providers/providers.dart';
 import '../components/components.dart';
 import 'components/components.dart';
 
-class EnterprisesPage extends StatefulWidget {
+class EnterprisesPage extends StatelessWidget {
   const EnterprisesPage({super.key});
-
-  @override
-  State<EnterprisesPage> createState() => _EnterprisesPageState();
-}
-
-class _EnterprisesPageState extends State<EnterprisesPage> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Provider.of<WebProvider>(context, listen: false).getAllClients();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
