@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +57,8 @@ class _ConferenceProductsItemsState extends State<ConferenceProductsItems> {
         _selectedIndex = -1;
       });
 
-      if (configurationsProvider.autoScan?.value == true) {
+      if (configurationsProvider.autoScan?.value == true &&
+          !Platform.isWindows) {
         await widget.getProductsWithCamera();
       }
 
