@@ -22,16 +22,15 @@ class _HomePageState extends State<HomePage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
-        debugPrint("mounted");
         EnterpriseProvider enterpriseProvider =
             Provider.of(context, listen: false);
 
-        setState(() {});
         ConfigurationsProvider configurationsProvider =
             Provider.of(context, listen: false);
         await configurationsProvider.restoreConfigurations();
         manualsUrl = await configurationsProvider.getManualsUrl();
         await enterpriseProvider.updateFirebaseEnterpriseModel();
+        setState(() {});
       }
     });
   }
@@ -39,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     EnterpriseProvider enterpriseProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
 
     debugPrint("Width: ${MediaQuery.of(context).size.width}");
     debugPrint("Height: ${MediaQuery.of(context).size.height}");
@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         loadingWidget(enterpriseProvider.isLoading),
+        loadingWidget(configurationsProvider.isLoading),
       ],
     );
   }

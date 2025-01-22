@@ -25,6 +25,9 @@ class ConfigurationsProvider with ChangeNotifier {
       _customerPersonalizedCode;
   ConfigurationsModel? _customerPersonalizedCode;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   ConfigurationsProvider._() {
     _autoScan = ConfigurationsModel(
       configurationType: ConfigurationType.autoScan,
@@ -70,6 +73,9 @@ class ConfigurationsProvider with ChangeNotifier {
   List<ConfigurationsModel> get configurations => _configurations;
 
   Future<void> restoreConfigurations() async {
+    _isLoading = true;
+    notifyListeners();
+
     _autoScan?.value =
         await PrefsInstance.getBool(prefsKeys: PrefsKeys.useAutoScan);
     _legacyCode?.value =
@@ -81,6 +87,7 @@ class ConfigurationsProvider with ChangeNotifier {
       prefsKeys: PrefsKeys.searchCustomerByPersonalizedCode,
     );
 
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -151,9 +158,15 @@ class ConfigurationsProvider with ChangeNotifier {
 
   Future<String?> getManualsUrl() async {
     try {
+      _isLoading = true;
+      notifyListeners();
+
       return FirebaseHelper.getManualsUrl();
     } catch (e) {
       return null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }
