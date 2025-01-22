@@ -56,6 +56,9 @@ class FirebaseHelper {
   static CollectionReference _clientsCollection =
       _firebaseFirestore.collection("clients");
 
+  static CollectionReference _manualsUrl =
+      _firebaseFirestore.collection("manualsUrl");
+
   static CollectionReference _soapActionsCollection =
       _firebaseFirestore.collection("soapActions");
 
@@ -247,17 +250,21 @@ class FirebaseHelper {
 
   static Future<QuerySnapshot<Object?>> _getQuerySnapshot({
     required CollectionReference<Object?> collection,
-    required Object fieldToSearch,
-    required String isEqualTo,
+    Object? fieldToSearch,
+    String? isEqualTo,
   }) async {
-    return await collection
-        .where(
-          fieldToSearch,
-          isEqualTo: isEqualTo
-              .toLowerCase()
-              .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
-        )
-        .get();
+    if (fieldToSearch != null && isEqualTo != null) {
+      return await collection
+          .where(
+            fieldToSearch,
+            isEqualTo: isEqualTo
+                .toLowerCase()
+                .replaceAll(RegExp(r'\s+'), ''), //remove espaços em branco
+          )
+          .get();
+    } else {
+      return await collection.get();
+    }
   }
 
   static Future<UserCredential?> signIn({
@@ -531,6 +538,20 @@ class FirebaseHelper {
       }
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  static Future<String?> getManualsUrl() async {
+    try {
+      final value = await _getQuerySnapshot(collection: _manualsUrl);
+
+      if (value.docs.isNotEmpty) {
+        return (value.docs.first.data() as Map)["url"];
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../api/api.dart';
 import '../../../../components/components.dart';
 import '../../../../utils/utils.dart';
 
@@ -81,15 +82,31 @@ class ModulesItems extends StatelessWidget {
         ),
         ImageComponent.image(
           imagePath: 'lib/assets/Images/manuals.png',
-          routine: 'Manuais'.toUpperCase(),
+          routine: 'Manuais do BS'.toUpperCase(),
           nextRoute: APPROUTES.MANUALS,
           context: context,
           isNew: true,
-          onTap: () async {
-            // await UrlLauncher.searchAndLaunchUrl(
-            //   context: context,
-            //   url: 'https://www.celtaware.com.br',
-            // );
+          onTap: () {
+            if (manualsUrl == null) {
+              ShowSnackbarMessage.show(
+                message:
+                    "Não foi possível carregar a URL para levar até o site com os manuais. Feche o aplicativo, abra novamente e tente de novo",
+                context: context,
+              );
+            } else {
+              ShowAlertDialog.show(
+                context: context,
+                title: "Navegar para site com manuais",
+                content: Text(
+                    "Você será levado para o site que contém os manuais do CeltaBS. Deseja continuar?"),
+                function: () async {
+                  await UrlLauncher.searchAndLaunchUrl(
+                    context: context,
+                    url: manualsUrl!,
+                  );
+                },
+              );
+            }
           },
         ),
         ImageComponent.image(

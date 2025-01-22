@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? manualsUrl;
   @override
   void initState() {
     super.initState();
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage> {
         ConfigurationsProvider configurationsProvider =
             Provider.of(context, listen: false);
         await configurationsProvider.restoreConfigurations();
+        manualsUrl = await configurationsProvider.getManualsUrl();
         await enterpriseProvider.updateFirebaseEnterpriseModel();
       }
     });
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 if (enterpriseProvider.firebaseEnterpriseModel != null)
                   Expanded(
-                    child: ModulesItems(manualsUrl: ""),
+                    child: ModulesItems(manualsUrl: manualsUrl),
                   ),
               ],
             ),

@@ -148,4 +148,12 @@ class ConfigurationsProvider with ChangeNotifier {
       value: newValue,
     );
   }
+
+  Future<String?> getManualsUrl() async {
+    try {
+      return FirebaseHelper.getManualsUrl();
+    } catch (e) {
+      return null;
+    }
+  }
 }
