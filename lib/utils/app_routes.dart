@@ -16,6 +16,7 @@ class APPROUTES {
   static const INVENTORY_PRODUCTS = '/INVENTORY_PRODUCTS';
   static const LOGIN_OR_HOME_PAGE = '/';
   static const LOGIN_PAGE = '/LOGINPAGE';
+  static const MANUALS = '/MANUALS';
   static const NOTIFICATIONS = '/NOTIFICATIONS';
   static const PRICE_CONFERENCE = '/PRICE_CONFERENCE';
   static const EXPEDITION_CONFERENCE_PRODUCTS =

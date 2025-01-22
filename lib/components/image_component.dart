@@ -10,17 +10,19 @@ class ImageComponent {
     required String nextRoute,
     bool? isNew,
     bool? onlyForValidateModule,
+    void Function()? onTap,
   }) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          APPROUTES.ENTERPRISE,
-          arguments: {
-            "nextRoute": nextRoute,
-            "onlyForValidateModule": onlyForValidateModule,
+    return InkWell(
+      onTap: onTap ??
+          () {
+            Navigator.of(context).pushNamed(
+              APPROUTES.ENTERPRISE,
+              arguments: {
+                "nextRoute": nextRoute,
+                "onlyForValidateModule": onlyForValidateModule,
+              },
+            );
           },
-        );
-      },
       child: Card(
         child: Stack(
           alignment: Alignment.center,

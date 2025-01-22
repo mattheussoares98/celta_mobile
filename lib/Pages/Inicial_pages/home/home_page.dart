@@ -7,7 +7,6 @@ import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import 'components/components.dart';
-import 'components/my_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,21 +16,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int returnSize() {
-    if (MediaQuery.of(context).size.width > 900) {
-      return 4;
-    } else if (MediaQuery.of(context).size.width > 600) {
-      return 3;
-    } else
-      return 2;
-  }
-
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
+        debugPrint("mounted");
         EnterpriseProvider enterpriseProvider =
             Provider.of(context, listen: false);
 
@@ -91,16 +82,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 if (enterpriseProvider.firebaseEnterpriseModel != null)
                   Expanded(
-                    child: GridView.count(
-                      crossAxisCount:
-                          returnSize(), // define o número de colunas
-                      childAspectRatio:
-                          1.7, // define a proporção de largura/altura dos itens
-                      mainAxisSpacing: 0.0,
-                      crossAxisSpacing: 0.0,
-                      shrinkWrap: true,
-                      children: ModulesItems.modules,
-                    ),
+                    child: ModulesItems(manualsUrl: ""),
                   ),
               ],
             ),
