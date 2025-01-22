@@ -65,7 +65,7 @@ class _ModelsItemsState extends State<ModelsItems> {
                       saleRequestProvider.requests[index - 1];
 
                   return Card(
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         saleRequestProvider.needProcessCart = true;
                         Navigator.of(context).pushNamed(
