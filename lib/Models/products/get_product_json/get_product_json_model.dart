@@ -1,7 +1,5 @@
 import '../../../models/models.dart';
 
-import 'get_product_json.dart';
-
 class GetProductJsonModel {
   int? enterpriseCode;
   int? productCode;
@@ -53,6 +51,9 @@ class GetProductJsonModel {
       AutomaticDiscountPercentageOrValue; //vem somente quando processa o carrinho
   double? AutomaticDiscountValue; //vem somente quando processa o carrinho
   double? TotalLiquid; //vem somente quando processa o carrinho
+  String? DiscountDescription; //vem somente quando processa o carrinho
+  String? ExpectedDeliveryDate; //vem somente quando processa o carrinho
+  String? Observations; //vem somente quando processa o carrinho
 
   GetProductJsonModel({
     required this.enterpriseCode,
@@ -103,6 +104,9 @@ class GetProductJsonModel {
     this.AutomaticDiscountPercentageOrValue,
     this.AutomaticDiscountValue,
     this.TotalLiquid,
+    this.DiscountDescription,
+    this.ExpectedDeliveryDate,
+    this.Observations,
   });
 
   factory GetProductJsonModel.fromJson(Map json) => GetProductJsonModel(
@@ -152,10 +156,13 @@ class GetProductJsonModel {
         IncrementValue: json["IncrementValue"],
         DiscountPercentageOrValue: json["DiscountPercentageOrValue"],
         DiscountValue: json["DiscountValue"],
+        ExpectedDeliveryDate: json["ExpectedDeliveryDate"],
+        Observations: json["Observations"],
         AutomaticDiscountPercentageOrValue:
             json["AutomaticDiscountPercentageOrValue"],
         AutomaticDiscountValue: json["AutomaticDiscountValue"],
         TotalLiquid: json["TotalLiquid"],
+        DiscountDescription: json["DiscountDescription"],
         stockByEnterpriseAssociateds: json['StockByEnterpriseAssociateds']
             ?.map<StockByEnterpriseAssociatedsModel>(
                 (e) => StockByEnterpriseAssociatedsModel.fromJson(e))
@@ -166,6 +173,68 @@ class GetProductJsonModel {
         lastBuyEntrance: json['LastBuyEntrance'] != null
             ? LastBuyEntranceModel.fromJson(json['LastBuyEntrance'])
             : null,
+      );
+
+  factory GetProductJsonModel.fromProcessedCart({
+    required GetProductJsonModel oldProduct,
+    required SaleRequestProductProcessCartModel processedProductCart,
+  }) =>
+      GetProductJsonModel(
+        AutomaticDiscountPercentageOrValue:
+            processedProductCart.AutomaticDiscountPercentageOrValue,
+        AutomaticDiscountValue: processedProductCart.AutomaticDiscountValue,
+        DiscountPercentageOrValue:
+            processedProductCart.DiscountPercentageOrValue,
+        DiscountValue: processedProductCart.DiscountValue,
+        IncrementPercentageOrValue:
+            processedProductCart.IncrementPercentageOrValue,
+        IncrementValue: processedProductCart.IncrementValue,
+        TotalLiquid: processedProductCart.TotalLiquid,
+        quantity: processedProductCart.Quantity ?? 1,
+        value: processedProductCart.Value,
+        DiscountDescription: processedProductCart.DiscountDescription,
+        ExpectedDeliveryDate: processedProductCart.ExpectedDeliveryDate,
+        Observations: processedProductCart.Observations,
+        enterpriseCode: oldProduct.enterpriseCode,
+        productCode: oldProduct.productCode,
+        productPackingCode: oldProduct.productPackingCode,
+        valueTyped: oldProduct.valueTyped,
+        plu: oldProduct.plu,
+        name: oldProduct.name,
+        packingQuantity: oldProduct.packingQuantity,
+        retailPracticedPrice: oldProduct.retailPracticedPrice,
+        retailSalePrice: oldProduct.retailSalePrice,
+        retailOfferPrice: oldProduct.retailOfferPrice,
+        wholePracticedPrice: oldProduct.wholePracticedPrice,
+        wholeSalePrice: oldProduct.wholeSalePrice,
+        wholeOfferPrice: oldProduct.wholeOfferPrice,
+        eCommercePracticedPrice: oldProduct.eCommercePracticedPrice,
+        eCommerceSalePrice: oldProduct.eCommerceSalePrice,
+        eCommerceOfferPrice: oldProduct.eCommerceOfferPrice,
+        minimumWholeQuantity: oldProduct.minimumWholeQuantity,
+        storageAreaAddress: oldProduct.storageAreaAddress,
+        balanceLabelType: oldProduct.balanceLabelType,
+        balanceLabelQuantity: oldProduct.balanceLabelQuantity,
+        pendantPrintLabel: oldProduct.pendantPrintLabel,
+        operationalCost: oldProduct.operationalCost,
+        replacementCost: oldProduct.replacementCost,
+        replacementCostMidle: oldProduct.replacementCostMidle,
+        liquidCost: oldProduct.liquidCost,
+        liquidCostMidle: oldProduct.liquidCostMidle,
+        realCost: oldProduct.realCost,
+        realLiquidCost: oldProduct.realLiquidCost,
+        fiscalCost: oldProduct.fiscalCost,
+        fiscalLiquidCost: oldProduct.fiscalLiquidCost,
+        stockByEnterpriseAssociateds: oldProduct.stockByEnterpriseAssociateds,
+        stocks: oldProduct.stocks,
+        lastBuyEntrance: oldProduct.lastBuyEntrance,
+        markUpdateClassInAdjustSalePriceIndividual:
+            oldProduct.markUpdateClassInAdjustSalePriceIndividual,
+        inClass: oldProduct.inClass,
+        isFatherOfGrate: oldProduct.isFatherOfGrate,
+        alterationPriceForAllPackings: oldProduct.alterationPriceForAllPackings,
+        isChildOfGrate: oldProduct.isChildOfGrate,
+        priceCost: oldProduct.priceCost,
       );
 
   Map<String, dynamic> toJson() => {
@@ -220,5 +289,8 @@ class GetProductJsonModel {
             this.AutomaticDiscountPercentageOrValue,
         "AutomaticDiscountValue": this.AutomaticDiscountValue,
         "TotalLiquid": this.TotalLiquid,
+        "DiscountDescription": this.DiscountDescription,
+        "ExpectedDeliveryDate": this.ExpectedDeliveryDate,
+        "Observations": this.Observations,
       };
 }

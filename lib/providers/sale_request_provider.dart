@@ -644,6 +644,24 @@ class SaleRequestProvider with ChangeNotifier {
           json.decode(SoapRequestResponse.responseAsString),
         );
 
+        // _cartProducts[enterpriseCode.toString()] =
+        if (saleRequestProcessCart?.Products == null) {
+          throw Exception();
+        }
+
+        _cartProducts[enterpriseCode.toString()] =
+            saleRequestProcessCart!.Products!.map((e) {
+          int indexSameProductInCart = _cartProducts[enterpriseCode.toString()]!
+              .indexWhere((element) =>
+                  element.productPackingCode == e.ProductPackingCode);
+
+          return GetProductJsonModel.fromProcessedCart(
+            oldProduct: _cartProducts[enterpriseCode.toString()]![
+                indexSameProductInCart],
+            processedProductCart: e,
+          );
+        }).toList();
+
         _needProcessCart = false;
       } else {
         ShowSnackbarMessage.show(
