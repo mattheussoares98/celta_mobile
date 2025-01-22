@@ -105,139 +105,120 @@ class GetProductJsonModel {
     this.TotalLiquid,
   });
 
-  GetProductJsonModel.fromJson(Map<String, dynamic> json) {
-    isChildOfGrate = json['IsChildOfGrate'];
-    priceCost = json['PriceCost'] == null
-        ? null
-        : PriceCostModel.fromJson(json['PriceCost']);
-    enterpriseCode = json['EnterpriseCode'];
-    productCode = json['ProductCode'];
-    productPackingCode = json['ProductPackingCode'];
-    plu = json['PLU'];
-    name = json['Name'];
-    packingQuantity = json['PackingQuantity'];
-    value = json['Value'];
-    retailPracticedPrice = json['RetailPracticedPrice'];
-    retailSalePrice = json['RetailSalePrice'];
-    retailOfferPrice = json['RetailOfferPrice'];
-    wholePracticedPrice = json['WholePracticedPrice'];
-    wholeSalePrice = json['WholeSalePrice'];
-    wholeOfferPrice = json['WholeOfferPrice'];
-    eCommercePracticedPrice = json['ECommercePracticedPrice'];
-    eCommerceSalePrice = json['ECommerceSalePrice'];
-    eCommerceOfferPrice = json['ECommerceOfferPrice'];
-    minimumWholeQuantity = json['MinimumWholeQuantity'];
-    storageAreaAddress = json['StorageAreaAddress'];
-    balanceLabelType = json['BalanceLabelType'];
-    balanceLabelQuantity = json['BalanceLabelQuantity'];
-    pendantPrintLabel = json['PendantPrintLabel'] ?? false;
-    operationalCost = json['OperationalCost'];
-    replacementCost = json['ReplacementCost'];
-    replacementCostMidle = json['ReplacementCostMidle'];
-    liquidCost = json['LiquidCost'];
-    liquidCostMidle = json['LiquidCostMidle'];
-    realCost = json['RealCost'];
-    realLiquidCost = json['RealLiquidCost'];
-    fiscalCost = json['FiscalCost'];
-    fiscalLiquidCost = json['FiscalLiquidCost'];
-    markUpdateClassInAdjustSalePriceIndividual =
-        json["MarkUpdateClassInAdjustSalePriceIndividual"] ?? false;
-    inClass = json["InClass"] ?? false;
-    isFatherOfGrate = json["IsFatherOfGrate"] ?? false;
+  factory GetProductJsonModel.fromJson(Map json) => GetProductJsonModel(
+        isChildOfGrate: json['IsChildOfGrate'],
+        priceCost: json['PriceCost'] == null
+            ? null
+            : PriceCostModel.fromJson(json['PriceCost']),
+        enterpriseCode: json['EnterpriseCode'],
+        productCode: json['ProductCode'],
+        productPackingCode: json['ProductPackingCode'],
+        plu: json['PLU'],
+        name: json['Name'],
+        packingQuantity: json['PackingQuantity'],
+        value: json['Value'],
+        retailPracticedPrice: json['RetailPracticedPrice'],
+        retailSalePrice: json['RetailSalePrice'],
+        retailOfferPrice: json['RetailOfferPrice'],
+        wholePracticedPrice: json['WholePracticedPrice'],
+        wholeSalePrice: json['WholeSalePrice'],
+        wholeOfferPrice: json['WholeOfferPrice'],
+        eCommercePracticedPrice: json['ECommercePracticedPrice'],
+        eCommerceSalePrice: json['ECommerceSalePrice'],
+        eCommerceOfferPrice: json['ECommerceOfferPrice'],
+        minimumWholeQuantity: json['MinimumWholeQuantity'],
+        storageAreaAddress: json['StorageAreaAddress'],
+        balanceLabelType: json['BalanceLabelType'],
+        balanceLabelQuantity: json['BalanceLabelQuantity'],
+        pendantPrintLabel: json['PendantPrintLabel'] ?? false,
+        operationalCost: json['OperationalCost'],
+        replacementCost: json['ReplacementCost'],
+        replacementCostMidle: json['ReplacementCostMidle'],
+        liquidCost: json['LiquidCost'],
+        liquidCostMidle: json['LiquidCostMidle'],
+        realCost: json['RealCost'],
+        realLiquidCost: json['RealLiquidCost'],
+        fiscalCost: json['FiscalCost'],
+        fiscalLiquidCost: json['FiscalLiquidCost'],
+        markUpdateClassInAdjustSalePriceIndividual:
+            json["MarkUpdateClassInAdjustSalePriceIndividual"] ?? false,
+        inClass: json["InClass"] ?? false,
+        isFatherOfGrate: json["IsFatherOfGrate"] ?? false,
+        alterationPriceForAllPackings:
+            json["AlterationPriceForAllPackings"] ?? false,
+        valueTyped: json["valueTyped"] ?? 0,
+        quantity: json["quantity"] ?? 0,
+        IncrementPercentageOrValue: json["IncrementPercentageOrValue"],
+        IncrementValue: json["IncrementValue"],
+        DiscountPercentageOrValue: json["DiscountPercentageOrValue"],
+        DiscountValue: json["DiscountValue"],
+        AutomaticDiscountPercentageOrValue:
+            json["AutomaticDiscountPercentageOrValue"],
+        AutomaticDiscountValue: json["AutomaticDiscountValue"],
+        TotalLiquid: json["TotalLiquid"],
+        stockByEnterpriseAssociateds: json['StockByEnterpriseAssociateds']
+            ?.map<StockByEnterpriseAssociatedsModel>(
+                (e) => StockByEnterpriseAssociatedsModel.fromJson(e))
+            .toList(),
+        stocks: json['Stocks']
+            ?.map<StocksModel>((e) => StocksModel.fromJson(e))
+            .toList(),
+        lastBuyEntrance: json['LastBuyEntrance'] != null
+            ? LastBuyEntranceModel.fromJson(json['LastBuyEntrance'])
+            : null,
+      );
 
-    alterationPriceForAllPackings =
-        json["AlterationPriceForAllPackings"] ?? false;
-
-    valueTyped = json["valueTyped"] ?? 0;
-    quantity = json["quantity"] ?? 0;
-
-    IncrementPercentageOrValue = json["IncrementPercentageOrValue"];
-    IncrementValue = json["IncrementValue"];
-    DiscountPercentageOrValue = json["DiscountPercentageOrValue"];
-    DiscountValue = json["DiscountValue"];
-    AutomaticDiscountPercentageOrValue =
-        json["AutomaticDiscountPercentageOrValue"];
-    AutomaticDiscountValue = json["AutomaticDiscountValue"];
-    TotalLiquid = json["TotalLiquid"];
-
-    if (json['StockByEnterpriseAssociateds'] != null) {
-      stockByEnterpriseAssociateds = <StockByEnterpriseAssociatedsModel>[];
-      json['StockByEnterpriseAssociateds'].forEach((v) {
-        stockByEnterpriseAssociateds!
-            .add(new StockByEnterpriseAssociatedsModel.fromJson(v));
-      });
-    }
-    if (json['Stocks'] != null) {
-      stocks = <StocksModel>[];
-      json['Stocks'].forEach((v) {
-        stocks!.add(new StocksModel.fromJson(v));
-      });
-    }
-
-    if (json["LastBuyEntrance"] != null) {
-      lastBuyEntrance = LastBuyEntranceModel.fromJson(json['LastBuyEntrance']);
-    } else {
-      lastBuyEntrance = null;
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['EnterpriseCode'] = this.enterpriseCode;
-    data['PriceCost'] = this.priceCost;
-    data['IsChildOfGrate'] = this.isChildOfGrate;
-    data['ProductCode'] = this.productCode;
-    data['ProductPackingCode'] = this.productPackingCode;
-    data['PLU'] = this.plu;
-    data['Name'] = this.name;
-    data['PackingQuantity'] = this.packingQuantity;
-    data['Value'] = this.value;
-    data['RetailPracticedPrice'] = this.retailPracticedPrice;
-    data['RetailSalePrice'] = this.retailSalePrice;
-    data['RetailOfferPrice'] = this.retailOfferPrice;
-    data['WholePracticedPrice'] = this.wholePracticedPrice;
-    data['WholeSalePrice'] = this.wholeSalePrice;
-    data['WholeOfferPrice'] = this.wholeOfferPrice;
-    data['ECommercePracticedPrice'] = this.eCommercePracticedPrice;
-    data['ECommerceSalePrice'] = this.eCommerceSalePrice;
-    data['ECommerceOfferPrice'] = this.eCommerceOfferPrice;
-    data['MinimumWholeQuantity'] = this.minimumWholeQuantity;
-    data['StorageAreaAddress'] = this.storageAreaAddress;
-    data['BalanceLabelType'] = this.balanceLabelType;
-    data['BalanceLabelQuantity'] = this.balanceLabelQuantity;
-    data['PendantPrintLabel'] = this.pendantPrintLabel;
-    data['OperationalCost'] = this.operationalCost;
-    data['ReplacementCost'] = this.replacementCost;
-    data['ReplacementCostMidle'] = this.replacementCostMidle;
-    data['LiquidCost'] = this.liquidCost;
-    data['LiquidCostMidle'] = this.liquidCostMidle;
-    data['RealCost'] = this.realCost;
-    data['RealLiquidCost'] = this.realLiquidCost;
-    data['FiscalCost'] = this.fiscalCost;
-    data['FiscalLiquidCost'] = this.fiscalLiquidCost;
-    data['valueTyped'] = this.valueTyped;
-    data['quantity'] = this.quantity;
-    data["markUpdateClassInAdjustSalePriceIndividual"] =
-        this.markUpdateClassInAdjustSalePriceIndividual;
-    data["inClass"] = this.inClass;
-    data["isFatherOfGrate"] = this.isFatherOfGrate;
-    data["alterationPriceForAllPackings"] = this.alterationPriceForAllPackings;
-    if (this.stockByEnterpriseAssociateds != null) {
-      data['StockByEnterpriseAssociateds'] =
-          this.stockByEnterpriseAssociateds!.map((v) => v.toJson()).toList();
-    }
-    if (this.stocks != null) {
-      data['Stocks'] = this.stocks!.map((v) => v.toJson()).toList();
-    }
-    data['LastBuyEntrance'] = this.lastBuyEntrance;
-    data["IncrementPercentageOrValue"] = this.IncrementPercentageOrValue;
-    data["IncrementValue"] = this.IncrementValue;
-    data["DiscountPercentageOrValue"] = this.DiscountPercentageOrValue;
-    data["DiscountValue"] = this.DiscountValue;
-    data["AutomaticDiscountPercentageOrValue"] =
-        this.AutomaticDiscountPercentageOrValue;
-    data["AutomaticDiscountValue"] = this.AutomaticDiscountValue;
-    data["TotalLiquid"] = this.TotalLiquid;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        'EnterpriseCode': this.enterpriseCode,
+        'PriceCost': this.priceCost,
+        'IsChildOfGrate': this.isChildOfGrate,
+        'ProductCode': this.productCode,
+        'ProductPackingCode': this.productPackingCode,
+        'PLU': this.plu,
+        'Name': this.name,
+        'PackingQuantity': this.packingQuantity,
+        'Value': this.value,
+        'RetailPracticedPrice': this.retailPracticedPrice,
+        'RetailSalePrice': this.retailSalePrice,
+        'RetailOfferPrice': this.retailOfferPrice,
+        'WholePracticedPrice': this.wholePracticedPrice,
+        'WholeSalePrice': this.wholeSalePrice,
+        'WholeOfferPrice': this.wholeOfferPrice,
+        'ECommercePracticedPrice': this.eCommercePracticedPrice,
+        'ECommerceSalePrice': this.eCommerceSalePrice,
+        'ECommerceOfferPrice': this.eCommerceOfferPrice,
+        'MinimumWholeQuantity': this.minimumWholeQuantity,
+        'StorageAreaAddress': this.storageAreaAddress,
+        'BalanceLabelType': this.balanceLabelType,
+        'BalanceLabelQuantity': this.balanceLabelQuantity,
+        'PendantPrintLabel': this.pendantPrintLabel,
+        'OperationalCost': this.operationalCost,
+        'ReplacementCost': this.replacementCost,
+        'ReplacementCostMidle': this.replacementCostMidle,
+        'LiquidCost': this.liquidCost,
+        'LiquidCostMidle': this.liquidCostMidle,
+        'RealCost': this.realCost,
+        'RealLiquidCost': this.realLiquidCost,
+        'FiscalCost': this.fiscalCost,
+        'FiscalLiquidCost': this.fiscalLiquidCost,
+        'valueTyped': this.valueTyped,
+        'quantity': this.quantity,
+        "markUpdateClassInAdjustSalePriceIndividual":
+            this.markUpdateClassInAdjustSalePriceIndividual,
+        "inClass": this.inClass,
+        "isFatherOfGrate": this.isFatherOfGrate,
+        "alterationPriceForAllPackings": this.alterationPriceForAllPackings,
+        'StockByEnterpriseAssociateds':
+            this.stockByEnterpriseAssociateds?.map((v) => v.toJson()).toList(),
+        'Stocks': this.stocks?.map((v) => v.toJson()).toList(),
+        'LastBuyEntrance': this.lastBuyEntrance,
+        "IncrementPercentageOrValue": this.IncrementPercentageOrValue,
+        "IncrementValue": this.IncrementValue,
+        "DiscountPercentageOrValue": this.DiscountPercentageOrValue,
+        "DiscountValue": this.DiscountValue,
+        "AutomaticDiscountPercentageOrValue":
+            this.AutomaticDiscountPercentageOrValue,
+        "AutomaticDiscountValue": this.AutomaticDiscountValue,
+        "TotalLiquid": this.TotalLiquid,
+      };
 }
