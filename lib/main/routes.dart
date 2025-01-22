@@ -46,7 +46,6 @@ Map<String, Widget Function(BuildContext)> routes() => {
       APPROUTES.HOME_PAGE: (ctx) => const HomePage(),
       APPROUTES.INVENTORY: (ctx) => const InventoryPage(),
       APPROUTES.INVENTORY_PRODUCTS: (ctx) => const InventoryProductsPage(),
-      APPROUTES.LOGIN_OR_HOME_PAGE: (ctx) => const AuthOrHoMePage(),
       APPROUTES.LOGIN_PAGE: (ctx) => const LoginPage(),
       APPROUTES.NOTIFICATIONS: (ctx) => const NotificationsPage(),
       APPROUTES.PRICE_CONFERENCE: (ctx) => const PriceConferencePage(),

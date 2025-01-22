@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../../api/api.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
@@ -25,8 +24,6 @@ class _HomePageState extends State<HomePage> {
         debugPrint("mounted");
         EnterpriseProvider enterpriseProvider =
             Provider.of(context, listen: false);
-
-        UserData.userName = await PrefsInstance.getString(PrefsKeys.user);
 
         setState(() {});
         ConfigurationsProvider configurationsProvider =

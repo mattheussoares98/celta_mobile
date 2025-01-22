@@ -21,22 +21,18 @@ class LoginProvider with ChangeNotifier {
     _changedEnterpriseNameOrUrlCcs = true;
   }
 
-  static MultiStreamController<bool>? _loginController;
-  //esse stream está sendo usado no AuthOrHomePage
-  //quando da certo o login, ele adiciona o _isAuth no controller
-  static final _isAuthStream = Stream<bool>.multi((controller) {
-    _loginController = controller;
-  });
-  Stream<bool> get authStream => _isAuthStream;
+  Future<bool> verifyIsLogged() async {
+    UserData.crossIdentity =
+        await PrefsInstance.getString(PrefsKeys.userIdentity);
+    UserData.enterpriseName =
+        await PrefsInstance.getString(PrefsKeys.enterpriseName);
+    UserData.userName = await PrefsInstance.getString(PrefsKeys.user);
+    UserData.urlCCS = await PrefsInstance.getString(PrefsKeys.urlCCS);
 
-  Future<void> verifyIsLogged() async {
-    final crossIdentity = await PrefsInstance.getString(PrefsKeys.userIdentity);
-
-    if (crossIdentity.isNotEmpty) {
-      UserData.crossIdentity = await PrefsInstance.getString(
-        PrefsKeys.userIdentity,
-      );
-      _loginController!.add(true);
+    if (UserData.crossIdentity.isNotEmpty) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -112,7 +108,10 @@ class LoginProvider with ChangeNotifier {
           value: UserData.crossIdentity,
         );
 
-        _loginController?.add(true);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          APPROUTES.HOME_PAGE,
+          (route) => false,
+        );
         _changedEnterpriseNameOrUrlCcs = false;
       }
     } catch (e) {
@@ -127,7 +126,7 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
-  logout() async {
+  Future<void> logout() async {
     UserData.crossIdentity = "";
 
     await PrefsInstance.setString(
@@ -136,6 +135,10 @@ class LoginProvider with ChangeNotifier {
     );
 
     await PrefsInstance.removeKeysOnLogout();
-    _loginController?.add(false);
+    Navigator.of(NavigatorKey.navigatorKey.currentState!.context)
+        .pushNamedAndRemoveUntil(
+      APPROUTES.LOGIN_PAGE,
+      (route) => false,
+    );
   }
 }

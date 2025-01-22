@@ -435,17 +435,9 @@ class FirebaseHelper {
 
       value = await _getQuerySnapshot(
         collection: _clientsCollection,
-        fieldToSearch: "urlCCS",
-        isEqualTo: UserData.urlCCS,
+        fieldToSearch: "enterpriseName",
+        isEqualTo: UserData.enterpriseName,
       );
-
-      if (value.docs.isEmpty) {
-        value = await _getQuerySnapshot(
-          collection: _clientsCollection,
-          fieldToSearch: "enterpriseName",
-          isEqualTo: UserData.enterpriseName,
-        );
-      }
 
       if (value.docs.isNotEmpty) {
         return FirebaseEnterpriseModel.fromJson(

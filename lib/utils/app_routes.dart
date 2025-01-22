@@ -14,7 +14,6 @@ class APPROUTES {
   static const HOME_PAGE = '/HOME_PAGE';
   static const INVENTORY = '/INVENTORY';
   static const INVENTORY_PRODUCTS = '/INVENTORY_PRODUCTS';
-  static const LOGIN_OR_HOME_PAGE = '/';
   static const LOGIN_PAGE = '/LOGINPAGE';
   static const MANUALS = '/MANUALS';
   static const NOTIFICATIONS = '/NOTIFICATIONS';
@@ -41,7 +40,7 @@ class APPROUTES {
       '/SALE_REQUEST_MANUAL_DEFAULT_REQUEST_MODEL';
   static const SALE_REQUEST_MODEL = '/SALE_REQUEST_MODEL';
   static const SALES = '/SALES';
-  static const SPLASHPAGE = '/SPLASHPAGE';
+  static const SPLASHPAGE = '/';
   static const STOCK = '/STOCK';
   static const TECHNICAL_SUPPORT = '/TECHNICAL_SUPPORT';
   static const TRANSFER = '/TRANSFER';

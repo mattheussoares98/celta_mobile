@@ -48,14 +48,23 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         Provider.of(context, listen: false);
 
     await FirebaseHelper.initNotifications(notificationsProvider);
+    LoginProvider loginProvider = Provider.of(context, listen: false);
+    bool logged = await loginProvider.verifyIsLogged();
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
       if (kIsWeb) {
         Navigator.of(context)
             .pushNamedAndRemoveUntil(APPROUTES.WEB_LOGIN, (route) => false);
+      } else if (logged) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          APPROUTES.HOME_PAGE,
+          (route) => false,
+        );
       } else {
         Navigator.of(context).pushNamedAndRemoveUntil(
-            APPROUTES.LOGIN_OR_HOME_PAGE, (route) => false);
+          APPROUTES.LOGIN_PAGE,
+          (route) => false,
+        );
       }
     });
   }
