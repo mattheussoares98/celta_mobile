@@ -401,7 +401,7 @@ class FirebaseHelper {
         subEnterprises: enterpriseToAdd.subEnterprises!
             .map(
               (e) => SubEnterpriseModel(
-                cnpj: e.cnpj,
+                cnpj: e.cnpj?.toInt().toString(),
                 surname: e.surname,
                 modules: e.modules,
               ),
@@ -409,7 +409,7 @@ class FirebaseHelper {
             .toList(),
       );
 
-      await _clientsCollection.doc(newEnterprise.enterpriseName).set(
+      await _clientsCollection.doc(enterpriseToAdd.id).set(
             newEnterprise.toJson(),
             SetOptions(merge: true),
           );
