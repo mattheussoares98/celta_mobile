@@ -197,158 +197,155 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
         userCanChangePrices: userCanChangePrices,
       ),
     ];
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Stack(
-        children: [
-          PopScope(
-            onPopInvokedWithResult: (value, __) {
-              saleRequestProvider.clearProducts();
-            },
-            child: Scaffold(
-              resizeToAvoidBottomInset: kIsWeb ? false : true,
-              appBar: AppBar(
-                title: FittedBox(
-                  child: Text(
-                    appBarTitles[_selectedIndex],
-                  ),
+    return Stack(
+      children: [
+        PopScope(
+          onPopInvokedWithResult: (value, __) {
+            saleRequestProvider.clearProducts();
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: kIsWeb ? false : true,
+            appBar: AppBar(
+              title: FittedBox(
+                child: Text(
+                  appBarTitles[_selectedIndex],
                 ),
-                actions: [
-                  if (_selectedIndex == _pages.length - 1)
-                    _clearAllDataIcon(saleRequestProvider),
-                  if (_selectedIndex < (_pages.length - 1))
-                    FittedBox(
-                      child: Column(
-                        children: [
-                          Stack(
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.shopping_cart,
-                                  color: Colors.white,
-                                  size: 33,
-                                  shadows: [
-                                    Shadow(
-                                      offset: Offset(1, 1),
-                                      blurRadius: 3.0,
-                                      color: Colors.black,
-                                    ),
-                                  ],
-                                ),
-                                //se não houver um modelo de pedido padrão informado,
-                                //desativa o botão pra ir até o carrinho
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedIndex = 2;
-                                  });
-                                },
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: FittedBox(
-                                      child: Text(
-                                        cartProductsCount.toString(),
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                  maxRadius: 11,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: Text(
-                              ConvertString.convertToBRL(
-                                totalCartPrice.toString(),
-                              ),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
               ),
-              body: Center(
-                child: _pages.elementAt(_selectedIndex),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: <BottomNavigationBarItem>[
-                  const BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.add_shopping_cart_sharp,
-                      size: 35,
-                    ),
-                    label: 'Inserir produtos',
-                  ),
-                  const BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.person_add,
-                      size: 35,
-                    ),
-                    label: 'Cliente',
-                  ),
-                  BottomNavigationBarItem(
-                    label: 'Carrinho',
-                    icon: Stack(
+              actions: [
+                if (_selectedIndex == _pages.length - 1)
+                  _clearAllDataIcon(saleRequestProvider),
+                if (_selectedIndex < (_pages.length - 1))
+                  FittedBox(
+                    child: Column(
                       children: [
-                        const Icon(
-                          Icons.shopping_cart,
-                          size: 35,
-                        ),
-                        if (cartProductsCount > 0)
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.red,
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: FittedBox(
-                                  child: Text(
-                                    cartProductsCount.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                        Stack(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                                size: 33,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(1, 1),
+                                    blurRadius: 3.0,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                              //se não houver um modelo de pedido padrão informado,
+                              //desativa o botão pra ir até o carrinho
+                              onPressed: () {
+                                setState(() {
+                                  _selectedIndex = 2;
+                                });
+                              },
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.red,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: FittedBox(
+                                    child: Text(
+                                      cartProductsCount.toString(),
+                                      style: const TextStyle(
+                                          color: Colors.white),
                                     ),
                                   ),
                                 ),
+                                maxRadius: 11,
                               ),
-                              maxRadius: 9,
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Text(
+                            ConvertString.convertToBRL(
+                              totalCartPrice.toString(),
+                            ),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Theme.of(context).colorScheme.primary,
-                onTap: (index) {
-                  _onItemTapped(
-                    index: index,
-                    saleRequestProvider: saleRequestProvider,
-                  );
-                },
-              ),
+              ],
+            ),
+            body: Center(
+              child: _pages.elementAt(_selectedIndex),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                const BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.add_shopping_cart_sharp,
+                    size: 35,
+                  ),
+                  label: 'Inserir produtos',
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.person_add,
+                    size: 35,
+                  ),
+                  label: 'Cliente',
+                ),
+                BottomNavigationBarItem(
+                  label: 'Carrinho',
+                  icon: Stack(
+                    children: [
+                      const Icon(
+                        Icons.shopping_cart,
+                        size: 35,
+                      ),
+                      if (cartProductsCount > 0)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.red,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: FittedBox(
+                                child: Text(
+                                  cartProductsCount.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            maxRadius: 9,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              onTap: (index) {
+                _onItemTapped(
+                  index: index,
+                  saleRequestProvider: saleRequestProvider,
+                );
+              },
             ),
           ),
-          loadingWidget(saleRequestProvider.isLoadingProcessCart),
-          loadingWidget(saleRequestProvider.isLoadingSaveSaleRequest),
-          loadingWidget(saleRequestProvider.isLoadingCustomer),
-          loadingWidget(saleRequestProvider.isLoadingProducts),
-        ],
-      ),
+        ),
+        loadingWidget(saleRequestProvider.isLoadingProcessCart),
+        loadingWidget(saleRequestProvider.isLoadingSaveSaleRequest),
+        loadingWidget(saleRequestProvider.isLoadingCustomer),
+        loadingWidget(saleRequestProvider.isLoadingProducts),
+      ],
     );
   }
 }

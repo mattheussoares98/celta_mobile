@@ -34,64 +34,61 @@ class _AdjustSalePriceProductsPageState
     EnterpriseModel enterprise =
         ModalRoute.of(context)!.settings.arguments as EnterpriseModel;
 
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: PopScope(
-        canPop: !adjustSalePriceProvider.isLoading,
-        onPopInvokedWithResult: (_, __) {
-          adjustSalePriceProvider.clearDataOnCloseProductsScreen();
-        },
-        child: Stack(
-          children: [
-            Scaffold(
-              appBar: AppBar(
-                title: const Text("Produtos"),
-              ),
-              body: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SearchWidget(
-                    searchFocusNode: searchFocusNode,
-                    configurations: [
-                      ConfigurationType.legacyCode,
-                      ConfigurationType.personalizedCode,
-                    ],
-                    searchProductController: searchValueController,
-                    onPressSearch: () async {
-                      await adjustSalePriceProvider.getProducts(
-                        enterprise: enterprise,
-                        searchValue: searchValueController.text,
-                        configurationsProvider: configurationsProvider,
-                      );
-
-                      if (adjustSalePriceProvider.products.isNotEmpty) {
-                        searchValueController.clear();
-                      }
-                    },
-                  ),
-                  if (adjustSalePriceProvider.errorMessage != "" &&
-                      adjustSalePriceProvider.products.length == 0)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ErrorMessage(
-                            errorMessage: adjustSalePriceProvider.errorMessage),
-                      ),
-                    ),
-                  if (!adjustSalePriceProvider.isLoading &&
-                      adjustSalePriceProvider.products.isNotEmpty)
-                    const ProductsItems(),
-                  // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
-                  //     priceConferenceProvider.productsCount > 1)
-                  //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
-                  //   PriceConferenceOrderProductsButtons(
-                  //       priceConferenceProvider: priceConferenceProvider)
-                ],
-              ),
+    return PopScope(
+      canPop: !adjustSalePriceProvider.isLoading,
+      onPopInvokedWithResult: (_, __) {
+        adjustSalePriceProvider.clearDataOnCloseProductsScreen();
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: const Text("Produtos"),
             ),
-            loadingWidget(adjustSalePriceProvider.isLoading),
-          ],
-        ),
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SearchWidget(
+                  searchFocusNode: searchFocusNode,
+                  configurations: [
+                    ConfigurationType.legacyCode,
+                    ConfigurationType.personalizedCode,
+                  ],
+                  searchProductController: searchValueController,
+                  onPressSearch: () async {
+                    await adjustSalePriceProvider.getProducts(
+                      enterprise: enterprise,
+                      searchValue: searchValueController.text,
+                      configurationsProvider: configurationsProvider,
+                    );
+
+                    if (adjustSalePriceProvider.products.isNotEmpty) {
+                      searchValueController.clear();
+                    }
+                  },
+                ),
+                if (adjustSalePriceProvider.errorMessage != "" &&
+                    adjustSalePriceProvider.products.length == 0)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ErrorMessage(
+                          errorMessage: adjustSalePriceProvider.errorMessage),
+                    ),
+                  ),
+                if (!adjustSalePriceProvider.isLoading &&
+                    adjustSalePriceProvider.products.isNotEmpty)
+                  const ProductsItems(),
+                // if (MediaQuery.of(context).viewInsets.bottom == 0 &&
+                //     priceConferenceProvider.productsCount > 1)
+                //   //só mostra a opção de organizar se houver mais de um produto e se o teclado estiver fechado
+                //   PriceConferenceOrderProductsButtons(
+                //       priceConferenceProvider: priceConferenceProvider)
+              ],
+            ),
+          ),
+          loadingWidget(adjustSalePriceProvider.isLoading),
+        ],
       ),
     );
   }

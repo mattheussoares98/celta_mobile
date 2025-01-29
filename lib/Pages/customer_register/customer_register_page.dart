@@ -183,91 +183,88 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           passwordController: passwordController,
         );
       },
-      child: GestureDetector(
-        onTap: FocusScope.of(context).unfocus,
-        child: PopScope(
-          canPop: canExitPage(
-            customerRegisterProvider: customerRegisterProvider,
-            addressProvider: addressProvider,
-          ),
-          onPopInvokedWithResult: (value, __) {
-            if (value == true) {
-              addressProvider.clearAddresses();
-              addressProvider.clearAddressControllers(clearCep: true);
-            }
-          },
-          child: Stack(
-            children: [
-              Scaffold(
-                appBar: AppBar(
-                  title: Text(
-                    appBarTitles[_selectedIndex],
-                  ),
+      child: PopScope(
+        canPop: canExitPage(
+          customerRegisterProvider: customerRegisterProvider,
+          addressProvider: addressProvider,
+        ),
+        onPopInvokedWithResult: (value, __) {
+          if (value == true) {
+            addressProvider.clearAddresses();
+            addressProvider.clearAddressControllers(clearCep: true);
+          }
+        },
+        child: Stack(
+          children: [
+            Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  appBarTitles[_selectedIndex],
                 ),
-                bottomNavigationBar: CustomerRegisterBottomNavigationItems(
-                  hasAddressInformed: _hasAdressInformed(addressProvider),
-                  updateSelectedIndex: (int index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  },
-                  isValidFormKey: _isValidFormKey,
-                  selectedIndex: _selectedIndex,
-                ),
-                body: _pages.elementAt(_selectedIndex),
-                floatingActionButton: _selectedIndex == 5
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomerRegisterClearAllData(
-                            nameController: nameController,
-                            emailController: emailController,
-                            telephoneController: telephoneController,
-                            dddController: dddController,
-                            reducedNameController: reducedNameController,
-                            cpfCnpjController: cpfCnpjController,
-                            dateOfBirthController: dateOfBirthController,
-                            passwordConfirmationController:
-                                passwordConfirmationController,
-                            passwordController: passwordController,
-                          ),
-                          CustomerRegisterFloatingActionButton(
-                            nameController: nameController,
-                            reducedNameController: reducedNameController,
-                            cpfCnpjController: cpfCnpjController,
-                            dateOfBirthController: dateOfBirthController,
-                            emailController: emailController,
-                            telephoneController: telephoneController,
-                            dddController: dddController,
-                            passwordController: passwordController,
-                            passwordConfirmationController:
-                                passwordConfirmationController,
-                            changeSelectedIndexToAddAddres: () {
-                              setState(() {
-                                _selectedIndex = 1;
-                              });
-                            },
-                            changeFormKeysToInvalid: () {
-                              setState(() {
-                                customerRegisterProvider.personFormKeyIsValid =
-                                    false;
-                                addressProvider.addressFormKeyIsValid = false;
-                                customerRegisterProvider.emailFormKeyIsValid =
-                                    false;
-                                customerRegisterProvider
-                                    .telephoneFormKeyIsValid = false;
-                                _selectedIndex = 0;
-                              });
-                            },
-                          )
-                        ],
-                      )
-                    : null,
               ),
-              loadingWidget(addressProvider.isLoadingCep),
-              loadingWidget(customerRegisterProvider.isLoading),
-            ],
-          ),
+              bottomNavigationBar: CustomerRegisterBottomNavigationItems(
+                hasAddressInformed: _hasAdressInformed(addressProvider),
+                updateSelectedIndex: (int index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+                isValidFormKey: _isValidFormKey,
+                selectedIndex: _selectedIndex,
+              ),
+              body: _pages.elementAt(_selectedIndex),
+              floatingActionButton: _selectedIndex == 5
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomerRegisterClearAllData(
+                          nameController: nameController,
+                          emailController: emailController,
+                          telephoneController: telephoneController,
+                          dddController: dddController,
+                          reducedNameController: reducedNameController,
+                          cpfCnpjController: cpfCnpjController,
+                          dateOfBirthController: dateOfBirthController,
+                          passwordConfirmationController:
+                              passwordConfirmationController,
+                          passwordController: passwordController,
+                        ),
+                        CustomerRegisterFloatingActionButton(
+                          nameController: nameController,
+                          reducedNameController: reducedNameController,
+                          cpfCnpjController: cpfCnpjController,
+                          dateOfBirthController: dateOfBirthController,
+                          emailController: emailController,
+                          telephoneController: telephoneController,
+                          dddController: dddController,
+                          passwordController: passwordController,
+                          passwordConfirmationController:
+                              passwordConfirmationController,
+                          changeSelectedIndexToAddAddres: () {
+                            setState(() {
+                              _selectedIndex = 1;
+                            });
+                          },
+                          changeFormKeysToInvalid: () {
+                            setState(() {
+                              customerRegisterProvider.personFormKeyIsValid =
+                                  false;
+                              addressProvider.addressFormKeyIsValid = false;
+                              customerRegisterProvider.emailFormKeyIsValid =
+                                  false;
+                              customerRegisterProvider
+                                  .telephoneFormKeyIsValid = false;
+                              _selectedIndex = 0;
+                            });
+                          },
+                        )
+                      ],
+                    )
+                  : null,
+            ),
+            loadingWidget(addressProvider.isLoadingCep),
+            loadingWidget(customerRegisterProvider.isLoading),
+          ],
         ),
       ),
     );

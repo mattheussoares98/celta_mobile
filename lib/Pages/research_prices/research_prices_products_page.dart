@@ -55,64 +55,61 @@ class _ResearchPricesProductsPageState
       ),
     ];
 
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Stack(
-        children: [
-          PopScope(
-            canPop: !researchPricesProvider.isLoadingGetProducts &&
-                !researchPricesProvider.isLoadingInsertConcurrentPrices,
-            onPopInvokedWithResult: (value, __) {
-              if (value == true) {
-                researchPricesProvider.clearAssociatedsProducts();
-                researchPricesProvider.clearNotAssociatedsProducts();
-              }
-            },
-            child: Scaffold(
-              resizeToAvoidBottomInset: kIsWeb ? false : true,
-              appBar: AppBar(
-                title: FittedBox(
-                  child: Text(
-                      "Pesquisa ${researchPricesProvider.selectedResearch!.Code}"
-                      " - Concorrente ${researchPricesProvider.selectedConcurrent!.ConcurrentCode}"),
-                ),
-              ),
-              body: Center(
-                child: _pages.elementAt(_selectedIndex),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: <BottomNavigationBarItem>[
-                  const BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.manage_search,
-                      size: 35,
-                    ),
-                    label: 'Associados à pesquisa',
-                  ),
-                  const BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.search,
-                      size: 35,
-                    ),
-                    label: 'Não associados à pesquisa',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Theme.of(context).colorScheme.primary,
-                onTap: researchPricesProvider.isLoadingGetProducts
-                    ? null
-                    : (index) {
-                        _onItemTapped(
-                          index: index,
-                        );
-                      },
+    return Stack(
+      children: [
+        PopScope(
+          canPop: !researchPricesProvider.isLoadingGetProducts &&
+              !researchPricesProvider.isLoadingInsertConcurrentPrices,
+          onPopInvokedWithResult: (value, __) {
+            if (value == true) {
+              researchPricesProvider.clearAssociatedsProducts();
+              researchPricesProvider.clearNotAssociatedsProducts();
+            }
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: kIsWeb ? false : true,
+            appBar: AppBar(
+              title: FittedBox(
+                child: Text(
+                    "Pesquisa ${researchPricesProvider.selectedResearch!.Code}"
+                    " - Concorrente ${researchPricesProvider.selectedConcurrent!.ConcurrentCode}"),
               ),
             ),
+            body: Center(
+              child: _pages.elementAt(_selectedIndex),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                const BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.manage_search,
+                    size: 35,
+                  ),
+                  label: 'Associados à pesquisa',
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.search,
+                    size: 35,
+                  ),
+                  label: 'Não associados à pesquisa',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              onTap: researchPricesProvider.isLoadingGetProducts
+                  ? null
+                  : (index) {
+                      _onItemTapped(
+                        index: index,
+                      );
+                    },
+            ),
           ),
-          loadingWidget(researchPricesProvider.isLoadingGetProducts),
-          loadingWidget(researchPricesProvider.isLoadingInsertConcurrentPrices),
-        ],
-      ),
+        ),
+        loadingWidget(researchPricesProvider.isLoadingGetProducts),
+        loadingWidget(researchPricesProvider.isLoadingInsertConcurrentPrices),
+      ],
     );
   }
 }

@@ -53,124 +53,121 @@ class _ResearchPricesPageState extends State<ResearchPricesPage> {
     ResearchPricesProvider researchPricesProvider =
         Provider.of(context, listen: true);
 
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: PopScope(
-        canPop: !researchPricesProvider.isLoadingResearchPrices,
-        onPopInvokedWithResult: (value, __) {
-          if (value == true) {
-            researchPricesProvider.clearResearchPrices();
-          }
-        },
-        child: Stack(
-          children: [
-            Scaffold(
-              appBar: AppBar(
-                title: const FittedBox(
-                  child: Text(
-                    'PESQUISAS CADASTRADAS',
-                  ),
+    return PopScope(
+      canPop: !researchPricesProvider.isLoadingResearchPrices,
+      onPopInvokedWithResult: (value, __) {
+        if (value == true) {
+          researchPricesProvider.clearResearchPrices();
+        }
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: const FittedBox(
+                child: Text(
+                  'PESQUISAS CADASTRADAS',
                 ),
               ),
-              body: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SearchWidget(
-                            configurations: [],
-                            searchProductController: searchController,
-                            onPressSearch: () async {
-                              await _getResearchPrices(
-                                notityListenersFromUpdate: true,
-                                researchPricesProvider: researchPricesProvider,
-                                searchText: searchController.text,
-                              );
-                            },
-                            hintText: "Nome ou código",
-                            labelText: "Nome ou código",
-                            searchFocusNode: _focusNode,
-                            useCamera: false,
-                            showConfigurationsIcon: false,
-                          ),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SearchWidget(
+                          configurations: [],
+                          searchProductController: searchController,
+                          onPressSearch: () async {
+                            await _getResearchPrices(
+                              notityListenersFromUpdate: true,
+                              researchPricesProvider: researchPricesProvider,
+                              searchText: searchController.text,
+                            );
+                          },
+                          hintText: "Nome ou código",
+                          labelText: "Nome ou código",
+                          searchFocusNode: _focusNode,
+                          useCamera: false,
+                          showConfigurationsIcon: false,
                         ),
-                        FittedBox(
-                          child: TextButton(
-                            onPressed: researchPricesProvider
-                                        .isLoadingGetConcurrents ||
-                                    researchPricesProvider
-                                        .isLoadingAddOrUpdateOfResearch
-                                ? null
-                                : () async {
-                                    await _getResearchPrices(
-                                      notityListenersFromUpdate: true,
-                                      researchPricesProvider:
-                                          researchPricesProvider,
-                                      searchText: "%",
-                                    );
-                                  },
-                            child: Text(
-                              "Consultar\ntodas",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: researchPricesProvider
-                                            .isLoadingGetConcurrents ||
-                                        researchPricesProvider
-                                            .isLoadingAddOrUpdateOfResearch
-                                    ? Colors.grey
-                                    : Theme.of(context).colorScheme.primary,
-                              ),
+                      ),
+                      FittedBox(
+                        child: TextButton(
+                          onPressed: researchPricesProvider
+                                      .isLoadingGetConcurrents ||
+                                  researchPricesProvider
+                                      .isLoadingAddOrUpdateOfResearch
+                              ? null
+                              : () async {
+                                  await _getResearchPrices(
+                                    notityListenersFromUpdate: true,
+                                    researchPricesProvider:
+                                        researchPricesProvider,
+                                    searchText: "%",
+                                  );
+                                },
+                          child: Text(
+                            "Consultar\ntodas",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: researchPricesProvider
+                                          .isLoadingGetConcurrents ||
+                                      researchPricesProvider
+                                          .isLoadingAddOrUpdateOfResearch
+                                  ? Colors.grey
+                                  : Theme.of(context).colorScheme.primary,
                             ),
                           ),
-                        )
-                      ],
+                        ),
+                      )
+                    ],
+                  ),
+                  if (researchPricesProvider.errorGetResearchPrices != "" &&
+                      researchPricesProvider.researchPricesCount == 0)
+                    ErrorMessage(
+                      errorMessage:
+                          researchPricesProvider.errorGetResearchPrices,
                     ),
-                    if (researchPricesProvider.errorGetResearchPrices != "" &&
-                        researchPricesProvider.researchPricesCount == 0)
-                      ErrorMessage(
-                        errorMessage:
-                            researchPricesProvider.errorGetResearchPrices,
-                      ),
-                    if (!researchPricesProvider.isLoadingResearchPrices)
-                      PricesItems(
-                        enterpriseCode: enterprise.Code,
-                      ),
-                  ],
-                ),
+                  if (!researchPricesProvider.isLoadingResearchPrices)
+                    PricesItems(
+                      enterpriseCode: enterprise.Code,
+                    ),
+                ],
               ),
-              floatingActionButton: floatingPersonalizedButton(
-                  context: context,
-                  researchPricesProvider: researchPricesProvider,
-                  nextRoute:
-                      APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
-                  isLoading: researchPricesProvider.isLoadingResearchPrices,
-                  messageButton: "criar\npesquisa".toUpperCase(),
-                  onTap: () async {
-                    researchPricesProvider.updateSelectedResearch(null);
-
-                    await Navigator.of(context).pushNamed(
-                      APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
-                      arguments: {
-                        "enterpriseCode": enterprise.Code,
-                      },
-                    );
-
-                    // if (createdNewResearch == true) {
-                    //   await _getResearchPrices(
-                    //     notityListenersFromUpdate: true,
-                    //     researchPricesProvider: researchPricesProvider,
-                    //     searchControllerText:
-                    //   );
-                    // }
-                  }),
             ),
-            loadingWidget(researchPricesProvider.isLoadingResearchPrices),
-            loadingWidget(
-                researchPricesProvider.isLoadingAddOrUpdateConcurrents),
-          ],
-        ),
+            floatingActionButton: floatingPersonalizedButton(
+                context: context,
+                researchPricesProvider: researchPricesProvider,
+                nextRoute:
+                    APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+                isLoading: researchPricesProvider.isLoadingResearchPrices,
+                messageButton: "criar\npesquisa".toUpperCase(),
+                onTap: () async {
+                  researchPricesProvider.updateSelectedResearch(null);
+    
+                  await Navigator.of(context).pushNamed(
+                    APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+                    arguments: {
+                      "enterpriseCode": enterprise.Code,
+                    },
+                  );
+    
+                  // if (createdNewResearch == true) {
+                  //   await _getResearchPrices(
+                  //     notityListenersFromUpdate: true,
+                  //     researchPricesProvider: researchPricesProvider,
+                  //     searchControllerText:
+                  //   );
+                  // }
+                }),
+          ),
+          loadingWidget(researchPricesProvider.isLoadingResearchPrices),
+          loadingWidget(
+              researchPricesProvider.isLoadingAddOrUpdateConcurrents),
+        ],
       ),
     );
   }

@@ -194,89 +194,86 @@ class _InventoryProductsPageState extends State<InventoryProductsPage> {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     final enterprise = arguments["enterprise"];
 
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: PopScope(
-        onPopInvokedWithResult: (value, __) {
-          if (value == true) {
-            inventoryProvider.clearProducts();
-          }
-        },
-        child: Stack(
-          children: [
-            Scaffold(
-              resizeToAvoidBottomInset: kIsWeb ? false : true,
-              appBar: AppBar(
-                title: const Text(
-                  'PRODUTOS',
-                ),
+    return PopScope(
+      onPopInvokedWithResult: (value, __) {
+        if (value == true) {
+          inventoryProvider.clearProducts();
+        }
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: kIsWeb ? false : true,
+            appBar: AppBar(
+              title: const Text(
+                'PRODUTOS',
               ),
-              body: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      SearchWidget(
-                        configurations: [
-                          ConfigurationType.autoScan,
-                          ConfigurationType.legacyCode,
-                          ConfigurationType.personalizedCode,
-                        ],
-                        searchProductController: _consultProductController,
-                        onPressSearch: () async {
-                          await _searchProduct(
-                            inventoryProvider: inventoryProvider,
-                            configurationsProvider: configurationsProvider,
-                            enterprise: enterprise,
-                          );
-                          if (inventoryProvider.productsCount > 0) {
-                            setState(() {
-                              _consultProductController.text = "";
-                            });
-                          }
-                        },
-                        searchFocusNode:
-                            inventoryProvider.consultProductFocusNode,
-                      ),
-                      searchButtonAndIndividualSwitch(
-                        inventoryProvider: inventoryProvider,
-                        configurationsProvider: configurationsProvider,
-                        enterprise: enterprise,
-                      ),
-                    ],
-                  ),
-                  if (inventoryProvider.errorMessageGetProducts != "")
-                    Expanded(
-                      child: ErrorMessage(
-                        errorMessage: inventoryProvider.errorMessageGetProducts,
-                      ),
-                    ),
-                  if (inventoryProvider.productsCount > 0)
-                    ProductsItems(
-                      getProducts: () async {
+            ),
+            body: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    SearchWidget(
+                      configurations: [
+                        ConfigurationType.autoScan,
+                        ConfigurationType.legacyCode,
+                        ConfigurationType.personalizedCode,
+                      ],
+                      searchProductController: _consultProductController,
+                      onPressSearch: () async {
                         await _searchProduct(
                           inventoryProvider: inventoryProvider,
                           configurationsProvider: configurationsProvider,
                           enterprise: enterprise,
                         );
+                        if (inventoryProvider.productsCount > 0) {
+                          setState(() {
+                            _consultProductController.text = "";
+                          });
+                        }
                       },
-                      isIndividual: _isIndividual,
-                      inventoryCountingCode:
-                          arguments["InventoryCountingsModel"]
-                              .codigoInternoInvCont,
-                      productPackingCode: arguments["InventoryCountingsModel"]
-                          .numeroContagemInvCont,
-                      consultedProductController: _consultedProductController,
+                      searchFocusNode:
+                          inventoryProvider.consultProductFocusNode,
                     ),
-                  Container()
-                ],
-              ),
+                    searchButtonAndIndividualSwitch(
+                      inventoryProvider: inventoryProvider,
+                      configurationsProvider: configurationsProvider,
+                      enterprise: enterprise,
+                    ),
+                  ],
+                ),
+                if (inventoryProvider.errorMessageGetProducts != "")
+                  Expanded(
+                    child: ErrorMessage(
+                      errorMessage: inventoryProvider.errorMessageGetProducts,
+                    ),
+                  ),
+                if (inventoryProvider.productsCount > 0)
+                  ProductsItems(
+                    getProducts: () async {
+                      await _searchProduct(
+                        inventoryProvider: inventoryProvider,
+                        configurationsProvider: configurationsProvider,
+                        enterprise: enterprise,
+                      );
+                    },
+                    isIndividual: _isIndividual,
+                    inventoryCountingCode:
+                        arguments["InventoryCountingsModel"]
+                            .codigoInternoInvCont,
+                    productPackingCode: arguments["InventoryCountingsModel"]
+                        .numeroContagemInvCont,
+                    consultedProductController: _consultedProductController,
+                  ),
+                Container()
+              ],
             ),
-            loadingWidget(inventoryProvider.isLoadingProducts),
-            loadingWidget(inventoryProvider.isLoadingQuantity),
-          ],
-        ),
+          ),
+          loadingWidget(inventoryProvider.isLoadingProducts),
+          loadingWidget(inventoryProvider.isLoadingQuantity),
+        ],
       ),
     );
   }

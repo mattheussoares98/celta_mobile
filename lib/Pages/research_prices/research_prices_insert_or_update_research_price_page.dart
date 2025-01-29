@@ -100,106 +100,103 @@ class _ResearchPricesInsertOrUpdateResearchPriceState
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
 
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Stack(
-        children: [
-          PopScope(
-            canPop: !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
-            onPopInvokedWithResult: (value, __) {
-              if (value == true) {
-                researchPricesProvider.updateSelectedResearch(null);
-              }
-            },
-            child: Scaffold(
-              appBar: AppBar(
-                title: FittedBox(
-                  child: Text(
-                    researchPricesProvider.selectedResearch == null
-                        ? "Cadastrar pesquisa"
-                        : "Alterar pesquisa",
-                  ),
+    return Stack(
+      children: [
+        PopScope(
+          canPop: !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
+          onPopInvokedWithResult: (value, __) {
+            if (value == true) {
+              researchPricesProvider.updateSelectedResearch(null);
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: FittedBox(
+                child: Text(
+                  researchPricesProvider.selectedResearch == null
+                      ? "Cadastrar pesquisa"
+                      : "Alterar pesquisa",
                 ),
               ),
-              body: SingleChildScrollView(
-                primary: false,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          autofocus: true,
-                          focusNode: nameFocusNode,
-                          enabled: !researchPricesProvider
-                              .isLoadingAddOrUpdateOfResearch,
-                          controller: researchNameController,
-                          decoration: FormFieldDecoration.decoration(
-                            context: context,
-                            labelText: 'Nome',
-                          ),
-                          validator: (value) {
-                            if (value == null) {
-                              return "Digite o nome!";
-                            } else if (value.isEmpty) {
-                              return "Digite o nome!";
-                            } else if (value.length < 3) {
-                              return "Mínimo de 3 caracteres";
-                            }
-                            return null;
-                          },
-                          onFieldSubmitted: (_) async {
-                            FocusScope.of(context).requestFocus(
-                              observationFocusNode,
-                            );
-                          },
-                          style: FormFieldStyle.style(),
+            ),
+            body: SingleChildScrollView(
+              primary: false,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        autofocus: true,
+                        focusNode: nameFocusNode,
+                        enabled: !researchPricesProvider
+                            .isLoadingAddOrUpdateOfResearch,
+                        controller: researchNameController,
+                        decoration: FormFieldDecoration.decoration(
+                          context: context,
+                          labelText: 'Nome',
                         ),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          focusNode: observationFocusNode,
-                          enabled: !researchPricesProvider
-                              .isLoadingAddOrUpdateOfResearch,
-                          controller: observationController,
-                          decoration: FormFieldDecoration.decoration(
-                            context: context,
-                            labelText: 'Observação',
-                          ),
-                          onFieldSubmitted: (_) async {
-                            FocusScope.of(context).unfocus();
-                          },
-                          style: FormFieldStyle.style(),
+                        validator: (value) {
+                          if (value == null) {
+                            return "Digite o nome!";
+                          } else if (value.isEmpty) {
+                            return "Digite o nome!";
+                          } else if (value.length < 3) {
+                            return "Mínimo de 3 caracteres";
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).requestFocus(
+                            observationFocusNode,
+                          );
+                        },
+                        style: FormFieldStyle.style(),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        focusNode: observationFocusNode,
+                        enabled: !researchPricesProvider
+                            .isLoadingAddOrUpdateOfResearch,
+                        controller: observationController,
+                        decoration: FormFieldDecoration.decoration(
+                          context: context,
+                          labelText: 'Observação',
                         ),
-                        const SizedBox(height: 8),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(200, 40),
-                          ),
-                          onPressed: researchPricesProvider
-                                  .isLoadingAddOrUpdateOfResearch
-                              ? null
-                              : () async {
-                                  await _insertOrUpdateResearch(
-                                    researchPricesProvider,
-                                  );
-                                },
-                          child: Text(
-                            researchPricesProvider.selectedResearch == null
-                                ? "CADASTRAR"
-                                : "ALTERAR",
-                          ),
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).unfocus();
+                        },
+                        style: FormFieldStyle.style(),
+                      ),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: const Size(200, 40),
                         ),
-                      ],
-                    ),
+                        onPressed: researchPricesProvider
+                                .isLoadingAddOrUpdateOfResearch
+                            ? null
+                            : () async {
+                                await _insertOrUpdateResearch(
+                                  researchPricesProvider,
+                                );
+                              },
+                        child: Text(
+                          researchPricesProvider.selectedResearch == null
+                              ? "CADASTRAR"
+                              : "ALTERAR",
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-          loadingWidget(researchPricesProvider.isLoadingAddOrUpdateOfResearch)
-        ],
-      ),
+        ),
+        loadingWidget(researchPricesProvider.isLoadingAddOrUpdateOfResearch)
+      ],
     );
   }
 }

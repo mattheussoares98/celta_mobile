@@ -53,18 +53,22 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransferBetweenStocksProvider()),
         ChangeNotifierProvider(create: (_) => WebProvider()),
       ],
-      child: MaterialApp(
-        navigatorKey: NavigatorKey.navigatorKey,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
-        ],
-        supportedLocales: [const Locale('pt', 'BR')],
-        theme: theme(),
-        debugShowCheckedModeBanner: false,
-        initialRoute: APPROUTES.SPLASHPAGE,
-        routes: routes(),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: FocusScope.of(context).unfocus,
+        child: MaterialApp(
+          navigatorKey: NavigatorKey.navigatorKey,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          supportedLocales: [const Locale('pt', 'BR')],
+          theme: theme(),
+          debugShowCheckedModeBanner: false,
+          initialRoute: APPROUTES.SPLASHPAGE,
+          routes: routes(),
+        ),
       ),
     );
   }

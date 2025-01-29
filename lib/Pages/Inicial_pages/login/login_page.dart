@@ -52,74 +52,71 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Scaffold(
-        resizeToAvoidBottomInset: kIsWeb ? false : true,
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromRGBO(51, 255, 51, 1),
-                    Color.fromRGBO(0, 102, 0, 1),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+    return Scaffold(
+      resizeToAvoidBottomInset: kIsWeb ? false : true,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromRGBO(51, 255, 51, 1),
+                  Color.fromRGBO(0, 102, 0, 1),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-            Center(
-              child: SingleChildScrollView(
-                primary: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: AnimatedBuilder(
-                        animation: _animationController!,
-                        child: FadeTransition(
-                          opacity: _animationOpacity!,
-                          child: Container(
-                            transform: Matrix4.rotationZ(-8 * pi / 180)
-                              ..translate(-10.0),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 30,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            child: const FittedBox(
-                              child: Text(
-                                'Celta mobile',
-                                style: TextStyle(
-                                  fontSize: 100,
-                                  color: Colors.white,
-                                  fontFamily: 'BebasNeue',
-                                ),
+          ),
+          Center(
+            child: SingleChildScrollView(
+              primary: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: AnimatedBuilder(
+                      animation: _animationController!,
+                      child: FadeTransition(
+                        opacity: _animationOpacity!,
+                        child: Container(
+                          transform: Matrix4.rotationZ(-8 * pi / 180)
+                            ..translate(-10.0),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 30,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          child: const FittedBox(
+                            child: Text(
+                              'Celta mobile',
+                              style: TextStyle(
+                                fontSize: 100,
+                                color: Colors.white,
+                                fontFamily: 'BebasNeue',
                               ),
                             ),
                           ),
                         ),
-                        builder: (context, child) {
-                          return child!;
-                        },
                       ),
+                      builder: (context, child) {
+                        return child!;
+                      },
                     ),
-                    AuthForm(
-                      formKey: _key,
-                    ),
-                  ],
-                ),
+                  ),
+                  AuthForm(
+                    formKey: _key,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
