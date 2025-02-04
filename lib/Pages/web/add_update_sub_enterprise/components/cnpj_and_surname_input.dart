@@ -11,12 +11,14 @@ class CnpjAndSurnameInput extends StatelessWidget {
   final FocusNode cnpjFocusNode;
   final TextEditingController surnameController;
   final FocusNode surnameFocusNode;
+  final SubEnterpriseModel? selectedSubEnterprise;
 
   const CnpjAndSurnameInput({
     required this.cnpjController,
     required this.cnpjFocusNode,
     required this.surnameController,
     required this.surnameFocusNode,
+    required this.selectedSubEnterprise,
     super.key,
   });
 
@@ -24,7 +26,8 @@ class CnpjAndSurnameInput extends StatelessWidget {
   Widget build(BuildContext context) {
     WebProvider webProvider = Provider.of(context);
     Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
-    SubEnterpriseModel? selectedSubEnterprise = arguments?["selectedSubEnterprise"];
+    SubEnterpriseModel? selectedSubEnterprise =
+        arguments?["selectedSubEnterprise"];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -48,6 +51,8 @@ class CnpjAndSurnameInput extends StatelessWidget {
                                 .indexWhere((e) => e.cnpj == value.toInt()) !=
                             -1) {
                       return "CNPJ já adicionado";
+                    } else if (selectedSubEnterprise != null) {
+                      return null;
                     }
                     return FormFieldValidations.cpfOrCnpj(value);
                   },

@@ -268,6 +268,7 @@ class _AddUpdateSubEnterprisePageState
                               cnpjFocusNode: _cnpjFocusNode,
                               surnameController: _surnameController,
                               surnameFocusNode: _surnameFocusNode,
+                              selectedSubEnterprise: selectedSubEnterprise,
                             ),
                           EnableOrDisableModule(
                             modules: modules,
