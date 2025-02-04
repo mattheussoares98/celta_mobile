@@ -40,8 +40,7 @@ class _EditUrlCcsState extends State<EditUrlCcs> {
         if (!urlCcsController.text.toLowerCase().contains("http") ||
             !urlCcsController.text.contains(":") ||
             !urlCcsController.text.contains("//") ||
-            !urlCcsController.text.contains("\.") ||
-            !urlCcsController.text.toLowerCase().contains("ccs")) {
+            !urlCcsController.text.contains("\.")) {
           ShowSnackbarMessage.show(
               message:
                   "Viiixi, acho que essa URL tá errada hein... confirma aew",
