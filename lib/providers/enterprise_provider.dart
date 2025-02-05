@@ -73,7 +73,6 @@ class EnterpriseProvider with ChangeNotifier {
       _errorMessage = SoapRequestResponse.errorMessage;
 
       _bsAlreadyInLatestVersion = await SoapHelper.bsAlreadyInLatestVersion();
-      debugPrint(_bsAlreadyInLatestVersion.toString());
     } catch (e) {
       _errorMessage = DefaultErrorMessage.ERROR;
     } finally {

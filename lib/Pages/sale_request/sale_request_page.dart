@@ -111,11 +111,14 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
+        EnterpriseProvider enterpriseProvider =
+            Provider.of(context, listen: false);
         await cleanSaleRequestBecauseVersionIncompatible();
         userCanChangePrices = await SoapHelper.userCanAccessResource(
-          resourceCode: 666,
-          routineInt: 0,
-        );
+              resourceCode: 666,
+              routineInt: 0,
+            ) &&
+            enterpriseProvider.bsAlreadyInLatestVersion;
         setState(() {});
       }
     });
@@ -251,8 +254,8 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
                                   child: FittedBox(
                                     child: Text(
                                       cartProductsCount.toString(),
-                                      style: const TextStyle(
-                                          color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
