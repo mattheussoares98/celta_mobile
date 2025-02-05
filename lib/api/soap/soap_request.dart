@@ -78,7 +78,8 @@ class SoapRequest {
         final parsedJsonResponse =
             parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse];
 
-        if (parsedJsonResponse["status"] == "OK" && typeOfResult != null) {
+        if (parsedJsonResponse["status"] == "OK") {
+          
           if (parsedJsonResponse[typeOfResult] != null) {
             SoapRequestResponse.responseAsString =
                 parsedJsonResponse[typeOfResult].toString();
@@ -109,7 +110,7 @@ class SoapRequest {
 bool _validateResultHasPatternNewDataSet({
   required Map parsedJson,
   required String typeOfResponse,
-  required String typeOfResult,
+  required String? typeOfResult,
 }) {
   try {
     return parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
