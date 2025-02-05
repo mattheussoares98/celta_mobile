@@ -35,7 +35,7 @@ class SendToPrintButton extends StatelessWidget {
                 index: index,
                 context: context,
               );
-    
+
               if (priceConferenceProvider.errorSendToPrint != "") {
                 ShowSnackbarMessage.show(
                   message: priceConferenceProvider.errorSendToPrint,
@@ -45,6 +45,9 @@ class SendToPrintButton extends StatelessWidget {
             },
       icon: Icon(
         etiquetaPendente == true ? Icons.print_disabled : Icons.print,
+        color: etiquetaPendente
+            ? Colors.red
+            : Theme.of(context).colorScheme.primary,
       ),
       iconAlignment: IconAlignment.end,
       label: Text(etiquetaPendente == true
