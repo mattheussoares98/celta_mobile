@@ -6,7 +6,7 @@ import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
-class UpdateQuantityAndManualPrice extends StatefulWidget {
+class UpdateQuantityPriceOrDiscount extends StatefulWidget {
   final GetProductJsonModel product;
   final double? controllerInDouble;
   final FocusNode quantityFocusNode;
@@ -18,7 +18,7 @@ class UpdateQuantityAndManualPrice extends StatefulWidget {
   final void Function() clearSelectedIndex;
   final int productIndex;
 
-  const UpdateQuantityAndManualPrice({
+  const UpdateQuantityPriceOrDiscount({
     required this.product,
     required this.controllerInDouble,
     required this.quantityFocusNode,
@@ -33,13 +33,15 @@ class UpdateQuantityAndManualPrice extends StatefulWidget {
   });
 
   @override
-  State<UpdateQuantityAndManualPrice> createState() =>
-      _UpdateQuantityAndManualPriceState();
+  State<UpdateQuantityPriceOrDiscount> createState() =>
+      _UpdateQuantityPriceOrDiscountState();
 }
 
-class _UpdateQuantityAndManualPriceState
-    extends State<UpdateQuantityAndManualPrice> {
+class _UpdateQuantityPriceOrDiscountState
+    extends State<UpdateQuantityPriceOrDiscount> {
   final manualPriceController = TextEditingController();
+  final discountController = TextEditingController();
+  String? discountType;
 
   @override
   void initState() {
@@ -68,6 +70,7 @@ class _UpdateQuantityAndManualPriceState
   void dispose() {
     super.dispose();
     manualPriceController.dispose();
+    discountController.dispose();
   }
 
   Future<void> updateProductInCart({
@@ -75,11 +78,11 @@ class _UpdateQuantityAndManualPriceState
     required GetProductJsonModel product,
     required int index,
   }) async {
+    bool? isValid = widget.quantityFormKey.currentState!.validate();
+
     double? controllerInDouble = double.tryParse(
       widget.newQuantityController.text.replaceAll(RegExp(r'\,'), '.'),
     );
-
-    bool? isValid = widget.quantityFormKey.currentState!.validate();
 
     if (controllerInDouble == null || controllerInDouble == 0) return;
 
@@ -187,97 +190,169 @@ class _UpdateQuantityAndManualPriceState
                       hintText: "Nova quantidade",
                     ),
                     if (widget.userCanChangePrices)
-                      Column(
-                        children: [
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: manualPriceController,
-                                  style: FormFieldStyle.style(),
-                                  onFieldSubmitted: (_) {
-                                    updateProductInCart(
-                                      saleRequestProvider: saleRequestProvider,
-                                      product: widget.product,
-                                      index: widget.productIndex,
-                                    );
-                                  },
-                                  onChanged: (_) {
-                                    widget.callSetState();
-                                  },
-                                  onTap: () {
-                                    manualPriceController.selection =
-                                        TextSelection(
-                                      baseOffset: 0,
-                                      extentOffset:
-                                          manualPriceController.text.length,
-                                    );
-                                  },
-                                  decoration: FormFieldDecoration.decoration(
-                                    context: context,
-                                    hintText: "Preço manual R\$",
-                                    labelText: "Preço manual R\$",
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.info,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                tooltip:
-                                    "Essa opção aparece somente quando o usuário possui permissão para alterar preços no pedido de vendas",
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                      manualPrice(saleRequestProvider, context),
+                    manualDiscount(context)
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Column(
-                  children: [
-                    const FittedBox(
-                      child: Text(
-                        "TOTAL",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ),
-                    FittedBox(
-                      child: Text(
-                        saleRequestProvider
-                            .getNewPrice(
-                              product: widget.product,
-                              enterpriseCode: widget.enterpriseCode.toString(),
-                              newQuantityController:
-                                  widget.newQuantityController,
-                              manualWrittedPriceController:
-                                  manualPriceController,
-                            )
-                            .toString()
-                            .toBrazilianNumber()
-                            .addBrazilianCoin(),
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              totalAmount(saleRequestProvider, context),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Padding totalAmount(
+      SaleRequestProvider saleRequestProvider, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Column(
+        children: [
+          const FittedBox(
+            child: Text(
+              "TOTAL",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+          FittedBox(
+            child: Text(
+              saleRequestProvider
+                  .getNewPrice(
+                    product: widget.product,
+                    enterpriseCode: widget.enterpriseCode.toString(),
+                    newQuantityController: widget.newQuantityController,
+                    manualWrittedPriceController: manualPriceController,
+                  )
+                  .toString()
+                  .toBrazilianNumber()
+                  .addBrazilianCoin(),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Row manualDiscount(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: TextFormField(
+              controller: discountController,
+              enabled: manualPriceController.text.isEmpty,
+              style: FormFieldStyle.style(),
+              onChanged: (_) {
+                widget.callSetState();
+              },
+              onTap: () {
+                discountController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: discountController.text.length,
+                );
+              },
+              decoration: FormFieldDecoration.decoration(
+                context: context,
+                hintText: "Desconto manual R\$",
+                labelText: "Desconto manual R\$",
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DropdownButton<String>(
+            isDense: true,
+            hint: Text(discountType ?? "Tipo"),
+            items: [
+              DropdownMenuItem(
+                value: "R\$",
+                onTap: () {
+                  discountType = "R\$";
+                },
+                child: Text("R\$"),
+              ),
+              DropdownMenuItem(
+                value: "%",
+                onTap: () {
+                  discountType = "%";
+                },
+                child: Text("%"),
+              ),
+            ],
+            onChanged: (value) {},
+          ),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.info,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          tooltip:
+              "Essa opção só fica disponível quando não há um preço manual informado",
+        )
+      ],
+    );
+  }
+
+  Padding manualPrice(
+    SaleRequestProvider saleRequestProvider,
+    BuildContext context,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: manualPriceController,
+              style: FormFieldStyle.style(),
+              enabled: discountController.text.isEmpty,
+              onFieldSubmitted: (_) {
+                updateProductInCart(
+                  saleRequestProvider: saleRequestProvider,
+                  product: widget.product,
+                  index: widget.productIndex,
+                );
+              },
+              onChanged: (_) {
+                widget.callSetState();
+              },
+              onTap: () {
+                manualPriceController.selection = TextSelection(
+                  baseOffset: 0,
+                  extentOffset: manualPriceController.text.length,
+                );
+              },
+              decoration: FormFieldDecoration.decoration(
+                context: context,
+                hintText: "Preço manual R\$",
+                labelText: "Preço manual R\$",
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.info,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            tooltip:
+                "Essa opção só fica disposnível quando o usuário possui permissão para alterar o preço e não há um desconto manual informado",
+          )
         ],
       ),
     );

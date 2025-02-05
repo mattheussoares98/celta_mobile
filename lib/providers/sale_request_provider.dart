@@ -206,6 +206,7 @@ class SaleRequestProvider with ChangeNotifier {
     required String enterpriseCode,
     TextEditingController? manualWrittedPriceController,
   }) {
+    //TODO insert discount as well
     double quantityToAdd = newQuantityController.text.isEmpty
         ? 1
         : newQuantityController.text.toDouble();
@@ -526,10 +527,11 @@ class SaleRequestProvider with ChangeNotifier {
 
   String? getDiscountDescription(
     GetProductJsonModel product,
+    String enterpriseCode,
   ) {
-    return saleRequestProcessCart?.Products
-        ?.where((e) => e.ProductPackingCode == product.productPackingCode)
-        .first
+    return _cartProducts[enterpriseCode]!
+        .firstWhere((element) =>
+            element.productPackingCode == product.productPackingCode)
         .DiscountDescription;
   }
 
@@ -1005,5 +1007,21 @@ class SaleRequestProvider with ChangeNotifier {
       _isLoadingSaveSaleRequest = false;
       notifyListeners();
     }
+  }
+
+  void updateProductDiscount({
+    required int indexOfProduct,
+    required double discount,
+    required bool isPercentage,
+    required String enterpriseCode,
+  }) {
+    //TODO remove this function and move to updateProductFromCart
+    final oldProduct = _cartProducts[enterpriseCode]![indexOfProduct];
+
+    oldProduct.DiscountDescription = "Desconto manual";
+    oldProduct.DiscountPercentageOrValue = isPercentage ? "%" : "R\$";
+    oldProduct.DiscountValue = discount;
+
+    _cartProducts[enterpriseCode]![indexOfProduct] = oldProduct;
   }
 }

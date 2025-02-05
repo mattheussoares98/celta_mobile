@@ -10,11 +10,13 @@ class QuantitysAndPrices extends StatelessWidget {
   final GetProductJsonModel product;
   final int selectedIndex;
   final void Function() changeFocus;
+  final String enterpriseCode;
 
   const QuantitysAndPrices({
     required this.product,
     required this.selectedIndex,
     required this.changeFocus,
+    required this.enterpriseCode,
     super.key,
   });
 
@@ -75,22 +77,29 @@ class QuantitysAndPrices extends StatelessWidget {
             ),
           ],
         ),
-        if (product.AutomaticDiscountValue != null &&
-            product.AutomaticDiscountValue! > 0)
+        if ((product.AutomaticDiscountValue != null &&
+                product.AutomaticDiscountValue! > 0) ||
+            (product.DiscountValue != null && product.DiscountValue! > 0))
           Padding(
-            padding: const EdgeInsets.only(top: 5, bottom: 5),
+            padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
             child: Column(
               children: [
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Desconto",
                   subtitleColor: Theme.of(context).colorScheme.primary,
                   subtitle: ConvertString.convertToBRL(
-                    product.AutomaticDiscountValue,
+                    product.AutomaticDiscountValue != null &&
+                            product.AutomaticDiscountValue! > 0
+                        ? product.AutomaticDiscountValue
+                        : product.DiscountValue,
                   ),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   subtitleColor: Theme.of(context).colorScheme.primary,
-                  subtitle: saleRequestProvider.getDiscountDescription(product),
+                  subtitle: saleRequestProvider.getDiscountDescription(
+                    product,
+                    enterpriseCode,
+                  ),
                 ),
               ],
             ),

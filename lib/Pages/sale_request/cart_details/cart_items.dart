@@ -111,6 +111,7 @@ class _CartItemsState extends State<CartItems> {
                         QuantitysAndPrices(
                           product: product,
                           selectedIndex: _selectedIndex,
+                          enterpriseCode: widget.enterpriseCode.toString(),
                           changeFocus: () {
                             selectIndexAndFocus(
                               saleRequestProvider: saleRequestProvider,
@@ -122,7 +123,7 @@ class _CartItemsState extends State<CartItems> {
                     ),
                   ),
                   if (_selectedIndex == index)
-                    UpdateQuantityAndManualPrice(
+                    UpdateQuantityPriceOrDiscount(
                       product: product,
                       productIndex: index,
                       clearSelectedIndex: () {
