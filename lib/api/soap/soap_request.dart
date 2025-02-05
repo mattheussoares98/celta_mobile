@@ -5,8 +5,7 @@ import 'package:xml2json/xml2json.dart';
 import '../../utils/utils.dart';
 
 class SoapRequestResponse {
-  static final SoapRequestResponse _instance =
-      SoapRequestResponse._internal();
+  static final SoapRequestResponse _instance = SoapRequestResponse._internal();
 
   factory SoapRequestResponse() {
     return _instance;
@@ -76,55 +75,33 @@ class SoapRequest {
         xml2json.parse(result);
         final getJustificationsResult = xml2json.toParker();
         Map parsedJson = json.decode(getJustificationsResult.toString());
-        //print("parsedJson: $parsedJson");
+        final parsedJsonResponse =
+            parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse];
 
-        if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                ["status"] ==
-            "OK") {
-          if (typeOfResult != null) {
-            if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                    [typeOfResult] !=
-                null) {
-              SoapRequestResponse.responseAsString =
-                  parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                          [typeOfResult]
-                      .toString();
-            }
-
-            if (_validateResultHasPatternNewDataSet(
-              parsedJson: parsedJson,
-              typeOfResponse: typeOfResponse,
-              typeOfResult: typeOfResult,
-            )) {
-              //no login não retorna nesse padrão de tags, por isso estava ocorrendo erro e por isso precisei criar esse tratamento
-              SoapRequestResponse.responseAsMap =
-                  parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                      [typeOfResult]["diffgr:diffgram"]["NewDataSet"];
-            }
-          }
-        } else {
-          if (parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-              .toString()
-              .contains("sucesso")) {
+        if (parsedJsonResponse["status"] == "OK" && typeOfResult != null) {
+          if (parsedJsonResponse[typeOfResult] != null) {
             SoapRequestResponse.responseAsString =
-                parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                    ["status"];
-          } else {
-            SoapRequestResponse.errorMessage =
-                parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-                    ["status"];
+                parsedJsonResponse[typeOfResult].toString();
           }
+
+          if (_validateResultHasPatternNewDataSet(
+            parsedJson: parsedJson,
+            typeOfResponse: typeOfResponse,
+            typeOfResult: typeOfResult,
+          )) {
+            SoapRequestResponse.responseAsMap = parsedJsonResponse[typeOfResult]
+                ["diffgr:diffgram"]["NewDataSet"];
+          }
+        } else if (parsedJsonResponse.toString().contains("sucesso")) {
+          SoapRequestResponse.responseAsString = parsedJsonResponse["status"];
+        } else {
+          SoapRequestResponse.errorMessage = parsedJsonResponse["status"];
         }
       } else {
-        SoapRequestResponse.errorMessage =
-            DefaultErrorMessage.ERROR;
-        // print(response.body);
-        throw Exception('Failed to load data');
+        throw Exception();
       }
     } catch (e) {
-      //print("erro para fazer a requisição http: $e");
-      SoapRequestResponse.errorMessage =
-          DefaultErrorMessage.ERROR;
+      SoapRequestResponse.errorMessage = DefaultErrorMessage.ERROR;
     }
   }
 }
@@ -134,21 +111,10 @@ bool _validateResultHasPatternNewDataSet({
   required String typeOfResponse,
   required String typeOfResult,
 }) {
-  return parsedJson.containsKey("soap:Envelope") &&
-      parsedJson["soap:Envelope"] is Map &&
-      parsedJson["soap:Envelope"].containsKey("soap:Body") &&
-      parsedJson["soap:Envelope"]["soap:Body"] is Map &&
-      parsedJson["soap:Envelope"]["soap:Body"].containsKey(typeOfResponse) &&
-      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse] is Map &&
-      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
-          .containsKey(typeOfResult) &&
-      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
-          is Map &&
-      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
-          .containsKey("diffgr:diffgram") &&
-      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
-          ["diffgr:diffgram"] is Map &&
-      parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse][typeOfResult]
-              ["diffgr:diffgram"]
-          .containsKey("NewDataSet");
+  try {
+    return parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse]
+        [typeOfResult]["diffgr:diffgram"]["NewDataSet"] is Map;
+  } catch (e) {
+    return false;
+  }
 }
