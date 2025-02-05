@@ -330,11 +330,12 @@ class SoapHelper {
         throw Exception();
       }
 
-      products = (json.decode(SoapRequestResponse.responseAsString) as List)
-          .map((e) => GetProductJsonModel.fromJson(e))
-          .toList();
+      products.addAll(
+          (json.decode(SoapRequestResponse.responseAsString) as List)
+              .map((e) => GetProductJsonModel.fromJson(e))
+              .toList());
     } catch (e) {
-      e;
+      debugPrint(e.toString());
     }
   }
 
