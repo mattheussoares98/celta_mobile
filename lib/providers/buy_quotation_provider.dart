@@ -78,7 +78,9 @@ class BuyQuotationProvider with ChangeNotifier {
     _errorMessage = "";
 
     try {
-      final products = _productsWithNewValues.map((e) => e.toJson()).toList();
+      final products = _productsWithNewValues
+          .map((e) => e.toJson(isInserting: isInserting))
+          .toList();
       final enterprises = _selectedEnterprises.map((e) {
         if (isInserting) {
           return {

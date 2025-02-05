@@ -44,7 +44,7 @@ class BuyQuotationCompleteModel {
                 .toList(),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson({required bool isInserting}) => {
         "CrossIdentity": CrossIdentity,
         "Code": Code,
         "DateOfCreation": DateOfCreation,
@@ -53,6 +53,7 @@ class BuyQuotationCompleteModel {
         "Observations": Observations,
         "Buyer": Buyer,
         "Enterprises": Enterprises?.map((e) => e.toJson()).toList(),
-        "Products": Products?.map((e) => e.toJson()).toList(),
+        "Products":
+            Products?.map((e) => e.toJson(isInserting: isInserting)).toList(),
       };
 }

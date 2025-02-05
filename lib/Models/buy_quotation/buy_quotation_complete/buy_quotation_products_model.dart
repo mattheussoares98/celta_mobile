@@ -20,9 +20,9 @@ class BuyQuotationProductsModel {
                 .toList(),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson({required bool isInserting}) => {
         "Code": Code,
-        "Product": Product?.toJson(),
+        "Product": Product?.toJson(isInserting: isInserting),
         "ProductEnterprises":
             ProductEnterprises?.map((e) => e.toJson()).toList(),
       };
@@ -144,7 +144,7 @@ class ProductModel {
         PriceCost: data["PriceCost"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson({required bool isInserting}) => {
         "EnterpriseCode": EnterpriseCode,
         "ProductCode": ProductCode,
         "ProductPackingCode": ProductPackingCode,
@@ -179,7 +179,7 @@ class ProductModel {
         "RealLiquidCost": RealLiquidCost,
         "FiscalCost": FiscalCost,
         "FiscalLiquidCost": FiscalLiquidCost,
-        "PriceCost": PriceCost == 0 ? null : PriceCost,
+        "PriceCost": isInserting ? null : PriceCost,
       };
 }
 
