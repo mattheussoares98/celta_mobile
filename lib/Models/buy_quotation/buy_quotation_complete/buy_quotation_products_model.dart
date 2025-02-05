@@ -179,7 +179,7 @@ class ProductModel {
         "RealLiquidCost": RealLiquidCost,
         "FiscalCost": FiscalCost,
         "FiscalLiquidCost": FiscalLiquidCost,
-        "PriceCost": PriceCost,
+        "PriceCost": PriceCost == 0 ? null : PriceCost,
       };
 }
 
