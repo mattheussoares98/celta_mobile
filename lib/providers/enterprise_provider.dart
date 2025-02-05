@@ -25,12 +25,16 @@ class EnterpriseProvider with ChangeNotifier {
   bool _userCanAdjustSalePrice = false;
   bool get userCanAdjustSalePrice => _userCanAdjustSalePrice;
 
+  bool _bsAlreadyInLatestVersion = false;
+  bool get bsAlreadyInLatestVersion => _bsAlreadyInLatestVersion;
+
   Future<void> getEnterprises({
     bool? verifyUserCanAdjustSalePrice,
   }) async {
     if (_isLoading) {
       return;
     }
+    _bsAlreadyInLatestVersion = false;
     _enterprises.clear();
     _errorMessage = '';
     _isLoading = true;
@@ -67,6 +71,9 @@ class EnterpriseProvider with ChangeNotifier {
           .toList();
 
       _errorMessage = SoapRequestResponse.errorMessage;
+
+      _bsAlreadyInLatestVersion = await SoapHelper.bsAlreadyInLatestVersion();
+      debugPrint(_bsAlreadyInLatestVersion.toString());
     } catch (e) {
       _errorMessage = DefaultErrorMessage.ERROR;
     } finally {

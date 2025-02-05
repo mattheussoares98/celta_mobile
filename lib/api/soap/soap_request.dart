@@ -75,11 +75,13 @@ class SoapRequest {
         xml2json.parse(result);
         final getJustificationsResult = xml2json.toParker();
         Map parsedJson = json.decode(getJustificationsResult.toString());
-        final parsedJsonResponse =
+        Map parsedJsonResponse =
             parsedJson["soap:Envelope"]["soap:Body"][typeOfResponse];
 
-        if (parsedJsonResponse["status"] == "OK") {
-          
+        if (!parsedJsonResponse.containsKey("status")) {
+          SoapRequestResponse.responseAsString =
+              parsedJsonResponse[typeOfResult].toString();
+        } else if (parsedJsonResponse["status"] == "OK") {
           if (parsedJsonResponse[typeOfResult] != null) {
             SoapRequestResponse.responseAsString =
                 parsedJsonResponse[typeOfResult].toString();
