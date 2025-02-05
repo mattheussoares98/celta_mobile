@@ -61,7 +61,7 @@ class _ResearchPricesConcurrentsPageState
             appBar: AppBar(
               title: FittedBox(
                 child: Text(
-                  'CONCORRENTES - pesquisa(${researchPricesProvider.selectedResearch!.Code})',
+                  'CONCORRENTES - pesquisa(${researchPricesProvider.selectedResearch?.Code})',
                 ),
               ),
             ),
