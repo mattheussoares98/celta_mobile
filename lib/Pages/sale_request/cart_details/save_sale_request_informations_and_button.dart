@@ -202,12 +202,25 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
                           onPressed: productsCount == 0 || customerCode == -1
                               ? null
                               : () async {
-                                  await saleRequestProvider.saveSaleRequest(
-                                    enterpriseCode: enterpriseCode.toString(),
-                                    requestTypeCode: requestTypeCode,
+                                  ShowAlertDialog.show(
                                     context: context,
-                                    instructions: instructions,
-                                    observations: observations,
+                                    title: "Salvar pedido",
+                                    content: const SingleChildScrollView(
+                                      child: Text(
+                                        "Deseja salvar o pedido?",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    function: () async {
+                                      await saleRequestProvider.saveSaleRequest(
+                                        enterpriseCode:
+                                            enterpriseCode.toString(),
+                                        requestTypeCode: requestTypeCode,
+                                        context: context,
+                                        instructions: instructions,
+                                        observations: observations,
+                                      );
+                                    },
                                   );
                                 },
                           child: const FittedBox(
