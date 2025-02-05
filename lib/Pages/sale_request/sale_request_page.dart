@@ -118,7 +118,7 @@ class _SaleRequestPageState extends State<SaleRequestPage> {
               resourceCode: 666,
               routineInt: 0,
             ) &&
-            enterpriseProvider.bsAlreadyInLatestVersion;
+            enterpriseProvider.bsAlreadyInRequiredVersion;
         setState(() {});
       }
     });
