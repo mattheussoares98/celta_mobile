@@ -410,4 +410,25 @@ class SoapHelper {
       return false;
     }
   }
+
+  static Future<bool> bsAlreadyInLatestVersion() async {
+    try {
+      await SoapRequest.soapPost(
+        parameters: {},
+        typeOfResponse: "GetVersionDateResponse",
+        SOAPAction: "GetVersionDate",
+        serviceASMX: "CeltaSecurityService.asmx",
+        typeOfResult: "GetVersionDateResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        return false;
+      } else {
+        return DateTime.parse(SoapRequestResponse.responseAsString)
+            .isAfter(DateTime(2025, 1, 15));
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }
