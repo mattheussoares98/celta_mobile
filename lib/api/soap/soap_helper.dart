@@ -425,8 +425,9 @@ class SoapHelper {
       if (SoapRequestResponse.errorMessage != "") {
         return false;
       } else {
-        return DateTime.parse(SoapRequestResponse.responseAsString)
-            .isAfter(DateTime(2025, 1, 15));
+        return DateTime.parse((json
+                .decode(SoapRequestResponse.responseAsString))["VersionDate"])
+            .isAfter(DateTime(2025, 2, 5));
       }
     } catch (e) {
       return false;
