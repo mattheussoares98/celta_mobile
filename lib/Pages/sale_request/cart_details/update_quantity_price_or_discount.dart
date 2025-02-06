@@ -59,11 +59,8 @@ class _UpdateQuantityPriceOrDiscountState
             widget.product.DiscountValue! > 0) {
           discountType = widget.product.DiscountPercentageOrValue;
           if (discountType == "R\$") {
-            manualDiscountController.text = widget.product.DiscountValue
-                .toString()
-                .toDouble()
-                .toInt()
-                .toString();
+            manualDiscountController.text =
+                widget.product.DiscountValue.toString().toBrazilianNumber();
           } else {
             manualDiscountController.text =
                 (widget.product.DiscountValue.toString().toDouble() * 100)
