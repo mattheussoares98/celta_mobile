@@ -146,6 +146,12 @@ class _UpdateQuantityPriceOrDiscountState
                         widget.product.wholePracticedPrice,
                       ),
                     ),
+                    TitleAndSubtitle.titleAndSubtitle(
+                      title: "Preço mínimo",
+                      subtitle: ConvertString.convertToBRL(
+                        widget.product.priceCost?.RetailMinimumPrice ?? 0,
+                      ),
+                    ),
                   ],
                 ),
               ),
