@@ -1064,7 +1064,7 @@ class SaleRequestProvider with ChangeNotifier {
     } else if (product.DiscountValue != null &&
         product.DiscountValue! > 0 &&
         product.DiscountPercentageOrValue == "R\$") {
-      return product.DiscountValue!;
+      return product.DiscountValue! * product.quantity;
     } else if (product.DiscountValue != null &&
         product.DiscountValue! > 0 &&
         product.DiscountPercentageOrValue == "%") {
