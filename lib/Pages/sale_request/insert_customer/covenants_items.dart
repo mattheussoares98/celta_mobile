@@ -1,11 +1,11 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/sale_request/sale_request.dart';
+import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 
 class CovenantsItems extends StatefulWidget {
-  final List<SaleRequestCovenantsModel> covenants;
+  final List<CustomerCovenantModel> covenants;
   final int indexOfCustomer;
   final String enterpriseCode;
   const CovenantsItems({
@@ -16,8 +16,7 @@ class CovenantsItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CovenantsItems> createState() =>
-      _CovenantsItemsState();
+  State<CovenantsItems> createState() => _CovenantsItemsState();
 }
 
 class _CovenantsItemsState extends State<CovenantsItems> {
@@ -78,7 +77,7 @@ class _CovenantsItemsState extends State<CovenantsItems> {
                   enterpriseCode: widget.enterpriseCode,
                   indexOfCustomer: widget.indexOfCustomer,
                   indexOfCovenants: index,
-                  isSelected: !widget.covenants[index].selected,
+                  isSelected: !widget.covenants[index].isSelected,
                 );
                 setState(() {});
               },
@@ -99,7 +98,7 @@ class _CovenantsItemsState extends State<CovenantsItems> {
                 color: const Color.fromARGB(255, 242, 241, 241),
                 child: ListTile(
                   title: Text(
-                    widget.covenants[index].name,
+                    widget.covenants[index].covenant?.Name ?? "",
                     style: TextStyle(
                         color: _selectedIndex == index
                             ? Theme.of(context).colorScheme.primary
@@ -117,7 +116,7 @@ class _CovenantsItemsState extends State<CovenantsItems> {
                         enterpriseCode: widget.enterpriseCode,
                         indexOfCustomer: widget.indexOfCustomer,
                         indexOfCovenants: index,
-                        isSelected: !widget.covenants[index].selected,
+                        isSelected: !widget.covenants[index].isSelected,
                       );
                       setState(() {});
                     },

@@ -31,7 +31,7 @@ class _CustomersItemsState extends State<CustomersItems> {
       itemCount: saleRequestProvider
           .customers[widget.enterpriseCode.toString()]?.length,
       itemBuilder: (context, index) {
-        CustomerRegisterModel? customer = saleRequestProvider
+        CustomerModel? customer = saleRequestProvider
             .customers[widget.enterpriseCode.toString()]![index];
         if (customer.Code == 1) {
           return Card(
@@ -97,9 +97,10 @@ class _CustomersItemsState extends State<CustomersItems> {
                   ],
                 ),
               ),
-              if (customer.selected == true)
+              if (customer.selected == true &&
+                  customer.CustomerCovenants != null)
                 CovenantsItems(
-                  covenants: customer.Covenants,
+                  covenants: customer.CustomerCovenants ?? [],
                   indexOfCustomer: index,
                   enterpriseCode: widget.enterpriseCode.toString(),
                 ),

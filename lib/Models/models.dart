@@ -4,7 +4,7 @@ export './buy_quotation/buy_quotation.dart';
 export './buy_request/buy_request.dart';
 export './buyer/buyer.dart';
 export './configurations/configurations.dart';
-export './customer_register/customer_register.dart';
+export './customer/customer.dart';
 export './enterprise/enterprise.dart';
 export './evaluation_and_suggestions/evaluation_and_suggestions.dart';
 export './expedition_control/expedition_control.dart';

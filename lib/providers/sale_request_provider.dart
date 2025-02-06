@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
+import '../models/customer/customer.dart';
 import '../models/models.dart';
 
 import '../utils/utils.dart';
@@ -29,8 +30,8 @@ class SaleRequestProvider with ChangeNotifier {
   bool get isLoadingCustomer => _isLoadingCustomer;
   String _errorMessageCustomer = "";
   String get errorMessageCustomer => _errorMessageCustomer;
-  Map<String, List<CustomerRegisterModel>> _customers = {};
-  Map<String, List<CustomerRegisterModel>> get customers => _customers;
+  Map<String, List<CustomerModel>> _customers = {};
+  Map<String, List<CustomerModel>> get customers => _customers;
 
   bool _isLoadingProducts = false;
   bool get isLoadingProducts => _isLoadingProducts;
@@ -69,9 +70,9 @@ class SaleRequestProvider with ChangeNotifier {
     int _indexOfSelectedCovenant = -1;
     _customers.forEach((key, value) {
       value.forEach((customer) {
-        if (customer.selected == true) {
-          _indexOfSelectedCovenant =
-              customer.Covenants.indexWhere((customer) => customer.selected);
+        if (customer.selected == true && customer.CustomerCovenants != null) {
+          _indexOfSelectedCovenant = customer.CustomerCovenants!
+              .indexWhere((customer) => customer.isSelected);
         }
       });
     });
@@ -82,9 +83,9 @@ class SaleRequestProvider with ChangeNotifier {
     int covenantCode = 0;
     if (_customers[enterpriseCode] != null) {
       _customers[enterpriseCode]!.forEach((customer) {
-        customer.Covenants.forEach((covenant) {
-          if (covenant.selected) {
-            covenantCode = covenant.code;
+        customer.CustomerCovenants?.forEach((covenant) {
+          if (covenant.isSelected && covenant.covenant?.Code != null) {
+            covenantCode = covenant.covenant!.Code!.toInt();
           }
         });
       });
@@ -705,8 +706,8 @@ class SaleRequestProvider with ChangeNotifier {
     _needProcessCart = true;
 
     _customers[enterpriseCode]?.forEach((element) {
-      element.Covenants.forEach((element) {
-        element.selected =
+      element.CustomerCovenants?.forEach((element) {
+        element.isSelected =
             false; //tira a seleção de todos convênios se alterar o cleinte selecionado
       });
     });
@@ -720,13 +721,15 @@ class SaleRequestProvider with ChangeNotifier {
     required int indexOfCovenants,
     required bool isSelected,
   }) {
-    _customers[enterpriseCode]?[indexOfCustomer].Covenants.forEach((element) {
-      element.selected = false;
+    _customers[enterpriseCode]?[indexOfCustomer]
+        .CustomerCovenants
+        ?.forEach((element) {
+      element.isSelected = false;
     });
 
     _customers[enterpriseCode]?[indexOfCustomer]
-        .Covenants[indexOfCovenants]
-        .selected = isSelected;
+        .CustomerCovenants?[indexOfCovenants]
+        .isSelected = isSelected;
 
     _updateCustomerInDatabase();
 
@@ -747,7 +750,7 @@ class SaleRequestProvider with ChangeNotifier {
 
     await _clearcustomers(enterpriseCode);
 
-    await _getCustomersOldSearch(
+    final defaultCustomer = await _getCustomersOldSearch(
       searchTypeInt: 2, //exactCode
       controllerText: "-1", //consumidor
       enterpriseCode: enterpriseCode,
@@ -763,34 +766,43 @@ class SaleRequestProvider with ChangeNotifier {
     }
 
     int? codeValue = int.tryParse(controllerText);
+
+    List<CustomerModel>? customers;
     if (codeValue == null) {
-      await _getCustomersOldSearch(
+      customers = await _getCustomersOldSearch(
         searchTypeInt: 3, //ApproximateName
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else if (configurationsProvider.customerPersonalizedCode?.value == true) {
-      await _getCustomersOldSearch(
+      customers = await _getCustomersOldSearch(
         searchTypeInt: 4, //PersonalizedCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else if (CPFValidator.isValid(codeValue.toString())) {
-      await _getCustomersOldSearch(
+      customers = await _getCustomersOldSearch(
         searchTypeInt: 1, //ExactCnpjCpfNumber
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     } else {
-      await _getCustomersOldSearch(
+      customers = await _getCustomersOldSearch(
         searchTypeInt: 2, //exactCode
         controllerText: controllerText,
         enterpriseCode: enterpriseCode,
       );
     }
+
+    _customers[enterpriseCode] = [
+      if (defaultCustomer != null) ...defaultCustomer,
+      if (customers != null) ...customers,
+    ];
+
+    await _updateCustomerInDatabase();
   }
 
-  Future<void> _getCustomersOldSearch({
+  Future<List<CustomerModel>?> _getCustomersOldSearch({
     required int searchTypeInt,
     required String controllerText,
     required String enterpriseCode,
@@ -831,20 +843,20 @@ class SaleRequestProvider with ChangeNotifier {
           _customers[enterpriseCode] = [];
         }
 
-        SaleRequestCustomerModel.responseAsStringToSaleRequestCustomerModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _customers[enterpriseCode]!,
-        );
+        return (json.decode(SoapRequestResponse.responseAsString) as List)
+            .map((e) => CustomerModel.fromJson(e))
+            .cast<CustomerModel>()
+            .toList();
       }
-
-      await _updateCustomerInDatabase();
     } catch (e) {
       //print("Erro para obter os clientes: $e");
       _errorMessageCustomer = DefaultErrorMessage.ERROR;
+      return null;
     } finally {
       _isLoadingCustomer = false;
       notifyListeners();
     }
+    return null;
   }
 
   Future<void> _getCustomersNewSearch({
@@ -992,10 +1004,12 @@ class SaleRequestProvider with ChangeNotifier {
         await clearCart(enterpriseCode);
 
         await _clearcustomers(enterpriseCode);
-        await _getCustomersOldSearch(
-          searchTypeInt: 2, //exactCode
-          controllerText: "-1", //consumidor
+        await getCustomers(
+          context: context,
+          controllerText: "",
           enterpriseCode: enterpriseCode,
+          configurationsProvider: ConfigurationsProvider(),
+          searchOnlyDefaultCustomer: true,
         );
       } else {
         _isLoadingSaveSaleRequest = false;

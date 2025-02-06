@@ -1,4 +1,4 @@
-import 'customer_register.dart';
+import 'customer.dart';
 
 class CustomerRegisterBindedCovenantModel {
   final CustomerRegisterCovenantModel customerRegisterCovenantModel;

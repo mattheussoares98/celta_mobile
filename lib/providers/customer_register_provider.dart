@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../api/api.dart';
-import '../models/customer_register/customer_register.dart';
+import '../models/customer/customer.dart';
 import '../utils/utils.dart';
 import './address_provider.dart';
 
