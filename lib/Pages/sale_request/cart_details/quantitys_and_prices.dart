@@ -79,9 +79,7 @@ class QuantitysAndPrices extends StatelessWidget {
             ),
           ],
         ),
-        if ((product.AutomaticDiscountValue != null &&
-                product.AutomaticDiscountValue! > 0) ||
-            (product.DiscountValue != null && product.DiscountValue! > 0))
+        if (saleRequestProvider.getProductDiscount(product) != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
             child: Column(
@@ -90,10 +88,7 @@ class QuantitysAndPrices extends StatelessWidget {
                   title: "Desconto",
                   subtitleColor: Theme.of(context).colorScheme.primary,
                   subtitle: ConvertString.convertToBRL(
-                    product.AutomaticDiscountValue != null
-                        ? product.AutomaticDiscountValue! * product.quantity
-                        : product.DiscountValue! * product.quantity,
-                  ),
+                      saleRequestProvider.getProductDiscount(product)),
                   otherWidget:
                       null, //TODO add button to remove discount if is manually
                 ),

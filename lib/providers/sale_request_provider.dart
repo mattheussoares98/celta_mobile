@@ -425,8 +425,8 @@ class SaleRequestProvider with ChangeNotifier {
             manualDiscountController.text.toDouble();
         selectedProduct.AutomaticDiscountValue = null;
       } else {
-        selectedProduct.DiscountValue = selectedProduct.value! *
-            (manualDiscountController.text.toDouble() / 100);
+        selectedProduct.DiscountValue =
+            manualDiscountController.text.toDouble() / 100;
         selectedProduct.AutomaticDiscountValue = null;
       }
 
@@ -1068,5 +1068,20 @@ class SaleRequestProvider with ChangeNotifier {
     oldProduct.DiscountValue = discount;
 
     _cartProducts[enterpriseCode]![indexOfProduct] = oldProduct;
+  }
+
+  double? getProductDiscount(GetProductJsonModel product) {
+    if (product.AutomaticDiscountValue == null &&
+        product.DiscountValue == null) {
+      return null;
+    } else if (product.DiscountValue != null &&
+        product.DiscountPercentageOrValue == "R\$") {
+      return product.DiscountValue! * product.quantity;
+    } else if (product.DiscountValue != null &&
+        product.DiscountPercentageOrValue == "%") {
+      return (product.value! * product.DiscountValue!) * product.quantity;
+    } else {
+      return product.AutomaticDiscountValue;
+    }
   }
 }

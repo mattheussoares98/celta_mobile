@@ -63,6 +63,17 @@ class _UpdateQuantityPriceOrDiscountState
               .toBrazilianNumber()
               .replaceAll(RegExp(r'\.'), '');
         }
+
+        if (widget.product.DiscountValue != null) {
+          discountType = widget.product.DiscountPercentageOrValue;
+          if (discountType == "R\$") {
+            manualDiscountController.text =
+                widget.product.DiscountValue.toString().toDouble().toInt().toString();
+          } else {
+            manualDiscountController.text =
+                (widget.product.DiscountValue.toString().toDouble() * 100).toInt().toString();
+          }
+        }
       }
     });
   }
