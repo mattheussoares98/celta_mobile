@@ -55,7 +55,8 @@ class _UpdateQuantityPriceOrDiscountState
             .toBrazilianNumber()
             .replaceAll(RegExp(r'\.'), '');
 
-        if (widget.product.DiscountValue != null) {
+        if (widget.product.DiscountValue != null &&
+            widget.product.DiscountValue! > 0) {
           discountType = widget.product.DiscountPercentageOrValue;
           if (discountType == "R\$") {
             manualDiscountController.text = widget.product.DiscountValue

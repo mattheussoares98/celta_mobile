@@ -32,7 +32,6 @@ class QuantitysAndPrices extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //TODO add discount value
                   _titleAndSubtitle(
                     flex: 20,
                     title: "Qtd",
@@ -44,38 +43,29 @@ class QuantitysAndPrices extends StatelessWidget {
                     flex: 20,
                     title: "Preço",
                     subtitle: ConvertString.convertToBRL(
-                      product.value.toString(), //TODO add discount value
+                      product.value.toString(),
                     ),
                   ),
+                  if (product.DiscountValue != null &&
+                      product.DiscountValue! > 0)
+                    _titleAndSubtitle(
+                      flex: 30,
+                      title: "Desconto",
+                      subtitle: ConvertString.convertToBRL(
+                        saleRequestProvider.getProductDiscount(product) ?? 0,
+                      ),
+                    ),
                   const SizedBox(width: 5),
                   _titleAndSubtitle(
                     flex: 30,
                     title: "Total",
-                    subtitle: ConvertString.convertToBRL(
-                      product.value! *
-                          product.quantity, //TODO add discount value
-                    ),
+                    subtitle: ConvertString.convertToBRL((product.value! -
+                            (saleRequestProvider.getProductDiscount(product) ??
+                                0)) *
+                        product.quantity),
                   ),
                 ],
               ),
-            ),
-            IconButton(
-              onPressed: saleRequestProvider.isLoadingSaveSaleRequest ||
-                      saleRequestProvider.isLoadingProcessCart
-                  ? null
-                  : changeFocus,
-              icon: selectedIndex != -1
-                  ? Icon(
-                      Icons.expand_less,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                  : Icon(
-                      Icons.edit,
-                      color: saleRequestProvider.isLoadingSaveSaleRequest ||
-                              saleRequestProvider.isLoadingProcessCart
-                          ? Colors.grey
-                          : Theme.of(context).colorScheme.primary,
-                    ),
             ),
           ],
         ),
@@ -84,14 +74,6 @@ class QuantitysAndPrices extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
             child: Column(
               children: [
-                TitleAndSubtitle.titleAndSubtitle(
-                  title: "Desconto",
-                  subtitleColor: Theme.of(context).colorScheme.primary,
-                  subtitle: ConvertString.convertToBRL(
-                      saleRequestProvider.getProductDiscount(product)),
-                  otherWidget:
-                      null, //TODO add button to remove discount if is manually
-                ),
                 TitleAndSubtitle.titleAndSubtitle(
                   subtitleColor: Theme.of(context).colorScheme.primary,
                   subtitle: saleRequestProvider.getDiscountDescription(
