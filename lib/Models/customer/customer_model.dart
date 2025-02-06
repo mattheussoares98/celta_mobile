@@ -44,21 +44,21 @@ class CustomerModel {
         DateOfBirth: json["DateOfBirth"],
         SexType: json["SexType"],
         PersonType: json["PersonType"],
-        Emails: json["Emails"]?.isEmpty == true
+        Emails: json["Emails"] == null || json["Emails"]?.isEmpty == true
             ? null
-            : (json["Emails"] as List)
-                .map((e) => e.toString())
-                .toList(),
-        Telephones: json["Telephones"]?.isEmpty == true
-            ? null
-            : (json["Telephones"] as List)
-                .map((e) => CustomerTelephoneModel.fromJson(e))
-                .toList(),
-        Addresses: json["Addresses"]?.isEmpty == true
-            ? null
-            : (json["Addresses"] as List)
-                .map((e) => CustomerAdressesModel.fromJson(e))
-                .toList(),
+            : (json["Emails"] as List).map((e) => e.toString()).toList(),
+        Telephones:
+            json["Telephones"] == null || json["Telephones"]?.isEmpty == true
+                ? null
+                : (json["Telephones"] as List)
+                    .map((e) => CustomerTelephoneModel.fromJson(e))
+                    .toList(),
+        Addresses:
+            json["Addresses"] == null || json["Addresses"]?.isEmpty == true
+                ? null
+                : (json["Addresses"] as List)
+                    .map((e) => CustomerAdressesModel.fromJson(e))
+                    .toList(),
         selected: json["selected"] ?? false,
         CustomerCovenants: json["CustomerCovenants"] == null
             ? null

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
-import '../models/customer/customer.dart';
 import '../models/models.dart';
 
 import '../utils/utils.dart';
@@ -143,23 +142,17 @@ class SaleRequestProvider with ChangeNotifier {
     );
   }
 
-  restorecustomers(String enterpriseCode) async {
+  Future<void> restorecustomers(String enterpriseCode) async {
     String customers = await PrefsInstance.getString(PrefsKeys.customers);
 
     if (customers.isEmpty) {
       _customers.clear();
     } else {
-      Map customersInDatabase = jsonDecode(customers);
+      final customersInDatabase = jsonDecode(customers);
 
-      List<SaleRequestCustomerModel> customersTemp = [];
-      customersInDatabase.forEach((key, value) {
-        if (key == enterpriseCode) {
-          value.forEach((element) {
-            customersTemp.add(SaleRequestCustomerModel.fromJson(element));
-          });
-        }
-      });
-      // _customers[enterpriseCode] = customersTemp;//TODO fix this restore
+      _customers[enterpriseCode] = customersInDatabase[enterpriseCode]
+          .map<CustomerModel>((e) => CustomerModel.fromJson(e))
+          .toList();
     }
     notifyListeners();
   }
