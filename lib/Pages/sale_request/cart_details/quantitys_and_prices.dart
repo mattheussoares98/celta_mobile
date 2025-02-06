@@ -32,6 +32,7 @@ class QuantitysAndPrices extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  //TODO add discount value
                   _titleAndSubtitle(
                     flex: 20,
                     title: "Qtd",
@@ -43,7 +44,7 @@ class QuantitysAndPrices extends StatelessWidget {
                     flex: 20,
                     title: "Preço",
                     subtitle: ConvertString.convertToBRL(
-                      product.value.toString(),
+                      product.value.toString(), //TODO add discount value
                     ),
                   ),
                   const SizedBox(width: 5),
@@ -51,7 +52,8 @@ class QuantitysAndPrices extends StatelessWidget {
                     flex: 30,
                     title: "Total",
                     subtitle: ConvertString.convertToBRL(
-                      product.value! * product.quantity,
+                      product.value! *
+                          product.quantity, //TODO add discount value
                     ),
                   ),
                 ],
@@ -88,11 +90,12 @@ class QuantitysAndPrices extends StatelessWidget {
                   title: "Desconto",
                   subtitleColor: Theme.of(context).colorScheme.primary,
                   subtitle: ConvertString.convertToBRL(
-                    product.AutomaticDiscountValue != null &&
-                            product.AutomaticDiscountValue! > 0
-                        ? product.AutomaticDiscountValue
-                        : product.DiscountValue,
+                    product.AutomaticDiscountValue != null
+                        ? product.AutomaticDiscountValue! * product.quantity
+                        : product.DiscountValue! * product.quantity,
                   ),
+                  otherWidget:
+                      null, //TODO add button to remove discount if is manually
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   subtitleColor: Theme.of(context).colorScheme.primary,

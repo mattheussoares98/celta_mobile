@@ -41,7 +41,7 @@ class UpdateQuantityPriceOrDiscount extends StatefulWidget {
 class _UpdateQuantityPriceOrDiscountState
     extends State<UpdateQuantityPriceOrDiscount> {
   final manualPriceController = TextEditingController();
-  final discountController = TextEditingController();
+  final manualDiscountController = TextEditingController();
   String? discountType;
 
   @override
@@ -71,7 +71,7 @@ class _UpdateQuantityPriceOrDiscountState
   void dispose() {
     super.dispose();
     manualPriceController.dispose();
-    discountController.dispose();
+    manualDiscountController.dispose();
   }
 
   Future<void> updateProductInCart({
@@ -88,23 +88,14 @@ class _UpdateQuantityPriceOrDiscountState
     if (controllerInDouble == null || controllerInDouble == 0) return;
 
     if (isValid) {
-      double productValue;
-      if (widget.userCanChangePrices && manualPriceController.text.isNotEmpty) {
-        productValue = manualPriceController.text.toDouble();
-      } else {
-        productValue = saleRequestProvider.getPracticedPrice(
-          quantityToAdd: controllerInDouble,
-          product: product,
-          enterpriseCode: widget.enterpriseCode.toString(),
-        );
-      }
-
-      await saleRequestProvider.updateProductFromCart(
+      await saleRequestProvider.updateProductInCart(
         enterpriseCode: widget.enterpriseCode.toString(),
         quantity: controllerInDouble,
         updateToNeedProcessCartAgain: true,
-        value: productValue,
         index: index,
+        manualDiscountController: manualDiscountController,
+        manualPriceController: manualPriceController,
+        discountType: discountType,
       );
       widget.newQuantityController.clear();
       widget.clearSelectedIndex();
@@ -235,7 +226,7 @@ class _UpdateQuantityPriceOrDiscountState
                     newQuantityController: widget.newQuantityController,
                     manualWrittedPriceController: manualPriceController,
                     discountType: discountType,
-                    manualDiscountText: discountController,
+                    manualDiscountText: manualDiscountController,
                   )
                   .toString()
                   .toBrazilianNumber()
@@ -254,13 +245,14 @@ class _UpdateQuantityPriceOrDiscountState
   }
 
   Row manualDiscount(BuildContext context) {
+    //TODO if has manual discount, change automatically the discount controller and discount type
     return Row(
       children: [
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(top: 8),
             child: TextFormField(
-              controller: discountController,
+              controller: manualDiscountController,
               enabled: manualPriceController.text.isEmpty,
               inputFormatters: [LengthLimitingTextInputFormatter(5)],
               //TODO confirm quantity
@@ -269,9 +261,9 @@ class _UpdateQuantityPriceOrDiscountState
                 widget.callSetState();
               },
               onTap: () {
-                discountController.selection = TextSelection(
+                manualDiscountController.selection = TextSelection(
                   baseOffset: 0,
-                  extentOffset: discountController.text.length,
+                  extentOffset: manualDiscountController.text.length,
                 );
               },
               decoration: FormFieldDecoration.decoration(
@@ -331,7 +323,7 @@ class _UpdateQuantityPriceOrDiscountState
             child: TextFormField(
               controller: manualPriceController,
               style: FormFieldStyle.style(),
-              enabled: discountController.text.isEmpty,
+              enabled: manualDiscountController.text.isEmpty,
               onFieldSubmitted: (_) {
                 updateProductInCart(
                   saleRequestProvider: saleRequestProvider,

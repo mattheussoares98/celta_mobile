@@ -222,7 +222,6 @@ class SaleRequestProvider with ChangeNotifier {
       product: product,
     );
 
-    //TODO insert discount as well
     if (discountType != null && manualDiscountText?.text.toDouble() != -1) {
       if (discountType == "R\$") {
         price = price - manualDiscountText!.text.toDouble();
@@ -327,8 +326,8 @@ class SaleRequestProvider with ChangeNotifier {
       value: productPrice,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
-      DiscountPercentageOrValue: "0.0",
-      DiscountValue: 0.0,
+      DiscountPercentageOrValue: product.DiscountPercentageOrValue,
+      DiscountValue: product.DiscountValue,
       // expectedDeliveryDate: "\"${DateTime.now().toString()}\"",
       productCode: product.productCode!,
       plu: product.plu!,
@@ -398,16 +397,46 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProductFromCart({
+  Future<void> updateProductInCart({
     required double quantity,
-    required double value,
     required String enterpriseCode,
     required int index,
-    bool updateToNeedProcessCartAgain = true,
+    required bool updateToNeedProcessCartAgain,
+    required TextEditingController manualPriceController,
+    required TextEditingController manualDiscountController,
+    required String? discountType,
   }) async {
-    _cartProducts[enterpriseCode]![index].TotalLiquid = quantity * value;
-    _cartProducts[enterpriseCode]![index].quantity = quantity;
-    _cartProducts[enterpriseCode]![index].value = value;
+    final selectedProduct = _cartProducts[enterpriseCode]![index];
+
+    if (manualPriceController.text.isNotEmpty) {
+      selectedProduct.value = manualPriceController.text.toDouble();
+    } else {
+      selectedProduct.value = getPracticedPrice(
+        quantityToAdd: quantity,
+        product: selectedProduct,
+        enterpriseCode: enterpriseCode,
+      );
+    }
+
+    if (discountType != null &&
+        manualDiscountController.text.toDouble() != -1) {
+      if (discountType == "R\$") {
+        selectedProduct.DiscountValue =
+            manualDiscountController.text.toDouble();
+        selectedProduct.AutomaticDiscountValue = null;
+      } else {
+        selectedProduct.DiscountValue = selectedProduct.value! *
+            (manualDiscountController.text.toDouble() / 100);
+        selectedProduct.AutomaticDiscountValue = null;
+      }
+
+      selectedProduct.DiscountDescription = "Desconto manual";
+      selectedProduct.DiscountPercentageOrValue =
+          discountType == "%" ? "%" : "R\$";
+    }
+
+    selectedProduct.TotalLiquid = quantity * (selectedProduct.value ?? 0);
+    selectedProduct.quantity = quantity;
 
     saleRequestProcessCart = SaleRequestProcessCartModel(
       crossId: UserData.crossIdentity,
