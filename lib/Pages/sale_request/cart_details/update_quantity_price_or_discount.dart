@@ -62,10 +62,11 @@ class _UpdateQuantityPriceOrDiscountState
             manualDiscountController.text =
                 widget.product.DiscountValue.toString().toBrazilianNumber();
           } else {
-            manualDiscountController.text =
-                (widget.product.DiscountValue.toString().toDouble() * 100)
-                    .toInt()
-                    .toString();
+            manualDiscountController.text = widget.product.DiscountValue
+                .toString()
+                .toDouble()
+                .toInt()
+                .toString();
           }
         }
       }
