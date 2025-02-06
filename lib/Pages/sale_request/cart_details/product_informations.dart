@@ -65,46 +65,53 @@ class ProductInformations extends StatelessWidget {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: saleRequestProvider.isLoadingSaveSaleRequest ||
-                            saleRequestProvider.isLoadingProcessCart
-                        ? null
-                        : () {
-                            ShowAlertDialog.show(
-                              context: context,
-                              title: "Remover item",
-                              content: const SingleChildScrollView(
-                                child: Text(
-                                  "Deseja realmente remover o item do carrinho?",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              function: () {
-                                saleRequestProvider.removeProductFromCart(
-                                  ProductPackingCode:
-                                      product.productPackingCode!,
-                                  enterpriseCode: enterpriseCode.toString(),
-                                );
-
-                                ShowSnackbarMessage.show(
-                                  message: "Produto removido",
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.edit,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      IconButton(
+                        onPressed: saleRequestProvider
+                                    .isLoadingSaveSaleRequest ||
+                                saleRequestProvider.isLoadingProcessCart
+                            ? null
+                            : () {
+                                ShowAlertDialog.show(
                                   context: context,
-                                  functionSnackBarAction: () {
-                                    saleRequestProvider.restoreProductRemoved(
-                                        enterpriseCode.toString());
+                                  title: "Remover item",
+                                  content: const SingleChildScrollView(
+                                    child: Text(
+                                      "Deseja realmente remover o item do carrinho?",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  function: () {
+                                    saleRequestProvider.removeProductFromCart(
+                                      ProductPackingCode:
+                                          product.productPackingCode!,
+                                      enterpriseCode: enterpriseCode.toString(),
+                                    );
+
+                                    ShowSnackbarMessage.show(
+                                      message: "Produto removido",
+                                      context: context,
+                                      functionSnackBarAction: () {
+                                        saleRequestProvider
+                                            .restoreProductRemoved(
+                                                enterpriseCode.toString());
+                                      },
+                                      labelSnackBarAction: "Restaurar produto",
+                                    );
                                   },
-                                  labelSnackBarAction: "Restaurar produto",
                                 );
                               },
-                            );
-                          },
-                    icon: Icon(
-                      Icons.delete,
-                      color: saleRequestProvider.isLoadingSaveSaleRequest ||
-                              saleRequestProvider.isLoadingProcessCart
-                          ? Colors.grey
-                          : Colors.red,
-                    ),
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
