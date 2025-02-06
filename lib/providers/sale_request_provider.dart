@@ -434,7 +434,7 @@ class SaleRequestProvider with ChangeNotifier {
       selectedProduct.DiscountPercentageOrValue =
           discountType == "%" ? "%" : "R\$";
       selectedProduct.DiscountDescription = "Desconto manual" +
-          " (${discount.toString().toBrazilianNumber()} ${discountType == "%" ? "%" : "R\$"})";
+          " - (${discount.toString().toBrazilianNumber()} ${discountType == "%" ? "%" : "R\$"}) por UN";
     }
 
     selectedProduct.TotalLiquid = quantity * (selectedProduct.value ?? 0);

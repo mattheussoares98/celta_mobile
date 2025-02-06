@@ -69,7 +69,7 @@ class QuantitysAndPrices extends StatelessWidget {
         ),
         if (productDiscount > 0)
           Padding(
-            padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+            padding: const EdgeInsets.all(5),
             child: Column(
               children: [
                 TitleAndSubtitle.titleAndSubtitle(
