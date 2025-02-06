@@ -61,12 +61,14 @@ class _UpdateQuantityPriceOrDiscountState
           if (discountType == "R\$") {
             manualDiscountController.text =
                 widget.product.DiscountValue.toString().toBrazilianNumber();
+            discountType = "R\$";
           } else {
             manualDiscountController.text = widget.product.DiscountValue
                 .toString()
                 .toDouble()
                 .toInt()
                 .toString();
+            discountType = "%";
           }
         }
       }
