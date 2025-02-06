@@ -615,7 +615,6 @@ class SaleRequestProvider with ChangeNotifier {
     required int enterpriseCode,
     required int requestTypeCode,
     required int customerCode,
-    required int covenantCode,
   }) async {
     _isLoadingProcessCart = true;
     _errorMessageProcessCart = "";
@@ -631,7 +630,7 @@ class SaleRequestProvider with ChangeNotifier {
         "crossId": UserData.crossIdentity,
         "EnterpriseCode": enterpriseCode,
         "RequestTypeCode": requestTypeCode,
-        "CovenantCode": covenantCode,
+        "CovenantCode": getSelectedCovenantCode(enterpriseCode.toString()),
         "CustomerCode": customerCode,
         "Products": processCartItems,
       }

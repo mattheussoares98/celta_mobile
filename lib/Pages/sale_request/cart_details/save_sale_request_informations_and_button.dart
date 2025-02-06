@@ -72,8 +72,6 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
               enterpriseCode: enterpriseCode,
               requestTypeCode: requestTypeCode,
               customerCode: customerCode,
-              covenantCode: saleRequestProvider
-                  .getSelectedCovenantCode(enterpriseCode.toString()),
             );
           },
         );
