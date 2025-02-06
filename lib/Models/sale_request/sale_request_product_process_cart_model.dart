@@ -103,7 +103,7 @@ class SaleRequestProductProcessCartModel {
         IncrementValue: product.IncrementValue,
         DiscountPercentageOrValue: product.DiscountPercentageOrValue,
         DiscountValue: product.DiscountValue,
-        DiscountDescription: null,
+        DiscountDescription: product.DiscountDescription,
         ExpectedDeliveryDate: null,
         Observations: null,
       );

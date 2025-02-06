@@ -426,7 +426,7 @@ class SaleRequestProvider with ChangeNotifier {
         selectedProduct.DiscountValue = discount;
         selectedProduct.AutomaticDiscountValue = null;
       } else {
-        selectedProduct.DiscountValue = discount / 100;
+        selectedProduct.DiscountValue = discount;
         selectedProduct.AutomaticDiscountValue = null;
       }
 
@@ -1064,11 +1064,11 @@ class SaleRequestProvider with ChangeNotifier {
     } else if (product.DiscountValue != null &&
         product.DiscountValue! > 0 &&
         product.DiscountPercentageOrValue == "R\$") {
-      return product.DiscountValue! * product.quantity;
+      return product.DiscountValue!;
     } else if (product.DiscountValue != null &&
         product.DiscountValue! > 0 &&
         product.DiscountPercentageOrValue == "%") {
-      return (1 - product.DiscountValue!) * product.quantity;
+      return product.DiscountValue;
     } else {
       return product.AutomaticDiscountValue;
     }
