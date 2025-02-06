@@ -1,16 +1,20 @@
+import '../models.dart';
+
 class CustomerRegisterModel {
-  int? Code; // 2697,
-  String crossId; // "crossId",
-  String? PersonalizedCode; // "999",
-  String Name; // "JavaScript Object Notation - JSON",
-  String? ReducedName; // "JSON Obj",
-  String CpfCnpjNumber; // "23696428078",
-  String? RegistrationNumber; // "258842246",
-  String? DateOfBirth; // "2001-01-01T00:00:00",
-  String SexType; // "F",
-  String PersonType; // "F",
-  List<String>? Emails;
-  List<Map<String, dynamic>>? Telephones;
+  final int? Code; // 2697,
+  final String crossId; // "crossId",
+  final String? PersonalizedCode; // "999",
+  final String Name; // "JavaScript Object Notation - JSON",
+  final String? ReducedName; // "JSON Obj",
+  final String CpfCnpjNumber; // "23696428078",
+  final String? RegistrationNumber; // "258842246",
+  final String? DateOfBirth; // "2001-01-01T00:00:00",
+  final String SexType; // "F",
+  final String PersonType; // "F",
+  final List<String>? Emails;
+  final List<Map<String, dynamic>>? Telephones;
+  bool? selected;
+  final List<SaleRequestCovenantsModel> /* TODO fix */ Covenants;
 // "Telephones": [
 // {
 // "AreaCode": "11",
@@ -47,19 +51,21 @@ class CustomerRegisterModel {
 // "Covenants": null
 
   CustomerRegisterModel({
-    this.Code,
     required this.crossId,
-    this.PersonalizedCode,
     required this.Name,
-    this.ReducedName,
+    required this.Code,
+    required this.PersonalizedCode,
+    required this.ReducedName,
     required this.CpfCnpjNumber,
-    this.RegistrationNumber,
-    this.DateOfBirth,
+    required this.RegistrationNumber,
+    required this.DateOfBirth,
     required this.SexType,
     required this.PersonType,
-    this.Emails,
-    this.Telephones,
-    this.Addresses,
+    required this.Emails,
+    required this.Telephones,
+    required this.Addresses,
+    required this.selected,
+    required this.Covenants,
   });
 
   static resultAsStringToCustomerRegisterModel({

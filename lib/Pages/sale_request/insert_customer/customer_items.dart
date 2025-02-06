@@ -1,8 +1,8 @@
-import '../../../models/sale_request/sale_request.dart';
-import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/models.dart';
+import '../../../providers/providers.dart';
 import '../../../components/components.dart';
 import 'insert_customer.dart';
 
@@ -31,7 +31,7 @@ class _CustomersItemsState extends State<CustomersItems> {
       itemCount: saleRequestProvider
           .customers[widget.enterpriseCode.toString()]?.length,
       itemBuilder: (context, index) {
-        SaleRequestCustomerModel customer = saleRequestProvider
+        CustomerRegisterModel? customer = saleRequestProvider
             .customers[widget.enterpriseCode.toString()]![index];
         if (customer.Code == 1) {
           return Card(
@@ -46,14 +46,13 @@ class _CustomersItemsState extends State<CustomersItems> {
                           saleRequestProvider.updateSelectedCustomer(
                             index: index,
                             value: value!,
-                            enterpriseCode:
-                                widget.enterpriseCode.toString(),
+                            enterpriseCode: widget.enterpriseCode.toString(),
                           );
                         });
                       }),
           );
         }
-        
+
         return Card(
           child: Column(
             children: [
@@ -67,8 +66,7 @@ class _CustomersItemsState extends State<CustomersItems> {
                           saleRequestProvider.updateSelectedCustomer(
                             index: index,
                             value: value!,
-                            enterpriseCode:
-                                widget.enterpriseCode.toString(),
+                            enterpriseCode: widget.enterpriseCode.toString(),
                           );
                         });
                       },
@@ -99,7 +97,7 @@ class _CustomersItemsState extends State<CustomersItems> {
                   ],
                 ),
               ),
-              if (customer.selected)
+              if (customer.selected == true)
                 CovenantsItems(
                   covenants: customer.Covenants,
                   indexOfCustomer: index,

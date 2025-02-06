@@ -29,8 +29,8 @@ class SaleRequestProvider with ChangeNotifier {
   bool get isLoadingCustomer => _isLoadingCustomer;
   String _errorMessageCustomer = "";
   String get errorMessageCustomer => _errorMessageCustomer;
-  Map<String, List<SaleRequestCustomerModel>> _customers = {};
-  Map<String, List<SaleRequestCustomerModel>> get customers => _customers;
+  Map<String, List<CustomerRegisterModel>> _customers = {};
+  Map<String, List<CustomerRegisterModel>> get customers => _customers;
 
   bool _isLoadingProducts = false;
   bool get isLoadingProducts => _isLoadingProducts;
@@ -69,7 +69,7 @@ class SaleRequestProvider with ChangeNotifier {
     int _indexOfSelectedCovenant = -1;
     _customers.forEach((key, value) {
       value.forEach((customer) {
-        if (customer.selected) {
+        if (customer.selected == true) {
           _indexOfSelectedCovenant =
               customer.Covenants.indexWhere((customer) => customer.selected);
         }
@@ -96,8 +96,8 @@ class SaleRequestProvider with ChangeNotifier {
     int customerCode = -1;
     if (_customers[enterpriseCode] != null)
       _customers[enterpriseCode]!.forEach((element) {
-        if (element.selected) {
-          customerCode = element.Code;
+        if (element.selected == true && element.Code != null) {
+          customerCode = element.Code!;
         }
       });
     else {
@@ -135,7 +135,7 @@ class SaleRequestProvider with ChangeNotifier {
           value
               .map((e) => e)
               .toList()
-              .where((x) => x.selected || x.Code == 1)
+              .where((x) => x.selected == true || x.Code == 1)
               .toList(),
         );
       }),
@@ -158,7 +158,7 @@ class SaleRequestProvider with ChangeNotifier {
           });
         }
       });
-      _customers[enterpriseCode] = customersTemp;
+      // _customers[enterpriseCode] = customersTemp;//TODO fix this restore
     }
     notifyListeners();
   }
