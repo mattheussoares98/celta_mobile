@@ -24,6 +24,9 @@ class QuantitysAndPrices extends StatelessWidget {
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
 
+    double productDiscount =
+        saleRequestProvider.getProductDiscount(product) ?? 0;
+
     return Column(
       children: [
         Row(
@@ -51,25 +54,21 @@ class QuantitysAndPrices extends StatelessWidget {
                     _titleAndSubtitle(
                       flex: 30,
                       title: "Desconto",
-                      subtitle: ConvertString.convertToBRL(
-                        saleRequestProvider.getProductDiscount(product) ?? 0,
-                      ),
+                      subtitle: ConvertString.convertToBRL(productDiscount),
                     ),
                   const SizedBox(width: 5),
                   _titleAndSubtitle(
                     flex: 30,
                     title: "Total",
-                    subtitle: ConvertString.convertToBRL((product.value! -
-                            (saleRequestProvider.getProductDiscount(product) ??
-                                0)) *
-                        product.quantity),
+                    subtitle: ConvertString.convertToBRL(
+                        (product.value! - productDiscount) * product.quantity),
                   ),
                 ],
               ),
             ),
           ],
         ),
-        if (saleRequestProvider.getProductDiscount(product) != null)
+        if (productDiscount > 0)
           Padding(
             padding: const EdgeInsets.fromLTRB(5, 5, 0, 0),
             child: Column(
