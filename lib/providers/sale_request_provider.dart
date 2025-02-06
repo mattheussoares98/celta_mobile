@@ -420,19 +420,21 @@ class SaleRequestProvider with ChangeNotifier {
 
     if (discountType != null &&
         manualDiscountController.text.toDouble() != -1) {
+      double discount = manualDiscountController.text.toDouble();
+
       if (discountType == "R\$") {
-        selectedProduct.DiscountValue =
-            manualDiscountController.text.toDouble();
+        selectedProduct.DiscountValue = discount;
         selectedProduct.AutomaticDiscountValue = null;
       } else {
-        selectedProduct.DiscountValue =
-            manualDiscountController.text.toDouble() / 100;
+        selectedProduct.DiscountValue = discount / 100;
         selectedProduct.AutomaticDiscountValue = null;
       }
 
       selectedProduct.DiscountDescription = "Desconto manual";
       selectedProduct.DiscountPercentageOrValue =
           discountType == "%" ? "%" : "R\$";
+      selectedProduct.DiscountDescription = "Desconto manual" +
+          " (${discount.toString().toBrazilianNumber()} ${discountType == "%" ? "%" : "R\$"})";
     }
 
     selectedProduct.TotalLiquid = quantity * (selectedProduct.value ?? 0);
@@ -1054,32 +1056,19 @@ class SaleRequestProvider with ChangeNotifier {
     }
   }
 
-  void updateProductDiscount({
-    required int indexOfProduct,
-    required double discount,
-    required bool isPercentage,
-    required String enterpriseCode,
-  }) {
-    //TODO remove this function and move to updateProductFromCart
-    final oldProduct = _cartProducts[enterpriseCode]![indexOfProduct];
-
-    oldProduct.DiscountDescription = "Desconto manual";
-    oldProduct.DiscountPercentageOrValue = isPercentage ? "%" : "R\$";
-    oldProduct.DiscountValue = discount;
-
-    _cartProducts[enterpriseCode]![indexOfProduct] = oldProduct;
-  }
-
   double? getProductDiscount(GetProductJsonModel product) {
     if (product.AutomaticDiscountValue == null &&
-        product.DiscountValue == null) {
+            product.DiscountValue == null ||
+        (product.AutomaticDiscountValue == 0 && product.DiscountValue == 0)) {
       return null;
     } else if (product.DiscountValue != null &&
+        product.DiscountValue! > 0 &&
         product.DiscountPercentageOrValue == "R\$") {
       return product.DiscountValue! * product.quantity;
     } else if (product.DiscountValue != null &&
+        product.DiscountValue! > 0 &&
         product.DiscountPercentageOrValue == "%") {
-      return (product.value! * product.DiscountValue!) * product.quantity;
+      return product.DiscountValue! * product.quantity;
     } else {
       return product.AutomaticDiscountValue;
     }

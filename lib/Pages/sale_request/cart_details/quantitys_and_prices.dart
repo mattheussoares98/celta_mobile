@@ -49,8 +49,7 @@ class QuantitysAndPrices extends StatelessWidget {
                       product.value.toString(),
                     ),
                   ),
-                  if (product.DiscountValue != null &&
-                      product.DiscountValue! > 0)
+                  if (productDiscount > 0)
                     _titleAndSubtitle(
                       flex: 30,
                       title: "Desconto",
@@ -61,7 +60,7 @@ class QuantitysAndPrices extends StatelessWidget {
                     flex: 30,
                     title: "Total",
                     subtitle: ConvertString.convertToBRL(
-                        (product.value! - productDiscount) * product.quantity),
+                        (product.value! * product.quantity) - productDiscount),
                   ),
                 ],
               ),
