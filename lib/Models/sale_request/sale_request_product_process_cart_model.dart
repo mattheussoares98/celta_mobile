@@ -42,8 +42,8 @@ class SaleRequestProductProcessCartModel {
               "TotalLiquid": e.quantity * e.value!,
               "IncrementPercentageOrValue": e.IncrementPercentageOrValue ?? 0,
               "IncrementValue": e.IncrementValue ?? 0,
-              "DiscountPercentageOrValue": e.DiscountPercentageOrValue ?? 0,
-              "DiscountValue": e.DiscountValue ?? 0,
+              "DiscountPercentageOrValue": 0,
+              "DiscountValue": 0,
               "AutomaticDiscountPercentageOrValue":
                   e.AutomaticDiscountPercentageOrValue ?? 0,
               "AutomaticDiscountValue": e.AutomaticDiscountValue ?? 0,
