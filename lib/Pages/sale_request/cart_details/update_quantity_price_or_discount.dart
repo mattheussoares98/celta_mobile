@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
@@ -227,6 +228,8 @@ class _UpdateQuantityPriceOrDiscountState
                     enterpriseCode: widget.enterpriseCode.toString(),
                     newQuantityController: widget.newQuantityController,
                     manualWrittedPriceController: manualPriceController,
+                    discountType: discountType,
+                    manualDiscountText: discountController,
                   )
                   .toString()
                   .toBrazilianNumber()
@@ -253,6 +256,8 @@ class _UpdateQuantityPriceOrDiscountState
             child: TextFormField(
               controller: discountController,
               enabled: manualPriceController.text.isEmpty,
+              inputFormatters: [LengthLimitingTextInputFormatter(5)],
+              //TODO confirm quantity
               style: FormFieldStyle.style(),
               onChanged: (_) {
                 widget.callSetState();

@@ -204,9 +204,10 @@ class SaleRequestProvider with ChangeNotifier {
     required GetProductJsonModel product,
     required TextEditingController newQuantityController,
     required String enterpriseCode,
-    TextEditingController? manualWrittedPriceController,
+    required String? discountType,
+    required TextEditingController? manualDiscountText,
+    required TextEditingController? manualWrittedPriceController,
   }) {
-    //TODO insert discount as well
     double quantityToAdd = newQuantityController.text.isEmpty
         ? 1
         : newQuantityController.text.toDouble();
@@ -226,6 +227,15 @@ class SaleRequestProvider with ChangeNotifier {
       quantityToAdd: quantityToAdd,
       product: product,
     );
+
+    //TODO insert discount as well
+    if (discountType != null && manualDiscountText?.text.toDouble() != -1) {
+      if (discountType == "R\$") {
+        price = price - manualDiscountText!.text.toDouble();
+      } else {
+        price = price * (1 - (manualDiscountText!.text.toDouble() / 100));
+      }
+    }
 
     return quantityToAdd * price;
   }
