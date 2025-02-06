@@ -55,23 +55,19 @@ class _UpdateQuantityPriceOrDiscountState
             .toBrazilianNumber()
             .replaceAll(RegExp(r'\.'), '');
 
-        SaleRequestProvider saleRequestProvider =
-            Provider.of(context, listen: false);
-        if (!saleRequestProvider.needProcessCart) {
-          manualPriceController.text = widget.product.value
-              .toString()
-              .toBrazilianNumber()
-              .replaceAll(RegExp(r'\.'), '');
-        }
-
         if (widget.product.DiscountValue != null) {
           discountType = widget.product.DiscountPercentageOrValue;
           if (discountType == "R\$") {
-            manualDiscountController.text =
-                widget.product.DiscountValue.toString().toDouble().toInt().toString();
+            manualDiscountController.text = widget.product.DiscountValue
+                .toString()
+                .toDouble()
+                .toInt()
+                .toString();
           } else {
             manualDiscountController.text =
-                (widget.product.DiscountValue.toString().toDouble() * 100).toInt().toString();
+                (widget.product.DiscountValue.toString().toDouble() * 100)
+                    .toInt()
+                    .toString();
           }
         }
       }
