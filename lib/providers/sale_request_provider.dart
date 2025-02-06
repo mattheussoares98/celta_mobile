@@ -463,28 +463,17 @@ class SaleRequestProvider with ChangeNotifier {
     if (_cartProducts[enterpriseCode] == null) {
       return 0;
     } else {
-      double totalLiquid = 0;
-      _cartProducts[enterpriseCode]!.forEach((element) {
-        if (element.TotalLiquid != null && element.TotalLiquid! > 0) {
-          //só terá o valor do TotalLiquid no produto quando processar o
-          //carrinho. Se fechar o app e abrir novamente, esse valor estará
-          //zerado e por isso precisa calcular conforme o que já tiver no banco
-          //de dados
-          totalLiquid += element.TotalLiquid!;
+      return _cartProducts[enterpriseCode]!.fold<double>(
+        0,
+        (previousValue, product) {
+          double newPrice =
+              previousValue + (product.TotalLiquid ?? product.value ?? 0);
 
-          if (element.AutomaticDiscountValue != null &&
-              element.AutomaticDiscountValue! > 0) {
-            totalLiquid -= element.AutomaticDiscountValue!;
-          }
-        } else if (element.value != null && element.value! > 0) {
-          double price = element.value! * element.quantity;
-          totalLiquid += price;
-          // print(totalLiquid);
-        } else {
-          //preço do produto está zerado, não deve somar
-        }
-      });
-      return totalLiquid;
+          double? discount = getProductDiscount(product);
+
+          return newPrice - (discount ?? 0);
+        },
+      );
     }
   }
 
