@@ -81,7 +81,7 @@ class SaleRequestProvider with ChangeNotifier {
       final indexSelectedCustomer =
           _customers[enterpriseCode]!.indexWhere((e) => e.selected == true);
 
-      if (indexSelectedCustomer == -1) {
+      if (indexSelectedCustomer != -1) {
         final indexSelectedCovenant =
             _customers[enterpriseCode]![indexSelectedCustomer]
                 .CustomerCovenants
@@ -997,28 +997,28 @@ class SaleRequestProvider with ChangeNotifier {
       firebaseCallEnum: FirebaseCallEnum.saleRequestSave,
     );
     try {
-      //TODO test a lot the seller and customer
+      final encodedJson = json.encode(
+        SaleRequestProcessCartModel(
+          crossId: UserData.crossIdentity,
+          EnterpriseCode: enterpriseCode.toInt(),
+          RequestTypeCode: requestTypeCode,
+          SellerCode:
+              0, //já vincula o vendedor se tiver um funcionário que é vendedor vinculado ao usuário
+          CovenantCode: getSelectedCovenantCode(enterpriseCode) ?? 0,
+          CustomerCode: getSelectedCustomerCode(enterpriseCode) ?? 0,
+          Instructions: instructions,
+          Observations: observations,
+          Products: _cartProducts[enterpriseCode]!
+              .map((e) =>
+                  SaleRequestProductProcessCartModel.fromGetProductJsonModel(e))
+              .toList(),
+        ).toJson(),
+      );
 
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "json": json.encode(
-            SaleRequestProcessCartModel(
-              crossId: UserData.crossIdentity,
-              EnterpriseCode: enterpriseCode.toInt(),
-              RequestTypeCode: requestTypeCode,
-              SellerCode:
-                  null, //TODO verify if add automatically when process the cart
-              CovenantCode: getSelectedCovenantCode(enterpriseCode),
-              CustomerCode: getSelectedCustomerCode(enterpriseCode),
-              Instructions: instructions,
-              Observations: observations,
-              Products: _cartProducts[enterpriseCode]!
-                  .map((e) => SaleRequestProductProcessCartModel
-                      .fromGetProductJsonModel(e))
-                  .toList(),
-            ).toJson(),
-          ),
+          "json": encodedJson,
           "printerName": "",
         },
         typeOfResponse: "InsertResponse",
@@ -1047,16 +1047,16 @@ class SaleRequestProvider with ChangeNotifier {
           //print("Nenhum conteúdo entre parênteses encontrado.");
         }
 
-        // await clearCart(enterpriseCode);
+        await clearCart(enterpriseCode);
 
-        // await _clearcustomers(enterpriseCode);
-        // await getCustomers(
-        //   context: context,
-        //   controllerText: "",
-        //   enterpriseCode: enterpriseCode,
-        //   configurationsProvider: ConfigurationsProvider(),
-        //   searchOnlyDefaultCustomer: true,
-        // );
+        await _clearcustomers(enterpriseCode);
+        await getCustomers(
+          context: context,
+          controllerText: "",
+          enterpriseCode: enterpriseCode,
+          configurationsProvider: ConfigurationsProvider(),
+          searchOnlyDefaultCustomer: true,
+        );
       } else {
         _isLoadingSaveSaleRequest = false;
 
