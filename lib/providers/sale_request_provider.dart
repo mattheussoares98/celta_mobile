@@ -1002,20 +1002,23 @@ class SaleRequestProvider with ChangeNotifier {
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "json": json.encode(SaleRequestProcessCartModel(
-            crossId: UserData.crossIdentity,
-            EnterpriseCode: enterpriseCode.toInt(),
-            RequestTypeCode: requestTypeCode,
-            SellerCode:
-                null, //TODO verify if add automatically when process the cart
-            CovenantCode: getSelectedCovenantCode(enterpriseCode),
-            CustomerCode: getSelectedCustomerCode(enterpriseCode),
-            Products: _cartProducts[enterpriseCode]!
-                .map((e) =>
-                    SaleRequestProductProcessCartModel.fromGetProductJsonModel(
-                        e))
-                .toList(),
-          ).toJson()),
+          "json": json.encode(
+            SaleRequestProcessCartModel(
+              crossId: UserData.crossIdentity,
+              EnterpriseCode: enterpriseCode.toInt(),
+              RequestTypeCode: requestTypeCode,
+              SellerCode:
+                  null, //TODO verify if add automatically when process the cart
+              CovenantCode: getSelectedCovenantCode(enterpriseCode),
+              CustomerCode: getSelectedCustomerCode(enterpriseCode),
+              Instructions: instructions,
+              Observations: observations,
+              Products: _cartProducts[enterpriseCode]!
+                  .map((e) => SaleRequestProductProcessCartModel
+                      .fromGetProductJsonModel(e))
+                  .toList(),
+            ).toJson(),
+          ),
           "printerName": "",
         },
         typeOfResponse: "InsertResponse",

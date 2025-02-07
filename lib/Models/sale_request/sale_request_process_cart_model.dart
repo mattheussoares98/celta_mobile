@@ -8,6 +8,8 @@ class SaleRequestProcessCartModel {
   final int? SellerCode;
   final int? CovenantCode;
   final int? CustomerCode;
+  final String? Instructions;
+  final String? Observations;
   final List<SaleRequestProductProcessCartModel>? Products;
 
   SaleRequestProcessCartModel({
@@ -18,6 +20,8 @@ class SaleRequestProcessCartModel {
     required this.CovenantCode,
     required this.CustomerCode,
     required this.Products,
+    required this.Instructions,
+    required this.Observations,
   });
 
   factory SaleRequestProcessCartModel.fromJson(Map data) =>
@@ -28,6 +32,8 @@ class SaleRequestProcessCartModel {
         SellerCode: data["SellerCode"],
         CovenantCode: data["CovenantCode"],
         CustomerCode: data["CustomerCode"],
+        Instructions: data["Instructions"],
+        Observations: data["Observations"],
         Products: data["Products"] != null
             ? (data["Products"] as List)
                 .map<SaleRequestProductProcessCartModel>(
@@ -44,6 +50,8 @@ class SaleRequestProcessCartModel {
         "SellerCode": SellerCode,
         "CovenantCode": CovenantCode,
         "CustomerCode": CustomerCode,
+        "Instructions": Instructions,
+        "Observations": Observations,
         "Products": Products?.map((e) => e.toJson()).toList(),
       };
 }
