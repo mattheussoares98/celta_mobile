@@ -209,7 +209,7 @@ class SaleRequestProvider with ChangeNotifier {
     if (manualPriceController != null &&
         manualPriceController.text.isNotEmpty &&
         manualPriceController.text.toDouble() > 0) {
-      return newQuantity * manualPriceController.text.toDouble();
+      return manualPriceController.text.toDouble();
     }
 
     double price = getPracticedPrice(
