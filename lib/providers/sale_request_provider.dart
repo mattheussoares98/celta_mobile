@@ -450,6 +450,12 @@ class SaleRequestProvider with ChangeNotifier {
           discountType == "%" ? "%" : "R\$";
       selectedProduct.DiscountDescription = "Desconto manual" +
           " - (${discount.toString().toBrazilianNumber()} ${discountType == "%" ? "%" : "R\$"}) por UN";
+    } else {
+      selectedProduct.DiscountDescription = null;
+      selectedProduct.DiscountPercentageOrValue = null;
+      selectedProduct.DiscountValue = null;
+      selectedProduct.AutomaticDiscountPercentageOrValue = null;
+      selectedProduct.AutomaticDiscountValue = null;
     }
 
     selectedProduct.TotalLiquid = quantity * (selectedProduct.value ?? 0);
