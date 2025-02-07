@@ -256,7 +256,6 @@ class _UpdateQuantityPriceOrDiscountState
   }
 
   Row manualDiscount(BuildContext context) {
-    //TODO if has manual discount, change automatically the discount controller and discount type
     return Row(
       children: [
         Expanded(
@@ -265,8 +264,8 @@ class _UpdateQuantityPriceOrDiscountState
             child: TextFormField(
               controller: manualDiscountController,
               enabled: manualPriceController.text.isEmpty,
-              inputFormatters: [LengthLimitingTextInputFormatter(5)],
-              //TODO confirm quantity
+              inputFormatters: [LengthLimitingTextInputFormatter(8)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               style: FormFieldStyle.style(),
               onChanged: (_) {
                 widget.callSetState();
