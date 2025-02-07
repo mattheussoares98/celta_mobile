@@ -194,43 +194,40 @@ class SaleRequestProvider with ChangeNotifier {
     return totalQuantity * practicedPrice;
   }
 
-  double getNewPrice({
+  double getNewItemPrice({
     required GetProductJsonModel product,
-    required TextEditingController newQuantityController,
+    required double newQuantity,
     required String enterpriseCode,
     required String? discountType,
-    required TextEditingController? manualDiscountText,
-    required TextEditingController? manualWrittedPriceController,
+    required TextEditingController? manualDiscountController,
+    required TextEditingController? manualPriceController,
   }) {
-    double quantityToAdd = newQuantityController.text.isEmpty
-        ? 1
-        : newQuantityController.text.toDouble();
-
-    if (quantityToAdd <= 0) {
-      quantityToAdd = 1;
+    if (newQuantity <= 0) {
+      newQuantity = 1;
     }
 
-    if (manualWrittedPriceController != null &&
-        manualWrittedPriceController.text.isNotEmpty &&
-        manualWrittedPriceController.text.toDouble() > 0) {
-      return quantityToAdd * manualWrittedPriceController.text.toDouble();
+    if (manualPriceController != null &&
+        manualPriceController.text.isNotEmpty &&
+        manualPriceController.text.toDouble() > 0) {
+      return newQuantity * manualPriceController.text.toDouble();
     }
 
     double price = getPracticedPrice(
       enterpriseCode: enterpriseCode,
-      quantityToAdd: quantityToAdd,
+      quantityToAdd: newQuantity,
       product: product,
     );
 
-    if (discountType != null && manualDiscountText?.text.toDouble() != -1) {
+    if (discountType != null &&
+        manualDiscountController?.text.toDouble() != -1) {
       if (discountType == "R\$") {
-        price = price - manualDiscountText!.text.toDouble();
+        price = price - manualDiscountController!.text.toDouble();
       } else {
-        price = price * (1 - (manualDiscountText!.text.toDouble() / 100));
+        price = price * (1 - (manualDiscountController!.text.toDouble() / 100));
       }
     }
 
-    return quantityToAdd * price;
+    return price;
   }
 
   double getPracticedPrice({
@@ -397,7 +394,7 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProductInCart({
+  Future<bool> updateProductInCart({
     required double quantity,
     required String enterpriseCode,
     required int index,
@@ -407,6 +404,24 @@ class SaleRequestProvider with ChangeNotifier {
     required String? discountType,
   }) async {
     final selectedProduct = _cartProducts[enterpriseCode]![index];
+
+    final newItemPrice = getNewItemPrice(
+      product: selectedProduct,
+      newQuantity: quantity,
+      enterpriseCode: enterpriseCode,
+      discountType: discountType,
+      manualDiscountController: manualDiscountController,
+      manualPriceController: manualPriceController,
+    );
+    if (selectedProduct.priceCost?.RetailMinimumPrice != null &&
+        newItemPrice < selectedProduct.priceCost!.RetailMinimumPrice!) {
+      ShowSnackbarMessage.show(
+        message:
+            "O novo preço ($newItemPrice) não pode ser menor do que o preço mínimo (${selectedProduct.priceCost!.RetailMinimumPrice})",
+        context: NavigatorKey.navigatorKey.currentState!.context,
+      );
+      return false;
+    }
 
     if (manualPriceController.text.isNotEmpty) {
       selectedProduct.value = manualPriceController.text.toDouble();
@@ -457,6 +472,7 @@ class SaleRequestProvider with ChangeNotifier {
       updateToNeedProcessCartAgain: updateToNeedProcessCartAgain,
     );
     notifyListeners();
+    return true;
   }
 
   double getTotalCartPrice(String enterpriseCode) {

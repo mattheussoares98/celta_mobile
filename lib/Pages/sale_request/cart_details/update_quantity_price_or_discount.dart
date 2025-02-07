@@ -96,7 +96,7 @@ class _UpdateQuantityPriceOrDiscountState
     if (controllerInDouble == null || controllerInDouble == 0) return;
 
     if (isValid) {
-      await saleRequestProvider.updateProductInCart(
+      final updated = await saleRequestProvider.updateProductInCart(
         enterpriseCode: widget.enterpriseCode.toString(),
         quantity: controllerInDouble,
         updateToNeedProcessCartAgain: true,
@@ -105,8 +105,11 @@ class _UpdateQuantityPriceOrDiscountState
         manualPriceController: manualPriceController,
         discountType: discountType,
       );
-      widget.newQuantityController.clear();
-      widget.clearSelectedIndex();
+
+      if (updated) {
+        widget.newQuantityController.clear();
+        widget.clearSelectedIndex();
+      }
     }
   }
 
@@ -227,15 +230,15 @@ class _UpdateQuantityPriceOrDiscountState
           ),
           FittedBox(
             child: Text(
-              saleRequestProvider
-                  .getNewPrice(
-                    product: widget.product,
-                    enterpriseCode: widget.enterpriseCode.toString(),
-                    newQuantityController: widget.newQuantityController,
-                    manualWrittedPriceController: manualPriceController,
-                    discountType: discountType,
-                    manualDiscountText: manualDiscountController,
-                  )
+              (saleRequestProvider.getNewItemPrice(
+                          product: widget.product,
+                          newQuantity:
+                              widget.newQuantityController.text.toDouble(),
+                          enterpriseCode: widget.enterpriseCode.toString(),
+                          discountType: discountType,
+                          manualDiscountController: manualDiscountController,
+                          manualPriceController: manualPriceController) *
+                      widget.newQuantityController.text.toDouble())
                   .toString()
                   .toBrazilianNumber()
                   .addBrazilianCoin(),
