@@ -62,7 +62,7 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
           cancelMessage: "CANCELAR",
           content: const SingleChildScrollView(
             child: Text(
-              "Os preços dos produtos devem ser calculados pelo CeltaBS devido a grande variedade de configurações que podem afetar o preço dos produtos (negociação de vendas, preço de oferta, preço de atacado, promoção, etc)",
+              "O cálculo dos preços serve para obter os preços de acordo com todas parametrizações do CeltaBS. Diversas configurações podem afetar os preços dos produtos, como negociação de vendas, preços de oferta, preço de atacado, promoção, etc",
               textAlign: TextAlign.center,
             ),
           ),
