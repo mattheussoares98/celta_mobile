@@ -20,7 +20,7 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
     super.key,
   });
   static int productsCount = 0;
-  static int customerCode = 0;
+  static int? customerCode = 0;
 
   void updateProductsCoundAndCustomerCode(
       SaleRequestProvider saleRequestProvider) {
@@ -71,7 +71,6 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
               context: context,
               enterpriseCode: enterpriseCode,
               requestTypeCode: requestTypeCode,
-              customerCode: customerCode,
             );
           },
         );

@@ -55,8 +55,6 @@ class SaleRequestProvider with ChangeNotifier {
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
 
-  SaleRequestProcessCartModel? saleRequestProcessCart;
-
   int customersCount(String enterpriseCode) {
     if (_customers[enterpriseCode] == null) {
       return 0;
@@ -78,31 +76,38 @@ class SaleRequestProvider with ChangeNotifier {
     return _indexOfSelectedCovenant;
   }
 
-  getSelectedCovenantCode(String enterpriseCode) {
-    int covenantCode = 0;
+  int? getSelectedCovenantCode(String enterpriseCode) {
     if (_customers[enterpriseCode] != null) {
-      _customers[enterpriseCode]!.forEach((customer) {
-        customer.CustomerCovenants?.forEach((covenant) {
-          if (covenant.isSelected && covenant.covenant?.Code != null) {
-            covenantCode = covenant.covenant!.Code!.toInt();
-          }
-        });
-      });
+      final indexSelectedCustomer =
+          _customers[enterpriseCode]!.indexWhere((e) => e.selected == true);
+
+      if (indexSelectedCustomer == -1) {
+        final indexSelectedCovenant =
+            _customers[enterpriseCode]![indexSelectedCustomer]
+                .CustomerCovenants
+                ?.indexWhere((e) => e.isSelected);
+
+        if (indexSelectedCovenant != -1 && indexSelectedCovenant != null) {
+          return _customers[enterpriseCode]![indexSelectedCustomer]
+              .CustomerCovenants![indexSelectedCovenant]
+              .covenant!
+              .Code;
+        }
+      }
     }
-    return covenantCode;
+    return null;
   }
 
-  getSelectedCustomerCode(String enterpriseCode) {
+  int? getSelectedCustomerCode(String enterpriseCode) {
     int customerCode = -1;
-    if (_customers[enterpriseCode] != null)
-      _customers[enterpriseCode]!.forEach((element) {
-        if (element.selected == true && element.Code != null) {
-          customerCode = element.Code!;
-        }
-      });
-    else {
-      customerCode = -1;
+    if (_customers[enterpriseCode] != null) {
+      final customerIndex =
+          _customers[enterpriseCode]!.indexWhere((e) => e.selected == true);
+      if (customerIndex != -1) {
+        return _customers[enterpriseCode]![customerIndex].Code;
+      }
     }
+
     return customerCode;
   }
 
@@ -323,8 +328,8 @@ class SaleRequestProvider with ChangeNotifier {
       value: productPrice,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
-      DiscountPercentageOrValue: product.DiscountPercentageOrValue,
-      DiscountValue: product.DiscountValue,
+      DiscountPercentageOrValue: product.DiscountPercentageOrValue ?? "R\$",
+      DiscountValue: product.DiscountValue ?? 0,
       // expectedDeliveryDate: "\"${DateTime.now().toString()}\"",
       productCode: product.productCode!,
       plu: product.plu!,
@@ -364,8 +369,8 @@ class SaleRequestProvider with ChangeNotifier {
       replacementCostMidle: product.replacementCostMidle,
       stocks: product.stocks,
       AutomaticDiscountPercentageOrValue:
-          product.AutomaticDiscountPercentageOrValue,
-      AutomaticDiscountValue: product.AutomaticDiscountValue,
+          product.AutomaticDiscountPercentageOrValue ?? "R\$",
+      AutomaticDiscountValue: product.AutomaticDiscountValue ?? 0,
       TotalLiquid: product.TotalLiquid,
       valueTyped: product.valueTyped,
     );
@@ -462,19 +467,6 @@ class SaleRequestProvider with ChangeNotifier {
 
     selectedProduct.TotalLiquid = quantity * (selectedProduct.value ?? 0);
     selectedProduct.quantity = quantity;
-
-    saleRequestProcessCart = SaleRequestProcessCartModel(
-      crossId: UserData.crossIdentity,
-      EnterpriseCode: saleRequestProcessCart?.EnterpriseCode,
-      RequestTypeCode: saleRequestProcessCart?.RequestTypeCode,
-      SellerCode: saleRequestProcessCart?.SellerCode,
-      CovenantCode: saleRequestProcessCart?.CovenantCode,
-      CustomerCode: saleRequestProcessCart?.CustomerCode,
-      Products: _cartProducts[enterpriseCode]!
-          .map((e) =>
-              SaleRequestProductProcessCartModel.fromGetProductJsonModel(e))
-          .toList(),
-    );
 
     await _updateCartInDatabase(
       updateToNeedProcessCartAgain: updateToNeedProcessCartAgain,
@@ -654,7 +646,6 @@ class SaleRequestProvider with ChangeNotifier {
     required BuildContext context,
     required int enterpriseCode,
     required int requestTypeCode,
-    required int customerCode,
   }) async {
     _isLoadingProcessCart = true;
     _errorMessageProcessCart = "";
@@ -671,7 +662,7 @@ class SaleRequestProvider with ChangeNotifier {
         "EnterpriseCode": enterpriseCode,
         "RequestTypeCode": requestTypeCode,
         "CovenantCode": getSelectedCovenantCode(enterpriseCode.toString()),
-        "CustomerCode": customerCode,
+        "CustomerCode": getSelectedCustomerCode(enterpriseCode.toString()),
         "Products": processCartItems,
       }
           //   // 'SellerCode: 1,' //não possui opção para consulta de vendedor no aplicativo. Ele retorna o código de acordo com o funcionário vinculado ao usuário logado, por isso não precisa enviar essa informação. O próprio backend vai verificar qual é o vendedor vinculado ao usuário e retornar o código dele
@@ -691,17 +682,17 @@ class SaleRequestProvider with ChangeNotifier {
       _errorMessageProcessCart = SoapRequestResponse.errorMessage;
 
       if (_errorMessageProcessCart == "") {
-        saleRequestProcessCart = SaleRequestProcessCartModel.fromJson(
+        final processedCart = SaleRequestProcessCartModel.fromJson(
           json.decode(SoapRequestResponse.responseAsString),
         );
 
         // _cartProducts[enterpriseCode.toString()] =
-        if (saleRequestProcessCart?.Products == null) {
+        if (processedCart.Products == null) {
           throw Exception();
         }
 
         _cartProducts[enterpriseCode.toString()] =
-            saleRequestProcessCart!.Products!.map((e) {
+            processedCart.Products!.map((e) {
           int indexSameProductInCart = _cartProducts[enterpriseCode.toString()]!
               .indexWhere((element) =>
                   element.productPackingCode == e.ProductPackingCode);
@@ -1006,10 +997,25 @@ class SaleRequestProvider with ChangeNotifier {
       firebaseCallEnum: FirebaseCallEnum.saleRequestSave,
     );
     try {
+      //TODO test a lot the seller and customer
+
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,
-          "json": json.encode(saleRequestProcessCart?.toJson()),
+          "json": json.encode(SaleRequestProcessCartModel(
+            crossId: UserData.crossIdentity,
+            EnterpriseCode: enterpriseCode.toInt(),
+            RequestTypeCode: requestTypeCode,
+            SellerCode:
+                null, //TODO verify if add automatically when process the cart
+            CovenantCode: getSelectedCovenantCode(enterpriseCode),
+            CustomerCode: getSelectedCustomerCode(enterpriseCode),
+            Products: _cartProducts[enterpriseCode]!
+                .map((e) =>
+                    SaleRequestProductProcessCartModel.fromGetProductJsonModel(
+                        e))
+                .toList(),
+          ).toJson()),
           "printerName": "",
         },
         typeOfResponse: "InsertResponse",
@@ -1038,16 +1044,16 @@ class SaleRequestProvider with ChangeNotifier {
           //print("Nenhum conteúdo entre parênteses encontrado.");
         }
 
-        await clearCart(enterpriseCode);
+        // await clearCart(enterpriseCode);
 
-        await _clearcustomers(enterpriseCode);
-        await getCustomers(
-          context: context,
-          controllerText: "",
-          enterpriseCode: enterpriseCode,
-          configurationsProvider: ConfigurationsProvider(),
-          searchOnlyDefaultCustomer: true,
-        );
+        // await _clearcustomers(enterpriseCode);
+        // await getCustomers(
+        //   context: context,
+        //   controllerText: "",
+        //   enterpriseCode: enterpriseCode,
+        //   configurationsProvider: ConfigurationsProvider(),
+        //   searchOnlyDefaultCustomer: true,
+        // );
       } else {
         _isLoadingSaveSaleRequest = false;
 
