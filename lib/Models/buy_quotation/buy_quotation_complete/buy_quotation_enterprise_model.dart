@@ -13,8 +13,8 @@ class BuyQuotationEnterpriseModel {
         enterprise: _EnterpriseModel.fromJson(data["Enterprise"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "Code": Code,
+  Map<String, dynamic> toJson({required bool isInserting}) => {
+        "Code": isInserting ? 0 : Code,
         "Enterprise": enterprise.toJson(),
       };
 }

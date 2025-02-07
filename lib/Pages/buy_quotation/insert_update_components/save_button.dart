@@ -36,10 +36,6 @@ class SaveButton extends StatelessWidget {
                 observations: observationsController.text.isNotEmpty
                     ? observationsController.text
                     : null,
-                dateOfCreation:
-                    buyQuotationProvider.completeBuyQuotation?.DateOfCreation,
-                dateOfLimit:
-                    buyQuotationProvider.completeBuyQuotation?.DateOfLimit,
               );
 
               if (updated) {

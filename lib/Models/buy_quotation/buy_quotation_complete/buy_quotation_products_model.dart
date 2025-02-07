@@ -21,7 +21,7 @@ class BuyQuotationProductsModel {
       );
 
   Map<String, dynamic> toJson({required bool isInserting}) => {
-        "Code": Code,
+        "Code": isInserting ? 0 : Code,
         "Product": Product?.toJson(isInserting: isInserting),
         "ProductEnterprises":
             ProductEnterprises?.map((e) => e.toJson()).toList(),

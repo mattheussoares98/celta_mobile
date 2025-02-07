@@ -71,45 +71,36 @@ class BuyQuotationProvider with ChangeNotifier {
   Future<bool> insertUpdateBuyQuotation({
     required bool isInserting,
     required String? observations,
-    required String? dateOfCreation,
-    required String? dateOfLimit,
   }) async {
     _isLoading = true;
     _errorMessage = "";
 
     try {
-      final products = _productsWithNewValues
-          .map((e) => e.toJson(isInserting: isInserting))
-          .toList();
-      final enterprises = _selectedEnterprises.map((e) {
-        if (isInserting) {
-          return {
-            "Code": 0,
-            /*0=Inserção | Preenchido=Alteração*/
-            "Enterprise": {"Code": e.Code}
-          };
-        } else {
-          return {
-            "Code": _completeBuyQuotation!.Enterprises!
-                .firstWhere((element) => element.enterprise.Code == e.Code)
-                .Code,
-            /*0=Inserção | Preenchido=Alteração*/
-            "Enterprise": {"Code": e.Code}
-          };
-        }
+      List<BuyQuotationProductsModel> productWithCorrectIsInsertingValue =
+          _productsWithNewValues.map((e) {
+        int? indexProductInBuyQuotation = _completeBuyQuotation?.Products
+            ?.indexWhere((x) => x.Product?.PLU == e.Product?.PLU);
+
+        return BuyQuotationProductsModel.fromJson(
+          e.toJson(
+              isInserting: indexProductInBuyQuotation == null ||
+                  indexProductInBuyQuotation == -1),
+        );
       }).toList();
 
-      final filters = {
-        "CrossIdentity": UserData.crossIdentity,
-        "Code": isInserting ? 0 : _completeBuyQuotation?.Code,
-        /*0=Inserção | Preenchido=Alteração*/
-        "DateOfCreation": dateOfCreation ?? DateTime.now().toIso8601String(),
-        "DateOfLimit": dateOfLimit,
-        "Observations": observations,
-        "Buyer": {"Code": _selectedBuyer?.Code},
-        "Enterprises": enterprises,
-        "Products": products,
-      };
+      final filters = BuyQuotationCompleteModel(
+        CrossIdentity: UserData.crossIdentity,
+        Code: _completeBuyQuotation?.Code,
+        DateOfCreation: _completeBuyQuotation?.DateOfCreation ??
+            DateTime.now().toIso8601String(),
+        DateOfLimit: _completeBuyQuotation?.DateOfLimit,
+        PersonalizedCode: _completeBuyQuotation?.PersonalizedCode,
+        Observations: observations,
+        Buyer: _completeBuyQuotation?.Buyer,
+        Enterprises: _completeBuyQuotation?.Enterprises?.map((e) => e).toList(),
+        Products: productWithCorrectIsInsertingValue,
+      ).toJson(isInserting: isInserting);
+
       await SoapRequest.soapPost(
         parameters: {
           "json": json.encode(filters),
