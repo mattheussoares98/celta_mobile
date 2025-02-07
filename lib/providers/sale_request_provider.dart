@@ -466,8 +466,8 @@ class SaleRequestProvider with ChangeNotifier {
       return _cartProducts[enterpriseCode]!.fold<double>(
         0,
         (previousValue, product) {
-          double newPrice =
-              previousValue + (product.TotalLiquid ?? product.value ?? 0);
+          double newPrice = previousValue +
+              (product.TotalLiquid ?? (product.value ?? 0) * product.quantity);
 
           double? discount = getProductDiscount(product);
 
@@ -1057,7 +1057,8 @@ class SaleRequestProvider with ChangeNotifier {
     } else if (product.DiscountValue != null &&
         product.DiscountValue! > 0 &&
         product.DiscountPercentageOrValue == "%") {
-      return (product.value! * product.quantity) *  (product.DiscountValue! / 100);
+      return (product.value! * product.quantity) *
+          (product.DiscountValue! / 100);
     } else {
       return product.AutomaticDiscountValue;
     }
