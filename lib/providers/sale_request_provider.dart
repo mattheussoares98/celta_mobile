@@ -492,10 +492,12 @@ class SaleRequestProvider with ChangeNotifier {
     await PrefsInstance.removeKey(PrefsKeys.cart);
     _needProcessCart = true;
 
-    await _getCustomersOldSearch(
-      searchTypeInt: 2, //exactCode
-      controllerText: "-1", //consumidor
+    await getCustomers(
+      context: NavigatorKey.navigatorKey.currentState!.context,
+      controllerText: "",
       enterpriseCode: enterpriseCode,
+      configurationsProvider: ConfigurationsProvider(),
+      searchOnlyDefaultCustomer: true,
     );
 
     notifyListeners();
@@ -769,12 +771,10 @@ class SaleRequestProvider with ChangeNotifier {
       enterpriseCode: enterpriseCode,
     );
 
-    if (_customers.isNotEmpty && controllerText == "-1") {
-      //como está consultando o cliente consumidor, não precisa continuar pois já foi pesquisado
-      return;
-    }
-
-    if (searchOnlyDefaultCustomer!) {
+    if (searchOnlyDefaultCustomer == true) {
+      _customers[enterpriseCode] = [
+        if (defaultCustomer != null) ...defaultCustomer,
+      ];
       return;
     }
 
