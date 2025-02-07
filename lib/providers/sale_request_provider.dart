@@ -455,9 +455,9 @@ class SaleRequestProvider with ChangeNotifier {
     } else {
       selectedProduct.DiscountDescription = null;
       selectedProduct.DiscountPercentageOrValue = null;
-      selectedProduct.DiscountValue = null;
+      selectedProduct.DiscountValue = 0;
       selectedProduct.AutomaticDiscountPercentageOrValue = null;
-      selectedProduct.AutomaticDiscountValue = null;
+      selectedProduct.AutomaticDiscountValue = 0;
     }
 
     selectedProduct.TotalLiquid = quantity * (selectedProduct.value ?? 0);
