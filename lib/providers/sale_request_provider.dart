@@ -405,14 +405,16 @@ class SaleRequestProvider with ChangeNotifier {
   }) async {
     final selectedProduct = _cartProducts[enterpriseCode]![index];
 
-    final newItemPrice = getNewItemPrice(
-      product: selectedProduct,
-      newQuantity: quantity,
-      enterpriseCode: enterpriseCode,
-      discountType: discountType,
-      manualDiscountController: manualDiscountController,
-      manualPriceController: manualPriceController,
-    );
+    final newItemPrice = manualPriceController.text.toDouble() != -1
+        ? manualPriceController.text.toDouble()
+        : getNewItemPrice(
+            product: selectedProduct,
+            newQuantity: quantity,
+            enterpriseCode: enterpriseCode,
+            discountType: discountType,
+            manualDiscountController: manualDiscountController,
+            manualPriceController: manualPriceController,
+          );
     if (selectedProduct.priceCost?.RetailMinimumPrice != null &&
         newItemPrice < selectedProduct.priceCost!.RetailMinimumPrice!) {
       ShowSnackbarMessage.show(
