@@ -466,8 +466,8 @@ class SaleRequestProvider with ChangeNotifier {
       return _cartProducts[enterpriseCode]!.fold<double>(
         0,
         (previousValue, product) {
-          double newPrice = previousValue +
-              (product.TotalLiquid ?? (product.value ?? 0) * product.quantity);
+          double newPrice =
+              previousValue + (product.value ?? 0) * product.quantity;
 
           double? discount = getProductDiscount(product);
 
