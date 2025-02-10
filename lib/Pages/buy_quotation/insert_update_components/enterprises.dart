@@ -17,11 +17,9 @@ class Enterprises extends StatelessWidget {
         const Text("Empresas"),
         ListView.builder(
           shrinkWrap: true,
-          itemCount:
-              buyQuotationProvider.enterprisesAlreadyAddedInBuyQuotation.length,
+          itemCount: buyQuotationProvider.selectedEnterprises.length,
           itemBuilder: (context, index) {
-            final enterprise = buyQuotationProvider
-                .enterprisesAlreadyAddedInBuyQuotation[index];
+            final enterprise = buyQuotationProvider.selectedEnterprises[index];
 
             return Container(
               margin: const EdgeInsets.only(bottom: 4),

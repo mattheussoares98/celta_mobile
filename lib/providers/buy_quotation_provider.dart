@@ -40,10 +40,6 @@ class BuyQuotationProvider with ChangeNotifier {
   List<EnterpriseModel> _selectedEnterprises = [];
   List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
 
-  List<EnterpriseModel> _enterprisesAlreadyAddedInBuyQuotation = [];
-  List<EnterpriseModel> get enterprisesAlreadyAddedInBuyQuotation =>
-      [..._enterprisesAlreadyAddedInBuyQuotation];
-
   List<BuyQuotationProductsModel> _productsWithNewValues = [];
   List<BuyQuotationProductsModel> get productsWithNewValues =>
       [..._productsWithNewValues];
@@ -388,13 +384,10 @@ class BuyQuotationProvider with ChangeNotifier {
     required bool isInserting,
   }) {
     _selectedEnterprises.clear();
-    _enterprisesAlreadyAddedInBuyQuotation.clear();
     _productsWithNewValues.clear();
 
     if (isInserting) {
       _selectedEnterprises.addAll(enterpriseProvider.enterprises);
-      _enterprisesAlreadyAddedInBuyQuotation
-          .addAll(enterpriseProvider.enterprises);
       _selectedBuyer = null;
     } else {
       if (_selectedBuyQuotation?.Enterprises != null &&
@@ -409,7 +402,6 @@ class BuyQuotationProvider with ChangeNotifier {
         }).toList();
 
         _selectedEnterprises.addAll(enterprises);
-        _enterprisesAlreadyAddedInBuyQuotation.addAll(enterprises);
 
         int indexOfBuyer = _buyers.indexWhere(
           (e) => e.Code == _selectedBuyQuotation?.Buyer?.Code,
