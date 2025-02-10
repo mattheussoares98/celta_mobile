@@ -198,7 +198,8 @@ class _UpdateQuantityPriceOrDiscountState
                     ),
                     if (saleRequestProvider.userCanChangePrices)
                       manualPrice(saleRequestProvider, context),
-                    manualDiscount(context)
+                    if (saleRequestProvider.userCanApplyDiscount)
+                      manualDiscount(context)
                   ],
                 ),
               ),

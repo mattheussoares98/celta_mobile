@@ -58,6 +58,9 @@ class SaleRequestProvider with ChangeNotifier {
   bool _userCanChangePrices = false;
   bool get userCanChangePrices => _userCanChangePrices;
 
+  bool _userCanApplyDiscount = false;
+  bool get userCanApplyDiscount => _userCanApplyDiscount;
+
   int customersCount(String enterpriseCode) {
     if (_customers[enterpriseCode] == null) {
       return 0;
