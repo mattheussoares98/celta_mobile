@@ -10,6 +10,7 @@ class EnterpriseModel {
   final bool? EnterpriseParticipateEnterpriseGroup;
   final int? ProductCodeSizeOfBalanceLabel;
   final bool? ProductCodeWithCheckerDigit;
+  final String? InscriptionNumber;
 
   EnterpriseModel({
     required this.Code,
@@ -23,6 +24,7 @@ class EnterpriseModel {
     required this.EnterpriseParticipateEnterpriseGroup,
     required this.ProductCodeSizeOfBalanceLabel,
     required this.ProductCodeWithCheckerDigit,
+    required this.InscriptionNumber,
   });
 
   factory EnterpriseModel.fromJson(Map<String, dynamic> json) =>
@@ -39,5 +41,6 @@ class EnterpriseModel {
             json["EnterpriseParticipateEnterpriseGroup"],
         ProductCodeSizeOfBalanceLabel: json["ProductCodeSizeOfBalanceLabel"],
         ProductCodeWithCheckerDigit: json["ProductCodeWithCheckerDigit"],
+        InscriptionNumber: json["InscriptionNumber"],
       );
 }
