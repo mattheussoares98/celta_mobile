@@ -16,8 +16,8 @@ class SaleRequestProvider with ChangeNotifier {
   String _errorMessageRequests = "";
   String get errorMessageRequests => _errorMessageRequests;
   List<SaleRequestsModel> _requests = [];
-  get requests => [..._requests];
-  get requestsCount => _requests.length;
+  List<SaleRequestsModel> get requests => [..._requests];
+  int get requestsCount => _requests.length;
 
   bool _needProcessCart = true;
   bool get needProcessCart => _needProcessCart;
@@ -57,9 +57,6 @@ class SaleRequestProvider with ChangeNotifier {
 
   bool _userCanChangePrices = false;
   bool get userCanChangePrices => _userCanChangePrices;
-
-  bool _userCanApplyDiscount = false;
-  bool get userCanApplyDiscount => _userCanApplyDiscount;
 
   int customersCount(String enterpriseCode) {
     if (_customers[enterpriseCode] == null) {

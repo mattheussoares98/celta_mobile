@@ -114,6 +114,8 @@ class _UpdateQuantityPriceOrDiscountState
   @override
   Widget build(BuildContext context) {
     SaleRequestProvider saleRequestProvider = Provider.of(context);
+    final arguments = ModalRoute.of(context)!.settings.arguments! as Map;
+    final code = arguments["SaleRequestTypeCode"];
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -198,7 +200,9 @@ class _UpdateQuantityPriceOrDiscountState
                     ),
                     if (saleRequestProvider.userCanChangePrices)
                       manualPrice(saleRequestProvider, context),
-                    if (saleRequestProvider.userCanApplyDiscount)
+                    if (saleRequestProvider.requests
+                        .where((e) => e.Code == code && e.AllowDiscount == true)
+                        .isNotEmpty)
                       manualDiscount(context)
                   ],
                 ),
@@ -314,7 +318,7 @@ class _UpdateQuantityPriceOrDiscountState
             color: Theme.of(context).colorScheme.primary,
           ),
           tooltip:
-              "Essa opção só fica disponível quando não há um preço manual informado",
+              "Essa opção só fica disponível quando o modelo de pedido de vendas permite desconto e não há um preço manual informado. Se o desconto for maior do que o permitido, o BS vai inserir o pedido no processo de autorizações",
         )
       ],
     );
