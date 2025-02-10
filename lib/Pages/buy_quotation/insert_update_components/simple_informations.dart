@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 
 class SimpleInformations extends StatefulWidget {
@@ -10,6 +11,8 @@ class SimpleInformations extends StatefulWidget {
   final bool isInserting;
   final DateTime? dateOfLimit;
   final void Function(DateTime date) updateDateOfLimit;
+  final BuyerModel? buyer;
+  final void Function(BuyerModel buyer) updateBuyer;
 
   const SimpleInformations({
     required this.observationsController,
@@ -17,6 +20,8 @@ class SimpleInformations extends StatefulWidget {
     required this.isInserting,
     required this.dateOfLimit,
     required this.updateDateOfLimit,
+    required this.buyer,
+    required this.updateBuyer,
     super.key,
   });
 
@@ -54,7 +59,7 @@ class _SimpleInformationsState extends State<SimpleInformations> {
           ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Comprador",
-          subtitle: buyQuotationProvider.selectedBuyer?.Name,
+          subtitle: widget.buyer?.Name,
           otherWidget: PopupMenuButton(
             tooltip: "Alterar comprador",
             child: Icon(
@@ -67,7 +72,7 @@ class _SimpleInformationsState extends State<SimpleInformations> {
                     (e) => PopupMenuItem(
                       value: e,
                       child: Text(e.Name),
-                      onTap: () => buyQuotationProvider.updateSelectedBuyer(e),
+                      onTap: () => widget.updateBuyer(e),
                     ),
                   )
                   .toList();

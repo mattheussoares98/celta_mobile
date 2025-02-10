@@ -21,7 +21,7 @@ class _InsertUpdateBuyQuotationPageState
   List<Map<int, TextEditingController>> controllers = [];
   List<Map<int, FocusNode>> focusNodes = [];
   DateTime? dateOfLimit;
-  BuyerModel? buyer;
+  BuyerModel? selectedBuyer;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _InsertUpdateBuyQuotationPageState
               buyQuotationProvider.selectedBuyQuotation!.Observations!;
         }
 
-        buyer = buyQuotationProvider.selectedBuyQuotation?.Buyer;
+        selectedBuyer = buyQuotationProvider.selectedBuyQuotation?.Buyer;
         if (buyQuotationProvider.selectedBuyQuotation?.DateOfLimit != null) {
           dateOfLimit = DateTime.parse(
               buyQuotationProvider.selectedBuyQuotation!.DateOfLimit!);
@@ -157,7 +157,7 @@ class _InsertUpdateBuyQuotationPageState
                 isInserting: isInserting,
                 observationsController: observationsController,
                 dateOfLimit: dateOfLimit,
-                buyer: buyer,
+                buyer: selectedBuyer,
               ),
             ],
           ),
@@ -183,6 +183,12 @@ class _InsertUpdateBuyQuotationPageState
                         observationsController: observationsController,
                         observationsFocusNode: observationsFocusNode,
                         dateOfLimit: dateOfLimit,
+                        buyer: selectedBuyer,
+                        updateBuyer: (buyer) {
+                          setState(() {
+                            selectedBuyer = buyer;
+                          });
+                        },
                         updateDateOfLimit: (date) {
                           setState(() {
                             dateOfLimit = date;
