@@ -41,9 +41,9 @@ class _InsertUpdateBuyQuotationPageState
         await loadCompleteBuyQuotation();
 
         Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
-        BuyQuotationIncompleteModel? incompleteModel =
+        BuyQuotationCompleteModel? buyQuotation =
             arguments?["incompleteQuotation"];
-        bool isInserting = incompleteModel == null;
+        bool isInserting = buyQuotation == null;
 
         buyQuotationProvider.updateSelectedsValues(
           enterpriseProvider: enterpriseProvider,
@@ -51,10 +51,10 @@ class _InsertUpdateBuyQuotationPageState
         );
 
         if (buyQuotationProvider
-                .completeBuyQuotation?.Observations?.isNotEmpty ==
+                .selectedBuyQuotation?.Observations?.isNotEmpty ==
             true) {
           observationsController.text =
-              buyQuotationProvider.completeBuyQuotation!.Observations!;
+              buyQuotationProvider.selectedBuyQuotation!.Observations!;
         }
 
         createControllersAndFocusNode(buyQuotationProvider);
@@ -95,24 +95,21 @@ class _InsertUpdateBuyQuotationPageState
 
   Future<void> loadCompleteBuyQuotation() async {
     Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
-    BuyQuotationIncompleteModel? incompleteModel =
-        arguments?["incompleteQuotation"];
 
     EnterpriseModel? enterprise = arguments?["enterprise"];
-    bool isInserting = incompleteModel == null;
 
     BuyQuotationProvider buyQuotationProvider =
         Provider.of(context, listen: false);
 
     await buyQuotationProvider.getBuyers(context: context);
 
-    if (isInserting || enterprise == null) {
+    if (enterprise == null) {
       return;
     }
 
     await buyQuotationProvider.getBuyQuotation(
       context: context,
-      valueToSearch: incompleteModel.Code.toString(),
+      valueToSearch: buyQuotationProvider.selectedBuyQuotation?.Code.toString() ?? "",
       searchByPersonalizedCode: false,
       enterpriseCode: enterprise.Code,
       complete: true,
@@ -130,10 +127,7 @@ class _InsertUpdateBuyQuotationPageState
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
     Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
-    BuyQuotationIncompleteModel? incompleteModel =
-        arguments?["incompleteQuotation"];
     EnterpriseModel? enterprise = arguments?["enterprise"];
-    bool isInserting = incompleteModel == null;
 
     return Stack(
       children: [
@@ -155,10 +149,12 @@ class _InsertUpdateBuyQuotationPageState
                 Icons.arrow_back,
               ),
             ),
-            title: Text(isInserting ? "Inserindo" : "Alterando"),
+            title: Text(buyQuotationProvider.selectedBuyQuotation == null
+                ? "Inserindo"
+                : "Alterando"),
             actions: [
               SaveButton(
-                isInserting: isInserting,
+                isInserting: buyQuotationProvider.selectedBuyQuotation == null,
                 observationsController: observationsController,
               ),
             ],
@@ -169,8 +165,7 @@ class _InsertUpdateBuyQuotationPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (buyQuotationProvider.completeBuyQuotation == null &&
-                      incompleteModel != null)
+                  if (buyQuotationProvider.selectedBuyQuotation != null)
                     TextButton(
                       onPressed: () async {
                         await loadCompleteBuyQuotation();
@@ -180,7 +175,8 @@ class _InsertUpdateBuyQuotationPageState
                   Column(
                     children: [
                       SimpleInformations(
-                        isInserting: isInserting,
+                        isInserting:
+                            buyQuotationProvider.selectedBuyQuotation == null,
                         observationsController: observationsController,
                         newObservation: newObservation,
                         observationsFocusNode: observationsFocusNode,

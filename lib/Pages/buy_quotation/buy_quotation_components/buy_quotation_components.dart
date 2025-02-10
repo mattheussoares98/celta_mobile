@@ -1,3 +1,3 @@
 export 'filter/filter.dart';
 export 'filter_or_add_cotations_buttons.dart';
-export 'incomplete_items.dart';
+export 'buy_quotations_items.dart';

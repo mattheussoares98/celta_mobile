@@ -99,7 +99,7 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                     const Divider(),
                     if (showFilterOptions)
                       AllFiltersOptions(enterprise: enterprise),
-                    IncompleteItems(enterprise: enterprise),
+                    BuyQuotationsItems(enterprise: enterprise),
                   ],
                 ),
               ),

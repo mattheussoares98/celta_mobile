@@ -6,9 +6,9 @@ import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
-class IncompleteItems extends StatelessWidget {
+class BuyQuotationsItems extends StatelessWidget {
   final EnterpriseModel enterprise;
-  const IncompleteItems({
+  const BuyQuotationsItems({
     required this.enterprise,
     super.key,
   });
@@ -17,7 +17,7 @@ class IncompleteItems extends StatelessWidget {
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
 
-    if (buyQuotationProvider.incompletesBuyQuotations.length == 0) {
+    if (buyQuotationProvider.buyQuotations.length == 0) {
       return TextButton.icon(
         onPressed: () async {
           await buyQuotationProvider.getBuyQuotation(
@@ -37,10 +37,9 @@ class IncompleteItems extends StatelessWidget {
 
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: buyQuotationProvider.incompletesBuyQuotations.length,
+      itemCount: buyQuotationProvider.buyQuotations.length,
       itemBuilder: (context, index) {
-        final incompleteQuotation =
-            buyQuotationProvider.incompletesBuyQuotations[index];
+        final buyQuotation = buyQuotationProvider.buyQuotations[index];
 
         return InkWell(
           onTap: () {
@@ -48,7 +47,6 @@ class IncompleteItems extends StatelessWidget {
               APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
               arguments: {
                 "enterprise": enterprise,
-                "incompleteQuotation": incompleteQuotation,
               },
             );
           },
@@ -59,27 +57,27 @@ class IncompleteItems extends StatelessWidget {
                 children: [
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Code",
-                    subtitle: incompleteQuotation.Code.toString(),
+                    subtitle: buyQuotation?.Code.toString(),
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Data de criação",
-                    subtitle: incompleteQuotation.DateOfCreation,
+                    subtitle: buyQuotation?.DateOfCreation,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Data de limite",
-                    subtitle: incompleteQuotation.DateOfLimit,
+                    subtitle: buyQuotation?.DateOfLimit,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Código personalizado",
-                    subtitle: incompleteQuotation.PersonalizedCode,
+                    subtitle: buyQuotation?.PersonalizedCode,
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
-                    title: incompleteQuotation.Observations?.isEmpty == true
+                    title: buyQuotation?.Observations?.isEmpty == true
                         ? null
-                        : incompleteQuotation.Observations,
-                    subtitle: incompleteQuotation.Observations?.isEmpty == true
+                        : buyQuotation?.Observations,
+                    subtitle: buyQuotation?.Observations?.isEmpty == true
                         ? "Sem observações"
-                        : incompleteQuotation.Observations,
+                        : buyQuotation?.Observations,
                   ),
                 ],
               ),

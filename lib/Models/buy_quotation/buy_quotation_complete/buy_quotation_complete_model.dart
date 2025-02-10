@@ -31,7 +31,9 @@ class BuyQuotationCompleteModel {
         DateOfLimit: data["DateOfLimit"],
         PersonalizedCode: data["PersonalizedCode"],
         Observations: data["Observations"],
-        Buyer: BuyQuotationBuyerModel.fromJson(data["Buyer"]),
+        Buyer: data["Buyer"] == null
+            ? null
+            : BuyQuotationBuyerModel.fromJson(data["Buyer"]),
         Enterprises: data["Enterprises"] == null
             ? null
             : (data["Enterprises"] as List)

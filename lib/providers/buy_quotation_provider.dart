@@ -32,12 +32,10 @@ class BuyQuotationProvider with ChangeNotifier {
   BuyerModel? _selectedBuyer;
   BuyerModel? get selectedBuyer => _selectedBuyer;
 
-  List<BuyQuotationIncompleteModel> _incompletesBuyQuotations = [];
-  List<BuyQuotationIncompleteModel> get incompletesBuyQuotations =>
-      [..._incompletesBuyQuotations];
-
-  BuyQuotationCompleteModel? _completeBuyQuotation;
-  BuyQuotationCompleteModel? get completeBuyQuotation => _completeBuyQuotation;
+  List<BuyQuotationCompleteModel?> _buyQuotations = [];
+  List<BuyQuotationCompleteModel?> get buyQuotations => [..._buyQuotations];
+  BuyQuotationCompleteModel? _selectedBuyQuotation;
+  BuyQuotationCompleteModel? get selectedBuyQuotation => _selectedBuyQuotation;
 
   List<EnterpriseModel> _selectedEnterprises = [];
   List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
@@ -78,7 +76,7 @@ class BuyQuotationProvider with ChangeNotifier {
     try {
       List<BuyQuotationProductsModel> productWithCorrectIsInsertingValue =
           _productsWithNewValues.map((e) {
-        int? indexProductInBuyQuotation = _completeBuyQuotation?.Products
+        int? indexProductInBuyQuotation = _selectedBuyQuotation?.Products
             ?.indexWhere((x) => x.Product?.PLU == e.Product?.PLU);
 
         return BuyQuotationProductsModel.fromJson(
@@ -90,14 +88,14 @@ class BuyQuotationProvider with ChangeNotifier {
 
       final filters = BuyQuotationCompleteModel(
         CrossIdentity: UserData.crossIdentity,
-        Code: _completeBuyQuotation?.Code,
-        DateOfCreation: _completeBuyQuotation?.DateOfCreation ??
+        Code: _selectedBuyQuotation?.Code,
+        DateOfCreation: _selectedBuyQuotation?.DateOfCreation ??
             DateTime.now().toIso8601String(),
-        DateOfLimit: _completeBuyQuotation?.DateOfLimit,
-        PersonalizedCode: _completeBuyQuotation?.PersonalizedCode,
+        DateOfLimit: _selectedBuyQuotation?.DateOfLimit,
+        PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
         Observations: observations,
-        Buyer: _completeBuyQuotation?.Buyer,
-        Enterprises: _completeBuyQuotation?.Enterprises?.map((e) => e).toList(),
+        Buyer: _selectedBuyQuotation?.Buyer,
+        Enterprises: _selectedBuyQuotation?.Enterprises?.map((e) => e).toList(),
         Products: productWithCorrectIsInsertingValue,
       ).toJson(isInserting: isInserting);
 
@@ -157,13 +155,8 @@ class BuyQuotationProvider with ChangeNotifier {
   }) async {
     _isLoading = true;
     _errorMessage = "";
+    _selectedBuyQuotation = null;
     notifyListeners();
-
-    if (complete == true) {
-      _completeBuyQuotation = null;
-    } else {
-      _incompletesBuyQuotations.clear();
-    }
 
     try {
       final filters = {
@@ -205,16 +198,16 @@ class BuyQuotationProvider with ChangeNotifier {
         );
       } else {
         if (complete == true) {
-          _completeBuyQuotation =
+          _selectedBuyQuotation =
               (json.decode(SoapRequestResponse.responseAsString) as List)
                   .map((e) => BuyQuotationCompleteModel.fromJson(e))
                   .toList()
                   .first;
         } else {
-          _incompletesBuyQuotations = (json.decode(
+          _buyQuotations = (json.decode(
                       SoapRequestResponse.responseAsString.removeBreakLines())
                   as List)
-              .map((e) => BuyQuotationIncompleteModel.fromJson(e))
+              .map((e) => BuyQuotationCompleteModel.fromJson(e))
               .toList();
         }
       }
@@ -384,16 +377,16 @@ class BuyQuotationProvider with ChangeNotifier {
     _productsWithNewValues.clear();
 
     if (isInserting) {
-      _completeBuyQuotation = null;
+      _selectedBuyQuotation = null;
       _selectedEnterprises.addAll(enterpriseProvider.enterprises);
       _enterprisesAlreadyAddedInBuyQuotation
           .addAll(enterpriseProvider.enterprises);
       _selectedBuyer = null;
     } else {
-      if (_completeBuyQuotation?.Enterprises != null &&
-          _completeBuyQuotation?.Enterprises!.isNotEmpty == true) {
+      if (_selectedBuyQuotation?.Enterprises != null &&
+          _selectedBuyQuotation?.Enterprises!.isNotEmpty == true) {
         final enterprises =
-            _completeBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
+            _selectedBuyQuotation!.Enterprises!.map((buyQuotationEnterprise) {
           return enterpriseProvider.enterprises.firstWhere(
             (e) =>
                 e.CnpjNumber.toString() ==
@@ -405,17 +398,17 @@ class BuyQuotationProvider with ChangeNotifier {
         _enterprisesAlreadyAddedInBuyQuotation.addAll(enterprises);
 
         int indexOfBuyer = _buyers.indexWhere(
-          (e) => e.Code == _completeBuyQuotation?.Buyer?.Code,
+          (e) => e.Code == _selectedBuyQuotation?.Buyer?.Code,
         );
         if (indexOfBuyer != -1) {
           _selectedBuyer = _buyers[indexOfBuyer];
         }
       }
 
-      if (_completeBuyQuotation?.Products != null &&
-          _completeBuyQuotation?.Products!.isNotEmpty == true) {
+      if (_selectedBuyQuotation?.Products != null &&
+          _selectedBuyQuotation?.Products!.isNotEmpty == true) {
         _productsWithNewValues =
-            _completeBuyQuotation!.Products!.map((product) => product).toList();
+            _selectedBuyQuotation!.Products!.map((product) => product).toList();
       }
     }
 
@@ -426,7 +419,7 @@ class BuyQuotationProvider with ChangeNotifier {
     if (_selectedEnterprises.contains(enterprise)) {
       _selectedEnterprises.remove(enterprise);
     } else {
-      int index = _completeBuyQuotation!.Enterprises!
+      int index = _selectedBuyQuotation!.Enterprises!
           .indexWhere((e) => e.enterprise.Code == enterprise.Code);
 
       if (index > _selectedEnterprises.length) {
@@ -635,20 +628,20 @@ class BuyQuotationProvider with ChangeNotifier {
     DateTime? dateOfLimit,
     DateTime? dateOfCreation,
   }) {
-    _completeBuyQuotation = BuyQuotationCompleteModel(
+    _selectedBuyQuotation = BuyQuotationCompleteModel(
       DateOfLimit: dateOfLimit != null
           ? dateOfLimit.toIso8601String()
-          : _completeBuyQuotation?.DateOfLimit,
+          : _selectedBuyQuotation?.DateOfLimit,
       DateOfCreation: dateOfCreation != null
           ? dateOfCreation.toIso8601String()
-          : _completeBuyQuotation?.DateOfCreation,
+          : _selectedBuyQuotation?.DateOfCreation,
       CrossIdentity: UserData.crossIdentity,
-      Code: _completeBuyQuotation?.Code,
-      PersonalizedCode: _completeBuyQuotation?.PersonalizedCode,
-      Observations: _completeBuyQuotation?.Observations,
-      Buyer: _completeBuyQuotation?.Buyer,
-      Enterprises: _completeBuyQuotation?.Enterprises,
-      Products: _completeBuyQuotation?.Products,
+      Code: _selectedBuyQuotation?.Code,
+      PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
+      Observations: _selectedBuyQuotation?.Observations,
+      Buyer: _selectedBuyQuotation?.Buyer,
+      Enterprises: _selectedBuyQuotation?.Enterprises,
+      Products: _selectedBuyQuotation?.Products,
     );
     notifyListeners();
   }

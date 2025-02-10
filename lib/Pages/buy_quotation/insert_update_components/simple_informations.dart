@@ -25,15 +25,15 @@ class SimpleInformations extends StatelessWidget {
   });
 
   String getObservationsValue(BuyQuotationProvider buyQuotationProvider) {
-    if (buyQuotationProvider.completeBuyQuotation?.Observations == null ||
-        buyQuotationProvider.completeBuyQuotation?.Observations?.isEmpty ==
+    if (buyQuotationProvider.selectedBuyQuotation?.Observations == null ||
+        buyQuotationProvider.selectedBuyQuotation?.Observations?.isEmpty ==
                 true &&
             newObservation == null) {
       return "Sem observações";
     } else if (newObservation != null) {
       return newObservation!;
     } else {
-      return buyQuotationProvider.completeBuyQuotation!.Observations.toString();
+      return buyQuotationProvider.selectedBuyQuotation!.Observations.toString();
     }
   }
 
@@ -47,7 +47,7 @@ class SimpleInformations extends StatelessWidget {
           TitleAndSubtitle.titleAndSubtitle(
             title: "Código",
             subtitle:
-                buyQuotationProvider.completeBuyQuotation?.Code.toString(),
+                buyQuotationProvider.selectedBuyQuotation?.Code.toString(),
           ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Comprador",
@@ -73,7 +73,7 @@ class SimpleInformations extends StatelessWidget {
         ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data de criação",
-          subtitle: buyQuotationProvider.completeBuyQuotation?.DateOfCreation
+          subtitle: buyQuotationProvider.selectedBuyQuotation?.DateOfCreation
               .toString(),
           // otherWidget: InkWell(
           //   onTap: () async {
@@ -94,7 +94,7 @@ class SimpleInformations extends StatelessWidget {
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data limite",
           subtitle:
-              buyQuotationProvider.completeBuyQuotation?.DateOfLimit.toString(),
+              buyQuotationProvider.selectedBuyQuotation?.DateOfLimit.toString(),
           otherWidget: InkWell(
             onTap: () async {
               final newDate = await GetNewDate.get(
@@ -113,13 +113,13 @@ class SimpleInformations extends StatelessWidget {
         ),
         TitleAndSubtitle.titleAndSubtitle(
           title: buyQuotationProvider
-                          .completeBuyQuotation?.Observations?.isEmpty ==
+                          .selectedBuyQuotation?.Observations?.isEmpty ==
                       true &&
                   observationsController.text.isEmpty
               ? null
               : "Observações",
           subtitle: buyQuotationProvider
-                          .completeBuyQuotation?.Observations?.isEmpty ==
+                          .selectedBuyQuotation?.Observations?.isEmpty ==
                       true &&
                   observationsController.text.isEmpty
               ? "Sem observações"
