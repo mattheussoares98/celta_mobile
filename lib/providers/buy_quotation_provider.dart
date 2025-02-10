@@ -68,7 +68,9 @@ class BuyQuotationProvider with ChangeNotifier {
 
   Future<bool> insertUpdateBuyQuotation({
     required bool isInserting,
-    required String? observations,
+    required TextEditingController observationsController,
+    required DateTime? dateOfLimit,
+    required BuyerModel? buyer,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -91,10 +93,12 @@ class BuyQuotationProvider with ChangeNotifier {
         Code: _selectedBuyQuotation?.Code,
         DateOfCreation: _selectedBuyQuotation?.DateOfCreation ??
             DateTime.now().toIso8601String(),
-        DateOfLimit: _selectedBuyQuotation?.DateOfLimit,
+        DateOfLimit: dateOfLimit
+            ?.toIso8601String(), //quando acessa a página atualizao o valor
         PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
-        Observations: observations,
-        Buyer: _selectedBuyer ?? _selectedBuyQuotation?.Buyer,
+        Observations: observationsController
+            .text, //quando acessa a página já altero o controller pra ser igual às observações da cotação
+        Buyer: buyer,
         Enterprises: _selectedBuyQuotation?.Enterprises
             ?.map((e) => e)
             .toList(), //TODO fix when is inserting
@@ -622,28 +626,6 @@ class BuyQuotationProvider with ChangeNotifier {
 
   void removeProductWithNewValue(int index) {
     _productsWithNewValues.removeAt(index);
-    notifyListeners();
-  }
-
-  void updateDates({
-    DateTime? dateOfLimit,
-    DateTime? dateOfCreation,
-  }) {
-    _selectedBuyQuotation = BuyQuotationModel(
-      DateOfLimit: dateOfLimit != null
-          ? dateOfLimit.toIso8601String()
-          : _selectedBuyQuotation?.DateOfLimit,
-      DateOfCreation: dateOfCreation != null
-          ? dateOfCreation.toIso8601String()
-          : _selectedBuyQuotation?.DateOfCreation,
-      CrossIdentity: UserData.crossIdentity,
-      Code: _selectedBuyQuotation?.Code,
-      PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
-      Observations: _selectedBuyQuotation?.Observations,
-      Buyer: _selectedBuyQuotation?.Buyer,
-      Enterprises: _selectedBuyQuotation?.Enterprises,
-      Products: _selectedBuyQuotation?.Products,
-    );
     notifyListeners();
   }
 

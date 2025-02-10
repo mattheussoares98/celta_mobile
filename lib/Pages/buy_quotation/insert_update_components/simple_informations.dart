@@ -8,11 +8,15 @@ class SimpleInformations extends StatefulWidget {
   final TextEditingController observationsController;
   final FocusNode observationsFocusNode;
   final bool isInserting;
+  final DateTime? dateOfLimit;
+  final void Function(DateTime date) updateDateOfLimit;
 
   const SimpleInformations({
     required this.observationsController,
     required this.observationsFocusNode,
     required this.isInserting,
+    required this.dateOfLimit,
+    required this.updateDateOfLimit,
     super.key,
   });
 
@@ -25,9 +29,9 @@ class _SimpleInformationsState extends State<SimpleInformations> {
 
   String getObservationsValue(BuyQuotationProvider buyQuotationProvider) {
     if ((buyQuotationProvider.selectedBuyQuotation?.Observations == null ||
-        buyQuotationProvider.selectedBuyQuotation?.Observations?.isEmpty ==
+            buyQuotationProvider.selectedBuyQuotation?.Observations?.isEmpty ==
                 true) &&
-            widget.observationsController.text.isEmpty) {
+        widget.observationsController.text.isEmpty) {
       return "Sem observações";
     } else if (widget.observationsController.text.isNotEmpty) {
       return widget.observationsController.text;
@@ -92,8 +96,7 @@ class _SimpleInformationsState extends State<SimpleInformations> {
         ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data limite",
-          subtitle:
-              buyQuotationProvider.selectedBuyQuotation?.DateOfLimit.toString(),
+          subtitle: widget.dateOfLimit?.toIso8601String(),
           otherWidget: InkWell(
             onTap: () async {
               final newDate = await GetNewDate.get(
@@ -101,7 +104,7 @@ class _SimpleInformationsState extends State<SimpleInformations> {
               );
 
               if (newDate != null) {
-                buyQuotationProvider.updateDates(dateOfLimit: newDate);
+                widget.updateDateOfLimit(newDate);
               }
             },
             child: Icon(

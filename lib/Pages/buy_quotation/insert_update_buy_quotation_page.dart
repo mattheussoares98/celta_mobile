@@ -20,6 +20,8 @@ class _InsertUpdateBuyQuotationPageState
   final observationsFocusNode = FocusNode();
   List<Map<int, TextEditingController>> controllers = [];
   List<Map<int, FocusNode>> focusNodes = [];
+  DateTime? dateOfLimit;
+  BuyerModel? buyer;
 
   @override
   void initState() {
@@ -52,6 +54,14 @@ class _InsertUpdateBuyQuotationPageState
           observationsController.text =
               buyQuotationProvider.selectedBuyQuotation!.Observations!;
         }
+
+        buyer = buyQuotationProvider.selectedBuyQuotation?.Buyer;
+        if (buyQuotationProvider.selectedBuyQuotation?.DateOfLimit != null) {
+          dateOfLimit = DateTime.parse(
+              buyQuotationProvider.selectedBuyQuotation!.DateOfLimit!);
+        }
+        observationsController.text =
+            buyQuotationProvider.selectedBuyQuotation?.Observations ?? "";
 
         createControllersAndFocusNode(buyQuotationProvider);
       }
@@ -146,6 +156,8 @@ class _InsertUpdateBuyQuotationPageState
               SaveButton(
                 isInserting: isInserting,
                 observationsController: observationsController,
+                dateOfLimit: dateOfLimit,
+                buyer: buyer,
               ),
             ],
           ),
@@ -170,6 +182,12 @@ class _InsertUpdateBuyQuotationPageState
                             buyQuotationProvider.selectedBuyQuotation == null,
                         observationsController: observationsController,
                         observationsFocusNode: observationsFocusNode,
+                        dateOfLimit: dateOfLimit,
+                        updateDateOfLimit: (date) {
+                          setState(() {
+                            dateOfLimit = date;
+                          });
+                        },
                       ),
                       const Divider(),
                       const Enterprises(),
