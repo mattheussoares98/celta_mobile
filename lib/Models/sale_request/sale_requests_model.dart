@@ -1,15 +1,14 @@
-import 'dart:convert';
-
 class SaleRequestsModel {
-  final int Code;
-  final String PersonalizedCode;
-  final String Name;
-  final String OperationTypeString;
-  final String UseWholePriceString;
-  final int OperationType;
-  final int UseWholePrice;
-  final int UnitValueType;
-  final String UnitValueTypeString;
+  final int? Code;
+  final String? PersonalizedCode;
+  final String? Name;
+  final String? OperationTypeString;
+  final String? UseWholePriceString;
+  final int? OperationType;
+  final int? UseWholePrice;
+  final int? UnitValueType;
+  final String? UnitValueTypeString;
+  final bool? AllowDiscount;
   /* 
 No Json, a tag do valor unitário é "UnitValueType".
 SalePracticedRetail = 1, "Venda praticada varejo"
@@ -36,28 +35,19 @@ SalePracticedECommerce = 13, "Venda praticada ECommerce" */
     required this.OperationTypeString,
     required this.UseWholePriceString,
     required this.UnitValueTypeString,
+    required this.AllowDiscount,
   });
 
-  static responseAsStringToSaleRequestsModel({
-    required String responseAsString,
-    required List listToAdd,
-  }) {
-    List responseAsList = json.decode(responseAsString.toString());
-
-    responseAsList.forEach((data) {
-      listToAdd.add(
-        SaleRequestsModel(
-          UseWholePriceString: data["UseWholePriceString"],
-          UnitValueTypeString: data["UnitValueTypeString"],
-          OperationTypeString: data["OperationTypeString"],
-          Code: data["Code"],
-          PersonalizedCode: data["PersonalizedCode"],
-          Name: data["Name"],
-          OperationType: data["OperationType"],
-          UseWholePrice: data["UseWholePrice"],
-          UnitValueType: data["UnitValueType"],
-        ),
+  factory SaleRequestsModel.fromJson(Map json) => SaleRequestsModel(
+        Code: json["Code"],
+        PersonalizedCode: json["PersonalizedCode"],
+        Name: json["Name"],
+        OperationType: json["OperationType"],
+        UseWholePrice: json["UseWholePrice"],
+        UnitValueType: json["UnitValueType"],
+        OperationTypeString: json["OperationTypeString"],
+        UseWholePriceString: json["UseWholePriceString"],
+        UnitValueTypeString: json["UnitValueTypeString"],
+        AllowDiscount: json["AllowDiscount"],
       );
-    });
-  }
 }

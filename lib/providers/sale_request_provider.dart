@@ -634,13 +634,11 @@ class SaleRequestProvider with ChangeNotifier {
       _errorMessageRequests = SoapRequestResponse.errorMessage;
 
       if (_errorMessageRequests == "") {
-        SaleRequestsModel.responseAsStringToSaleRequestsModel(
-          responseAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _requests,
-        );
+        _requests = (json.decode(SoapRequestResponse.responseAsString) as List)
+            .map((e) => SaleRequestsModel.fromJson(e))
+            .toList();
       }
     } catch (e) {
-      //print("Erro para obter os modelos de pedido: $e");
       _errorMessageRequests = DefaultErrorMessage.ERROR;
     }
 
