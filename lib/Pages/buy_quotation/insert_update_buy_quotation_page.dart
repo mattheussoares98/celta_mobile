@@ -41,8 +41,7 @@ class _InsertUpdateBuyQuotationPageState
         await loadCompleteBuyQuotation();
 
         Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
-        BuyQuotationModel? buyQuotation =
-            arguments?["incompleteQuotation"];
+        BuyQuotationModel? buyQuotation = arguments?["incompleteQuotation"];
         bool isInserting = buyQuotation == null;
 
         buyQuotationProvider.updateSelectedsValues(
@@ -97,6 +96,7 @@ class _InsertUpdateBuyQuotationPageState
     Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
 
     EnterpriseModel? enterprise = arguments?["enterprise"];
+    bool isInserting = arguments?["isInserting"];
 
     BuyQuotationProvider buyQuotationProvider =
         Provider.of(context, listen: false);
@@ -109,10 +109,11 @@ class _InsertUpdateBuyQuotationPageState
 
     await buyQuotationProvider.getBuyQuotation(
       context: context,
-      valueToSearch: buyQuotationProvider.selectedBuyQuotation?.Code.toString() ?? "",
+      valueToSearch:
+          buyQuotationProvider.selectedBuyQuotation?.Code.toString() ?? "",
       searchByPersonalizedCode: false,
       enterpriseCode: enterprise.Code,
-      complete: true,
+      complete: isInserting ? false : true,
     );
   }
 
@@ -128,6 +129,7 @@ class _InsertUpdateBuyQuotationPageState
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
     Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
     EnterpriseModel? enterprise = arguments?["enterprise"];
+    bool isInserting = arguments?["isInserting"];
 
     return Stack(
       children: [
@@ -165,7 +167,8 @@ class _InsertUpdateBuyQuotationPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (buyQuotationProvider.selectedBuyQuotation != null)
+                  if (buyQuotationProvider.selectedBuyQuotation == null &&
+                      !isInserting)
                     TextButton(
                       onPressed: () async {
                         await loadCompleteBuyQuotation();

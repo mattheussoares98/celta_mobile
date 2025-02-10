@@ -377,7 +377,6 @@ class BuyQuotationProvider with ChangeNotifier {
     _productsWithNewValues.clear();
 
     if (isInserting) {
-      _selectedBuyQuotation = null;
       _selectedEnterprises.addAll(enterpriseProvider.enterprises);
       _enterprisesAlreadyAddedInBuyQuotation
           .addAll(enterpriseProvider.enterprises);

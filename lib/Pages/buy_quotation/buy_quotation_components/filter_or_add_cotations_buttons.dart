@@ -45,6 +45,7 @@ class FilterOrAddCotationsButtons extends StatelessWidget {
                 APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
                 arguments: {
                   "enterprise": enterprise,
+                  "isInserting": true,
                 },
               );
             },

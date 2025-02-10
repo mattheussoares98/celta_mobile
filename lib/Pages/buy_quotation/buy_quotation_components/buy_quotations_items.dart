@@ -47,6 +47,7 @@ class BuyQuotationsItems extends StatelessWidget {
               APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
               arguments: {
                 "enterprise": enterprise,
+                "isInserting": false,
               },
             );
           },
