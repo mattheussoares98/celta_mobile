@@ -11,14 +11,12 @@ class CartDetailsPage extends StatefulWidget {
   final bool keyboardIsOpen;
   final TextEditingController observationsController;
   final TextEditingController instructionsController;
-  final bool userCanChangePrices;
   const CartDetailsPage({
     required this.enterpriseCode,
     required this.requestTypeCode,
     required this.keyboardIsOpen,
     required this.observationsController,
     required this.instructionsController,
-    required this.userCanChangePrices,
     Key? key,
   }) : super(key: key);
 
@@ -66,7 +64,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                   ),
                 CartItems(
                   enterpriseCode: widget.enterpriseCode,
-                  userCanChangePrices: widget.userCanChangePrices,
                 ),
                 LastSaleRequestSaved(saleRequestProvider: saleRequestProvider),
               ],
@@ -79,7 +76,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
             requestTypeCode: widget.requestTypeCode,
             instructionsController: widget.instructionsController,
             observationsController: widget.observationsController,
-            userCanChangePrices: widget.userCanChangePrices,
           ),
       ],
     );

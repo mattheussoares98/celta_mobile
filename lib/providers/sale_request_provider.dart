@@ -55,6 +55,9 @@ class SaleRequestProvider with ChangeNotifier {
   String _lastSaleRequestSaved = "";
   String get lastSaleRequestSaved => _lastSaleRequestSaved;
 
+  bool _userCanChangePrices = false;
+  bool get userCanChangePrices => _userCanChangePrices;
+
   int customersCount(String enterpriseCode) {
     if (_customers[enterpriseCode] == null) {
       return 0;
@@ -1095,6 +1098,19 @@ class SaleRequestProvider with ChangeNotifier {
           (product.DiscountValue! / 100);
     } else {
       return product.AutomaticDiscountValue;
+    }
+  }
+
+  Future<void> verifyUserCanChangePrices(
+    EnterpriseProvider enterpriseProvider,
+  ) async {
+    if (!enterpriseProvider.bsAlreadyInRequiredVersion) {
+      _userCanChangePrices = false;
+    } else {
+      _userCanChangePrices = await SoapHelper.userCanAccessResource(
+        resourceCode: 666,
+        routineInt: 0,
+      );
     }
   }
 }

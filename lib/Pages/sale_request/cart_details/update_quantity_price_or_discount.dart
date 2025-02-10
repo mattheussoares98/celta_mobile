@@ -15,7 +15,6 @@ class UpdateQuantityPriceOrDiscount extends StatefulWidget {
   final TextEditingController newQuantityController;
   final int enterpriseCode;
   final void Function() callSetState;
-  final bool userCanChangePrices;
   final void Function() clearSelectedIndex;
   final int productIndex;
 
@@ -27,7 +26,6 @@ class UpdateQuantityPriceOrDiscount extends StatefulWidget {
     required this.newQuantityController,
     required this.enterpriseCode,
     required this.callSetState,
-    required this.userCanChangePrices,
     required this.clearSelectedIndex,
     required this.productIndex,
     super.key,
@@ -198,7 +196,7 @@ class _UpdateQuantityPriceOrDiscountState
                       labelText: "Digite a nova quantidade",
                       hintText: "Nova quantidade",
                     ),
-                    if (widget.userCanChangePrices)
+                    if (saleRequestProvider.userCanChangePrices)
                       manualPrice(saleRequestProvider, context),
                     manualDiscount(context)
                   ],

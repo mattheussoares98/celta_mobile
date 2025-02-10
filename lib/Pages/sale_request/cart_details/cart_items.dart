@@ -7,10 +7,8 @@ import 'cart_details.dart';
 
 class CartItems extends StatefulWidget {
   final int enterpriseCode;
-  final bool userCanChangePrices;
   const CartItems({
     required this.enterpriseCode,
-    required this.userCanChangePrices,
     Key? key,
   }) : super(key: key);
 
@@ -131,7 +129,6 @@ class _CartItemsState extends State<CartItems> {
                           _selectedIndex = -1;
                         });
                       },
-                      userCanChangePrices: widget.userCanChangePrices,
                       controllerInDouble: controllerInDouble,
                       callSetState: () {
                         setState(() {});

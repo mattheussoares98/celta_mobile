@@ -10,13 +10,11 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
   final int requestTypeCode;
   final TextEditingController instructionsController;
   final TextEditingController observationsController;
-  final bool userCanChangePrices;
   const SaveSaleRequestInformationsAndButton({
     required this.enterpriseCode,
     required this.requestTypeCode,
     required this.instructionsController,
     required this.observationsController,
-    required this.userCanChangePrices,
     super.key,
   });
   static int productsCount = 0;
@@ -189,7 +187,7 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (userCanChangePrices &&
+                    if (saleRequestProvider.userCanChangePrices &&
                         saleRequestProvider.needProcessCart &&
                         productsCount > 0 &&
                         customerCode != -1)
@@ -214,8 +212,10 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
                                             enterpriseCode.toString(),
                                         requestTypeCode: requestTypeCode,
                                         context: context,
-                                        instructionsController: instructionsController,
-                                        observationsController: observationsController,
+                                        instructionsController:
+                                            instructionsController,
+                                        observationsController:
+                                            observationsController,
                                       );
                                     },
                                   );
