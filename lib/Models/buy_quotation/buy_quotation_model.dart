@@ -1,6 +1,6 @@
-import '../../models.dart';
+import '../models.dart';
 
-class BuyQuotationCompleteModel {
+class BuyQuotationModel {
   final String? CrossIdentity;
   final int? Code;
   final String? DateOfCreation;
@@ -11,7 +11,7 @@ class BuyQuotationCompleteModel {
   final List<BuyQuotationEnterpriseModel>? Enterprises;
   final List<BuyQuotationProductsModel>? Products;
 
-  const BuyQuotationCompleteModel({
+  const BuyQuotationModel({
     required this.CrossIdentity,
     required this.Code,
     required this.DateOfCreation,
@@ -23,8 +23,8 @@ class BuyQuotationCompleteModel {
     required this.Products,
   });
 
-  factory BuyQuotationCompleteModel.fromJson(Map data) =>
-      BuyQuotationCompleteModel(
+  factory BuyQuotationModel.fromJson(Map data) =>
+      BuyQuotationModel(
         CrossIdentity: data["CrossIdentity"],
         Code: data["Code"],
         DateOfCreation: data["DateOfCreation"],

@@ -32,10 +32,10 @@ class BuyQuotationProvider with ChangeNotifier {
   BuyerModel? _selectedBuyer;
   BuyerModel? get selectedBuyer => _selectedBuyer;
 
-  List<BuyQuotationCompleteModel?> _buyQuotations = [];
-  List<BuyQuotationCompleteModel?> get buyQuotations => [..._buyQuotations];
-  BuyQuotationCompleteModel? _selectedBuyQuotation;
-  BuyQuotationCompleteModel? get selectedBuyQuotation => _selectedBuyQuotation;
+  List<BuyQuotationModel?> _buyQuotations = [];
+  List<BuyQuotationModel?> get buyQuotations => [..._buyQuotations];
+  BuyQuotationModel? _selectedBuyQuotation;
+  BuyQuotationModel? get selectedBuyQuotation => _selectedBuyQuotation;
 
   List<EnterpriseModel> _selectedEnterprises = [];
   List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
@@ -86,7 +86,7 @@ class BuyQuotationProvider with ChangeNotifier {
         );
       }).toList();
 
-      final filters = BuyQuotationCompleteModel(
+      final filters = BuyQuotationModel(
         CrossIdentity: UserData.crossIdentity,
         Code: _selectedBuyQuotation?.Code,
         DateOfCreation: _selectedBuyQuotation?.DateOfCreation ??
@@ -200,14 +200,14 @@ class BuyQuotationProvider with ChangeNotifier {
         if (complete == true) {
           _selectedBuyQuotation =
               (json.decode(SoapRequestResponse.responseAsString) as List)
-                  .map((e) => BuyQuotationCompleteModel.fromJson(e))
+                  .map((e) => BuyQuotationModel.fromJson(e))
                   .toList()
                   .first;
         } else {
           _buyQuotations = (json.decode(
                       SoapRequestResponse.responseAsString.removeBreakLines())
                   as List)
-              .map((e) => BuyQuotationCompleteModel.fromJson(e))
+              .map((e) => BuyQuotationModel.fromJson(e))
               .toList();
         }
       }
@@ -628,7 +628,7 @@ class BuyQuotationProvider with ChangeNotifier {
     DateTime? dateOfLimit,
     DateTime? dateOfCreation,
   }) {
-    _selectedBuyQuotation = BuyQuotationCompleteModel(
+    _selectedBuyQuotation = BuyQuotationModel(
       DateOfLimit: dateOfLimit != null
           ? dateOfLimit.toIso8601String()
           : _selectedBuyQuotation?.DateOfLimit,
