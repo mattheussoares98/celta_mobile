@@ -94,8 +94,8 @@ class BuyQuotationProvider with ChangeNotifier {
         DateOfLimit: _selectedBuyQuotation?.DateOfLimit,
         PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
         Observations: observations,
-        Buyer: _selectedBuyQuotation?.Buyer,
-        Enterprises: _selectedBuyQuotation?.Enterprises?.map((e) => e).toList(),
+        Buyer: _selectedBuyer ?? _selectedBuyQuotation?.Buyer,
+        Enterprises: _selectedBuyQuotation?.Enterprises?.map((e) => e).toList(), //TODO fix when is inserting
         Products: productWithCorrectIsInsertingValue,
       ).toJson(isInserting: isInserting);
 

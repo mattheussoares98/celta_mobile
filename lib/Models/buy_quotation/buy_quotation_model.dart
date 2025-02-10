@@ -7,7 +7,7 @@ class BuyQuotationModel {
   final String? DateOfLimit;
   final String? PersonalizedCode;
   final String? Observations;
-  final BuyQuotationBuyerModel? Buyer;
+  final BuyerModel? Buyer;
   final List<BuyQuotationEnterpriseModel>? Enterprises;
   final List<BuyQuotationProductsModel>? Products;
 
@@ -23,17 +23,15 @@ class BuyQuotationModel {
     required this.Products,
   });
 
-  factory BuyQuotationModel.fromJson(Map data) =>
-      BuyQuotationModel(
+  factory BuyQuotationModel.fromJson(Map data) => BuyQuotationModel(
         CrossIdentity: data["CrossIdentity"],
         Code: data["Code"],
         DateOfCreation: data["DateOfCreation"],
         DateOfLimit: data["DateOfLimit"],
         PersonalizedCode: data["PersonalizedCode"],
         Observations: data["Observations"],
-        Buyer: data["Buyer"] == null
-            ? null
-            : BuyQuotationBuyerModel.fromJson(data["Buyer"]),
+        Buyer:
+            data["Buyer"] == null ? null : BuyerModel.fromJson(data["Buyer"]),
         Enterprises: data["Enterprises"] == null
             ? null
             : (data["Enterprises"] as List)
