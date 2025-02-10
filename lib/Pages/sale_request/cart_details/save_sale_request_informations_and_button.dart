@@ -8,14 +8,14 @@ import '../../../utils/utils.dart';
 class SaveSaleRequestInformationsAndButton extends StatelessWidget {
   final int enterpriseCode;
   final int requestTypeCode;
-  final String instructions;
-  final String observations;
+  final TextEditingController instructionsController;
+  final TextEditingController observationsController;
   final bool userCanChangePrices;
   const SaveSaleRequestInformationsAndButton({
     required this.enterpriseCode,
     required this.requestTypeCode,
-    required this.instructions,
-    required this.observations,
+    required this.instructionsController,
+    required this.observationsController,
     required this.userCanChangePrices,
     super.key,
   });
@@ -91,8 +91,8 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
               enterpriseCode: enterpriseCode.toString(),
               requestTypeCode: requestTypeCode,
               context: context,
-              instructions: instructions,
-              observations: observations,
+              instructionsController: instructionsController,
+              observationsController: observationsController,
             );
           },
         );
@@ -214,8 +214,8 @@ class SaveSaleRequestInformationsAndButton extends StatelessWidget {
                                             enterpriseCode.toString(),
                                         requestTypeCode: requestTypeCode,
                                         context: context,
-                                        instructions: instructions,
-                                        observations: observations,
+                                        instructionsController: instructionsController,
+                                        observationsController: observationsController,
                                       );
                                     },
                                   );

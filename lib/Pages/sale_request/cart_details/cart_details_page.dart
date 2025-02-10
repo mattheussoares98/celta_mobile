@@ -77,8 +77,8 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
           SaveSaleRequestInformationsAndButton(
             enterpriseCode: widget.enterpriseCode,
             requestTypeCode: widget.requestTypeCode,
-            instructions: widget.instructionsController.text,
-            observations: widget.observationsController.text,
+            instructionsController: widget.instructionsController,
+            observationsController: widget.observationsController,
             userCanChangePrices: widget.userCanChangePrices,
           ),
       ],

@@ -982,8 +982,8 @@ class SaleRequestProvider with ChangeNotifier {
     required String enterpriseCode,
     required int requestTypeCode,
     required BuildContext context,
-    required String instructions,
-    required String observations,
+    required TextEditingController instructionsController,
+    required TextEditingController observationsController,
   }) async {
     if (!allProductsHasPrice(
         context: context, enterpriseCode: enterpriseCode)) {
@@ -1006,8 +1006,8 @@ class SaleRequestProvider with ChangeNotifier {
               0, //já vincula o vendedor se tiver um funcionário que é vendedor vinculado ao usuário
           CovenantCode: getSelectedCovenantCode(enterpriseCode) ?? 0,
           CustomerCode: getSelectedCustomerCode(enterpriseCode) ?? 0,
-          Instructions: instructions,
-          Observations: observations,
+          Instructions: instructionsController.text,
+          Observations: observationsController.text,
           Products: _cartProducts[enterpriseCode]!
               .map((e) =>
                   SaleRequestProductProcessCartModel.fromGetProductJsonModel(e))
@@ -1047,8 +1047,9 @@ class SaleRequestProvider with ChangeNotifier {
           //print("Nenhum conteúdo entre parênteses encontrado.");
         }
 
+        instructionsController.clear();
+        observationsController.clear();
         await clearCart(enterpriseCode);
-
         await _clearcustomers(enterpriseCode);
         await getCustomers(
           context: context,
