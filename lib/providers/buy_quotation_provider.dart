@@ -95,7 +95,9 @@ class BuyQuotationProvider with ChangeNotifier {
         PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
         Observations: observations,
         Buyer: _selectedBuyer ?? _selectedBuyQuotation?.Buyer,
-        Enterprises: _selectedBuyQuotation?.Enterprises?.map((e) => e).toList(), //TODO fix when is inserting
+        Enterprises: _selectedBuyQuotation?.Enterprises
+            ?.map((e) => e)
+            .toList(), //TODO fix when is inserting
         Products: productWithCorrectIsInsertingValue,
       ).toJson(isInserting: isInserting);
 
@@ -418,13 +420,13 @@ class BuyQuotationProvider with ChangeNotifier {
     if (_selectedEnterprises.contains(enterprise)) {
       _selectedEnterprises.remove(enterprise);
     } else {
-      int index = _selectedBuyQuotation!.Enterprises!
-          .indexWhere((e) => e.enterprise.Code == enterprise.Code);
+      int? index = _selectedBuyQuotation?.Enterprises
+          ?.indexWhere((e) => e.enterprise.Code == enterprise.Code);
 
-      if (index > _selectedEnterprises.length) {
+      if (index != null && index > _selectedEnterprises.length) {
         _selectedEnterprises.add(enterprise);
       } else {
-        _selectedEnterprises.insert(index, enterprise);
+        _selectedEnterprises.insert(index ?? 0, enterprise);
       }
     }
     notifyListeners();

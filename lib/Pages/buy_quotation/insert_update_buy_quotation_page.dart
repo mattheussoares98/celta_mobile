@@ -39,8 +39,7 @@ class _InsertUpdateBuyQuotationPageState
         await loadCompleteBuyQuotation();
 
         Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
-        BuyQuotationModel? buyQuotation = arguments?["incompleteQuotation"];
-        bool isInserting = buyQuotation == null;
+        bool isInserting = arguments?["isInserting"];
 
         buyQuotationProvider.updateSelectedsValues(
           enterpriseProvider: enterpriseProvider,
