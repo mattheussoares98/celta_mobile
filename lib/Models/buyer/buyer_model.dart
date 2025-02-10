@@ -30,8 +30,8 @@ class BuyerModel {
         Buyer: json["Buyer"],
       );
 
-  Map<String, dynamic> toJson({bool? isInserting = false}) => {
-        "Code": isInserting == true ? 0 : Code,
+  Map<String, dynamic> toJson() => {
+        "Code": Code,
         "PersonalizedCode": PersonalizedCode,
         "Name": Name,
         "NameReduced": NameReduced,

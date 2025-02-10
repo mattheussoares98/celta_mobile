@@ -99,9 +99,18 @@ class BuyQuotationProvider with ChangeNotifier {
         Observations: observationsController
             .text, //quando acessa a página já altero o controller pra ser igual às observações da cotação
         Buyer: buyer,
-        Enterprises: _selectedBuyQuotation?.Enterprises
-            ?.map((e) => e)
-            .toList(), //TODO fix when is inserting
+        Enterprises: _selectedEnterprises
+            .map((e) => BuyQuotationEnterpriseModel(
+                  Code: 0,
+                  enterprise: BuyQuotationEnterprise(
+                    PersonalizedCode: e.PersonalizedCode.toString(),
+                    Name: e.Name,
+                    CnpjNumber: e.CnpjNumber.toString(),
+                    InscriptionNumber: e.InscriptionNumber,
+                    Code: e.Code,
+                  ),
+                ))
+            .toList(),
         Products: productWithCorrectIsInsertingValue,
       ).toJson(isInserting: isInserting);
 

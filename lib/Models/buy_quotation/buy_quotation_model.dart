@@ -51,7 +51,7 @@ class BuyQuotationModel {
         "DateOfLimit": DateOfLimit,
         "PersonalizedCode": PersonalizedCode,
         "Observations": Observations,
-        "Buyer": Buyer?.toJson(isInserting: isInserting),
+        "Buyer": Buyer?.toJson(),
         "Enterprises":
             Enterprises?.map((e) => e.toJson(isInserting: isInserting))
                 .toList(),
