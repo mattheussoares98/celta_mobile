@@ -4,34 +4,33 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
-class SimpleInformations extends StatelessWidget {
+class SimpleInformations extends StatefulWidget {
   final TextEditingController observationsController;
-  final void Function() updateShowEditObservationFormField;
-  final String? newObservation;
-  final bool showEditObservationFormField;
   final FocusNode observationsFocusNode;
-  final void Function() updateObservation;
   final bool isInserting;
 
   const SimpleInformations({
     required this.observationsController,
-    required this.updateShowEditObservationFormField,
-    required this.newObservation,
-    required this.showEditObservationFormField,
     required this.observationsFocusNode,
-    required this.updateObservation,
     required this.isInserting,
     super.key,
   });
 
+  @override
+  State<SimpleInformations> createState() => _SimpleInformationsState();
+}
+
+class _SimpleInformationsState extends State<SimpleInformations> {
+  bool showEditObservationFormFields = false;
+
   String getObservationsValue(BuyQuotationProvider buyQuotationProvider) {
-    if (buyQuotationProvider.selectedBuyQuotation?.Observations == null ||
+    if ((buyQuotationProvider.selectedBuyQuotation?.Observations == null ||
         buyQuotationProvider.selectedBuyQuotation?.Observations?.isEmpty ==
-                true &&
-            newObservation == null) {
+                true) &&
+            widget.observationsController.text.isEmpty) {
       return "Sem observações";
-    } else if (newObservation != null) {
-      return newObservation!;
+    } else if (widget.observationsController.text.isNotEmpty) {
+      return widget.observationsController.text;
     } else {
       return buyQuotationProvider.selectedBuyQuotation!.Observations.toString();
     }
@@ -43,7 +42,7 @@ class SimpleInformations extends StatelessWidget {
 
     return Column(
       children: [
-        if (!isInserting)
+        if (!widget.isInserting)
           TitleAndSubtitle.titleAndSubtitle(
             title: "Código",
             subtitle:
@@ -115,33 +114,35 @@ class SimpleInformations extends StatelessWidget {
           title: buyQuotationProvider
                           .selectedBuyQuotation?.Observations?.isEmpty ==
                       true &&
-                  observationsController.text.isEmpty
+                  widget.observationsController.text.isEmpty
               ? null
               : "Observações",
           subtitle: buyQuotationProvider
                           .selectedBuyQuotation?.Observations?.isEmpty ==
                       true &&
-                  observationsController.text.isEmpty
+                  widget.observationsController.text.isEmpty
               ? "Sem observações"
               : getObservationsValue(buyQuotationProvider),
           otherWidget: TextButton.icon(
-            onPressed: updateShowEditObservationFormField,
+            onPressed: () {
+              setState(() {
+                showEditObservationFormFields = !showEditObservationFormFields;
+              });
+            },
             icon: const Icon(Icons.edit),
             label: const Text("Alterar"),
           ),
         ),
-        if (showEditObservationFormField)
+        if (showEditObservationFormFields)
           Column(
             children: [
               TextFormField(
                 maxLines: 10,
                 minLines: 1,
-                focusNode: observationsFocusNode,
+                focusNode: widget.observationsFocusNode,
                 style: const TextStyle(fontSize: 14),
-                onFieldSubmitted: (_) {
-                  updateObservation();
-                },
-                controller: observationsController,
+                onFieldSubmitted: (_) {},
+                controller: widget.observationsController,
                 decoration: FormFieldDecoration.decoration(
                   context: context,
                 ),
@@ -149,8 +150,13 @@ class SimpleInformations extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: ElevatedButton(
-                  onPressed: updateObservation,
-                  child: const Text("Alterar comentário"),
+                  onPressed: () {
+                    setState(() {
+                      showEditObservationFormFields = false;
+                      //TODO confirm that is updating the observation when save is successful
+                    });
+                  },
+                  child: const Text("Confirmar"),
                 ),
               ),
             ],

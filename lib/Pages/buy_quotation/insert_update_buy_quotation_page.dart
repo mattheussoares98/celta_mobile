@@ -16,9 +16,7 @@ class InsertUpdateBuyQuotationPage extends StatefulWidget {
 
 class _InsertUpdateBuyQuotationPageState
     extends State<InsertUpdateBuyQuotationPage> {
-  bool showEditObservationFormField = false;
   final observationsController = TextEditingController();
-  static String? newObservation;
   final observationsFocusNode = FocusNode();
   List<Map<int, TextEditingController>> controllers = [];
   List<Map<int, FocusNode>> focusNodes = [];
@@ -117,13 +115,6 @@ class _InsertUpdateBuyQuotationPageState
     );
   }
 
-  void updateObservation() {
-    setState(() {
-      newObservation = observationsController.text;
-      showEditObservationFormField = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     BuyQuotationProvider buyQuotationProvider = Provider.of(context);
@@ -151,12 +142,10 @@ class _InsertUpdateBuyQuotationPageState
                 Icons.arrow_back,
               ),
             ),
-            title: Text(buyQuotationProvider.selectedBuyQuotation == null
-                ? "Inserindo"
-                : "Alterando"),
+            title: Text(isInserting ? "Inserindo" : "Alterando"),
             actions: [
               SaveButton(
-                isInserting: buyQuotationProvider.selectedBuyQuotation == null,
+                isInserting: isInserting,
                 observationsController: observationsController,
               ),
             ],
@@ -181,18 +170,7 @@ class _InsertUpdateBuyQuotationPageState
                         isInserting:
                             buyQuotationProvider.selectedBuyQuotation == null,
                         observationsController: observationsController,
-                        newObservation: newObservation,
                         observationsFocusNode: observationsFocusNode,
-                        showEditObservationFormField:
-                            showEditObservationFormField,
-                        updateObservation: updateObservation,
-                        updateShowEditObservationFormField: () {
-                          setState(() {
-                            showEditObservationFormField =
-                                !showEditObservationFormField;
-                          });
-                          observationsFocusNode.requestFocus();
-                        },
                       ),
                       const Divider(),
                       const Enterprises(),
