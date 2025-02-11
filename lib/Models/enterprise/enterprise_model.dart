@@ -11,6 +11,7 @@ class EnterpriseModel {
   final int? ProductCodeSizeOfBalanceLabel;
   final bool? ProductCodeWithCheckerDigit;
   final String? InscriptionNumber;
+  bool isSelected;
 
   EnterpriseModel({
     required this.Code,
@@ -25,6 +26,7 @@ class EnterpriseModel {
     required this.ProductCodeSizeOfBalanceLabel,
     required this.ProductCodeWithCheckerDigit,
     required this.InscriptionNumber,
+    this.isSelected = false,
   });
 
   factory EnterpriseModel.fromJson(Map<String, dynamic> json) =>
