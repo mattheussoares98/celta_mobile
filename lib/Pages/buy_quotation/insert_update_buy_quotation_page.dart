@@ -21,7 +21,6 @@ class _InsertUpdateBuyQuotationPageState
   List<Map<int, TextEditingController>> controllers = [];
   List<Map<int, FocusNode>> focusNodes = [];
   DateTime? dateOfLimit;
-  BuyerModel? selectedBuyer;
 
   @override
   void initState() {
@@ -48,18 +47,6 @@ class _InsertUpdateBuyQuotationPageState
           isInserting: isInserting,
         );
 
-        if (buyQuotationProvider
-                .selectedBuyQuotation?.Observations?.isNotEmpty ==
-            true) {
-          observationsController.text =
-              buyQuotationProvider.selectedBuyQuotation!.Observations!;
-        }
-
-        selectedBuyer = buyQuotationProvider.selectedBuyQuotation?.Buyer;
-        if (buyQuotationProvider.selectedBuyQuotation?.DateOfLimit != null) {
-          dateOfLimit = DateTime.parse(
-              buyQuotationProvider.selectedBuyQuotation!.DateOfLimit!);
-        }
         observationsController.text =
             buyQuotationProvider.selectedBuyQuotation?.Observations ?? "";
 
@@ -159,7 +146,6 @@ class _InsertUpdateBuyQuotationPageState
                 isInserting: isInserting,
                 observationsController: observationsController,
                 dateOfLimit: dateOfLimit,
-                buyer: selectedBuyer,
                 enterpriseModel: enterprise,
               ),
             ],
@@ -170,8 +156,7 @@ class _InsertUpdateBuyQuotationPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (buyQuotationProvider.selectedBuyQuotation == null &&
-                      !isInserting)
+                  if (buyQuotationProvider.errorMessage != "")
                     TextButton(
                       onPressed: () async {
                         await loadCompleteBuyQuotation();
@@ -181,17 +166,10 @@ class _InsertUpdateBuyQuotationPageState
                   Column(
                     children: [
                       SimpleInformations(
-                        isInserting:
-                            buyQuotationProvider.selectedBuyQuotation == null,
+                        isInserting: isInserting,
                         observationsController: observationsController,
                         observationsFocusNode: observationsFocusNode,
                         dateOfLimit: dateOfLimit,
-                        buyer: selectedBuyer,
-                        updateBuyer: (buyer) {
-                          setState(() {
-                            selectedBuyer = buyer;
-                          });
-                        },
                         updateDateOfLimit: (date) {
                           setState(() {
                             dateOfLimit = date;

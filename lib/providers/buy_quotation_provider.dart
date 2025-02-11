@@ -66,7 +66,6 @@ class BuyQuotationProvider with ChangeNotifier {
     required bool isInserting,
     required TextEditingController observationsController,
     required DateTime? dateOfLimit,
-    required BuyerModel? buyer,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -105,7 +104,7 @@ class BuyQuotationProvider with ChangeNotifier {
         PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
         Observations: observationsController
             .text, //quando acessa a página já altero o controller pra ser igual às observações da cotação
-        Buyer: buyer,
+        Buyer: _selectedBuyer,
         Enterprises: _allEnterprises
             .where((e) => e.isSelected)
             .map((e) => BuyQuotationEnterpriseModel(
@@ -675,7 +674,6 @@ class BuyQuotationProvider with ChangeNotifier {
     _errorMessage = "";
     _isLoading = true;
     _buyers.clear();
-    _selectedBuyer = null;
     notifyListeners();
 
     try {

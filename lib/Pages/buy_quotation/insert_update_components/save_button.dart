@@ -9,13 +9,11 @@ class SaveButton extends StatelessWidget {
   final bool isInserting;
   final TextEditingController observationsController;
   final DateTime? dateOfLimit;
-  final BuyerModel? buyer;
   final EnterpriseModel? enterpriseModel;
   const SaveButton({
     required this.isInserting,
     required this.observationsController,
     required this.dateOfLimit,
-    required this.buyer,
     required this.enterpriseModel,
     super.key,
   });
@@ -42,7 +40,6 @@ class SaveButton extends StatelessWidget {
                 isInserting: isInserting,
                 observationsController: observationsController,
                 dateOfLimit: dateOfLimit,
-                buyer: buyer,
               );
 
               if (updated) {
