@@ -20,7 +20,6 @@ class _InsertUpdateBuyQuotationPageState
   final observationsFocusNode = FocusNode();
   List<Map<int, TextEditingController>> controllers = [];
   List<Map<int, FocusNode>> focusNodes = [];
-  DateTime? dateOfLimit;
 
   @override
   void initState() {
@@ -145,7 +144,6 @@ class _InsertUpdateBuyQuotationPageState
               SaveButton(
                 isInserting: isInserting,
                 observationsController: observationsController,
-                dateOfLimit: dateOfLimit,
                 enterpriseModel: enterprise,
               ),
             ],
@@ -169,12 +167,6 @@ class _InsertUpdateBuyQuotationPageState
                         isInserting: isInserting,
                         observationsController: observationsController,
                         observationsFocusNode: observationsFocusNode,
-                        dateOfLimit: dateOfLimit,
-                        updateDateOfLimit: (date) {
-                          setState(() {
-                            dateOfLimit = date;
-                          });
-                        },
                       ),
                       const Divider(),
                       const Enterprises(),

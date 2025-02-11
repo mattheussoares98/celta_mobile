@@ -8,12 +8,10 @@ import '../../../providers/providers.dart';
 class SaveButton extends StatelessWidget {
   final bool isInserting;
   final TextEditingController observationsController;
-  final DateTime? dateOfLimit;
   final EnterpriseModel? enterpriseModel;
   const SaveButton({
     required this.isInserting,
     required this.observationsController,
-    required this.dateOfLimit,
     required this.enterpriseModel,
     super.key,
   });
@@ -39,7 +37,6 @@ class SaveButton extends StatelessWidget {
                   await buyQuotationProvider.insertUpdateBuyQuotation(
                 isInserting: isInserting,
                 observationsController: observationsController,
-                dateOfLimit: dateOfLimit,
               );
 
               if (updated) {

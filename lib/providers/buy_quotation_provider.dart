@@ -65,7 +65,6 @@ class BuyQuotationProvider with ChangeNotifier {
   Future<bool> insertUpdateBuyQuotation({
     required bool isInserting,
     required TextEditingController observationsController,
-    required DateTime? dateOfLimit,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -99,8 +98,8 @@ class BuyQuotationProvider with ChangeNotifier {
         Code: _selectedBuyQuotation?.Code,
         DateOfCreation: _selectedBuyQuotation?.DateOfCreation ??
             DateTime.now().toIso8601String(),
-        DateOfLimit: dateOfLimit
-            ?.toIso8601String(), //quando acessa a página atualizao o valor
+        DateOfLimit:
+            _selectedBuyQuotation?.DateOfLimit, //TODO create method to update
         PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
         Observations: observationsController
             .text, //quando acessa a página já altero o controller pra ser igual às observações da cotação
@@ -703,5 +702,21 @@ class BuyQuotationProvider with ChangeNotifier {
 
   void updateSelectedBuyQuotation(BuyQuotationModel? buyQuotation) {
     _selectedBuyQuotation = buyQuotation;
+  }
+
+  void updateDateOfLimit(DateTime? date) {
+    final updated = BuyQuotationModel(
+      DateOfLimit: date?.toIso8601String(),
+      CrossIdentity: _selectedBuyQuotation?.CrossIdentity,
+      Code: _selectedBuyQuotation?.Code,
+      DateOfCreation: _selectedBuyQuotation?.DateOfCreation,
+      PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
+      Observations: _selectedBuyQuotation?.Observations,
+      Buyer: _selectedBuyQuotation?.Buyer,
+      Enterprises: _selectedBuyQuotation?.Enterprises,
+      Products: _selectedBuyQuotation?.Products,
+    );
+
+    _selectedBuyQuotation = updated;
   }
 }
