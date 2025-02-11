@@ -17,6 +17,7 @@ class Enterprises extends StatelessWidget {
         const Text("Empresas"),
         ListView.builder(
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: buyQuotationProvider.allEnterprises.length,
           itemBuilder: (context, index) {
             final enterprise = buyQuotationProvider.allEnterprises[index];

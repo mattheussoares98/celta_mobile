@@ -48,6 +48,7 @@ class UpdateQuantity extends StatelessWidget {
       child: Column(
         children: [
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: buyQuotationProvider.allEnterprises
                 .where((e) => e.isSelected)

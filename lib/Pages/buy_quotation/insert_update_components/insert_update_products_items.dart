@@ -76,6 +76,7 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
           const Text("Não há produtos na cotação"),
         ListView.builder(
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: buyQuotationProvider.productsWithNewValues.length,
           itemBuilder: (context, productIndex) {
             final product =
@@ -133,11 +134,14 @@ void updateControllersQuantity({
 
       if (index == -1) {
         continue;
+      } else if (productQuantity == 0) {
+        controllers[index].values.first.text = "";
+      } else {
+        controllers[index].values.first.text = productQuantity
+            .toString()
+            .toBrazilianNumber(3)
+            .replaceAll(RegExp(r'\.'), '');
       }
-      controllers[index].values.first.text = productQuantity
-          .toString()
-          .toBrazilianNumber(3)
-          .replaceAll(RegExp(r'\.'), '');
     } else {
       controllers
           .where((e) => e.keys.first == enterprise.Code)

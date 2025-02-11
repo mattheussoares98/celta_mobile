@@ -30,6 +30,7 @@ class SearchProducts extends StatelessWidget {
       ],
       labelText: "Adicionar produto",
       searchProductController: searchProductController,
+      autofocus: false,
       onPressSearch: () async {
         cleanSelectedIndex();
         await buyQuotationProvider.searchProductsToAdd(
