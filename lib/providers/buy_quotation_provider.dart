@@ -663,4 +663,8 @@ class BuyQuotationProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void updateSelectedBuyQuotation(BuyQuotationModel? buyQuotation) {
+    _selectedBuyQuotation = buyQuotation;
+  }
 }

@@ -43,6 +43,7 @@ class BuyQuotationsItems extends StatelessWidget {
 
         return InkWell(
           onTap: () {
+            buyQuotationProvider.updateSelectedBuyQuotation(buyQuotation);
             Navigator.of(context).pushNamed(
               APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
               arguments: {
