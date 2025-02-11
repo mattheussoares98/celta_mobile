@@ -5,6 +5,7 @@ import '../../../components/components.dart';
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
+import '../buy_quotation.dart';
 
 class BuyQuotationsItems extends StatelessWidget {
   final EnterpriseModel enterprise;
@@ -63,11 +64,15 @@ class BuyQuotationsItems extends StatelessWidget {
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Data de criação",
-                    subtitle: buyQuotation?.DateOfCreation,
+                    subtitle: dateFormatted(buyQuotation?.DateOfCreation),
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
-                    title: "Data de limite",
-                    subtitle: buyQuotation?.DateOfLimit,
+                    title: dateFormatted(buyQuotation?.DateOfLimit) == null
+                        ? null
+                        : "Data de limite",
+                    subtitle: dateFormatted(buyQuotation?.DateOfLimit) == null
+                        ? "Sem data de limite"
+                        : dateFormatted(buyQuotation?.DateOfLimit),
                   ),
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Código personalizado",

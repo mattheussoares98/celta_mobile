@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
+import 'insert_update_components.dart';
 
 class SimpleInformations extends StatefulWidget {
   final TextEditingController observationsController;
@@ -81,27 +82,16 @@ class _SimpleInformationsState extends State<SimpleInformations> {
         ),
         TitleAndSubtitle.titleAndSubtitle(
           title: "Data de criação",
-          subtitle: buyQuotationProvider.selectedBuyQuotation?.DateOfCreation
-              .toString(),
-          // otherWidget: InkWell(
-          //   onTap: () async {
-          //     final newDate = await GetNewDate.get(
-          //       context: context,
-          //     );
-
-          //     if (newDate != null) {
-          //       buyQuotationProvider.updateDates(dateOfCreation: newDate);
-          //     }
-          //   },
-          //   child: Icon(
-          //     Icons.edit,
-          //     color: Theme.of(context).colorScheme.primary,
-          //   ),
-          // ),
+          subtitle: dateFormatted(
+              buyQuotationProvider.selectedBuyQuotation?.DateOfCreation),
         ),
         TitleAndSubtitle.titleAndSubtitle(
-          title: "Data limite",
-          subtitle: widget.dateOfLimit?.toIso8601String(),
+          title: dateFormatted(widget.dateOfLimit?.toIso8601String()) == null
+              ? null
+              : "Data limite",
+          subtitle: dateFormatted(widget.dateOfLimit?.toIso8601String()) == null
+              ? "Sem data de limite"
+              : dateFormatted(widget.dateOfLimit?.toIso8601String()),
           otherWidget: InkWell(
             onTap: () async {
               final newDate = await GetNewDate.get(
