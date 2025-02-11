@@ -106,7 +106,7 @@ class BuyQuotationProvider with ChangeNotifier {
                     Code: e.Code,
                   ),
                 ))
-            .toList(),
+            .toList(), //TODO get correct enterprises when adding or when is updating
         Products: productWithCorrectIsInsertingValue,
       ).toJson(isInserting: isInserting);
 
