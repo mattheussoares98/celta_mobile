@@ -45,24 +45,21 @@ class _WebEnterpriseDetailsPageState extends State<WebEnterpriseDetailsPage> {
               client: client,
               webProvider: webProvider,
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (client != null) EditUrlCcs(client: client!),
-                    const SubEnterprisesItems(),
-                    const SizedBox(height: 20),
-                    // if (client.usersInformations == null)
-                    //   const Text(
-                    //     "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // if (client.usersInformations?.isNotEmpty == true)
-                    //   UsersList(client: client)
-                  ],
-                ),
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (client != null) EditUrlCcs(client: client!),
+                  const SubEnterprisesItems(),
+                  const SizedBox(height: 20),
+                  // if (client.usersInformations == null)
+                  //   const Text(
+                  //     "Nenhum usuário utilizou o aplicativo recentemente nessa empresa",
+                  //     textAlign: TextAlign.center,
+                  //   ),
+                  // if (client.usersInformations?.isNotEmpty == true)
+                  //   UsersList(client: client)
+                ],
               ),
             ),
           ),

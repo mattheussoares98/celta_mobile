@@ -53,6 +53,7 @@ class SubEnterprisesItems extends StatelessWidget {
                     ?.length ??
                 0,
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final item = webProvider
                   .enterprises[webProvider.indexOfSelectedEnterprise]
