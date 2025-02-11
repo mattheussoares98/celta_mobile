@@ -65,7 +65,7 @@ class SoapRequest {
       final response = await http.post(
         Uri.parse('${UserData.urlCCS}/$serviceASMX'),
         headers: soapHeaders,
-        body: envelope,
+        body: envelope.replaceAll(RegExp(r'&'), '&amp;'),
       );
 
       if (response.statusCode == 200) {
