@@ -421,19 +421,8 @@ class BuyQuotationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addOrRemoveSelectedEnterprise(EnterpriseModel enterprise) {
-    if (_allEnterprises.contains(enterprise)) {
-      _allEnterprises.remove(enterprise);
-    } else {
-      int? index = _selectedBuyQuotation?.Enterprises
-          ?.indexWhere((e) => e.enterprise.Code == enterprise.Code);
-
-      if (index != null && index > _allEnterprises.length) {
-        _allEnterprises.add(enterprise);
-      } else {
-        _allEnterprises.insert(index ?? 0, enterprise);
-      }
-    }
+  void updateEnterpriseIsSelected(EnterpriseModel enterprise) {
+    enterprise.isSelected = !enterprise.isSelected;
     notifyListeners();
   }
 

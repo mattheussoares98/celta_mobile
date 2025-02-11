@@ -32,8 +32,7 @@ class Enterprises extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  buyQuotationProvider
-                      .addOrRemoveSelectedEnterprise(enterprise);
+                  buyQuotationProvider.updateEnterpriseIsSelected(enterprise);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -58,11 +57,10 @@ class Enterprises extends StatelessWidget {
                         ),
                       ),
                       Checkbox(
-                        value: buyQuotationProvider.allEnterprises
-                            .contains(enterprise),
+                        value: enterprise.isSelected,
                         onChanged: (value) {
                           buyQuotationProvider
-                              .addOrRemoveSelectedEnterprise(enterprise);
+                              .updateEnterpriseIsSelected(enterprise);
                         },
                       ),
                     ],
