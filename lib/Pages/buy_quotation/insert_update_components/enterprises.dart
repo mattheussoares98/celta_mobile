@@ -44,7 +44,7 @@ class Enterprises extends StatelessWidget {
                           children: [
                             TitleAndSubtitle.titleAndSubtitle(
                               title: "Código",
-                              subtitle: enterprise.Code.toString(),
+                              subtitle: enterprise.PersonalizedCode.toString(),
                             ),
                             TitleAndSubtitle.titleAndSubtitle(
                               subtitle: enterprise.Name.toString(),
