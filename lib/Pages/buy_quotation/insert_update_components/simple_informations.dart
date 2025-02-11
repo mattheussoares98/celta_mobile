@@ -136,6 +136,7 @@ class _SimpleInformationsState extends State<SimpleInformations> {
               setState(() {
                 showEditObservationFormFields = !showEditObservationFormFields;
               });
+              widget.observationsFocusNode.requestFocus();
             },
             icon: const Icon(Icons.edit),
             label: const Text("Alterar"),
@@ -163,7 +164,7 @@ class _SimpleInformationsState extends State<SimpleInformations> {
                       showEditObservationFormFields = false;
                     });
                   },
-                  child: const Text("Confirmar"),
+                  child: const Text("Confirmar observação"),
                 ),
               ),
             ],
