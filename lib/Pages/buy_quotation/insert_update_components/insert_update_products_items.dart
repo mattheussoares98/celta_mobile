@@ -66,6 +66,11 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
           searchProductController: searchProductController,
           enterprise: widget.enterprise,
           searchFocusNode: searchFocusNode,
+          cleanSelectedIndex: () {
+            setState(() {
+              selectedProductIndex = null;
+            });
+          },
         ),
         if (buyQuotationProvider.productsWithNewValues.length == 0)
           const Text("Não há produtos na cotação"),
@@ -79,16 +84,15 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
             return InsertUpdateProductItem(
               productIndex: productIndex,
               selectedProductIndex: selectedProductIndex,
-              updateSelectedIndex:
-                  buyQuotationProvider.allEnterprises.isEmpty
-                      ? null
-                      : () {
-                          updateSelectedIndex(
-                            productIndex: productIndex,
-                            buyQuotationProvider: buyQuotationProvider,
-                          );
-                          widget.focusNodes[0].values.first.requestFocus();
-                        },
+              updateSelectedIndex: buyQuotationProvider.allEnterprises.isEmpty
+                  ? null
+                  : () {
+                      updateSelectedIndex(
+                        productIndex: productIndex,
+                        buyQuotationProvider: buyQuotationProvider,
+                      );
+                      widget.focusNodes[0].values.first.requestFocus();
+                    },
               product: product,
               controllers: widget.controllers,
               focusNodes: widget.focusNodes,

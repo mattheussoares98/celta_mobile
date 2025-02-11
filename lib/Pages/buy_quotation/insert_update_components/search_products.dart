@@ -9,10 +9,12 @@ class SearchProducts extends StatelessWidget {
   final TextEditingController searchProductController;
   final EnterpriseModel enterprise;
   final FocusNode searchFocusNode;
+  final void Function() cleanSelectedIndex;
   const SearchProducts({
     required this.searchProductController,
     required this.enterprise,
     required this.searchFocusNode,
+    required this.cleanSelectedIndex,
     super.key,
   });
 
@@ -29,6 +31,7 @@ class SearchProducts extends StatelessWidget {
       labelText: "Adicionar produto",
       searchProductController: searchProductController,
       onPressSearch: () async {
+        cleanSelectedIndex();
         await buyQuotationProvider.searchProductsToAdd(
           enterprise: enterprise,
           searchProductController: searchProductController,
@@ -56,7 +59,8 @@ class SearchProducts extends StatelessWidget {
                   return InkWell(
                     onTap: () async {
                       Navigator.of(context).pop();
-                      await buyQuotationProvider.insertNewProductInProductsWithNewValues(
+                      await buyQuotationProvider
+                          .insertNewProductInProductsWithNewValues(
                         plu: product.plu!,
                         enterprise: enterprise,
                         configurationsProvider: configurationsProvider,
