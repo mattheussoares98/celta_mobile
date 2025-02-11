@@ -75,7 +75,7 @@ class BuyQuotationsItems extends StatelessWidget {
                   TitleAndSubtitle.titleAndSubtitle(
                     title: buyQuotation?.Observations?.isEmpty == true
                         ? null
-                        : buyQuotation?.Observations,
+                        : "Observações",
                     subtitle: buyQuotation?.Observations?.isEmpty == true
                         ? "Sem observações"
                         : buyQuotation?.Observations,

@@ -161,7 +161,6 @@ class _SimpleInformationsState extends State<SimpleInformations> {
                   onPressed: () {
                     setState(() {
                       showEditObservationFormFields = false;
-                      //TODO confirm that is updating the observation when save is successful
                     });
                   },
                   child: const Text("Confirmar"),

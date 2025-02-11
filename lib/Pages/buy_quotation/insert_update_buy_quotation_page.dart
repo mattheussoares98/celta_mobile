@@ -117,8 +117,7 @@ class _InsertUpdateBuyQuotationPageState
     await buyQuotationProvider.getBuyQuotation(
       context: context,
       valueToSearch:
-          buyQuotationProvider.selectedBuyQuotation?.Code.toString() ??
-              "", //TODO search using correctly buyQuotation
+          buyQuotationProvider.selectedBuyQuotation?.Code.toString() ?? "",
       searchByPersonalizedCode: false,
       enterpriseCode: enterprise.Code,
       complete: isInserting ? false : true,
