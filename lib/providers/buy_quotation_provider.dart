@@ -417,6 +417,7 @@ class BuyQuotationProvider with ChangeNotifier {
                 InscriptionNumber: e.InscriptionNumber,
               )));
       _selectedBuyer = null;
+      _selectedBuyQuotation = null;
     } else {
       if (_selectedBuyQuotation?.Enterprises != null &&
           _selectedBuyQuotation?.Enterprises!.isNotEmpty == true) {
