@@ -823,6 +823,13 @@ class SaleRequestProvider with ChangeNotifier {
       );
     }
 
+    if (SoapRequestResponse.errorMessage != "") {
+      ShowSnackbarMessage.show(
+        message: SoapRequestResponse.errorMessage,
+        context: context,
+      );
+    }
+
     _customers[enterpriseCode] = [
       if (defaultCustomer != null) ...defaultCustomer,
       if (customers != null) ...customers,
