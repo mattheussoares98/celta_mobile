@@ -5,6 +5,7 @@ import '../../components/components.dart';
 
 import '../../models/models.dart';
 import '../../providers/providers.dart';
+import '../../utils/utils.dart';
 import 'buy_quotation_components/buy_quotation_components.dart';
 
 class BuyQuotationPage extends StatefulWidget {
@@ -91,14 +92,32 @@ class _BuyQuotationPageState extends State<BuyQuotationPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    FilterOrAddCotationsButtons(
-                      updateShowFilterOptions: updateShowFilterOptions,
-                      showFilterOptions: showFilterOptions,
-                      enterprise: enterprise,
+                    TextButton.icon(
+                      icon: const Icon(Icons.add),
+                      label: const FittedBox(
+                        child: Text(
+                          "Cadastrar cotação",
+                        ),
+                      ),
+                      iconAlignment: IconAlignment.end,
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          APPROUTES.BUY_QUOTATION_INSERT_UPDATE,
+                          arguments: {
+                            "enterprise": enterprise,
+                            "isInserting": true,
+                          },
+                        );
+                      },
                     ),
+                    // FilterOrAddCotationsButtons(
+                    //   updateShowFilterOptions: updateShowFilterOptions,
+                    //   showFilterOptions: showFilterOptions,
+                    //   enterprise: enterprise,
+                    // ),
                     const Divider(),
-                    if (showFilterOptions)
-                      AllFiltersOptions(enterprise: enterprise),
+                    // if (showFilterOptions)
+                    //   AllFiltersOptions(enterprise: enterprise),
                     BuyQuotationsItems(enterprise: enterprise),
                   ],
                 ),
