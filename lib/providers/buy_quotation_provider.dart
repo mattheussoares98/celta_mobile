@@ -179,6 +179,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
     _selectedBuyQuotation = null;
+    _buyQuotations.clear();
     notifyListeners();
 
     try {

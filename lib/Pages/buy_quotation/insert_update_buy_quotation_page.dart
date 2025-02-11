@@ -114,14 +114,16 @@ class _InsertUpdateBuyQuotationPageState
       return;
     }
 
-    await buyQuotationProvider.getBuyQuotation(
-      context: context,
-      valueToSearch:
-          buyQuotationProvider.selectedBuyQuotation?.Code.toString() ?? "",
-      searchByPersonalizedCode: false,
-      enterpriseCode: enterprise.Code,
-      complete: isInserting ? false : true,
-    );
+    if (!isInserting) {
+      await buyQuotationProvider.getBuyQuotation(
+        context: context,
+        valueToSearch:
+            buyQuotationProvider.selectedBuyQuotation?.Code.toString() ?? "",
+        searchByPersonalizedCode: false,
+        enterpriseCode: enterprise.Code,
+        complete: isInserting ? false : true,
+      );
+    }
   }
 
   @override
