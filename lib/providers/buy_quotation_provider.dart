@@ -37,8 +37,8 @@ class BuyQuotationProvider with ChangeNotifier {
   BuyQuotationModel? _selectedBuyQuotation;
   BuyQuotationModel? get selectedBuyQuotation => _selectedBuyQuotation;
 
-  List<EnterpriseModel> _selectedEnterprises = [];
-  List<EnterpriseModel> get selectedEnterprises => [..._selectedEnterprises];
+  List<EnterpriseModel> _allEnterprises = [];
+  List<EnterpriseModel> get allEnterprises => [..._allEnterprises];
 
   List<BuyQuotationProductsModel> _productsWithNewValues = [];
   List<BuyQuotationProductsModel> get productsWithNewValues =>
@@ -95,7 +95,7 @@ class BuyQuotationProvider with ChangeNotifier {
         Observations: observationsController
             .text, //quando acessa a página já altero o controller pra ser igual às observações da cotação
         Buyer: buyer,
-        Enterprises: _selectedEnterprises
+        Enterprises: _allEnterprises
             .map((e) => BuyQuotationEnterpriseModel(
                   Code: 0,
                   enterprise: BuyQuotationEnterprise(
@@ -383,11 +383,11 @@ class BuyQuotationProvider with ChangeNotifier {
     required EnterpriseProvider enterpriseProvider,
     required bool isInserting,
   }) {
-    _selectedEnterprises.clear();
+    _allEnterprises.clear();
     _productsWithNewValues.clear();
 
     if (isInserting) {
-      _selectedEnterprises.addAll(enterpriseProvider.enterprises);
+      _allEnterprises.addAll(enterpriseProvider.enterprises);
       _selectedBuyer = null;
     } else {
       if (_selectedBuyQuotation?.Enterprises != null &&
@@ -401,7 +401,7 @@ class BuyQuotationProvider with ChangeNotifier {
           );
         }).toList();
 
-        _selectedEnterprises.addAll(enterprises);
+        _allEnterprises.addAll(enterprises);
 
         int indexOfBuyer = _buyers.indexWhere(
           (e) => e.Code == _selectedBuyQuotation?.Buyer?.Code,
@@ -422,16 +422,16 @@ class BuyQuotationProvider with ChangeNotifier {
   }
 
   void addOrRemoveSelectedEnterprise(EnterpriseModel enterprise) {
-    if (_selectedEnterprises.contains(enterprise)) {
-      _selectedEnterprises.remove(enterprise);
+    if (_allEnterprises.contains(enterprise)) {
+      _allEnterprises.remove(enterprise);
     } else {
       int? index = _selectedBuyQuotation?.Enterprises
           ?.indexWhere((e) => e.enterprise.Code == enterprise.Code);
 
-      if (index != null && index > _selectedEnterprises.length) {
-        _selectedEnterprises.add(enterprise);
+      if (index != null && index > _allEnterprises.length) {
+        _allEnterprises.add(enterprise);
       } else {
-        _selectedEnterprises.insert(index ?? 0, enterprise);
+        _allEnterprises.insert(index ?? 0, enterprise);
       }
     }
     notifyListeners();
@@ -540,7 +540,7 @@ class BuyQuotationProvider with ChangeNotifier {
         enterprise: enterprise,
         searchValue: plu,
         configurationsProvider: configurationsProvider,
-        enterprisesCodes: _selectedEnterprises.map((e) => e.Code).toList(),
+        enterprisesCodes: _allEnterprises.map((e) => e.Code).toList(),
         routineTypeInt: 9,
       );
 

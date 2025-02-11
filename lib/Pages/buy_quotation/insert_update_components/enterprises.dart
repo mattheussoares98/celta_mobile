@@ -17,9 +17,9 @@ class Enterprises extends StatelessWidget {
         const Text("Empresas"),
         ListView.builder(
           shrinkWrap: true,
-          itemCount: buyQuotationProvider.selectedEnterprises.length,
+          itemCount: buyQuotationProvider.allEnterprises.length,
           itemBuilder: (context, index) {
-            final enterprise = buyQuotationProvider.selectedEnterprises[index];
+            final enterprise = buyQuotationProvider.allEnterprises[index];
 
             return Container(
               margin: const EdgeInsets.only(bottom: 4),
@@ -58,7 +58,7 @@ class Enterprises extends StatelessWidget {
                         ),
                       ),
                       Checkbox(
-                        value: buyQuotationProvider.selectedEnterprises
+                        value: buyQuotationProvider.allEnterprises
                             .contains(enterprise),
                         onChanged: (value) {
                           buyQuotationProvider

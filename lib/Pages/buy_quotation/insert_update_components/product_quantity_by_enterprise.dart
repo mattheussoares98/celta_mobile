@@ -24,7 +24,7 @@ class ProductQuantityByEnterprise extends StatelessWidget {
       shrinkWrap: true,
       itemCount: product.ProductEnterprises?.length,
       itemBuilder: (context, enterpriseIndex) {
-        int indexOfEnterprise = buyQuotationProvider.selectedEnterprises
+        int indexOfEnterprise = buyQuotationProvider.allEnterprises
             .indexWhere((e) =>
                 e.Code ==
                 product.ProductEnterprises![enterpriseIndex].EnterpriseCode);
@@ -34,7 +34,7 @@ class ProductQuantityByEnterprise extends StatelessWidget {
         }
 
         final enterprise =
-            buyQuotationProvider.selectedEnterprises[indexOfEnterprise];
+            buyQuotationProvider.allEnterprises[indexOfEnterprise];
 
         final productQuantity = buyQuotationProvider
             .productsWithNewValues[productIndex].ProductEnterprises!

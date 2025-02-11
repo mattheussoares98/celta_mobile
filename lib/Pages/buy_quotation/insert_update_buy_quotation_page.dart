@@ -70,13 +70,13 @@ class _InsertUpdateBuyQuotationPageState
 
   void createControllersAndFocusNode(
       BuyQuotationProvider buyQuotationProvider) {
-    if (buyQuotationProvider.selectedEnterprises.isEmpty == true) {
+    if (buyQuotationProvider.allEnterprises.isEmpty == true) {
       return;
     } else {
-      controllers = buyQuotationProvider.selectedEnterprises
+      controllers = buyQuotationProvider.allEnterprises
           .map((e) => {e.Code: TextEditingController()})
           .toList();
-      focusNodes = buyQuotationProvider.selectedEnterprises
+      focusNodes = buyQuotationProvider.allEnterprises
           .map((e) => {e.Code: FocusNode()})
           .toList();
     }

@@ -24,7 +24,7 @@ class SaveButton extends StatelessWidget {
 
     return IconButton(
       onPressed: () async {
-        if (buyQuotationProvider.selectedEnterprises.isEmpty) {
+        if (buyQuotationProvider.allEnterprises.isEmpty) {
           ShowSnackbarMessage.show(
             message: "Selecione pelo menos uma empresa!",
             context: context,

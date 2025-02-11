@@ -80,7 +80,7 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
               productIndex: productIndex,
               selectedProductIndex: selectedProductIndex,
               updateSelectedIndex:
-                  buyQuotationProvider.selectedEnterprises.isEmpty
+                  buyQuotationProvider.allEnterprises.isEmpty
                       ? null
                       : () {
                           updateSelectedIndex(
@@ -111,9 +111,9 @@ void updateControllersQuantity({
     return;
   }
 
-  for (var x = 0; x < buyQuotationProvider.selectedEnterprises.length; x++) {
+  for (var x = 0; x < buyQuotationProvider.allEnterprises.length; x++) {
     //a quantidade de controllers é criado de acordo com a quantidade de empresas selecionadas
-    final enterprise = buyQuotationProvider.selectedEnterprises[x];
+    final enterprise = buyQuotationProvider.allEnterprises[x];
 
     final productQuantity = buyQuotationProvider
         .productsWithNewValues[productIndex].ProductEnterprises!
