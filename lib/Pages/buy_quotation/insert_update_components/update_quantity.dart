@@ -49,10 +49,13 @@ class UpdateQuantity extends StatelessWidget {
         children: [
           ListView.builder(
             shrinkWrap: true,
-            itemCount: buyQuotationProvider.allEnterprises.length,
+            itemCount: buyQuotationProvider.allEnterprises
+                .where((e) => e.isSelected)
+                .length,
             itemBuilder: (context, index) {
-              final enterprise =
-                  buyQuotationProvider.allEnterprises[index];
+              final enterprise = buyQuotationProvider.allEnterprises
+                  .where((e) => e.isSelected)
+                  .toList()[index];
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),

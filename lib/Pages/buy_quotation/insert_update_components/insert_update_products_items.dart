@@ -84,7 +84,9 @@ class _InsertUpdateProductsItemsState extends State<InsertUpdateProductsItems> {
             return InsertUpdateProductItem(
               productIndex: productIndex,
               selectedProductIndex: selectedProductIndex,
-              updateSelectedIndex: buyQuotationProvider.allEnterprises.isEmpty
+              updateSelectedIndex: buyQuotationProvider.allEnterprises
+                      .where((e) => e.isSelected)
+                      .isEmpty
                   ? null
                   : () {
                       updateSelectedIndex(

@@ -98,8 +98,7 @@ class BuyQuotationProvider with ChangeNotifier {
         Code: _selectedBuyQuotation?.Code,
         DateOfCreation: _selectedBuyQuotation?.DateOfCreation ??
             DateTime.now().toIso8601String(),
-        DateOfLimit:
-            _selectedBuyQuotation?.DateOfLimit, //TODO create method to update
+        DateOfLimit: _selectedBuyQuotation?.DateOfLimit,
         PersonalizedCode: _selectedBuyQuotation?.PersonalizedCode,
         Observations: observationsController
             .text, //quando acessa a página já altero o controller pra ser igual às observações da cotação
