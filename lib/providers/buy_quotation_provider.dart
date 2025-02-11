@@ -84,6 +84,17 @@ class BuyQuotationProvider with ChangeNotifier {
         );
       }).toList();
 
+      int getEnterpriseCode(EnterpriseModel enterprise) {
+        final equal = _selectedBuyQuotation?.Enterprises
+            ?.where((e) => e.enterprise.Code == enterprise.Code)
+            .first;
+
+        if (equal != null) {
+          return equal.Code!;
+        }
+        return 0;
+      }
+
       final filters = BuyQuotationModel(
         CrossIdentity: UserData.crossIdentity,
         Code: _selectedBuyQuotation?.Code,
@@ -98,7 +109,7 @@ class BuyQuotationProvider with ChangeNotifier {
         Enterprises: _allEnterprises
             .where((e) => e.isSelected)
             .map((e) => BuyQuotationEnterpriseModel(
-                  Code: 0,
+                  Code: getEnterpriseCode(e),
                   enterprise: BuyQuotationEnterprise(
                     PersonalizedCode: e.PersonalizedCode.toString(),
                     Name: e.Name,
@@ -107,7 +118,7 @@ class BuyQuotationProvider with ChangeNotifier {
                     Code: e.Code,
                   ),
                 ))
-            .toList(), //TODO get correct enterprises when adding or when is updating
+            .toList(),
         Products: productWithCorrectIsInsertingValue,
       ).toJson(isInserting: isInserting);
 
