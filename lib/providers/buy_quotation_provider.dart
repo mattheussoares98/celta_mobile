@@ -96,6 +96,7 @@ class BuyQuotationProvider with ChangeNotifier {
             .text, //quando acessa a página já altero o controller pra ser igual às observações da cotação
         Buyer: buyer,
         Enterprises: _allEnterprises
+            .where((e) => e.isSelected)
             .map((e) => BuyQuotationEnterpriseModel(
                   Code: 0,
                   enterprise: BuyQuotationEnterprise(
@@ -401,7 +402,23 @@ class BuyQuotationProvider with ChangeNotifier {
           );
         }).toList();
 
-        _allEnterprises.addAll(enterprises);
+        _allEnterprises.addAll(enterprises.map((e) => EnterpriseModel(
+              Code: e.Code,
+              PersonalizedCode: e.PersonalizedCode,
+              Name: e.Name,
+              CnpjNumber: e.CnpjNumber,
+              CodigoInternoVendaMobile_ModeloPedido:
+                  e.CodigoInternoVendaMobile_ModeloPedido,
+              useEcommerceSale: e.useEcommerceSale,
+              useRetailSale: e.useRetailSale,
+              useWholeSale: e.useWholeSale,
+              EnterpriseParticipateEnterpriseGroup:
+                  e.EnterpriseParticipateEnterpriseGroup,
+              ProductCodeSizeOfBalanceLabel: e.ProductCodeSizeOfBalanceLabel,
+              ProductCodeWithCheckerDigit: e.ProductCodeWithCheckerDigit,
+              InscriptionNumber: e.InscriptionNumber,
+              isSelected: true,
+            )));
 
         int indexOfBuyer = _buyers.indexWhere(
           (e) => e.Code == _selectedBuyQuotation?.Buyer?.Code,
@@ -422,7 +439,11 @@ class BuyQuotationProvider with ChangeNotifier {
   }
 
   void updateEnterpriseIsSelected(EnterpriseModel enterprise) {
-    enterprise.isSelected = !enterprise.isSelected;
+    int enterpriseIndex = _allEnterprises
+        .indexWhere((e) => e.CnpjNumber == enterprise.CnpjNumber);
+
+    final oldEnterprise = _allEnterprises[enterpriseIndex];
+    oldEnterprise.isSelected = !oldEnterprise.isSelected;
     notifyListeners();
   }
 
