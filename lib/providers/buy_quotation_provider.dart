@@ -400,7 +400,24 @@ class BuyQuotationProvider with ChangeNotifier {
     _productsWithNewValues.clear();
 
     if (isInserting) {
-      _allEnterprises.addAll(enterpriseProvider.enterprises);
+      _allEnterprises
+          .addAll(enterpriseProvider.enterprises.map((e) => EnterpriseModel(
+                isSelected: true,
+                Code: e.Code,
+                PersonalizedCode: e.PersonalizedCode,
+                Name: e.Name,
+                CnpjNumber: e.CnpjNumber,
+                CodigoInternoVendaMobile_ModeloPedido:
+                    e.CodigoInternoVendaMobile_ModeloPedido,
+                useEcommerceSale: e.useEcommerceSale,
+                useRetailSale: e.useRetailSale,
+                useWholeSale: e.useWholeSale,
+                EnterpriseParticipateEnterpriseGroup:
+                    e.EnterpriseParticipateEnterpriseGroup,
+                ProductCodeSizeOfBalanceLabel: e.ProductCodeSizeOfBalanceLabel,
+                ProductCodeWithCheckerDigit: e.ProductCodeWithCheckerDigit,
+                InscriptionNumber: e.InscriptionNumber,
+              )));
       _selectedBuyer = null;
     } else {
       if (_selectedBuyQuotation?.Enterprises != null &&
