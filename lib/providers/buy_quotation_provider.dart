@@ -179,7 +179,9 @@ class BuyQuotationProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
     _selectedBuyQuotation = null;
-    _buyQuotations.clear();
+    if (complete == false) {
+      _buyQuotations.clear();
+    }
     notifyListeners();
 
     try {
@@ -235,8 +237,6 @@ class BuyQuotationProvider with ChangeNotifier {
               .toList();
         }
       }
-      SoapRequestResponse.responseAsMap;
-      SoapRequestResponse.responseAsString;
     } catch (e) {
       debugPrint(e.toString());
       _errorMessage = DefaultErrorMessage.ERROR;

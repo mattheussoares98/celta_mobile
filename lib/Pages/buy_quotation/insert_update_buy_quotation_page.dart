@@ -135,92 +135,81 @@ class _InsertUpdateBuyQuotationPageState
 
     return Stack(
       children: [
-        PopScope(
-          onPopInvokedWithResult: (didPop, result) async {
-            if (enterprise != null) {
-              await buyQuotationProvider.getBuyQuotation(
-                context: context,
-                valueToSearch: "%",
-                searchByPersonalizedCode: false,
-                enterpriseCode: enterprise.Code,
-              );
-            }
-          },
-          child: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  ShowAlertDialog.show(
-                      context: context,
-                      title: "Deseja realmente sair?",
-                      content: const Text(
-                        "Se alguma alteração não foi salva, ela será perdida se você sair da tela",
-                      ),
-                      function: () {
-                        Navigator.of(context).pop();
-                      });
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                ),
-              ),
-              title: Text(isInserting ? "Inserindo" : "Alterando"),
-              actions: [
-                SaveButton(
-                  isInserting: isInserting,
-                  observationsController: observationsController,
-                  dateOfLimit: dateOfLimit,
-                  buyer: selectedBuyer,
-                ),
-              ],
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (buyQuotationProvider.selectedBuyQuotation == null &&
-                        !isInserting)
-                      TextButton(
-                        onPressed: () async {
-                          await loadCompleteBuyQuotation();
-                        },
-                        child: const Text("Pesquisar novamente"),
-                      ),
-                    Column(
-                      children: [
-                        SimpleInformations(
-                          isInserting:
-                              buyQuotationProvider.selectedBuyQuotation == null,
-                          observationsController: observationsController,
-                          observationsFocusNode: observationsFocusNode,
-                          dateOfLimit: dateOfLimit,
-                          buyer: selectedBuyer,
-                          updateBuyer: (buyer) {
-                            setState(() {
-                              selectedBuyer = buyer;
-                            });
-                          },
-                          updateDateOfLimit: (date) {
-                            setState(() {
-                              dateOfLimit = date;
-                            });
-                          },
-                        ),
-                        const Divider(),
-                        const Enterprises(),
-                        const Divider(),
-                        if (enterprise != null)
-                          InsertUpdateProductsItems(
-                            enterprise: enterprise,
-                            controllers: controllers,
-                            focusNodes: focusNodes,
-                          ),
-                      ],
+        Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                ShowAlertDialog.show(
+                    context: context,
+                    title: "Deseja realmente sair?",
+                    content: const Text(
+                      "Se alguma alteração não foi salva, ela será perdida se você sair da tela",
                     ),
-                  ],
-                ),
+                    function: () {
+                      Navigator.of(context).pop();
+                    });
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+              ),
+            ),
+            title: Text(isInserting ? "Inserindo" : "Alterando"),
+            actions: [
+              SaveButton(
+                isInserting: isInserting,
+                observationsController: observationsController,
+                dateOfLimit: dateOfLimit,
+                buyer: selectedBuyer,
+                enterpriseModel: enterprise,
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (buyQuotationProvider.selectedBuyQuotation == null &&
+                      !isInserting)
+                    TextButton(
+                      onPressed: () async {
+                        await loadCompleteBuyQuotation();
+                      },
+                      child: const Text("Pesquisar novamente"),
+                    ),
+                  Column(
+                    children: [
+                      SimpleInformations(
+                        isInserting:
+                            buyQuotationProvider.selectedBuyQuotation == null,
+                        observationsController: observationsController,
+                        observationsFocusNode: observationsFocusNode,
+                        dateOfLimit: dateOfLimit,
+                        buyer: selectedBuyer,
+                        updateBuyer: (buyer) {
+                          setState(() {
+                            selectedBuyer = buyer;
+                          });
+                        },
+                        updateDateOfLimit: (date) {
+                          setState(() {
+                            dateOfLimit = date;
+                          });
+                        },
+                      ),
+                      const Divider(),
+                      const Enterprises(),
+                      const Divider(),
+                      if (enterprise != null)
+                        InsertUpdateProductsItems(
+                          enterprise: enterprise,
+                          controllers: controllers,
+                          focusNodes: focusNodes,
+                        ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

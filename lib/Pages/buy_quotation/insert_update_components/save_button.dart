@@ -10,11 +10,13 @@ class SaveButton extends StatelessWidget {
   final TextEditingController observationsController;
   final DateTime? dateOfLimit;
   final BuyerModel? buyer;
+  final EnterpriseModel? enterpriseModel;
   const SaveButton({
     required this.isInserting,
     required this.observationsController,
     required this.dateOfLimit,
     required this.buyer,
+    required this.enterpriseModel,
     super.key,
   });
 
@@ -44,6 +46,14 @@ class SaveButton extends StatelessWidget {
               );
 
               if (updated) {
+                if (enterpriseModel != null) {
+                  await buyQuotationProvider.getBuyQuotation(
+                    context: context,
+                    valueToSearch: "%",
+                    searchByPersonalizedCode: false,
+                    enterpriseCode: enterpriseModel!.Code,
+                  );
+                }
                 Navigator.of(context).pop();
               }
             });
