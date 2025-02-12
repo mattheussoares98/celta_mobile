@@ -70,6 +70,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _errorMessage = "";
 
     try {
+      //TODO create method to count buyQuotation use
       List<BuyQuotationProductsModel> productWithCorrectIsInsertingValue =
           _productsWithNewValues.map((e) {
         int? indexProductInBuyQuotation = _selectedBuyQuotation?.Products
@@ -179,6 +180,7 @@ class BuyQuotationProvider with ChangeNotifier {
     if (complete == false) {
       _buyQuotations.clear();
     }
+
     notifyListeners();
 
     try {
