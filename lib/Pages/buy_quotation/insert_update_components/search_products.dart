@@ -46,9 +46,12 @@ class SearchProducts extends StatelessWidget {
             title: "Selecione os produtos",
             contentPadding: const EdgeInsets.all(3),
             insetPadding: const EdgeInsets.all(3),
-            showConfirmAndCancelMessage: false,
             canCloseClickingOut: false,
-            showCloseAlertDialogButton: true,
+            cancelMessage: "Cancelar",
+            confirmMessage: "Confirmar",
+            function: () {
+              // buyQuotationProvider
+            },
             content: Scaffold(
               body: ListView.builder(
                 itemCount: buyQuotationProvider.searchedProductsToAdd.length,
@@ -56,31 +59,51 @@ class SearchProducts extends StatelessWidget {
                   final product =
                       buyQuotationProvider.searchedProductsToAdd[index];
 
-                  return InkWell(
-                    onTap: () async {
-                      //TODO create method to select more than one product
-                    },
-                    child: Card(
-                        child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          TitleAndSubtitle.titleAndSubtitle(
-                            subtitle:
-                                "${product.name} (${product.packingQuantity})",
-                          ),
-                          TitleAndSubtitle.titleAndSubtitle(
-                            title: "PLU",
-                            subtitle: product.plu,
-                          ),
-                        ],
+                  return StatefulBuilder(
+                    builder: (context, setState) => Card(
+                        child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          buyQuotationProvider
+                              .addOrRemoveSelectedProduct(product);
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  TitleAndSubtitle.titleAndSubtitle(
+                                    subtitle:
+                                        "${product.name} (${product.packingQuantity})",
+                                  ),
+                                  TitleAndSubtitle.titleAndSubtitle(
+                                    title: "PLU",
+                                    subtitle: product.plu,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Checkbox(
+                              value: buyQuotationProvider.selectedsProductsToAdd
+                                  .contains(product),
+                              onChanged: (_) {
+                                setState(() {
+                                  buyQuotationProvider
+                                      .addOrRemoveSelectedProduct(product);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     )),
                   );
                 },
               ),
             ),
-            function: () async {},
           );
         }
       },

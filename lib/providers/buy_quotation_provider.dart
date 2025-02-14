@@ -50,6 +50,10 @@ class BuyQuotationProvider with ChangeNotifier {
   List<GetProductJsonModel?> _productsToAdd = [];
   List<GetProductJsonModel?> get productsToAdd => _productsToAdd;
 
+  List<GetProductJsonModel?> _selectedsProductsToAdd = [];
+  List<GetProductJsonModel?> get selectedsProductsToAdd =>
+      _selectedsProductsToAdd;
+
   List<BuyerModel> _buyers = [];
   List<BuyerModel> get buyers => [..._buyers];
 
@@ -60,6 +64,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _selectedBuyer = null;
     _productToFilter = null;
     _selectedSupplier = null;
+    _searchedProductsToAdd.clear();
   }
 
   Future<bool> insertUpdateBuyQuotation({
@@ -711,5 +716,14 @@ class BuyQuotationProvider with ChangeNotifier {
     );
 
     _selectedBuyQuotation = updated;
+  }
+
+  void addOrRemoveSelectedProduct(GetProductJsonModel product) {
+    if (_selectedsProductsToAdd.contains(product)) {
+      _selectedsProductsToAdd.remove(product);
+    } else {
+      _selectedsProductsToAdd.add(product);
+    }
+    notifyListeners();
   }
 }
