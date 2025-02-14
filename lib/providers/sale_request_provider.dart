@@ -156,9 +156,11 @@ class SaleRequestProvider with ChangeNotifier {
     if (customers.isEmpty) {
       _customers.clear();
     } else {
-      final customersInDatabase = jsonDecode(customers);
+      final Map<String, dynamic> customersInDatabase = jsonDecode(customers);
 
-      _customers[enterpriseCode] = customersInDatabase[enterpriseCode]
+      if (!customersInDatabase.containsKey(enterpriseCode)) return;
+
+      _customers[enterpriseCode] = (customersInDatabase[enterpriseCode] as List)
           .map<CustomerModel>((e) => CustomerModel.fromJson(e))
           .toList();
     }
