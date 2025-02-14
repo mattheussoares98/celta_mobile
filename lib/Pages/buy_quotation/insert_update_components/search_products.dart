@@ -40,11 +40,10 @@ class SearchProducts extends StatelessWidget {
           context: context,
         );
 
-        if (buyQuotationProvider.searchedProductsToAdd.length > 1 &&
-            buyQuotationProvider.productToAdd == null) {
+        if (buyQuotationProvider.searchedProductsToAdd.length > 1) {
           ShowAlertDialog.show(
             context: context,
-            title: "Selecione um produto",
+            title: "Selecione os produtos",
             contentPadding: const EdgeInsets.all(3),
             insetPadding: const EdgeInsets.all(3),
             showConfirmAndCancelMessage: false,
@@ -59,13 +58,7 @@ class SearchProducts extends StatelessWidget {
 
                   return InkWell(
                     onTap: () async {
-                      Navigator.of(context).pop();
-                      await buyQuotationProvider
-                          .insertNewProductInProductsWithNewValues(
-                        plu: product.plu!,
-                        enterprise: enterprise,
-                        configurationsProvider: configurationsProvider,
-                      );
+                      //TODO create method to select more than one product
                     },
                     child: Card(
                         child: Padding(

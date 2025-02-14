@@ -47,8 +47,8 @@ class BuyQuotationProvider with ChangeNotifier {
   List<GetProductJsonModel> _searchedProductsToAdd = [];
   List<GetProductJsonModel> get searchedProductsToAdd =>
       [..._searchedProductsToAdd];
-  GetProductJsonModel? _productToAdd;
-  GetProductJsonModel? get productToAdd => _productToAdd;
+  List<GetProductJsonModel?> _productsToAdd = [];
+  List<GetProductJsonModel?> get productsToAdd => _productsToAdd;
 
   List<BuyerModel> _buyers = [];
   List<BuyerModel> get buyers => [..._buyers];
@@ -70,9 +70,8 @@ class BuyQuotationProvider with ChangeNotifier {
     _errorMessage = "";
 
     FirebaseHelper.addSoapCallInFirebase(FirebaseCallEnum.buyQuotation);
-    
+
     try {
-      
       List<BuyQuotationProductsModel> productWithCorrectIsInsertingValue =
           _productsWithNewValues.map((e) {
         int? indexProductInBuyQuotation = _selectedBuyQuotation?.Products
@@ -512,7 +511,7 @@ class BuyQuotationProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
     _searchedProductsToAdd.clear();
-    _productToAdd = null;
+    _productsToAdd.clear();
     notifyListeners();
 
     try {
@@ -538,12 +537,12 @@ class BuyQuotationProvider with ChangeNotifier {
                 .toList();
 
         if (_searchedProductsToAdd.length == 1) {
-          _productToAdd = _searchedProductsToAdd[0];
           await insertNewProductInProductsWithNewValues(
-            plu: _productToAdd!.plu!,
+            product: _searchedProductsToAdd[0],
             enterprise: enterprise,
             configurationsProvider: configurationsProvider,
           );
+          _searchedProductsToAdd.clear();
         }
       }
 
@@ -560,30 +559,25 @@ class BuyQuotationProvider with ChangeNotifier {
   }
 
   Future<void> insertNewProductInProductsWithNewValues({
-    required String plu,
+    required GetProductJsonModel product,
     required EnterpriseModel enterprise,
     required ConfigurationsProvider configurationsProvider,
   }) async {
     _isLoading = true;
     _errorMessage = "";
-    _productToAdd = null;
+    _productsToAdd.clear();
     notifyListeners();
 
     try {
-      if (_productsWithNewValues.map((e) => e.Product?.PLU).contains(plu)) {
+      if (_productsWithNewValues
+          .map((e) => e.Product?.PLU)
+          .contains(product.plu)) {
         ShowSnackbarMessage.show(
           message: "Produto já adicionado",
           context: NavigatorKey.navigatorKey.currentContext!,
         );
         return;
       }
-      _searchedProductsToAdd = await SoapHelper.getProductsJsonModel(
-        enterprise: enterprise,
-        searchValue: plu,
-        configurationsProvider: configurationsProvider,
-        enterprisesCodes: _allEnterprises.map((e) => e.Code).toList(),
-        routineTypeInt: 9,
-      );
 
       if (SoapRequestResponse.errorMessage != "") {
         ShowSnackbarMessage.show(
@@ -592,57 +586,52 @@ class BuyQuotationProvider with ChangeNotifier {
         );
         return;
       }
-      final enterpriseCodes =
-          (json.decode(SoapRequestResponse.responseAsString) as List)
-              .map((e) => GetProductJsonModel.fromJson(e).enterpriseCode!)
-              .toList();
-
-      _productToAdd =
-          (json.decode(SoapRequestResponse.responseAsString) as List)
-              .map((e) => GetProductJsonModel.fromJson(e))
-              .toList()[0];
+      final enterpriseCodes = _allEnterprises
+          .where((e) => e.isSelected)
+          .map((e) => e.Code)
+          .toList();
 
       _productsWithNewValues.insert(
         0,
         BuyQuotationProductsModel(
           Code: 0,
           Product: ProductModel(
-            EnterpriseCode: _productToAdd?.enterpriseCode,
-            ProductCode: _productToAdd?.productCode,
-            ProductPackingCode: _productToAdd?.productPackingCode,
-            PLU: _productToAdd?.plu,
-            Name: _productToAdd?.name,
-            PackingQuantity: _productToAdd?.packingQuantity,
-            PendantPrintLabel: _productToAdd?.pendantPrintLabel,
+            EnterpriseCode: product.enterpriseCode,
+            ProductCode: product.productCode,
+            ProductPackingCode: product.productPackingCode,
+            PLU: product.plu,
+            Name: product.name,
+            PackingQuantity: product.packingQuantity,
+            PendantPrintLabel: product.pendantPrintLabel,
             AlterationPriceForAllPackings:
-                _productToAdd?.alterationPriceForAllPackings,
-            IsFatherOfGrate: _productToAdd?.isFatherOfGrate,
-            IsChildOfGrate: _productToAdd?.isChildOfGrate,
-            InClass: _productToAdd?.inClass,
+                product.alterationPriceForAllPackings,
+            IsFatherOfGrate: product.isFatherOfGrate,
+            IsChildOfGrate: product.isChildOfGrate,
+            InClass: product.inClass,
             MarkUpdateClassInAdjustSalePriceIndividual:
-                _productToAdd?.markUpdateClassInAdjustSalePriceIndividual,
-            Value: _productToAdd?.value,
-            BalanceLabelQuantity: _productToAdd?.balanceLabelQuantity,
-            RetailPracticedPrice: _productToAdd?.retailPracticedPrice,
-            RetailSalePrice: _productToAdd?.retailSalePrice,
-            RetailOfferPrice: _productToAdd?.retailOfferPrice,
-            WholePracticedPrice: _productToAdd?.wholePracticedPrice,
-            WholeSalePrice: _productToAdd?.wholeSalePrice,
-            WholeOfferPrice: _productToAdd?.wholeOfferPrice,
-            ECommercePracticedPrice: _productToAdd?.eCommercePracticedPrice,
-            ECommerceSalePrice: _productToAdd?.eCommerceSalePrice,
-            ECommerceOfferPrice: _productToAdd?.eCommerceOfferPrice,
-            MinimumWholeQuantity: _productToAdd?.minimumWholeQuantity,
-            OperationalCost: _productToAdd?.operationalCost,
-            ReplacementCost: _productToAdd?.replacementCost,
-            ReplacementCostMidle: _productToAdd?.replacementCostMidle,
-            LiquidCost: _productToAdd?.liquidCost,
-            LiquidCostMidle: _productToAdd?.liquidCostMidle,
-            RealCost: _productToAdd?.realCost,
-            RealLiquidCost: _productToAdd?.realLiquidCost,
-            FiscalCost: _productToAdd?.fiscalCost,
-            FiscalLiquidCost: _productToAdd?.fiscalLiquidCost,
-            PriceCost: _productToAdd?.priceCost?.LiquidCost,
+                product.markUpdateClassInAdjustSalePriceIndividual,
+            Value: product.value,
+            BalanceLabelQuantity: product.balanceLabelQuantity,
+            RetailPracticedPrice: product.retailPracticedPrice,
+            RetailSalePrice: product.retailSalePrice,
+            RetailOfferPrice: product.retailOfferPrice,
+            WholePracticedPrice: product.wholePracticedPrice,
+            WholeSalePrice: product.wholeSalePrice,
+            WholeOfferPrice: product.wholeOfferPrice,
+            ECommercePracticedPrice: product.eCommercePracticedPrice,
+            ECommerceSalePrice: product.eCommerceSalePrice,
+            ECommerceOfferPrice: product.eCommerceOfferPrice,
+            MinimumWholeQuantity: product.minimumWholeQuantity,
+            OperationalCost: product.operationalCost,
+            ReplacementCost: product.replacementCost,
+            ReplacementCostMidle: product.replacementCostMidle,
+            LiquidCost: product.liquidCost,
+            LiquidCostMidle: product.liquidCostMidle,
+            RealCost: product.realCost,
+            RealLiquidCost: product.realLiquidCost,
+            FiscalCost: product.fiscalCost,
+            FiscalLiquidCost: product.fiscalLiquidCost,
+            PriceCost: product.priceCost?.LiquidCost,
           ),
           ProductEnterprises: enterpriseCodes
               .map(
