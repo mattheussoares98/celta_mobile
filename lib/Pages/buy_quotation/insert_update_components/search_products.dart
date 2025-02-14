@@ -48,9 +48,13 @@ class SearchProducts extends StatelessWidget {
             insetPadding: const EdgeInsets.all(3),
             canCloseClickingOut: false,
             cancelMessage: "Cancelar",
-            confirmMessage: "Confirmar",
+            confirmMessage: "Adicionar",
             function: () {
-              // buyQuotationProvider
+              buyQuotationProvider.insertNewProductInProductsWithNewValues(
+                enterprise: enterprise,
+                configurationsProvider: configurationsProvider,
+                products: buyQuotationProvider.selectedsProductsToAdd,
+              );
             },
             content: Scaffold(
               body: ListView.builder(

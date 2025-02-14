@@ -47,11 +47,9 @@ class BuyQuotationProvider with ChangeNotifier {
   List<GetProductJsonModel> _searchedProductsToAdd = [];
   List<GetProductJsonModel> get searchedProductsToAdd =>
       [..._searchedProductsToAdd];
-  List<GetProductJsonModel?> _productsToAdd = [];
-  List<GetProductJsonModel?> get productsToAdd => _productsToAdd;
 
-  List<GetProductJsonModel?> _selectedsProductsToAdd = [];
-  List<GetProductJsonModel?> get selectedsProductsToAdd =>
+  List<GetProductJsonModel> _selectedsProductsToAdd = [];
+  List<GetProductJsonModel> get selectedsProductsToAdd =>
       _selectedsProductsToAdd;
 
   List<BuyerModel> _buyers = [];
@@ -516,7 +514,6 @@ class BuyQuotationProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
     _searchedProductsToAdd.clear();
-    _productsToAdd.clear();
     notifyListeners();
 
     try {
@@ -542,12 +539,11 @@ class BuyQuotationProvider with ChangeNotifier {
                 .toList();
 
         if (_searchedProductsToAdd.length == 1) {
-          await insertNewProductInProductsWithNewValues(
-            product: _searchedProductsToAdd[0],
+          insertNewProductInProductsWithNewValues(
+            products: _searchedProductsToAdd,
             enterprise: enterprise,
             configurationsProvider: configurationsProvider,
           );
-          _searchedProductsToAdd.clear();
         }
       }
 
@@ -563,34 +559,22 @@ class BuyQuotationProvider with ChangeNotifier {
     }
   }
 
-  Future<void> insertNewProductInProductsWithNewValues({
-    required GetProductJsonModel product,
+  void insertNewProductInProductsWithNewValues({
+    required List<GetProductJsonModel> products,
     required EnterpriseModel enterprise,
     required ConfigurationsProvider configurationsProvider,
   }) async {
-    _isLoading = true;
-    _errorMessage = "";
-    _productsToAdd.clear();
-    notifyListeners();
-
-    try {
+    products.forEach((product) {
       if (_productsWithNewValues
           .map((e) => e.Product?.PLU)
           .contains(product.plu)) {
         ShowSnackbarMessage.show(
-          message: "Produto já adicionado",
-          context: NavigatorKey.navigatorKey.currentContext!,
+          message: "O produto ${product.name} de PLU (${product.plu}) já foi adicionado",
+          context: NavigatorKey.navigatorKey.currentState!.context,
         );
         return;
       }
 
-      if (SoapRequestResponse.errorMessage != "") {
-        ShowSnackbarMessage.show(
-          message: _errorMessage,
-          context: NavigatorKey.navigatorKey.currentContext!,
-        );
-        return;
-      }
       final enterpriseCodes = _allEnterprises
           .where((e) => e.isSelected)
           .map((e) => e.Code)
@@ -649,15 +633,7 @@ class BuyQuotationProvider with ChangeNotifier {
               .toList(),
         ),
       );
-    } catch (e) {
-      ShowSnackbarMessage.show(
-        message: e.toString(),
-        context: NavigatorKey.navigatorKey.currentContext!,
-      );
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+    });
   }
 
   void removeProductWithNewValue(int index) {
