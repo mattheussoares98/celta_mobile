@@ -711,7 +711,7 @@ class ResearchPricesProvider with ChangeNotifier {
       }
 
       FirebaseHelper.addSoapCallInFirebase(
-        firebaseCallEnum: FirebaseCallEnum.researchPricesInsertPrice,
+        FirebaseCallEnum.researchPricesInsertPrice,
       );
     } catch (e) {
       //print("Erro para obter os produtos: $e");

@@ -285,7 +285,7 @@ class CustomerRegisterProvider with ChangeNotifier {
           passwordConfirmationController: passwordConfirmationController,
         );
         FirebaseHelper.addSoapCallInFirebase(
-            firebaseCallEnum: FirebaseCallEnum.customerRegister);
+            FirebaseCallEnum.customerRegister);
       }
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');

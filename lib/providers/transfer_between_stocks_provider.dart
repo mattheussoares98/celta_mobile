@@ -283,7 +283,7 @@ class TransferBetweenStocksProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.transferBetweenStocksConfirmAdjust,
+      FirebaseCallEnum.transferBetweenStocksConfirmAdjust,
     );
 
     _updateProductCodeAndProductPackingCode(indexOfProduct);

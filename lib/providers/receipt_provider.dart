@@ -136,7 +136,7 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.receiptEntryQuantity,
+      FirebaseCallEnum.receiptEntryQuantity,
     );
 
     try {
@@ -214,7 +214,7 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.receiptEntryQuantity,
+      FirebaseCallEnum.receiptEntryQuantity,
     );
 
     try {
@@ -402,7 +402,7 @@ class ReceiptProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.receiptLiberate,
+      FirebaseCallEnum.receiptLiberate,
     );
 
     try {

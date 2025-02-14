@@ -91,7 +91,7 @@ class MyDrawer extends StatelessWidget {
 
                 Navigator.of(context).pop();
                 FirebaseHelper.addClickedInLink(
-                  firebaseCallEnum: FirebaseCallEnum.aboutUs,
+                  FirebaseCallEnum.aboutUs,
                 );
               },
               text: "Sobre nós",
@@ -110,7 +110,7 @@ class MyDrawer extends StatelessWidget {
                 Navigator.of(context).pop();
 
                 FirebaseHelper.addClickedInLink(
-                  firebaseCallEnum: FirebaseCallEnum.instagram,
+                  FirebaseCallEnum.instagram,
                 );
               },
               text: "Instagram",
@@ -129,7 +129,7 @@ class MyDrawer extends StatelessWidget {
                 Navigator.of(context).pop();
 
                 FirebaseHelper.addClickedInLink(
-                  firebaseCallEnum: FirebaseCallEnum.linkedin,
+                  FirebaseCallEnum.linkedin,
                 );
               },
               text: "Linkedin",
@@ -148,7 +148,7 @@ class MyDrawer extends StatelessWidget {
                 Navigator.of(context).pop();
 
                 FirebaseHelper.addClickedInLink(
-                  firebaseCallEnum: FirebaseCallEnum.facebook,
+                  FirebaseCallEnum.facebook,
                 );
               },
               text: "Facebook",

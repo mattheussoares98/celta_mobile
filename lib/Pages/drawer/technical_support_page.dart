@@ -117,9 +117,7 @@ class TechnicalSupportPage extends StatelessWidget {
                             context: context,
                           );
                         }
-                        FirebaseHelper.addClickedInLink(
-                          firebaseCallEnum: firebaseCallEnum,
-                        );
+                        FirebaseHelper.addClickedInLink(firebaseCallEnum);
                       },
                       child: FittedBox(child: Text(messageLeftButton)),
                     ),
@@ -150,9 +148,7 @@ class TechnicalSupportPage extends StatelessWidget {
                           context: context,
                         );
                       }
-                      FirebaseHelper.addClickedInLink(
-                        firebaseCallEnum: firebaseCallEnum,
-                      );
+                      FirebaseHelper.addClickedInLink(firebaseCallEnum);
                     },
                     child: FittedBox(child: Text(messageCenterButton)),
                   ),

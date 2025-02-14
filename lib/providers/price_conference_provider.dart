@@ -38,7 +38,7 @@ class PriceConferenceProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
+      FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
     );
 
     dynamic value = int.tryParse(controllerText);
@@ -115,7 +115,7 @@ class PriceConferenceProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
+      FirebaseCallEnum.priceConferenceGetProductOrSendToPrint,
     );
 
     bool newValue = !_products[index].pendantPrintLabel;

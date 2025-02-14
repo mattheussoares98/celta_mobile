@@ -246,7 +246,7 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.inventoryEntryQuantity,
+      FirebaseCallEnum.inventoryEntryQuantity,
     );
 
     try {
@@ -312,7 +312,7 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.inventoryEntryQuantity,
+      FirebaseCallEnum.inventoryEntryQuantity,
     );
 
     try {

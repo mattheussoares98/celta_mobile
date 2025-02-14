@@ -74,7 +74,6 @@ class ModulesItems extends StatelessWidget {
           context: context,
           isNew: true,
         ),
-        //TODO liberate this module only when is working
         ImageComponent.image(
           imagePath: 'lib/assets/Images/inventory.png',
           routine: 'Inventário'.toUpperCase(),

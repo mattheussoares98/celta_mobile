@@ -22,6 +22,7 @@ enum FirebaseCallEnum {
   adjustStockConfirmQuantity,
   administrativeWhats,
   bsWhats,
+  buyQuotation,
   buyRequestSave,
   customerRegister,
   callToCeltaNumber,
@@ -115,9 +116,9 @@ class FirebaseHelper {
     return errorMessage;
   }
 
-  static Future<void> addSoapCallInFirebase({
-    required FirebaseCallEnum firebaseCallEnum,
-  }) async {
+  static Future<void> addSoapCallInFirebase(
+    FirebaseCallEnum firebaseCallEnum,
+  ) async {
     Map<String, dynamic> newSoapAction = {
       "typeOfSearch": firebaseCallEnum.name,
     };
@@ -148,7 +149,7 @@ class FirebaseHelper {
                     ? "iOS"
                     : "android": FieldValue.increment(1),
               },
-              'users': FieldValue.arrayUnion([UserData.userName.toLowerCase()]),
+              'users': null,
               'datesUsed': FieldValue.arrayUnion(
                   [DateFormat('yyyy-MM-dd').format(DateTime.now())]),
             },
@@ -226,9 +227,9 @@ class FirebaseHelper {
     });
   }
 
-  static Future<void> addClickedInLink({
-    required FirebaseCallEnum firebaseCallEnum,
-  }) async {
+  static Future<void> addClickedInLink(
+    FirebaseCallEnum firebaseCallEnum,
+  ) async {
     DocumentReference docRef =
         _cleckedLinkCollection.doc(UserData.enterpriseName);
 

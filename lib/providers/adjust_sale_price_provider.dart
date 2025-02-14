@@ -295,7 +295,7 @@ class AdjustSalePriceProvider with ChangeNotifier {
 
     try {
       FirebaseHelper.addSoapCallInFirebase(
-        firebaseCallEnum: FirebaseCallEnum.adjustSalePrice,
+        FirebaseCallEnum.adjustSalePrice,
       );
       final jsonRequest = _getJsonRequest(
         enterpriseCode: enterpriseCode,

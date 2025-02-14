@@ -894,7 +894,7 @@ class BuyRequestProvider with ChangeNotifier {
         clearAllData();
         await _updateDataInDatabase();
         FirebaseHelper.addSoapCallInFirebase(
-            firebaseCallEnum: FirebaseCallEnum.buyRequestSave);
+            FirebaseCallEnum.buyRequestSave);
       }
     } catch (e) {
       //print("Erro para salvar o pedido: $e");

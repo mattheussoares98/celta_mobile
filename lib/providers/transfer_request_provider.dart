@@ -649,7 +649,7 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.transferRequestSave,
+      FirebaseCallEnum.transferRequestSave,
     );
 
     try {

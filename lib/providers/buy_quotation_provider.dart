@@ -69,8 +69,10 @@ class BuyQuotationProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = "";
 
+    FirebaseHelper.addSoapCallInFirebase(FirebaseCallEnum.buyQuotation);
+    
     try {
-      //TODO create method to count buyQuotation use
+      
       List<BuyQuotationProductsModel> productWithCorrectIsInsertingValue =
           _productsWithNewValues.map((e) {
         int? indexProductInBuyQuotation = _selectedBuyQuotation?.Products

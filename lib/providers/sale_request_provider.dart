@@ -1002,7 +1002,7 @@ class SaleRequestProvider with ChangeNotifier {
     notifyListeners();
 
     FirebaseHelper.addSoapCallInFirebase(
-      firebaseCallEnum: FirebaseCallEnum.saleRequestSave,
+      FirebaseCallEnum.saleRequestSave,
     );
     try {
       final encodedJson = json.encode(
