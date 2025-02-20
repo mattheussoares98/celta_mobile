@@ -15,6 +15,7 @@ class InsertQuantityTextFormField extends StatefulWidget {
   final int lengthLimitingTextInputFormatter;
   final Function onFieldSubmitted;
   final bool canReceiveEmptyValue;
+  final bool? enabled;
   const InsertQuantityTextFormField({
     required this.focusNode,
     required this.newQuantityController,
@@ -26,6 +27,7 @@ class InsertQuantityTextFormField extends StatefulWidget {
     this.labelText = "Quantidade",
     this.hintText = "Quantidade",
     this.lengthLimitingTextInputFormatter = 10,
+    this.enabled = true,
     Key? key,
   }) : super(key: key);
 
@@ -41,6 +43,7 @@ class _InsertQuantityTextFormFieldState
     return Form(
       key: widget.formKey,
       child: TextFormField(
+        enabled: widget.enabled == true,
         autofocus: widget.autoFocus,
         focusNode: widget.focusNode,
         controller: widget.newQuantityController,

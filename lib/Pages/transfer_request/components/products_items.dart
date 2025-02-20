@@ -89,16 +89,19 @@ class _ProductsItemsState extends State<ProductsItems> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: transferRequestProvider.productsCount,
       itemBuilder: (context, index) {
+        TransferRequestProductsModel product =
+            transferRequestProvider.products[index];
+
         if (transferRequestProvider.products.isEmpty) return Container();
 
-        if (transferRequestProvider.productsCount == 1) {
+        if (transferRequestProvider.productsCount == 1 && product.Value > 0) {
           selectedIndex = 0;
+        } else if (transferRequestProvider.productsCount == 1 &&
+            product.Value == 0) {
+          selectedIndex = -1;
         }
 
         Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
-
-        TransferRequestProductsModel product =
-            transferRequestProvider.products[index];
 
         double _totalItensInCart = transferRequestProvider.getTotalItensInCart(
           ProductPackingCode: product.ProductPackingCode,

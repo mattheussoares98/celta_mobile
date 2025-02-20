@@ -147,6 +147,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             Expanded(
               flex: 10,
               child: InsertQuantityTextFormField(
+                enabled: widget.product.Value > 0,
                 focusNode: transferRequestProvider.consultedProductFocusNode,
                 newQuantityController: widget.consultedProductController,
                 formKey: widget.consultedProductFormKey,
