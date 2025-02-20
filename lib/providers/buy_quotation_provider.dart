@@ -431,7 +431,7 @@ class BuyQuotationProvider with ChangeNotifier {
           return enterpriseProvider.enterprises.firstWhere(
             (e) =>
                 e.CnpjNumber.toString() ==
-                buyQuotationEnterprise.enterprise.CnpjNumber,
+                buyQuotationEnterprise.enterprise.CnpjNumber?.toInt().toString(),
           );
         }).toList();
 
