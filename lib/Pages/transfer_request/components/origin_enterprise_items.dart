@@ -12,15 +12,14 @@ class OriginEnterpriseItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OriginEnterpriseItems> createState() =>
-      _OriginEnterpriseItemsState();
+  State<OriginEnterpriseItems> createState() => _OriginEnterpriseItemsState();
 }
 
-class _OriginEnterpriseItemsState
-    extends State<OriginEnterpriseItems> {
+class _OriginEnterpriseItemsState extends State<OriginEnterpriseItems> {
   @override
   Widget build(BuildContext context) {
-    int requestTypeCode = ModalRoute.of(context)!.settings.arguments as int;
+    TransferRequestModel selectedTransferRequestModel =
+        ModalRoute.of(context)!.settings.arguments as TransferRequestModel;
 
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);
@@ -31,24 +30,25 @@ class _OriginEnterpriseItemsState
             child: ListView.builder(
               itemCount: transferRequestProvider.originEnterprisesCount,
               itemBuilder: (context, index) {
-                TransferOriginEnterpriseModel originEnterprise =
+                TransferRequestEnterpriseModel originEnterprise =
                     transferRequestProvider.originEnterprises[index];
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER_DESTINY_ENTERPRISE,
                       arguments: {
-                        "requestTypeCode": requestTypeCode,
-                        "enterpriseOriginCode": originEnterprise.Code,
+                        "selectedTransferRequestModel":
+                            selectedTransferRequestModel,
+                        "originEnterprise": originEnterprise,
                       },
                     );
                   },
                   //sem esse Card, não funciona o gesture detector no campo inteiro
                   child: Card(
                     child: ListTile(
-                      leading: Text(originEnterprise.PersonalizedCode),
+                      leading: Text(originEnterprise.PersonalizedCode ?? ""),
                       title: Text(
-                        originEnterprise.Name,
+                        originEnterprise.Name ?? "",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),

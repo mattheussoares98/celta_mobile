@@ -31,7 +31,7 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: transferRequestProvider.requestModelsCount,
+              itemCount: transferRequestProvider.requestModels.length,
               itemBuilder: (context, index) {
                 TransferRequestModel transfer =
                     transferRequestProvider.requestModels[index];
@@ -39,7 +39,7 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER_ORIGIN_ENTERPRISE,
-                      arguments: transfer.Code,
+                      arguments: transfer,
                     );
                   },
                   //sem esse Card, não funciona o gesture detector no campo inteiro

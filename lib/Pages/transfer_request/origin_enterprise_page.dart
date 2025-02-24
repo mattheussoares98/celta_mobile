@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/models.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 
@@ -16,14 +17,15 @@ class _OriginEnterprisePageState extends State<OriginEnterprisePage> {
   bool isLoaded = false;
   @override
   void didChangeDependencies() async {
-    int requestTypeCode = ModalRoute.of(context)!.settings.arguments as int;
+    TransferRequestModel selectedTransferRequest =
+        ModalRoute.of(context)!.settings.arguments as TransferRequestModel;
 
     super.didChangeDependencies();
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: false);
     if (!isLoaded) {
       await transferRequestProvider.getOriginEnterprises(
-        requestTypeCode: requestTypeCode,
+        requestTypeCode: selectedTransferRequest.Code,
       );
     }
     isLoaded = true;
@@ -34,7 +36,8 @@ class _OriginEnterprisePageState extends State<OriginEnterprisePage> {
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);
 
-    int requestTypeCode = ModalRoute.of(context)!.settings.arguments as int;
+    TransferRequestModel selectedTransferRequest =
+        ModalRoute.of(context)!.settings.arguments as TransferRequestModel;
 
     return Stack(
       children: [
@@ -53,7 +56,7 @@ class _OriginEnterprisePageState extends State<OriginEnterprisePage> {
                       ? null
                       : () async {
                           await transferRequestProvider.getOriginEnterprises(
-                            requestTypeCode: requestTypeCode,
+                            requestTypeCode: selectedTransferRequest.Code,
                             isConsultingAgain: true,
                           );
                         },
@@ -65,7 +68,7 @@ class _OriginEnterprisePageState extends State<OriginEnterprisePage> {
             body: RefreshIndicator(
               onRefresh: () async {
                 await transferRequestProvider.getOriginEnterprises(
-                  requestTypeCode: requestTypeCode,
+                  requestTypeCode: selectedTransferRequest.Code,
                   isConsultingAgain: true,
                 );
               },
@@ -88,7 +91,7 @@ class _OriginEnterprisePageState extends State<OriginEnterprisePage> {
                           request: () async {
                             setState(() {});
                             await transferRequestProvider.getOriginEnterprises(
-                              requestTypeCode: requestTypeCode,
+                              requestTypeCode: selectedTransferRequest.Code,
                             );
                           }),
                     ),

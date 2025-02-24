@@ -14,8 +14,7 @@ class TransferRequestProvider with ChangeNotifier {
   bool _isLoadingRequestModel = false;
   bool get isLoadingRequestModel => _isLoadingRequestModel;
   List<TransferRequestModel> _requestModels = [];
-  get requestModels => [..._requestModels];
-  get requestModelsCount => _requestModels.length;
+  List<TransferRequestModel> get requestModels => [..._requestModels];
 
   void clearRequestModels() {
     _requestModels.clear();
@@ -33,7 +32,7 @@ class TransferRequestProvider with ChangeNotifier {
   String get errorMessageDestinyEnterprise => _errorMessageDestinyEnterprise;
   bool _isLoadingDestinyEnterprise = false;
   bool get isLoadingDestinyEnterprise => _isLoadingDestinyEnterprise;
-  List<TransferDestinyEnterpriseModel> _destinyEnterprises = [];
+  List<TransferRequestEnterpriseModel> _destinyEnterprises = [];
   get destinyEnterprises => [..._destinyEnterprises];
   get destinyEnterprisesCount => _destinyEnterprises.length;
 
@@ -46,7 +45,7 @@ class TransferRequestProvider with ChangeNotifier {
   String get errorMessageOriginEnterprise => _errorMessageOriginEnterprise;
   bool _isLoadingOriginEnterprise = false;
   bool get isLoadingOriginEnterprise => _isLoadingOriginEnterprise;
-  List<TransferOriginEnterpriseModel> _originEnterprises = [];
+  List<TransferRequestEnterpriseModel> _originEnterprises = [];
   get originEnterprises => [..._originEnterprises];
   get originEnterprisesCount => _originEnterprises.length;
 
@@ -469,7 +468,7 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   Future<void> getOriginEnterprises({
-    required int requestTypeCode,
+    required int? requestTypeCode,
     bool isConsultingAgain = false,
   }) async {
     if (_isLoadingOriginEnterprise) return;
@@ -496,10 +495,10 @@ class TransferRequestProvider with ChangeNotifier {
       _errorMessageOriginEnterprise = SoapRequestResponse.errorMessage;
 
       if (_errorMessageOriginEnterprise == "") {
-        TransferOriginEnterpriseModel.resultAsStringToOriginEnterpriseModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _originEnterprises,
-        );
+        _originEnterprises =
+            (json.decode(SoapRequestResponse.responseAsString) as List)
+                .map((e) => TransferRequestEnterpriseModel.fromJson(e))
+                .toList();
       }
     } catch (e) {
       //print('deu erro para consultar as empresas de origem: $e');
@@ -510,9 +509,9 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   int cartProductsCount({
-    required String enterpriseOriginCode,
-    required String enterpriseDestinyCode,
-    required String requestTypeCode,
+    required String? enterpriseOriginCode,
+    required String? enterpriseDestinyCode,
+    required String? requestTypeCode,
   }) {
     if (_cartProducts[requestTypeCode]?[enterpriseOriginCode]
             ?[enterpriseDestinyCode] ==
@@ -530,9 +529,9 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   double getTotalCartPrice({
-    required String enterpriseOriginCode,
-    required String enterpriseDestinyCode,
-    required String requestTypeCode,
+    required String? enterpriseOriginCode,
+    required String? enterpriseDestinyCode,
+    required String? requestTypeCode,
   }) {
     double total = 0;
     if (_cartProducts[requestTypeCode]?[enterpriseOriginCode]
@@ -551,16 +550,14 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   Future<void> getDestinyEnterprises({
-    required int requestTypeCode,
-    required int enterpriseOriginCode,
+    required int? requestTypeCode,
+    required int? enterpriseOriginCode,
     bool isConsultingAgain = false,
   }) async {
-    if (_isLoadingDestinyEnterprise) return;
     _errorMessageDestinyEnterprise = '';
     _isLoadingDestinyEnterprise = true;
     _destinyEnterprises.clear();
-
-    if (isConsultingAgain) notifyListeners();
+    notifyListeners();
 
     try {
       await SoapRequest.soapPost(
@@ -579,17 +576,18 @@ class TransferRequestProvider with ChangeNotifier {
       _errorMessageDestinyEnterprise = SoapRequestResponse.errorMessage;
 
       if (_errorMessageDestinyEnterprise == "") {
-        TransferDestinyEnterpriseModel.resultAsStringToDestinyEnterpriseModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _destinyEnterprises,
-        );
+        _destinyEnterprises =
+            (json.decode(SoapRequestResponse.responseAsString) as List)
+                .map((e) => TransferRequestEnterpriseModel.fromJson(e))
+                .toList();
       }
     } catch (e) {
       //print('deu erro para consultar as empresas de destino: $e');
       _errorMessageDestinyEnterprise = DefaultErrorMessage.ERROR;
+    } finally {
+      _isLoadingDestinyEnterprise = false;
+      notifyListeners();
     }
-    _isLoadingDestinyEnterprise = false;
-    notifyListeners();
   }
 
   Future<void> getProducts({

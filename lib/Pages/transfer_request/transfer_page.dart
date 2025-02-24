@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/models.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 import 'transfer_request.dart';
@@ -47,11 +48,17 @@ class _TransferPageState extends State<TransferPage> {
     if (!_isLoaded) {
       _isLoaded = true;
       Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+      TransferRequestModel selectedTransferRequestModel =
+          arguments["selectedTransferRequestModel"];
+      TransferRequestEnterpriseModel destinyEnterprise =
+          arguments["destinyEnterprise"];
+      TransferRequestEnterpriseModel originEnterprise =
+          arguments["originEnterprise"];
 
       await saleRequestProvider.restoreProducts(
-        requestTypeCode: arguments["requestTypeCode"].toString(),
-        enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
-        enterpriseDestinyCode: arguments["enterpriseDestinyCode"].toString(),
+        requestTypeCode: selectedTransferRequestModel.Code.toString(),
+        enterpriseOriginCode: originEnterprise.Code.toString(),
+        enterpriseDestinyCode: destinyEnterprise.Code.toString(),
       );
     }
   }
@@ -62,24 +69,29 @@ class _TransferPageState extends State<TransferPage> {
         Provider.of(context, listen: true);
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    TransferRequestModel selectedTransferRequestModel =
+        arguments["selectedTransferRequestModel"];
+    TransferRequestEnterpriseModel destinyEnterprise =
+        arguments["destinyEnterprise"];
+    TransferRequestEnterpriseModel originEnterprise =
+        arguments["originEnterprise"];
 
     int cartProductsCount = transferRequestProvider.cartProductsCount(
-      requestTypeCode: arguments["requestTypeCode"].toString(),
-      enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
-      enterpriseDestinyCode: arguments["enterpriseDestinyCode"].toString(),
+      requestTypeCode: selectedTransferRequestModel.Code.toString(),
+      enterpriseOriginCode: originEnterprise.Code.toString(),
+      enterpriseDestinyCode: destinyEnterprise.Code.toString(),
     );
 
     List<Widget> _pages = <Widget>[
       InsertProductsPage(
-        requestTypeCode: arguments["requestTypeCode"].toString(),
-        enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
-        enterpriseDestinyCode: arguments["enterpriseDestinyCode"].toString(),
+        requestTypeCode: selectedTransferRequestModel.Code.toString(),
+        enterpriseOriginCode: originEnterprise.Code.toString(),
+        enterpriseDestinyCode: destinyEnterprise.Code.toString(),
       ),
-      // SaleRequestInsertCostumer(enterpriseCode: 2),
       CartDetailsPage(
-        requestTypeCode: arguments["requestTypeCode"].toString(),
-        enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
-        enterpriseDestinyCode: arguments["enterpriseDestinyCode"].toString(),
+        selectedTransferRequestModel: selectedTransferRequestModel,
+        originEnterprise: originEnterprise,
+        destinyEnterprise: destinyEnterprise,
         keyboardIsOpen: MediaQuery.of(context).viewInsets.bottom == 0,
       ),
     ];
@@ -140,8 +152,7 @@ class _TransferPageState extends State<TransferPage> {
                                 child: FittedBox(
                                   child: Text(
                                     cartProductsCount.toString(),
-                                    style:
-                                        const TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -156,13 +167,11 @@ class _TransferPageState extends State<TransferPage> {
                           ConvertString.convertToBRL(
                             transferRequestProvider.getTotalCartPrice(
                               enterpriseOriginCode:
-                                  arguments["enterpriseOriginCode"]
-                                      .toString(),
+                                  originEnterprise.Code.toString(),
                               enterpriseDestinyCode:
-                                  arguments["enterpriseDestinyCode"]
-                                      .toString(),
+                                  destinyEnterprise.Code.toString(),
                               requestTypeCode:
-                                  arguments["requestTypeCode"].toString(),
+                                  selectedTransferRequestModel.Code.toString(),
                             ),
                           ),
                           style: const TextStyle(

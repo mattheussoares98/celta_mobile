@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/models.dart';
 import 'components/components.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 
 class CartDetailsPage extends StatefulWidget {
-  final String enterpriseOriginCode;
-  final String enterpriseDestinyCode;
-  final String requestTypeCode;
+  final TransferRequestEnterpriseModel originEnterprise;
+  final TransferRequestEnterpriseModel destinyEnterprise;
+  final TransferRequestModel selectedTransferRequestModel;
   final bool keyboardIsOpen;
   const CartDetailsPage({
-    required this.enterpriseOriginCode,
-    required this.enterpriseDestinyCode,
-    required this.requestTypeCode,
+    required this.originEnterprise,
+    required this.destinyEnterprise,
+    required this.selectedTransferRequestModel,
     required this.keyboardIsOpen,
     Key? key,
   }) : super(key: key);
@@ -28,9 +29,9 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
   String textButtonMessage({
     required TransferRequestProvider transferRequestProvider,
-    required String enterpriseOriginCode,
-    required String enterpriseDestinyCode,
-    required String requestTypeCode,
+    required String? enterpriseOriginCode,
+    required String? enterpriseDestinyCode,
+    required String? requestTypeCode,
   }) {
     if (transferRequestProvider.cartProductsCount(
           enterpriseOriginCode: enterpriseOriginCode,
@@ -50,9 +51,9 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     if (transferRequestProvider.isLoadingSaveTransferRequest) {
       return null;
     } else if (transferRequestProvider.cartProductsCount(
-          enterpriseOriginCode: widget.enterpriseOriginCode,
-          enterpriseDestinyCode: widget.enterpriseDestinyCode,
-          requestTypeCode: widget.requestTypeCode,
+          enterpriseOriginCode: widget.originEnterprise.Code?.toString(),
+          enterpriseDestinyCode: widget.destinyEnterprise.Code?.toString(),
+          requestTypeCode: widget.selectedTransferRequestModel.Code?.toString(),
         ) ==
         0) {
       return null;
@@ -69,9 +70,11 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
               ),
               function: () async {
                 await transferRequestProvider.saveTransferRequest(
-                  enterpriseOriginCode: widget.enterpriseOriginCode,
-                  enterpriseDestinyCode: widget.enterpriseDestinyCode,
-                  requestTypeCode: widget.requestTypeCode,
+                  enterpriseOriginCode: widget.originEnterprise.Code.toString(),
+                  enterpriseDestinyCode:
+                      widget.destinyEnterprise.Code.toString(),
+                  requestTypeCode:
+                      widget.selectedTransferRequestModel.Code.toString(),
                   context: context,
                 );
               },
@@ -92,29 +95,30 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
         Provider.of(context, listen: true);
 
     int cartProductsCount = transferRequestProvider.cartProductsCount(
-      enterpriseOriginCode: widget.enterpriseOriginCode,
-      enterpriseDestinyCode: widget.enterpriseDestinyCode,
-      requestTypeCode: widget.requestTypeCode,
+      enterpriseOriginCode: widget.originEnterprise.Code?.toString(),
+      enterpriseDestinyCode: widget.destinyEnterprise.Code?.toString(),
+      requestTypeCode: widget.selectedTransferRequestModel.Code?.toString(),
     );
 
     double totalCartPrice = transferRequestProvider.getTotalCartPrice(
-      enterpriseOriginCode: widget.enterpriseOriginCode,
-      enterpriseDestinyCode: widget.enterpriseDestinyCode,
-      requestTypeCode: widget.requestTypeCode,
+      enterpriseOriginCode: widget.originEnterprise.Code?.toString(),
+      enterpriseDestinyCode: widget.destinyEnterprise.Code?.toString(),
+      requestTypeCode: widget.selectedTransferRequestModel.Code?.toString(),
     );
 
     return Column(
       children: [
         CartItems(
-          enterpriseOriginCode: widget.enterpriseOriginCode,
-          enterpriseDestinyCode: widget.enterpriseDestinyCode,
-          requestTypeCode: widget.requestTypeCode,
+          enterpriseOriginCode: widget.originEnterprise.Code.toString(),
+          enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
+          requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
           textEditingController: _textEditingController,
         ),
         if (transferRequestProvider.cartProductsCount(
-              enterpriseOriginCode: widget.enterpriseOriginCode,
-              enterpriseDestinyCode: widget.enterpriseDestinyCode,
-              requestTypeCode: widget.requestTypeCode,
+              enterpriseOriginCode: widget.originEnterprise.Code?.toString(),
+              enterpriseDestinyCode: widget.destinyEnterprise.Code?.toString(),
+              requestTypeCode:
+                  widget.selectedTransferRequestModel.Code?.toString(),
             ) ==
             0)
           Expanded(
@@ -258,11 +262,15 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                       textButtonMessage(
                                         transferRequestProvider:
                                             transferRequestProvider,
-                                        enterpriseOriginCode:
-                                            widget.enterpriseOriginCode,
-                                        enterpriseDestinyCode:
-                                            widget.enterpriseDestinyCode,
-                                        requestTypeCode: widget.requestTypeCode,
+                                        enterpriseOriginCode: widget
+                                            .originEnterprise.Code
+                                            .toString(),
+                                        enterpriseDestinyCode: widget
+                                            .destinyEnterprise.Code
+                                            .toString(),
+                                        requestTypeCode: widget
+                                            .selectedTransferRequestModel.Code
+                                            .toString(),
                                       ),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,

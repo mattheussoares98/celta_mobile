@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
+import '../../models/models.dart';
 import 'components/destiny_enterprise_items.dart';
 import '../../providers/providers.dart';
 
@@ -13,29 +14,37 @@ class DestinyEnterprisePage extends StatefulWidget {
 }
 
 class _DestinyEnterprisePageState extends State<DestinyEnterprisePage> {
-  bool isLoaded = false;
   @override
-  void didChangeDependencies() async {
-    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+  void initState() {
+    super.initState();
 
-    super.didChangeDependencies();
-    TransferRequestProvider transferRequestProvider =
-        Provider.of(context, listen: true);
-    if (!isLoaded) {
-      await transferRequestProvider.getDestinyEnterprises(
-        enterpriseOriginCode: arguments["enterpriseOriginCode"],
-        requestTypeCode: arguments["requestTypeCode"],
-      );
-    }
-    isLoaded = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        TransferRequestProvider transferRequestProvider =
+            Provider.of(context, listen: false);
+        Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+        TransferRequestModel selectedTranferRequestModel =
+            arguments["selectedTransferRequestModel"];
+        TransferRequestEnterpriseModel originEnterprise =
+            arguments["originEnterprise"];
+
+        await transferRequestProvider.getDestinyEnterprises(
+          enterpriseOriginCode: originEnterprise.Code,
+          requestTypeCode: selectedTranferRequestModel.Code,
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    TransferRequestProvider transferRequestProvider =
-        Provider.of(context, listen: true);
+    TransferRequestProvider transferRequestProvider = Provider.of(context);
 
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    TransferRequestModel selectedTranferRequestModel =
+        arguments["selectedTransferRequestModel"];
+    TransferRequestEnterpriseModel originEnterprise =
+        arguments["originEnterprise"];
 
     return Stack(
       children: [
@@ -54,10 +63,8 @@ class _DestinyEnterprisePageState extends State<DestinyEnterprisePage> {
                       ? null
                       : () async {
                           await transferRequestProvider.getDestinyEnterprises(
-                            enterpriseOriginCode:
-                                arguments["enterpriseOriginCode"],
-                            requestTypeCode: arguments["requestTypeCode"],
-                            isConsultingAgain: true,
+                            enterpriseOriginCode: originEnterprise.Code,
+                            requestTypeCode: selectedTranferRequestModel.Code,
                           );
                         },
                   tooltip: "Consultar inventários",
@@ -68,9 +75,8 @@ class _DestinyEnterprisePageState extends State<DestinyEnterprisePage> {
             body: RefreshIndicator(
               onRefresh: () async {
                 await transferRequestProvider.getDestinyEnterprises(
-                  enterpriseOriginCode: arguments["enterpriseOriginCode"],
-                  requestTypeCode: arguments["requestTypeCode"],
-                  isConsultingAgain: true,
+                  enterpriseOriginCode: originEnterprise.Code,
+                  requestTypeCode: selectedTranferRequestModel.Code,
                 );
               },
               child: Column(
@@ -92,9 +98,8 @@ class _DestinyEnterprisePageState extends State<DestinyEnterprisePage> {
                           request: () async {
                             setState(() {});
                             await transferRequestProvider.getDestinyEnterprises(
-                              enterpriseOriginCode:
-                                  arguments["enterpriseOriginCode"],
-                              requestTypeCode: arguments["requestTypeCode"],
+                              enterpriseOriginCode: originEnterprise.Code,
+                              requestTypeCode: selectedTranferRequestModel.Code,
                             );
                           }),
                     ),

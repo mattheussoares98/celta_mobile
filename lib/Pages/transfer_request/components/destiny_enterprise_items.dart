@@ -12,12 +12,10 @@ class DestinyEnterpriseItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DestinyEnterpriseItems> createState() =>
-      _DestinyEnterpriseItemsState();
+  State<DestinyEnterpriseItems> createState() => _DestinyEnterpriseItemsState();
 }
 
-class _DestinyEnterpriseItemsState
-    extends State<DestinyEnterpriseItems> {
+class _DestinyEnterpriseItemsState extends State<DestinyEnterpriseItems> {
   int selectedIndex = -1;
 
   @override
@@ -26,6 +24,11 @@ class _DestinyEnterpriseItemsState
         Provider.of(context, listen: true);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
+    TransferRequestEnterpriseModel originEnterprise =
+        arguments["originEnterprise"];
+    TransferRequestModel selectedTransferRequestModel =
+        arguments["selectedTransferRequestModel"];
+
     return Expanded(
       child: Column(
         children: [
@@ -33,26 +36,26 @@ class _DestinyEnterpriseItemsState
             child: ListView.builder(
               itemCount: transferRequestProvider.destinyEnterprisesCount,
               itemBuilder: (context, index) {
-                TransferDestinyEnterpriseModel destinyEnterprise =
+                TransferRequestEnterpriseModel destinyEnterprise =
                     transferRequestProvider.destinyEnterprises[index];
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(
                       APPROUTES.TRANSFER,
                       arguments: {
-                        "enterpriseOriginCode":
-                            arguments["enterpriseOriginCode"],
-                        "requestTypeCode": arguments["requestTypeCode"],
-                        "enterpriseDestinyCode": destinyEnterprise.Code,
+                        "originEnterprise": originEnterprise,
+                        "selectedTransferRequestModel":
+                            selectedTransferRequestModel,
+                        "destinyEnterprise": destinyEnterprise,
                       },
                     );
                   },
                   //sem esse Card, não funciona o gesture detector no campo inteiro
                   child: Card(
                     child: ListTile(
-                      leading: Text(destinyEnterprise.PersonalizedCode),
+                      leading: Text(destinyEnterprise.PersonalizedCode ?? ""),
                       title: Text(
-                        destinyEnterprise.Name,
+                        destinyEnterprise.Name ?? "",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
