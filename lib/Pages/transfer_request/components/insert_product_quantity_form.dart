@@ -73,74 +73,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
       children: [
         const Divider(
           color: Colors.grey,
-          height: 3,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    color: Theme.of(context).colorScheme.primary,
-                    onPressed: () {
-                      if (quantityToAdd == null) return;
-
-                      setState(() {
-                        if (quantityToAdd! <= 1) {
-                          widget.consultedProductController.text = "";
-                          widget.consultedProductController.clear();
-                        } else {
-                          quantityToAdd = quantityToAdd! - 1;
-                          widget.consultedProductController.text =
-                              quantityToAdd!
-                                  .toStringAsFixed(3)
-                                  .replaceAll(RegExp(r'\.'), ',');
-                        }
-
-                        widget.updateTotalItemValue();
-                      });
-                    },
-                    icon: Icon(
-                      Icons.remove,
-                      color: widget.consultedProductController.text.isEmpty
-                          ? Colors.grey
-                          : Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  IconButton(
-                    color: Theme.of(context).colorScheme.primary,
-                    onPressed: () {
-                      if (widget.consultedProductController.text.isEmpty ||
-                          widget.consultedProductController.text == "0") {
-                        widget.consultedProductController.text = "1,000";
-                        widget.updateTotalItemValue();
-                      } else {
-                        double? quantityToAdd = double.tryParse(widget
-                            .consultedProductController.text
-                            .replaceAll(RegExp(r','), '.'));
-
-                        if (quantityToAdd != null) {
-                          quantityToAdd++;
-
-                          widget.consultedProductController.text = quantityToAdd
-                              .toStringAsFixed(3)
-                              .replaceAll(RegExp(r'\.'), ',');
-                        }
-                        widget.updateTotalItemValue();
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(),
-            ),
-          ],
+          height: 20,
         ),
         Row(
           children: [
