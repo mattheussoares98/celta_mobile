@@ -137,8 +137,7 @@ class SoapHelper {
           "filters": json.encode({
             "CrossIdentity": UserData.crossIdentity,
             "EnterpriseCodes": enterprisesCodes,
-            "SearchValue":
-                changeSearchValueIfIsBalanceCode(searchValue, enterprise),
+            "SearchValue": searchValue,
             "SearchType": getSearchTypeInt(configurationsProvider),
             "RoutineInt": routineTypeInt,
           }),
@@ -149,8 +148,27 @@ class SoapHelper {
         serviceASMX: "CeltaProductService.asmx",
       );
 
+      if (SoapRequestResponse.responseAsString == "") {
+        await SoapRequest.soapPost(
+          parameters: {
+            "filters": json.encode({
+              "CrossIdentity": UserData.crossIdentity,
+              "EnterpriseCodes": enterprisesCodes,
+              "SearchValue":
+                  changeSearchValueIfIsBalanceCode(searchValue, enterprise),
+              "SearchType": getSearchTypeInt(configurationsProvider),
+              "RoutineInt": routineTypeInt,
+            }),
+          },
+          typeOfResponse: "GetProductsJsonResponse",
+          typeOfResult: "GetProductsJsonResult",
+          SOAPAction: "GetProductsJson",
+          serviceASMX: "CeltaProductService.asmx",
+        );
+      }
+
       if (SoapRequestResponse.errorMessage != "") {
-        throw Exception();
+        return [];
       }
 
       return (json.decode(SoapRequestResponse.responseAsString) as List)
