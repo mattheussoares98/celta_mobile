@@ -24,6 +24,18 @@ class _ProductsItemsState extends State<ProductsItems> {
   final _consultedProductFormKey = GlobalKey<FormState>();
   final quantityFocusNode = FocusNode();
   final quantityController = TextEditingController();
+  final newPriceFocusNode = FocusNode();
+  final newPriceController = TextEditingController();
+  final priceKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    quantityFocusNode.dispose();
+    quantityController.dispose();
+    newPriceFocusNode.dispose();
+    newPriceController.dispose();
+  }
 
   void changeCursorToLastIndex() {
     quantityController.selection = TextSelection.collapsed(
@@ -34,7 +46,7 @@ class _ProductsItemsState extends State<ProductsItems> {
   void removeProduct({
     required TransferRequestProvider transferRequestProvider,
     required double totalItemValue,
-    required dynamic product,
+    required TransferRequestProductsModel product,
     required String enterpriseDestinyCode,
     required String enterpriseOriginCode,
     required String requestTypeCode,
@@ -60,6 +72,7 @@ class _ProductsItemsState extends State<ProductsItems> {
           totalItemValue = transferRequestProvider.getTotalItemValue(
             product: product,
             consultedProductController: quantityController,
+            newPriceController: newPriceController,
           );
         });
       },
@@ -94,18 +107,13 @@ class _ProductsItemsState extends State<ProductsItems> {
 
     if (selectedIndex != index) {
       quantityController.text = "1,000";
+      newPriceController.text =
+          product.Value.toDouble().toString().toBrazilianNumber();
 
       setState(() {
         selectedIndex = index;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    quantityFocusNode.dispose();
-    quantityController.dispose();
   }
 
   @override
@@ -140,6 +148,7 @@ class _ProductsItemsState extends State<ProductsItems> {
         double _totalItemValue = transferRequestProvider.getTotalItemValue(
           product: product,
           consultedProductController: quantityController,
+          newPriceController: newPriceController,
         );
 
         return Card(
@@ -190,11 +199,10 @@ class _ProductsItemsState extends State<ProductsItems> {
                     ),
                   if (transferRequestProvider.alreadyContainsProduct(
                     ProductPackingCode: product.ProductPackingCode,
-                    enterpriseOriginCode:
-                        originEnterprise.Code.toString(),
-                    enterpriseDestinyCode:
-                        destinyEnterprise.Code.toString(),
-                    requestTypeCode: selectedTransferRequestModel.Code.toString(),
+                    enterpriseOriginCode: originEnterprise.Code.toString(),
+                    enterpriseDestinyCode: destinyEnterprise.Code.toString(),
+                    requestTypeCode:
+                        selectedTransferRequestModel.Code.toString(),
                   ))
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,11 +215,9 @@ class _ProductsItemsState extends State<ProductsItems> {
                                       ProductPackingCode:
                                           product.ProductPackingCode,
                                       enterpriseOriginCode:
-                                          originEnterprise.Code
-                                              .toString(),
+                                          originEnterprise.Code.toString(),
                                       enterpriseDestinyCode:
-                                          destinyEnterprise.Code
-                                              .toString(),
+                                          destinyEnterprise.Code.toString(),
                                       requestTypeCode:
                                           selectedTransferRequestModel.Code
                                               .toString(),
@@ -242,11 +248,9 @@ class _ProductsItemsState extends State<ProductsItems> {
                                       totalItemValue: _totalItemValue,
                                       product: product,
                                       enterpriseOriginCode:
-                                          originEnterprise.Code
-                                              .toString(),
+                                          originEnterprise.Code.toString(),
                                       enterpriseDestinyCode:
-                                          destinyEnterprise.Code
-                                              .toString(),
+                                          destinyEnterprise.Code.toString(),
                                       requestTypeCode:
                                           selectedTransferRequestModel.Code
                                               .toString(),
@@ -284,7 +288,8 @@ class _ProductsItemsState extends State<ProductsItems> {
                             context: context,
                           );
                         }
-                        transferRequestProvider.addProductInCart(
+                        await transferRequestProvider.addProductInCart(
+                          newPriceController: newPriceController,
                           consultedProductController: quantityController,
                           product: product,
                           enterpriseOriginCode:
@@ -309,9 +314,29 @@ class _ProductsItemsState extends State<ProductsItems> {
                               transferRequestProvider.getTotalItemValue(
                             product: product,
                             consultedProductController: quantityController,
+                            newPriceController: newPriceController,
                           );
                         });
                       },
+                    ),
+                  if (selectedIndex == index &&
+                      selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
+                          true)
+                    InsertQuantityTextFormField(
+                      focusNode: newPriceFocusNode,
+                      newQuantityController: newPriceController,
+                      formKey: priceKey,
+                      onChanged: () {
+                        setState(() {});
+                      },
+                      onFieldSubmitted: () {},
+                      autoFocus: false,
+                      canReceiveEmptyValue: false,
+                      enabled: true,
+                      hintText: "Alterar preço R\$",
+                      labelText: "Alterar preço R\$",
+                      showSuffixIcon: false,
+                      showPrefixIcon: false,
                     ),
                 ],
               ),

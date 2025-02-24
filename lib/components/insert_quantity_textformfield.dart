@@ -11,11 +11,13 @@ class InsertQuantityTextFormField extends StatefulWidget {
   final String hintText;
   final bool autoFocus;
   final GlobalKey formKey;
-  final Function onChanged;
+  final void Function() onChanged;
   final int lengthLimitingTextInputFormatter;
   final Function onFieldSubmitted;
   final bool canReceiveEmptyValue;
   final bool? enabled;
+  final bool? showPrefixIcon;
+  final bool? showSuffixIcon;
   const InsertQuantityTextFormField({
     required this.focusNode,
     required this.newQuantityController,
@@ -28,6 +30,8 @@ class InsertQuantityTextFormField extends StatefulWidget {
     this.hintText = "Quantidade",
     this.lengthLimitingTextInputFormatter = 10,
     this.enabled = true,
+    this.showPrefixIcon = true,
+    this.showSuffixIcon = true,
     Key? key,
   }) : super(key: key);
 
@@ -76,36 +80,42 @@ class _InsertQuantityTextFormFieldState
           context: context,
           labelText: widget.labelText,
           hintText: widget.hintText,
-          prefixIcon: IconButton(
-            onPressed: () {
-              final atualValue = widget.newQuantityController.text.toDouble();
-              if (atualValue == -1) {
-                widget.newQuantityController.text = '0';
-              } else if (atualValue > 0) {
-                widget.newQuantityController.text = (atualValue - 1)
-                    .toString()
-                    .toBrazilianNumber()
-                    .replaceAll(RegExp(r'\.'), '');
-              }
-              widget.onChanged();
-            },
-            icon: const Icon(Icons.remove),
-          ),
-          suffixIcon: IconButton(
-            onPressed: () {
-              final atualValue = widget.newQuantityController.text.toDouble();
-              if (atualValue == -1) {
-                widget.newQuantityController.text = '1';
-              } else {
-                widget.newQuantityController.text = (atualValue + 1)
-                    .toString()
-                    .toBrazilianNumber(3)
-                    .replaceAll(RegExp(r'\.'), '');
-              }
-              widget.onChanged();
-            },
-            icon: const Icon(Icons.add),
-          ),
+          prefixIcon: widget.showPrefixIcon != true
+              ? null
+              : IconButton(
+                  onPressed: () {
+                    final atualValue =
+                        widget.newQuantityController.text.toDouble();
+                    if (atualValue == -1) {
+                      widget.newQuantityController.text = '0';
+                    } else if (atualValue > 0) {
+                      widget.newQuantityController.text = (atualValue - 1)
+                          .toString()
+                          .toBrazilianNumber()
+                          .replaceAll(RegExp(r'\.'), '');
+                    }
+                    widget.onChanged();
+                  },
+                  icon: const Icon(Icons.remove),
+                ),
+          suffixIcon: widget.showSuffixIcon != true
+              ? null
+              : IconButton(
+                  onPressed: () {
+                    final atualValue =
+                        widget.newQuantityController.text.toDouble();
+                    if (atualValue == -1) {
+                      widget.newQuantityController.text = '1';
+                    } else {
+                      widget.newQuantityController.text = (atualValue + 1)
+                          .toString()
+                          .toBrazilianNumber(3)
+                          .replaceAll(RegExp(r'\.'), '');
+                    }
+                    widget.onChanged();
+                  },
+                  icon: const Icon(Icons.add),
+                ),
         ),
         style: FormFieldStyle.style(),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),

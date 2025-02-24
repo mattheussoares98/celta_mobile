@@ -171,6 +171,7 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   double tryChangeControllerTextToDouble(
+      //TODO remove this
       TextEditingController consultedProductController) {
     if (double.tryParse(
             consultedProductController.text.replaceAll(RegExp(r','), '.')) !=
@@ -202,34 +203,29 @@ class TransferRequestProvider with ChangeNotifier {
     }
   }
 
-  alreadyContainsProduct({
+  bool alreadyContainsProduct({
     required int ProductPackingCode,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
   }) {
-    bool alreadyContainsProduct = false;
-
     if (_cartProducts[requestTypeCode]?[enterpriseOriginCode]
             ?[enterpriseDestinyCode] ==
         null) {
       return false;
     } else {
-      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-              enterpriseDestinyCode]!
-          .forEach((element) {
-        if (ProductPackingCode == element.ProductPackingCode) {
-          alreadyContainsProduct = true;
-        }
-      });
-
-      return alreadyContainsProduct;
+      return _cartProducts[requestTypeCode]![enterpriseOriginCode]![
+                  enterpriseDestinyCode]!
+              .indexWhere((element) =>
+                  element.ProductPackingCode == ProductPackingCode) !=
+          -1;
     }
   }
 
-  dynamic addProductInCart({
+  Future<void> addProductInCart({
     required TransferRequestProductsModel product,
     required TextEditingController consultedProductController,
+    required TextEditingController newPriceController,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
@@ -238,15 +234,38 @@ class TransferRequestProvider with ChangeNotifier {
         tryChangeControllerTextToDouble(consultedProductController);
 
     if (quantity == 0) {
-      quantity = 1; //quando retornar zero, precisa adicionar uma unidade
+      quantity = 1;
+    }
+
+    late double price;
+    if (newPriceController.text.toDouble() > 0) {
+      price = newPriceController.text.toDouble();
+    } else {
+      price = product.Value;
+    }
+
+    late double newQuantity;
+
+    int indexInCart = _cartProducts[requestTypeCode]![enterpriseOriginCode]![
+            enterpriseDestinyCode]!
+        .indexWhere((element) =>
+            element.ProductPackingCode == product.ProductPackingCode);
+
+    if (indexInCart != -1) {
+      newQuantity = quantity +
+          _cartProducts[requestTypeCode]![enterpriseOriginCode]![
+                  enterpriseDestinyCode]![indexInCart]
+              .Quantity;
+    } else {
+      newQuantity = quantity;
     }
 
     TransferRequestCartProductsModel cartProductsModel =
         TransferRequestCartProductsModel(
       ProductPackingCode: product.ProductPackingCode,
       Name: product.Name,
-      Quantity: quantity,
-      Value: product.Value,
+      Quantity: newQuantity,
+      Value: price,
       IncrementPercentageOrValue: "0.0",
       IncrementValue: 0.0,
       DiscountPercentageOrValue: "0.0",
@@ -270,39 +289,13 @@ class TransferRequestProvider with ChangeNotifier {
       StockByEnterpriseAssociateds: product.StockByEnterpriseAssociateds,
     );
 
-    if (alreadyContainsProduct(
-        ProductPackingCode: product.ProductPackingCode,
-        enterpriseDestinyCode: enterpriseDestinyCode,
-        enterpriseOriginCode: enterpriseOriginCode,
-        requestTypeCode: requestTypeCode)) {
-      int index = _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-              enterpriseDestinyCode]!
-          .indexWhere((element) =>
-              element.ProductPackingCode == product.ProductPackingCode);
-
-      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-              enterpriseDestinyCode]![index]
-          .Quantity += quantity;
-      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-              enterpriseDestinyCode]![index]
-          .Value = product.Value;
-    } else {
-      if (_cartProducts[requestTypeCode] == null) {
-        _cartProducts[requestTypeCode] = {};
-      }
-      if (_cartProducts[requestTypeCode]![enterpriseOriginCode] == null) {
-        _cartProducts[requestTypeCode]![enterpriseOriginCode] = {};
-      }
-      if (_cartProducts[requestTypeCode]![enterpriseOriginCode]![
-              enterpriseDestinyCode] ==
-          null) {
-        _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-            enterpriseDestinyCode] = [];
-      }
-
+    if (indexInCart == -1) {
       _cartProducts[requestTypeCode]![enterpriseOriginCode]![
               enterpriseDestinyCode]!
           .add(cartProductsModel);
+    } else {
+      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
+          enterpriseDestinyCode]![indexInCart] = cartProductsModel;
     }
 
     consultedProductController.text = "";
@@ -316,18 +309,23 @@ class TransferRequestProvider with ChangeNotifier {
   double getTotalItemValue({
     required TransferRequestProductsModel product,
     required TextEditingController consultedProductController,
+    required TextEditingController newPriceController,
   }) {
     double _quantityToAdd =
         tryChangeControllerTextToDouble(consultedProductController);
 
     if (_quantityToAdd == 0) {
-      //quando o campo de quantidade estiver sem dados ou não conseguir
-      //converter a informação para inteiro, o aplicativo vai informar que a
-      //quanitdade a ser inserida será "1"
       _quantityToAdd = 1;
     }
 
-    double _totalItemValue = _quantityToAdd * product.Value;
+    late double priceValue;
+    if (newPriceController.text.toDouble() > 0) {
+      priceValue = newPriceController.text.toDouble();
+    } else {
+      priceValue = product.Value;
+    }
+
+    double _totalItemValue = _quantityToAdd * priceValue;
 
     double? controllerInDouble = double.tryParse(
         consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
@@ -343,7 +341,7 @@ class TransferRequestProvider with ChangeNotifier {
     return _totalItemValue;
   }
 
-  restoreProducts({
+  Future<void> restoreProducts({
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
@@ -408,7 +406,7 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  clearCart({
+  Future<void> clearCart({
     required String requestTypeCode,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,

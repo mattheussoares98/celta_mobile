@@ -12,8 +12,8 @@ class InsertProductQuantityForm extends StatefulWidget {
   final double totalItensInCart;
   final double totalItemValue;
   final TransferRequestProductsModel product;
-  final Function addProductInCart;
-  final Function updateTotalItemValue;
+  final void Function() addProductInCart;
+  final void Function() updateTotalItemValue;
   const InsertProductQuantityForm({
     required this.consultedProductController,
     required this.consultedProductFormKey,
