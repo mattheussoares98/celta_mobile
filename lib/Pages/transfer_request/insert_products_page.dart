@@ -23,15 +23,17 @@ class InsertProductsPage extends StatefulWidget {
 }
 
 class _InsertProductsPageState extends State<InsertProductsPage> {
-  TextEditingController _searchProductTextEditingController =
+  TextEditingController searchProductTextEditingController =
       TextEditingController();
-  TextEditingController _consultedProductController = TextEditingController();
+  TextEditingController consultedProductController = TextEditingController();
+  final searchProductFocusNode = FocusNode();
 
   @override
   void dispose() {
     super.dispose();
-    _searchProductTextEditingController.dispose();
-    _consultedProductController.dispose();
+    searchProductTextEditingController.dispose();
+    consultedProductController.dispose();
+    searchProductFocusNode.dispose();
   }
 
   @override
@@ -47,7 +49,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SearchWidget(
-              searchProductController: _searchProductTextEditingController,
+              searchProductController: searchProductTextEditingController,
               autofocus: false,
               configurations: [
                 ConfigurationType.autoScan,
@@ -55,36 +57,35 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                 ConfigurationType.personalizedCode,
               ],
               onPressSearch: () async {
-                _consultedProductController.clear();
+                consultedProductController.clear();
 
                 await transferRequestProvider.getProducts(
                   requestTypeCode: widget.requestTypeCode.toString(),
                   enterpriseOriginCode: widget.enterpriseOriginCode,
                   enterpriseDestinyCode: widget.enterpriseDestinyCode,
-                  value: _searchProductTextEditingController.text,
+                  value: searchProductTextEditingController.text,
                   configurationsProvider: configurationsProvider,
                 );
 
-                if (transferRequestProvider.productsCount > 0) {
-                  _searchProductTextEditingController.clear();
+                if (transferRequestProvider.products.length > 0) {
+                  searchProductTextEditingController.clear();
                 }
               },
-              searchFocusNode: transferRequestProvider.searchProductFocusNode,
+              searchFocusNode: searchProductFocusNode,
             ),
             if (transferRequestProvider.errorMessageProducts != "")
               ErrorMessage(
                 errorMessage: transferRequestProvider.errorMessageProducts,
               ),
             ProductsItems(
-              consultedProductController: _consultedProductController,
               getProductsWithCamera: () async {
                 FocusScope.of(context).unfocus();
-                _searchProductTextEditingController.clear();
+                searchProductTextEditingController.clear();
 
-                _searchProductTextEditingController.text =
+                searchProductTextEditingController.text =
                     await ScanBarCode.scanBarcode(context);
 
-                if (_searchProductTextEditingController.text == "") {
+                if (searchProductTextEditingController.text == "") {
                   return;
                 }
 
@@ -92,12 +93,12 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                   requestTypeCode: widget.requestTypeCode.toString(),
                   enterpriseOriginCode: widget.enterpriseOriginCode,
                   enterpriseDestinyCode: widget.enterpriseDestinyCode,
-                  value: _searchProductTextEditingController.text,
+                  value: searchProductTextEditingController.text,
                   configurationsProvider: configurationsProvider,
                 );
 
-                if (transferRequestProvider.productsCount > 0) {
-                  _searchProductTextEditingController.clear();
+                if (transferRequestProvider.products.length > 0) {
+                  searchProductTextEditingController.clear();
                 }
               },
             ),

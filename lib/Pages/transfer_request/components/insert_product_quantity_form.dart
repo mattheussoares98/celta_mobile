@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../models/transfer_request/transfer_request.dart';
-import '../../../providers/providers.dart';
+import '../../../models/models.dart';
+
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
 
@@ -31,7 +30,9 @@ class InsertProductQuantityForm extends StatefulWidget {
 }
 
 class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
-  addItemInCart() {
+  final quantityFocusNode = FocusNode();
+
+  void addItemInCart() {
     if (widget.consultedProductController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
       setState(() {
@@ -62,10 +63,14 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    TransferRequestProvider transferRequestProvider =
-        Provider.of(context, listen: true);
+  void dispose() {
+    super.dispose();
 
+    quantityFocusNode.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double? quantityToAdd = double.tryParse(
         widget.consultedProductController.text.replaceAll(RegExp(r','), '.'));
 
@@ -80,12 +85,13 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
             Expanded(
               flex: 10,
               child: InsertQuantityTextFormField(
+                autoFocus: true,
                 enabled: widget.product.Value > 0,
-                focusNode: transferRequestProvider.consultedProductFocusNode,
+                focusNode: quantityFocusNode,
                 newQuantityController: widget.consultedProductController,
                 formKey: widget.consultedProductFormKey,
-                onChanged: () => {widget.updateTotalItemValue()},
-                onFieldSubmitted: () => addItemInCart(),
+                onChanged: widget.updateTotalItemValue,
+                onFieldSubmitted: addItemInCart,
                 canReceiveEmptyValue: true,
                 hintText: "Quantidade",
               ),

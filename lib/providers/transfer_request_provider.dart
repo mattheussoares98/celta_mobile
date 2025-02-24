@@ -68,10 +68,8 @@ class TransferRequestProvider with ChangeNotifier {
   bool _isLoadingProducts = false;
   bool get isLoadingProducts => _isLoadingProducts;
   List<TransferRequestProductsModel> _products = [];
-  get products => [..._products];
-  get productsCount => _products.length;
-  FocusNode searchProductFocusNode = FocusNode();
-  FocusNode consultedProductFocusNode = FocusNode();
+  List<TransferRequestProductsModel> get products => [..._products];
+
   Map<String, Map<String, Map<String, List<TransferRequestCartProductsModel>>>>
       _cartProducts = {};
 
@@ -197,7 +195,7 @@ class TransferRequestProvider with ChangeNotifier {
     required int index,
   }) {
     if (selectedIndex != index &&
-        productsCount == 1 &&
+        _products.length == 1 &&
         product.WholePracticedPrice > 0)
       return true;
     else {

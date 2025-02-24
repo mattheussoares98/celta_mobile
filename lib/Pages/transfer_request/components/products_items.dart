@@ -8,12 +8,10 @@ import '../../../components/components.dart';
 import 'components.dart';
 
 class ProductsItems extends StatefulWidget {
-  final TextEditingController consultedProductController;
   final Function getProductsWithCamera;
 
   const ProductsItems({
     required this.getProductsWithCamera,
-    required this.consultedProductController,
     Key? key,
   }) : super(key: key);
 
@@ -23,20 +21,15 @@ class ProductsItems extends StatefulWidget {
 
 class _ProductsItemsState extends State<ProductsItems> {
   int selectedIndex = -1;
+  final _consultedProductFormKey = GlobalKey<FormState>();
+  final quantityFocusNode = FocusNode();
+  final quantityController = TextEditingController();
 
-  GlobalKey<FormState> _consultedProductFormKey = GlobalKey();
-
-  changeCursorToLastIndex() {
-    widget.consultedProductController.selection = TextSelection.collapsed(
-      offset: widget.consultedProductController.text.length,
+  void changeCursorToLastIndex() {
+    quantityController.selection = TextSelection.collapsed(
+      offset: quantityController.text.length,
     );
   }
-
-  bool hasOneProductAndIsExpandedQuantityForm = false;
-  //quando só retorna um produto na consulta, já expande a opção de inserção de
-  //quantidade dos itens. Esse bool serve para saber quando já foi expandido uma
-  //vez automaticamente o campo para digitação da quantidade, senão vai ficar
-  //abrindo direto o campo para digitação, mesmo quando já inseriu a quantidade.
 
   void removeProduct({
     required TransferRequestProvider transferRequestProvider,
@@ -66,42 +59,78 @@ class _ProductsItemsState extends State<ProductsItems> {
 
           totalItemValue = transferRequestProvider.getTotalItemValue(
             product: product,
-            consultedProductController: widget.consultedProductController,
+            consultedProductController: quantityController,
           );
         });
       },
     );
   }
 
+  void changeFocus(
+    TransferRequestProvider transferRequestProvider,
+    int index,
+    TransferRequestProductsModel product,
+  ) {
+    //TODO test a lot
+    if (selectedIndex == index) {
+      setState(() {
+        selectedIndex = -1;
+      });
+      return;
+    }
+
+    if (selectedIndex != index) {
+      if (product.Value == 0) {
+        ShowSnackbarMessage.show(
+          message:
+              "O preço está zerado. Por isso não é possível inserir a quantidade!",
+          context: context,
+        );
+        return;
+      }
+      quantityController.clear();
+      //necessário apagar o campo da quantidade quando
+      //mudar de produto selecionado
+
+      FocusScope.of(context).unfocus();
+      setState(() {
+        selectedIndex = index;
+      });
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        FocusScope.of(context).requestFocus(quantityFocusNode);
+      });
+    } else {
+      FocusScope.of(context).unfocus();
+      //quando clica no mesmo produto, fecha o teclado
+      setState(() {
+        selectedIndex = -1;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    quantityFocusNode.dispose();
+    quantityController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    TransferRequestProvider transferRequestProvider = Provider.of(
-      context,
-      listen: true,
-    );
-    ConfigurationsProvider configurationsProvider = Provider.of(
-      context,
-      listen: true,
-    );
+    TransferRequestProvider transferRequestProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: transferRequestProvider.productsCount,
+      itemCount: transferRequestProvider.products.length,
       itemBuilder: (context, index) {
         TransferRequestProductsModel product =
             transferRequestProvider.products[index];
 
         if (transferRequestProvider.products.isEmpty) return Container();
-
-        if (transferRequestProvider.productsCount == 1 && product.Value > 0) {
-          selectedIndex = 0;
-        } else if (transferRequestProvider.productsCount == 1 &&
-            product.Value == 0) {
-          selectedIndex = -1;
-        }
-
-        Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
         double _totalItensInCart = transferRequestProvider.getTotalItensInCart(
           ProductPackingCode: product.ProductPackingCode,
@@ -112,58 +141,16 @@ class _ProductsItemsState extends State<ProductsItems> {
 
         double _totalItemValue = transferRequestProvider.getTotalItemValue(
           product: product,
-          consultedProductController: widget.consultedProductController,
+          consultedProductController: quantityController,
         );
 
         return Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: transferRequestProvider.isLoadingProducts
-                  ? null
-                  : () {
-                      if (!transferRequestProvider
-                              .consultedProductFocusNode.hasFocus &&
-                          selectedIndex == index) {
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          FocusScope.of(context).requestFocus(
-                            transferRequestProvider.consultedProductFocusNode,
-                          );
-                        });
-                        return;
-                      }
-
-                      if (selectedIndex != index) {
-                        if (product.Value == 0) {
-                          ShowSnackbarMessage.show(
-                            message:
-                                "O preço está zerado. Por isso não é possível inserir a quantidade!",
-                            context: context,
-                          );
-                          return;
-                        }
-                        widget.consultedProductController.clear();
-                        //necessário apagar o campo da quantidade quando
-                        //mudar de produto selecionado
-
-                        FocusScope.of(context).unfocus();
-                        setState(() {
-                          selectedIndex = index;
-                        });
-
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          FocusScope.of(context).requestFocus(
-                            transferRequestProvider.consultedProductFocusNode,
-                          );
-                        });
-                      } else {
-                        FocusScope.of(context).unfocus();
-                        //quando clica no mesmo produto, fecha o teclado
-                        setState(() {
-                          selectedIndex = -1;
-                        });
-                      }
-                    },
+              onTap: () {
+                changeFocus(transferRequestProvider, index, product);
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -300,8 +287,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                     ),
                   if (selectedIndex == index)
                     InsertProductQuantityForm(
-                      consultedProductController:
-                          widget.consultedProductController,
+                      consultedProductController: quantityController,
                       consultedProductFormKey: _consultedProductFormKey,
                       totalItemValue: _totalItemValue,
                       product: product,
@@ -313,8 +299,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                           );
                         }
                         transferRequestProvider.addProductInCart(
-                          consultedProductController:
-                              widget.consultedProductController,
+                          consultedProductController: quantityController,
                           product: product,
                           enterpriseOriginCode:
                               arguments["enterpriseOriginCode"].toString(),
@@ -337,8 +322,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                           _totalItemValue =
                               transferRequestProvider.getTotalItemValue(
                             product: product,
-                            consultedProductController:
-                                widget.consultedProductController,
+                            consultedProductController: quantityController,
                           );
                         });
                       },
