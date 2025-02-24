@@ -1,15 +1,15 @@
-import 'dart:convert';
+import 'package:celta_inventario/utils/utils.dart';
 
 class TransferRequestModel {
-  final int Code;
-  final int OperationType;
-  final int UseWholePrice;
-  final int UnitValueType;
-  final String PersonalizedCode;
-  final String Name;
-  final String OperationTypeString;
-  final String UseWholePriceString;
-  final String UnitValueTypeString;
+  final int? Code;
+  final int? OperationType;
+  final int? UseWholePrice;
+  final int? UnitValueType;
+  final String? PersonalizedCode;
+  final String? Name;
+  final String? OperationTypeString;
+  final String? UseWholePriceString;
+  final String? UnitValueTypeString;
 
   TransferRequestModel({
     required this.Code,
@@ -23,27 +23,21 @@ class TransferRequestModel {
     required this.UnitValueTypeString,
   });
 
-  static resultAsStringToTransferRequestModel({
-    required String resultAsString,
-    required List listToAdd,
-  }) {
-    List resultAsList = json.decode(resultAsString);
-    Map resultAsMap = resultAsList.asMap();
-
-    resultAsMap.forEach((id, data) {
-      listToAdd.add(
-        TransferRequestModel(
-          Code: data["Code"],
-          OperationType: data["OperationType"],
-          UseWholePrice: data["UseWholePrice"],
-          UnitValueType: data["UnitValueType"],
-          PersonalizedCode: data["PersonalizedCode"],
-          Name: data["Name"],
-          OperationTypeString: data["OperationTypeString"],
-          UseWholePriceString: data["UseWholePriceString"],
-          UnitValueTypeString: data["UnitValueTypeString"],
-        ),
+  factory TransferRequestModel.fromJson(Map data) => TransferRequestModel(
+        Code: data["Code"] == null ? null : data["Code"].toString().toInt(),
+        OperationType: data["OperationType"] == null
+            ? null
+            : data["OperationType"].toString().toInt(),
+        UseWholePrice: data["UseWholePrice"] == null
+            ? null
+            : data["UseWholePrice"].toString().toInt(),
+        UnitValueType: data["UnitValueType"] == null
+            ? null
+            : data["UnitValueType"].toString().toInt(),
+        PersonalizedCode: data["PersonalizedCode"],
+        Name: data["Name"],
+        OperationTypeString: data["OperationTypeString"],
+        UseWholePriceString: data["UseWholePriceString"],
+        UnitValueTypeString: data["UnitValueTypeString"],
       );
-    });
-  }
 }

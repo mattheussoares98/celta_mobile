@@ -457,10 +457,10 @@ class TransferRequestProvider with ChangeNotifier {
       _errorMessageRequestModel = SoapRequestResponse.errorMessage;
 
       if (_errorMessageRequestModel == "") {
-        TransferRequestModel.resultAsStringToTransferRequestModel(
-          resultAsString: SoapRequestResponse.responseAsString,
-          listToAdd: _requestModels,
-        );
+        _requestModels =
+            (json.decode(SoapRequestResponse.responseAsString) as List)
+                .map((e) => TransferRequestModel.fromJson(e))
+                .toList();
       }
     } catch (e) {
       //print('deu erro para consultar os pedidos: $e');
@@ -505,8 +505,7 @@ class TransferRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print('deu erro para consultar as empresas de origem: $e');
-      _errorMessageOriginEnterprise =
-          DefaultErrorMessage.ERROR;
+      _errorMessageOriginEnterprise = DefaultErrorMessage.ERROR;
     }
     _isLoadingOriginEnterprise = false;
     notifyListeners();
@@ -589,8 +588,7 @@ class TransferRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print('deu erro para consultar as empresas de destino: $e');
-      _errorMessageDestinyEnterprise =
-          DefaultErrorMessage.ERROR;
+      _errorMessageDestinyEnterprise = DefaultErrorMessage.ERROR;
     }
     _isLoadingDestinyEnterprise = false;
     notifyListeners();
@@ -699,8 +697,7 @@ class TransferRequestProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para salvar a transferência: $e");
-      _errorMessageSaveTransferRequest =
-          DefaultErrorMessage.ERROR;
+      _errorMessageSaveTransferRequest = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageSaveTransferRequest,
         context: context,
