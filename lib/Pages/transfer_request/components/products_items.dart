@@ -71,7 +71,6 @@ class _ProductsItemsState extends State<ProductsItems> {
     int index,
     TransferRequestProductsModel product,
   ) {
-    //TODO test a lot
     if (selectedIndex == index) {
       setState(() {
         selectedIndex = -1;
@@ -79,32 +78,25 @@ class _ProductsItemsState extends State<ProductsItems> {
       return;
     }
 
-    if (selectedIndex != index) {
-      if (product.Value == 0) {
-        ShowSnackbarMessage.show(
-          message:
-              "O preço está zerado. Por isso não é possível inserir a quantidade!",
-          context: context,
-        );
-        return;
-      }
-      quantityController.clear();
-      //necessário apagar o campo da quantidade quando
-      //mudar de produto selecionado
+    Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    TransferRequestModel selectedTransferRequestModel =
+        arguments["selectedTransferRequestModel"];
 
-      FocusScope.of(context).unfocus();
+    if (product.Value == 0 &&
+        selectedTransferRequestModel.AllowAlterCostOrSalePrice != true) {
+      ShowSnackbarMessage.show(
+        message:
+            "O preço está zerado e o modelo de pedido não permite a alteração do preço. Por isso não é possível inserir a quantidade!",
+        context: context,
+      );
+      return;
+    }
+
+    if (selectedIndex != index) {
+      quantityController.text = "1,000";
+
       setState(() {
         selectedIndex = index;
-      });
-
-      Future.delayed(const Duration(milliseconds: 100), () {
-        FocusScope.of(context).requestFocus(quantityFocusNode);
-      });
-    } else {
-      FocusScope.of(context).unfocus();
-      //quando clica no mesmo produto, fecha o teclado
-      setState(() {
-        selectedIndex = -1;
       });
     }
   }
@@ -121,6 +113,12 @@ class _ProductsItemsState extends State<ProductsItems> {
     TransferRequestProvider transferRequestProvider = Provider.of(context);
     ConfigurationsProvider configurationsProvider = Provider.of(context);
     Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    TransferRequestModel selectedTransferRequestModel =
+        arguments["selectedTransferRequestModel"];
+    TransferRequestEnterpriseModel destinyEnterprise =
+        arguments["destinyEnterprise"];
+    TransferRequestEnterpriseModel originEnterprise =
+        arguments["originEnterprise"];
 
     return ListView.builder(
       shrinkWrap: true,
@@ -134,9 +132,9 @@ class _ProductsItemsState extends State<ProductsItems> {
 
         double _totalItensInCart = transferRequestProvider.getTotalItensInCart(
           ProductPackingCode: product.ProductPackingCode,
-          enterpriseOriginCode: arguments["enterpriseOriginCode"].toString(),
-          enterpriseDestinyCode: arguments["enterpriseDestinyCode"].toString(),
-          requestTypeCode: arguments["requestTypeCode"].toString(),
+          enterpriseOriginCode: originEnterprise.Code.toString(),
+          enterpriseDestinyCode: destinyEnterprise.Code.toString(),
+          requestTypeCode: selectedTransferRequestModel.Code.toString(),
         );
 
         double _totalItemValue = transferRequestProvider.getTotalItemValue(
@@ -175,19 +173,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                     ),
                     subtitleColor: Theme.of(context).colorScheme.primary,
                   ),
-                  // TitleAndSubtitle.titleAndSubtitle(
-                  //   title: "Preço de atacado",
-                  //   value: ConvertString.convertToBRL(
-                  //     product.WholePracticedPrice,
-                  //   ),
-                  //   subtitleColor: Colors.black,
-                  // ),
-                  // TitleAndSubtitle.titleAndSubtitle(
-                  //   title: "Qtd mínima p/ atacado",
-                  //   value: ConvertString.convertToBrazilianNumber(
-                  //     product.MinimumWholeQuantity.toString(),
-                  //   ),
-                  // ),
                   if (product.BalanceStockSale != null)
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Estoque de venda",
@@ -206,10 +191,10 @@ class _ProductsItemsState extends State<ProductsItems> {
                   if (transferRequestProvider.alreadyContainsProduct(
                     ProductPackingCode: product.ProductPackingCode,
                     enterpriseOriginCode:
-                        arguments["enterpriseOriginCode"].toString(),
+                        originEnterprise.Code.toString(),
                     enterpriseDestinyCode:
-                        arguments["enterpriseDestinyCode"].toString(),
-                    requestTypeCode: arguments["requestTypeCode"].toString(),
+                        destinyEnterprise.Code.toString(),
+                    requestTypeCode: selectedTransferRequestModel.Code.toString(),
                   ))
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -222,13 +207,13 @@ class _ProductsItemsState extends State<ProductsItems> {
                                       ProductPackingCode:
                                           product.ProductPackingCode,
                                       enterpriseOriginCode:
-                                          arguments["enterpriseOriginCode"]
+                                          originEnterprise.Code
                                               .toString(),
                                       enterpriseDestinyCode:
-                                          arguments["enterpriseDestinyCode"]
+                                          destinyEnterprise.Code
                                               .toString(),
                                       requestTypeCode:
-                                          arguments["requestTypeCode"]
+                                          selectedTransferRequestModel.Code
                                               .toString(),
                                     )
                                     .toStringAsFixed(3)
@@ -257,13 +242,13 @@ class _ProductsItemsState extends State<ProductsItems> {
                                       totalItemValue: _totalItemValue,
                                       product: product,
                                       enterpriseOriginCode:
-                                          arguments["enterpriseOriginCode"]
+                                          originEnterprise.Code
                                               .toString(),
                                       enterpriseDestinyCode:
-                                          arguments["enterpriseDestinyCode"]
+                                          destinyEnterprise.Code
                                               .toString(),
                                       requestTypeCode:
-                                          arguments["requestTypeCode"]
+                                          selectedTransferRequestModel.Code
                                               .toString(),
                                     )
                                 : null,
@@ -287,6 +272,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                     ),
                   if (selectedIndex == index)
                     InsertProductQuantityForm(
+                      quantityFocusNode: quantityFocusNode,
                       consultedProductController: quantityController,
                       consultedProductFormKey: _consultedProductFormKey,
                       totalItemValue: _totalItemValue,
@@ -302,11 +288,11 @@ class _ProductsItemsState extends State<ProductsItems> {
                           consultedProductController: quantityController,
                           product: product,
                           enterpriseOriginCode:
-                              arguments["enterpriseOriginCode"].toString(),
+                              originEnterprise.Code.toString(),
                           enterpriseDestinyCode:
-                              arguments["enterpriseDestinyCode"].toString(),
+                              destinyEnterprise.Code.toString(),
                           requestTypeCode:
-                              arguments["requestTypeCode"].toString(),
+                              selectedTransferRequestModel.Code.toString(),
                         );
                         setState(() {
                           selectedIndex = -1;

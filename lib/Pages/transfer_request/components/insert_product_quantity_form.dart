@@ -8,6 +8,7 @@ import '../../../components/components.dart';
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
   final TextEditingController consultedProductController;
+  final FocusNode quantityFocusNode;
   final double totalItensInCart;
   final double totalItemValue;
   final TransferRequestProductsModel product;
@@ -16,6 +17,7 @@ class InsertProductQuantityForm extends StatefulWidget {
   const InsertProductQuantityForm({
     required this.consultedProductController,
     required this.consultedProductFormKey,
+    required this.quantityFocusNode,
     required this.totalItensInCart,
     required this.totalItemValue,
     required this.product,
@@ -30,8 +32,6 @@ class InsertProductQuantityForm extends StatefulWidget {
 }
 
 class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
-  final quantityFocusNode = FocusNode();
-
   void addItemInCart() {
     if (widget.consultedProductController.text.isEmpty) {
       //não precisa validar o formulário se não houver quantidade adicionada porque o usuário vai adicionar uma quantidade
@@ -63,13 +63,6 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-
-    quantityFocusNode.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double? quantityToAdd = double.tryParse(
         widget.consultedProductController.text.replaceAll(RegExp(r','), '.'));
@@ -87,7 +80,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
               child: InsertQuantityTextFormField(
                 autoFocus: true,
                 enabled: widget.product.Value > 0,
-                focusNode: quantityFocusNode,
+                focusNode: widget.quantityFocusNode,
                 newQuantityController: widget.consultedProductController,
                 formKey: widget.consultedProductFormKey,
                 onChanged: widget.updateTotalItemValue,
