@@ -10,6 +10,9 @@ class TransferRequestModel {
   final String? OperationTypeString;
   final String? UseWholePriceString;
   final String? UnitValueTypeString;
+  final String? TransferUnitValueTypeString;
+  final bool? AllowDiscount;
+  final bool? AllowAlterCostOrSalePrice;
 
   TransferRequestModel({
     required this.Code,
@@ -21,6 +24,9 @@ class TransferRequestModel {
     required this.OperationTypeString,
     required this.UseWholePriceString,
     required this.UnitValueTypeString,
+    required this.TransferUnitValueTypeString,
+    required this.AllowDiscount,
+    required this.AllowAlterCostOrSalePrice,
   });
 
   factory TransferRequestModel.fromJson(Map data) => TransferRequestModel(
@@ -39,5 +45,8 @@ class TransferRequestModel {
         OperationTypeString: data["OperationTypeString"],
         UseWholePriceString: data["UseWholePriceString"],
         UnitValueTypeString: data["UnitValueTypeString"],
+        TransferUnitValueTypeString: data["TransferUnitValueTypeString"],
+        AllowDiscount: data["AllowDiscount"] == true,
+        AllowAlterCostOrSalePrice: data["AllowAlterCostOrSalePrice"] == true,
       );
 }
