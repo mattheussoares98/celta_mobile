@@ -11,6 +11,9 @@ ThemeData theme() {
   return ThemeData(
     useMaterial3: true,
     primaryColor: principalColor,
+    dialogTheme: DialogTheme(
+      backgroundColor: Colors.white,
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       //usado no dropdown
       enabledBorder: UnderlineInputBorder(
@@ -20,7 +23,6 @@ ThemeData theme() {
         ),
       ),
     ),
-    dialogBackgroundColor: Colors.white,
     cardTheme: CardTheme(
       color: Colors.grey[50],
       surfaceTintColor: Colors.amber[100],
