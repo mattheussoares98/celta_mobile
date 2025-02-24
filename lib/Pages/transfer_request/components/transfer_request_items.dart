@@ -74,6 +74,15 @@ class _TransferRequestItemsState extends State<TransferRequestItems> {
                             title: "Preço praticado",
                             subtitle: transfer.UnitValueTypeString,
                           ),
+                          TitleAndSubtitle.titleAndSubtitle(
+                            subtitle: transfer.AllowAlterCostOrSalePrice == true
+                                ? "Pode alterar preço de custo ou venda"
+                                : "Não pode alterar preço de custo ou venda",
+                            subtitleColor:
+                                transfer.AllowAlterCostOrSalePrice == true
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Colors.red,
+                          ),
                         ],
                       ),
                     ),
