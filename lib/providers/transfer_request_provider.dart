@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
-import '../models/transfer_request/transfer_request.dart';
+import '../models/models.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 
@@ -66,13 +66,13 @@ class TransferRequestProvider with ChangeNotifier {
   String get errorMessageProducts => _errorMessageProducts;
   bool _isLoadingProducts = false;
   bool get isLoadingProducts => _isLoadingProducts;
-  List<TransferRequestProductsModel> _products = [];
-  List<TransferRequestProductsModel> get products => [..._products];
+  List<GetProductJsonModel> _products = [];
+  List<GetProductJsonModel> get products => [..._products];
 
-  Map<String, Map<String, Map<String, List<TransferRequestCartProductsModel>>>>
+  Map<String, Map<String, Map<String, List<GetProductJsonModel>>>>
       _cartProducts = {};
 
-  List<TransferRequestCartProductsModel> getCartProducts({
+  List<GetProductJsonModel> getCartProducts({
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
@@ -96,9 +96,9 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Map<requestTypeCode, Map<enterpriseOriginCode, Map<enterpriseDestinyCode, List<TransferRequestCartProductsModel>>>>
+  // Map<requestTypeCode, Map<enterpriseOriginCode, Map<enterpriseDestinyCode, List<GetProductJsonModel>>>>
   int? indexOfRemovedProduct;
-  TransferRequestCartProductsModel? removedProduct;
+  GetProductJsonModel? removedProduct;
 
   // getCartProducts({
   //   required String enterpriseOriginCode,
@@ -108,25 +108,25 @@ class TransferRequestProvider with ChangeNotifier {
   // }
 
   Future<void> removeProductFromCart({
-    required int ProductPackingCode,
+    required int? ProductPackingCode,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
   }) async {
     // removedProduct = _cartProducts[enterpriseCode]!.firstWhere(
-    //     (element) => element.ProductPackingCode == ProductPackingCode);
+    //     (element) => element.productPackingCode == ProductPackingCode);
 
     indexOfRemovedProduct = _cartProducts[requestTypeCode]![
             enterpriseOriginCode]![enterpriseDestinyCode]!
         .indexWhere(
-            (element) => element.ProductPackingCode == ProductPackingCode);
+            (element) => element.productPackingCode == ProductPackingCode);
 
     removedProduct = _cartProducts[requestTypeCode]![enterpriseOriginCode]![
             enterpriseDestinyCode]!
         .removeAt(indexOfRemovedProduct!);
 
     // _cartProducts[enterpriseCode]!.removeWhere(
-    //     (element) => element.ProductPackingCode == ProductPackingCode);
+    //     (element) => element.productPackingCode == ProductPackingCode);
 
     await _updateCartInDatabase();
 
@@ -145,7 +145,7 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   double getTotalItensInCart({
-    required int ProductPackingCode,
+    required int? ProductPackingCode,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
@@ -161,8 +161,8 @@ class TransferRequestProvider with ChangeNotifier {
               enterpriseDestinyCode]!
           .forEach((element) {
         // print(element["ProductPackingCode"]);
-        if (element.ProductPackingCode == ProductPackingCode) {
-          atualQuantity = element.Quantity;
+        if (element.productPackingCode == ProductPackingCode) {
+          atualQuantity = element.quantity;
         }
       });
 
@@ -177,13 +177,14 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   bool canShowInsertProductQuantityForm({
-    required TransferRequestProductsModel product,
+    required GetProductJsonModel product,
     required int selectedIndex,
     required int index,
   }) {
     if (selectedIndex != index &&
         _products.length == 1 &&
-        product.WholePracticedPrice > 0)
+        product.wholePracticedPrice != null &&
+        product.wholePracticedPrice!.toDouble() > 0)
       return true;
     else {
       return false;
@@ -204,13 +205,13 @@ class TransferRequestProvider with ChangeNotifier {
       return _cartProducts[requestTypeCode]![enterpriseOriginCode]![
                   enterpriseDestinyCode]!
               .indexWhere((element) =>
-                  element.ProductPackingCode == ProductPackingCode) !=
+                  element.productPackingCode == ProductPackingCode) !=
           -1;
     }
   }
 
   Future<void> insertUpdateProductInCart({
-    required TransferRequestProductsModel product,
+    required GetProductJsonModel product,
     required TextEditingController quantityController,
     required TextEditingController newPriceController,
     required String enterpriseOriginCode,
@@ -227,7 +228,7 @@ class TransferRequestProvider with ChangeNotifier {
     if (newPriceController.text.toDouble() > 0) {
       price = newPriceController.text.toDouble();
     } else {
-      price = product.Value;
+      price = product.value ?? 0;
     }
 
     late double newQuantity;
@@ -235,44 +236,60 @@ class TransferRequestProvider with ChangeNotifier {
     int indexInCart = _cartProducts[requestTypeCode]![enterpriseOriginCode]![
             enterpriseDestinyCode]!
         .indexWhere((element) =>
-            element.ProductPackingCode == product.ProductPackingCode);
+            element.productPackingCode == product.productPackingCode);
 
     if (indexInCart != -1) {
       newQuantity = quantity +
           _cartProducts[requestTypeCode]![enterpriseOriginCode]![
                   enterpriseDestinyCode]![indexInCart]
-              .Quantity;
+              .quantity;
     } else {
       newQuantity = quantity;
     }
 
-    TransferRequestCartProductsModel cartProductsModel =
-        TransferRequestCartProductsModel(
-      ProductPackingCode: product.ProductPackingCode,
-      Name: product.Name,
-      Quantity: newQuantity,
-      Value: price,
-      IncrementPercentageOrValue: "0.0",
-      IncrementValue: 0.0,
-      DiscountPercentageOrValue: "0.0",
-      DiscountValue: 0.0,
+    GetProductJsonModel cartProductsModel = GetProductJsonModel(
       ExpectedDeliveryDate: "\"${DateTime.now().toString()}\"",
-      ProductCode: product.ProductCode,
-      PLU: product.PLU,
-      PackingQuantity: product.PackingQuantity,
-      RetailPracticedPrice: product.RetailPracticedPrice,
-      RetailSalePrice: product.RetailSalePrice,
-      RetailOfferPrice: product.RetailOfferPrice,
-      WholePracticedPrice: product.WholePracticedPrice,
-      WholeSalePrice: product.WholeSalePrice,
-      WholeOfferPrice: product.WholeOfferPrice,
-      ECommercePracticedPrice: product.ECommercePracticedPrice,
-      ECommerceSalePrice: product.ECommerceSalePrice,
-      ECommerceOfferPrice: product.ECommerceOfferPrice,
-      MinimumWholeQuantity: product.MinimumWholeQuantity,
-      BalanceStockSale: product.BalanceStockSale,
-      StorageAreaAddress: product.StorageAreaAddress,
-      StockByEnterpriseAssociateds: product.StockByEnterpriseAssociateds,
+      quantity: newQuantity,
+      value: price,
+      enterpriseCode: product.enterpriseCode,
+      productCode: product.productCode,
+      productPackingCode: product.productPackingCode,
+      plu: product.plu,
+      name: product.name,
+      packingQuantity: product.packingQuantity,
+      retailPracticedPrice: product.retailPracticedPrice,
+      retailSalePrice: product.retailSalePrice,
+      retailOfferPrice: product.retailOfferPrice,
+      wholePracticedPrice: product.wholePracticedPrice,
+      wholeSalePrice: product.wholeSalePrice,
+      wholeOfferPrice: product.wholeOfferPrice,
+      eCommercePracticedPrice: product.eCommercePracticedPrice,
+      eCommerceSalePrice: product.eCommerceSalePrice,
+      eCommerceOfferPrice: product.eCommerceOfferPrice,
+      minimumWholeQuantity: product.minimumWholeQuantity,
+      storageAreaAddress: product.storageAreaAddress,
+      balanceLabelType: product.balanceLabelType,
+      balanceLabelQuantity: product.balanceLabelQuantity,
+      pendantPrintLabel: product.pendantPrintLabel,
+      operationalCost: product.operationalCost,
+      replacementCost: product.replacementCost,
+      replacementCostMidle: product.replacementCostMidle,
+      liquidCost: product.liquidCost,
+      liquidCostMidle: product.liquidCostMidle,
+      realCost: product.realCost,
+      realLiquidCost: product.realLiquidCost,
+      fiscalCost: product.fiscalCost,
+      fiscalLiquidCost: product.fiscalLiquidCost,
+      stockByEnterpriseAssociateds: product.stockByEnterpriseAssociateds,
+      stocks: product.stocks,
+      lastBuyEntrance: product.lastBuyEntrance,
+      markUpdateClassInAdjustSalePriceIndividual:
+          product.markUpdateClassInAdjustSalePriceIndividual,
+      inClass: product.inClass,
+      isFatherOfGrate: product.isFatherOfGrate,
+      alterationPriceForAllPackings: product.alterationPriceForAllPackings,
+      isChildOfGrate: product.isChildOfGrate,
+      priceCost: product.priceCost,
     );
 
     if (indexInCart == -1) {
@@ -293,7 +310,7 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   double getTotalItemValue({
-    required TransferRequestProductsModel product,
+    required GetProductJsonModel product,
     required TextEditingController consultedProductController,
     required TextEditingController newPriceController,
   }) {
@@ -307,7 +324,7 @@ class TransferRequestProvider with ChangeNotifier {
     if (newPriceController.text.toDouble() > 0) {
       priceValue = newPriceController.text.toDouble();
     } else {
-      priceValue = product.Value;
+      priceValue = product.value ?? 0;
     }
 
     double _totalItemValue = _quantityToAdd * priceValue;
@@ -338,7 +355,7 @@ class TransferRequestProvider with ChangeNotifier {
     } else {
       Map cartProductsInDatabase = jsonDecode(cart);
 
-      List<TransferRequestCartProductsModel> cartProductsTemp = [];
+      List<GetProductJsonModel> cartProductsTemp = [];
 
       if (cartProductsInDatabase.isEmpty) {
         return;
@@ -364,8 +381,7 @@ class TransferRequestProvider with ChangeNotifier {
       cartProductsInDatabase[requestTypeCode][enterpriseOriginCode]
               [enterpriseDestinyCode]
           .forEach((element) {
-        cartProductsTemp
-            .add(TransferRequestCartProductsModel.fromJson(element));
+        cartProductsTemp.add(GetProductJsonModel.fromJson(element));
         _cartProducts[requestTypeCode]?[enterpriseOriginCode]
             ?[enterpriseDestinyCode] = cartProductsTemp;
       });
@@ -385,7 +401,7 @@ class TransferRequestProvider with ChangeNotifier {
   }) async {
     _cartProducts[requestTypeCode]![enterpriseOriginCode]![
             enterpriseDestinyCode]![index]
-        .Quantity = quantity;
+        .quantity = quantity;
 
     await _updateCartInDatabase();
     notifyListeners();
@@ -522,13 +538,12 @@ class TransferRequestProvider with ChangeNotifier {
         null) {
       return 0;
     } else {
-      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
+      return _cartProducts[requestTypeCode]![enterpriseOriginCode]![
               enterpriseDestinyCode]!
-          .forEach((element) {
-        total += (element.Quantity * element.Value) - element.DiscountValue;
-      });
-
-      return total;
+          .fold(0.0, (previous, atual) {
+        return previous +=
+            (atual.quantity * (atual.value ?? 0)) - (atual.DiscountValue ?? 0);
+      }); //TODO test if is working
     }
   }
 
@@ -586,22 +601,22 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await SoapHelper.getProductTransferRequest(
+      _products = await SoapHelper.getProductTransferRequest(
         enterpriseOriginCode: enterpriseOriginCode.toString(),
         enterpriseDestinyCode: enterpriseDestinyCode.toString(),
         requestTypeCode: requestTypeCode.toString(),
         searchValue: value,
         configurationsProvider: configurationsProvider,
-        products: _products,
       );
 
       _errorMessageProducts = SoapRequestResponse.errorMessage;
     } catch (e) {
       //print('deu erro para consultar os produtos: $e');
       _errorMessageProducts = DefaultErrorMessage.ERROR;
+    } finally {
+      _isLoadingProducts = false;
+      notifyListeners();
     }
-    _isLoadingProducts = false;
-    notifyListeners();
   }
 
   Future<void> saveTransferRequest({

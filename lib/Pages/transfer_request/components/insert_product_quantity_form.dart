@@ -12,7 +12,7 @@ class InsertProductQuantityForm extends StatefulWidget {
   final FocusNode quantityFocusNode;
   final double totalItensInCart;
   final double totalItemValue;
-  final TransferRequestProductsModel product;
+  final GetProductJsonModel product;
   final void Function() addProductInCart;
   final void Function() updateTotalItemValue;
   const InsertProductQuantityForm({
@@ -81,7 +81,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
               flex: 10,
               child: InsertQuantityTextFormField(
                 autoFocus: true,
-                enabled: widget.product.Value > 0 ||
+                enabled: (widget.product.value ?? 0) > 0 ||
                     widget.selectedTransferRequestModel
                             .AllowAlterCostOrSalePrice ==
                         true,

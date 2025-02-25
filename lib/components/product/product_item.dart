@@ -6,7 +6,7 @@ import '../../../utils/utils.dart';
 
 class ProductItem extends StatelessWidget {
   final GetProductJsonModel product;
-  final Widget componentAfterProductInformations;
+  final Widget? componentAfterProductInformations;
   final bool? showCosts;
   final bool? showLastBuyEntrance;
   final bool? showPrice;
@@ -112,7 +112,8 @@ class ProductItem extends StatelessWidget {
                   ),
               ],
             ),
-            componentAfterProductInformations,
+            if (componentAfterProductInformations != null)
+              componentAfterProductInformations!,
           ],
         ),
       ),

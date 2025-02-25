@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/transfer_request/transfer_request.dart';
+import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';
@@ -46,7 +46,7 @@ class _ProductsItemsState extends State<ProductsItems> {
   void removeProduct({
     required TransferRequestProvider transferRequestProvider,
     required double totalItemValue,
-    required TransferRequestProductsModel product,
+    required GetProductJsonModel product,
     required String enterpriseDestinyCode,
     required String enterpriseOriginCode,
     required String requestTypeCode,
@@ -63,7 +63,7 @@ class _ProductsItemsState extends State<ProductsItems> {
       function: () {
         setState(() {
           transferRequestProvider.removeProductFromCart(
-            ProductPackingCode: product.ProductPackingCode,
+            ProductPackingCode: product.productPackingCode,
             enterpriseDestinyCode: enterpriseDestinyCode,
             enterpriseOriginCode: enterpriseOriginCode,
             requestTypeCode: requestTypeCode,
@@ -82,7 +82,7 @@ class _ProductsItemsState extends State<ProductsItems> {
   void changeFocus(
     TransferRequestProvider transferRequestProvider,
     int index,
-    TransferRequestProductsModel product,
+    GetProductJsonModel product,
   ) {
     if (selectedIndex == index) {
       setState(() {
@@ -95,7 +95,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     TransferRequestModel selectedTransferRequestModel =
         arguments["selectedTransferRequestModel"];
 
-    if (product.Value == 0 &&
+    if (product.value == 0 &&
         selectedTransferRequestModel.AllowAlterCostOrSalePrice != true) {
       ShowSnackbarMessage.show(
         message:
@@ -108,7 +108,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     if (selectedIndex != index) {
       quantityController.text = "1,000";
       newPriceController.text =
-          product.Value.toDouble().toString().toBrazilianNumber();
+          product.value.toString().toDouble().toString().toBrazilianNumber();
 
       setState(() {
         selectedIndex = index;
@@ -120,7 +120,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     TransferRequestModel selectedTransferRequestModel,
     double totalItemValue,
     TransferRequestProvider transferRequestProvider,
-    TransferRequestProductsModel product,
+    GetProductJsonModel product,
     TransferRequestEnterpriseModel destinyEnterprise,
     TransferRequestEnterpriseModel originEnterprise,
     ConfigurationsProvider configurationsProvider,
@@ -187,13 +187,12 @@ class _ProductsItemsState extends State<ProductsItems> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: transferRequestProvider.products.length,
       itemBuilder: (context, index) {
-        TransferRequestProductsModel product =
-            transferRequestProvider.products[index];
+        GetProductJsonModel product = transferRequestProvider.products[index];
 
         if (transferRequestProvider.products.isEmpty) return Container();
 
         double _totalItensInCart = transferRequestProvider.getTotalItensInCart(
-          ProductPackingCode: product.ProductPackingCode,
+          ProductPackingCode: product.productPackingCode,
           enterpriseOriginCode: originEnterprise.Code.toString(),
           enterpriseDestinyCode: destinyEnterprise.Code.toString(),
           requestTypeCode: selectedTransferRequestModel.Code.toString(),
@@ -204,199 +203,177 @@ class _ProductsItemsState extends State<ProductsItems> {
           consultedProductController: quantityController,
           newPriceController: newPriceController,
         );
-
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    changeFocus(transferRequestProvider, index, product);
-                  },
-                  child: Column(
-                    children: [
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "PLU",
-                        subtitle: product.PLU.toString(),
-                        otherWidget: AllStocks.allStocks(
-                          context: context,
-                          hasStocks: product.Stocks.length > 0,
-                          product: product,
-                        ),
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Produto",
-                        subtitle: product.Name.toString() +
-                            " (${product.PackingQuantity})",
-                      ),
-                      TitleAndSubtitle.titleAndSubtitle(
-                        title: "Preço",
-                        subtitle: ConvertString.convertToBRL(
-                          product.Value,
-                        ),
-                        subtitleColor: Theme.of(context).colorScheme.primary,
-                      ),
-                      if (product.BalanceStockSale != null)
-                        TitleAndSubtitle.titleAndSubtitle(
-                          title: "Estoque de venda",
-                          subtitle: product.BalanceStockSale!
-                              .toDouble()
-                              .toString()
-                              .toBrazilianNumber(),
-                          otherWidget: Icon(
-                            selectedIndex != index
-                                ? Icons.arrow_drop_down_sharp
-                                : Icons.arrow_drop_up_sharp,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 30,
-                          ),
-                        ),
-                      if (transferRequestProvider.alreadyContainsProduct(
-                        ProductPackingCode: product.ProductPackingCode,
-                        enterpriseOriginCode: originEnterprise.Code.toString(),
-                        enterpriseDestinyCode:
-                            destinyEnterprise.Code.toString(),
-                        requestTypeCode:
-                            selectedTransferRequestModel.Code.toString(),
-                      ))
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Qtd: " +
-                                    transferRequestProvider
-                                        .getTotalItensInCart(
-                                          ProductPackingCode:
-                                              product.ProductPackingCode,
-                                          enterpriseOriginCode:
-                                              originEnterprise.Code.toString(),
-                                          enterpriseDestinyCode:
-                                              destinyEnterprise.Code.toString(),
-                                          requestTypeCode:
-                                              selectedTransferRequestModel.Code
-                                                  .toString(),
-                                        )
-                                        .toStringAsFixed(3)
-                                        .replaceAll(RegExp(r'\.'), ','),
-                                style: TextStyle(
-                                  color: _totalItensInCart > 0
-                                      ? Colors.red
-                                      : Colors.grey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  // primary: _totalItensInCart > 0
-                                  //     ? Colors.red
-                                  //     : Colors.grey,
-                                ),
-                                onPressed: _totalItensInCart > 0
-                                    ? () => removeProduct(
-                                          transferRequestProvider:
-                                              transferRequestProvider,
-                                          totalItemValue: _totalItemValue,
-                                          product: product,
-                                          enterpriseOriginCode:
-                                              originEnterprise.Code.toString(),
-                                          enterpriseDestinyCode:
-                                              destinyEnterprise.Code.toString(),
-                                          requestTypeCode:
-                                              selectedTransferRequestModel.Code
-                                                  .toString(),
-                                        )
-                                    : null,
-                                child: const FittedBox(
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Remover produto",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ),
-                if (selectedIndex == index)
-                  InsertProductQuantityForm(
-                    selectedTransferRequestModel: selectedTransferRequestModel,
-                    quantityFocusNode: quantityFocusNode,
-                    consultedProductController: quantityController,
-                    consultedProductFormKey: _consultedProductFormKey,
-                    totalItemValue: _totalItemValue,
+//TODO when search product, remove selected index
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            GestureDetector(
+              onTap: () {
+                changeFocus(transferRequestProvider, index, product);
+              },
+              child: Column(
+                children: [
+                  ProductItem(
+                    showCosts: false,
+                    showPrice: true,
+                    showLastBuyEntrance: true,
+                    showMargins: false,
+                    showWholeInformations: false,
                     product: product,
-                    addProductInCart: () async {
-                      await insertUpdateProductInCart(
-                        selectedTransferRequestModel,
-                        _totalItemValue,
-                        transferRequestProvider,
-                        product,
-                        destinyEnterprise,
-                        originEnterprise,
-                        configurationsProvider,
-                      );
-                    },
-                    totalItensInCart: _totalItensInCart,
-                    updateTotalItemValue: () {
-                      setState(() {
-                        _totalItemValue =
-                            transferRequestProvider.getTotalItemValue(
-                          product: product,
-                          consultedProductController: quantityController,
-                          newPriceController: newPriceController,
-                        );
-                      });
-                    },
+                    enterpriseCode: originEnterprise.Code,
+                    componentAfterProductInformations: _totalItensInCart == 0
+                        ? null
+                        : Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Qtd: " +
+                                          transferRequestProvider
+                                              .getTotalItensInCart(
+                                                ProductPackingCode:
+                                                    product.productPackingCode,
+                                                enterpriseOriginCode:
+                                                    originEnterprise.Code
+                                                        .toString(),
+                                                enterpriseDestinyCode:
+                                                    destinyEnterprise.Code
+                                                        .toString(),
+                                                requestTypeCode:
+                                                    selectedTransferRequestModel
+                                                        .Code.toString(),
+                                              )
+                                              .toStringAsFixed(3)
+                                              .replaceAll(RegExp(r'\.'), ','),
+                                      style: TextStyle(
+                                        color: _totalItensInCart > 0
+                                            ? Colors.red
+                                            : Colors.grey,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    child: TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        // primary: _totalItensInCart > 0
+                                        //     ? Colors.red
+                                        //     : Colors.grey,
+                                      ),
+                                      onPressed: _totalItensInCart > 0
+                                          ? () => removeProduct(
+                                                transferRequestProvider:
+                                                    transferRequestProvider,
+                                                totalItemValue: _totalItemValue,
+                                                product: product,
+                                                enterpriseOriginCode:
+                                                    originEnterprise.Code
+                                                        .toString(),
+                                                enterpriseDestinyCode:
+                                                    destinyEnterprise.Code
+                                                        .toString(),
+                                                requestTypeCode:
+                                                    selectedTransferRequestModel
+                                                        .Code.toString(),
+                                              )
+                                          : null,
+                                      child: const FittedBox(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Remover produto",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (selectedIndex == index)
+                                InsertProductQuantityForm(
+                                  selectedTransferRequestModel:
+                                      selectedTransferRequestModel,
+                                  quantityFocusNode: quantityFocusNode,
+                                  consultedProductController:
+                                      quantityController,
+                                  consultedProductFormKey:
+                                      _consultedProductFormKey,
+                                  totalItemValue: _totalItemValue,
+                                  product: product,
+                                  addProductInCart: () async {
+                                    await insertUpdateProductInCart(
+                                      selectedTransferRequestModel,
+                                      _totalItemValue,
+                                      transferRequestProvider,
+                                      product,
+                                      destinyEnterprise,
+                                      originEnterprise,
+                                      configurationsProvider,
+                                    );
+                                  },
+                                  totalItensInCart: _totalItensInCart,
+                                  updateTotalItemValue: () {
+                                    setState(() {
+                                      _totalItemValue = transferRequestProvider
+                                          .getTotalItemValue(
+                                        product: product,
+                                        consultedProductController:
+                                            quantityController,
+                                        newPriceController: newPriceController,
+                                      );
+                                    });
+                                  },
+                                ),
+                              if (selectedIndex == index &&
+                                  selectedTransferRequestModel
+                                          .AllowAlterCostOrSalePrice ==
+                                      true)
+                                InsertQuantityTextFormField(
+                                  focusNode: newPriceFocusNode,
+                                  newQuantityController: newPriceController,
+                                  formKey: priceKey,
+                                  onChanged: () {
+                                    setState(() {});
+                                  },
+                                  onFieldSubmitted: () async {
+                                    await insertUpdateProductInCart(
+                                      selectedTransferRequestModel,
+                                      _totalItemValue,
+                                      transferRequestProvider,
+                                      product,
+                                      destinyEnterprise,
+                                      originEnterprise,
+                                      configurationsProvider,
+                                    );
+                                  },
+                                  autoFocus: false,
+                                  canReceiveEmptyValue: false,
+                                  enabled: true,
+                                  hintText: "Alterar preço R\$",
+                                  labelText: "Alterar preço R\$",
+                                  showSuffixIcon: false,
+                                  showPrefixIcon: false,
+                                ),
+                            ],
+                          ),
+                    //TODO dont show whole price. Dont show minimum whole quantity
                   ),
-                if (selectedIndex == index &&
-                    selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
-                        true)
-                  InsertQuantityTextFormField(
-                    focusNode: newPriceFocusNode,
-                    newQuantityController: newPriceController,
-                    formKey: priceKey,
-                    onChanged: () {
-                      setState(() {});
-                    },
-                    onFieldSubmitted: () async {
-                      await insertUpdateProductInCart(
-                        selectedTransferRequestModel,
-                        _totalItemValue,
-                        transferRequestProvider,
-                        product,
-                        destinyEnterprise,
-                        originEnterprise,
-                        configurationsProvider,
-                      );
-                    },
-                    autoFocus: false,
-                    canReceiveEmptyValue: false,
-                    enabled: true,
-                    hintText: "Alterar preço R\$",
-                    labelText: "Alterar preço R\$",
-                    showSuffixIcon: false,
-                    showPrefixIcon: false,
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );

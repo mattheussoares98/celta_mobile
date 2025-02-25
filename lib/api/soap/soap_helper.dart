@@ -272,14 +272,12 @@ class SoapHelper {
     }
   }
 
-  static Future<void> getProductTransferRequest({
+  static Future<List<GetProductJsonModel>> getProductTransferRequest({
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
-    required List<TransferRequestProductsModel> products,
-    // required EnterpriseModel enterprise,
   }) async {
     try {
       await SoapRequest.soapPost(
@@ -302,13 +300,12 @@ class SoapHelper {
         throw Exception();
       }
 
-      TransferRequestProductsModel
-          .responseAsStringToTransferRequestProductsModel(
-        responseAsString: SoapRequestResponse.responseAsString,
-        listToAdd: products,
-      );
+      return (json.decode(SoapRequestResponse.responseAsString) as List)
+          .map((e) => GetProductJsonModel.fromJson(e))
+          .toList();
     } catch (e) {
       e;
+      return [];
     }
   }
 

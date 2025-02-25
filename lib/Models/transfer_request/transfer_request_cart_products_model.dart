@@ -1,4 +1,7 @@
-class TransferRequestCartProductsModel {//TODO remove this
+import '../models.dart';
+
+class TransferRequestCartProductsModel {
+  //TODO remove this
   int ProductPackingCode;
   String Name;
   double Quantity;
@@ -108,12 +111,13 @@ class TransferRequestCartProductsModel {//TODO remove this
         "StockByEnterpriseAssociateds": StockByEnterpriseAssociateds,
       };
   static updateJsonSaleRequest({
-    required List<TransferRequestCartProductsModel> products,
+    required List<GetProductJsonModel> products,
     required Map jsonSaleRequest,
     required int enterpriseOriginCode,
     required int enterpriseDestinyCode,
     required int requestTypeCode,
   }) {
+    //TODO create a function to update the jsonSaleRequest
     jsonSaleRequest["EnterpriseOriginCode"] = enterpriseOriginCode;
     jsonSaleRequest["EnterpriseDestinyCode"] = enterpriseDestinyCode;
     jsonSaleRequest["RequestTypeCode"] = requestTypeCode;
@@ -121,9 +125,9 @@ class TransferRequestCartProductsModel {//TODO remove this
     List<Map> productsWithUnnecessaryKeys = [];
     products.forEach((element) {
       productsWithUnnecessaryKeys.add({
-        "ProductPackingCode": element.ProductPackingCode,
-        "Quantity": element.Quantity,
-        "Value": element.Value,
+        "ProductPackingCode": element.productPackingCode,
+        "Quantity": element.quantity,
+        "Value": element.value,
         // "IncrementPercentageOrValue": element.IncrementPercentageOrValue,
         // "DiscountPercentageOrValue": element.DiscountPercentageOrValue,
         // "DiscountValue": element.DiscountValue,

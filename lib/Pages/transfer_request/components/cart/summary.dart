@@ -4,7 +4,7 @@ import '../../../../models/models.dart';
 import '../../../../utils/utils.dart';
 
 class Summary extends StatelessWidget {
-  final TransferRequestCartProductsModel product;
+  final GetProductJsonModel product;
   const Summary({
     required this.product,
     super.key,
@@ -37,17 +37,17 @@ class Summary extends StatelessWidget {
       children: [
         item(
           title: "Qtd",
-          value: product.Quantity.toString(),
+          value: product.quantity.toString(),
           addBrazilianCoin: false,
         ),
         item(
           title: "Preço",
-          value: product.Value.toString(),
+          value: product.value.toString(),
           addBrazilianCoin: true,
         ),
         item(
           title: "Total",
-          value: (product.Quantity * product.Value).toString(),
+          value: (product.quantity * (product.value ?? 0)).toString(),
           addBrazilianCoin: true,
         ),
         Padding(

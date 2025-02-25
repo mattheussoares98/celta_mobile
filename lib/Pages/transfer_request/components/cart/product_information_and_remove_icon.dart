@@ -6,7 +6,7 @@ import '../../../../models/models.dart';
 import '../../../../providers/providers.dart';
 
 class ProductInformationAndRemoveIcon extends StatelessWidget {
-  final TransferRequestCartProductsModel product;
+  final GetProductJsonModel product;
   final TransferRequestEnterpriseModel originEnterprise;
   final TransferRequestEnterpriseModel destinyEnterprise;
   final TransferRequestModel selectedTransferRequestModel;
@@ -47,10 +47,10 @@ class ProductInformationAndRemoveIcon extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TitleAndSubtitle.titleAndSubtitle(
-                subtitle: "${product.Name} (${product.PackingQuantity})",
+                subtitle: "${product.name} (${product.packingQuantity})",
               ),
               TitleAndSubtitle.titleAndSubtitle(
-                subtitle: "PLU: " + product.PLU,
+                subtitle: "PLU: " + product.plu.toString(),
               ),
             ],
           ),
@@ -66,7 +66,7 @@ class ProductInformationAndRemoveIcon extends StatelessWidget {
                     enterpriseDestinyCode: destinyEnterprise.Code.toString(),
                     requestTypeCode:
                         selectedTransferRequestModel.Code.toString(),
-                    ProductPackingCode: product.ProductPackingCode,
+                    ProductPackingCode: product.productPackingCode,
                   );
                 });
           },

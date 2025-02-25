@@ -11,7 +11,7 @@ class EditQuantityAndPrice extends StatefulWidget {
   final void Function() unselectIndex;
   final TransferRequestEnterpriseModel originEnterprise;
   final TransferRequestEnterpriseModel destinyEnterprise;
-  final TransferRequestCartProductsModel product;
+  final GetProductJsonModel product;
   const EditQuantityAndPrice({
     required this.selectedTransferRequestModel,
     required this.unselectIndex,
@@ -77,7 +77,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
       return 0;
     } else if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice !=
         true) {
-      return quantity * widget.product.Value;
+      return quantity * (widget.product.value ?? 0);
     } else {
       final price = priceController.text.toDouble();
       if (price <= 0) return 0;

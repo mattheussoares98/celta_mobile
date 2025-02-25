@@ -47,7 +47,7 @@ class _SaleRequestCartItemsState extends State<CartItems> {
       requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
     );
 
-    List<TransferRequestCartProductsModel> cartProducts =
+    List<GetProductJsonModel> cartProducts =
         transferRequestProvider.getCartProducts(
       enterpriseOriginCode: widget.originEnterprise.Code.toString(),
       enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
