@@ -77,11 +77,20 @@ class _ProductsItemsState extends State<ProductsItems> {
       setState(() {
         selectedIndex = index;
       });
+
+      Future.delayed(Duration.zero, () {
+        quantityController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: quantityController.text.length,
+        );
+        quantityFocusNode.requestFocus();
+      });
     }
   }
 
   void changeFocusToPrice() {
-    ShowSnackbarMessage.show(message: "Digite um preço válido", context: context);
+    ShowSnackbarMessage.show(
+        message: "Digite um preço válido", context: context);
 
     Future.delayed(Duration.zero, () {
       newPriceFocusNode.requestFocus();
