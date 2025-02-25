@@ -11,9 +11,9 @@ class FormFieldValidations {
     bool valueCanIsEmpty = false,
   }) {
     if (value!.isEmpty && !valueCanIsEmpty) {
-      return 'Digite uma quantidade';
+      return 'Digite um valor';
     } else if (value == '0' || value == '0.' || value == '0,') {
-      return 'Digite uma quantidade';
+      return 'Digite um valor';
     } else if (value.contains('.') && value.contains(',')) {
       return 'Carácter inválido';
     } else if (value.contains('-')) {
@@ -35,7 +35,7 @@ class FormFieldValidations {
     } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
         value.isNotEmpty &&
         !valueCanIsEmpty) {
-      return "Digite uma quantidade";
+      return "Digite um valor";
     } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
         value.isNotEmpty) {
       return "Número inválido";
