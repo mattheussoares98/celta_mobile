@@ -25,14 +25,12 @@ class InsertProductsPage extends StatefulWidget {
 class _InsertProductsPageState extends State<InsertProductsPage> {
   TextEditingController searchProductTextEditingController =
       TextEditingController();
-  TextEditingController consultedProductController = TextEditingController();
   final searchProductFocusNode = FocusNode();
 
   @override
   void dispose() {
     super.dispose();
     searchProductTextEditingController.dispose();
-    consultedProductController.dispose();
     searchProductFocusNode.dispose();
   }
 
@@ -57,8 +55,6 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                 ConfigurationType.personalizedCode,
               ],
               onPressSearch: () async {
-                consultedProductController.clear();
-
                 await transferRequestProvider.getProducts(
                   requestTypeCode: widget.requestTypeCode.toString(),
                   enterpriseOriginCode: widget.enterpriseOriginCode,
