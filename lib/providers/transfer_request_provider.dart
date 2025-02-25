@@ -308,10 +308,10 @@ class TransferRequestProvider with ChangeNotifier {
 
   double getTotalItemValue({
     required GetProductJsonModel product,
-    required TextEditingController consultedProductController,
+    required TextEditingController quantityController,
     required TextEditingController newPriceController,
   }) {
-    double _quantityToAdd = consultedProductController.text.toDouble();
+    double _quantityToAdd = quantityController.text.toDouble();
 
     if (_quantityToAdd <= 0) {
       _quantityToAdd = 1;
@@ -326,16 +326,7 @@ class TransferRequestProvider with ChangeNotifier {
 
     double _totalItemValue = _quantityToAdd * priceValue;
 
-    double? controllerInDouble = double.tryParse(
-        consultedProductController.text.replaceAll(RegExp(r'\,'), '.'));
-
-    if (controllerInDouble != null) {
-      _quantityToAdd = double.tryParse(
-        consultedProductController.text.replaceAll(RegExp(r','), '\.'),
-      )!;
-    }
-
-    _changeCursorToLastIndex(consultedProductController);
+    _changeCursorToLastIndex(quantityController);
 
     return _totalItemValue;
   }

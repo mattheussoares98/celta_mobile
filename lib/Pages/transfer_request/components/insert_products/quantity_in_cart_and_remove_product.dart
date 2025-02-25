@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../components/components.dart';
 import '../../../../models/models.dart';
 import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
 
 class QuantityInCartAndRemoveProduct extends StatelessWidget {
   final GetProductJsonModel product;
@@ -60,10 +61,10 @@ class QuantityInCartAndRemoveProduct extends StatelessWidget {
                       requestTypeCode:
                           selectedTransferRequestModel.Code.toString(),
                     )
-                    .toStringAsFixed(3)
-                    .replaceAll(RegExp(r'\.'), ','),
+                    .toString()
+                    .toBrazilianNumber(3),
             style: TextStyle(
-              color: Colors.red,
+              color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
             ),
           ),

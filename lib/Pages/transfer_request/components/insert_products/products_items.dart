@@ -168,7 +168,7 @@ class _ProductsItemsState extends State<ProductsItems> {
 
         double _totalItemValue = transferRequestProvider.getTotalItemValue(
           product: product,
-          consultedProductController: quantityController,
+          quantityController: quantityController,
           newPriceController: newPriceController,
         );
         return Column(
@@ -234,7 +234,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                                   _totalItemValue =
                                       transferRequestProvider.getTotalItemValue(
                                     product: product,
-                                    consultedProductController:
+                                    quantityController:
                                         quantityController,
                                     newPriceController: newPriceController,
                                   );

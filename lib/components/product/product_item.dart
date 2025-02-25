@@ -67,16 +67,21 @@ class ProductItem extends StatelessWidget {
                 ),
                 if (showPrice == true)
                   getTitleAndSubtitle(
-                    value: product.retailPracticedPrice.toString(),
+                    value: product.value.toString(),
                     isPrice: true,
-                    successMessage: "Preço de venda",
-                    errorMessage: "Sem preço de venda",
+                    successMessage: "Preço",
+                    errorMessage: "Sem preço",
                     context: context,
                   ),
                 TitleAndSubtitle.titleAndSubtitle(
-                  title: _getAtualStock(product, enterpriseCode) != null
-                      ? "Estoque atual"
-                      : null,
+                  title:
+                      _getAtualStock(product, enterpriseCode)?.stockQuantity !=
+                                  null &&
+                              _getAtualStock(product, enterpriseCode)!
+                                      .stockQuantity! >
+                                  0
+                          ? "Estoque atual"
+                          : null,
                   subtitle: _getStockValueMessage(product, enterpriseCode),
                   subtitleColor:
                       _getStockSubtitleColor(context, product, enterpriseCode),
@@ -148,7 +153,7 @@ Widget getTitleAndSubtitle({
             : value.toBrazilianNumber())
         : errorMessage,
     subtitleColor:
-        hasValue ? Theme.of(context).colorScheme.primary : Colors.black,
+        hasValue ? Theme.of(context).colorScheme.primary : Colors.red,
   );
 }
 
@@ -172,7 +177,7 @@ Color _getStockSubtitleColor(
   if (atualStock == null) {
     return Colors.black;
   } else if (atualStock.stockQuantity == 0) {
-    return Colors.black;
+    return Colors.red;
   } else if (atualStock.stockQuantity! > 0) {
     return Theme.of(context).colorScheme.primary;
   } else {
