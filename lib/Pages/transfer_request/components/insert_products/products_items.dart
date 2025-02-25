@@ -211,29 +211,37 @@ class _ProductsItemsState extends State<ProductsItems> {
                                   selectedTransferRequestModel,
                             ),
                           if (selectedIndex == index)
-                            InsertProductQuantityForm(
-                              selectedTransferRequestModel:
-                                  selectedTransferRequestModel,
-                              quantityFocusNode: quantityFocusNode,
-                              consultedProductController: quantityController,
-                              consultedProductFormKey: _consultedProductFormKey,
-                              totalItemValue: _totalItemValue,
-                              product: product,
-                              addProductInCart: () async {
-                                await insertUpdateProductInCart(
-                                  selectedTransferRequestModel,
-                                  _totalItemValue,
-                                  transferRequestProvider,
-                                  product,
-                                  destinyEnterprise,
-                                  originEnterprise,
-                                  configurationsProvider,
-                                );
-                              },
-                              totalItensInCart: _totalItensInCart,
-                              updateTotalItemValue: () {
-                                setState(() {});
-                              },
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () {},
+                              child: InsertProductQuantityForm(
+                                selectedTransferRequestModel:
+                                    selectedTransferRequestModel,
+                                quantityFocusNode: quantityFocusNode,
+                                consultedProductController: quantityController,
+                                consultedProductFormKey:
+                                    _consultedProductFormKey,
+                                totalItemValue: _totalItemValue,
+                                product: product,
+                                addProductInCart: () async {
+                                  await insertUpdateProductInCart(
+                                    selectedTransferRequestModel,
+                                    _totalItemValue,
+                                    transferRequestProvider,
+                                    product,
+                                    destinyEnterprise,
+                                    originEnterprise,
+                                    configurationsProvider,
+                                  );
+                                },
+                                totalItensInCart: _totalItensInCart,
+                                updateTotalItemValue: () {
+                                  setState(() {});
+                                },
+                              ),
                             ),
                           if (selectedIndex == index &&
                               selectedTransferRequestModel
