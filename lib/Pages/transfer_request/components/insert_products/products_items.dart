@@ -80,6 +80,30 @@ class _ProductsItemsState extends State<ProductsItems> {
     }
   }
 
+  void changeFocusToPrice() {
+    ShowSnackbarMessage.show(message: "Digite um preço válido", context: context);
+
+    Future.delayed(Duration.zero, () {
+      newPriceFocusNode.requestFocus();
+      newPriceController.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: newPriceController.text.length,
+      );
+    });
+  }
+
+  void changeFocusToQuantity() {
+    ShowSnackbarMessage.show(message: "Digite a quantidade", context: context);
+
+    Future.delayed(Duration.zero, () {
+      quantityController.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: quantityController.text.length,
+      );
+      quantityFocusNode.requestFocus();
+    });
+  }
+
   Future<void> insertUpdateProductInCart(
     TransferRequestModel selectedTransferRequestModel,
     double totalItemValue,
@@ -89,32 +113,13 @@ class _ProductsItemsState extends State<ProductsItems> {
     TransferRequestEnterpriseModel originEnterprise,
     ConfigurationsProvider configurationsProvider,
   ) async {
-    if (newPriceFocusNode.hasFocus && totalItemValue == 0) {
-      ShowSnackbarMessage.show(
-        message: "O total dos itens está zerado!",
-        context: context,
-      );
-      Future.delayed(Duration.zero, () {
-        newPriceFocusNode.requestFocus();
-        newPriceController.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: newPriceController.text.length,
-        );
-      });
-    } else if (selectedTransferRequestModel.AllowAlterCostOrSalePrice == true &&
-        totalItemValue == 0) {
-      Future.delayed(Duration.zero, () {
-        newPriceFocusNode.requestFocus();
-        newPriceController.selection = TextSelection(
-          baseOffset: 0,
-          extentOffset: newPriceController.text.length,
-        );
-      });
-    } else if (totalItemValue == 0) {
-      ShowSnackbarMessage.show(
-        message: "O total dos itens está zerado!",
-        context: context,
-      );
+    if (quantityController.text.toDouble() <= 0) {
+      changeFocusToQuantity();
+      return;
+    } else if (totalItemValue < 0.01 &&
+        selectedTransferRequestModel.AllowAlterCostOrSalePrice == true) {
+      changeFocusToPrice();
+      return;
     } else {
       await transferRequestProvider.insertUpdateProductInCart(
         newPriceController: newPriceController,
@@ -159,13 +164,6 @@ class _ProductsItemsState extends State<ProductsItems> {
         GetProductJsonModel product = transferRequestProvider.products[index];
 
         if (transferRequestProvider.products.isEmpty) return Container();
-
-        double _totalItensInCart = transferRequestProvider.getTotalItensInCart(
-          ProductPackingCode: product.productPackingCode,
-          enterpriseOriginCode: originEnterprise.Code.toString(),
-          enterpriseDestinyCode: destinyEnterprise.Code.toString(),
-          requestTypeCode: selectedTransferRequestModel.Code.toString(),
-        );
 
         double _totalItemValue = transferRequestProvider.getNewPrice(
           newQuantity: quantityController.text.toDouble(),
@@ -237,7 +235,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                                     configurationsProvider,
                                   );
                                 },
-                                totalItensInCart: _totalItensInCart,
                                 updateTotalItemValue: () {
                                   setState(() {});
                                 },
