@@ -14,6 +14,7 @@ class Summary extends StatelessWidget {
     required String title,
     required String value,
     required bool addBrazilianCoin,
+    required int decimalHouses,
   }) {
     return Expanded(
       child: Column(
@@ -22,7 +23,7 @@ class Summary extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.grey[600])),
           Text(
-            "${value.toBrazilianNumber(3)}" +
+            "${value.toBrazilianNumber(decimalHouses)}" +
                 (addBrazilianCoin == true ? "".addBrazilianCoin() : ""),
             style: TextStyle(color: Colors.grey[600]),
           ),
@@ -39,16 +40,19 @@ class Summary extends StatelessWidget {
           title: "Qtd",
           value: product.quantity.toString(),
           addBrazilianCoin: false,
+          decimalHouses: 3,
         ),
         item(
           title: "Preço",
           value: product.value.toString(),
           addBrazilianCoin: true,
+          decimalHouses: 2,
         ),
         item(
           title: "Total",
           value: (product.quantity * (product.value ?? 0)).toString(),
           addBrazilianCoin: true,
+          decimalHouses: 2,
         ),
         Padding(
           padding: const EdgeInsets.only(right: 8),

@@ -62,22 +62,39 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
   Future<void> updateInCart(
     TransferRequestProvider transferRequestProvider,
   ) async {
-    if (isValid() != true) return;
-    await transferRequestProvider.insertUpdateProductInCart(
-      product: widget.product,
-      quantityController: quantityController,
-      newPriceController: priceController,
-      enterpriseOriginCode: widget.originEnterprise.Code.toString(),
-      enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
-      requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
-      isAdding: false,
-    );
+    if (isValid() != true) {
+      return;
+    } else if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
+            true &&
+        quantityFocusNode.hasFocus) {
+      priceFocusNode.requestFocus();
+      return;
+    }
 
-    widget.unselectIndex();
+    ShowAlertDialog.show(
+        context: context,
+        title: "Deseja realmente atualizar?",
+        function: () async {
+          await transferRequestProvider.insertUpdateProductInCart(
+            product: widget.product,
+            quantityController: quantityController,
+            newPriceController: priceController,
+            enterpriseOriginCode: widget.originEnterprise.Code.toString(),
+            enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
+            requestTypeCode:
+                widget.selectedTransferRequestModel.Code.toString(),
+            isAdding: false,
+          );
+
+          widget.unselectIndex();
+        });
   }
 
   bool? isValid() {
-    if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice == true) {
+    if (getNewPrice() < 0.01) {
+      return false;
+    } else if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
+        true) {
       return priceFormKey.currentState?.validate() == true &&
           quantityFormKey.currentState?.validate() == true;
     } else {
@@ -88,74 +105,74 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
   @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider = Provider.of(context);
+    double newPrice = getNewPrice();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
+      child: Row(
         children: [
-          InsertQuantityTextFormField(
-            focusNode: quantityFocusNode,
-            newQuantityController: quantityController,
-            formKey: quantityFormKey,
-            onChanged: (_) {
-              setState(() {});
-            },
-            onFieldSubmitted: (_) async {
-              await updateInCart(transferRequestProvider);
-              //TODO test when can change price
-            },
-          ),
-          if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
-              true)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: InsertQuantityTextFormField(
-                showPrefixIcon: false,
-                showSuffixIcon: false,
-                canReceiveEmptyValue: false,
-                focusNode: priceFocusNode,
-                newQuantityController: priceController,
-                formKey: priceFormKey,
-                hintText: "Preço R\$",
-                labelText: "Preço R\$",
-                onChanged: (_) {
-                  setState(() {});
-                },
-                onFieldSubmitted: (_) {},
-              ),
-            ),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Text("Novo preço"),
-                    Text(
-                      getNewPrice()
-                          .toString()
-                          .toBrazilianNumber()
-                          .addBrazilianCoin(),
-                    ),
-                  ],
+          Expanded(
+            flex: 2,
+            child: Column(
+              children: [
+                InsertQuantityTextFormField(
+                  focusNode: quantityFocusNode,
+                  newQuantityController: quantityController,
+                  formKey: quantityFormKey,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                  onFieldSubmitted: (_) async {
+                    await updateInCart(transferRequestProvider);
+                  },
                 ),
-              ),
-              Expanded(
-                child: ElevatedButton(
+                if (widget.selectedTransferRequestModel
+                        .AllowAlterCostOrSalePrice ==
+                    true)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: InsertQuantityTextFormField(
+                      showPrefixIcon: false,
+                      showSuffixIcon: false,
+                      canReceiveEmptyValue: false,
+                      focusNode: priceFocusNode,
+                      newQuantityController: priceController,
+                      formKey: priceFormKey,
+                      hintText: "Preço R\$",
+                      labelText: "Preço R\$",
+                      maxDecimalHouses: 2,
+                      onChanged: (_) {
+                        setState(() {});
+                      },
+                      onFieldSubmitted: (_) async {
+                        await updateInCart(transferRequestProvider);
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  "Novo preço \n ${(newPrice < 0.01 ? 0 : newPrice).toString().toBrazilianNumber().addBrazilianCoin()}",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                ElevatedButton(
                   onPressed: isValid() != true
                       ? null
                       : () async {
-                          ShowAlertDialog.show(
-                              context: context,
-                              title: "Deseja realmente atualizar?",
-                              function: () async {
-                                await updateInCart(transferRequestProvider);
-                              });
+                          await updateInCart(transferRequestProvider);
                         },
-                  child: FittedBox(child: Text("Alterar preço")),
+                  child: FittedBox(child: Text("Alterar")),
                 ),
-              ),
-            ],
-          )
+              ],
+            ),
+          ),
         ],
       ),
     );
