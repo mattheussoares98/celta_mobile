@@ -43,26 +43,10 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
     priceController.dispose();
   }
 
-  double getNewPrice() {
-    final quantity = quantityController.text.toDouble();
-
-    if (quantity <= 0) {
-      return 0;
-    } else if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice !=
-        true) {
-      return quantity * (widget.product.value ?? 0);
-    } else {
-      final price = priceController.text.toDouble();
-      if (price <= 0) return 0;
-
-      return quantity * priceController.text.toDouble();
-    }
-  }
-
   Future<void> updateInCart(
     TransferRequestProvider transferRequestProvider,
   ) async {
-    if (isValid() != true) {
+    if (isValid(transferRequestProvider) != true) {
       return;
     } else if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
             true &&
@@ -90,8 +74,14 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
         });
   }
 
-  bool? isValid() {
-    if (getNewPrice() < 0.01) {
+  bool? isValid(TransferRequestProvider transferRequestProvider) {
+    if (transferRequestProvider.getNewPrice(
+          newQuantity: quantityController.text.toDouble(),
+          product: widget.product,
+          selectedTransferRequestModel: widget.selectedTransferRequestModel,
+          newPrice: priceController.text.toDouble(),
+        ) <
+        0.01) {
       return false;
     } else if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
         true) {
@@ -105,7 +95,12 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
   @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider = Provider.of(context);
-    double newPrice = getNewPrice();
+    double newPrice = transferRequestProvider.getNewPrice(
+      newQuantity: quantityController.text.toDouble(),
+      product: widget.product,
+      selectedTransferRequestModel: widget.selectedTransferRequestModel,
+      newPrice: priceController.text.toDouble(),
+    );
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -159,11 +154,9 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
                   "Novo preço \n ${(newPrice < 0.01 ? 0 : newPrice).toString().toBrazilianNumber().addBrazilianCoin()}",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
+                const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: isValid() != true
+                  onPressed: isValid(transferRequestProvider) != true
                       ? null
                       : () async {
                           await updateInCart(transferRequestProvider);

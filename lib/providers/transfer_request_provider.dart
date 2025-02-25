@@ -674,4 +674,21 @@ class TransferRequestProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  double getNewPrice({
+    required double newQuantity,
+    required GetProductJsonModel product,
+    required TransferRequestModel selectedTransferRequestModel,
+    required double? newPrice,
+  }) {
+    if (newQuantity <= 0) {
+      return 0;
+    } else if (selectedTransferRequestModel.AllowAlterCostOrSalePrice != true) {
+      return newQuantity * (product.value ?? 0);
+    } else {
+      if (newPrice != null && newPrice <= 0) return 0;
+
+      return newQuantity * newPrice!;
+    }
+  }
 }
