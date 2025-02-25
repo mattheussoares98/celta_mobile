@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/models.dart';
+import '../../../../models/models.dart';
 
-import '../../../utils/utils.dart';
-import '../../../components/components.dart';
+import '../../../../utils/utils.dart';
+import '../../../../components/components.dart';
 
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
