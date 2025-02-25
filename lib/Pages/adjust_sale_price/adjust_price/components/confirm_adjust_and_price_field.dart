@@ -107,7 +107,7 @@ class _PriceFieldAndConfirmAdjustButtonState
                   ),
                   validator: (value) {
                     return FormFieldValidations.number(
-                      value: value,
+                      value,
                       maxDecimalPlaces: 2,
                     );
                   },

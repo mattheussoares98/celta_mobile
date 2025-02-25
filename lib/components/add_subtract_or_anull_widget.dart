@@ -95,15 +95,14 @@ class _AddSubtractOrAnullWidget extends State<AddSubtractOrAnullWidget> {
                       },
                       controller: widget.consultedProductController,
                       focusNode: widget.consultedProductFocusNode,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       inputFormatters: [LengthLimitingTextInputFormatter(10)],
                       onChanged: (value) {
                         if (value.isEmpty || value == '-') {
                           value = '0';
                         }
                       },
-                      validator: (value) {
-                        return FormFieldValidations.number(value: value);
-                      },
+                      validator: FormFieldValidations.number,
                       decoration: FormFieldDecoration.decoration(
                         context: context,
                         labelText: 'Quantidade',

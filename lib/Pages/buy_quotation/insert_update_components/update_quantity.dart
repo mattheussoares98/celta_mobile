@@ -101,9 +101,8 @@ class UpdateQuantity extends StatelessWidget {
                   maxLength: 11,
                   validator: (value) {
                     return FormFieldValidations.number(
-                      maxDecimalPlaces: 3,
+                      value,
                       valueCanIsEmpty: true,
-                      value: value,
                     );
                   },
                   decoration: FormFieldDecoration.decoration(

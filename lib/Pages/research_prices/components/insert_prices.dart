@@ -58,7 +58,7 @@ class _InsertPricesState extends State<InsertPrices> {
         },
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (value) => FormFieldValidations.number(
-          value: value,
+          value,
           maxDecimalPlaces: 2,
           valueCanIsEmpty: true,
         ),

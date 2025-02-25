@@ -57,18 +57,18 @@ class _LimitAndBindCovenantButtonState
             Expanded(
               child: TextFormField(
                 autofocus: false,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 controller: controller,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onFieldSubmitted: (_) {
                   associateCovenant(key, customerRegisterProvider);
                 },
                 validator: (value) => FormFieldValidations.number(
-                  value: value,
+                  value,
                   maxDecimalPlaces: 2,
                 ),
                 decoration: FormFieldDecoration.decoration(
-                  
                   context: context,
                   hintText: "Limite R\$",
                   labelText: "Limite R\$",

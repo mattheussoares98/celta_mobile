@@ -20,7 +20,6 @@ class QuantityField extends StatelessWidget {
       focusNode: quantityFocusNode,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: FormFieldDecoration.decoration(
-        
         context: context,
         hintText: "Quantidade",
         labelText: "Quantidade",
@@ -37,9 +36,7 @@ class QuantityField extends StatelessWidget {
       onFieldSubmitted: (_) async {
         await insertUpdateProduct();
       },
-      validator: (value) {
-        return FormFieldValidations.number(value: value);
-      },
+      validator: FormFieldValidations.number,
     );
   }
 }

@@ -103,9 +103,7 @@ class _AdjustStockInsertQuantityState extends State<AdjustStockInsertQuantity> {
                         );
                       }
                     },
-                    validator: (value) {
-                      return FormFieldValidations.number(value: value);
-                    },
+                    validator: FormFieldValidations.number,
                     decoration: FormFieldDecoration.decoration(
                       context: context,
                       labelText: 'Quantidade',

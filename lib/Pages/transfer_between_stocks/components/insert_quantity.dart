@@ -124,9 +124,7 @@ class _InsertQuantityState extends State<InsertQuantity> {
                         );
                       }
                     },
-                    validator: (value) {
-                      return FormFieldValidations.number(value: value);
-                    },
+                    validator: FormFieldValidations.number,
                     decoration: FormFieldDecoration.decoration(
                       context: context,
                       labelText: "Quantidade",

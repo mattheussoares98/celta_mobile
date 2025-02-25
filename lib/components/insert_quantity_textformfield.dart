@@ -12,12 +12,13 @@ class InsertQuantityTextFormField extends StatefulWidget {
   final bool autoFocus;
   final GlobalKey formKey;
   final int lengthLimitingTextInputFormatter;
-  final void Function() onChanged;//TODO improve this declaration
-  final Function onFieldSubmitted;//TODO improve this declaration
+  final void Function() onChanged; //TODO improve this declaration
+  final Function onFieldSubmitted; //TODO improve this declaration
   final bool canReceiveEmptyValue;
   final bool? enabled;
   final bool? showPrefixIcon;
   final bool? showSuffixIcon;
+  final int maxDecimalHouses;
   const InsertQuantityTextFormField({
     required this.focusNode,
     required this.newQuantityController,
@@ -32,6 +33,7 @@ class InsertQuantityTextFormField extends StatefulWidget {
     this.enabled = true,
     this.showPrefixIcon = true,
     this.showSuffixIcon = true,
+    this.maxDecimalHouses = 3,
     Key? key,
   }) : super(key: key);
 
@@ -73,8 +75,12 @@ class _InsertQuantityTextFormFieldState
 
           widget.onChanged();
         },
-        validator: (value) {//TODO pass decimal houses
-          return FormFieldValidations.number(value: value);
+        validator: (value) {
+          return FormFieldValidations.number(
+            value,
+            maxDecimalPlaces: widget.maxDecimalHouses,
+            valueCanIsEmpty: widget.canReceiveEmptyValue,
+          );
         },
         decoration: FormFieldDecoration.decoration(
           context: context,

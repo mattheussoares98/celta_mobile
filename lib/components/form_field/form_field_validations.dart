@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class FormFieldValidations {
   FormFieldValidations._();
 
-  static String? number({
-    String? value,//TODO change the constructor
+  static String? number(
+    String? value, {
     int maxDecimalPlaces = 3,
     bool valueCanIsEmpty = false,
   }) {

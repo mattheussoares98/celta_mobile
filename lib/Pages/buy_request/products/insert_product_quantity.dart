@@ -93,7 +93,7 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                     autovalidateMode: AutovalidateMode.always,
                     validator: (value) {
                       return FormFieldValidations.number(
-                        value: value,
+                        value,
                         maxDecimalPlaces: 2,
                       );
                     },
@@ -118,7 +118,8 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                       }
                     },
                     style: FormFieldStyle.style(),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 3),
@@ -136,11 +137,10 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                       value: value,
                     ),
                     validator: (value) => FormFieldValidations.number(
-                      value: value,
+                      value,
                       maxDecimalPlaces: 4,
                     ),
                     decoration: FormFieldDecoration.decoration(
-                      
                       context: context,
                       labelText: 'Custo',
                     ),
@@ -153,7 +153,8 @@ class _BuyRequestInsertProductQuantity extends State<InsertProductQuantity> {
                       }
                     },
                     style: FormFieldStyle.style(),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
                 const SizedBox(width: 5),
