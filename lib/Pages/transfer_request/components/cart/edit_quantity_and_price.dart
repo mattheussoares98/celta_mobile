@@ -59,6 +59,32 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
     }
   }
 
+  Future<void> updateInCart(
+    TransferRequestProvider transferRequestProvider,
+  ) async {
+    if (isValid() != true) return;
+    await transferRequestProvider.insertUpdateProductInCart(
+      product: widget.product,
+      quantityController: quantityController,
+      newPriceController: priceController,
+      enterpriseOriginCode: widget.originEnterprise.Code.toString(),
+      enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
+      requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
+      isAdding: false,
+    );
+
+    widget.unselectIndex();
+  }
+
+  bool? isValid() {
+    if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice == true) {
+      return priceFormKey.currentState?.validate() == true &&
+          quantityFormKey.currentState?.validate() == true;
+    } else {
+      return quantityFormKey.currentState?.validate() == true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider = Provider.of(context);
@@ -73,19 +99,10 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
             formKey: quantityFormKey,
             onChanged: (_) {
               setState(() {});
-              debugPrint("Changing quantity");
             },
             onFieldSubmitted: (_) async {
-              await transferRequestProvider.insertUpdateProductInCart(
-                product: widget.product,
-                quantityController: quantityController,
-                newPriceController: priceController,
-                enterpriseOriginCode: widget.originEnterprise.Code.toString(),
-                enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
-                requestTypeCode:
-                    widget.selectedTransferRequestModel.Code.toString(),
-                isAdding: false,
-              );
+              await updateInCart(transferRequestProvider);
+              //TODO test when can change price
             },
           ),
           if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
@@ -95,6 +112,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
               child: InsertQuantityTextFormField(
                 showPrefixIcon: false,
                 showSuffixIcon: false,
+                canReceiveEmptyValue: false,
                 focusNode: priceFocusNode,
                 newQuantityController: priceController,
                 formKey: priceFormKey,
@@ -123,27 +141,14 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: getNewPrice() <= 0
+                  onPressed: isValid() != true
                       ? null
                       : () async {
                           ShowAlertDialog.show(
                               context: context,
                               title: "Deseja realmente atualizar?",
                               function: () async {
-                                await transferRequestProvider
-                                    .insertUpdateProductInCart(
-                                  isAdding: false,
-                                  product: widget.product,
-                                  quantityController: quantityController,
-                                  newPriceController: priceController,
-                                  enterpriseOriginCode:
-                                      widget.originEnterprise.Code.toString(),
-                                  enterpriseDestinyCode:
-                                      widget.destinyEnterprise.Code.toString(),
-                                  requestTypeCode: widget
-                                      .selectedTransferRequestModel.Code
-                                      .toString(),
-                                );
+                                await updateInCart(transferRequestProvider);
                               });
                         },
                   child: FittedBox(child: Text("Alterar preço")),
