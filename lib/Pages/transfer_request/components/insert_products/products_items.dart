@@ -274,7 +274,6 @@ class _ProductsItemsState extends State<ProductsItems> {
                         ],
                       ),
                     ),
-                    //TODO dont show whole price. Dont show minimum whole quantity
                   ),
                 ],
               ),

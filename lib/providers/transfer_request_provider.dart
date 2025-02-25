@@ -540,7 +540,7 @@ class TransferRequestProvider with ChangeNotifier {
           .fold(0.0, (previous, atual) {
         return previous +=
             (atual.quantity * (atual.value ?? 0)) - (atual.DiscountValue ?? 0);
-      }); //TODO test if is working
+      });
     }
   }
 
