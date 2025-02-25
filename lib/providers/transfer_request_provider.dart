@@ -222,7 +222,7 @@ class TransferRequestProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addProductInCart({
+  Future<void> insertUpdateProductInCart({
     required TransferRequestProductsModel product,
     required TextEditingController consultedProductController,
     required TextEditingController newPriceController,

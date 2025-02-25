@@ -116,6 +116,60 @@ class _ProductsItemsState extends State<ProductsItems> {
     }
   }
 
+  Future<void> insertUpdateProductInCart(
+    TransferRequestModel selectedTransferRequestModel,
+    double totalItemValue,
+    TransferRequestProvider transferRequestProvider,
+    TransferRequestProductsModel product,
+    TransferRequestEnterpriseModel destinyEnterprise,
+    TransferRequestEnterpriseModel originEnterprise,
+    ConfigurationsProvider configurationsProvider,
+  ) async {
+    if (newPriceFocusNode.hasFocus && totalItemValue == 0) {
+      ShowSnackbarMessage.show(
+        message: "O total dos itens está zerado!",
+        context: context,
+      );
+      Future.delayed(Duration.zero, () {
+        newPriceFocusNode.requestFocus();
+        newPriceController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: newPriceController.text.length,
+        );
+      });
+    } else if (selectedTransferRequestModel.AllowAlterCostOrSalePrice == true &&
+        totalItemValue == 0) {
+      Future.delayed(Duration.zero, () {
+        newPriceFocusNode.requestFocus();
+        newPriceController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: newPriceController.text.length,
+        );
+      });
+    } else if (totalItemValue == 0) {
+      ShowSnackbarMessage.show(
+        message: "O total dos itens está zerado!",
+        context: context,
+      );
+    } else {
+      await transferRequestProvider.insertUpdateProductInCart(
+        newPriceController: newPriceController,
+        consultedProductController: quantityController,
+        product: product,
+        enterpriseOriginCode: originEnterprise.Code.toString(),
+        enterpriseDestinyCode: destinyEnterprise.Code.toString(),
+        requestTypeCode: selectedTransferRequestModel.Code.toString(),
+      );
+      setState(() {
+        selectedIndex = -1;
+      });
+
+      if (configurationsProvider.autoScan?.value == true) {
+        await widget.getProductsWithCamera();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider = Provider.of(context);
@@ -154,193 +208,193 @@ class _ProductsItemsState extends State<ProductsItems> {
         return Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                changeFocus(transferRequestProvider, index, product);
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "PLU",
-                    subtitle: product.PLU.toString(),
-                    otherWidget: AllStocks.allStocks(
-                      context: context,
-                      hasStocks: product.Stocks.length > 0,
-                      product: product,
-                    ),
-                  ),
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "Produto",
-                    subtitle: product.Name.toString() +
-                        " (${product.PackingQuantity})",
-                  ),
-                  TitleAndSubtitle.titleAndSubtitle(
-                    title: "Preço",
-                    subtitle: ConvertString.convertToBRL(
-                      product.Value,
-                    ),
-                    subtitleColor: Theme.of(context).colorScheme.primary,
-                  ),
-                  if (product.BalanceStockSale != null)
-                    TitleAndSubtitle.titleAndSubtitle(
-                      title: "Estoque de venda",
-                      subtitle: product.BalanceStockSale!
-                          .toDouble()
-                          .toString()
-                          .toBrazilianNumber(),
-                      otherWidget: Icon(
-                        selectedIndex != index
-                            ? Icons.arrow_drop_down_sharp
-                            : Icons.arrow_drop_up_sharp,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 30,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    changeFocus(transferRequestProvider, index, product);
+                  },
+                  child: Column(
+                    children: [
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "PLU",
+                        subtitle: product.PLU.toString(),
+                        otherWidget: AllStocks.allStocks(
+                          context: context,
+                          hasStocks: product.Stocks.length > 0,
+                          product: product,
+                        ),
                       ),
-                    ),
-                  if (transferRequestProvider.alreadyContainsProduct(
-                    ProductPackingCode: product.ProductPackingCode,
-                    enterpriseOriginCode: originEnterprise.Code.toString(),
-                    enterpriseDestinyCode: destinyEnterprise.Code.toString(),
-                    requestTypeCode:
-                        selectedTransferRequestModel.Code.toString(),
-                  ))
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Qtd: " +
-                                transferRequestProvider
-                                    .getTotalItensInCart(
-                                      ProductPackingCode:
-                                          product.ProductPackingCode,
-                                      enterpriseOriginCode:
-                                          originEnterprise.Code.toString(),
-                                      enterpriseDestinyCode:
-                                          destinyEnterprise.Code.toString(),
-                                      requestTypeCode:
-                                          selectedTransferRequestModel.Code
-                                              .toString(),
-                                    )
-                                    .toStringAsFixed(3)
-                                    .replaceAll(RegExp(r'\.'), ','),
-                            style: TextStyle(
-                              color: _totalItensInCart > 0
-                                  ? Colors.red
-                                  : Colors.grey,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Produto",
+                        subtitle: product.Name.toString() +
+                            " (${product.PackingQuantity})",
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Preço",
+                        subtitle: ConvertString.convertToBRL(
+                          product.Value,
+                        ),
+                        subtitleColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      if (product.BalanceStockSale != null)
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "Estoque de venda",
+                          subtitle: product.BalanceStockSale!
+                              .toDouble()
+                              .toString()
+                              .toBrazilianNumber(),
+                          otherWidget: Icon(
+                            selectedIndex != index
+                                ? Icons.arrow_drop_down_sharp
+                                : Icons.arrow_drop_up_sharp,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 30,
                           ),
                         ),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              // primary: _totalItensInCart > 0
-                              //     ? Colors.red
-                              //     : Colors.grey,
-                            ),
-                            onPressed: _totalItensInCart > 0
-                                ? () => removeProduct(
-                                      transferRequestProvider:
-                                          transferRequestProvider,
-                                      totalItemValue: _totalItemValue,
-                                      product: product,
-                                      enterpriseOriginCode:
-                                          originEnterprise.Code.toString(),
-                                      enterpriseDestinyCode:
-                                          destinyEnterprise.Code.toString(),
-                                      requestTypeCode:
-                                          selectedTransferRequestModel.Code
-                                              .toString(),
-                                    )
-                                : null,
-                            child: const FittedBox(
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Remover produto",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                  ),
-                                ],
+                      if (transferRequestProvider.alreadyContainsProduct(
+                        ProductPackingCode: product.ProductPackingCode,
+                        enterpriseOriginCode: originEnterprise.Code.toString(),
+                        enterpriseDestinyCode:
+                            destinyEnterprise.Code.toString(),
+                        requestTypeCode:
+                            selectedTransferRequestModel.Code.toString(),
+                      ))
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Qtd: " +
+                                    transferRequestProvider
+                                        .getTotalItensInCart(
+                                          ProductPackingCode:
+                                              product.ProductPackingCode,
+                                          enterpriseOriginCode:
+                                              originEnterprise.Code.toString(),
+                                          enterpriseDestinyCode:
+                                              destinyEnterprise.Code.toString(),
+                                          requestTypeCode:
+                                              selectedTransferRequestModel.Code
+                                                  .toString(),
+                                        )
+                                        .toStringAsFixed(3)
+                                        .replaceAll(RegExp(r'\.'), ','),
+                                style: TextStyle(
+                                  color: _totalItensInCart > 0
+                                      ? Colors.red
+                                      : Colors.grey,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  // primary: _totalItensInCart > 0
+                                  //     ? Colors.red
+                                  //     : Colors.grey,
+                                ),
+                                onPressed: _totalItensInCart > 0
+                                    ? () => removeProduct(
+                                          transferRequestProvider:
+                                              transferRequestProvider,
+                                          totalItemValue: _totalItemValue,
+                                          product: product,
+                                          enterpriseOriginCode:
+                                              originEnterprise.Code.toString(),
+                                          enterpriseDestinyCode:
+                                              destinyEnterprise.Code.toString(),
+                                          requestTypeCode:
+                                              selectedTransferRequestModel.Code
+                                                  .toString(),
+                                        )
+                                    : null,
+                                child: const FittedBox(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Remover produto",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  if (selectedIndex == index)
-                    InsertProductQuantityForm(
-                      selectedTransferRequestModel: selectedTransferRequestModel,
-                      quantityFocusNode: quantityFocusNode,
-                      consultedProductController: quantityController,
-                      consultedProductFormKey: _consultedProductFormKey,
-                      totalItemValue: _totalItemValue,
-                      product: product,
-                      addProductInCart: () async {
-                        if (_totalItemValue == 0) {
-                          ShowSnackbarMessage.show(
-                            message: "O total dos itens está zerado!",
-                            context: context,
-                          );
-                        }
-                        await transferRequestProvider.addProductInCart(
-                          newPriceController: newPriceController,
-                          consultedProductController: quantityController,
+                    ],
+                  ),
+                ),
+                if (selectedIndex == index)
+                  InsertProductQuantityForm(
+                    selectedTransferRequestModel: selectedTransferRequestModel,
+                    quantityFocusNode: quantityFocusNode,
+                    consultedProductController: quantityController,
+                    consultedProductFormKey: _consultedProductFormKey,
+                    totalItemValue: _totalItemValue,
+                    product: product,
+                    addProductInCart: () async {
+                      await insertUpdateProductInCart(
+                        selectedTransferRequestModel,
+                        _totalItemValue,
+                        transferRequestProvider,
+                        product,
+                        destinyEnterprise,
+                        originEnterprise,
+                        configurationsProvider,
+                      );
+                    },
+                    totalItensInCart: _totalItensInCart,
+                    updateTotalItemValue: () {
+                      setState(() {
+                        _totalItemValue =
+                            transferRequestProvider.getTotalItemValue(
                           product: product,
-                          enterpriseOriginCode:
-                              originEnterprise.Code.toString(),
-                          enterpriseDestinyCode:
-                              destinyEnterprise.Code.toString(),
-                          requestTypeCode:
-                              selectedTransferRequestModel.Code.toString(),
+                          consultedProductController: quantityController,
+                          newPriceController: newPriceController,
                         );
-                        setState(() {
-                          selectedIndex = -1;
-                        });
-
-                        if (configurationsProvider.autoScan?.value == true) {
-                          await widget.getProductsWithCamera();
-                        }
-                      },
-                      totalItensInCart: _totalItensInCart,
-                      updateTotalItemValue: () {
-                        setState(() {
-                          _totalItemValue =
-                              transferRequestProvider.getTotalItemValue(
-                            product: product,
-                            consultedProductController: quantityController,
-                            newPriceController: newPriceController,
-                          );
-                        });
-                      },
-                    ),
-                  if (selectedIndex == index &&
-                      selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
-                          true)
-                    InsertQuantityTextFormField(
-                      focusNode: newPriceFocusNode,
-                      newQuantityController: newPriceController,
-                      formKey: priceKey,
-                      onChanged: () {
-                        setState(() {});
-                      },
-                      onFieldSubmitted: () {},
-                      autoFocus: false,
-                      canReceiveEmptyValue: false,
-                      enabled: true,
-                      hintText: "Alterar preço R\$",
-                      labelText: "Alterar preço R\$",
-                      showSuffixIcon: false,
-                      showPrefixIcon: false,
-                    ),
-                ],
-              ),
+                      });
+                    },
+                  ),
+                if (selectedIndex == index &&
+                    selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
+                        true)
+                  InsertQuantityTextFormField(
+                    focusNode: newPriceFocusNode,
+                    newQuantityController: newPriceController,
+                    formKey: priceKey,
+                    onChanged: () {
+                      setState(() {});
+                    },
+                    onFieldSubmitted: () async {
+                      await insertUpdateProductInCart(
+                        selectedTransferRequestModel,
+                        _totalItemValue,
+                        transferRequestProvider,
+                        product,
+                        destinyEnterprise,
+                        originEnterprise,
+                        configurationsProvider,
+                      );
+                    },
+                    autoFocus: false,
+                    canReceiveEmptyValue: false,
+                    enabled: true,
+                    hintText: "Alterar preço R\$",
+                    labelText: "Alterar preço R\$",
+                    showSuffixIcon: false,
+                    showPrefixIcon: false,
+                  ),
+              ],
             ),
           ),
         );

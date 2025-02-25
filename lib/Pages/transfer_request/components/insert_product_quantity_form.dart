@@ -105,9 +105,7 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
                         ? Colors.grey
                         : Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: widget.totalItemValue == 0
-                      ? () {}
-                      : () => addItemInCart(),
+                  onPressed: widget.totalItemValue == 0 ? null : addItemInCart,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
