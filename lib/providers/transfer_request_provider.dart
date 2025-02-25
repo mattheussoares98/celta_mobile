@@ -532,7 +532,6 @@ class TransferRequestProvider with ChangeNotifier {
     required String? enterpriseDestinyCode,
     required String? requestTypeCode,
   }) {
-    double total = 0;
     if (_cartProducts[requestTypeCode]?[enterpriseOriginCode]
             ?[enterpriseDestinyCode] ==
         null) {
