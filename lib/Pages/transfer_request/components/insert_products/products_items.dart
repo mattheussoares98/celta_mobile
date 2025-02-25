@@ -247,10 +247,10 @@ class _ProductsItemsState extends State<ProductsItems> {
                               focusNode: newPriceFocusNode,
                               newQuantityController: newPriceController,
                               formKey: priceKey,
-                              onChanged: () {
+                              onChanged: (_) {
                                 setState(() {});
                               },
-                              onFieldSubmitted: () async {
+                              onFieldSubmitted: (_) async {
                                 await insertUpdateProductInCart(
                                   selectedTransferRequestModel,
                                   _totalItemValue,

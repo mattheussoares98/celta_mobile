@@ -12,8 +12,8 @@ class InsertQuantityTextFormField extends StatefulWidget {
   final bool autoFocus;
   final GlobalKey formKey;
   final int lengthLimitingTextInputFormatter;
-  final void Function() onChanged; //TODO improve this declaration
-  final Function onFieldSubmitted; //TODO improve this declaration
+  final void Function(String? value) onChanged;
+  final void Function(String? value) onFieldSubmitted;
   final bool canReceiveEmptyValue;
   final bool? enabled;
   final bool? showPrefixIcon;
@@ -65,15 +65,13 @@ class _InsertQuantityTextFormFieldState
             widget.lengthLimitingTextInputFormatter,
           )
         ],
-        onFieldSubmitted: (value) => {
-          widget.onFieldSubmitted(),
-        },
+        onFieldSubmitted: widget.onFieldSubmitted,
         onChanged: (value) {
           if (value.isEmpty || value == '-') {
             value = '0';
           }
 
-          widget.onChanged();
+          widget.onChanged(value);
         },
         validator: (value) {
           return FormFieldValidations.number(
@@ -100,7 +98,7 @@ class _InsertQuantityTextFormFieldState
                           .toBrazilianNumber()
                           .replaceAll(RegExp(r'\.'), '');
                     }
-                    widget.onChanged();
+                    widget.onChanged(null);
                   },
                   icon: const Icon(Icons.remove),
                 ),
@@ -118,7 +116,7 @@ class _InsertQuantityTextFormFieldState
                           .toBrazilianNumber(3)
                           .replaceAll(RegExp(r'\.'), '');
                     }
-                    widget.onChanged();
+                    widget.onChanged(null);
                   },
                   icon: const Icon(Icons.add),
                 ),

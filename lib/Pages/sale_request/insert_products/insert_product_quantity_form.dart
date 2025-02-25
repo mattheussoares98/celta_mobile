@@ -76,8 +76,12 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
                 focusNode: widget.insertQuantityFocusNode,
                 newQuantityController: widget.newQuantityController,
                 formKey: widget.consultedProductFormKey,
-                onChanged: widget.updateTotalItemValue,
-                onFieldSubmitted: addItemInCart,
+                onChanged: (_) {
+                  widget.updateTotalItemValue();
+                },
+                onFieldSubmitted: (_) {
+                  addItemInCart();
+                },
                 canReceiveEmptyValue: true,
                 hintText: "Quantidade",
               ),

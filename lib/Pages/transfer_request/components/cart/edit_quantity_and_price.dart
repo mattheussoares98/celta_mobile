@@ -98,10 +98,10 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
             focusNode: quantityFocusNode,
             newQuantityController: quantityController,
             formKey: quantityFormKey,
-            onChanged: () {
+            onChanged: (_) {
               setState(() {});
             },
-            onFieldSubmitted: () {},
+            onFieldSubmitted: (_) {},
           ),
           if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
               true)
@@ -115,10 +115,10 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
                 formKey: priceFormKey,
                 hintText: "Preço R\$",
                 labelText: "Preço R\$",
-                onChanged: () {
+                onChanged: (_) {
                   setState(() {});
                 },
-                onFieldSubmitted: () {},
+                onFieldSubmitted: (_) {},
               ),
             ),
           Row(

@@ -187,14 +187,16 @@ class _UpdateQuantityPriceOrDiscountState
                       focusNode: widget.quantityFocusNode,
                       formKey: widget.quantityFormKey,
                       newQuantityController: widget.newQuantityController,
-                      onFieldSubmitted: () {
+                      onFieldSubmitted: (_) {
                         updateProductInCart(
                           saleRequestProvider: saleRequestProvider,
                           product: widget.product,
                           index: widget.productIndex,
                         );
                       },
-                      onChanged: widget.callSetState,
+                      onChanged: (_) {
+                        widget.callSetState();
+                      },
                       labelText: "Digite a nova quantidade",
                       hintText: "Nova quantidade",
                     ),
