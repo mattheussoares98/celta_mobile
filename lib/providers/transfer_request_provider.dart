@@ -192,7 +192,7 @@ class TransferRequestProvider with ChangeNotifier {
   }
 
   bool alreadyContainsProduct({
-    required int ProductPackingCode,
+    required int? ProductPackingCode,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
@@ -293,9 +293,15 @@ class TransferRequestProvider with ChangeNotifier {
     );
 
     if (indexInCart == null || indexInCart == -1) {
-      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-              enterpriseDestinyCode]!
-          .add(cartProductsModel);
+      if (_cartProducts[requestTypeCode]?[enterpriseOriginCode]
+              ?[enterpriseDestinyCode] ==
+          null) {
+        _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+            ?[enterpriseDestinyCode] = [];
+      }
+      _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+              ?[enterpriseDestinyCode]
+          ?.add(cartProductsModel);
     } else {
       _cartProducts[requestTypeCode]![enterpriseOriginCode]![
           enterpriseDestinyCode]![indexInCart] = cartProductsModel;
