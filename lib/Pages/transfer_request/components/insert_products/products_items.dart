@@ -146,6 +146,10 @@ class _ProductsItemsState extends State<ProductsItems> {
     TransferRequestEnterpriseModel originEnterprise =
         arguments["originEnterprise"];
 
+    if (transferRequestProvider.products.isEmpty) {
+      selectedIndex = -1;
+    }
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -167,7 +171,6 @@ class _ProductsItemsState extends State<ProductsItems> {
           consultedProductController: quantityController,
           newPriceController: newPriceController,
         );
-//TODO when search product, remove selected index
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
