@@ -54,14 +54,6 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, dynamic> _jsonSaleRequest = {
-    "crossId": UserData.crossIdentity,
-    "EnterpriseOriginCode": 0,
-    "EnterpriseDestinyCode": 0,
-    "RequestTypeCode": 0,
-    "Products": [],
-  };
-
   String _errorMessageProducts = '';
   String get errorMessageProducts => _errorMessageProducts;
   bool _isLoadingProducts = false;
@@ -630,17 +622,6 @@ class TransferRequestProvider with ChangeNotifier {
     required String requestTypeCode,
     required BuildContext context,
   }) async {
-    _jsonSaleRequest["crossId"] = '${UserData.crossIdentity}';
-
-    TransferRequestCartProductsModel.updateJsonSaleRequest(
-      products: _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-          enterpriseDestinyCode]!,
-      jsonSaleRequest: _jsonSaleRequest,
-      enterpriseOriginCode: int.parse(enterpriseOriginCode),
-      enterpriseDestinyCode: int.parse(enterpriseDestinyCode),
-      requestTypeCode: int.parse(requestTypeCode),
-    );
-
     _errorMessageSaveTransferRequest = "";
     _isLoadingSaveTransferRequest = true;
     notifyListeners();
@@ -650,6 +631,15 @@ class TransferRequestProvider with ChangeNotifier {
     );
 
     try {
+      Map<String, dynamic> _jsonSaleRequest = {
+        "crossId": UserData.crossIdentity,
+        "EnterpriseOriginCode": int.parse(enterpriseOriginCode),
+        "EnterpriseDestinyCode": int.parse(enterpriseDestinyCode),
+        "RequestTypeCode": int.parse(requestTypeCode),
+        "Products": _cartProducts[requestTypeCode]![enterpriseOriginCode]![
+            enterpriseDestinyCode]!,
+      };
+
       await SoapRequest.soapPost(
         parameters: {
           "crossIdentity": UserData.crossIdentity,

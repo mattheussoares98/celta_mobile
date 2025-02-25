@@ -6,7 +6,6 @@ import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 import '../../../../components/components.dart';
 import '../components.dart';
-import 'insert_products.dart';
 
 class ProductsItems extends StatefulWidget {
   final Function getProductsWithCamera;

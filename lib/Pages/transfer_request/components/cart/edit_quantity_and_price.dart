@@ -45,7 +45,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
 
   Future<void> updateProductInCart({
     required TransferRequestProvider transferRequestProvider,
-    required TransferRequestCartProductsModel product,
+    required GetProductJsonModel product,
     required int index,
   }) async {
     double quantity = quantityController.text.toDouble();
@@ -59,9 +59,9 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
         enterpriseOriginCode: widget.originEnterprise.Code.toString(),
         enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
         requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
-        productPackingCode: product.ProductPackingCode,
+        productPackingCode: product.productPackingCode!,
         quantity: quantity,
-        value: product.RetailPracticedPrice,
+        value: product.value!,
         index: index,
       );
       quantityController.clear();
