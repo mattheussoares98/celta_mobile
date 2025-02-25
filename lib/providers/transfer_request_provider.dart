@@ -353,6 +353,13 @@ class TransferRequestProvider with ChangeNotifier {
       _cartProducts[requestTypeCode]?[enterpriseOriginCode]
           ?[enterpriseDestinyCode] ??= [];
 
+      final productsInCart = cartProductsInDatabase[requestTypeCode]
+          ?[enterpriseOriginCode]?[enterpriseDestinyCode];
+
+      if (productsInCart == null) {
+        return;
+      }
+
       _cartProducts[requestTypeCode]?[enterpriseOriginCode]
           ?[enterpriseDestinyCode] = (cartProductsInDatabase[requestTypeCode]
               [enterpriseOriginCode][enterpriseDestinyCode] as List)
