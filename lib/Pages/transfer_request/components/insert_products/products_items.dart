@@ -167,10 +167,11 @@ class _ProductsItemsState extends State<ProductsItems> {
           requestTypeCode: selectedTransferRequestModel.Code.toString(),
         );
 
-        double _totalItemValue = transferRequestProvider.getTotalItemValue(
+        double _totalItemValue = transferRequestProvider.getNewPrice(
+          newQuantity: quantityController.text.toDouble(),
           product: product,
-          quantityController: quantityController,
-          newPriceController: newPriceController,
+          selectedTransferRequestModel: selectedTransferRequestModel,
+          newPrice: newPriceController.text.toDouble(),
         );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -231,14 +232,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                               },
                               totalItensInCart: _totalItensInCart,
                               updateTotalItemValue: () {
-                                setState(() {
-                                  _totalItemValue =
-                                      transferRequestProvider.getTotalItemValue(
-                                    product: product,
-                                    quantityController: quantityController,
-                                    newPriceController: newPriceController,
-                                  );
-                                });
+                                setState(() {});
                               },
                             ),
                           if (selectedIndex == index &&

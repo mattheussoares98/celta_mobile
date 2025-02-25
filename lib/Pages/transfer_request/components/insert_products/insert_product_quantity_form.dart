@@ -104,12 +104,8 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
               child: Container(
                 height: 60,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.totalItemValue == 0
-                        ? Colors.grey
-                        : Theme.of(context).colorScheme.primary,
-                  ),
-                  onPressed: widget.totalItemValue == 0 ? null : addItemInCart,
+                  onPressed:
+                      widget.totalItemValue < 0.01 ? null : addItemInCart,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -123,7 +119,9 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
                               const Text("Total: "),
                               Text(
                                 ConvertString.convertToBRL(
-                                  widget.totalItemValue,
+                                  widget.totalItemValue < 0.01
+                                      ? 0
+                                      : widget.totalItemValue,
                                 ),
                               ),
                             ],

@@ -307,31 +307,6 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  double getTotalItemValue({
-    required GetProductJsonModel product,
-    required TextEditingController quantityController,
-    required TextEditingController newPriceController,
-  }) {
-    double _quantityToAdd = quantityController.text.toDouble();
-
-    if (_quantityToAdd <= 0) {
-      _quantityToAdd = 1;
-    }
-
-    late double priceValue;
-    if (newPriceController.text.toDouble() > 0) {
-      priceValue = newPriceController.text.toDouble();
-    } else {
-      priceValue = product.value ?? 0;
-    }
-
-    double _totalItemValue = _quantityToAdd * priceValue;
-
-    _changeCursorToLastIndex(quantityController);
-
-    return _totalItemValue;
-  }
-
   Future<void> restoreProducts({
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
