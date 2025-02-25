@@ -123,6 +123,7 @@ class _ProductsItemsState extends State<ProductsItems> {
         enterpriseOriginCode: originEnterprise.Code.toString(),
         enterpriseDestinyCode: destinyEnterprise.Code.toString(),
         requestTypeCode: selectedTransferRequestModel.Code.toString(),
+        isAdding: true,
       );
       setState(() {
         selectedIndex = -1;
@@ -234,8 +235,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                                   _totalItemValue =
                                       transferRequestProvider.getTotalItemValue(
                                     product: product,
-                                    quantityController:
-                                        quantityController,
+                                    quantityController: quantityController,
                                     newPriceController: newPriceController,
                                   );
                                 });

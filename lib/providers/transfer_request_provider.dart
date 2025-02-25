@@ -209,6 +209,7 @@ class TransferRequestProvider with ChangeNotifier {
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
+    required bool isAdding,
   }) async {
     double quantity = quantityController.text.toDouble();
 
@@ -230,7 +231,7 @@ class TransferRequestProvider with ChangeNotifier {
         ?.indexWhere((element) =>
             element.productPackingCode == product.productPackingCode);
 
-    if (indexInCart != null && indexInCart != -1) {
+    if (indexInCart != null && indexInCart != -1 && isAdding) {
       newQuantity = quantity +
           _cartProducts[requestTypeCode]![enterpriseOriginCode]![
                   enterpriseDestinyCode]![indexInCart]

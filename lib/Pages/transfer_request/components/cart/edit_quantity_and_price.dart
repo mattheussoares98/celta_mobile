@@ -43,33 +43,6 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
     priceController.dispose();
   }
 
-  Future<void> updateProductInCart({
-    required TransferRequestProvider transferRequestProvider,
-    required GetProductJsonModel product,
-    required int index,
-  }) async {
-    double quantity = quantityController.text.toDouble();
-
-    bool? isValid = quantityFormKey.currentState?.validate();
-
-    if (quantity <= 0) return;
-
-    if (isValid == true) {
-      await transferRequestProvider.updateProductFromCart(
-        enterpriseOriginCode: widget.originEnterprise.Code.toString(),
-        enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
-        requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
-        productPackingCode: product.productPackingCode!,
-        quantity: quantity,
-        value: getNewPrice(),
-        index: index,
-      );
-      quantityController.clear();
-      FocusScope.of(context).unfocus();
-      widget.unselectIndex();
-    }
-  }
-
   double getNewPrice() {
     final quantity = quantityController.text.toDouble();
 
@@ -111,6 +84,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
                 enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
                 requestTypeCode:
                     widget.selectedTransferRequestModel.Code.toString(),
+                isAdding: false,
               );
             },
           ),
@@ -158,6 +132,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
                               function: () async {
                                 await transferRequestProvider
                                     .insertUpdateProductInCart(
+                                  isAdding: false,
                                   product: widget.product,
                                   quantityController: quantityController,
                                   newPriceController: priceController,

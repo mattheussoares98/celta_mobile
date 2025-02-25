@@ -22,7 +22,7 @@ class Summary extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.grey[600])),
           Text(
-            "${value.toBrazilianNumber()}" +
+            "${value.toBrazilianNumber(3)}" +
                 (addBrazilianCoin == true ? "".addBrazilianCoin() : ""),
             style: TextStyle(color: Colors.grey[600]),
           ),
