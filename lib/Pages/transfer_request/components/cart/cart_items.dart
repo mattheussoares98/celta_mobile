@@ -95,8 +95,8 @@ class _SaleRequestCartItemsState extends State<CartItems> {
                               EditQuantityAndPrice(
                                 selectedTransferRequestModel:
                                     widget.selectedTransferRequestModel,
-                                destinyEnterprise: widget.originEnterprise,
-                                originEnterprise: widget.destinyEnterprise,
+                                destinyEnterprise: widget.destinyEnterprise,
+                                originEnterprise: widget.originEnterprise,
                                 product: product,
                                 unselectIndex: () {
                                   setState(() {

@@ -74,7 +74,7 @@ class TransferRequestProvider with ChangeNotifier {
         [];
   }
 
-  restoreProductRemoved({
+  Future<void> restoreProductRemoved({
     required int ProductPackingCode,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
@@ -239,7 +239,7 @@ class TransferRequestProvider with ChangeNotifier {
       newQuantity = quantity;
     }
 
-    GetProductJsonModel cartProductsModel = GetProductJsonModel(
+    GetProductJsonModel productUpdated = GetProductJsonModel(
       ExpectedDeliveryDate: "\"${DateTime.now().toString()}\"",
       quantity: newQuantity,
       value: price,
@@ -290,12 +290,12 @@ class TransferRequestProvider with ChangeNotifier {
       _cartProducts[requestTypeCode]?[enterpriseOriginCode]
           ?[enterpriseDestinyCode] ??= [];
 
-      _cartProducts[requestTypeCode]?[enterpriseOriginCode]
-              ?[enterpriseDestinyCode]
-          ?.add(cartProductsModel);
+      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
+              enterpriseDestinyCode]!
+          .add(productUpdated);
     } else {
       _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-          enterpriseDestinyCode]![indexInCart] = cartProductsModel;
+          enterpriseDestinyCode]![indexInCart] = productUpdated;
     }
 
     quantityController.text = "";
@@ -343,36 +343,20 @@ class TransferRequestProvider with ChangeNotifier {
     } else {
       Map cartProductsInDatabase = jsonDecode(cart);
 
-      List<GetProductJsonModel> cartProductsTemp = [];
-
       if (cartProductsInDatabase.isEmpty) {
         return;
-      } else if (cartProductsInDatabase[requestTypeCode] == null) {
-        return;
-      } else if (cartProductsInDatabase[requestTypeCode]
-              [enterpriseOriginCode] ==
-          null) {
-        return;
-      } else if (cartProductsInDatabase[requestTypeCode][enterpriseOriginCode]
-              [enterpriseDestinyCode] ==
-          null) return;
+      }
 
-      _cartProducts[requestTypeCode] = {};
-      _cartProducts[requestTypeCode]![enterpriseOriginCode] = {};
-      _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-          enterpriseDestinyCode] = [];
+      _cartProducts[requestTypeCode] ??= {};
+      _cartProducts[requestTypeCode]![enterpriseOriginCode] ??= {};
       _cartProducts[requestTypeCode]?[enterpriseOriginCode]
-          ?[enterpriseDestinyCode] = [];
+          ?[enterpriseDestinyCode] ??= [];
 
-      //se não fizer essas atribuições, não funciona adicionar os produtos do cartProductsTemp no _cartProducts
-
-      cartProductsInDatabase[requestTypeCode][enterpriseOriginCode]
-              [enterpriseDestinyCode]
-          .forEach((element) {
-        cartProductsTemp.add(GetProductJsonModel.fromJson(element));
-        _cartProducts[requestTypeCode]?[enterpriseOriginCode]
-            ?[enterpriseDestinyCode] = cartProductsTemp;
-      });
+      _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+          ?[enterpriseDestinyCode] = (cartProductsInDatabase[requestTypeCode]
+              [enterpriseOriginCode][enterpriseDestinyCode] as List)
+          .map((e) => GetProductJsonModel.fromJson(e))
+          .toList();
     }
 
     notifyListeners();
@@ -500,18 +484,14 @@ class TransferRequestProvider with ChangeNotifier {
     required String? enterpriseDestinyCode,
     required String? requestTypeCode,
   }) {
-    if (_cartProducts[requestTypeCode]?[enterpriseOriginCode]
-            ?[enterpriseDestinyCode] ==
-        null) {
-      return 0;
-    } else if (_cartProducts[requestTypeCode]![enterpriseOriginCode]![
-            enterpriseDestinyCode]!
-        .isEmpty) {
+    int? length = _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+            ?[enterpriseDestinyCode]
+        ?.length;
+
+    if (length == null) {
       return 0;
     } else {
-      return _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-              enterpriseDestinyCode]!
-          .length;
+      return length;
     }
   }
 

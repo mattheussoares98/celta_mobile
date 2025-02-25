@@ -61,7 +61,7 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
         requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
         productPackingCode: product.productPackingCode!,
         quantity: quantity,
-        value: product.value!,
+        value: getNewPrice(),
         index: index,
       );
       quantityController.clear();
@@ -100,8 +100,19 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
             formKey: quantityFormKey,
             onChanged: (_) {
               setState(() {});
+              debugPrint("Changing quantity");
             },
-            onFieldSubmitted: (_) {},
+            onFieldSubmitted: (_) async {
+              await transferRequestProvider.insertUpdateProductInCart(
+                product: widget.product,
+                quantityController: quantityController,
+                newPriceController: priceController,
+                enterpriseOriginCode: widget.originEnterprise.Code.toString(),
+                enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
+                requestTypeCode:
+                    widget.selectedTransferRequestModel.Code.toString(),
+              );
+            },
           ),
           if (widget.selectedTransferRequestModel.AllowAlterCostOrSalePrice ==
               true)
