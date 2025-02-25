@@ -233,12 +233,12 @@ class TransferRequestProvider with ChangeNotifier {
 
     late double newQuantity;
 
-    int indexInCart = _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-            enterpriseDestinyCode]!
-        .indexWhere((element) =>
+    int? indexInCart = _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+            ?[enterpriseDestinyCode]
+        ?.indexWhere((element) =>
             element.productPackingCode == product.productPackingCode);
 
-    if (indexInCart != -1) {
+    if (indexInCart != null && indexInCart != -1) {
       newQuantity = quantity +
           _cartProducts[requestTypeCode]![enterpriseOriginCode]![
                   enterpriseDestinyCode]![indexInCart]
@@ -292,7 +292,7 @@ class TransferRequestProvider with ChangeNotifier {
       priceCost: product.priceCost,
     );
 
-    if (indexInCart == -1) {
+    if (indexInCart == null || indexInCart == -1) {
       _cartProducts[requestTypeCode]![enterpriseOriginCode]![
               enterpriseDestinyCode]!
           .add(cartProductsModel);

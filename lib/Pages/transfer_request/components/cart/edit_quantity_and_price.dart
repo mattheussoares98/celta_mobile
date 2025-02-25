@@ -141,20 +141,24 @@ class _EditQuantityAndPriceState extends State<EditQuantityAndPrice> {
                   onPressed: getNewPrice() <= 0
                       ? null
                       : () async {
-                          //TODO fix this
-                          // await transferRequestProvider
-                          //     .insertUpdateProductInCart(
-                          //   product: widget.product,
-                          //   quantityController: quantityController,
-                          //   newPriceController: priceController,
-                          //   enterpriseOriginCode:
-                          //       widget.originEnterprise.Code.toString(),
-                          //   enterpriseDestinyCode:
-                          //       widget.destinyEnterprise.Code.toString(),
-                          //   requestTypeCode: widget
-                          //       .selectedTransferRequestModel.Code
-                          //       .toString(),
-                          // );
+                          ShowAlertDialog.show(
+                              context: context,
+                              title: "Deseja realmente atualizar?",
+                              function: () async {
+                                await transferRequestProvider
+                                    .insertUpdateProductInCart(
+                                  product: widget.product,
+                                  quantityController: quantityController,
+                                  newPriceController: priceController,
+                                  enterpriseOriginCode:
+                                      widget.originEnterprise.Code.toString(),
+                                  enterpriseDestinyCode:
+                                      widget.destinyEnterprise.Code.toString(),
+                                  requestTypeCode: widget
+                                      .selectedTransferRequestModel.Code
+                                      .toString(),
+                                );
+                              });
                         },
                   child: FittedBox(child: Text("Alterar preço")),
                 ),
