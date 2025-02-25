@@ -107,7 +107,7 @@ class TransferRequestProvider with ChangeNotifier {
   //   return _cartProducts[enterpriseOriginCode]?[enterpriseDestinyCode] ?? 0;
   // }
 
-  removeProductFromCart({
+  Future<void> removeProductFromCart({
     required int ProductPackingCode,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
@@ -211,13 +211,13 @@ class TransferRequestProvider with ChangeNotifier {
 
   Future<void> insertUpdateProductInCart({
     required TransferRequestProductsModel product,
-    required TextEditingController consultedProductController,
+    required TextEditingController quantityController,
     required TextEditingController newPriceController,
     required String enterpriseOriginCode,
     required String enterpriseDestinyCode,
     required String requestTypeCode,
   }) async {
-    double quantity = consultedProductController.text.toDouble();
+    double quantity = quantityController.text.toDouble();
 
     if (quantity <= 0) {
       quantity = 1;
@@ -284,9 +284,9 @@ class TransferRequestProvider with ChangeNotifier {
           enterpriseDestinyCode]![indexInCart] = cartProductsModel;
     }
 
-    consultedProductController.text = "";
+    quantityController.text = "";
 
-    _changeCursorToLastIndex(consultedProductController);
+    _changeCursorToLastIndex(quantityController);
 
     await _updateCartInDatabase();
     notifyListeners();

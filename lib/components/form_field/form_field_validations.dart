@@ -6,7 +6,7 @@ class FormFieldValidations {
   FormFieldValidations._();
 
   static String? number({
-    String? value,
+    String? value,//TODO change the constructor
     int maxDecimalPlaces = 3,
     bool valueCanIsEmpty = false,
   }) {

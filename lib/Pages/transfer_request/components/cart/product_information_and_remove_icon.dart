@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../components/components.dart';
+import '../../../../models/models.dart';
+import '../../../../providers/providers.dart';
+
+class ProductInformationAndRemoveIcon extends StatelessWidget {
+  final TransferRequestCartProductsModel product;
+  final TransferRequestEnterpriseModel originEnterprise;
+  final TransferRequestEnterpriseModel destinyEnterprise;
+  final TransferRequestModel selectedTransferRequestModel;
+  final int index;
+  const ProductInformationAndRemoveIcon({
+    required this.product,
+    required this.index,
+    required this.originEnterprise,
+    required this.destinyEnterprise,
+    required this.selectedTransferRequestModel,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    TransferRequestProvider transferRequestProvider =
+        Provider.of(context, listen: false);
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(4),
+          child: CircleAvatar(
+            minRadius: 10,
+            maxRadius: 10,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: FittedBox(
+              child: Text(
+                (index + 1).toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: "${product.Name} (${product.PackingQuantity})",
+              ),
+              TitleAndSubtitle.titleAndSubtitle(
+                subtitle: "PLU: " + product.PLU,
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          onPressed: () async {
+            ShowAlertDialog.show(
+                context: context,
+                title: "Remover produto?",
+                function: () async {
+                  await transferRequestProvider.removeProductFromCart(
+                    enterpriseOriginCode: originEnterprise.Code.toString(),
+                    enterpriseDestinyCode: destinyEnterprise.Code.toString(),
+                    requestTypeCode:
+                        selectedTransferRequestModel.Code.toString(),
+                    ProductPackingCode: product.ProductPackingCode,
+                  );
+                });
+          },
+          icon: Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
+        ),
+      ],
+    );
+  }
+}

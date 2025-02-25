@@ -11,9 +11,9 @@ class InsertQuantityTextFormField extends StatefulWidget {
   final String hintText;
   final bool autoFocus;
   final GlobalKey formKey;
-  final void Function() onChanged;
   final int lengthLimitingTextInputFormatter;
-  final Function onFieldSubmitted;
+  final void Function() onChanged;//TODO improve this declaration
+  final Function onFieldSubmitted;//TODO improve this declaration
   final bool canReceiveEmptyValue;
   final bool? enabled;
   final bool? showPrefixIcon;
@@ -73,7 +73,7 @@ class _InsertQuantityTextFormFieldState
 
           widget.onChanged();
         },
-        validator: (value) {
+        validator: (value) {//TODO pass decimal houses
           return FormFieldValidations.number(value: value);
         },
         decoration: FormFieldDecoration.decoration(

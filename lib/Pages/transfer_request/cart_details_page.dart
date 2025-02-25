@@ -101,9 +101,9 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     return Column(
       children: [
         CartItems(
-          enterpriseOriginCode: widget.originEnterprise.Code.toString(),
-          enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
-          requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
+          originEnterprise: widget.originEnterprise,
+          destinyEnterprise: widget.destinyEnterprise,
+          selectedTransferRequestModel: widget.selectedTransferRequestModel,
         ),
         if (transferRequestProvider.cartProductsCount(
               enterpriseOriginCode: widget.originEnterprise.Code?.toString(),

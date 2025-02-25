@@ -1,4 +1,4 @@
-class TransferRequestCartProductsModel {
+class TransferRequestCartProductsModel {//TODO remove this
   int ProductPackingCode;
   String Name;
   double Quantity;

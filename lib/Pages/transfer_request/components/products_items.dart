@@ -154,7 +154,7 @@ class _ProductsItemsState extends State<ProductsItems> {
     } else {
       await transferRequestProvider.insertUpdateProductInCart(
         newPriceController: newPriceController,
-        consultedProductController: quantityController,
+        quantityController: quantityController,
         product: product,
         enterpriseOriginCode: originEnterprise.Code.toString(),
         enterpriseDestinyCode: destinyEnterprise.Code.toString(),
