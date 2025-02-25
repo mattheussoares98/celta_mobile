@@ -35,9 +35,12 @@ class ProductInformationAndRemoveIcon extends StatelessWidget {
             maxRadius: 10,
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: FittedBox(
-              child: Text(
-                (index + 1).toString(),
-                style: TextStyle(color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(2),
+                child: Text(
+                  (index + 1).toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ),
