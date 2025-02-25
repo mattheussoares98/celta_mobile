@@ -285,12 +285,11 @@ class TransferRequestProvider with ChangeNotifier {
     );
 
     if (indexInCart == null || indexInCart == -1) {
-      if (_cartProducts[requestTypeCode]?[enterpriseOriginCode]
-              ?[enterpriseDestinyCode] ==
-          null) {
-        _cartProducts[requestTypeCode]?[enterpriseOriginCode]
-            ?[enterpriseDestinyCode] = [];
-      }
+      _cartProducts[requestTypeCode] ??= {};
+      _cartProducts[requestTypeCode]![enterpriseOriginCode] ??= {};
+      _cartProducts[requestTypeCode]?[enterpriseOriginCode]
+          ?[enterpriseDestinyCode] ??= [];
+
       _cartProducts[requestTypeCode]?[enterpriseOriginCode]
               ?[enterpriseDestinyCode]
           ?.add(cartProductsModel);
