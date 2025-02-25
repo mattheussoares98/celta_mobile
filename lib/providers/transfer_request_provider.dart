@@ -170,19 +170,6 @@ class TransferRequestProvider with ChangeNotifier {
     }
   }
 
-  double tryChangeControllerTextToDouble(
-      //TODO remove this
-      TextEditingController consultedProductController) {
-    if (double.tryParse(
-            consultedProductController.text.replaceAll(RegExp(r','), '.')) !=
-        null) {
-      return double.tryParse(
-          consultedProductController.text.replaceAll(RegExp(r','), '.'))!;
-    } else {
-      return 0;
-    }
-  }
-
   _changeCursorToLastIndex(TextEditingController consultedProductController) {
     consultedProductController.selection = TextSelection.collapsed(
       offset: consultedProductController.text.length,
@@ -230,10 +217,9 @@ class TransferRequestProvider with ChangeNotifier {
     required String enterpriseDestinyCode,
     required String requestTypeCode,
   }) async {
-    double quantity =
-        tryChangeControllerTextToDouble(consultedProductController);
+    double quantity = consultedProductController.text.toDouble();
 
-    if (quantity == 0) {
+    if (quantity <= 0) {
       quantity = 1;
     }
 
@@ -311,10 +297,9 @@ class TransferRequestProvider with ChangeNotifier {
     required TextEditingController consultedProductController,
     required TextEditingController newPriceController,
   }) {
-    double _quantityToAdd =
-        tryChangeControllerTextToDouble(consultedProductController);
+    double _quantityToAdd = consultedProductController.text.toDouble();
 
-    if (_quantityToAdd == 0) {
+    if (_quantityToAdd <= 0) {
       _quantityToAdd = 1;
     }
 
