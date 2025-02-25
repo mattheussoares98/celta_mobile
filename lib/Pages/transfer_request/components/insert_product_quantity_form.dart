@@ -8,6 +8,7 @@ import '../../../components/components.dart';
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
   final TextEditingController consultedProductController;
+  final TransferRequestModel selectedTransferRequestModel;
   final FocusNode quantityFocusNode;
   final double totalItensInCart;
   final double totalItemValue;
@@ -23,6 +24,7 @@ class InsertProductQuantityForm extends StatefulWidget {
     required this.product,
     required this.addProductInCart,
     required this.updateTotalItemValue,
+    required this.selectedTransferRequestModel,
     Key? key,
   }) : super(key: key);
 
@@ -79,7 +81,10 @@ class _InsertProductQuantityFormState extends State<InsertProductQuantityForm> {
               flex: 10,
               child: InsertQuantityTextFormField(
                 autoFocus: true,
-                enabled: widget.product.Value > 0,
+                enabled: widget.product.Value > 0 ||
+                    widget.selectedTransferRequestModel
+                            .AllowAlterCostOrSalePrice ==
+                        true,
                 focusNode: widget.quantityFocusNode,
                 newQuantityController: widget.consultedProductController,
                 formKey: widget.consultedProductFormKey,

@@ -276,6 +276,7 @@ class _ProductsItemsState extends State<ProductsItems> {
                     ),
                   if (selectedIndex == index)
                     InsertProductQuantityForm(
+                      selectedTransferRequestModel: selectedTransferRequestModel,
                       quantityFocusNode: quantityFocusNode,
                       consultedProductController: quantityController,
                       consultedProductFormKey: _consultedProductFormKey,
