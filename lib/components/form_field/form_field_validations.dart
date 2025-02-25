@@ -2,6 +2,8 @@ import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/utils.dart';
+
 class FormFieldValidations {
   FormFieldValidations._();
 
@@ -39,6 +41,8 @@ class FormFieldValidations {
     } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
         value.isNotEmpty) {
       return "Número inválido";
+    } else if (value.toDouble() <= 0) {
+      return "Digite um valor";
     }
 
     // Adiciona a verificação do número máximo de casas decimais
