@@ -25,8 +25,6 @@ class CartDetailsPage extends StatefulWidget {
 }
 
 class _CartDetailsPageState extends State<CartDetailsPage> {
-  TextEditingController _textEditingController = TextEditingController();
-
   String textButtonMessage({
     required TransferRequestProvider transferRequestProvider,
     required String? enterpriseOriginCode,
@@ -45,7 +43,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     }
   }
 
-  saveTransferRequestFunction({
+  dynamic saveTransferRequestFunction({
     required TransferRequestProvider transferRequestProvider,
   }) {
     if (transferRequestProvider.isLoadingSaveTransferRequest) {
@@ -84,12 +82,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _textEditingController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     TransferRequestProvider transferRequestProvider =
         Provider.of(context, listen: true);
@@ -112,7 +104,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
           enterpriseOriginCode: widget.originEnterprise.Code.toString(),
           enterpriseDestinyCode: widget.destinyEnterprise.Code.toString(),
           requestTypeCode: widget.selectedTransferRequestModel.Code.toString(),
-          textEditingController: _textEditingController,
         ),
         if (transferRequestProvider.cartProductsCount(
               enterpriseOriginCode: widget.originEnterprise.Code?.toString(),

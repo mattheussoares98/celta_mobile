@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/transfer_request/transfer_request.dart';
-import '../../../providers/providers.dart';
-import '../../../utils/utils.dart';
-import '../../../components/components.dart';
+import '../../../../models/models.dart';
+import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
+import '../../../../components/components.dart';
 
 class CartProductsItems {
   static Widget _titleAndSubtitle({
@@ -57,11 +57,7 @@ class CartProductsItems {
     required Function updateSelectedIndex,
   }) {
     return GestureDetector(
-      onTap: transferRequestProvider.isLoadingSaveTransferRequest
-          ? null
-          : () async {
-              await changeFocus();
-            },
+      onTap: changeFocus,
       child: Padding(
         padding: const EdgeInsets.only(left: 3, top: 4),
         child: Row(
