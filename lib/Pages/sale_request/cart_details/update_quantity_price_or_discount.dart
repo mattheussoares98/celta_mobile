@@ -337,6 +337,7 @@ class _UpdateQuantityPriceOrDiscountState
           Expanded(
             child: TextFormField(
               controller: manualPriceController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               style: FormFieldStyle.style(),
               enabled: manualDiscountController.text.isEmpty,
               onFieldSubmitted: (_) {
