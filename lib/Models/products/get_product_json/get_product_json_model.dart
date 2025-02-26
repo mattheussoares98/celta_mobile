@@ -153,14 +153,14 @@ class GetProductJsonModel {
         valueTyped: json["valueTyped"] ?? 0,
         quantity: json["quantity"] ?? 0,
         IncrementPercentageOrValue: json["IncrementPercentageOrValue"],
-        IncrementValue: json["IncrementValue"],
+        IncrementValue: json["IncrementValue"] ?? 0,
         DiscountPercentageOrValue: json["DiscountPercentageOrValue"],
-        DiscountValue: json["DiscountValue"],
+        DiscountValue: json["DiscountValue"] ?? 0,
         ExpectedDeliveryDate: json["ExpectedDeliveryDate"],
         Observations: json["Observations"],
         AutomaticDiscountPercentageOrValue:
             json["AutomaticDiscountPercentageOrValue"],
-        AutomaticDiscountValue: json["AutomaticDiscountValue"],
+        AutomaticDiscountValue: json["AutomaticDiscountValue"] ?? 0,
         TotalLiquid: json["TotalLiquid"],
         DiscountDescription: json["DiscountDescription"],
         stockByEnterpriseAssociateds: json['StockByEnterpriseAssociateds']
@@ -282,7 +282,7 @@ class GetProductJsonModel {
         'Stocks': this.stocks?.map((v) => v.toJson()).toList(),
         'LastBuyEntrance': this.lastBuyEntrance,
         "IncrementPercentageOrValue": this.IncrementPercentageOrValue,
-        "IncrementValue": this.IncrementValue,
+        "IncrementValue": this.IncrementValue ?? 0,
         "DiscountPercentageOrValue": this.DiscountPercentageOrValue,
         "DiscountValue": this.DiscountValue,
         "AutomaticDiscountPercentageOrValue":

@@ -241,9 +241,10 @@ class TransferRequestProvider with ChangeNotifier {
     }
 
     GetProductJsonModel productUpdated = GetProductJsonModel(
-      ExpectedDeliveryDate: "\"${DateTime.now().toString()}\"",
+      ExpectedDeliveryDate: DateTime.now().toIso8601String(),
       quantity: newQuantity,
       value: price,
+      TotalLiquid: newQuantity * price,
       enterpriseCode: product.enterpriseCode,
       productCode: product.productCode,
       productPackingCode: product.productPackingCode,
@@ -283,6 +284,16 @@ class TransferRequestProvider with ChangeNotifier {
       alterationPriceForAllPackings: product.alterationPriceForAllPackings,
       isChildOfGrate: product.isChildOfGrate,
       priceCost: product.priceCost,
+      AutomaticDiscountPercentageOrValue:
+          product.AutomaticDiscountPercentageOrValue,
+      AutomaticDiscountValue: product.AutomaticDiscountValue,
+      DiscountDescription: product.DiscountDescription,
+      DiscountPercentageOrValue: product.DiscountPercentageOrValue,
+      DiscountValue: product.DiscountValue,
+      IncrementPercentageOrValue: product.IncrementPercentageOrValue,
+      IncrementValue: product.IncrementValue,
+      Observations: product.Observations,
+      valueTyped: product.valueTyped,
     );
 
     if (indexInCart == null || indexInCart == -1) {
@@ -606,11 +617,11 @@ class TransferRequestProvider with ChangeNotifier {
       _errorMessageSaveTransferRequest = SoapRequestResponse.errorMessage;
 
       if (_errorMessageSaveTransferRequest == "") {
-        await clearCart(
-          requestTypeCode: requestTypeCode,
-          enterpriseOriginCode: enterpriseOriginCode,
-          enterpriseDestinyCode: enterpriseDestinyCode,
-        );
+        // await clearCart(
+        //   requestTypeCode: requestTypeCode,
+        //   enterpriseOriginCode: enterpriseOriginCode,
+        //   enterpriseDestinyCode: enterpriseDestinyCode,
+        // );
 
         ShowSnackbarMessage.show(
           message: "O pedido foi salvo com sucesso!",
