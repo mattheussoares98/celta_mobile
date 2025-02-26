@@ -74,30 +74,8 @@ class TransferRequestProvider with ChangeNotifier {
         [];
   }
 
-  Future<void> restoreProductRemoved({
-    required int ProductPackingCode,
-    required String enterpriseOriginCode,
-    required String enterpriseDestinyCode,
-    required String requestTypeCode,
-  }) async {
-    _cartProducts[requestTypeCode]![enterpriseOriginCode]![
-            enterpriseDestinyCode]!
-        .insert(indexOfRemovedProduct!, removedProduct!);
-
-    await _updateCartInDatabase();
-    notifyListeners();
-  }
-
-  // Map<requestTypeCode, Map<enterpriseOriginCode, Map<enterpriseDestinyCode, List<GetProductJsonModel>>>>
   int? indexOfRemovedProduct;
   GetProductJsonModel? removedProduct;
-
-  // getCartProducts({
-  //   required String enterpriseOriginCode,
-  //   required String enterpriseDestinyCode,
-  // }) {
-  //   return _cartProducts[enterpriseOriginCode]?[enterpriseDestinyCode] ?? 0;
-  // }
 
   Future<void> removeProductFromCart({
     required int? ProductPackingCode,
@@ -125,7 +103,7 @@ class TransferRequestProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  _updateCartInDatabase() async {
+  Future<void> _updateCartInDatabase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("transferCart");
     await prefs.setString("transferCart", json.encode(_cartProducts));
@@ -160,12 +138,6 @@ class TransferRequestProvider with ChangeNotifier {
 
       return atualQuantity;
     }
-  }
-
-  _changeCursorToLastIndex(TextEditingController consultedProductController) {
-    consultedProductController.selection = TextSelection.collapsed(
-      offset: consultedProductController.text.length,
-    );
   }
 
   bool canShowInsertProductQuantityForm({
@@ -311,8 +283,6 @@ class TransferRequestProvider with ChangeNotifier {
     }
 
     quantityController.text = "";
-
-    _changeCursorToLastIndex(quantityController);
 
     await _updateCartInDatabase();
     notifyListeners();
