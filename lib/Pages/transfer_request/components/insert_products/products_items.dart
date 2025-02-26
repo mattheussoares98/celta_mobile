@@ -89,8 +89,10 @@ class _ProductsItemsState extends State<ProductsItems> {
   }
 
   void changeFocusToPrice() {
-    ShowSnackbarMessage.show(
-        message: "Digite um preço válido", context: context);
+    if (newPriceFocusNode.hasFocus) {
+      ShowSnackbarMessage.show(
+          message: "Digite um preço válido", context: context);
+    }
 
     Future.delayed(Duration.zero, () {
       newPriceFocusNode.requestFocus();

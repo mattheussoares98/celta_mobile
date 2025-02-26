@@ -587,11 +587,11 @@ class TransferRequestProvider with ChangeNotifier {
       _errorMessageSaveTransferRequest = SoapRequestResponse.errorMessage;
 
       if (_errorMessageSaveTransferRequest == "") {
-        // await clearCart(
-        //   requestTypeCode: requestTypeCode,
-        //   enterpriseOriginCode: enterpriseOriginCode,
-        //   enterpriseDestinyCode: enterpriseDestinyCode,
-        // );
+        await clearCart(
+          requestTypeCode: requestTypeCode,
+          enterpriseOriginCode: enterpriseOriginCode,
+          enterpriseDestinyCode: enterpriseDestinyCode,
+        );
 
         ShowSnackbarMessage.show(
           message: "O pedido foi salvo com sucesso!",
