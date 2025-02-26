@@ -72,7 +72,6 @@ class ModulesItems extends StatelessWidget {
           routine: 'Cotação de compras'.toUpperCase(),
           nextRoute: APPROUTES.BUY_QUOTATION,
           context: context,
-          isNew: true,
         ),
         ImageComponent.image(
           imagePath: 'lib/assets/Images/inventory.png',
@@ -85,7 +84,6 @@ class ModulesItems extends StatelessWidget {
           routine: 'Manuais do BS'.toUpperCase(),
           nextRoute: APPROUTES.MANUALS,
           context: context,
-          isNew: true,
           onTap: () {
             if (manualsUrl == null) {
               ShowSnackbarMessage.show(
