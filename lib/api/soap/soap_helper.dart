@@ -427,7 +427,7 @@ class SoapHelper {
     }
   }
 
-  static Future<bool> bsAlreadyInLatestVersion() async {
+  static Future<DateTime?> bsAlreadyInLatestVersion() async {
     try {
       await SoapRequest.soapPost(
         parameters: {},
@@ -438,14 +438,13 @@ class SoapHelper {
       );
 
       if (SoapRequestResponse.errorMessage != "") {
-        return false;
+        return null;
       } else {
-        return DateTime.parse((json
-                .decode(SoapRequestResponse.responseAsString))["VersionDate"])
-            .isAfter(DateTime(2025, 2, 5));
+        return DateTime.parse(
+            (json.decode(SoapRequestResponse.responseAsString))["VersionDate"]);
       }
     } catch (e) {
-      return false;
+      return null;
     }
   }
 }

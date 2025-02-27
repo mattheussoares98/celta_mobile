@@ -1111,7 +1111,8 @@ class SaleRequestProvider with ChangeNotifier {
   Future<void> verifyUserCanChangePrices(
     EnterpriseProvider enterpriseProvider,
   ) async {
-    if (!enterpriseProvider.bsAlreadyInRequiredVersion) {
+    if (enterpriseProvider.bsDate != null &&
+        enterpriseProvider.bsDate!.isBefore(DateTime(2025, 2, 5))) {
       _userCanChangePrices = false;
     } else {
       _userCanChangePrices = await SoapHelper.userCanAccessResource(
