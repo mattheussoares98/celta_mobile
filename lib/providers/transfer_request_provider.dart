@@ -525,6 +525,7 @@ class TransferRequestProvider with ChangeNotifier {
     required String enterpriseDestinyCode,
     required String value,
     required ConfigurationsProvider configurationsProvider,
+    required EnterpriseProvider enterpriseProvider,
   }) async {
     _errorMessageProducts = '';
     _isLoadingProducts = true;
@@ -538,6 +539,7 @@ class TransferRequestProvider with ChangeNotifier {
         requestTypeCode: requestTypeCode.toString(),
         searchValue: value,
         configurationsProvider: configurationsProvider,
+        bsDate: enterpriseProvider.bsDate,
       );
 
       _errorMessageProducts = SoapRequestResponse.errorMessage;

@@ -47,6 +47,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     NotificationsProvider notificationsProvider =
         Provider.of(context, listen: false);
 
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          APPROUTES.LOGIN_PAGE,
+          (route) => false,
+        );
+
     await FirebaseHelper.initNotifications(notificationsProvider);
     LoginProvider loginProvider = Provider.of(context, listen: false);
     bool logged = await loginProvider.verifyIsLogged();

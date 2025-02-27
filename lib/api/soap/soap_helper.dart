@@ -278,10 +278,12 @@ class SoapHelper {
     required String requestTypeCode,
     required String searchValue,
     required ConfigurationsProvider configurationsProvider,
+    required DateTime? bsDate,
   }) async {
     try {
-      await SoapRequest.soapPost(
-        parameters: {
+      Map<String, dynamic> parameters;
+      if (bsDate == null || bsDate.isBefore(DateTime(2025, 2, 27))) {
+        parameters = {
           "crossIdentity": UserData.crossIdentity,
           "enterpriseCode": enterpriseOriginCode,
           "enterpriseDestinyCode": enterpriseDestinyCode,
@@ -289,7 +291,20 @@ class SoapHelper {
           "searchValue": searchValue,
           "searchTypeInt": getSearchTypeInt(configurationsProvider),
           // "routineTypeInt": 3,
-        },
+        };
+      } else {
+        parameters = {
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseOriginCode,
+          "enterpriseDestinyCode": enterpriseDestinyCode,
+          "requestTypeCode": requestTypeCode,
+          "searchValue": searchValue,
+          // "searchTypeInt": 3,
+          "routineTypeInt": 3,
+        };
+      }
+      await SoapRequest.soapPost(
+        parameters: parameters,
         typeOfResponse: "GetProductJsonByRequestTypeResponse",
         SOAPAction: "GetProductJsonByRequestType",
         serviceASMX: "CeltaProductService.asmx",

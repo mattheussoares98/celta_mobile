@@ -36,10 +36,9 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    TransferRequestProvider transferRequestProvider =
-        Provider.of(context, listen: true);
-    ConfigurationsProvider configurationsProvider =
-        Provider.of(context, listen: true);
+    TransferRequestProvider transferRequestProvider = Provider.of(context);
+    ConfigurationsProvider configurationsProvider = Provider.of(context);
+    EnterpriseProvider enterpriseProvider = Provider.of(context, listen: false);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -61,6 +60,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                   enterpriseDestinyCode: widget.enterpriseDestinyCode,
                   value: searchProductTextEditingController.text,
                   configurationsProvider: configurationsProvider,
+                  enterpriseProvider: enterpriseProvider,
                 );
 
                 if (transferRequestProvider.products.length > 0) {
@@ -91,6 +91,7 @@ class _InsertProductsPageState extends State<InsertProductsPage> {
                   enterpriseDestinyCode: widget.enterpriseDestinyCode,
                   value: searchProductTextEditingController.text,
                   configurationsProvider: configurationsProvider,
+                  enterpriseProvider: enterpriseProvider,
                 );
 
                 if (transferRequestProvider.products.length > 0) {
