@@ -115,9 +115,8 @@ class LoginProvider with ChangeNotifier {
         _changedEnterpriseNameOrUrlCcs = false;
       }
     } catch (e) {
-      _errorMessage = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
-        message: _errorMessage,
+        message: e.toString(),
         context: context,
       );
     } finally {

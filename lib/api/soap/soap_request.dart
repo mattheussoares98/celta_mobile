@@ -104,7 +104,7 @@ class SoapRequest {
         throw Exception();
       }
     } catch (e) {
-      SoapRequestResponse.errorMessage = DefaultErrorMessage.ERROR;
+      SoapRequestResponse.errorMessage = e.toString();
     }
   }
 }

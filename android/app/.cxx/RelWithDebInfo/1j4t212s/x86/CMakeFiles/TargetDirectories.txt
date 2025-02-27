@@ -1,0 +1,2 @@
+D:/Development/Flutter projects/celta_mobile/android/app/.cxx/RelWithDebInfo/1j4t212s/x86/CMakeFiles/edit_cache.dir
+D:/Development/Flutter projects/celta_mobile/android/app/.cxx/RelWithDebInfo/1j4t212s/x86/CMakeFiles/rebuild_cache.dir
