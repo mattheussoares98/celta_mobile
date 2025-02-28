@@ -67,7 +67,10 @@ class ProductItem extends StatelessWidget {
                 ),
                 if (showPrice == true)
                   getTitleAndSubtitle(
-                    value: product.value.toString(),
+                    value: (product.value != null && product.value! > 0
+                            ? product.value
+                            : product.retailPracticedPrice)
+                        .toString(),
                     isPrice: true,
                     successMessage: "Preço",
                     errorMessage: "Sem preço",
