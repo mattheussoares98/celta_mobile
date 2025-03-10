@@ -148,7 +148,8 @@ class SubEnterprisesItems extends StatelessWidget {
               );
             },
           ),
-        if (webProvider.enterprises.isNotEmpty &&
+        if (webProvider.isGeneratingVersionToAdministration &&
+            webProvider.enterprises.isNotEmpty &&
             webProvider.indexOfSelectedEnterprise != -1 &&
             webProvider.enterprises[webProvider.indexOfSelectedEnterprise]
                     .subEnterprises?.length !=
