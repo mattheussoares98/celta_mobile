@@ -13,6 +13,8 @@ enum Months {
 }
 
 class WebProvider with ChangeNotifier {
+  bool get isGeneratingVersionToAdministration => false;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 

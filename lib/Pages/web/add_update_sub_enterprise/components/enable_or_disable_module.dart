@@ -4,7 +4,7 @@ import '../../../../models/models.dart';
 
 class EnableOrDisableModule extends StatefulWidget {
   final List<ModuleModel> modules;
-  final void Function(int index) updateEnabled;
+  final void Function(int index)? updateEnabled;
   const EnableOrDisableModule({
     required this.modules,
     required this.updateEnabled,
@@ -35,17 +35,21 @@ class _EnableOrDisableModuleState extends State<EnableOrDisableModule> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: InkWell(
-                onTap: () {
-                  widget.updateEnabled(index);
-                },
+                onTap: widget.updateEnabled == null
+                    ? null
+                    : () {
+                        widget.updateEnabled!(index);
+                      },
                 child: Row(
                   children: [
                     Expanded(child: Text(module.name)),
                     Switch(
                       value: module.enabled == true,
-                      onChanged: (_) {
-                        widget.updateEnabled(index);
-                      },
+                      onChanged: widget.updateEnabled == null
+                          ? null
+                          : (_) {
+                              widget.updateEnabled!(index);
+                            },
                     ),
                   ],
                 ),

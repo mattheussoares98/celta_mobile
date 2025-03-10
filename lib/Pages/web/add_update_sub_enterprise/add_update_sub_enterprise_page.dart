@@ -49,7 +49,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.adjustSalePrice.name)
                     .first
                     .enabled ??
-                true,
+                false,
             name: "Ajuste de preços",
           ),
           ModuleModel(
@@ -57,7 +57,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.adjustStock.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.adjustStock.name,
             name: "Ajuste de estoques",
           ),
@@ -66,7 +66,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.buyQuotation.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.buyQuotation.name,
             name: "Cotação de compras",
           ),
@@ -75,7 +75,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.buyRequest.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.buyRequest.name,
             name: "Pedido de compra",
           ),
@@ -84,7 +84,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.customerRegister.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.customerRegister.name,
             name: "Cadastro de cliente",
           ),
@@ -93,7 +93,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.inventory.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.inventory.name,
             name: "Inventário",
           ),
@@ -102,7 +102,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.priceConference.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.priceConference.name,
             name: "Consulta de preços",
           ),
@@ -111,7 +111,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.productsConference.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.productsConference.name,
             name: "Conferência de produtos (expedição)",
           ),
@@ -120,7 +120,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.receipt.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.receipt.name,
             name: "Recebimento",
           ),
@@ -129,7 +129,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.researchPrices.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.researchPrices.name,
             name: "Consulta de preços concorrentes",
           ),
@@ -138,7 +138,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.saleRequest.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.saleRequest.name,
             name: "Pedido de vendas",
           ),
@@ -148,7 +148,7 @@ class _AddUpdateSubEnterprisePageState
                         (e) => e.module == Modules.transferBetweenStocks.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.transferBetweenStocks.name,
             name: "Transferência entre estoques",
           ),
@@ -157,7 +157,7 @@ class _AddUpdateSubEnterprisePageState
                     ?.where((e) => e.module == Modules.transferRequest.name)
                     .first
                     .enabled ??
-                true,
+                false,
             module: Modules.transferRequest.name,
             name: "Pedido de transferência",
           ),
@@ -272,16 +272,19 @@ class _AddUpdateSubEnterprisePageState
                             ),
                           EnableOrDisableModule(
                             modules: modules,
-                            updateEnabled: (index) {
-                              final oldModule = modules[index];
-                              setState(() {
-                                modules[index] = ModuleModel(
-                                  name: oldModule.name,
-                                  enabled: !oldModule.enabled,
-                                  module: oldModule.module,
-                                );
-                              });
-                            },
+                            updateEnabled:
+                                webProvider.isGeneratingVersionToAdministration
+                                    ? (index) {
+                                        final oldModule = modules[index];
+                                        setState(() {
+                                          modules[index] = ModuleModel(
+                                            name: oldModule.name,
+                                            enabled: !oldModule.enabled,
+                                            module: oldModule.module,
+                                          );
+                                        });
+                                      }
+                                    : null,
                           ),
                         ],
                       ),
