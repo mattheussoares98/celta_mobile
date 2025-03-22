@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import '../../models/models.dart';
+import '../../Models/models.dart';
 
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';

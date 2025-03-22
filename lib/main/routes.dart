@@ -11,7 +11,7 @@ import '../Pages/adjust_stock/adjust_stock.dart';
 import '../Pages/buy_request/buy_request.dart';
 import '../Pages/customer_register/customer_register.dart';
 import '../Pages/drawer/drawer.dart';
-import '../Pages/inicial_pages/inicial_pages.dart';
+import '../Pages/Inicial_pages/inicial_pages.dart';
 import '../Pages/inventory/inventory.dart';
 import '../Pages/price_conference/price_conference.dart';
 import '../Pages/receipt/receipt.dart';

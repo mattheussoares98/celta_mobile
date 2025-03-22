@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../components/components.dart';
 
-import '../../../../models/models.dart';
+import '../../../../Models/models.dart';
 import '../../../../utils/utils.dart';
 
 class ProductInformations extends StatelessWidget {

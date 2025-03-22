@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
-import '../models/models.dart';
+import '../Models/models.dart';
 import '../utils/utils.dart';
 import './providers.dart';
 

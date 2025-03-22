@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:platform_plus/platform_plus.dart';
 
 import '../firebase_options.dart';
-import '../models/models.dart';
+import '../Models/models.dart';
 import '../providers/providers.dart';
 import '../utils/utils.dart';
 import './api.dart';

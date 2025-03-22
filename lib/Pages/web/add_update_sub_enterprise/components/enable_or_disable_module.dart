@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../models/models.dart';
+import '../../../../Models/models.dart';
 
 class EnableOrDisableModule extends StatefulWidget {
   final List<ModuleModel> modules;

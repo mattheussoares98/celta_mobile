@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/components.dart';
-import '../../../models/models.dart';
+import '../../../Models/models.dart';
 import '../sale_request.dart';
 
 class InsertProductQuantityForm extends StatefulWidget {

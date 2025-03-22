@@ -1,7 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/models.dart';
+import '../../../Models/models.dart';
 import '../../../providers/providers.dart';
 
 class CovenantsItems extends StatefulWidget {

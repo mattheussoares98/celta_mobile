@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/models.dart';
+import '../../../Models/models.dart';
 import '../../components.dart';
 
 class StockAddress extends StatelessWidget implements MoreInformationWidget {
