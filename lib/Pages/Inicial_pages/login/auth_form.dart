@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/api.dart';
-import '../../../pages/Inicial_pages/inicial_pages.dart';
+import '../../../Pages/Inicial_pages/inicial_pages.dart';
 import '../../../providers/providers.dart';
 
 class AuthForm extends StatefulWidget {
