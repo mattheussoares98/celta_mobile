@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'components/components.dart';
+import './components/components.dart';
 
 class CountingPage extends StatefulWidget {
   const CountingPage({Key? key}) : super(key: key);
