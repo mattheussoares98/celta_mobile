@@ -1,5 +1,3 @@
-import 'package:celta_inventario/main/routes.dart';
-import 'package:celta_inventario/main/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,10 +5,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:platform_plus/platform_plus.dart';
 import 'package:provider/provider.dart';
 
-import 'api/api.dart';
 
-import 'providers/providers.dart';
-import 'utils/utils.dart';
+import '../api/api.dart';
+import '../main/routes.dart';
+import '../main/theme.dart';
+import '../providers/providers.dart';
+import '../utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

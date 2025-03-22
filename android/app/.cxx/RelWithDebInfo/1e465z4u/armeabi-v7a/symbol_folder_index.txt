@@ -1,0 +1,1 @@
+/Users/soares/development/projects/celta_mobile/build/app/intermediates/cxx/RelWithDebInfo/1e465z4u/obj/armeabi-v7a
