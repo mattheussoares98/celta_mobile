@@ -1,1 +1,1 @@
-export 'buyer_model.dart';
+export './buyer_model.dart';

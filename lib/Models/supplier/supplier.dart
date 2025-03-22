@@ -1,1 +1,1 @@
-export 'supplier_model.dart';
+export './supplier_model.dart';

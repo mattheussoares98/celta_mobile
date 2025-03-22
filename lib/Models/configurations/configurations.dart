@@ -1,1 +1,1 @@
-export 'configurations_model.dart';
+export './configurations_model.dart';

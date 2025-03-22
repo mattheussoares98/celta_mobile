@@ -1,1 +1,1 @@
-export 'price_conference_page.dart';
+export './price_conference_page.dart';

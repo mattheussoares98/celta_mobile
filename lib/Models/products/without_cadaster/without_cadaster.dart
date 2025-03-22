@@ -1,1 +1,1 @@
-export 'product_without_cadaster_model.dart';
+export './product_without_cadaster_model.dart';

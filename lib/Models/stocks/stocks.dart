@@ -1,1 +1,1 @@
-export 'get_stock_types_model.dart';
+export './get_stock_types_model.dart';

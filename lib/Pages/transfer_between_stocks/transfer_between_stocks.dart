@@ -1,2 +1,2 @@
-export 'components/components.dart';
-export 'transfer_between_stocks_page.dart';
+export './components/components.dart';
+export './transfer_between_stocks_page.dart';

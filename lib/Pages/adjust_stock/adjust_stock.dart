@@ -1,1 +1,1 @@
-export 'adjust_stock_page.dart';
+export './adjust_stock_page.dart';

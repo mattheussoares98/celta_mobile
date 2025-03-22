@@ -1,1 +1,1 @@
-export 'evaluation_and_suggestions_page.dart';
+export './evaluation_and_suggestions_page.dart';

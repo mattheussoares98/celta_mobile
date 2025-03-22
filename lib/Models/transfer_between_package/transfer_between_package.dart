@@ -1,1 +1,1 @@
-export 'transfer_between_package_justification_model.dart';
+export './transfer_between_package_justification_model.dart';

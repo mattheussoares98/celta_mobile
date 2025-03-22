@@ -1,2 +1,2 @@
-export 'components/components.dart';
-export 'receipts_page.dart';
+export './components/components.dart';
+export './receipts_page.dart';
