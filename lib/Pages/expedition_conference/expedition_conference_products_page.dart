@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../models/expedition_control/expedition_control.dart';
-import '../../pages/expedition_conference/expedition_conference.dart';
+import 'expedition_conference.dart';
 import '../../providers/providers.dart';
 
 class ExpeditionConferenceProductsPage extends StatefulWidget {

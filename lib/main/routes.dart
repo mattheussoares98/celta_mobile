@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../pages/buy_quotation/buy_quotation.dart';
-import '../pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
-import '../pages/expedition_conference/expedition_conference.dart';
-import '../pages/adjust_sale_price/adjust_sale_price.dart';
-import '../pages/web/add_update_sub_enterprise/add_update_sub_enterprise.dart';
-import '../pages/web/enterprise_details/enterprise_details.dart';
-import '../pages/web/web.dart';
-import '../pages/adjust_stock/adjust_stock.dart';
-import '../pages/buy_request/buy_request.dart';
-import '../pages/customer_register/customer_register.dart';
-import '../pages/drawer/drawer.dart';
+import '../Pages/buy_quotation/buy_quotation.dart';
+import '../Pages/evaluation_and_suggestions/evaluation_and_suggestions_page.dart';
+import '../Pages/expedition_conference/expedition_conference.dart';
+import '../Pages/adjust_sale_price/adjust_sale_price.dart';
+import '../Pages/web/add_update_sub_enterprise/add_update_sub_enterprise.dart';
+import '../Pages/web/enterprise_details/enterprise_details.dart';
+import '../Pages/web/web.dart';
+import '../Pages/adjust_stock/adjust_stock.dart';
+import '../Pages/buy_request/buy_request.dart';
+import '../Pages/customer_register/customer_register.dart';
+import '../Pages/drawer/drawer.dart';
 import '../Pages/inicial_pages/inicial_pages.dart';
 import '../Pages/inventory/inventory.dart';
-import '../pages/price_conference/price_conference.dart';
-import '../pages/receipt/receipt.dart';
-import '../pages/research_prices/research_prices.dart';
-import '../pages/notifications/notifications_page.dart';
-import '../pages/transfer_between_stocks/transfer_between_stocks.dart';
-import '../pages/transfer_request/transfer_request.dart';
-import '../pages/sale_request/sale_request.dart';
+import '../Pages/price_conference/price_conference.dart';
+import '../Pages/receipt/receipt.dart';
+import '../Pages/research_prices/research_prices.dart';
+import '../Pages/notifications/notifications_page.dart';
+import '../Pages/transfer_between_stocks/transfer_between_stocks.dart';
+import '../Pages/transfer_request/transfer_request.dart';
+import '../Pages/sale_request/sale_request.dart';
 import '../utils/utils.dart';
 
 Map<String, Widget Function(BuildContext)> routes() => {

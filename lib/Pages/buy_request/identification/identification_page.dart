@@ -2,7 +2,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../pages/buy_request/buy_request.dart';
+import '../buy_request.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 

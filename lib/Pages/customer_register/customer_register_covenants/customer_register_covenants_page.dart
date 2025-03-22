@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../pages/customer_register/customer_register.dart';
+import '../customer_register.dart';
 import '../../../providers/providers.dart';
 
 class CustomerRegisterCovenantsPage extends StatefulWidget {

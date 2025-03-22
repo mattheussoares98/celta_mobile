@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../components/components.dart';
 import '../../../models/models.dart';
-import '../../../pages/sale_request/sale_request.dart';
+import '../sale_request.dart';
 
 class InsertProductQuantityForm extends StatefulWidget {
   final GlobalKey<FormState> consultedProductFormKey;
