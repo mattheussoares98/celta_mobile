@@ -1,10 +1,10 @@
-import 'package:celta_inventario/utils/convert_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../models/research_prices/research_prices.dart';
 import '../../../providers/providers.dart';
+import '../../../utils/convert_string.dart';
 
 class InsertPrices extends StatefulWidget {
   final ResearchPricesProductsModel product;

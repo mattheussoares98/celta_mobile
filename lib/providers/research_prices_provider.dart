@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/models/address/address.dart';
+import '../models/address/address.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';

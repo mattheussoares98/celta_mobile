@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/api/api.dart';
-import 'package:celta_inventario/utils/utils.dart';
+import '../api/api.dart';
+import '../utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import '../components/components.dart';

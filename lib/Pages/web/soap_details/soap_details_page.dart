@@ -1,10 +1,10 @@
-import 'package:celta_inventario/pages/web/soap_details/month_details.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
 import '../../../models/firebase/firebase.dart';
 import '../../../providers/providers.dart';
+import 'month_details.dart';
 
 class SoapDetailsPage extends StatelessWidget {
   const SoapDetailsPage({super.key});

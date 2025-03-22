@@ -1,8 +1,9 @@
-import 'package:celta_inventario/models/enterprise/enterprise_model.dart';
 import 'package:date_format/date_format.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter/material.dart';
+
+import '../../../models/enterprise/enterprise_model.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';

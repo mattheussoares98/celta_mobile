@@ -1,5 +1,6 @@
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
+
+import '../../../providers/providers.dart';
 
 class LastSaleRequestSaved extends StatelessWidget {
   final SaleRequestProvider saleRequestProvider;

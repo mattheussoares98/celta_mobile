@@ -1,11 +1,10 @@
-import 'package:celta_inventario/pages/buy_request/components/title_component.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../pages/buy_request/buy_request.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
-import 'identification.dart';
 
 class IdentificationPage extends StatefulWidget {
   final GlobalKey<FormFieldState> buyersKey;

@@ -1,8 +1,8 @@
-import 'package:celta_inventario/components/components.dart';
-import 'package:celta_inventario/models/enterprise/enterprise.dart';
-import 'package:celta_inventario/models/products/products.dart';
-import 'package:celta_inventario/providers/providers.dart';
-import 'package:celta_inventario/utils/utils.dart';
+import '../../../../components/components.dart';
+import '../../../../models/enterprise/enterprise.dart';
+import '../../../../models/products/products.dart';
+import '../../../../providers/providers.dart';
+import '../../../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

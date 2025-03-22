@@ -1,4 +1,4 @@
-import 'package:celta_inventario/providers/providers.dart';
+import '../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

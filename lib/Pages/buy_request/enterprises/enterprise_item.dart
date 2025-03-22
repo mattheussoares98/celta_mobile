@@ -1,9 +1,9 @@
-import 'package:celta_inventario/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../models/buy_request/buy_request.dart';
+import '../../../models/models.dart';
+import '../../../providers/providers.dart';
 
 class EnterpriseItem extends StatelessWidget {
   final BuyRequestEnterpriseModel enterpriseModel;

@@ -1,8 +1,8 @@
-import 'package:celta_inventario/pages/customer_register/customer_register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
+import '../../../pages/customer_register/customer_register.dart';
 import '../../../providers/providers.dart';
 
 class CustomerRegisterCovenantsPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _CustomerRegisterCovenantsPageState
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: SingleChildScrollView(
@@ -47,7 +47,8 @@ class _CustomerRegisterCovenantsPageState
             if (customerRegisterProvider.errorMessageLoadCovenants != "" &&
                 customerRegisterProvider.covenants.isEmpty)
               searchAgain(
-                errorMessage: customerRegisterProvider.errorMessageLoadCovenants,
+                errorMessage:
+                    customerRegisterProvider.errorMessageLoadCovenants,
                 request: customerRegisterProvider.loadCovenants,
               ),
             if (customerRegisterProvider.covenants.isNotEmpty)

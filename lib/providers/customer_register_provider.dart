@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:celta_inventario/providers/providers.dart';
+import '../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

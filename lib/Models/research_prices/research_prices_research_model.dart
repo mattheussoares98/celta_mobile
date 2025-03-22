@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/models/research_prices/research_prices.dart';
-
+import '../models.dart';
 import '../../api/api.dart';
-// import '../../models/research_prices/research_prices.dart';
 
 class ResearchPricesResearchModel {
   final int Code;
@@ -31,8 +29,7 @@ class ResearchPricesResearchModel {
   });
 
   static List<ResearchPricesResearchModel> convertResultToResearchModel() {
-    List resultAsList =
-        json.decode(SoapRequestResponse.responseAsString);
+    List resultAsList = json.decode(SoapRequestResponse.responseAsString);
 
     return resultAsList
         .map((e) => ResearchPricesResearchModel.fromJson(e))

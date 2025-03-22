@@ -1,8 +1,8 @@
-import 'package:celta_inventario/pages/buy_request/enterprises/enterprise_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/buy_request/buy_request.dart';
+import '../../../pages/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
 import '../../../components/components.dart';
 

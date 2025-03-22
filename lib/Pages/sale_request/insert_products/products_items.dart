@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/models.dart';
 import '../../../providers/providers.dart';
 import '../../../components/components.dart';
+import '../../../utils/utils.dart';
 import 'insert_products.dart';
 
 class ProductsItems extends StatefulWidget {

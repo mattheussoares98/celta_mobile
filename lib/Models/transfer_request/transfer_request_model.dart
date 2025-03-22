@@ -1,4 +1,4 @@
-import 'package:celta_inventario/utils/utils.dart';
+import '../../utils/utils.dart';
 
 class TransferRequestModel {
   final int? Code;

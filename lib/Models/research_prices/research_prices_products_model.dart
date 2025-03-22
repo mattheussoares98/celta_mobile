@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:celta_inventario/api/api.dart';
+import '../../api/api.dart';
 
 class ResearchPricesProductsModel {
   final int ResearchOfPriceCode; /* 1014 */
