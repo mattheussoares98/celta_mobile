@@ -34,6 +34,8 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
+        env: 
+          CI: "true"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
