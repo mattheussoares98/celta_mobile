@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/evaluation_and_suggestions/evaluation_model.dart';
+import '../Models/evaluation_and_suggestions/evaluation_model.dart';
 import '../utils/utils.dart';
 
 class EvaluationAndSuggestionsProvider with ChangeNotifier {

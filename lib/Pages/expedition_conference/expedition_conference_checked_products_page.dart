@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/expedition_control/expedition_control.dart';
+import '../../Models/expedition_control/expedition_control.dart';
 import '../../providers/providers.dart';
 import './components/components.dart';
 

@@ -1,5 +1,5 @@
-import '../../../models/enterprise/enterprise.dart';
-import '../../../models/sale_request/sale_request.dart';
+import '../../../Models/enterprise/enterprise.dart';
+import '../../../Models/sale_request/sale_request.dart';
 import '../../../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

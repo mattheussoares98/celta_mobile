@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../components/components.dart';
-import '../../../models/buy_request/buy_request.dart';
+import '../../../Models/buy_request/buy_request.dart';
 import '../../../providers/providers.dart';
 import 'identification.dart';
 

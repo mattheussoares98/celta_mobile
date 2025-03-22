@@ -1,6 +1,6 @@
 import '../../../../components/components.dart';
-import '../../../../models/enterprise/enterprise.dart';
-import '../../../../models/products/products.dart';
+import '../../../../Models/enterprise/enterprise.dart';
+import '../../../../Models/products/products.dart';
 import '../../../../providers/providers.dart';
 import '../../../../utils/utils.dart';
 import 'package:flutter/material.dart';

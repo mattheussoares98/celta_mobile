@@ -2,7 +2,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../models/firebase/firebase.dart';
+import '../../../Models/firebase/firebase.dart';
 import '../../../providers/providers.dart';
 import 'month_details.dart';
 

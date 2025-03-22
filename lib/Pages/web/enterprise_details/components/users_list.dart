@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../models/firebase/firebase.dart';
+import '../../../../Models/firebase/firebase.dart';
 
 class UsersList extends StatelessWidget {
   final FirebaseEnterpriseModel client;

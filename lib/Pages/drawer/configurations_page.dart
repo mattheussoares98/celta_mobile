@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/configurations/configurations.dart';
+import '../../Models/configurations/configurations.dart';
 import 'configurations_checkbox.dart';
 
 class ConfigurationsPage extends StatefulWidget {

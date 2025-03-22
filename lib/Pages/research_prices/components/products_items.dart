@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import 'components.dart';
-import '../../../models/research_prices/research_prices.dart';
+import '../../../Models/research_prices/research_prices.dart';
 import '../../../providers/providers.dart';
 
 class ProductsItems extends StatefulWidget {

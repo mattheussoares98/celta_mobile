@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../components/components.dart';
 
 import '../../Models/models.dart';
-import '../../Pages/inventory/inventory.dart';
+import '../../Pages/Inventory/inventory.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
 

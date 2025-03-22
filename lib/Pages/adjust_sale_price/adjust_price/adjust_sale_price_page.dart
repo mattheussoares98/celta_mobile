@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../components/product/more_informations/prices.dart';
-import '../../../models/enterprise/enterprise.dart';
-import '../../../models/products/products.dart';
+import '../../../Models/enterprise/enterprise.dart';
+import '../../../Models/products/products.dart';
 import '../../../providers/providers.dart';
 import '../adjust_sale_price.dart';
 

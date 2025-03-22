@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
-import '../models/notifications/notifications.dart';
+import '../Models/notifications/notifications.dart';
 
 class NotificationsProvider with ChangeNotifier {
   String _errorMessage = '';

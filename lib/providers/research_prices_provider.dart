@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import '../models/address/address.dart';
+import '../Models/address/address.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../../components/components.dart';
-import '../../models/research_prices/research_prices.dart';
+import '../../Models/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 import '../utils/utils.dart';
 

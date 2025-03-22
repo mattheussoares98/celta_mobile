@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../components/components.dart';
-import '../../../../../models/firebase/firebase.dart';
+import '../../../../../Models/firebase/firebase.dart';
 import '../../../../providers/providers.dart';
 
 class EditUrlCcs extends StatefulWidget {

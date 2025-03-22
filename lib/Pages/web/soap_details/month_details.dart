@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/firebase/firebase.dart';
+import '../../../Models/firebase/firebase.dart';
 
 class MonthDetails extends StatelessWidget {
   final SoapActionsModel? monthData;

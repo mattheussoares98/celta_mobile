@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../api/api.dart';
 import '../components/components.dart';
-import '../models/address/address.dart';
+import '../Models/address/address.dart';
 
 class AddressProvider with ChangeNotifier {
   final TextEditingController cepController = TextEditingController();

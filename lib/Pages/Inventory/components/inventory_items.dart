@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../models/enterprise/enterprise_model.dart';
+import '../../../Models/enterprise/enterprise_model.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 import '../../../components/components.dart';

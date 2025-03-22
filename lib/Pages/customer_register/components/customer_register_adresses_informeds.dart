@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../models/address/address.dart';
+import '../../../Models/address/address.dart';
 import '../../../providers/providers.dart';
 
 class CustomerRegisterAddressesInformeds extends StatefulWidget {

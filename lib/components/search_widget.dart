@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../Pages/drawer/drawer.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
-import '../models/configurations/configurations.dart';
+import '../Models/configurations/configurations.dart';
 import 'components.dart';
 
 class SearchWidget extends StatefulWidget {

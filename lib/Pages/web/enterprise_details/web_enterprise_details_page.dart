@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../models/firebase/firebase.dart';
+import '../../../../Models/firebase/firebase.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import 'enterprise_details.dart';

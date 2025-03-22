@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/components.dart';
-import '../../../models/expedition_control/expedition_control.dart';
+import '../../../Models/expedition_control/expedition_control.dart';
 import '../../../utils/utils.dart';
 
 class ExpeditionControlProductItem extends StatelessWidget {

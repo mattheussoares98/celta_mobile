@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
-import '../models/configurations/configurations.dart';
+import '../Models/configurations/configurations.dart';
 
 class ConfigurationsProvider with ChangeNotifier {
   List<ConfigurationsModel> _configurations = [];

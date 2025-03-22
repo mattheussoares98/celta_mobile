@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../providers/providers.dart';
-import '../../models/research_prices/research_prices.dart';
+import '../../Models/research_prices/research_prices.dart';
 
 class ResearchPricesInsertOrUpdateConcurrentPage extends StatefulWidget {
   const ResearchPricesInsertOrUpdateConcurrentPage({super.key});

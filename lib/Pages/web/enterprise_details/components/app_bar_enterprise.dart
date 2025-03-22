@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../components/components.dart';
-import '../../../../../models/firebase/firebase.dart';
+import '../../../../../Models/firebase/firebase.dart';
 import '../../../../providers/providers.dart';
 
 AppBar appBarEnterprise({
