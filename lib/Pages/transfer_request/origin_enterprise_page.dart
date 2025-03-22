@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../models/models.dart';
-import 'components/components.dart';
+import './components/components.dart';
 import '../../providers/providers.dart';
 
 class OriginEnterprisePage extends StatefulWidget {

@@ -5,7 +5,7 @@ import '../../components/components.dart';
 import '../../models/models.dart';
 import '../../providers/providers.dart';
 import '../../utils/utils.dart';
-import 'components/components.dart';
+import './components/components.dart';
 
 class ExpeditionConferencePendingProductsPage extends StatefulWidget {
   const ExpeditionConferencePendingProductsPage({super.key});

@@ -7,7 +7,7 @@ import '../../../models/configurations/configurations.dart';
 import '../../../models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
-import 'components/components.dart';
+import './components/components.dart';
 
 class ReceiptConferencePage extends StatefulWidget {
   const ReceiptConferencePage({

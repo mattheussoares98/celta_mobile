@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/expedition_control/expedition_control.dart';
 import '../../providers/providers.dart';
-import 'components/components.dart';
+import './components/components.dart';
 
 class ExpeditionConferenceCheckedProductsPage extends StatelessWidget {
   const ExpeditionConferenceCheckedProductsPage({super.key});

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../components/components.dart';
 import '../../models/configurations/configurations.dart';
 import '../../providers/providers.dart';
-import 'components/components.dart';
+import './components/components.dart';
 import '../../utils/utils.dart';
 
 class ResearchPricesConcurrentsPage extends StatefulWidget {

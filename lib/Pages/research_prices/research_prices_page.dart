@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../utils/utils.dart';
 import '../../components/components.dart';
-import 'components/components.dart';
+import './components/components.dart';
 import '../../providers/providers.dart';
 
 class ResearchPricesPage extends StatefulWidget {

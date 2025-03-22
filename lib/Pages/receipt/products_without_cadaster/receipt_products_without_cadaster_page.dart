@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
-import 'components/components.dart';
+import './components/components.dart';
 
 class ReceiptProductsWithoutCadasterPage extends StatefulWidget {
   const ReceiptProductsWithoutCadasterPage({super.key});
