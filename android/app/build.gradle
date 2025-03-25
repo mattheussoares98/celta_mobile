@@ -79,9 +79,6 @@ android {
                 debugSymbolLevel 'FULL'
             }
             signingConfig signingConfigs.release
-        if (System.getenv("CI") == "true") {
-            signingConfig null // Disable signing when running in CI
-            }
         }
     }
 
