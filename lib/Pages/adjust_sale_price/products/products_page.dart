@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../Models/configurations/configurations.dart';
 import '../../../Models/enterprise/enterprise_model.dart';
-import '../adjust_sale_price.dart';
 import '../../../providers/providers.dart';
+import 'products_items.dart';
 
 class AdjustSalePriceProductsPage extends StatefulWidget {
   const AdjustSalePriceProductsPage({super.key});

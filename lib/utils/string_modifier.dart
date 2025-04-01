@@ -71,4 +71,20 @@ extension StringModifier on String {
 
     return newValue;
   }
+
+  String? formatPackingQuantity() {
+    String? packingQuantity = this.replaceAll(RegExp(r'.0000'), '');
+
+    if (packingQuantity.endsWith("000") == true) {
+      packingQuantity = packingQuantity.replaceAll(RegExp(r'000'), '');
+    }
+    if (packingQuantity.endsWith("00") == true) {
+      packingQuantity = packingQuantity.replaceAll(RegExp(r'00'), '');
+    }
+    if (packingQuantity.endsWith("0") == true) {
+      packingQuantity = packingQuantity.replaceAll(RegExp(r'0'), '');
+    }
+
+    return packingQuantity.replaceAll(RegExp(r'\.'), ',');
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +56,7 @@ class ProductInformations extends StatelessWidget {
                   Expanded(
                     child: Text(
                       product.name! +
-                          " (${product.packingQuantity})" +
+                          " (${product.packingQuantity?.formatPackingQuantity()})" +
                           '\nplu: ${product.plu}',
                       style: const TextStyle(
                         fontFamily: 'OpenSans',

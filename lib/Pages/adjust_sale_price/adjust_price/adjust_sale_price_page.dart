@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
-import '../../../components/product/more_informations/prices.dart';
 import '../../../Models/enterprise/enterprise.dart';
 import '../../../Models/products/products.dart';
 import '../../../providers/providers.dart';

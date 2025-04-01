@@ -12,6 +12,8 @@ class ProductItem extends StatelessWidget {
   final bool? showPrice;
   final bool? showWholeInformations;
   final bool? showMargins;
+  final bool? showAddress;
+  final bool? showStocks;
   final Widget? componentBeforeProductInformations;
   final int? enterpriseCode;
   const ProductItem({
@@ -21,6 +23,8 @@ class ProductItem extends StatelessWidget {
     this.componentBeforeProductInformations,
     this.showPrice = true,
     this.showWholeInformations = true,
+    this.showAddress = true,
+    this.showStocks = true,
     this.showCosts,
     this.showLastBuyEntrance,
     this.showMargins,
@@ -41,8 +45,8 @@ class ProductItem extends StatelessWidget {
                   componentBeforeProductInformations!,
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Produto",
-                  subtitle:
-                      product.name.toString() + " (${product.packingQuantity})",
+                  subtitle: product.name.toString() +
+                      " (${product.packingQuantity?.formatPackingQuantity()})",
                 ),
                 Row(
                   children: [
@@ -55,12 +59,13 @@ class ProductItem extends StatelessWidget {
                     OpenDialogProductInformations(
                       product: product,
                       pages: [
-                        Stocks(product: product),
-                        StockAddress(product: product),
+                        if (showPrice == true) Prices(product: product),
+                        if (showStocks == true) Stocks(product: product),
+                        if (showAddress == true) StockAddress(product: product),
                         if (showLastBuyEntrance == true)
                           LastBuyEntrance(product: product),
                         if (showCosts == true) Costs(product: product),
-                        if (showMargins == true) Margins(product: product)
+                        if (showMargins == true) Margins(product: product),
                       ],
                     ),
                   ],
@@ -130,11 +135,12 @@ class ProductItem extends StatelessWidget {
 }
 
 StocksModel? _getAtualStock(GetProductJsonModel product, int? enterpriseCode) {
-  final atualStock = product.stocks!.where((element) =>
+  final atualStock = product.stocks?.where((element) =>
       element.stockName == "Estoque Atual" &&
       element.enterpriseCode == enterpriseCode);
-  if (atualStock.isNotEmpty && atualStock.first.stockQuantity != null) {
-    return atualStock.first;
+  if (atualStock?.isNotEmpty == true &&
+      atualStock?.first.stockQuantity != null) {
+    return atualStock!.first;
   }
   return null;
 }
