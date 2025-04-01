@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../components/components.dart';
 import '../../../Models/enterprise/enterprise.dart';
 import '../../../providers/providers.dart';
+import '../../../utils/utils.dart';
 
 class ConfirmProductDialog extends StatelessWidget {
   final int expeditionControlCode;
@@ -71,7 +72,7 @@ class ConfirmProductDialog extends StatelessWidget {
                             children: [
                               TitleAndSubtitle.titleAndSubtitle(
                                 subtitle: searchedProduct.name! +
-                                    " (${searchedProduct.packingQuantity})",
+                                    " (${searchedProduct.packingQuantity?.formatPackingQuantity()})",
                               ),
                               TitleAndSubtitle.titleAndSubtitle(
                                 title: "PLU",
