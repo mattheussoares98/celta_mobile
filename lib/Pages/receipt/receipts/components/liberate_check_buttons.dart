@@ -22,6 +22,23 @@ class LiberateCheckButtons extends StatefulWidget {
 }
 
 class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
+  bool canLiberateOrConfer() {
+    if (widget.receipt.DefaultObservations == "") {
+      return true;
+    } else if (widget.receipt.DefaultObservations == null) {
+      return true;
+    } else if (widget.receipt.Observacoes_ProcRecebDoc?.isEmpty == true) {
+      return false;
+    } else if (widget.receipt.Observacoes_ProcRecebDoc == null) {
+      return false;
+    } else if (widget.receipt.DefaultObservations !=
+        widget.receipt.Observacoes_ProcRecebDoc) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ReceiptProvider receiptProvider = Provider.of(context);
@@ -31,44 +48,55 @@ class _LiberateCheckButtonsState extends State<LiberateCheckButtons> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () async {
-              ShowAlertDialog.show(
-                context: context,
-                title: "Liberar recebimento?",
-                content: const SingleChildScrollView(
-                  child: Text(
-                    "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                function: () async {
-                  await receiptProvider.liberate(
-                    grDocCode: widget.receipt.CodigoInterno_ProcRecebDoc,
-                    index: widget.index,
-                    context: context,
-                    enterprise: widget.enterprise,
-                  );
-                },
-              );
-            },
-            child: const Text("Liberar"),
+            onPressed: canLiberateOrConfer()
+                ? () async {
+                    ShowAlertDialog.show(
+                      context: context,
+                      title: "Liberar recebimento?",
+                      content: const SingleChildScrollView(
+                        child: Text(
+                          "Ao liberar o recebimento, todos recebimentos serão consultados novamente para atualizar os status!",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      function: () async {
+                        await receiptProvider.liberate(
+                          grDocCode: widget.receipt.CodigoInterno_ProcRecebDoc,
+                          index: widget.index,
+                          context: context,
+                          enterprise: widget.enterprise,
+                        );
+                      },
+                    );
+                  }
+                : null,
+            child: Text(
+              canLiberateOrConfer() ? "Liberar" : "Insira a observação",
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                APPROUTES.RECEIPT_CONFERENCE,
-                arguments: {
-                  "grDocCode": widget.receipt.CodigoInterno_ProcRecebDoc,
-                  "numeroProcRecebDoc": widget.receipt.Numero_ProcRecebDoc,
-                  "emitterName": widget.receipt.EmitterName,
-                  "enterprise": widget.enterprise,
-                },
-              );
-            },
-            child: const Text("Conferir"),
+            onPressed: canLiberateOrConfer()
+                ? () {
+                    Navigator.of(context).pushNamed(
+                      APPROUTES.RECEIPT_CONFERENCE,
+                      arguments: {
+                        "grDocCode": widget.receipt.CodigoInterno_ProcRecebDoc,
+                        "numeroProcRecebDoc":
+                            widget.receipt.Numero_ProcRecebDoc,
+                        "emitterName": widget.receipt.EmitterName,
+                        "enterprise": widget.enterprise,
+                      },
+                    );
+                  }
+                : null,
+            child: Text(
+              canLiberateOrConfer() ? "Conferir" : "Insira a observação",
+              textAlign: TextAlign.center,
+            ),
           ),
         )
       ],

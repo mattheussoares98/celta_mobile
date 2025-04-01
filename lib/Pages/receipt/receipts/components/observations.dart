@@ -21,16 +21,18 @@ class Observations extends StatelessWidget {
     super.key,
   });
 
-  String observationsWithoutBar(String? value) {
-    if (value == null) {
-      return "";
+  String? observationsWithoutBar(
+    String? value, {
+    required bool breakLineInStart,
+  }) {
+    String? newValue = value;
+    newValue = newValue?.replaceAll(RegExp(r'\\r\\'), '');
+    newValue = newValue?.replaceAll(RegExp(r'\\n'), '\n');
+    newValue = newValue?.replaceAll(RegExp(r'\\'), '');
+
+    if (breakLineInStart) {
+      newValue = "\n$newValue";
     }
-
-    String newValue = value;
-    newValue = newValue.replaceAll(RegExp(r'\\r\\'), '');
-    newValue = newValue.replaceAll(RegExp(r'\\n'), '\n');
-    newValue = newValue.replaceAll(RegExp(r'\\'), '');
-
     return newValue;
   }
 
@@ -41,16 +43,44 @@ class Observations extends StatelessWidget {
     return Column(
       children: [
         TitleAndSubtitle.titleAndSubtitle(
-          title:
-              receipt.Observacoes_ProcRecebDoc != null ? "Observações" : null,
-          subtitle: receipt.Observacoes_ProcRecebDoc != null
-              ? observationsWithoutBar(receipt.Observacoes_ProcRecebDoc)
-              : "Sem observações",
+          title: observationsWithoutBar(
+                    receipt.Observacoes_ProcRecebDoc != null
+                        ? receipt.Observacoes_ProcRecebDoc
+                        : receipt.DefaultObservations,
+                    breakLineInStart: false,
+                  ) ==
+                  null
+              ? null
+              : "Observações",
+          subtitle: observationsWithoutBar(
+                    receipt.Observacoes_ProcRecebDoc != null
+                        ? receipt.Observacoes_ProcRecebDoc
+                        : receipt.DefaultObservations,
+                    breakLineInStart: false,
+                  ) ==
+                  null
+              ? "Sem observações"
+              : observationsWithoutBar(
+                  receipt.Observacoes_ProcRecebDoc != null
+                      ? receipt.Observacoes_ProcRecebDoc
+                      : receipt.DefaultObservations,
+                  breakLineInStart: true,
+                ),
           otherWidget: TextButton(
             onPressed: () async {
-              if (receipt.DefaultObservations != null) {
-                observationsController.text =
-                    observationsWithoutBar(receipt.DefaultObservations);
+              if (receipt.Observacoes_ProcRecebDoc != null &&
+                  receipt.Observacoes_ProcRecebDoc!.isNotEmpty) {
+                observationsController.text = observationsWithoutBar(
+                      receipt.Observacoes_ProcRecebDoc,
+                      breakLineInStart: false,
+                    ) ??
+                    "";
+              } else if (receipt.DefaultObservations != null) {
+                observationsController.text = observationsWithoutBar(
+                      receipt.DefaultObservations,
+                      breakLineInStart: false,
+                    ) ??
+                    "";
               }
 
               updateShowObservationsField();
