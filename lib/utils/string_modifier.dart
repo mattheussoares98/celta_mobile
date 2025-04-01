@@ -1,11 +1,20 @@
 extension StringModifier on String {
-  String toBrazilianNumber([decimalHouses = 2]) {
+  String toBrazilianNumber(
+      [int decimalHouses = 2, bool hideDecimalIfWhole = false]) {
     double value = double.parse(this);
-    String formatted = value.toStringAsFixed(decimalHouses);
 
+    if (hideDecimalIfWhole && value % 1 == 0) {
+      return value
+          .toInt()
+          .toString()
+          .replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => '.');
+    }
+
+    String formatted = value.toStringAsFixed(decimalHouses);
     List<String> parts = formatted.split('.');
     parts[0] = parts[0]
         .replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => '.');
+
     return parts.join(',');
   }
 
