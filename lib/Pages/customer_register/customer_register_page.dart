@@ -127,11 +127,19 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   //     }
   //   });
   // }
+  bool cpfCnpjIsValid = false;
+  void changeCpfCnpjIsValid(bool isValid) {
+    setState(() {
+      cpfCnpjIsValid = isValid;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> _pages = <Widget>[
       CustomerRegisterPersonalDataPage(
+        changeCpfCnpjIsValid: changeCpfCnpjIsValid,
+        cpfCnpjIsValid: cpfCnpjIsValid,
         personFormKey: _personFormKey,
         validateFormKey: _isValidFormKey,
         cpfCnpjController: cpfCnpjController,
@@ -252,8 +260,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                               addressProvider.addressFormKeyIsValid = false;
                               customerRegisterProvider.emailFormKeyIsValid =
                                   false;
-                              customerRegisterProvider
-                                  .telephoneFormKeyIsValid = false;
+                              customerRegisterProvider.telephoneFormKeyIsValid =
+                                  false;
                               _selectedIndex = 0;
                             });
                           },

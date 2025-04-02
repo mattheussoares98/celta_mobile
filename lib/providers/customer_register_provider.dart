@@ -173,16 +173,8 @@ class CustomerRegisterProvider with ChangeNotifier {
   //   selectedSexDropDown.value = null;
   // }
 
-  void clearPersonalDataControllers({
-    required TextEditingController nameController,
-    required TextEditingController reducedNameController,
-    required TextEditingController cpfCnpjController,
-    required TextEditingController dateOfBirthController,
-  }) {
-    nameController.text = "";
-    reducedNameController.text = "";
-    cpfCnpjController.text = "";
-    dateOfBirthController.text = "";
+  void clearPersonalDataControllers() {
+    //TODO remove this function
     selectedSexDropDown.value = null;
     notifyListeners();
   }
@@ -284,8 +276,7 @@ class CustomerRegisterProvider with ChangeNotifier {
           passwordController: passwordController,
           passwordConfirmationController: passwordConfirmationController,
         );
-        FirebaseHelper.addSoapCallInFirebase(
-            FirebaseCallEnum.customerRegister);
+        FirebaseHelper.addSoapCallInFirebase(FirebaseCallEnum.customerRegister);
       }
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');

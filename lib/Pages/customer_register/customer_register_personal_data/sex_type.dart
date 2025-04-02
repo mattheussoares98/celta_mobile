@@ -8,11 +8,13 @@ class SexType extends StatelessWidget {
   final FocusNode sexTypeFocusNode;
   final bool cpfCnpjEnabled;
   final void Function() validateFormKey;
+  final bool cpfCnpjIsValid;
   const SexType({
     required this.selectedSexDropDown,
     required this.sexTypeFocusNode,
     required this.cpfCnpjEnabled,
     required this.validateFormKey,
+    required this.cpfCnpjIsValid,
     super.key,
   });
 
@@ -42,10 +44,13 @@ class SexType extends StatelessWidget {
           }
           return null;
         },
-        onChanged: (value) {
-          customerRegisterProvider.selectedSexDropDown = ValueNotifier(value);
-          validateFormKey();
-        },
+        onChanged: cpfCnpjIsValid == false
+            ? null
+            : (value) {
+                customerRegisterProvider.selectedSexDropDown =
+                    ValueNotifier(value);
+                validateFormKey();
+              },
         decoration: const InputDecoration(
           labelText: '',
           border: UnderlineInputBorder(

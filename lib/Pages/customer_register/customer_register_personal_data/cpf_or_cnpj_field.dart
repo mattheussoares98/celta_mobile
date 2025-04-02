@@ -4,15 +4,15 @@ import '../../../components/components.dart';
 
 class CpfOrCnpjField extends StatelessWidget {
   final FocusNode cpfCnpjFocusNode;
-  final FocusNode reducedNameFocusNode;
-  final void Function() updateCpfCnpjEnabled;
-  final void Function() validateFormKey;
+  final FocusNode nameFocusNode;
+  final void Function(String) updateCpfCnpjEnabled;
+  final void Function(bool) changeCpfCnpjIsValid;
   final TextEditingController cpfCnpjController;
   const CpfOrCnpjField({
     required this.cpfCnpjFocusNode,
-    required this.reducedNameFocusNode,
+    required this.nameFocusNode,
+    required this.changeCpfCnpjIsValid,
     required this.updateCpfCnpjEnabled,
-    required this.validateFormKey,
     required this.cpfCnpjController,
     super.key,
   });
@@ -24,8 +24,13 @@ class CpfOrCnpjField extends StatelessWidget {
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       enabled: true,
       onChanged: (value) {
-        updateCpfCnpjEnabled();
-        validateFormKey();
+        updateCpfCnpjEnabled(value);
+        bool isValid = FormFieldValidations.cpfOrCnpj(value) == null;
+        if (isValid) {
+          changeCpfCnpjIsValid(true);
+        } else {
+          changeCpfCnpjIsValid(false);
+        }
       },
       suffixWidget: IconButton(
         onPressed: () {
@@ -38,7 +43,7 @@ class CpfOrCnpjField extends StatelessWidget {
         ),
       ),
       onFieldSubmitted: (String? value) {
-        FocusScope.of(context).requestFocus(reducedNameFocusNode);
+        nameFocusNode.requestFocus();
       },
       labelText: "CPF/CNPJ",
       validator: FormFieldValidations.cpfOrCnpj,

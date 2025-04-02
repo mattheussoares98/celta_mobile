@@ -7,18 +7,20 @@ class ReducedNameField extends StatelessWidget {
   final FocusNode dateOfBirthFocusNode;
   final void Function() validateFormKey;
   final TextEditingController reducedNameController;
+  final bool cpfCnpjIsValid;
   const ReducedNameField({
     required this.reducedNameFocusNode,
     required this.dateOfBirthFocusNode,
     required this.validateFormKey,
     required this.reducedNameController,
+    required this.cpfCnpjIsValid,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      enabled: true,
+      enabled: cpfCnpjIsValid,
       focusNode: reducedNameFocusNode,
       onChanged: (_) {
         validateFormKey();

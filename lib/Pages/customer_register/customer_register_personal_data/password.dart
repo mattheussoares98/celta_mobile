@@ -5,16 +5,20 @@ import '../../../components/components.dart';
 class Password extends StatelessWidget {
   final FocusNode passwordFocusNode;
   final FocusNode passwordConfirmationFocusNode;
+  final FocusNode sexTypeFocusNode;
   final Function() validateFormKey;
   final TextEditingController passwordController;
   final TextEditingController passwordConfirmationController;
+  final bool cpfCnpjIsValid;
 
   const Password({
     required this.passwordFocusNode,
     required this.passwordConfirmationFocusNode,
+    required this.sexTypeFocusNode,
     required this.validateFormKey,
     required this.passwordController,
     required this.passwordConfirmationController,
+    required this.cpfCnpjIsValid,
     super.key,
   });
 
@@ -23,7 +27,7 @@ class Password extends StatelessWidget {
     return Column(
       children: [
         FormFieldWidget(
-          enabled: true,
+          enabled: cpfCnpjIsValid,
           textEditingController: passwordController,
           labelText: "Senha",
           obscureText: true,
@@ -41,6 +45,8 @@ class Password extends StatelessWidget {
           onFieldSubmitted: (_) {
             if (passwordController.text.isNotEmpty) {
               passwordConfirmationFocusNode.requestFocus();
+            } else {
+              passwordFocusNode.requestFocus();
             }
           },
           validator: (value) => FormFieldValidations.minimumSize(
@@ -52,11 +58,18 @@ class Password extends StatelessWidget {
           },
         ),
         FormFieldWidget(
-          enabled: true,
+          enabled: cpfCnpjIsValid,
           textEditingController: passwordConfirmationController,
           labelText: "Confirmar senha",
           obscureText: true,
           focusNode: passwordConfirmationFocusNode,
+          onFieldSubmitted: (_) {
+            if (passwordConfirmationController.text.isEmpty) {
+              passwordConfirmationFocusNode.requestFocus();
+            } else {
+              sexTypeFocusNode.requestFocus();
+            }
+          },
           suffixWidget: IconButton(
             onPressed: () {
               passwordConfirmationController.clear();

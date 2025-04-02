@@ -5,15 +5,17 @@ import '../../../components/components.dart';
 
 class BirthField extends StatelessWidget {
   final FocusNode dateOfBirthFocusNode;
-  final FocusNode sexTypeFocusNode;
+  final FocusNode passwordFocusNode;
   final void Function() validateFormKey;
   final TextEditingController dateOfBirthController;
+  final bool cpfCnpjIsValid;
 
   const BirthField({
     required this.dateOfBirthFocusNode,
-    required this.sexTypeFocusNode,
+    required this.passwordFocusNode,
     required this.validateFormKey,
     required this.dateOfBirthController,
+    required this.cpfCnpjIsValid,
     super.key,
   });
 
@@ -21,13 +23,13 @@ class BirthField extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormFieldWidget(
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      enabled: true,
+      enabled: cpfCnpjIsValid,
       focusNode: dateOfBirthFocusNode,
       onChanged: (_) {
         validateFormKey();
       },
       onFieldSubmitted: (String? value) {
-        FocusScope.of(context).requestFocus(sexTypeFocusNode);
+        FocusScope.of(context).requestFocus(passwordFocusNode);
       },
       labelText: "Nascimento",
       isDate: true,

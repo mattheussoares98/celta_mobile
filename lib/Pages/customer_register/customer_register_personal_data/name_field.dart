@@ -4,32 +4,31 @@ import '../../../components/components.dart';
 
 class NameField extends StatelessWidget {
   final FocusNode nameFocusNode;
-  final FocusNode cpfCnpjFocusNode;
+  final FocusNode reducedNameFocusNode;
   final void Function() validateFormKey;
   final TextEditingController nameController;
+  final bool cpfCnpjIsValid;
   const NameField({
     required this.nameFocusNode,
-    required this.cpfCnpjFocusNode,
+    required this.reducedNameFocusNode,
     required this.validateFormKey,
     required this.nameController,
+    required this.cpfCnpjIsValid,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      enabled: true,
+      enabled: cpfCnpjIsValid,
       focusNode: nameFocusNode,
-      onChanged: (_) {
-        validateFormKey();
-      },
       onFieldSubmitted: (String? value) {
-        FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
+        FocusScope.of(context).requestFocus(reducedNameFocusNode);
       },
       suffixWidget: IconButton(
         onPressed: () {
           nameController.text = "";
-          FocusScope.of(context).requestFocus(nameFocusNode);
+          nameFocusNode.requestFocus();
         },
         icon: const Icon(
           Icons.delete,
