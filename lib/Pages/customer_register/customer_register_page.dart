@@ -117,16 +117,16 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     passwordController.dispose();
   }
 
-  @override
-  initState() {
-    super.initState();
+  // @override
+  // initState() {
+  //   super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (mounted) {
-        _isValidFormKey();
-      }
-    });
-  }
+  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //     if (mounted) {
+  //       _isValidFormKey();
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
