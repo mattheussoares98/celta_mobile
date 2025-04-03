@@ -91,22 +91,22 @@ class _AddressComponentState extends State<AddressComponent> {
       triedGetCep = true;
     });
 
-    if (addressModel != null) {
-      cityController.text = addressModel.City ?? "";
-      districtController.text = addressModel.District ?? "";
-      addressController.text = addressModel.Address ?? "";
-      complementController.text = addressModel.Complement ?? "";
-      referenceController.text = addressModel.Reference ?? "";
+    cityController.text = addressModel?.City ?? "";
+    districtController.text = addressModel?.District ?? "";
+    addressController.text = addressModel?.Address ?? "";
+    complementController.text = addressModel?.Complement ?? "";
+    referenceController.text = addressModel?.Reference ?? "";
 
-      final states =
-          addressProvider.states.where((e) => e == addressModel.State);
-      if (states.isNotEmpty) {
-        selectedStateNotifier.value = states.first;
-      } else {
-        selectedStateNotifier.value = null;
-      }
-      Future.delayed(const Duration(milliseconds: 100), () {
-        FocusScope.of(context).requestFocus(numberFocusNode);
+    final states =
+        addressProvider.states.where((e) => e == addressModel?.State);
+    if (states.isNotEmpty) {
+      selectedStateNotifier.value = states.first;
+    } else {
+      selectedStateNotifier.value = null;
+    }
+    if (addressModel != null) {
+      Future.delayed(Duration.zero, () {
+        numberFocusNode.requestFocus();
       });
     }
   }
