@@ -38,11 +38,11 @@ class _CustomerRegisterTelephonePageState
         telephoneController: widget.telephoneController,
         dddController: widget.dddController,
       );
-      if (customerRegisterProvider.errorMessageAddTelephone == "") {
+      if (customerRegisterProvider.errorMessage == "") {
         FocusScope.of(context).unfocus();
       } else {
         ShowSnackbarMessage.show(
-          message: customerRegisterProvider.errorMessageAddTelephone,
+          message: customerRegisterProvider.errorMessage,
           context: context,
         );
       }

@@ -76,7 +76,7 @@ class _CustomerRegisterFloatingActionButtonState
                           widget.passwordConfirmationController,
                     );
 
-                    if (customerRegisterProvider.errorMessageInsertCustomer ==
+                    if (customerRegisterProvider.errorMessage ==
                         "") {
                       setState(() {
                         widget.changeFormKeysToInvalid();
@@ -90,7 +90,7 @@ class _CustomerRegisterFloatingActionButtonState
                     } else {
                       ShowSnackbarMessage.show(
                         message:
-                            customerRegisterProvider.errorMessageInsertCustomer,
+                            customerRegisterProvider.errorMessage,
                         context: context,
                       );
                     }

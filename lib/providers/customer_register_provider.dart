@@ -9,6 +9,9 @@ import '../utils/utils.dart';
 import './address_provider.dart';
 
 class CustomerRegisterProvider with ChangeNotifier {
+  CustomerModel? _customer;
+  CustomerModel? get customer => _customer;
+
   final ValueNotifier<String?> _selectedSexDropDown =
       ValueNotifier<String?>(null);
 
@@ -50,17 +53,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     _telephoneFormKeyIsValid = newValue;
   }
 
-  String _errorMessageAddEmail = "";
-  String get errorMessageAddEmail => _errorMessageAddEmail;
-
-  String _errorMessageLoadCovenants = "";
-  String get errorMessageLoadCovenants => _errorMessageLoadCovenants;
-
-  String _errorMessageAddTelephone = "";
-  String get errorMessageAddTelephone => _errorMessageAddTelephone;
-
-  String _errorMessageInsertCustomer = "";
-  String get errorMessageInsertCustomer => _errorMessageInsertCustomer;
+  String _errorMessage = "";
+  String get errorMessage => _errorMessage;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -74,14 +68,14 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void addEmail(TextEditingController emailController) {
-    _errorMessageAddEmail = "";
+    _errorMessage = "";
     if (!_emails.contains(emailController.text)) {
       _emails.add(emailController.text);
 
       emailController.text = "";
       notifyListeners();
     } else {
-      _errorMessageAddEmail = "Esse e-mail já existe na lista de e-mails!";
+      _errorMessage = "Esse e-mail já existe na lista de e-mails!";
     }
     notifyListeners();
   }
@@ -90,7 +84,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     required TextEditingController telephoneController,
     required TextEditingController dddController,
   }) {
-    _errorMessageAddTelephone = "";
+    _errorMessage = "";
 
     Map<String, String> newTelephone = {
       "AreaCode": dddController.text,
@@ -112,8 +106,7 @@ class CustomerRegisterProvider with ChangeNotifier {
         dddController: dddController,
       );
     } else {
-      _errorMessageAddTelephone =
-          "Esse telefone já existe na lista de telefones!";
+      _errorMessage = "Esse telefone já existe na lista de telefones!";
     }
     notifyListeners();
   }
@@ -237,7 +230,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     required TextEditingController passwordConfirmationController,
   }) async {
     _isLoading = true;
-    _errorMessageInsertCustomer = "";
+    _errorMessage = "";
     notifyListeners();
 
     try {
@@ -261,9 +254,9 @@ class CustomerRegisterProvider with ChangeNotifier {
         typeOfResult: "InsertUpdateCustomerResult",
       );
 
-      _errorMessageInsertCustomer = SoapRequestResponse.errorMessage;
+      _errorMessage = SoapRequestResponse.errorMessage;
 
-      if (_errorMessageInsertCustomer == "") {
+      if (_errorMessage == "") {
         clearAllDataInformed(
           addressProvider: addressProvider,
           emailController: emailController,
@@ -280,7 +273,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       }
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');
-      _errorMessageInsertCustomer = DefaultErrorMessage.ERROR;
+      _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -293,7 +286,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       return;
     }
     _isLoading = true;
-    _errorMessageLoadCovenants = "";
+    _errorMessage = "";
     _covenants.clear();
     notifyListeners();
 
@@ -310,16 +303,16 @@ class CustomerRegisterProvider with ChangeNotifier {
         typeOfResult: "GetCovenantJsonResult",
       );
 
-      _errorMessageLoadCovenants = SoapRequestResponse.errorMessage;
+      _errorMessage = SoapRequestResponse.errorMessage;
 
-      if (_errorMessageLoadCovenants == "") {
+      if (_errorMessage == "") {
         CustomerRegisterCovenantModel.responseAsStringToModel(
           listToAdd: _covenants,
           response: SoapRequestResponse.responseAsString,
         );
       }
     } catch (e) {
-      _errorMessageLoadCovenants = DefaultErrorMessage.ERROR;
+      _errorMessage = DefaultErrorMessage.ERROR;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -345,5 +338,26 @@ class CustomerRegisterProvider with ChangeNotifier {
     _covenants.add(bindedCovenant);
     _bindedCovenants.removeAt(index);
     notifyListeners();
+  }
+
+  Future<void> getCustomer(String cpfCnpjText) async {
+    _isLoading = true;
+    _errorMessage = "";
+    _customer = null;
+    notifyListeners();
+
+    try {
+      _customer = await SoapHelper.getCustomer(
+        searchTypeInt: 1, //cpf/cnpj
+        controllerText: cpfCnpjText,
+        enterpriseCode: "0",
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+      _errorMessage = DefaultErrorMessage.ERROR;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

@@ -44,11 +44,10 @@ class _CustomerRegisterCovenantsPageState
       child: SingleChildScrollView(
         child: Column(
           children: [
-            if (customerRegisterProvider.errorMessageLoadCovenants != "" &&
+            if (customerRegisterProvider.errorMessage != "" &&
                 customerRegisterProvider.covenants.isEmpty)
               searchAgain(
-                errorMessage:
-                    customerRegisterProvider.errorMessageLoadCovenants,
+                errorMessage: customerRegisterProvider.errorMessage,
                 request: customerRegisterProvider.loadCovenants,
               ),
             if (customerRegisterProvider.covenants.isNotEmpty)

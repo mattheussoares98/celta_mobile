@@ -32,11 +32,11 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
     if (isValid && widget.emailController.text.isNotEmpty) {
       customerRegisterProvider.addEmail(widget.emailController);
 
-      if (customerRegisterProvider.errorMessageAddEmail == "") {
+      if (customerRegisterProvider.errorMessage == "") {
         FocusScope.of(context).unfocus();
       } else {
         ShowSnackbarMessage.show(
-          message: customerRegisterProvider.errorMessageAddEmail,
+          message: customerRegisterProvider.errorMessage,
           context: context,
         );
       }
