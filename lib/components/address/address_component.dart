@@ -23,14 +23,15 @@ class AddressComponent extends StatefulWidget {
 }
 
 class _AddressComponentState extends State<AddressComponent> {
-  final FocusNode _cepFocusNode = FocusNode();
-  final FocusNode _adressFocusNode = FocusNode();
-  final FocusNode _districtFocusNode = FocusNode();
-  final FocusNode _stateFocusNode = FocusNode();
-  final FocusNode _cityFocusNode = FocusNode();
-  final FocusNode _numberFocusNode = FocusNode();
-  final FocusNode _complementFocusNode = FocusNode();
-  final FocusNode _referenceFocusNode = FocusNode();
+  final cepController = TextEditingController();
+  final cepFocusNode = FocusNode();
+  final _adressFocusNode = FocusNode();
+  final _districtFocusNode = FocusNode();
+  final _stateFocusNode = FocusNode();
+  final _cityFocusNode = FocusNode();
+  final _numberFocusNode = FocusNode();
+  final _complementFocusNode = FocusNode();
+  final _referenceFocusNode = FocusNode();
 
   _getAdressByCep({
     required AddressProvider addressProvider,
@@ -43,17 +44,11 @@ class _AddressComponentState extends State<AddressComponent> {
         context: context,
       );
       return;
-    } else if (addressProvider.cepController.text.length < 8) {
-      ShowSnackbarMessage.show(
-        message: "O CEP deve conter 8 dígitos!",
-        context: context,
-      );
-      FocusScope.of(context).requestFocus(_cepFocusNode);
-      return;
     }
 
     await addressProvider.getAddressByCep(
       context: context,
+      cep: cepController.text,
     );
 
     if (addressProvider.errorMessageGetAddressByCep == "") {
@@ -81,7 +76,7 @@ class _AddressComponentState extends State<AddressComponent> {
   @override
   void dispose() {
     super.dispose();
-    _cepFocusNode.dispose();
+    cepFocusNode.dispose();
     _adressFocusNode.dispose();
     _districtFocusNode.dispose();
     _stateFocusNode.dispose();
@@ -89,6 +84,7 @@ class _AddressComponentState extends State<AddressComponent> {
     _numberFocusNode.dispose();
     _complementFocusNode.dispose();
     _referenceFocusNode.dispose();
+    cepController.dispose();
   }
 
   @override
@@ -100,62 +96,12 @@ class _AddressComponentState extends State<AddressComponent> {
         key: widget.adressFormKey,
         child: Column(
           children: [
-            FormFieldWidget(
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              enabled:
-                  widget.isLoading == false && !addressProvider.isLoadingCep,
-              focusNode: _cepFocusNode,
-              onFieldSubmitted: addressProvider.isLoadingCep
-                  ? null
-                  : (String? value) async {
-                      await _getAdressByCep(
-                        addressProvider: addressProvider,
-                      );
-                    },
-              labelText: "CEP",
-              textEditingController: addressProvider.cepController,
-              limitOfCaracters: 8,
-              validator: FormFieldValidations.cep,
-              suffixWidget: TextButton(
-                child: addressProvider.isLoadingCep
-                    ? const FittedBox(
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 8.0),
-                              child: Text(
-                                "Pesquisando CEP",
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                              width: 15,
-                              child: CircularProgressIndicator(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Text(
-                        "Pesquisar CEP",
-                        style: TextStyle(
-                          color: addressProvider.isLoadingCep ||
-                                  widget.isLoading == true
-                              ? Colors.grey
-                              : Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                onPressed: addressProvider.isLoadingCep
-                    ? null
-                    : () async {
-                        await _getAdressByCep(
-                          addressProvider: addressProvider,
-                        );
-                      },
-              ),
+            CepField(
+              cepController: cepController,
+              cepFocusNode: cepFocusNode,
+              getAdressByCep: () async {
+                await _getAdressByCep(addressProvider: addressProvider);
+              },
             ),
             if (addressProvider.triedGetCep)
               Column(

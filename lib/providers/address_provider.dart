@@ -154,6 +154,7 @@ class AddressProvider with ChangeNotifier {
 
   Future<void> getAddressByCep({
     required BuildContext context,
+    required String cep,
   }) async {
     clearAddressControllers(clearCep: false);
     _errorMessageGetAddressByCep = "";
@@ -162,7 +163,7 @@ class AddressProvider with ChangeNotifier {
 
     try {
       Map response = await RequestsHttp.get(
-        url: "https://viacep.com.br/ws/${cepController.text}/json/",
+        url: "https://viacep.com.br/ws/$cep/json/",
       );
 
       _triedGetCep = true;
