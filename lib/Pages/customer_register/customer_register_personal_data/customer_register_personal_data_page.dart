@@ -14,7 +14,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final TextEditingController passwordController;
   final TextEditingController reducedNameController;
   final TextEditingController dateOfBirthController;
-  final void Function(bool) changeCpfCnpjIsValid;
+  final void Function(String) changeCpfCnpj;
   final bool cpfCnpjIsValid;
   const CustomerRegisterPersonalDataPage({
     required this.personFormKey,
@@ -25,7 +25,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
     required this.passwordController,
     required this.reducedNameController,
     required this.dateOfBirthController,
-    required this.changeCpfCnpjIsValid,
+    required this.changeCpfCnpj,
     required this.cpfCnpjIsValid,
     Key? key,
   }) : super(key: key);
@@ -68,19 +68,6 @@ class _CustomerRegisterPersonalDataPageState
     passwordConfirmationFocusNode.dispose();
   }
 
-  bool isCpf = true;
-  void updateIsCpf(String value) {
-    if (value.length > 11) {
-      setState(() {
-        isCpf = false;
-      });
-    } else {
-      setState(() {
-        isCpf = true;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -95,9 +82,8 @@ class _CustomerRegisterPersonalDataPageState
             CpfOrCnpjField(
               cpfCnpjFocusNode: cpfCnpjFocusNode,
               nameFocusNode: nameFocusNode,
-              updateCpfCnpjEnabled: updateIsCpf,
+              changeCpfCnpj: widget.changeCpfCnpj,
               cpfCnpjController: widget.cpfCnpjController,
-              changeCpfCnpjIsValid: widget.changeCpfCnpjIsValid,
             ),
             Visibility(
               visible: widget.cpfCnpjIsValid,
@@ -135,12 +121,11 @@ class _CustomerRegisterPersonalDataPageState
                     passwordController: widget.passwordController,
                     sexTypeFocusNode: sexTypeFocusNode,
                   ),
-                  if (isCpf)
+                  if (widget.cpfCnpjController.text.length == 11)
                     SexType(
                       cpfCnpjIsValid: widget.cpfCnpjIsValid,
                       selectedSexDropDown: _selectedSexDropDown,
                       sexTypeFocusNode: sexTypeFocusNode,
-                      cpfCnpjEnabled: isCpf,
                       validateFormKey: widget.validateFormKey,
                     ),
                   ClearData(

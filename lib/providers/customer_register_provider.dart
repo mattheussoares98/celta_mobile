@@ -350,11 +350,11 @@ class CustomerRegisterProvider with ChangeNotifier {
       _customer = await SoapHelper.getCustomer(
         searchTypeInt: 1, //cpf/cnpj
         controllerText: cpfCnpjText,
-        enterpriseCode: "0",
+        enterpriseCode: "1",
       );
     } catch (e) {
-      debugPrint(e.toString());
-      _errorMessage = DefaultErrorMessage.ERROR;
+      debugPrint(SoapRequestResponse.errorMessage);
+      _errorMessage = SoapRequestResponse.errorMessage;
     } finally {
       _isLoading = false;
       notifyListeners();

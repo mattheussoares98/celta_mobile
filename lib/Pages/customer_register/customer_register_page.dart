@@ -128,17 +128,32 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   //   });
   // }
   bool cpfCnpjIsValid = false;
-  void changeCpfCnpjIsValid(bool isValid) {
-    setState(() {
-      cpfCnpjIsValid = isValid;
-    });
+  void changeCpfCnpj(
+    String value,
+    CustomerRegisterProvider customerRegisterProvider,
+  ) async {
+    if (FormFieldValidations.cpfOrCnpj(value) == null) {
+      await customerRegisterProvider.getCustomer(cpfCnpjController.text);
+      setState(() {
+        cpfCnpjIsValid = true;
+      });
+    } else {
+      setState(() {
+        cpfCnpjIsValid = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
+    AddressProvider addressProvider = Provider.of(context);
+
     List<Widget> _pages = <Widget>[
       CustomerRegisterPersonalDataPage(
-        changeCpfCnpjIsValid: changeCpfCnpjIsValid,
+        changeCpfCnpj: (value) {
+          changeCpfCnpj(value, customerRegisterProvider);
+        },
         cpfCnpjIsValid: cpfCnpjIsValid,
         personFormKey: _personFormKey,
         validateFormKey: _isValidFormKey,
@@ -174,8 +189,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       ),
     ];
 
-    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-    AddressProvider addressProvider = Provider.of(context);
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         customerRegisterProvider.clearAllDataInformed(

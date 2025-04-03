@@ -6,13 +6,11 @@ import '../../../providers/providers.dart';
 class SexType extends StatelessWidget {
   final ValueNotifier<String?> selectedSexDropDown;
   final FocusNode sexTypeFocusNode;
-  final bool cpfCnpjEnabled;
   final void Function() validateFormKey;
   final bool cpfCnpjIsValid;
   const SexType({
     required this.selectedSexDropDown,
     required this.sexTypeFocusNode,
-    required this.cpfCnpjEnabled,
     required this.validateFormKey,
     required this.cpfCnpjIsValid,
     super.key,
@@ -39,7 +37,7 @@ class SexType extends StatelessWidget {
           ),
         ),
         validator: (value) {
-          if (value == null && cpfCnpjEnabled) {
+          if (value == null) {
             return 'Selecione uma opção!';
           }
           return null;
