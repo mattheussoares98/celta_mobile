@@ -24,16 +24,18 @@ class AddressComponent extends StatefulWidget {
 
 class _AddressComponentState extends State<AddressComponent> {
   final cepController = TextEditingController();
+  final addressController = TextEditingController();
+
   final cepFocusNode = FocusNode();
-  final _adressFocusNode = FocusNode();
-  final _districtFocusNode = FocusNode();
+  final addressFocusNode = FocusNode();
+  final districtFocusNode = FocusNode();
   final _stateFocusNode = FocusNode();
   final _cityFocusNode = FocusNode();
   final _numberFocusNode = FocusNode();
   final _complementFocusNode = FocusNode();
   final _referenceFocusNode = FocusNode();
 
-  _getAdressByCep({
+  Future<void> _getAdressByCep({
     required AddressProvider addressProvider,
   }) async {
     if (!widget.canInsertMoreThanOneAddress &&
@@ -77,14 +79,16 @@ class _AddressComponentState extends State<AddressComponent> {
   void dispose() {
     super.dispose();
     cepFocusNode.dispose();
-    _adressFocusNode.dispose();
-    _districtFocusNode.dispose();
+    addressFocusNode.dispose();
+    districtFocusNode.dispose();
     _stateFocusNode.dispose();
     _cityFocusNode.dispose();
     _numberFocusNode.dispose();
     _complementFocusNode.dispose();
     _referenceFocusNode.dispose();
+
     cepController.dispose();
+    addressController.dispose();
   }
 
   @override
@@ -106,25 +110,12 @@ class _AddressComponentState extends State<AddressComponent> {
             if (addressProvider.triedGetCep)
               Column(
                 children: [
-                  FormFieldWidget(
-                    enabled: widget.isLoading == false &&
-                        !addressProvider.isLoadingCep,
-                    focusNode: _adressFocusNode,
-                    labelText: "Logradouro",
-                    textEditingController: addressProvider.addressController,
-                    limitOfCaracters: 40,
-                    onFieldSubmitted: (value) {
-                      FocusScope.of(context).requestFocus(_districtFocusNode);
-                    },
-                    validator: (String? value) {
-                      if ((value == null ||
-                              value.isEmpty ||
-                              value.length < 5) &&
-                          addressProvider.cepController.text.length == 8) {
-                        return "Logradouro muito curto";
-                      }
-                      return null;
-                    },
+                  AddressField(
+                    cepController: cepController,
+                    addressController: addressController,
+                    isLoading: widget.isLoading == true,
+                    districtFocusNode: districtFocusNode,
+                    addressFocusNode: addressFocusNode,
                   ),
                   Row(
                     children: [
@@ -132,7 +123,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
-                          focusNode: _districtFocusNode,
+                          focusNode: districtFocusNode,
                           onFieldSubmitted: addressProvider.isLoadingCep
                               ? null
                               : (String? value) {
