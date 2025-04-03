@@ -24,6 +24,7 @@ class AddressComponent extends StatefulWidget {
 
 class _AddressComponentState extends State<AddressComponent> {
   final cepController = TextEditingController();
+  final numberController = TextEditingController();
   final cityController = TextEditingController();
   final districtController = TextEditingController();
   final addressController = TextEditingController();
@@ -33,8 +34,8 @@ class _AddressComponentState extends State<AddressComponent> {
   final districtFocusNode = FocusNode();
   final stateFocusNode = FocusNode();
   final cityFocusNode = FocusNode();
-  final _numberFocusNode = FocusNode();
-  final _complementFocusNode = FocusNode();
+  final numberFocusNode = FocusNode();
+  final complementFocusNode = FocusNode();
   final _referenceFocusNode = FocusNode();
 
   ValueNotifier<String?> _selectedStateNotifier = ValueNotifier<String?>("");
@@ -55,11 +56,12 @@ class _AddressComponentState extends State<AddressComponent> {
     districtFocusNode.dispose();
     stateFocusNode.dispose();
     cityFocusNode.dispose();
-    _numberFocusNode.dispose();
-    _complementFocusNode.dispose();
+    numberFocusNode.dispose();
+    complementFocusNode.dispose();
     _referenceFocusNode.dispose();
 
     cepController.dispose();
+    numberController.dispose();
     cityController.dispose();
     districtController.dispose();
     addressController.dispose();
@@ -85,7 +87,7 @@ class _AddressComponentState extends State<AddressComponent> {
 
     if (addressProvider.errorMessageGetAddressByCep == "") {
       Future.delayed(const Duration(milliseconds: 100), () {
-        FocusScope.of(context).requestFocus(_numberFocusNode);
+        FocusScope.of(context).requestFocus(numberFocusNode);
       });
     } else {
       ShowSnackbarMessage.show(
@@ -153,38 +155,12 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
-                        flex: 4,
-                        child: FormFieldWidget(
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          enabled: widget.isLoading == false &&
-                              !addressProvider.isLoadingCep,
-                          focusNode: _numberFocusNode,
-                          onFieldSubmitted: addressProvider.isLoadingCep
-                              ? null
-                              : (String? value) async {
-                                  FocusScope.of(context)
-                                      .requestFocus(_complementFocusNode);
-                                },
-                          labelText: "Número",
-                          textEditingController:
-                              addressProvider.numberController,
-                          limitOfCaracters: 6,
-                          validator: (String? value) {
-                            if ((value == null ||
-                                    value.isEmpty ||
-                                    value.length < 1) &&
-                                addressProvider.cepController.text.length ==
-                                    8) {
-                              return "Digite o número!";
-                            } else if (value!.contains("\.") ||
-                                value.contains("\,") ||
-                                value.contains("\-") ||
-                                value.contains(" ")) {
-                              return "Digite somente números";
-                            }
-                            return null;
-                          },
+                        child: NumberField(
+                          cepController: cepController,
+                          numberController: numberController,
+                          isLoading: widget.isLoading == true,
+                          numberFocusNode: numberFocusNode,
+                          complementFocusNode: complementFocusNode,
                         ),
                       ),
                     ],
@@ -195,7 +171,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
-                          focusNode: _complementFocusNode,
+                          focusNode: complementFocusNode,
                           onFieldSubmitted: addressProvider.isLoadingCep
                               ? null
                               : (String? value) {
