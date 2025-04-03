@@ -101,6 +101,16 @@ class _AddressComponentState extends State<AddressComponent> {
     }
   }
 
+  void clearControllers() {
+    cepController.clear();
+    numberController.clear();
+    cityController.clear();
+    districtController.clear();
+    addressController.clear();
+    complementController.clear();
+    referenceController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     AddressProvider addressProvider = Provider.of(context);
@@ -193,31 +203,8 @@ class _AddressComponentState extends State<AddressComponent> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextButton(
-                          style:
-                              TextButton.styleFrom(backgroundColor: Colors.red),
-                          onPressed: () {
-                            ShowAlertDialog.show(
-                              context: context,
-                              title: "Apagar dados digitados",
-                              content: const SingleChildScrollView(
-                                child: Text(
-                                  "Deseja apagar todos os dados preenchidos?",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              function: () {
-                                addressProvider.clearAddressControllers(
-                                    clearCep: true);
-                              },
-                            );
-                          },
-                          child: const Text(
-                            "Apagar dados",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
+                        CleanWrittenDataButton(
+                          clearControllers: clearControllers,
                         ),
                         TextButton(
                           style: TextButton.styleFrom(
