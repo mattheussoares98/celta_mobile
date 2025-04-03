@@ -214,8 +214,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                                     addresses: [], //TODO test this a lot
                                     adressFormKey: _adressFormKey,
                                     canInsertMoreThanOneAddress: false,
-                                    isLoading: researchPricesProvider
-                                        .isLoadingAddOrUpdateConcurrents,
                                     validateAdressFormKey: () {
                                       return _adressFormKey.currentState!
                                           .validate();

@@ -37,7 +37,6 @@ class CustomerRegisterAddPage extends StatelessWidget {
             ),
           if (addressProvider.addressesCount > 0)
             CustomerRegisterAddressesInformeds(
-              isLoading: false,
               addresses: customerRegisterProvider.customer?.Addresses ?? [],
             ),
           if (customerRegisterProvider.emailsCount > 0)

@@ -97,8 +97,8 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.room_outlined,
-            hasDataAndIsValid: addressProvider.addressFormKeyIsValid &&
-                addressProvider.addressesCount > 0,
+            hasDataAndIsValid:
+                (customerRegisterProvider.customer?.Addresses?.length ?? 0) > 0,
           ),
         ),
         BottomNavigationBarItem(
@@ -124,7 +124,8 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.payment,
-            hasDataAndIsValid: customerRegisterProvider.bindedCovenants.isNotEmpty,
+            hasDataAndIsValid:
+                customerRegisterProvider.bindedCovenants.isNotEmpty,
           ),
           label: 'Convênios',
         ),
