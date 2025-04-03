@@ -7,13 +7,13 @@ import '../components/components.dart';
 import '../Models/address/address.dart';
 
 class AddressProvider with ChangeNotifier {
-  final TextEditingController cepController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController districtController = TextEditingController();
-  final TextEditingController complementController = TextEditingController();
-  final TextEditingController referenceController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
-  final TextEditingController numberController = TextEditingController();
+  final TextEditingController cepController = TextEditingController(); //TODO remove all
+  final TextEditingController addressController = TextEditingController(); //TODO remove all
+  final TextEditingController districtController = TextEditingController(); //TODO remove all
+  final TextEditingController complementController = TextEditingController(); //TODO remove all
+  final TextEditingController referenceController = TextEditingController(); //TODO remove all
+  final TextEditingController cityController = TextEditingController(); //TODO remove all
+  final TextEditingController numberController = TextEditingController(); //TODO remove all
 
   List<AddressModel> _addresses = [];
   List<AddressModel> get addresses => [..._addresses];
