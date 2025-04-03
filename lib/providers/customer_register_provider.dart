@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../api/api.dart';
-import '../Models/customer/customer.dart';
 import '../utils/utils.dart';
 import './address_provider.dart';
 
@@ -398,5 +397,14 @@ class CustomerRegisterProvider with ChangeNotifier {
     );
     notifyListeners();
     return true;
+  }
+
+  void removeAddress(AddressModel address) {
+    if (_customer?.Addresses?.isEmpty == true) {
+      debugPrint("Não deveria estar vazio");
+      return;
+    }
+    _customer?.Addresses!.removeWhere((e) => e == address);
+    notifyListeners();
   }
 }

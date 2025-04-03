@@ -26,7 +26,6 @@ class CustomerRegisterAddressesInformeds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AddressProvider addressProvider = Provider.of(context);
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
     return Column(
@@ -111,7 +110,8 @@ class CustomerRegisterAddressesInformeds extends StatelessWidget {
                             ),
                           ),
                           function: () {
-                            addressProvider.removeAddress(index);
+                            customerRegisterProvider
+                                .removeAddress(addressModel);
                           },
                         );
                       },
