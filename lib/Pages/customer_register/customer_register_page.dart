@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
@@ -134,6 +135,18 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   ) async {
     if (FormFieldValidations.cpfOrCnpj(value) == null) {
       await customerRegisterProvider.getCustomer(cpfCnpjController.text);
+
+      if (customerRegisterProvider.customer != null) {
+        nameController.text = customerRegisterProvider.customer!.Name;
+        reducedNameController.text =
+            customerRegisterProvider.customer!.ReducedName ?? "";
+        dateOfBirthController.text = customerRegisterProvider
+                    .customer!.DateOfBirth !=
+                null
+            ? DateFormat("dd/MM/yyyy").format(
+                DateTime.parse(customerRegisterProvider.customer!.DateOfBirth!))
+            : customerRegisterProvider.customer!.DateOfBirth ?? "";
+      }
       setState(() {
         cpfCnpjIsValid = true;
       });
