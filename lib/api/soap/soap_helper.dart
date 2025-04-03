@@ -9,6 +9,8 @@ import '../../utils/utils.dart';
 import 'soap.dart';
 
 class SoapHelper {
+  SoapHelper._();
+
   static Future<void> getStockTypesModel(
     List<GetStockTypesModel> listToAdd,
   ) async {
@@ -463,7 +465,7 @@ class SoapHelper {
     }
   }
 
-  Future<CustomerModel> getCustomer({
+  static Future<CustomerModel> getCustomer({
     required int searchTypeInt,
     required String controllerText,
     required String enterpriseCode,
