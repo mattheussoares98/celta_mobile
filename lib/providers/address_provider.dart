@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../../../utils/utils.dart';
 import '../api/api.dart';
 import '../components/components.dart';
 import '../Models/address/address.dart';
@@ -177,24 +178,28 @@ class AddressProvider with ChangeNotifier {
 
       if (response["error"] != "") {
         _errorMessage = response["error"];
-
-        ShowSnackbarMessage.show(
-          message:
-              "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
-          context: context,
-        );
-        return null;
+        throw Exception();
       } else {
+        final decoded = json.decode(response["success"]
+            .toString()
+            .removeBreakLines()
+            .removeWhiteSpaces());
+        if (decoded.toString().contains("erro")) {
+          throw Exception();
+        }
+
         return AddressModel.fromViaCepJson(
           data: json.decode(response["success"]),
-          selectedStateDropDown: _selectedStateDropDown,
           states: _states,
         );
       }
     } catch (e) {
       //print("Erro para consultar o CEP: $e");
-      _errorMessage =
-          "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente";
+      ShowSnackbarMessage.show(
+        message:
+            "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
+        context: context,
+      );
       return null;
     } finally {
       _isLoadingCep = false;

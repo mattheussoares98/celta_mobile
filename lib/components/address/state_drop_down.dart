@@ -38,7 +38,7 @@ class StateDropDown extends StatelessWidget {
       onChanged: addressProvider.isLoadingCep
           ? null
           : (value) {
-              addressProvider.selectedStateDropDown.value = value;
+              selectedState.value = value;
             },
       items: addressProvider.states
           .map(

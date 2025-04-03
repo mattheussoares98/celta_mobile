@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../components.dart';
 
 class NumberField extends StatelessWidget {
-  final TextEditingController cepController;
+  final TextEditingController zipController;
   final TextEditingController numberController;
   final bool isLoading;
   final FocusNode numberFocusNode;
   final FocusNode complementFocusNode;
   const NumberField({
     super.key,
-    required this.cepController,
+    required this.zipController,
     required this.numberController,
     required this.isLoading,
     required this.numberFocusNode,
@@ -29,18 +29,7 @@ class NumberField extends StatelessWidget {
       labelText: "Número",
       textEditingController: numberController,
       limitOfCaracters: 6,
-      validator: (String? value) {
-        if ((value == null || value.isEmpty || value.length < 1) &&
-            cepController.text.length == 8) {
-          return "Digite o número!";
-        } else if (value!.contains("\.") ||
-            value.contains("\,") ||
-            value.contains("\-") ||
-            value.contains(" ")) {
-          return "Digite somente números";
-        }
-        return null;
-      },
+      validator: (value) => FormFieldValidations.number(value, isInteger: true),
     );
   }
 }

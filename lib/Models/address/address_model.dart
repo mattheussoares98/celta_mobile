@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class AddressModel {
   String? Zip;
   String? Address;
@@ -60,7 +58,6 @@ class AddressModel {
 
   factory AddressModel.fromViaCepJson({
     required Map data,
-    required ValueNotifier<String?> selectedStateDropDown,
     required Map<String, String> states,
   }) =>
       AddressModel(
@@ -69,7 +66,7 @@ class AddressModel {
         Complement: data["complemento"],
         District: data["bairro"],
         City: data["localidade"],
-        State: data["uf"],
+        State: states[data["uf"]],
         Number: null,
         Reference: null,
       );

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import '../Models/models.dart';
+import '../components/components.dart';
 import '../providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -359,5 +361,41 @@ class CustomerRegisterProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  bool addAddress(AddressModel address) {
+    if (_customer?.Addresses
+            ?.where((e) => e.Zip == address.Zip && e.Number == address.Number)
+            .isEmpty ==
+        false) {
+      ShowSnackbarMessage.show(
+        message: "Esse endereço já foi adicionado",
+        context: NavigatorKey.navigatorKey.currentState!.context,
+      );
+      return false;
+    }
+
+    final oldCustomer = _customer;
+
+    _customer = CustomerModel(
+      Addresses: [
+        ...oldCustomer?.Addresses ?? [],
+        address,
+      ],
+      Name: oldCustomer?.Name ?? "",
+      Code: oldCustomer?.Code,
+      PersonalizedCode: oldCustomer?.PersonalizedCode,
+      ReducedName: oldCustomer?.ReducedName,
+      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber ?? "",
+      RegistrationNumber: oldCustomer?.RegistrationNumber,
+      DateOfBirth: oldCustomer?.DateOfBirth,
+      SexType: oldCustomer?.SexType ?? "M",
+      PersonType: oldCustomer?.PersonType ?? "M",
+      Emails: oldCustomer?.Emails,
+      Telephones: oldCustomer?.Telephones,
+      selected: oldCustomer?.selected == true,
+      CustomerCovenants: oldCustomer?.CustomerCovenants,
+    );
+    return true;
   }
 }

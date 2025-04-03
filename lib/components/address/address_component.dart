@@ -12,7 +12,7 @@ class AddressComponent extends StatefulWidget {
   final bool canInsertMoreThanOneAddress;
   final bool? isLoading;
   final List<AddressModel> addresses;
-  final void Function() addAddress;
+  final bool Function(AddressModel address) addAddress;
   const AddressComponent({
     required this.adressFormKey,
     required this.isLoading,
@@ -28,7 +28,7 @@ class AddressComponent extends StatefulWidget {
 }
 
 class _AddressComponentState extends State<AddressComponent> {
-  final cepController = TextEditingController();
+  final zipController = TextEditingController();
   final numberController = TextEditingController();
   final cityController = TextEditingController();
   final districtController = TextEditingController();
@@ -47,6 +47,8 @@ class _AddressComponentState extends State<AddressComponent> {
 
   ValueNotifier<String?> selectedStateNotifier = ValueNotifier<String?>("");
 
+  bool triedGetCep = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -59,7 +61,7 @@ class _AddressComponentState extends State<AddressComponent> {
     complementFocusNode.dispose();
     referenceFocusNode.dispose();
 
-    cepController.dispose();
+    zipController.dispose();
     numberController.dispose();
     cityController.dispose();
     districtController.dispose();
@@ -82,23 +84,27 @@ class _AddressComponentState extends State<AddressComponent> {
 
     AddressModel? addressModel = await addressProvider.getAddressByCep(
       context: context,
-      cep: cepController.text,
+      cep: zipController.text,
     );
 
-    if (addressModel == null) {
-      ShowSnackbarMessage.show(
-        message: addressProvider.errorMessage,
-        context: context,
-      );
-    } else {
+    setState(() {
+      triedGetCep = true;
+    });
+
+    if (addressModel != null) {
       cityController.text = addressModel.City ?? "";
       districtController.text = addressModel.District ?? "";
       addressController.text = addressModel.Address ?? "";
       complementController.text = addressModel.Complement ?? "";
       referenceController.text = addressModel.Reference ?? "";
-      setState(() {
-        selectedStateNotifier.value = addressModel.City ?? "";
-      });
+
+      final states =
+          addressProvider.states.where((e) => e == addressModel.State);
+      if (states.isNotEmpty) {
+        selectedStateNotifier.value = states.first;
+      } else {
+        selectedStateNotifier.value = null;
+      }
       Future.delayed(const Duration(milliseconds: 100), () {
         FocusScope.of(context).requestFocus(numberFocusNode);
       });
@@ -106,13 +112,14 @@ class _AddressComponentState extends State<AddressComponent> {
   }
 
   void clearControllers() {
-    cepController.clear();
+    zipController.clear();
     numberController.clear();
     cityController.clear();
     districtController.clear();
     addressController.clear();
     complementController.clear();
     referenceController.clear();
+    selectedStateNotifier.value = null;
   }
 
   @override
@@ -125,17 +132,17 @@ class _AddressComponentState extends State<AddressComponent> {
         child: Column(
           children: [
             CepField(
-              cepController: cepController,
+              cepController: zipController,
               cepFocusNode: cepFocusNode,
               getAdressByCep: () async {
                 await _getAdressByCep(addressProvider: addressProvider);
               },
             ),
-            if (addressProvider.triedGetCep)
+            if (triedGetCep)
               Column(
                 children: [
                   AddressField(
-                    cepController: cepController,
+                    cepController: zipController,
                     addressController: addressController,
                     isLoading: widget.isLoading == true,
                     districtFocusNode: districtFocusNode,
@@ -145,7 +152,7 @@ class _AddressComponentState extends State<AddressComponent> {
                     children: [
                       Expanded(
                         child: DistrictField(
-                          cepController: cepController,
+                          cepController: zipController,
                           districtController: districtController,
                           isLoading: widget.isLoading == true,
                           districtFocusNode: districtFocusNode,
@@ -154,7 +161,7 @@ class _AddressComponentState extends State<AddressComponent> {
                       ),
                       Expanded(
                         child: CityField(
-                          cepController: cepController,
+                          cepController: zipController,
                           cityController: cityController,
                           isLoading: widget.isLoading == true,
                           cityFocusNode: cityFocusNode,
@@ -174,7 +181,7 @@ class _AddressComponentState extends State<AddressComponent> {
                       ),
                       Expanded(
                         child: NumberField(
-                          cepController: cepController,
+                          zipController: zipController,
                           numberController: numberController,
                           isLoading: widget.isLoading == true,
                           numberFocusNode: numberFocusNode,
@@ -212,7 +219,26 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                         AddAddressButton(
                           validateAdressFormKey: widget.validateAdressFormKey,
-                          addAddress: widget.addAddress,
+                          addAddress: () {
+                            bool added = widget.addAddress(
+                              AddressModel(
+                                Zip: zipController.text,
+                                Address: addressController.text,
+                                Number: numberController.text,
+                                District: districtController.text,
+                                City: cityController.text,
+                                State: selectedStateNotifier.value,
+                                Complement: complementController.text,
+                                Reference: referenceController.text,
+                              ),
+                            );
+                            if (added) {
+                              setState(() {
+                                triedGetCep = false;
+                              });
+                              clearControllers();
+                            }
+                          },
                         ),
                       ],
                     ),

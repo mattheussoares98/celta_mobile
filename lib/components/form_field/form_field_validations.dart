@@ -11,6 +11,7 @@ class FormFieldValidations {
     String? value, {
     int maxDecimalPlaces = 3,
     bool valueCanIsEmpty = false,
+    bool isInteger = false,
   }) {
     if (value!.isEmpty && !valueCanIsEmpty) {
       return 'Digite um valor';
@@ -34,6 +35,8 @@ class FormFieldValidations {
         1) {
       // verifica se tem mais de uma vírgula
       return 'Carácter inválido';
+    } else if (isInteger && int.tryParse(value) == null) {
+      return "Número inválido";
     } else if (double.tryParse(value.replaceAll(RegExp(r','), '.')) == null &&
         value.isNotEmpty &&
         !valueCanIsEmpty) {
