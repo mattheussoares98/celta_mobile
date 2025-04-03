@@ -116,7 +116,7 @@ class _AddressComponentState extends State<AddressComponent> {
               labelText: "CEP",
               textEditingController: addressProvider.cepController,
               limitOfCaracters: 8,
-              validator: FormFieldValidations.cpf,
+              validator: FormFieldValidations.cep,
               suffixWidget: TextButton(
                 child: addressProvider.isLoadingCep
                     ? const FittedBox(

@@ -54,7 +54,7 @@ class FormFieldValidations {
     return null;
   }
 
-  static String? cpf(String? value) {
+  static String? cep(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     } else if (value.length < 8) {
