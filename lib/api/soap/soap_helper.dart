@@ -462,4 +462,44 @@ class SoapHelper {
       return null;
     }
   }
+
+  Future<CustomerModel> getCustomer({
+    required int searchTypeInt,
+    required String controllerText,
+    required String enterpriseCode,
+  }) async {
+// 1=ExactCnpjCpfNumber
+// 2=ExactCode
+// 3=ApproximateName
+// 4=PersonalizedCode
+
+    try {
+      await SoapRequest.soapPost(
+        parameters: {
+          "filters": json.encode({
+            "crossIdentity": UserData.crossIdentity,
+            "customerData": controllerText,
+            "customerDataType": searchTypeInt,
+            "enterpriseCode": enterpriseCode,
+          }),
+        },
+        typeOfResponse: "GetCustomerJsonResponse",
+        SOAPAction: "GetCustomerJson",
+        serviceASMX: "CeltaCustomerService.asmx",
+        typeOfResult: "GetCustomerJsonResult",
+      );
+
+      if (SoapRequestResponse.errorMessage != "") {
+        throw Exception();
+      }
+
+      return (json.decode(SoapRequestResponse.responseAsString) as List)
+          .map((e) => CustomerModel.fromJson(e))
+          .cast<CustomerModel>()
+          .toList()
+          .first;
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }
