@@ -52,6 +52,7 @@ class Password extends StatelessWidget {
           validator: (value) => FormFieldValidations.minimumSize(
             value: value,
             minimumSize: 3,
+            canBeNullOrEmpty: true,
           ),
           onChanged: (_) {
             validateFormKey();

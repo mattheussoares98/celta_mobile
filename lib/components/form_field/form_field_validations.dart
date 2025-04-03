@@ -114,8 +114,11 @@ class FormFieldValidations {
   static String? minimumSize({
     required String? value,
     required int minimumSize,
+    bool canBeNullOrEmpty = false,
   }) {
-    if (value == null || value.isEmpty || value.length < minimumSize) {
+    if (canBeNullOrEmpty == true && (value == null || value.isEmpty)) {
+      return null;
+    } else if (value == null || value.isEmpty || value.length < minimumSize) {
       return "Mínimo de $minimumSize caracteres";
     }
     return null;
