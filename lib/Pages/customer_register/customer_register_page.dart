@@ -14,8 +14,6 @@ class CustomerRegisterPage extends StatefulWidget {
 }
 
 class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
-  int _selectedIndex = 0;
-
   final emailController = TextEditingController();
   final telephoneController = TextEditingController();
   final dddController = TextEditingController();
@@ -32,6 +30,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   GlobalKey<FormState> _adressFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _telephoneFormKey = GlobalKey<FormState>();
+
+  int _selectedIndex = 0;
+  ValueNotifier<String?> selectedSexDropDown = ValueNotifier<String?>(null);
 
   static const List appBarTitles = [
     "Dados pessoais",
@@ -160,6 +161,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
     List<Widget> _pages = <Widget>[
       CustomerRegisterPersonalDataPage(
+        changeSexDropDown: (value) {
+          selectedSexDropDown.value = value;
+        },
+        selectedSexDropDown: selectedSexDropDown,
         cpfCnpjFocusNode: cpfCnpjFocusNode,
         changeCpfCnpj: (value) {
           changeCpfCnpj(value, customerRegisterProvider);

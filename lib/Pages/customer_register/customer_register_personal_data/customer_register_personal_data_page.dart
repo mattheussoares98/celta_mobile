@@ -17,6 +17,8 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final void Function(String) changeCpfCnpj;
   final bool cpfCnpjIsValid;
   final FocusNode cpfCnpjFocusNode;
+  final ValueNotifier<String?> selectedSexDropDown;
+  final void Function(String?) changeSexDropDown;
   const CustomerRegisterPersonalDataPage({
     required this.personFormKey,
     required this.validateFormKey,
@@ -29,6 +31,8 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
     required this.changeCpfCnpj,
     required this.cpfCnpjIsValid,
     required this.cpfCnpjFocusNode,
+    required this.selectedSexDropDown,
+    required this.changeSexDropDown,
     Key? key,
   }) : super(key: key);
 
@@ -45,17 +49,6 @@ class _CustomerRegisterPersonalDataPageState
   final FocusNode dateOfBirthFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final FocusNode passwordConfirmationFocusNode = FocusNode();
-  ValueNotifier<String?> _selectedSexDropDown = ValueNotifier<String?>("");
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    CustomerRegisterProvider customerRegisterProvider =
-        Provider.of(context, listen: true);
-    _selectedSexDropDown.value =
-        customerRegisterProvider.selectedSexDropDown.value;
-  }
 
   @override
   void dispose() {
@@ -124,9 +117,10 @@ class _CustomerRegisterPersonalDataPageState
                   if (widget.cpfCnpjController.text.length == 11)
                     SexType(
                       cpfCnpjIsValid: widget.cpfCnpjIsValid,
-                      selectedSexDropDown: _selectedSexDropDown,
+                      selectedSexDropDown: widget.selectedSexDropDown,
                       sexTypeFocusNode: sexTypeFocusNode,
                       validateFormKey: widget.validateFormKey,
+                      changeSexDropDown: widget.changeSexDropDown,
                     ),
                   ClearData(
                     clearControllers: widget.cpfCnpjIsValid == true
