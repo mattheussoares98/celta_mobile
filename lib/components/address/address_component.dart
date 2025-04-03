@@ -24,16 +24,44 @@ class AddressComponent extends StatefulWidget {
 
 class _AddressComponentState extends State<AddressComponent> {
   final cepController = TextEditingController();
+  final districtController = TextEditingController();
   final addressController = TextEditingController();
 
   final cepFocusNode = FocusNode();
   final addressFocusNode = FocusNode();
   final districtFocusNode = FocusNode();
   final _stateFocusNode = FocusNode();
-  final _cityFocusNode = FocusNode();
+  final cityFocusNode = FocusNode();
   final _numberFocusNode = FocusNode();
   final _complementFocusNode = FocusNode();
   final _referenceFocusNode = FocusNode();
+
+  ValueNotifier<String?> _selectedStateDropDown = ValueNotifier<String?>("");
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    AddressProvider addressProvider = Provider.of(context, listen: true);
+    _selectedStateDropDown.value = addressProvider.selectedStateDropDown.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    cepFocusNode.dispose();
+    addressFocusNode.dispose();
+    districtFocusNode.dispose();
+    _stateFocusNode.dispose();
+    cityFocusNode.dispose();
+    _numberFocusNode.dispose();
+    _complementFocusNode.dispose();
+    _referenceFocusNode.dispose();
+
+    cepController.dispose();
+    districtController.dispose();
+    addressController.dispose();
+  }
 
   Future<void> _getAdressByCep({
     required AddressProvider addressProvider,
@@ -65,32 +93,6 @@ class _AddressComponentState extends State<AddressComponent> {
     }
   }
 
-  ValueNotifier<String?> _selectedStateDropDown = ValueNotifier<String?>("");
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    AddressProvider addressProvider = Provider.of(context, listen: true);
-    _selectedStateDropDown.value = addressProvider.selectedStateDropDown.value;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    cepFocusNode.dispose();
-    addressFocusNode.dispose();
-    districtFocusNode.dispose();
-    _stateFocusNode.dispose();
-    _cityFocusNode.dispose();
-    _numberFocusNode.dispose();
-    _complementFocusNode.dispose();
-    _referenceFocusNode.dispose();
-
-    cepController.dispose();
-    addressController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     AddressProvider addressProvider = Provider.of(context);
@@ -120,37 +122,19 @@ class _AddressComponentState extends State<AddressComponent> {
                   Row(
                     children: [
                       Expanded(
-                        child: FormFieldWidget(
-                          enabled: widget.isLoading == false &&
-                              !addressProvider.isLoadingCep,
-                          focusNode: districtFocusNode,
-                          onFieldSubmitted: addressProvider.isLoadingCep
-                              ? null
-                              : (String? value) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_cityFocusNode);
-                                },
-                          labelText: "Bairro",
-                          textEditingController:
-                              addressProvider.districtController,
-                          limitOfCaracters: 30,
-                          validator: (String? value) {
-                            if ((value == null ||
-                                    value.isEmpty ||
-                                    value.length < 2) &&
-                                addressProvider.cepController.text.length ==
-                                    8) {
-                              return "Bairro muito curto";
-                            }
-                            return null;
-                          },
+                        child: DistrictField(
+                          cepController: cepController,
+                          districtController: districtController,
+                          isLoading: widget.isLoading == true,
+                          districtFocusNode: districtFocusNode,
+                          cityFocusNode: cityFocusNode,
                         ),
                       ),
                       Expanded(
                         child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
-                          focusNode: _cityFocusNode,
+                          focusNode: cityFocusNode,
                           labelText: "Cidade",
                           textEditingController: addressProvider.cityController,
                           limitOfCaracters: 30,
