@@ -132,7 +132,7 @@ class _AddressComponentState extends State<AddressComponent> {
         child: Column(
           children: [
             CepField(
-              cepController: zipController,
+              zipController: zipController,
               cepFocusNode: cepFocusNode,
               getAdressByCep: () async {
                 await _getAdressByCep(addressProvider: addressProvider);

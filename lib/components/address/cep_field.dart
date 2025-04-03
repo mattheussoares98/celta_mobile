@@ -4,16 +4,34 @@ import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 import '../components.dart';
 
-class CepField extends StatelessWidget {
-  final TextEditingController cepController;
+class CepField extends StatefulWidget {
+  final TextEditingController zipController;
   final FocusNode cepFocusNode;
-  final Future<void> Function() getAdressByCep;
+  final void Function()? getAdressByCep;
   const CepField({
     super.key,
-    required this.cepController,
+    required this.zipController,
     required this.cepFocusNode,
     required this.getAdressByCep,
   });
+
+  @override
+  State<CepField> createState() => _CepFieldState();
+}
+
+class _CepFieldState extends State<CepField> {
+  bool canSearch = false;
+  void changeCanSearch() {
+    if (widget.zipController.text.length == 8) {
+      setState(() {
+        canSearch = true;
+      });
+    } else {
+      setState(() {
+        canSearch = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +40,24 @@ class CepField extends StatelessWidget {
     return FormFieldWidget(
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       enabled: !customerRegisterProvider.isLoading,
-      focusNode: cepFocusNode,
+      focusNode: widget.cepFocusNode,
+      onChanged: (_) {
+        changeCanSearch();
+      },
       onFieldSubmitted: (_) async {
-        await getAdressByCep();
+        if (canSearch) {
+          widget.getAdressByCep!();
+        } else {
+          widget.cepFocusNode.requestFocus();
+        }
       },
       labelText: "CEP",
-      textEditingController: cepController,
+      textEditingController: widget.zipController,
       limitOfCaracters: 8,
       validator: FormFieldValidations.cep,
       suffixWidget: TextButton(
         child: Text("Pesquisar CEP"),
-        onPressed: getAdressByCep,
+        onPressed: canSearch ? widget.getAdressByCep : null,
       ),
     );
   }
