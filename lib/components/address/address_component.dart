@@ -29,6 +29,7 @@ class _AddressComponentState extends State<AddressComponent> {
   final districtController = TextEditingController();
   final addressController = TextEditingController();
   final complementController = TextEditingController();
+  final referenceController = TextEditingController();
 
   final cepFocusNode = FocusNode();
   final addressFocusNode = FocusNode();
@@ -67,6 +68,7 @@ class _AddressComponentState extends State<AddressComponent> {
     districtController.dispose();
     addressController.dispose();
     complementController.dispose();
+    referenceController.dispose();
   }
 
   Future<void> _getAdressByCep({
@@ -178,17 +180,10 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
-                        child: FormFieldWidget(
-                          enabled: widget.isLoading == false &&
-                              !addressProvider.isLoadingCep,
-                          focusNode: referenceFocusNode,
-                          labelText: "Referência",
-                          textEditingController:
-                              addressProvider.referenceController,
-                          limitOfCaracters: 40,
-                          validator: (String? value) {
-                            return null;
-                          },
+                        child: ReferenceField(
+                          isLoading: widget.isLoading == true,
+                          referenceFocusNode: referenceFocusNode,
+                          referenceController: referenceController,
                         ),
                       ),
                     ],
