@@ -24,13 +24,14 @@ class AddressComponent extends StatefulWidget {
 
 class _AddressComponentState extends State<AddressComponent> {
   final cepController = TextEditingController();
+  final cityController = TextEditingController();
   final districtController = TextEditingController();
   final addressController = TextEditingController();
 
   final cepFocusNode = FocusNode();
   final addressFocusNode = FocusNode();
   final districtFocusNode = FocusNode();
-  final _stateFocusNode = FocusNode();
+  final stateFocusNode = FocusNode();
   final cityFocusNode = FocusNode();
   final _numberFocusNode = FocusNode();
   final _complementFocusNode = FocusNode();
@@ -52,13 +53,14 @@ class _AddressComponentState extends State<AddressComponent> {
     cepFocusNode.dispose();
     addressFocusNode.dispose();
     districtFocusNode.dispose();
-    _stateFocusNode.dispose();
+    stateFocusNode.dispose();
     cityFocusNode.dispose();
     _numberFocusNode.dispose();
     _complementFocusNode.dispose();
     _referenceFocusNode.dispose();
 
     cepController.dispose();
+    cityController.dispose();
     districtController.dispose();
     addressController.dispose();
   }
@@ -131,27 +133,12 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
-                        child: FormFieldWidget(
-                          enabled: widget.isLoading == false &&
-                              !addressProvider.isLoadingCep,
-                          focusNode: cityFocusNode,
-                          labelText: "Cidade",
-                          textEditingController: addressProvider.cityController,
-                          limitOfCaracters: 30,
-                          onFieldSubmitted: (value) {
-                            FocusScope.of(context)
-                                .requestFocus(_stateFocusNode);
-                          },
-                          validator: (String? value) {
-                            if ((value == null ||
-                                    value.isEmpty ||
-                                    value.length < 2) &&
-                                addressProvider.cepController.text.length ==
-                                    8) {
-                              return "Cidade muito curta";
-                            }
-                            return null;
-                          },
+                        child: CityField(
+                          cepController: cepController,
+                          cityController: cityController,
+                          isLoading: widget.isLoading == true,
+                          cityFocusNode: cityFocusNode,
+                          stateFocusNode: stateFocusNode,
                         ),
                       ),
                     ],
@@ -161,7 +148,7 @@ class _AddressComponentState extends State<AddressComponent> {
                       Expanded(
                         flex: 5,
                         child: DropdownButtonFormField<dynamic>(
-                          focusNode: _stateFocusNode,
+                          focusNode: stateFocusNode,
                           value: _selectedStateDropDown.value,
                           isExpanded: true,
                           hint: Center(
