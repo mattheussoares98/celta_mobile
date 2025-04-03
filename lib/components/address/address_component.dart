@@ -28,6 +28,7 @@ class _AddressComponentState extends State<AddressComponent> {
   final cityController = TextEditingController();
   final districtController = TextEditingController();
   final addressController = TextEditingController();
+  final complementController = TextEditingController();
 
   final cepFocusNode = FocusNode();
   final addressFocusNode = FocusNode();
@@ -36,7 +37,7 @@ class _AddressComponentState extends State<AddressComponent> {
   final cityFocusNode = FocusNode();
   final numberFocusNode = FocusNode();
   final complementFocusNode = FocusNode();
-  final _referenceFocusNode = FocusNode();
+  final referenceFocusNode = FocusNode();
 
   ValueNotifier<String?> _selectedStateNotifier = ValueNotifier<String?>("");
 
@@ -58,13 +59,14 @@ class _AddressComponentState extends State<AddressComponent> {
     cityFocusNode.dispose();
     numberFocusNode.dispose();
     complementFocusNode.dispose();
-    _referenceFocusNode.dispose();
+    referenceFocusNode.dispose();
 
     cepController.dispose();
     numberController.dispose();
     cityController.dispose();
     districtController.dispose();
     addressController.dispose();
+    complementController.dispose();
   }
 
   Future<void> _getAdressByCep({
@@ -168,30 +170,18 @@ class _AddressComponentState extends State<AddressComponent> {
                   Row(
                     children: [
                       Expanded(
-                        child: FormFieldWidget(
-                          enabled: widget.isLoading == false &&
-                              !addressProvider.isLoadingCep,
-                          focusNode: complementFocusNode,
-                          onFieldSubmitted: addressProvider.isLoadingCep
-                              ? null
-                              : (String? value) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_referenceFocusNode);
-                                },
-                          labelText: "Complemento",
-                          textEditingController:
-                              addressProvider.complementController,
-                          limitOfCaracters: 30,
-                          validator: (String? value) {
-                            return null;
-                          },
+                        child: ComplementField(
+                          complementController: complementController,
+                          isLoading: widget.isLoading == true,
+                          complementFocusNode: complementFocusNode,
+                          referenceFocusNode: referenceFocusNode,
                         ),
                       ),
                       Expanded(
                         child: FormFieldWidget(
                           enabled: widget.isLoading == false &&
                               !addressProvider.isLoadingCep,
-                          focusNode: _referenceFocusNode,
+                          focusNode: referenceFocusNode,
                           labelText: "Referência",
                           textEditingController:
                               addressProvider.referenceController,
