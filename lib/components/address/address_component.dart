@@ -206,43 +206,8 @@ class _AddressComponentState extends State<AddressComponent> {
                         CleanWrittenDataButton(
                           clearControllers: clearControllers,
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                          ),
-                          onPressed: addressProvider.isLoadingCep
-                              ? null
-                              : () {
-                                  bool isValid = widget.validateAdressFormKey();
-
-                                  if (isValid &&
-                                      addressProvider
-                                          .cepController.text.isNotEmpty) {
-                                    addressProvider.addAddress();
-                                    if (addressProvider.errorMessageAddAddres !=
-                                        "") {
-                                      ShowSnackbarMessage.show(
-                                        message: addressProvider
-                                            .errorMessageAddAddres,
-                                        context: context,
-                                      );
-                                    }
-                                    FocusScope.of(context).unfocus();
-                                  } else {
-                                    ShowSnackbarMessage.show(
-                                      message:
-                                          "Insira os dados corretamente para salvar o endereço",
-                                      context: context,
-                                    );
-                                  }
-                                },
-                          child: const Text(
-                            "Adicionar endereço",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
+                        AddAddressButton(
+                          validateAdressFormKey: widget.validateAdressFormKey,
                         ),
                       ],
                     ),

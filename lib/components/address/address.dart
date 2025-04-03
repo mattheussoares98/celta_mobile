@@ -1,3 +1,4 @@
+export './add_address_button.dart';
 export './address_component.dart';
 export 'address_field.dart';
 export './cep_field.dart';
