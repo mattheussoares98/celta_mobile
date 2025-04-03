@@ -396,6 +396,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       selected: oldCustomer?.selected == true,
       CustomerCovenants: oldCustomer?.CustomerCovenants,
     );
+    notifyListeners();
     return true;
   }
 }
