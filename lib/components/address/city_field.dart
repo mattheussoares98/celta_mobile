@@ -19,24 +19,22 @@ class CityField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: FormFieldWidget(
-        enabled: isLoading == false,
-        focusNode: cityFocusNode,
-        labelText: "Cidade",
-        textEditingController: cityController,
-        limitOfCaracters: 30,
-        onFieldSubmitted: (value) {
-          stateFocusNode.requestFocus();
-        },
-        validator: (String? value) {
-          if ((value == null || value.isEmpty || value.length < 2) &&
-              cepController.text.length == 8) {
-            return "Cidade muito curta";
-          }
-          return null;
-        },
-      ),
+    return FormFieldWidget(
+      enabled: isLoading == false,
+      focusNode: cityFocusNode,
+      labelText: "Cidade",
+      textEditingController: cityController,
+      limitOfCaracters: 30,
+      onFieldSubmitted: (value) {
+        stateFocusNode.requestFocus();
+      },
+      validator: (String? value) {
+        if ((value == null || value.isEmpty || value.length < 2) &&
+            cepController.text.length == 8) {
+          return "Cidade muito curta";
+        }
+        return null;
+      },
     );
   }
 }

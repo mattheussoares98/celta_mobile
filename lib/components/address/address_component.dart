@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/models.dart';
 import '../../Pages/customer_register/customer_register.dart';
 import '../components.dart';
 import '../../providers/providers.dart';
@@ -40,15 +41,7 @@ class _AddressComponentState extends State<AddressComponent> {
   final complementFocusNode = FocusNode();
   final referenceFocusNode = FocusNode();
 
-  ValueNotifier<String?> _selectedStateNotifier = ValueNotifier<String?>("");
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    AddressProvider addressProvider = Provider.of(context, listen: true);
-    _selectedStateNotifier.value = addressProvider.selectedStateDropDown.value;
-  }
+  ValueNotifier<String?> selectedStateNotifier = ValueNotifier<String?>("");
 
   @override
   void dispose() {
@@ -84,20 +77,28 @@ class _AddressComponentState extends State<AddressComponent> {
       return;
     }
 
-    await addressProvider.getAddressByCep(
+    AddressModel? addressModel = await addressProvider.getAddressByCep(
       context: context,
       cep: cepController.text,
     );
 
-    if (addressProvider.errorMessage == "") {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        FocusScope.of(context).requestFocus(numberFocusNode);
-      });
-    } else {
+    if (addressModel == null) {
       ShowSnackbarMessage.show(
         message: addressProvider.errorMessage,
         context: context,
       );
+    } else {
+      cityController.text = addressModel.City ?? "";
+      districtController.text = addressModel.District ?? "";
+      addressController.text = addressModel.Address ?? "";
+      complementController.text = addressModel.Complement ?? "";
+      referenceController.text = addressModel.Reference ?? "";
+      setState(() {
+        selectedStateNotifier.value = addressModel.City ?? "";
+      });
+      Future.delayed(const Duration(milliseconds: 100), () {
+        FocusScope.of(context).requestFocus(numberFocusNode);
+      });
     }
   }
 
@@ -165,7 +166,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         flex: 5,
                         child: StateDropDown(
                           stateFocusNode: stateFocusNode,
-                          selectedState: _selectedStateNotifier,
+                          selectedState: selectedStateNotifier,
                         ),
                       ),
                       Expanded(
