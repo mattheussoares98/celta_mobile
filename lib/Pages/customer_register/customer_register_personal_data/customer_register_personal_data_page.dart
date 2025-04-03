@@ -16,6 +16,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final TextEditingController dateOfBirthController;
   final void Function(String) changeCpfCnpj;
   final bool cpfCnpjIsValid;
+  final FocusNode cpfCnpjFocusNode;
   const CustomerRegisterPersonalDataPage({
     required this.personFormKey,
     required this.validateFormKey,
@@ -27,6 +28,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
     required this.dateOfBirthController,
     required this.changeCpfCnpj,
     required this.cpfCnpjIsValid,
+    required this.cpfCnpjFocusNode,
     Key? key,
   }) : super(key: key);
 
@@ -39,7 +41,6 @@ class _CustomerRegisterPersonalDataPageState
     extends State<CustomerRegisterPersonalDataPage> {
   final FocusNode nameFocusNode = FocusNode();
   final FocusNode reducedNameFocusNode = FocusNode();
-  final FocusNode cpfCnpjFocusNode = FocusNode();
   final FocusNode sexTypeFocusNode = FocusNode();
   final FocusNode dateOfBirthFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
@@ -61,7 +62,6 @@ class _CustomerRegisterPersonalDataPageState
     super.dispose();
     nameFocusNode.dispose();
     reducedNameFocusNode.dispose();
-    cpfCnpjFocusNode.dispose();
     sexTypeFocusNode.dispose();
     dateOfBirthFocusNode.dispose();
     passwordFocusNode.dispose();
@@ -80,7 +80,7 @@ class _CustomerRegisterPersonalDataPageState
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CpfOrCnpjField(
-              cpfCnpjFocusNode: cpfCnpjFocusNode,
+              cpfCnpjFocusNode: widget.cpfCnpjFocusNode,
               nameFocusNode: nameFocusNode,
               changeCpfCnpj: widget.changeCpfCnpj,
               cpfCnpjController: widget.cpfCnpjController,

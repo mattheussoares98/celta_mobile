@@ -16,6 +16,7 @@ class FormFieldWidget extends StatelessWidget {
   final TextEditingController textEditingController;
   final bool enabled;
   final bool? obscureText;
+  final bool? autofocus;
   const FormFieldWidget({
     this.onChanged,
     this.keyboardType,
@@ -26,6 +27,7 @@ class FormFieldWidget extends StatelessWidget {
     this.validator,
     this.limitOfCaracters,
     this.obscureText,
+    this.autofocus,
     required this.enabled,
     required this.textEditingController,
     required this.labelText,
@@ -38,6 +40,7 @@ class FormFieldWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, top: 12, right: 8),
       child: TextFormField(
         enabled: enabled,
+        autofocus: autofocus == true,
         controller: textEditingController,
         keyboardType: keyboardType ?? TextInputType.name,
         maxLines: 1,

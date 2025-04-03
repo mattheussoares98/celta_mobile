@@ -18,6 +18,7 @@ class CpfOrCnpjField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
+      autofocus: true,
       focusNode: cpfCnpjFocusNode,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       enabled: true,

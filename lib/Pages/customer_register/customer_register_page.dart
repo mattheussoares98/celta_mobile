@@ -26,6 +26,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   final passwordConfirmationController = TextEditingController();
   final passwordController = TextEditingController();
 
+  final cpfCnpjFocusNode = FocusNode();
+
   GlobalKey<FormState> _personFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _adressFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
@@ -116,24 +118,18 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     dateOfBirthController.dispose();
     passwordConfirmationController.dispose();
     passwordController.dispose();
+
+    cpfCnpjFocusNode.dispose();
   }
 
-  // @override
-  // initState() {
-  //   super.initState();
-
-  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
-  //     if (mounted) {
-  //       _isValidFormKey();
-  //     }
-  //   });
-  // }
   bool cpfCnpjIsValid = false;
   void changeCpfCnpj(
     String value,
     CustomerRegisterProvider customerRegisterProvider,
   ) async {
     if (FormFieldValidations.cpfOrCnpj(value) == null) {
+      cpfCnpjFocusNode.unfocus();
+
       await customerRegisterProvider.getCustomer(cpfCnpjController.text);
 
       if (customerRegisterProvider.customer != null) {
@@ -164,6 +160,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
     List<Widget> _pages = <Widget>[
       CustomerRegisterPersonalDataPage(
+        cpfCnpjFocusNode: cpfCnpjFocusNode,
         changeCpfCnpj: (value) {
           changeCpfCnpj(value, customerRegisterProvider);
         },
