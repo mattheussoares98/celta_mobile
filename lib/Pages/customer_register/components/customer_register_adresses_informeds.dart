@@ -94,6 +94,7 @@ class CustomerRegisterAddressesInformeds extends StatelessWidget {
                       ),
                     ElevatedButton(
                       style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.red),
                         minimumSize:
                             const WidgetStatePropertyAll(Size(100, 30)),
                         maximumSize: const WidgetStatePropertyAll(
