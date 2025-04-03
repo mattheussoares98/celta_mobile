@@ -208,6 +208,8 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                               child: Column(
                                 children: [
                                   AddressComponent(
+                                    addAddress:
+                                        () {}, //TODO create function to add new address
                                     addresses: [], //TODO test this a lot
                                     adressFormKey: _adressFormKey,
                                     canInsertMoreThanOneAddress: false,

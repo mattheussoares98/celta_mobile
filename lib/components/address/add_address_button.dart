@@ -6,9 +6,11 @@ import '../components.dart';
 
 class AddAddressButton extends StatelessWidget {
   final bool Function() validateAdressFormKey;
+  final void Function() addAddress;
   const AddAddressButton({
     super.key,
     required this.validateAdressFormKey,
+    required this.addAddress,
   });
 
   @override
@@ -24,14 +26,8 @@ class AddAddressButton extends StatelessWidget {
           : () {
               bool isValid = validateAdressFormKey();
 
-              if (isValid && addressProvider.cepController.text.isNotEmpty) {
-                addressProvider.addAddress();
-                if (addressProvider.errorMessageAddAddres != "") {
-                  ShowSnackbarMessage.show(
-                    message: addressProvider.errorMessageAddAddres,
-                    context: context,
-                  );
-                }
+              if (isValid /*  && addressProvider.cepController.text.isNotEmpty TODO test if works when doesnt has cep*/) {
+                addAddress();
                 FocusScope.of(context).unfocus();
               } else {
                 ShowSnackbarMessage.show(

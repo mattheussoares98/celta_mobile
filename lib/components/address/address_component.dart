@@ -12,12 +12,14 @@ class AddressComponent extends StatefulWidget {
   final bool canInsertMoreThanOneAddress;
   final bool? isLoading;
   final List<AddressModel> addresses;
+  final void Function() addAddress;
   const AddressComponent({
     required this.adressFormKey,
-    this.isLoading = false,
+    required this.isLoading,
     required this.validateAdressFormKey,
     required this.canInsertMoreThanOneAddress,
     required this.addresses,
+    required this.addAddress,
     Key? key,
   }) : super(key: key);
 
@@ -210,6 +212,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                         AddAddressButton(
                           validateAdressFormKey: widget.validateAdressFormKey,
+                          addAddress: widget.addAddress,
                         ),
                       ],
                     ),
