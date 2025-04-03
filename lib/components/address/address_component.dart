@@ -11,11 +11,13 @@ class AddressComponent extends StatefulWidget {
   final bool Function() validateAdressFormKey;
   final bool canInsertMoreThanOneAddress;
   final bool? isLoading;
+  final List<AddressModel> addresses;
   const AddressComponent({
     required this.adressFormKey,
     this.isLoading = false,
     required this.validateAdressFormKey,
     required this.canInsertMoreThanOneAddress,
+    required this.addresses,
     Key? key,
   }) : super(key: key);
 
@@ -67,8 +69,7 @@ class _AddressComponentState extends State<AddressComponent> {
   Future<void> _getAdressByCep({
     required AddressProvider addressProvider,
   }) async {
-    if (!widget.canInsertMoreThanOneAddress &&
-        addressProvider.addressesCount > 0) {
+    if (!widget.canInsertMoreThanOneAddress && widget.addresses.length > 0) {
       ShowSnackbarMessage.show(
         message:
             "Não é possível inserir mais de um endereço! Remova o endereço informado para conseguir adicionar outro!",
@@ -215,9 +216,10 @@ class _AddressComponentState extends State<AddressComponent> {
                   ),
                 ],
               ),
-            if (addressProvider.addressesCount > 0)
+            if (widget.addresses.length > 0)
               CustomerRegisterAddressesInformeds(
                 isLoading: widget.isLoading == true,
+                addresses: widget.addresses,
               ),
           ],
         ),

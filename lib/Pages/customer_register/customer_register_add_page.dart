@@ -36,7 +36,10 @@ class CustomerRegisterAddPage extends StatelessWidget {
               dateOfBirthController: dateOfBirthController,
             ),
           if (addressProvider.addressesCount > 0)
-            const CustomerRegisterAddressesInformeds(isLoading: false),
+            CustomerRegisterAddressesInformeds(
+              isLoading: false,
+              addresses: customerRegisterProvider.customer?.Addresses ?? [],
+            ),
           if (customerRegisterProvider.emailsCount > 0)
             const CustomerRegisterEmailsInformeds(),
           if (customerRegisterProvider.telephonesCount > 0)

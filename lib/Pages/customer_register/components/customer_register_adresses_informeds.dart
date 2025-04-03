@@ -5,27 +5,25 @@ import '../../../components/components.dart';
 import '../../../Models/address/address.dart';
 import '../../../providers/providers.dart';
 
-class CustomerRegisterAddressesInformeds extends StatefulWidget {
+class CustomerRegisterAddressesInformeds extends StatelessWidget {
   final bool isLoading;
+  final List<AddressModel> addresses;
   const CustomerRegisterAddressesInformeds({
     required this.isLoading,
+    required this.addresses,
     Key? key,
   }) : super(key: key);
-
-  @override
-  State<CustomerRegisterAddressesInformeds> createState() =>
-      _CustomerRegisterAddressesInformedsState();
-}
-
-class _CustomerRegisterAddressesInformedsState
-    extends State<CustomerRegisterAddressesInformeds> {
   String _getState({
-    required AddressProvider addressProvider,
+    required CustomerRegisterProvider customerRegisterProvider,
     required AddressModel addressModel,
   }) {
-    int? index = addressProvider.addresses.indexOf(addressModel);
+    int? index = addresses.indexOf(addressModel);
 
-    return addressProvider.addresses[index].State!;
+    if (index == -1) {
+      return "";
+    }
+
+    return addresses[index].State!;
   }
 
   @override
@@ -50,9 +48,9 @@ class _CustomerRegisterAddressesInformedsState
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: addressProvider.addressesCount,
+          itemCount: addresses.length,
           itemBuilder: ((context, index) {
-            AddressModel addressModel = addressProvider.addresses[index];
+            AddressModel addressModel = addresses[index];
 
             return Card(
               child: Padding(
@@ -78,7 +76,7 @@ class _CustomerRegisterAddressesInformedsState
                     TitleAndSubtitle.titleAndSubtitle(
                       title: "Estado",
                       subtitle: _getState(
-                        addressProvider: addressProvider,
+                        customerRegisterProvider: customerRegisterProvider,
                         addressModel: addressModel,
                       ),
                     ),
@@ -108,24 +106,23 @@ class _CustomerRegisterAddressesInformedsState
                         maximumSize: const WidgetStatePropertyAll(
                             Size(double.infinity, 30)),
                       ),
-                      onPressed:
-                          customerRegisterProvider.isLoading || widget.isLoading
-                              ? null
-                              : () {
-                                  ShowAlertDialog.show(
-                                    context: context,
-                                    title: "Remover endereço",
-                                    content: const SingleChildScrollView(
-                                      child: Text(
-                                        "Deseja realmente remover o endereço?",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    function: () {
-                                      addressProvider.removeAddress(index);
-                                    },
-                                  );
+                      onPressed: customerRegisterProvider.isLoading || isLoading
+                          ? null
+                          : () {
+                              ShowAlertDialog.show(
+                                context: context,
+                                title: "Remover endereço",
+                                content: const SingleChildScrollView(
+                                  child: Text(
+                                    "Deseja realmente remover o endereço?",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                function: () {
+                                  addressProvider.removeAddress(index);
                                 },
+                              );
+                            },
                       child: const Text("Remover endereço"),
                     ),
                   ],

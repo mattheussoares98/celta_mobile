@@ -181,6 +181,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         validateAdressFormKey: _isValidFormKey,
         adressFormKey: _adressFormKey,
         canInsertMoreThanOneAddress: true,
+        addresses: customerRegisterProvider.customer?.Addresses ?? [],
       ),
       CustomerRegisterEmailPage(
         emailFormKey: _emailFormKey,

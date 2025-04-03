@@ -1,4 +1,4 @@
-import 'customer.dart';
+import '../models.dart';
 
 class CustomerModel {
   final int? Code; // 2697,
@@ -14,7 +14,7 @@ class CustomerModel {
   final List<CustomerTelephoneModel>? Telephones;
   bool selected;
   final List<CustomerCovenantModel>? CustomerCovenants;
-  final List<CustomerAdressesModel>? Addresses;
+  final List<AddressModel>? Addresses;
 // "Covenants": null
 
   CustomerModel({
@@ -57,7 +57,7 @@ class CustomerModel {
             json["Addresses"] == null || json["Addresses"]?.isEmpty == true
                 ? null
                 : (json["Addresses"] as List)
-                    .map((e) => CustomerAdressesModel.fromJson(e))
+                    .map((e) => AddressModel.fromJson(e))
                     .toList(),
         selected: json["selected"] ?? false,
         CustomerCovenants: json["CustomerCovenants"] == null

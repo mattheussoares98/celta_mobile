@@ -208,6 +208,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                               child: Column(
                                 children: [
                                   AddressComponent(
+                                    addresses: [], //TODO test this a lot
                                     adressFormKey: _adressFormKey,
                                     canInsertMoreThanOneAddress: false,
                                     isLoading: researchPricesProvider
