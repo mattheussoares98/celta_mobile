@@ -37,14 +37,14 @@ class _AddressComponentState extends State<AddressComponent> {
   final _complementFocusNode = FocusNode();
   final _referenceFocusNode = FocusNode();
 
-  ValueNotifier<String?> _selectedStateDropDown = ValueNotifier<String?>("");
+  ValueNotifier<String?> _selectedStateNotifier = ValueNotifier<String?>("");
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     AddressProvider addressProvider = Provider.of(context, listen: true);
-    _selectedStateDropDown.value = addressProvider.selectedStateDropDown.value;
+    _selectedStateNotifier.value = addressProvider.selectedStateDropDown.value;
   }
 
   @override
@@ -147,57 +147,9 @@ class _AddressComponentState extends State<AddressComponent> {
                     children: [
                       Expanded(
                         flex: 5,
-                        child: DropdownButtonFormField<dynamic>(
-                          focusNode: stateFocusNode,
-                          value: _selectedStateDropDown.value,
-                          isExpanded: true,
-                          hint: Center(
-                            child: Text(
-                              'Estado',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null &&
-                                addressProvider.cepController.text.length ==
-                                    8) {
-                              return 'Selecione um estado!';
-                            }
-                            return null;
-                          },
-                          onChanged: addressProvider.isLoadingCep
-                              ? null
-                              : (value) {
-                                  addressProvider.selectedStateDropDown.value =
-                                      value;
-                                },
-                          items: addressProvider.states
-                              .map(
-                                (value) => DropdownMenuItem(
-                                  alignment: Alignment.center,
-                                  onTap: () {},
-                                  value: value,
-                                  child: FittedBox(
-                                    child: Column(
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            value,
-                                          ),
-                                        ),
-                                        const Divider(
-                                          color: Colors.black,
-                                          height: 4,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
+                        child: StateDropDown(
+                          stateFocusNode: stateFocusNode,
+                          selectedState: _selectedStateNotifier,
                         ),
                       ),
                       Expanded(
