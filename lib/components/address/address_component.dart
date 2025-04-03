@@ -89,13 +89,13 @@ class _AddressComponentState extends State<AddressComponent> {
       cep: cepController.text,
     );
 
-    if (addressProvider.errorMessageGetAddressByCep == "") {
+    if (addressProvider.errorMessage == "") {
       Future.delayed(const Duration(milliseconds: 100), () {
         FocusScope.of(context).requestFocus(numberFocusNode);
       });
     } else {
       ShowSnackbarMessage.show(
-        message: addressProvider.errorMessageGetAddressByCep,
+        message: addressProvider.errorMessage,
         context: context,
       );
     }

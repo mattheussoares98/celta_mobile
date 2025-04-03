@@ -45,32 +45,6 @@ class AddressModel {
     );
   }
 
-  static resultAsStringAddressCustomerModel({
-    required Map data,
-    required AddressModel? addressModel,
-    required TextEditingController addressController,
-    required TextEditingController districtController,
-    required TextEditingController complementController,
-    required TextEditingController cityController,
-    required ValueNotifier<String?> selectedStateDropDown,
-    required Map<String, String> states,
-  }) {
-    if (addressModel != null) {
-      addressModel.Zip = data["cep"];
-      addressModel.Address = data["logradouro"];
-      addressModel.Complement = data["complemento"];
-      addressModel.District = data["bairro"];
-      addressModel.City = data["localidade"];
-      addressModel.State = data["uf"];
-    }
-
-    addressController.text = data["logradouro"];
-    complementController.text = data["complemento"];
-    districtController.text = data["bairro"];
-    cityController.text = data["localidade"];
-    selectedStateDropDown.value = states[data["uf"]];
-  }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['Zip'] = this.Zip;
@@ -83,4 +57,20 @@ class AddressModel {
     data['Number'] = this.Number;
     return data;
   }
+
+  factory AddressModel.fromViaCepJson({
+    required Map data,
+    required ValueNotifier<String?> selectedStateDropDown,
+    required Map<String, String> states,
+  }) =>
+      AddressModel(
+        Zip: data["cep"],
+        Address: data["logradouro"],
+        Complement: data["complemento"],
+        District: data["bairro"],
+        City: data["localidade"],
+        State: data["uf"],
+        Number: null,
+        Reference: null,
+      );
 }

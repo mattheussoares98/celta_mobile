@@ -69,8 +69,8 @@ class AddressProvider with ChangeNotifier {
 
   List<String> get states => [..._states.values];
 
-  String _errorMessageGetAddressByCep = "";
-  String get errorMessageGetAddressByCep => _errorMessageGetAddressByCep;
+  String _errorMessage = "";
+  String get errorMessage => _errorMessage;
 
   final ValueNotifier<String?> _selectedStateDropDown =
       ValueNotifier<String?>(null);
@@ -159,12 +159,11 @@ class AddressProvider with ChangeNotifier {
     _addresses.clear();
   }
 
-  Future<void> getAddressByCep({
+  Future<AddressModel?> getAddressByCep({
     required BuildContext context,
     required String cep,
   }) async {
-    clearAddressControllers(clearCep: false);
-    _errorMessageGetAddressByCep = "";
+    _errorMessage = "";
     _isLoadingCep = true;
     notifyListeners();
 
@@ -177,33 +176,29 @@ class AddressProvider with ChangeNotifier {
       notifyListeners();
 
       if (response["error"] != "") {
-        _errorMessageGetAddressByCep = response["error"];
+        _errorMessage = response["error"];
 
         ShowSnackbarMessage.show(
           message:
               "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente",
           context: context,
         );
+        return null;
       } else {
-        //TODO return addressModel and change controllers
-        AddressModel.resultAsStringAddressCustomerModel(
+        return AddressModel.fromViaCepJson(
           data: json.decode(response["success"]),
-          addressModel: _addressCustomerModel,
-          addressController: addressController,
-          districtController: districtController,
-          complementController: complementController,
-          cityController: cityController,
           selectedStateDropDown: _selectedStateDropDown,
           states: _states,
         );
       }
     } catch (e) {
       //print("Erro para consultar o CEP: $e");
-      _errorMessageGetAddressByCep =
+      _errorMessage =
           "Ocorreu um erro para consultar o CEP. Insira os dados do endereço manualmente";
+      return null;
+    } finally {
+      _isLoadingCep = false;
+      notifyListeners();
     }
-
-    _isLoadingCep = false;
-    notifyListeners();
   }
 }
