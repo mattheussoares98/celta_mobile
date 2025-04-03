@@ -6,10 +6,8 @@ import '../../../Models/address/address.dart';
 import '../../../providers/providers.dart';
 
 class CustomerRegisterAddressesInformeds extends StatelessWidget {
-  final bool isLoading;
   final List<AddressModel> addresses;
   const CustomerRegisterAddressesInformeds({
-    required this.isLoading,
     required this.addresses,
     Key? key,
   }) : super(key: key);
@@ -96,33 +94,26 @@ class CustomerRegisterAddressesInformeds extends StatelessWidget {
                       ),
                     ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                          customerRegisterProvider.isLoading
-                              ? Colors.grey
-                              : Colors.red,
-                        ),
                         minimumSize:
                             const WidgetStatePropertyAll(Size(100, 30)),
                         maximumSize: const WidgetStatePropertyAll(
                             Size(double.infinity, 30)),
                       ),
-                      onPressed: customerRegisterProvider.isLoading || isLoading
-                          ? null
-                          : () {
-                              ShowAlertDialog.show(
-                                context: context,
-                                title: "Remover endereço",
-                                content: const SingleChildScrollView(
-                                  child: Text(
-                                    "Deseja realmente remover o endereço?",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                function: () {
-                                  addressProvider.removeAddress(index);
-                                },
-                              );
-                            },
+                      onPressed: () {
+                        ShowAlertDialog.show(
+                          context: context,
+                          title: "Remover endereço",
+                          content: const SingleChildScrollView(
+                            child: Text(
+                              "Deseja realmente remover o endereço?",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          function: () {
+                            addressProvider.removeAddress(index);
+                          },
+                        );
+                      },
                       child: const Text("Remover endereço"),
                     ),
                   ],

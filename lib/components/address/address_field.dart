@@ -6,13 +6,11 @@ class AddressField extends StatelessWidget {
   final TextEditingController cepController;
   final TextEditingController addressController;
   final FocusNode addressFocusNode;
-  final bool isLoading;
   final FocusNode districtFocusNode;
   const AddressField({
     super.key,
     required this.cepController,
     required this.addressController,
-    required this.isLoading,
     required this.districtFocusNode,
     required this.addressFocusNode,
   });
@@ -20,7 +18,7 @@ class AddressField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      enabled: isLoading == false,
+      enabled: true,
       focusNode: addressFocusNode,
       labelText: "Logradouro",
       textEditingController: addressController,

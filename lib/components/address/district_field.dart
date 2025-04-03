@@ -5,14 +5,12 @@ import '../components.dart';
 class DistrictField extends StatelessWidget {
   final TextEditingController cepController;
   final TextEditingController districtController;
-  final bool isLoading;
   final FocusNode districtFocusNode;
   final FocusNode cityFocusNode;
   const DistrictField({
     super.key,
     required this.cepController,
     required this.districtController,
-    required this.isLoading,
     required this.districtFocusNode,
     required this.cityFocusNode,
   });
@@ -20,7 +18,7 @@ class DistrictField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      enabled: isLoading == false,
+      enabled: true,
       focusNode: districtFocusNode,
       onFieldSubmitted: (String? value) {
         FocusScope.of(context).requestFocus(cityFocusNode);

@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import '../components.dart';
 
 class ReferenceField extends StatelessWidget {
-  final bool isLoading;
   final FocusNode referenceFocusNode;
   final TextEditingController referenceController;
   const ReferenceField({
     super.key,
-    required this.isLoading,
     required this.referenceFocusNode,
     required this.referenceController,
   });
@@ -16,7 +14,7 @@ class ReferenceField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      enabled: isLoading,
+      enabled: true,
       focusNode: referenceFocusNode,
       labelText: "Referência",
       textEditingController: referenceController,

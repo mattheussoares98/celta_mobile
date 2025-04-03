@@ -5,14 +5,12 @@ import '../components.dart';
 class CityField extends StatelessWidget {
   final TextEditingController cepController;
   final TextEditingController cityController;
-  final bool isLoading;
   final FocusNode cityFocusNode;
   final FocusNode stateFocusNode;
   const CityField({
     super.key,
     required this.cepController,
     required this.cityController,
-    required this.isLoading,
     required this.cityFocusNode,
     required this.stateFocusNode,
   });
@@ -20,7 +18,7 @@ class CityField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormFieldWidget(
-      enabled: isLoading == false,
+      enabled: true,
       focusNode: cityFocusNode,
       labelText: "Cidade",
       textEditingController: cityController,

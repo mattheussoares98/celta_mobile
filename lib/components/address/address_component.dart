@@ -10,12 +10,10 @@ class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
   final bool Function() validateAdressFormKey;
   final bool canInsertMoreThanOneAddress;
-  final bool? isLoading;
   final List<AddressModel> addresses;
   final bool Function(AddressModel address) addAddress;
   const AddressComponent({
     required this.adressFormKey,
-    required this.isLoading,
     required this.validateAdressFormKey,
     required this.canInsertMoreThanOneAddress,
     required this.addresses,
@@ -144,7 +142,6 @@ class _AddressComponentState extends State<AddressComponent> {
                   AddressField(
                     cepController: zipController,
                     addressController: addressController,
-                    isLoading: widget.isLoading == true,
                     districtFocusNode: districtFocusNode,
                     addressFocusNode: addressFocusNode,
                   ),
@@ -154,7 +151,6 @@ class _AddressComponentState extends State<AddressComponent> {
                         child: DistrictField(
                           cepController: zipController,
                           districtController: districtController,
-                          isLoading: widget.isLoading == true,
                           districtFocusNode: districtFocusNode,
                           cityFocusNode: cityFocusNode,
                         ),
@@ -163,7 +159,6 @@ class _AddressComponentState extends State<AddressComponent> {
                         child: CityField(
                           cepController: zipController,
                           cityController: cityController,
-                          isLoading: widget.isLoading == true,
                           cityFocusNode: cityFocusNode,
                           stateFocusNode: stateFocusNode,
                         ),
@@ -183,7 +178,6 @@ class _AddressComponentState extends State<AddressComponent> {
                         child: NumberField(
                           zipController: zipController,
                           numberController: numberController,
-                          isLoading: widget.isLoading == true,
                           numberFocusNode: numberFocusNode,
                           complementFocusNode: complementFocusNode,
                         ),
@@ -195,14 +189,12 @@ class _AddressComponentState extends State<AddressComponent> {
                       Expanded(
                         child: ComplementField(
                           complementController: complementController,
-                          isLoading: widget.isLoading == true,
                           complementFocusNode: complementFocusNode,
                           referenceFocusNode: referenceFocusNode,
                         ),
                       ),
                       Expanded(
                         child: ReferenceField(
-                          isLoading: widget.isLoading == true,
                           referenceFocusNode: referenceFocusNode,
                           referenceController: referenceController,
                         ),
@@ -247,7 +239,6 @@ class _AddressComponentState extends State<AddressComponent> {
               ),
             if (widget.addresses.length > 0)
               CustomerRegisterAddressesInformeds(
-                isLoading: widget.isLoading == true,
                 addresses: widget.addresses,
               ),
           ],
