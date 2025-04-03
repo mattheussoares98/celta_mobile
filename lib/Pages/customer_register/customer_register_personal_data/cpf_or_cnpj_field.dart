@@ -35,6 +35,7 @@ class CpfOrCnpjField extends StatelessWidget {
       suffixWidget: IconButton(
         onPressed: () {
           cpfCnpjController.text = "";
+          changeCpfCnpjIsValid(false);
           FocusScope.of(context).requestFocus(cpfCnpjFocusNode);
         },
         icon: const Icon(
