@@ -15,7 +15,9 @@ class BindedCovenants extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: customerRegisterProvider.bindedCovenants.length + 1,
+      itemCount:
+          (customerRegisterProvider.customer?.CustomerCovenants?.length ?? 0) +
+              1,
       itemBuilder: (context, index) {
         if (index == 0) {
           return const Column(
@@ -33,7 +35,8 @@ class BindedCovenants extends StatelessWidget {
             ],
           );
         }
-        final binded = customerRegisterProvider.bindedCovenants[index - 1];
+        final binded =
+            customerRegisterProvider.customer?.CustomerCovenants![index - 1];
 
         return Card(
           child: Padding(
@@ -42,20 +45,21 @@ class BindedCovenants extends StatelessWidget {
               children: [
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Nome",
-                  subtitle: binded.customerRegisterCovenantModel.Nome_Convenio,
+                  subtitle: binded?.covenant?.Name,
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "CNPJ",
-                  subtitle: binded.customerRegisterCovenantModel.Cnpj_Convenio,
+                  subtitle: binded?.covenant?.Code?.toString(),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
                   title: "Limite",
-                  subtitle: binded.limit
+                  subtitle: binded?.LimitOfPurchase
                       .toString()
                       .toBrazilianNumber()
                       .addBrazilianCoin(),
                 ),
                 TextButton(
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
                   onPressed: () {
                     ShowAlertDialog.show(
                         context: context,

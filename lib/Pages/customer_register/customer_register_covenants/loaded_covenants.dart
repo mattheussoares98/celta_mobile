@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../customer_register.dart';
-import '../../../providers/providers.dart';
 
 class LoadedCovenants extends StatelessWidget {
-  const LoadedCovenants({super.key});
+  final List<CustomerRegisterCovenantModel> notInsertedCovenants;
+  const LoadedCovenants({super.key, required this.notInsertedCovenants});
 
   @override
   Widget build(BuildContext context) {
-    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-
     return Column(
       children: [
         const Text(
@@ -26,9 +24,9 @@ class LoadedCovenants extends StatelessWidget {
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: customerRegisterProvider.covenants.length,
+          itemCount: notInsertedCovenants.length,
           itemBuilder: (context, index) {
-            final covenant = customerRegisterProvider.covenants[index];
+            final covenant = notInsertedCovenants[index];
 
             return Card(
               child: Padding(

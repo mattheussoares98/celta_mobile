@@ -23,16 +23,17 @@ class CustomerRegisterProvider with ChangeNotifier {
 
   List<String> _emails = [];
   List<String> get emails => [..._emails];
-  int get emailsCount => _emails.length;//TODO remove this
+  int get emailsCount => _emails.length; //TODO remove this
 
-  List<Map<String, String>> _telephones = [];//TODO remove this
+  List<Map<String, String>> _telephones = []; //TODO remove this
   List<Map<String, String>> get telephones => [..._telephones];
   int get telephonesCount => _telephones.length;
 
-  List<CustomerRegisterCovenantModel> _covenants = [];//TODO remove this
+  List<CustomerRegisterCovenantModel> _covenants = []; //TODO remove this
   List<CustomerRegisterCovenantModel> get covenants => [..._covenants];
 
-  List<CustomerRegisterBindedCovenantModel> _bindedCovenants = [];//TODO remove this
+  List<CustomerRegisterBindedCovenantModel> _bindedCovenants =
+      []; //TODO remove this
   List<CustomerRegisterBindedCovenantModel> get bindedCovenants =>
       [..._bindedCovenants];
 
@@ -51,7 +52,7 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void addEmail(TextEditingController emailController) {
-    _errorMessage = "";//TODO change this function
+    _errorMessage = ""; //TODO change this function
     if (!_emails.contains(emailController.text)) {
       _emails.add(emailController.text);
 
@@ -333,9 +334,6 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void unbindCovenant(int index) {
-    final bindedCovenant =
-        _bindedCovenants[index].customerRegisterCovenantModel;
-    _covenants.add(bindedCovenant);
     _bindedCovenants.removeAt(index);
     notifyListeners();
   }

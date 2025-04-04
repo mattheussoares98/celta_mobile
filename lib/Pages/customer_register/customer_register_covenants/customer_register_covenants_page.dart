@@ -1,6 +1,8 @@
+import 'package:celta_inventario/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../customer_register.dart';
 import '../../../providers/providers.dart';
@@ -33,6 +35,25 @@ class _CustomerRegisterCovenantsPageState
     });
   }
 
+  List<CustomerRegisterCovenantModel> notInsertedCovenants(
+    CustomerRegisterProvider customerRegisterProvider,
+  ) {
+    if (customerRegisterProvider.customer?.CustomerCovenants == null) {
+      return customerRegisterProvider.covenants;
+    }
+
+    return customerRegisterProvider.covenants
+        .where((e) =>
+            customerRegisterProvider.customer?.CustomerCovenants
+                ?.where(
+                  (x) => e.Codigo_Convenio?.toInt() == x.covenant?.Code,
+                )
+                .toList()
+                .isEmpty ==
+            true)
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -50,9 +71,14 @@ class _CustomerRegisterCovenantsPageState
                 errorMessage: customerRegisterProvider.errorMessage,
                 request: customerRegisterProvider.loadCovenants,
               ),
-            if (customerRegisterProvider.covenants.isNotEmpty)
-              const LoadedCovenants(),
-            if (customerRegisterProvider.bindedCovenants.isNotEmpty)
+            if (notInsertedCovenants(customerRegisterProvider).isNotEmpty)
+              LoadedCovenants(
+                notInsertedCovenants:
+                    notInsertedCovenants(customerRegisterProvider),
+              ),
+            if ((customerRegisterProvider.customer?.CustomerCovenants?.length ??
+                    0) >
+                0)
               const BindedCovenants(),
           ],
         ),
