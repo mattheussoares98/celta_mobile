@@ -36,24 +36,6 @@ class CustomerRegisterProvider with ChangeNotifier {
   List<CustomerRegisterBindedCovenantModel> get bindedCovenants =>
       [..._bindedCovenants];
 
-  bool _personFormKeyIsValid = false;
-  bool get personFormKeyIsValid => _personFormKeyIsValid;
-  set personFormKeyIsValid(bool newValue) {
-    _personFormKeyIsValid = newValue;
-  }
-
-  bool _emailFormKeyIsValid = false;
-  bool get emailFormKeyIsValid => _emailFormKeyIsValid;
-  set emailFormKeyIsValid(bool newValue) {
-    _emailFormKeyIsValid = newValue;
-  }
-
-  bool _telephoneFormKeyIsValid = false;
-  bool get telephoneFormKeyIsValid => _telephoneFormKeyIsValid;
-  set telephoneFormKeyIsValid(bool newValue) {
-    _telephoneFormKeyIsValid = newValue;
-  }
-
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 

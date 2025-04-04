@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/providers.dart';
-import '../components.dart';
 
 class AddAddressButton extends StatelessWidget {
-  final bool Function() validateAdressFormKey;
+  final void Function() validateAdressFormKey;
   final void Function() addAddress;
   const AddAddressButton({
     super.key,
@@ -24,18 +23,18 @@ class AddAddressButton extends StatelessWidget {
       onPressed: addressProvider.isLoadingCep
           ? null
           : () {
-              bool isValid = validateAdressFormKey();
+              bool isValid = true; //TODO test this
 
               if (isValid /*  && addressProvider.cepController.text.isNotEmpty TODO test if works when doesnt has cep*/) {
                 addAddress();
                 FocusScope.of(context).unfocus();
-              } else {
+              } /*  else {
                 ShowSnackbarMessage.show(
                   message:
                       "Insira os dados corretamente para salvar o endereço",
                   context: context,
                 );
-              }
+              } */
             },
       child: const Text(
         "Adicionar endereço",

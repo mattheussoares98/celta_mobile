@@ -8,7 +8,7 @@ import '../../providers/providers.dart';
 
 class AddressComponent extends StatefulWidget {
   final GlobalKey<FormState> adressFormKey;
-  final bool Function() validateAdressFormKey;
+  final void Function() validateAdressFormKey;
   final bool canInsertMoreThanOneAddress;
   final List<AddressModel> addresses;
   final bool Function(AddressModel address) addAddress;

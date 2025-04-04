@@ -7,12 +7,12 @@ import '../../../providers/providers.dart';
 class CustomerRegisterBottomNavigationItems extends StatelessWidget {
   final bool hasAddressInformed;
   final void Function(int) updateSelectedIndex;
-  final bool Function() isValidFormKey;
+  final void Function() validateFormKeys;
   final int selectedIndex;
   const CustomerRegisterBottomNavigationItems({
     required this.hasAddressInformed,
     required this.updateSelectedIndex,
-    required this.isValidFormKey,
+    required this.validateFormKeys,
     required this.selectedIndex,
     super.key,
   });
@@ -64,7 +64,7 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
       errorMessage = "Corrija os dados e salve o endereço para mudar de tela!";
     }
 
-    if (isValidFormKey() && !hasAddressInformed) {
+    if (!hasAddressInformed) {
       updateSelectedIndex(index);
     } else {
       ShowSnackbarMessage.show(
@@ -77,7 +77,6 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-    AddressProvider addressProvider = Provider.of(context);
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
@@ -88,7 +87,10 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.person,
-            hasDataAndIsValid: customerRegisterProvider.personFormKeyIsValid,
+            hasDataAndIsValid:
+                customerRegisterProvider.customer?.Name != null &&
+                    customerRegisterProvider.customer?.CpfCnpjNumber != null &&
+                    customerRegisterProvider.customer?.PersonType != null,
           ),
           label: 'Dados',
         ),
@@ -105,8 +107,8 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.email_rounded,
-            hasDataAndIsValid: customerRegisterProvider.emailFormKeyIsValid &&
-                customerRegisterProvider.emailsCount > 0,
+            hasDataAndIsValid:
+                (customerRegisterProvider.customer?.Emails?.length ?? 0) > 0,
           ),
           label: 'E-mail',
         ),
@@ -115,8 +117,8 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
             context: context,
             icon: Icons.phone,
             hasDataAndIsValid:
-                customerRegisterProvider.telephoneFormKeyIsValid &&
-                    customerRegisterProvider.telephonesCount > 0,
+                (customerRegisterProvider.customer?.Telephones?.length ?? 0) >
+                    0,
           ),
           label: 'Telefone',
         ),
@@ -133,9 +135,8 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
           icon: iconAccordingFormIsValid(
             context: context,
             icon: Icons.check,
-            hasDataAndIsValid: customerRegisterProvider.personFormKeyIsValid &&
-                (addressProvider.addressFormKeyIsValid &&
-                    addressProvider.addressesCount > 0),
+            hasDataAndIsValid:
+                (customerRegisterProvider.customer?.Addresses?.length ?? 0) > 0,
           ),
           label: 'Salvar',
         ),

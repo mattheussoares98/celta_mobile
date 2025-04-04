@@ -31,6 +31,11 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _telephoneFormKey = GlobalKey<FormState>();
 
+  bool personIsValid = false;
+  bool adressIsValid = false;
+  bool emailIsValid = false;
+  bool telephoneIsValid = false;
+
   int _selectedIndex = 0;
   ValueNotifier<String?> selectedSexDropDown = ValueNotifier<String?>(null);
 
@@ -43,39 +48,15 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     "Confirmação de dados",
   ];
 
-  bool _isValidFormKey() {
-    CustomerRegisterProvider customerRegisterProvider =
-        Provider.of(context, listen: false);
+  void validateFormKeys() {
+    Future.delayed(Duration.zero, () {
+      if (mounted) {}
+    });
 
-    AddressProvider addressProvider = Provider.of(context, listen: false);
-    if (_selectedIndex == 0) {
-      setState(() {
-        customerRegisterProvider.personFormKeyIsValid = //TODO remove this
-            _personFormKey.currentState!.validate();
-      });
-      return customerRegisterProvider.personFormKeyIsValid;
-    }
-    if (_selectedIndex == 1) {
-      addressProvider.addressFormKeyIsValid = //TODO remove this
-          _adressFormKey.currentState!.validate();
-
-      return addressProvider.addressFormKeyIsValid;
-    }
-    if (_selectedIndex == 2) {
-      customerRegisterProvider.emailFormKeyIsValid = //TODO remove this
-          _emailFormKey.currentState!.validate();
-      return customerRegisterProvider.emailFormKeyIsValid;
-    }
-    if (_selectedIndex == 3) {
-      return _telephoneFormKey.currentState?.validate() == true;
-    }
-    if (_selectedIndex == 4) {
-      return true;
-    } else if (_selectedIndex == 5) {
-      return true;
-    } else {
-      return false;
-    }
+    personIsValid = _personFormKey.currentState?.validate() == true;
+    adressIsValid = _adressFormKey.currentState?.validate() == true;
+    emailIsValid = _emailFormKey.currentState?.validate() == true;
+    telephoneIsValid = _telephoneFormKey.currentState?.validate() == true;
   }
 
   bool _hasAdressInformed(
@@ -149,7 +130,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       setState(() {
         cpfCnpjIsValid = true;
       });
-      _isValidFormKey();
+      validateFormKeys();
     } else {
       setState(() {
         cpfCnpjIsValid = false;
@@ -196,7 +177,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         },
         cpfCnpjIsValid: cpfCnpjIsValid,
         personFormKey: _personFormKey,
-        validateFormKey: _isValidFormKey,
+        validateFormKey: validateFormKeys,
         cpfCnpjController: cpfCnpjController,
         nameController: nameController,
         passwordConfirmationController: passwordConfirmationController,
@@ -205,7 +186,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         dateOfBirthController: dateOfBirthController,
       ),
       AddressComponent(
-        validateAdressFormKey: _isValidFormKey,
+        validateAdressFormKey: validateFormKeys,
         adressFormKey: _adressFormKey,
         canInsertMoreThanOneAddress: true,
         addresses: customerRegisterProvider.customer?.Addresses ?? [],
@@ -213,12 +194,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       ),
       CustomerRegisterEmailPage(
         emailFormKey: _emailFormKey,
-        validateAdressFormKey: _isValidFormKey,
+        validateAdressFormKey: validateFormKeys,
         emailController: emailController,
       ),
       CustomerRegisterTelephonePage(
         telephoneFormKey: _telephoneFormKey,
-        validateTelephoneFormKey: _isValidFormKey,
+        validateTelephoneFormKey: validateFormKeys,
         areaCodeController: dddController,
         phoneNumberController: telephoneController,
       ),
@@ -273,7 +254,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     customerRegisterProvider: customerRegisterProvider,
                   );
                 },
-                isValidFormKey: _isValidFormKey,
+                validateFormKeys: validateFormKeys,
                 selectedIndex: _selectedIndex,
               ),
               body: _pages.elementAt(_selectedIndex),
@@ -311,13 +292,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                           },
                           changeFormKeysToInvalid: () {
                             setState(() {
-                              customerRegisterProvider.personFormKeyIsValid =
-                                  false;
-                              addressProvider.addressFormKeyIsValid = false;
-                              customerRegisterProvider.emailFormKeyIsValid =
-                                  false;
-                              customerRegisterProvider.telephoneFormKeyIsValid =
-                                  false;
                               _selectedIndex = 0;
                             });
                           },

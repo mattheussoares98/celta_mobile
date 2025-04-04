@@ -215,8 +215,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                                     adressFormKey: _adressFormKey,
                                     canInsertMoreThanOneAddress: false,
                                     validateAdressFormKey: () {
-                                      return _adressFormKey.currentState!
-                                          .validate();
+                                      //TODO test this
                                     },
                                   ),
                                 ],
