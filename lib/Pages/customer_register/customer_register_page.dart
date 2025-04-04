@@ -50,26 +50,24 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     AddressProvider addressProvider = Provider.of(context, listen: false);
     if (_selectedIndex == 0) {
       setState(() {
-        customerRegisterProvider.personFormKeyIsValid =
+        customerRegisterProvider.personFormKeyIsValid = //TODO remove this
             _personFormKey.currentState!.validate();
       });
       return customerRegisterProvider.personFormKeyIsValid;
     }
     if (_selectedIndex == 1) {
-      addressProvider.addressFormKeyIsValid =
+      addressProvider.addressFormKeyIsValid = //TODO remove this
           _adressFormKey.currentState!.validate();
 
       return addressProvider.addressFormKeyIsValid;
     }
     if (_selectedIndex == 2) {
-      customerRegisterProvider.emailFormKeyIsValid =
+      customerRegisterProvider.emailFormKeyIsValid = //TODO remove this
           _emailFormKey.currentState!.validate();
       return customerRegisterProvider.emailFormKeyIsValid;
     }
     if (_selectedIndex == 3) {
-      customerRegisterProvider.telephoneFormKeyIsValid =
-          _telephoneFormKey.currentState!.validate();
-      return customerRegisterProvider.telephoneFormKeyIsValid;
+      return _telephoneFormKey.currentState?.validate() == true;
     }
     if (_selectedIndex == 4) {
       return true;
@@ -221,8 +219,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       CustomerRegisterTelephonePage(
         telephoneFormKey: _telephoneFormKey,
         validateTelephoneFormKey: _isValidFormKey,
-        dddController: dddController,
-        telephoneController: telephoneController,
+        areaCodeController: dddController,
+        phoneNumberController: telephoneController,
       ),
       const CustomerRegisterCovenantsPage(),
       CustomerRegisterAddPage(

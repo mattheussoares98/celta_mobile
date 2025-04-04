@@ -81,35 +81,53 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addTelephone({
-    required TextEditingController telephoneController,
-    required TextEditingController dddController,
+  bool addTelephone({
+    required String phoneNumber,
+    required String areaCode,
   }) {
-    _errorMessage = "";
+    final newTelephone = CustomerTelephoneModel(
+      AreaCode: areaCode,
+      PhoneNumber: phoneNumber,
+    );
 
-    Map<String, String> newTelephone = {
-      "AreaCode": dddController.text,
-      "PhoneNumber": telephoneController.text,
-    };
-
-    bool hasEqualTelephone = false;
-    _telephones.forEach((element) {
-      if (element["AreaCode"] == newTelephone["AreaCode"] &&
-          element["PhoneNumber"] == newTelephone["PhoneNumber"]) {
-        hasEqualTelephone = true;
-      }
-    });
-
-    if (!hasEqualTelephone) {
-      _telephones.add(newTelephone);
-      clearTelephoneControllers(
-        telephoneController: telephoneController,
-        dddController: dddController,
-      );
-    } else {
-      _errorMessage = "Esse telefone já existe na lista de telefones!";
+    if (_customer?.Telephones
+            ?.where((e) =>
+                e.AreaCode == newTelephone.AreaCode &&
+                e.PhoneNumber == newTelephone.PhoneNumber)
+            .isNotEmpty ==
+        true) {
+      ShowSnackbarMessage.show(
+          message: "Esse telefone já foi inserido!",
+          context: NavigatorKey.navigatorKey.currentState!
+              .context); //TODO change navigatorKey to only "key"
+      return false;
     }
+    final oldCustomer = _customer;
+
+    _customer = CustomerModel(
+      Telephones: [
+        ...oldCustomer?.Telephones ?? [],
+        newTelephone,
+      ],
+      Name: oldCustomer?.Name,
+      Code: oldCustomer?.Code,
+      PersonalizedCode: oldCustomer?.PersonalizedCode,
+      ReducedName: oldCustomer?.ReducedName,
+      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber,
+      RegistrationNumber: oldCustomer?.RegistrationNumber,
+      DateOfBirth: oldCustomer?.DateOfBirth,
+      SexType: oldCustomer?.SexType,
+      PersonType: oldCustomer?.PersonType,
+      Emails: oldCustomer?.Emails,
+      Addresses: oldCustomer?.Addresses,
+      selected: oldCustomer?.selected == true,
+      password: oldCustomer?.password,
+      CustomerCovenants: oldCustomer?.CustomerCovenants,
+    );
+
     notifyListeners();
+
+    return true;
   }
 
   void removeEmail(int index) {
