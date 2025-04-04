@@ -34,6 +34,7 @@ class _CustomerRegisterTelephonePageState
     bool isValid = widget.validateTelephoneFormKey();
 
     if (isValid && widget.telephoneController.text.isNotEmpty) {
+      //TODO change this function
       customerRegisterProvider.addTelephone(
         telephoneController: widget.telephoneController,
         dddController: widget.dddController,
@@ -77,7 +78,8 @@ class _CustomerRegisterTelephonePageState
                 Expanded(
                   flex: 3,
                   child: FormFieldWidget(
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: false),
                     enabled: true,
                     focusNode: dddFocusNode,
                     onFieldSubmitted: (String? value) {
@@ -103,7 +105,8 @@ class _CustomerRegisterTelephonePageState
                 Expanded(
                   flex: 10,
                   child: FormFieldWidget(
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: false),
                     enabled: true,
                     focusNode: telephoneFocusNode,
                     onChanged: (value) {
@@ -176,7 +179,8 @@ class _CustomerRegisterTelephonePageState
                 ),
               ),
             ),
-            if (customerRegisterProvider.telephonesCount > 0)
+            if ((customerRegisterProvider.customer?.Telephones?.length ?? 0) >
+                0)
               const CustomerRegisterTelephonesInformeds(),
           ],
         ),

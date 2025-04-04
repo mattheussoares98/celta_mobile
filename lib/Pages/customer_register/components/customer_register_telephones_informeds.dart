@@ -42,10 +42,10 @@ class _CustomerRegisterTelephonesInformedsState
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: customerRegisterProvider.telephonesCount,
+          itemCount: customerRegisterProvider.customer!.Telephones!.length,
           itemBuilder: (context, index) {
-            Map<String, String> telephone =
-                customerRegisterProvider.telephones[index];
+            final telephone =
+                customerRegisterProvider.customer!.Telephones![index];
             return Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,34 +54,32 @@ class _CustomerRegisterTelephonesInformedsState
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
                       formatPhoneNumber(
-                          AreaCode: telephone["AreaCode"]!,
-                          PhoneNumber: telephone["PhoneNumber"]!),
+                        AreaCode: telephone.AreaCode!,
+                        PhoneNumber: telephone.PhoneNumber!,
+                      ),
                     ),
                   ),
                   IconButton(
-                    onPressed: customerRegisterProvider.isLoading
-                        ? null
-                        : () {
-                            ShowAlertDialog.show(
-                              context: context,
-                              title: "Excluir telefone",
-                              content: const SingleChildScrollView(
-                                child: Text(
-                                  "Deseja realmente excluir o telefone?",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              function: () {
-                                customerRegisterProvider.removeTelephone(index);
-                              },
-                            );
-                          },
+                    onPressed: () {
+                      ShowAlertDialog.show(
+                        context: context,
+                        title: "Excluir telefone",
+                        content: const SingleChildScrollView(
+                          child: Text(
+                            "Deseja realmente excluir o telefone?",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        function: () {
+                          //TODO change this function
+                          customerRegisterProvider.removeTelephone(index);
+                        },
+                      );
+                    },
                     icon: Icon(
                       Icons.delete,
                       size: 30,
-                      color: customerRegisterProvider.isLoading
-                          ? Colors.grey
-                          : Colors.red,
+                      color: Colors.red,
                     ),
                   )
                 ],
