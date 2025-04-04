@@ -190,7 +190,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         adressFormKey: _adressFormKey,
         canInsertMoreThanOneAddress: true,
         addresses: customerRegisterProvider.customer?.Addresses ?? [],
-        addAddress: customerRegisterProvider.addAddress,
+        addAddress: customerRegisterProvider.addAddress,//TODO remove this parameter
       ),
       CustomerRegisterEmailPage(
         emailFormKey: _emailFormKey,

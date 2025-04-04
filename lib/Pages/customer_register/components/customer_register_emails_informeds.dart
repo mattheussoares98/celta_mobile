@@ -36,18 +36,16 @@ class _CustomerRegisterEmailsInformedsState
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: customerRegisterProvider.emailsCount,
+          itemCount: customerRegisterProvider.customer?.Emails?.length ?? 0,
           itemBuilder: (context, index) {
-            String email = customerRegisterProvider.emails[index];
+            final email = customerRegisterProvider.customer!.Emails![index];
             return Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      email,
-                    ),
+                    child: Text(email),
                   ),
                   IconButton(
                     onPressed: customerRegisterProvider.isLoading

@@ -23,16 +23,16 @@ class CustomerRegisterProvider with ChangeNotifier {
 
   List<String> _emails = [];
   List<String> get emails => [..._emails];
-  int get emailsCount => _emails.length;
+  int get emailsCount => _emails.length;//TODO remove this
 
-  List<Map<String, String>> _telephones = [];
+  List<Map<String, String>> _telephones = [];//TODO remove this
   List<Map<String, String>> get telephones => [..._telephones];
   int get telephonesCount => _telephones.length;
 
-  List<CustomerRegisterCovenantModel> _covenants = [];
+  List<CustomerRegisterCovenantModel> _covenants = [];//TODO remove this
   List<CustomerRegisterCovenantModel> get covenants => [..._covenants];
 
-  List<CustomerRegisterBindedCovenantModel> _bindedCovenants = [];
+  List<CustomerRegisterBindedCovenantModel> _bindedCovenants = [];//TODO remove this
   List<CustomerRegisterBindedCovenantModel> get bindedCovenants =>
       [..._bindedCovenants];
 
@@ -51,7 +51,7 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void addEmail(TextEditingController emailController) {
-    _errorMessage = "";
+    _errorMessage = "";//TODO change this function
     if (!_emails.contains(emailController.text)) {
       _emails.add(emailController.text);
 

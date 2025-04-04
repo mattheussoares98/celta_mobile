@@ -7,7 +7,7 @@ import './components/components.dart';
 
 class CustomerRegisterEmailPage extends StatefulWidget {
   final GlobalKey<FormState> emailFormKey;
-  final Function validateAdressFormKey;
+  final void Function() validateAdressFormKey;
   final TextEditingController emailController;
   const CustomerRegisterEmailPage({
     required this.validateAdressFormKey,
@@ -27,9 +27,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
   void addEmail({
     required CustomerRegisterProvider customerRegisterProvider,
   }) {
-    bool isValid = widget.validateAdressFormKey();
-
-    if (isValid && widget.emailController.text.isNotEmpty) {
+    if (widget.emailController.text.isNotEmpty) {
       customerRegisterProvider.addEmail(widget.emailController);
 
       if (customerRegisterProvider.errorMessage == "") {
@@ -106,7 +104,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
                 ),
               ),
             ),
-            if (customerRegisterProvider.emailsCount > 0)
+            if ((customerRegisterProvider.customer?.Emails?.length ?? 0) > 0)
               const CustomerRegisterEmailsInformeds(),
           ],
         ),
