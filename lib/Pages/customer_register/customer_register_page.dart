@@ -151,6 +151,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       setState(() {
         cpfCnpjIsValid = true;
       });
+      _isValidFormKey();
     } else {
       setState(() {
         cpfCnpjIsValid = false;
