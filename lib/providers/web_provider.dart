@@ -549,7 +549,7 @@ class WebProvider with ChangeNotifier {
       if (updatedEnterprise == null) {
         throw Exception();
       } else {
-        final context = NavigatorKey.navigatorKey.currentState!.context;
+        final context = NavigatorKey.key.currentState!.context;
         _enterprises[_indexOfSelectedEnterprise] = updatedEnterprise;
         Navigator.of(context).pop();
         ShowSnackbarMessage.show(
@@ -588,7 +588,7 @@ class WebProvider with ChangeNotifier {
     } catch (e) {
       ShowSnackbarMessage.show(
         message: DefaultErrorMessage.ERROR,
-        context: NavigatorKey.navigatorKey.currentState!.context,
+        context: NavigatorKey.key.currentState!.context,
       );
     } finally {
       _isLoading = false;

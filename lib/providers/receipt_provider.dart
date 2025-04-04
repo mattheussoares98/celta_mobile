@@ -593,7 +593,7 @@ class ReceiptProvider with ChangeNotifier {
     _errorMessageLiberate = "";
     notifyListeners();
 
-    final context = NavigatorKey.navigatorKey.currentState!.context;
+    final context = NavigatorKey.key.currentState!.context;
     try {
       await SoapRequest.soapPost(
         parameters: {

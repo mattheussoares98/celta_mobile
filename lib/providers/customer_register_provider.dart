@@ -98,8 +98,7 @@ class CustomerRegisterProvider with ChangeNotifier {
         true) {
       ShowSnackbarMessage.show(
           message: "Esse telefone já foi inserido!",
-          context: NavigatorKey.navigatorKey.currentState!
-              .context); //TODO change navigatorKey to only "key"
+          context: NavigatorKey.key.currentState!.context);
       return false;
     }
     final oldCustomer = _customer;
@@ -387,7 +386,7 @@ class CustomerRegisterProvider with ChangeNotifier {
         false) {
       ShowSnackbarMessage.show(
         message: "Esse endereço já foi adicionado",
-        context: NavigatorKey.navigatorKey.currentState!.context,
+        context: NavigatorKey.key.currentState!.context,
       );
       return false;
     }

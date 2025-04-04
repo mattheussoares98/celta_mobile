@@ -134,7 +134,7 @@ class LoginProvider with ChangeNotifier {
     );
 
     await PrefsInstance.removeKeysOnLogout();
-    Navigator.of(NavigatorKey.navigatorKey.currentState!.context)
+    Navigator.of(NavigatorKey.key.currentState!.context)
         .pushNamedAndRemoveUntil(
       APPROUTES.LOGIN_PAGE,
       (route) => false,

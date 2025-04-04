@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         behavior: HitTestBehavior.translucent,
         onTap: FocusScope.of(context).unfocus,
         child: MaterialApp(
-          navigatorKey: NavigatorKey.navigatorKey,
+          navigatorKey: NavigatorKey.key,
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

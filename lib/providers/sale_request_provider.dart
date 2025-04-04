@@ -430,7 +430,7 @@ class SaleRequestProvider with ChangeNotifier {
       ShowSnackbarMessage.show(
         message:
             "O novo preço ($newItemPrice) não pode ser menor do que o preço mínimo (${selectedProduct.priceCost!.RetailMinimumPrice})",
-        context: NavigatorKey.navigatorKey.currentState!.context,
+        context: NavigatorKey.key.currentState!.context,
       );
       return false;
     }
@@ -514,7 +514,7 @@ class SaleRequestProvider with ChangeNotifier {
     _needProcessCart = true;
 
     await getCustomers(
-      context: NavigatorKey.navigatorKey.currentState!.context,
+      context: NavigatorKey.key.currentState!.context,
       controllerText: "",
       enterpriseCode: enterpriseCode,
       configurationsProvider: ConfigurationsProvider(),

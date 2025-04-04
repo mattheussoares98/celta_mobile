@@ -151,7 +151,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       if (_errorMessageGetProducts != "") {
         ShowSnackbarMessage.show(
           message: _errorMessageGetProducts,
-          context: NavigatorKey.navigatorKey.currentState!.context,
+          context: NavigatorKey.key.currentState!.context,
         );
       } else if (_searchedProducts.length == 1) {
         await addConfirmedProduct(
@@ -171,7 +171,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       _errorMessageGetProducts = DefaultErrorMessage.ERROR;
       ShowSnackbarMessage.show(
         message: _errorMessageGetProducts,
-        context: NavigatorKey.navigatorKey.currentState!.context,
+        context: NavigatorKey.key.currentState!.context,
       );
     } finally {
       _isLoading = false;
@@ -194,7 +194,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       _errorMessageGetProducts = "Esse produto não faz parte da conferência";
       ShowSnackbarMessage.show(
         message: _errorMessageGetProducts,
-        context: NavigatorKey.navigatorKey.currentState!.context,
+        context: NavigatorKey.key.currentState!.context,
       );
       return;
     }
@@ -221,13 +221,13 @@ class ExpeditionConferenceProvider with ChangeNotifier {
     notifyListeners();
     ShowSnackbarMessage.show(
       message: "Produto conferido",
-      context: NavigatorKey.navigatorKey.currentState!.context,
-      backgroundColor: Theme.of(NavigatorKey.navigatorKey.currentState!.context)
+      context: NavigatorKey.key.currentState!.context,
+      backgroundColor: Theme.of(NavigatorKey.key.currentState!.context)
           .colorScheme
           .primary,
     );
 
-    Navigator.of(NavigatorKey.navigatorKey.currentState!.context).popUntil(
+    Navigator.of(NavigatorKey.key.currentState!.context).popUntil(
       (route) =>
           route.settings.name == APPROUTES.EXPEDITION_CONFERENCE_PRODUCTS,
     );
@@ -299,7 +299,7 @@ class ExpeditionConferenceProvider with ChangeNotifier {
       _errorMessageConfirmConference = SoapRequestResponse.errorMessage;
 
       if (_errorMessageConfirmConference.isEmpty) {
-        Navigator.of(NavigatorKey.navigatorKey.currentState!.context).popUntil(
+        Navigator.of(NavigatorKey.key.currentState!.context).popUntil(
           (route) =>
               route.settings.name ==
               APPROUTES.EXPEDITION_CONFERENCE_CONTROLS_TO_CONFERENCE,
@@ -307,9 +307,9 @@ class ExpeditionConferenceProvider with ChangeNotifier {
 
         ShowSnackbarMessage.show(
           message: "Conferência concluída com sucesso",
-          context: NavigatorKey.navigatorKey.currentState!.context,
+          context: NavigatorKey.key.currentState!.context,
           backgroundColor:
-              Theme.of(NavigatorKey.navigatorKey.currentState!.context)
+              Theme.of(NavigatorKey.key.currentState!.context)
                   .colorScheme
                   .primary,
         );

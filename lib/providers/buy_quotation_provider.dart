@@ -137,14 +137,14 @@ class BuyQuotationProvider with ChangeNotifier {
       if (SoapRequestResponse.errorMessage != "") {
         ShowSnackbarMessage.show(
           message: SoapRequestResponse.errorMessage,
-          context: NavigatorKey.navigatorKey.currentContext!,
+          context: NavigatorKey.key.currentContext!,
         );
         return false;
       } else {
         ShowSnackbarMessage.show(
           message: "Alteração realizada com sucesso",
-          context: NavigatorKey.navigatorKey.currentContext!,
-          backgroundColor: Theme.of(NavigatorKey.navigatorKey.currentContext!)
+          context: NavigatorKey.key.currentContext!,
+          backgroundColor: Theme.of(NavigatorKey.key.currentContext!)
               .colorScheme
               .primary,
         );
@@ -154,7 +154,7 @@ class BuyQuotationProvider with ChangeNotifier {
       debugPrint(e.toString());
       ShowSnackbarMessage.show(
         message: SoapRequestResponse.errorMessage,
-        context: NavigatorKey.navigatorKey.currentContext!,
+        context: NavigatorKey.key.currentContext!,
       );
       return false;
     } finally {
@@ -570,7 +570,7 @@ class BuyQuotationProvider with ChangeNotifier {
           .contains(product.plu)) {
         ShowSnackbarMessage.show(
           message: "O produto ${product.name} de PLU (${product.plu}) já foi adicionado",
-          context: NavigatorKey.navigatorKey.currentState!.context,
+          context: NavigatorKey.key.currentState!.context,
         );
         return;
       }

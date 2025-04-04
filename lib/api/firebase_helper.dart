@@ -209,7 +209,7 @@ class FirebaseHelper {
 
     //quando clica na notificação pra abrir o aplicativo
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      Navigator.of(NavigatorKey.navigatorKey.currentState!.context)
+      Navigator.of(NavigatorKey.key.currentState!.context)
           .pushNamed(APPROUTES.NOTIFICATIONS);
     });
 
