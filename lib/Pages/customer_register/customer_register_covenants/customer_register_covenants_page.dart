@@ -19,6 +19,16 @@ class CustomerRegisterCovenantsPage extends StatefulWidget {
 
 class _CustomerRegisterCovenantsPageState
     extends State<CustomerRegisterCovenantsPage> {
+  final limitController = TextEditingController();
+  final limitFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    super.dispose();
+    limitController.dispose();
+    limitFocusNode.dispose();
+  }
+
   @override
   initState() {
     super.initState();
@@ -58,31 +68,41 @@ class _CustomerRegisterCovenantsPageState
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (customerRegisterProvider.errorMessage != "" &&
-                customerRegisterProvider.covenants.isEmpty)
-              searchAgain(
-                errorMessage: customerRegisterProvider.errorMessage,
-                request: customerRegisterProvider.loadCovenants,
-              ),
-            if (notInsertedCovenants(customerRegisterProvider).isNotEmpty)
-              LoadedCovenants(
-                notInsertedCovenants:
-                    notInsertedCovenants(customerRegisterProvider),
-              ),
-            if ((customerRegisterProvider.customer?.CustomerCovenants?.length ??
-                    0) >
-                0)
-              const BindedCovenants(),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          flex: 8,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (customerRegisterProvider.errorMessage != "" &&
+                    customerRegisterProvider.covenants.isEmpty)
+                  searchAgain(
+                    errorMessage: customerRegisterProvider.errorMessage,
+                    request: customerRegisterProvider.loadCovenants,
+                  ),
+                if (notInsertedCovenants(customerRegisterProvider).isNotEmpty)
+                  LoadedCovenants(
+                    limitFocusNode: limitFocusNode,
+                    notInsertedCovenants:
+                        notInsertedCovenants(customerRegisterProvider),
+                  ),
+                if ((customerRegisterProvider
+                            .customer?.CustomerCovenants?.length ??
+                        0) >
+                    0)
+                  const BindedCovenants(),
+              ],
+            ),
+          ),
         ),
-      ),
+        if (notInsertedCovenants(customerRegisterProvider).isNotEmpty)
+          LimitAndBindCovenantButton(
+            limitController: limitController,
+            limitFocusNode: limitFocusNode,
+          )
+      ],
     );
   }
 }

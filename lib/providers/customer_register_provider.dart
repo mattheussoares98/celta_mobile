@@ -21,6 +21,9 @@ class CustomerRegisterProvider with ChangeNotifier {
     _selectedSexDropDown.value = newValue.value;
   }
 
+  CustomerRegisterCovenantModel? _selectedCovenant;
+  CustomerRegisterCovenantModel? get selectedCovenant => _selectedCovenant;
+
   List<String> _emails = [];
   List<String> get emails => [..._emails];
   int get emailsCount => _emails.length; //TODO remove this
@@ -321,18 +324,18 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void bindCovenant({
-    required CustomerRegisterCovenantModel covenant,
     required double limit,
   }) {
+    final newCovenant = _selectedCovenant;
     final oldCustomer = _customer;
     _customer = CustomerModel(
       CustomerCovenants: [
         ..._customer?.CustomerCovenants ?? [],
         CustomerCovenantModel(
           covenant: CovenantModel(
-            Code: covenant.Codigo_Convenio?.toInt(),
-            PersonalizedCode: covenant.CodigoLegado_Convenio?.toString(),
-            Name: covenant.Nome_Convenio,
+            Code: newCovenant?.Codigo_Convenio?.toInt(),
+            PersonalizedCode: newCovenant?.CodigoLegado_Convenio?.toString(),
+            Name: newCovenant?.Nome_Convenio,
           ),
           Matriculate: "99",
           LimitOfPurchase: limit,
@@ -355,6 +358,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       password: oldCustomer?.password,
     );
 
+    _selectedCovenant = null;
     notifyListeners();
   }
 
@@ -476,6 +480,15 @@ class CustomerRegisterProvider with ChangeNotifier {
       selected: oldCustomer?.selected == true,
       CustomerCovenants: oldCustomer?.CustomerCovenants,
     );
+    notifyListeners();
+  }
+
+  void updateSelectedCovenant(CustomerRegisterCovenantModel? value) {
+    if (_selectedCovenant == value) {
+      _selectedCovenant = null;
+    } else {
+      _selectedCovenant = value;
+    }
     notifyListeners();
   }
 }

@@ -1,46 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
-class LimitAndBindCovenantButton extends StatefulWidget {
-  final CustomerRegisterCovenantModel covenant;
+class LimitAndBindCovenantButton extends StatelessWidget {
+  final TextEditingController limitController;
+  final FocusNode limitFocusNode;
   const LimitAndBindCovenantButton({
-    required this.covenant,
+    required this.limitController,
+    required this.limitFocusNode,
     super.key,
   });
 
-  @override
-  State<LimitAndBindCovenantButton> createState() =>
-      _LimitAndBindCovenantButtonState();
-}
-
-class _LimitAndBindCovenantButtonState
-    extends State<LimitAndBindCovenantButton> {
-  final limitController = TextEditingController();
-  final key = GlobalKey<FormState>();
-
-  @override
-  dispose() {
-    super.dispose();
-    limitController.dispose();
-  }
+  static final formKey = GlobalKey<FormState>();
 
   void associateCovenant(
     CustomerRegisterProvider customerRegisterProvider,
+    BuildContext context,
   ) {
-    bool? isValid = key.currentState?.validate();
+    bool? isValid = formKey.currentState?.validate();
+    final limit = limitController.text.toDouble();
+
     if (isValid == true) {
-      customerRegisterProvider.bindCovenant(
-        covenant: widget.covenant,
-        limit: limitController.text.toDouble(),
-      );
+      customerRegisterProvider.bindCovenant(limit: limit);
     }
-   
-    key.currentState?.reset();
+
+    limitFocusNode.unfocus();
+    limitController.clear();
     FocusScope.of(context).unfocus();
   }
 
@@ -49,20 +37,25 @@ class _LimitAndBindCovenantButtonState
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
     return Form(
-      key: key,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 5),
+      key: formKey,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(3, 5, 3, 3),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary.withAlpha(50),
+        ),
         child: Row(
           children: [
             Expanded(
               child: TextFormField(
+                focusNode: limitFocusNode,
+                enabled: customerRegisterProvider.selectedCovenant != null,
                 autofocus: false,
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 controller: limitController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onFieldSubmitted: (_) {
-                  associateCovenant(customerRegisterProvider);
+                  associateCovenant(customerRegisterProvider, context);
                 },
                 validator: (value) => FormFieldValidations.number(
                   value,
@@ -75,15 +68,24 @@ class _LimitAndBindCovenantButtonState
                 ),
               ),
             ),
+            const SizedBox(width: 8),
             Flexible(
               child: Center(
-                child: TextButton(
-                  onPressed: () {
-                    associateCovenant(customerRegisterProvider);
-                  },
-                  child: const Text(
-                    "Vincular convênio",
-                    textAlign: TextAlign.center,
+                child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(foregroundColor: Colors.black),
+                  onPressed: customerRegisterProvider.selectedCovenant == null
+                      ? null
+                      : () {
+                          associateCovenant(customerRegisterProvider, context);
+                        },
+                  child: FittedBox(
+                    child: Text(
+                      customerRegisterProvider.selectedCovenant == null
+                          ? "Selecione um convênio"
+                          : "Vincular convênio",
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
