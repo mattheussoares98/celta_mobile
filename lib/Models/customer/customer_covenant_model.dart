@@ -1,5 +1,5 @@
 class CustomerCovenantModel {
-  final _Covenant? covenant;
+  final CovenantModel? covenant;
   final String? Matriculate;
   final double? LimitOfPurchase;
   bool isSelected;
@@ -14,7 +14,7 @@ class CustomerCovenantModel {
   factory CustomerCovenantModel.fromJson(Map json) => CustomerCovenantModel(
         covenant: json["Covenant"] == null
             ? null
-            : _Covenant.fromJson(json["Covenant"]),
+            : CovenantModel.fromJson(json["Covenant"]),
         Matriculate: json["Matriculate"],
         LimitOfPurchase: json["LimitOfPurchase"],
         isSelected: json["isSelected"] ?? false,
@@ -28,18 +28,18 @@ class CustomerCovenantModel {
       };
 }
 
-class _Covenant {
+class CovenantModel {
   final int? Code;
   final String? PersonalizedCode;
   final String? Name;
 
-  _Covenant({
+  CovenantModel({
     required this.Code,
     required this.PersonalizedCode,
     required this.Name,
   });
 
-  factory _Covenant.fromJson(Map json) => _Covenant(
+  factory CovenantModel.fromJson(Map json) => CovenantModel(
         Code: json["Code"],
         PersonalizedCode: json["PersonalizedCode"],
         Name: json["Name"],

@@ -321,15 +321,40 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void bindCovenant({
-    required int index,
+    required CustomerRegisterCovenantModel covenant,
     required double limit,
   }) {
-    final covenant = _covenants[index];
-    _bindedCovenants.add(CustomerRegisterBindedCovenantModel(
-      customerRegisterCovenantModel: covenant,
-      limit: limit,
-    ));
-    _covenants.removeAt(index);
+    final oldCustomer = _customer;
+    _customer = CustomerModel(
+      CustomerCovenants: [
+        ..._customer?.CustomerCovenants ?? [],
+        CustomerCovenantModel(
+          covenant: CovenantModel(
+            Code: covenant.Codigo_Convenio?.toInt(),
+            PersonalizedCode: covenant.CodigoLegado_Convenio?.toString(),
+            Name: covenant.Nome_Convenio,
+          ),
+          Matriculate: "99",
+          LimitOfPurchase: limit,
+          isSelected: true,
+        )
+      ],
+      Name: oldCustomer?.Name,
+      Code: oldCustomer?.Code,
+      PersonalizedCode: oldCustomer?.PersonalizedCode,
+      ReducedName: oldCustomer?.ReducedName,
+      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber,
+      RegistrationNumber: oldCustomer?.RegistrationNumber,
+      DateOfBirth: oldCustomer?.DateOfBirth,
+      SexType: oldCustomer?.SexType,
+      PersonType: oldCustomer?.PersonType,
+      Emails: oldCustomer?.Emails,
+      Telephones: oldCustomer?.Telephones,
+      Addresses: oldCustomer?.Addresses,
+      selected: oldCustomer?.selected == true,
+      password: oldCustomer?.password,
+    );
+
     notifyListeners();
   }
 

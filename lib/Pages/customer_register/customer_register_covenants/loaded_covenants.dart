@@ -47,7 +47,9 @@ class LoadedCovenants extends StatelessWidget {
                           " " +
                           (covenant.NumEndereco_Convenio ?? ""),
                     ),
-                    LimitAndBindCovenantButton(index: index),
+                    LimitAndBindCovenantButton(
+                      covenant: covenant,
+                    ),
                   ],
                 ),
               ),

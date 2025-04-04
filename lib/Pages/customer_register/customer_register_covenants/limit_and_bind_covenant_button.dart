@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
 class LimitAndBindCovenantButton extends StatefulWidget {
-  final int index;
+  final CustomerRegisterCovenantModel covenant;
   const LimitAndBindCovenantButton({
-    required this.index,
+    required this.covenant,
     super.key,
   });
 
@@ -19,29 +20,28 @@ class LimitAndBindCovenantButton extends StatefulWidget {
 
 class _LimitAndBindCovenantButtonState
     extends State<LimitAndBindCovenantButton> {
-  final controller = TextEditingController();
+  final limitController = TextEditingController();
   final key = GlobalKey<FormState>();
 
+  @override
+  dispose() {
+    super.dispose();
+    limitController.dispose();
+  }
+
   void associateCovenant(
-    GlobalKey<FormState> key,
     CustomerRegisterProvider customerRegisterProvider,
   ) {
     bool? isValid = key.currentState?.validate();
     if (isValid == true) {
       customerRegisterProvider.bindCovenant(
-        index: widget.index,
-        limit: controller.text.toDouble(),
+        covenant: widget.covenant,
+        limit: limitController.text.toDouble(),
       );
-      controller.clear();
+      limitController.clear();
       key.currentState?.reset();
       FocusScope.of(context).unfocus();
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
   }
 
   @override
@@ -59,10 +59,10 @@ class _LimitAndBindCovenantButtonState
                 autofocus: false,
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
-                controller: controller,
+                controller: limitController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onFieldSubmitted: (_) {
-                  associateCovenant(key, customerRegisterProvider);
+                  associateCovenant(customerRegisterProvider);
                 },
                 validator: (value) => FormFieldValidations.number(
                   value,
@@ -79,7 +79,7 @@ class _LimitAndBindCovenantButtonState
               child: Center(
                 child: TextButton(
                   onPressed: () {
-                    associateCovenant(key, customerRegisterProvider);
+                    associateCovenant(customerRegisterProvider);
                   },
                   child: const Text(
                     "Vincular convênio",
