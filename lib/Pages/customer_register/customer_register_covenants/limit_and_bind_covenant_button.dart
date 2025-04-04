@@ -38,10 +38,10 @@ class _LimitAndBindCovenantButtonState
         covenant: widget.covenant,
         limit: limitController.text.toDouble(),
       );
-      limitController.clear();
-      key.currentState?.reset();
-      FocusScope.of(context).unfocus();
     }
+   
+    key.currentState?.reset();
+    FocusScope.of(context).unfocus();
   }
 
   @override

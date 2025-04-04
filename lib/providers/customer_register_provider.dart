@@ -359,7 +359,26 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void unbindCovenant(int index) {
-    _bindedCovenants.removeAt(index);
+    final oldCustomer = _customer;
+    oldCustomer?.CustomerCovenants?.removeAt(index);
+
+    _customer = CustomerModel(
+      Name: oldCustomer?.Name,
+      Code: oldCustomer?.Code,
+      PersonalizedCode: oldCustomer?.PersonalizedCode,
+      ReducedName: oldCustomer?.ReducedName,
+      CpfCnpjNumber: oldCustomer?.CpfCnpjNumber,
+      RegistrationNumber: oldCustomer?.RegistrationNumber,
+      DateOfBirth: oldCustomer?.DateOfBirth,
+      SexType: oldCustomer?.SexType,
+      PersonType: oldCustomer?.PersonType,
+      Emails: oldCustomer?.Emails,
+      Telephones: oldCustomer?.Telephones,
+      Addresses: oldCustomer?.Addresses,
+      selected: oldCustomer?.selected == true,
+      password: oldCustomer?.password,
+      CustomerCovenants: oldCustomer?.CustomerCovenants,
+    );
     notifyListeners();
   }
 
