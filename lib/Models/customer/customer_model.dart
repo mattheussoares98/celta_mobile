@@ -3,13 +3,13 @@ import '../models.dart';
 class CustomerModel {
   final int? Code; // 2697,
   final String? PersonalizedCode; // "999",
-  final String Name; // "JavaScript Object Notation - JSON",
+  final String? Name; // "JavaScript Object Notation - JSON",
   final String? ReducedName; // "JSON Obj",
-  final String CpfCnpjNumber; // "23696428078",
+  final String? CpfCnpjNumber; // "23696428078",
   final String? RegistrationNumber; // "258842246",
   final String? DateOfBirth; // "2001-01-01T00:00:00",
-  final String SexType; // "F",
-  final String PersonType; // "F",
+  final String? SexType; // "F",
+  final String? PersonType; // "F",
   final List<String>? Emails;
   final List<CustomerTelephoneModel>? Telephones;
   bool selected;
