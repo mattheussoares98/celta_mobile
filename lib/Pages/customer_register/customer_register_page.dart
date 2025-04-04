@@ -31,11 +31,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _telephoneFormKey = GlobalKey<FormState>();
 
-  bool personIsValid = false;
-  bool adressIsValid = false;
-  bool emailIsValid = false;
-  bool telephoneIsValid = false;
-
   int _selectedIndex = 0;
   ValueNotifier<String?> selectedSexDropDown = ValueNotifier<String?>(null);
 
@@ -49,14 +44,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   ];
 
   void validateFormKeys() {
-    Future.delayed(Duration.zero, () {
-      if (mounted) {}
-    });
-
-    personIsValid = _personFormKey.currentState?.validate() == true;
-    adressIsValid = _adressFormKey.currentState?.validate() == true;
-    emailIsValid = _emailFormKey.currentState?.validate() == true;
-    telephoneIsValid = _telephoneFormKey.currentState?.validate() == true;
+    _personFormKey.currentState?.validate() == true;
+    _adressFormKey.currentState?.validate() == true;
+    _emailFormKey.currentState?.validate() == true;
+    _telephoneFormKey.currentState?.validate() == true;
   }
 
   bool _hasAdressInformed(
@@ -190,7 +181,8 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         adressFormKey: _adressFormKey,
         canInsertMoreThanOneAddress: true,
         addresses: customerRegisterProvider.customer?.Addresses ?? [],
-        addAddress: customerRegisterProvider.addAddress,//TODO remove this parameter
+        addAddress:
+            customerRegisterProvider.addAddress, //TODO remove this parameter
       ),
       CustomerRegisterEmailPage(
         emailFormKey: _emailFormKey,
