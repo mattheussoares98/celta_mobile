@@ -408,4 +408,33 @@ class CustomerRegisterProvider with ChangeNotifier {
     _customer?.Addresses!.removeWhere((e) => e == address);
     notifyListeners();
   }
+
+  void changePersonalData({
+    required String cpfCnpj,
+    required String name,
+    required String sexType,
+    String? reducedName,
+    DateTime? birthDate,
+    String? password,
+  }) {
+    final oldCustomer = _customer;
+    _customer = CustomerModel(
+      CpfCnpjNumber: cpfCnpj,
+      Name: name,
+      SexType: sexType,
+      ReducedName: reducedName,
+      DateOfBirth: birthDate?.toIso8601String(),
+      password: password,
+      Addresses: oldCustomer?.Addresses,
+      Code: oldCustomer?.Code,
+      PersonalizedCode: oldCustomer?.PersonalizedCode,
+      RegistrationNumber: oldCustomer?.RegistrationNumber,
+      PersonType: oldCustomer?.PersonType ?? "F",
+      Emails: oldCustomer?.Emails,
+      Telephones: oldCustomer?.Telephones,
+      selected: oldCustomer?.selected == true,
+      CustomerCovenants: oldCustomer?.CustomerCovenants,
+    );
+    notifyListeners();
+  }
 }

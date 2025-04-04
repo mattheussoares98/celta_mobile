@@ -159,6 +159,28 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     }
   }
 
+  void updateSelectedIndex({
+    required int index,
+    required CustomerRegisterProvider customerRegisterProvider,
+  }) {
+    if (_selectedIndex == 0) {
+      customerRegisterProvider.changePersonalData(
+        cpfCnpj: cpfCnpjController.text,
+        name: nameController.text,
+        sexType: selectedSexDropDown.value ?? "",
+        birthDate: dateOfBirthController.text.isEmpty
+            ? null
+            : DateFormat("dd/MM/yyyy").parse(dateOfBirthController.text),
+        password: passwordController.text,
+        reducedName: reducedNameController.text,
+      );
+    }
+
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -247,10 +269,11 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
               ),
               bottomNavigationBar: CustomerRegisterBottomNavigationItems(
                 hasAddressInformed: _hasAdressInformed(addressProvider),
-                updateSelectedIndex: (int index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
+                updateSelectedIndex: (index) {
+                  updateSelectedIndex(
+                    index: index,
+                    customerRegisterProvider: customerRegisterProvider,
+                  );
                 },
                 isValidFormKey: _isValidFormKey,
                 selectedIndex: _selectedIndex,
