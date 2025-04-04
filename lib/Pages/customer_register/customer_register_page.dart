@@ -134,6 +134,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       await customerRegisterProvider.getCustomer(cpfCnpjController.text);
 
       if (customerRegisterProvider.customer != null) {
+        selectedSexDropDown.value =
+            customerRegisterProvider.customer?.SexType == "M"
+                ? "Masculino"
+                : "Feminino";
         nameController.text = customerRegisterProvider.customer!.Name;
         reducedNameController.text =
             customerRegisterProvider.customer!.ReducedName ?? "";
