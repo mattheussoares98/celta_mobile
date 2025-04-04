@@ -351,7 +351,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       _customer = await SoapHelper.getCustomer(
         searchTypeInt: 1, //cpf/cnpj
         controllerText: cpfCnpjText,
-        enterpriseCode: "1",//TODO test if always work
+        enterpriseCode: "1", //TODO test if always work
       );
     } catch (e) {
       debugPrint(SoapRequestResponse.errorMessage);
@@ -394,6 +394,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       Telephones: oldCustomer?.Telephones,
       selected: oldCustomer?.selected == true,
       CustomerCovenants: oldCustomer?.CustomerCovenants,
+      password: oldCustomer?.password,
     );
     notifyListeners();
     return true;

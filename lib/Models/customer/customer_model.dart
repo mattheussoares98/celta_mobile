@@ -12,9 +12,10 @@ class CustomerModel {
   final String? PersonType; // "F",
   final List<String>? Emails;
   final List<CustomerTelephoneModel>? Telephones;
-  bool selected;
   final List<CustomerCovenantModel>? CustomerCovenants;
   final List<AddressModel>? Addresses;
+  bool selected;
+  final String? password;
 // "Covenants": null
 
   CustomerModel({
@@ -31,6 +32,7 @@ class CustomerModel {
     required this.Telephones,
     required this.Addresses,
     required this.selected,
+    required this.password,
     required this.CustomerCovenants,
   });
 
@@ -60,6 +62,7 @@ class CustomerModel {
                     .map((e) => AddressModel.fromJson(e))
                     .toList(),
         selected: json["selected"] ?? false,
+        password: json["password"],
         CustomerCovenants: json["CustomerCovenants"] == null
             ? null
             : (json["CustomerCovenants"] as List)
@@ -82,6 +85,7 @@ class CustomerModel {
         "Telephones": Telephones?.map((e) => e.toJson()).toList(),
         "Addresses": Addresses?.map((e) => e.toJson()).toList(),
         "selected": selected,
+        "password": password,
         "CustomerCovenants": CustomerCovenants?.map((e) => e.toJson()).toList(),
       };
 }
