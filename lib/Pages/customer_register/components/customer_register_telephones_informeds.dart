@@ -71,7 +71,6 @@ class _CustomerRegisterTelephonesInformedsState
                           ),
                         ),
                         function: () {
-                          //TODO change this function
                           customerRegisterProvider.removeTelephone(index);
                         },
                       );

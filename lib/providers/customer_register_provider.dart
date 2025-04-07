@@ -121,7 +121,8 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void removeTelephone(int index) {
-    _telephones.removeAt(index);
+    _customer?.Telephones?.removeAt(index);
+
     notifyListeners();
   }
 
