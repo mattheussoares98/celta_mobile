@@ -168,7 +168,7 @@ class _AddressComponentState extends State<AddressComponent> {
                   Row(
                     children: [
                       Expanded(
-                        flex: 5,
+                        flex: 6,
                         child: StateDropDown(
                           stateFocusNode: stateFocusNode,
                           areaCodeController: areaCodeController,
@@ -176,6 +176,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         ),
                       ),
                       Expanded(
+                        flex: 4,
                         child: NumberField(
                           zipController: zipController,
                           numberController: numberController,
