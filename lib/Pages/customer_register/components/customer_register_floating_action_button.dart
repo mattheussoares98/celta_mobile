@@ -39,7 +39,7 @@ class _CustomerRegisterFloatingActionButtonState
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
     AddressProvider addressProvider = Provider.of(context);
 
-    return GestureDetector(
+    return InkWell(
       onTap: () async {
         final customer = customerRegisterProvider.customer;
         if (customer?.Name == null ||
