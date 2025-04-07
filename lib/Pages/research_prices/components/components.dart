@@ -1,3 +1,4 @@
+export './change_address.dart';
 export './concurrents_items.dart';
 export './floating_personalized_button.dart';
 export "filter_associateds_products.dart";

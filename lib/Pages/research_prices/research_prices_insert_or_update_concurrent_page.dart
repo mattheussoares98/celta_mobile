@@ -135,56 +135,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                         observationController: observationController,
                       ),
                       const SizedBox(height: 15),
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                researchPricesProvider.selectedConcurrent
-                                                ?.Address!.Zip !=
-                                            "" &&
-                                        researchPricesProvider
-                                                .selectedConcurrent
-                                                ?.Address!
-                                                .Zip !=
-                                            null
-                                    ? "Alterar endereço"
-                                    : "Inserir endereço",
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 126, 126, 126),
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: const BorderSide(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8, bottom: 20),
-                              child: Column(
-                                children: [
-                                  AddressComponent(
-                                    addAddress: (address) {
-                                      return false;
-                                    }, //TODO create function to add new address
-                                    addresses: [], //TODO test this a lot
-                                    canInsertMoreThanOneAddress: false,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      ChangeAddress(),
                       const SizedBox(height: 8),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
