@@ -162,6 +162,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       ),
       const CustomerRegisterCovenantsPage(),
       CustomerRegisterAddPage(
+        selectedSex: selectedSexDropDown.value,
         nameController: nameController,
         cpfCnpjController: cpfCnpjController,
         reducedNameController: reducedNameController,
@@ -170,95 +171,69 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     ];
 
     return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        customerRegisterProvider.clearAllDataInformed(
-          addressProvider: addressProvider,
-          emailController: emailController,
-          telephoneController: telephoneController,
-          dddController: dddController,
-          nameController: nameController,
-          reducedNameController: reducedNameController,
-          cpfCnpjController: cpfCnpjController,
-          dateOfBirthController: dateOfBirthController,
-          passwordConfirmationController: passwordConfirmationController,
-          passwordController: passwordController,
-        );
+      onPopInvokedWithResult: (value, __) {
+        if (value == true) {
+          addressProvider.clearAddresses();
+        }
       },
-      child: PopScope(
-        onPopInvokedWithResult: (value, __) {
-          if (value == true) {
-            addressProvider.clearAddresses();
-          }
-        },
-        child: Stack(
-          children: [
-            Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  appBarTitles[_selectedIndex],
-                ),
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text(
+                appBarTitles[_selectedIndex],
               ),
-              bottomNavigationBar: CustomerRegisterBottomNavigationItems(
-                hasAddressInformed:
-                    (customerRegisterProvider.customer?.Addresses?.length ??
-                            0) >
-                        0,
-                updateSelectedIndex: (index) {
-                  updateSelectedIndex(
-                    index: index,
-                    customerRegisterProvider: customerRegisterProvider,
-                  );
-                },
-                validateFormKeys: validateFormKeys,
-                selectedIndex: _selectedIndex,
-              ),
-              body: _pages.elementAt(_selectedIndex),
-              floatingActionButton: _selectedIndex == 5
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomerRegisterClearAllData(
-                          nameController: nameController,
-                          emailController: emailController,
-                          telephoneController: telephoneController,
-                          dddController: dddController,
-                          reducedNameController: reducedNameController,
-                          cpfCnpjController: cpfCnpjController,
-                          dateOfBirthController: dateOfBirthController,
-                          passwordConfirmationController:
-                              passwordConfirmationController,
-                          passwordController: passwordController,
-                        ),
-                        CustomerRegisterFloatingActionButton(
-                          nameController: nameController,
-                          reducedNameController: reducedNameController,
-                          cpfCnpjController: cpfCnpjController,
-                          dateOfBirthController: dateOfBirthController,
-                          emailController: emailController,
-                          telephoneController: telephoneController,
-                          dddController: dddController,
-                          passwordController: passwordController,
-                          passwordConfirmationController:
-                              passwordConfirmationController,
-                          changeSelectedIndexToAddAddres: () {
-                            setState(() {
-                              _selectedIndex = 1;
-                            });
-                          },
-                          changeFormKeysToInvalid: () {
-                            setState(() {
-                              _selectedIndex = 0;
-                            });
-                          },
-                        )
-                      ],
-                    )
-                  : null,
             ),
-            loadingWidget(addressProvider.isLoadingCep),
-            loadingWidget(customerRegisterProvider.isLoading),
-          ],
-        ),
+            bottomNavigationBar: CustomerRegisterBottomNavigationItems(
+              hasAddressInformed:
+                  (customerRegisterProvider.customer?.Addresses?.length ?? 0) >
+                      0,
+              updateSelectedIndex: (index) {
+                updateSelectedIndex(
+                  index: index,
+                  customerRegisterProvider: customerRegisterProvider,
+                );
+              },
+              validateFormKeys: validateFormKeys,
+              selectedIndex: _selectedIndex,
+            ),
+            body: _pages.elementAt(_selectedIndex),
+            floatingActionButton: _selectedIndex == 5
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomerRegisterClearAllData(
+                        nameController: nameController,
+                        emailController: emailController,
+                        telephoneController: telephoneController,
+                        dddController: dddController,
+                        reducedNameController: reducedNameController,
+                        cpfCnpjController: cpfCnpjController,
+                        dateOfBirthController: dateOfBirthController,
+                        passwordConfirmationController:
+                            passwordConfirmationController,
+                        passwordController: passwordController,
+                      ),
+                      CustomerRegisterFloatingActionButton(
+                        passwordController: passwordController,
+                        changeSelectedIndexToAddAddres: () {
+                          setState(() {
+                            _selectedIndex = 1;
+                          });
+                        },
+                        changeFormKeysToInvalid: () {
+                          setState(() {
+                            _selectedIndex = 0;
+                          });
+                        },
+                      )
+                    ],
+                  )
+                : null,
+          ),
+          loadingWidget(addressProvider.isLoadingCep),
+          loadingWidget(customerRegisterProvider.isLoading),
+        ],
       ),
     );
   }

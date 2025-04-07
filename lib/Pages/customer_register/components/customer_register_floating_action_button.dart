@@ -5,29 +5,14 @@ import '../../../providers/providers.dart';
 import '../../../components/components.dart';
 
 class CustomerRegisterFloatingActionButton extends StatefulWidget {
-  final Function changeSelectedIndexToAddAddres;
-  final Function changeFormKeysToInvalid;
-  final TextEditingController nameController;
-  final TextEditingController reducedNameController;
-  final TextEditingController cpfCnpjController;
-  final TextEditingController dateOfBirthController;
-  final TextEditingController emailController;
-  final TextEditingController telephoneController;
-  final TextEditingController dddController;
+  final void Function() changeSelectedIndexToAddAddres; //TODO test if need this
+  final void Function() changeFormKeysToInvalid; //TODO test if need this
   final TextEditingController passwordController;
-  final TextEditingController passwordConfirmationController;
+
   const CustomerRegisterFloatingActionButton({
     required this.changeSelectedIndexToAddAddres,
     required this.changeFormKeysToInvalid,
-    required this.nameController,
-    required this.reducedNameController,
-    required this.cpfCnpjController,
-    required this.dateOfBirthController,
-    required this.emailController,
-    required this.telephoneController,
-    required this.dddController,
     required this.passwordController,
-    required this.passwordConfirmationController,
     Key? key,
   }) : super(key: key);
 
@@ -64,20 +49,10 @@ class _CustomerRegisterFloatingActionButtonState
                   function: () async {
                     await customerRegisterProvider.insertCustomer(
                       addressProvider: addressProvider,
-                      nameController: widget.nameController,
-                      reducedNameController: widget.reducedNameController,
-                      cpfCnpjController: widget.cpfCnpjController,
-                      dateOfBirthController: widget.dateOfBirthController,
-                      emailController: widget.emailController,
-                      telephoneController: widget.telephoneController,
-                      dddController: widget.dddController,
-                      passwordController: widget.passwordController,
-                      passwordConfirmationController:
-                          widget.passwordConfirmationController,
+                      password: widget.passwordController.text,
                     );
 
-                    if (customerRegisterProvider.errorMessage ==
-                        "") {
+                    if (customerRegisterProvider.errorMessage == "") {
                       setState(() {
                         widget.changeFormKeysToInvalid();
                       });
@@ -89,8 +64,7 @@ class _CustomerRegisterFloatingActionButtonState
                       );
                     } else {
                       ShowSnackbarMessage.show(
-                        message:
-                            customerRegisterProvider.errorMessage,
+                        message: customerRegisterProvider.errorMessage,
                         context: context,
                       );
                     }

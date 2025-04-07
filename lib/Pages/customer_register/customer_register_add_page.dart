@@ -9,11 +9,13 @@ class CustomerRegisterAddPage extends StatelessWidget {
   final TextEditingController cpfCnpjController;
   final TextEditingController reducedNameController;
   final TextEditingController dateOfBirthController;
+  final String? selectedSex;
   const CustomerRegisterAddPage({
     required this.nameController,
     required this.cpfCnpjController,
     required this.reducedNameController,
     required this.dateOfBirthController,
+    required this.selectedSex,
     Key? key,
   }) : super(key: key);
 
@@ -34,16 +36,19 @@ class CustomerRegisterAddPage extends StatelessWidget {
               cpfCnpjController: cpfCnpjController,
               reducedNameController: reducedNameController,
               dateOfBirthController: dateOfBirthController,
+              selectedSex: selectedSex,
             ),
           if (addressProvider.addressesCount > 0)
             CustomerRegisterAddressesInformeds(
               addresses: customerRegisterProvider.customer?.Addresses ?? [],
             ),
-          if (customerRegisterProvider.emailsCount > 0)
+          if ((customerRegisterProvider.customer?.Emails?.length ?? 0) > 0)
             const CustomerRegisterEmailsInformeds(),
-          if (customerRegisterProvider.telephonesCount > 0)
+          if ((customerRegisterProvider.customer?.Telephones?.length ?? 0) > 0)
             const CustomerRegisterTelephonesInformeds(),
-          if (customerRegisterProvider.bindedCovenants.isNotEmpty)
+          if ((customerRegisterProvider.customer?.CustomerCovenants?.length ??
+                  0) >
+              0)
             const BindedCovenants(),
           const SizedBox(height: 100),
         ],

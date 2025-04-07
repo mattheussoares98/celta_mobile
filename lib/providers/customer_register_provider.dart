@@ -13,33 +13,10 @@ class CustomerRegisterProvider with ChangeNotifier {
   CustomerModel? _customer;
   CustomerModel? get customer => _customer;
 
-  final ValueNotifier<String?> _selectedSexDropDown =
-      ValueNotifier<String?>(null);
-
-  ValueNotifier<String?> get selectedSexDropDown => _selectedSexDropDown;
-  set selectedSexDropDown(ValueNotifier<String?> newValue) {
-    _selectedSexDropDown.value = newValue.value;
-  }
-
   CustomerRegisterCovenantModel? _selectedCovenant;
   CustomerRegisterCovenantModel? get selectedCovenant => _selectedCovenant;
-
-  List<String> _emails = [];
-  List<String> get emails => [..._emails];
-  int get emailsCount => _emails.length; //TODO remove this
-
-  List<Map<String, String>> _telephones = []; //TODO remove this
-  List<Map<String, String>> get telephones => [..._telephones];
-  int get telephonesCount => _telephones.length;
-
   List<CustomerRegisterCovenantModel> _covenants = []; //TODO remove this
   List<CustomerRegisterCovenantModel> get covenants => [..._covenants];
-
-  List<CustomerRegisterBindedCovenantModel> _bindedCovenants =
-      []; //TODO remove this
-  List<CustomerRegisterBindedCovenantModel> get bindedCovenants =>
-      [..._bindedCovenants];
-
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
@@ -55,15 +32,7 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void addEmail(TextEditingController emailController) {
-    _errorMessage = ""; //TODO change this function
-    if (!_emails.contains(emailController.text)) {
-      _emails.add(emailController.text);
-
-      emailController.text = "";
-      notifyListeners();
-    } else {
-      _errorMessage = "Esse e-mail já existe na lista de e-mails!";
-    }
+    //TODO implementar email
     notifyListeners();
   }
 
@@ -116,7 +85,7 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void removeEmail(int index) {
-    _emails.removeAt(index);
+    //TODO implement this
     notifyListeners();
   }
 
@@ -126,92 +95,38 @@ class CustomerRegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearAllDataInformed({
-    required AddressProvider addressProvider,
-    required TextEditingController emailController,
-    required TextEditingController telephoneController,
-    required TextEditingController dddController,
-    required TextEditingController nameController,
-    required TextEditingController reducedNameController,
-    required TextEditingController cpfCnpjController,
-    required TextEditingController dateOfBirthController,
-    required TextEditingController passwordController,
-    required TextEditingController passwordConfirmationController,
-  }) {
-    nameController.clear();
-    reducedNameController.clear();
-    cpfCnpjController.clear();
-    dateOfBirthController.clear();
-    emailController.clear();
-    telephoneController.clear();
-    dddController.clear();
-    addressProvider.clearAddresses();
-    _emails.clear();
-    _telephones.clear();
-    passwordController.clear();
-    passwordConfirmationController.clear();
-    _selectedSexDropDown.value = null;
-    _covenants.clear();
-    _bindedCovenants.clear();
-
-    notifyListeners();
-  }
-
-  String _formatDate(TextEditingController dateOfBirthController) {
-    DateFormat inputFormat = DateFormat("dd/MM/yyyy");
-    DateFormat outputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.");
-
-    DateTime date = inputFormat.parse(dateOfBirthController.text);
-    String formatedDate = outputFormat.format(date);
-    return formatedDate;
-  }
-
-  // void clearSelectedSexDropDown() {
-  //   selectedSexDropDown.value = null;
-  // }
-
-  void clearPersonalDataControllers() {
-    //TODO remove this function
-    selectedSexDropDown.value = null;
-    notifyListeners();
-  }
-
   Map<String, dynamic> _getJsonInsertCustomer({
     required AddressProvider addressProvider,
-    required TextEditingController nameController,
-    required TextEditingController reducedNameController,
-    required TextEditingController cpfCnpjController,
-    required TextEditingController dateOfBirthController,
-    required TextEditingController passwordController,
+    required String? password,
   }) {
     Map<String, dynamic> _jsonInsertCustomer = {
-      "Name": nameController.text,
-      "ReducedName": reducedNameController.text,
-      "CpfCnpjNumber": cpfCnpjController.text,
-      "Password": passwordController.text,
-      "PersonType": cpfCnpjController.text.length == 11 ? "F" : "J",
+      "Name": customer?.Name,
+      "ReducedName": customer?.ReducedName,
+      "CpfCnpjNumber": customer?.CpfCnpjNumber,
+      "Password": password,
+      "PersonType": customer?.CpfCnpjNumber?.length == 11 ? "F" : "J",
       "RegistrationNumber": "",
-      "SexType": selectedSexDropDown.value != null
-          ? selectedSexDropDown.value!.substring(0, 1).toUpperCase()
-          : "M",
-      "Emails": _emails,
-      "Telephones": _telephones,
+      "SexType": customer?.SexType, //TODO if send correct value
+      "Emails": customer?.Emails,
+      "Telephones": customer?.Telephones,
       "Addresses": addressProvider.addresses.map((e) => e.toJson()).toList(),
       "Covenants": null,
     };
-    if (_bindedCovenants.isNotEmpty) {
-      _jsonInsertCustomer["CustomerCovenants"] = _bindedCovenants
+    if ((customer?.CustomerCovenants?.length ?? 0) > 0) {
+      _jsonInsertCustomer["CustomerCovenants"] = customer?.CustomerCovenants!
           .map(
             (e) => CustomerRegisterCustomerCovenantModel(
-              Code: e.customerRegisterCovenantModel.Codigo_Convenio!.toInt(),
+              Code: e.covenant!.Code!.toInt(),
               Matriculate: "99",
-              LimitOfPurchase: e.limit,
+              LimitOfPurchase: e.LimitOfPurchase!,
             ).toJson(),
           )
           .toList();
     }
-    if (dateOfBirthController.text != "") {
-      _jsonInsertCustomer["DateOfBirth"] = _formatDate(dateOfBirthController);
+    if (customer?.DateOfBirth != null) {
+      _jsonInsertCustomer["DateOfBirth"] = DateFormat("yyyy-MM-dd'T'HH:mm:ss.")
+          .parse(customer!.DateOfBirth!)
+          .toString(); //TODO test
     }
 
     return _jsonInsertCustomer;
@@ -223,15 +138,7 @@ class CustomerRegisterProvider with ChangeNotifier {
 
   Future<void> insertCustomer({
     required AddressProvider addressProvider,
-    required TextEditingController nameController,
-    required TextEditingController reducedNameController,
-    required TextEditingController cpfCnpjController,
-    required TextEditingController dateOfBirthController,
-    required TextEditingController emailController,
-    required TextEditingController telephoneController,
-    required TextEditingController dddController,
-    required TextEditingController passwordController,
-    required TextEditingController passwordConfirmationController,
+    required String? password,
   }) async {
     _isLoading = true;
     _errorMessage = "";
@@ -240,11 +147,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     try {
       final jsonInsertCustomer = _getJsonInsertCustomer(
         addressProvider: addressProvider,
-        nameController: nameController,
-        reducedNameController: reducedNameController,
-        cpfCnpjController: cpfCnpjController,
-        dateOfBirthController: dateOfBirthController,
-        passwordController: passwordController,
+        password: password,
       );
 
       await SoapRequest.soapPost(
@@ -260,21 +163,7 @@ class CustomerRegisterProvider with ChangeNotifier {
 
       _errorMessage = SoapRequestResponse.errorMessage;
 
-      if (_errorMessage == "") {
-        clearAllDataInformed(
-          addressProvider: addressProvider,
-          emailController: emailController,
-          telephoneController: telephoneController,
-          dddController: dddController,
-          nameController: nameController,
-          reducedNameController: reducedNameController,
-          cpfCnpjController: cpfCnpjController,
-          dateOfBirthController: dateOfBirthController,
-          passwordController: passwordController,
-          passwordConfirmationController: passwordConfirmationController,
-        );
-        FirebaseHelper.addSoapCallInFirebase(FirebaseCallEnum.customerRegister);
-      }
+      FirebaseHelper.addSoapCallInFirebase(FirebaseCallEnum.customerRegister);
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');
       _errorMessage = DefaultErrorMessage.ERROR;

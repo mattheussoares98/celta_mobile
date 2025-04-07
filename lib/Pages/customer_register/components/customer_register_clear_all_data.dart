@@ -30,7 +30,6 @@ class CustomerRegisterClearAllData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-    AddressProvider addressProvider = Provider.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(left: 30.0),
@@ -50,19 +49,15 @@ class CustomerRegisterClearAllData extends StatelessWidget {
                         ),
                       ),
                       function: () {
-                        customerRegisterProvider.clearAllDataInformed(
-                          addressProvider: addressProvider,
-                          emailController: emailController,
-                          telephoneController: telephoneController,
-                          dddController: dddController,
-                          reducedNameController: reducedNameController,
-                          cpfCnpjController: cpfCnpjController,
-                          dateOfBirthController: dateOfBirthController,
-                          nameController: nameController,
-                          passwordController: passwordController,
-                          passwordConfirmationController:
-                              passwordConfirmationController,
-                        );
+                        nameController.clear();
+                        emailController.clear();
+                        telephoneController.clear();
+                        dddController.clear();
+                        reducedNameController.clear();
+                        cpfCnpjController.clear();
+                        dateOfBirthController.clear();
+                        passwordController.clear();
+                        passwordConfirmationController.clear();
                       },
                     );
                   },

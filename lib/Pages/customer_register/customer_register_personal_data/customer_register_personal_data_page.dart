@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-
-import '../../../providers/providers.dart';
 import 'customer_register_personal_data.dart';
 
 class CustomerRegisterPersonalDataPage extends StatefulWidget {
@@ -63,8 +60,6 @@ class _CustomerRegisterPersonalDataPageState
 
   @override
   Widget build(BuildContext context) {
-    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
-
     return SingleChildScrollView(
       primary: false,
       child: Form(
@@ -131,9 +126,6 @@ class _CustomerRegisterPersonalDataPageState
                             widget.dateOfBirthController.clear();
                             widget.passwordController.clear();
                             widget.passwordConfirmationController.clear();
-
-                            customerRegisterProvider
-                                .clearPersonalDataControllers();
                           }
                         : null,
                   ),

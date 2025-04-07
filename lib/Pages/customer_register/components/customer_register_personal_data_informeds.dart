@@ -9,12 +9,14 @@ class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
   final TextEditingController cpfCnpjController;
   final TextEditingController reducedNameController;
   final TextEditingController dateOfBirthController;
+  final String? selectedSex;
   const CustomerRegisterPersonalDataInformeds({
     required this.customerRegisterProvider,
     required this.nameController,
     required this.cpfCnpjController,
     required this.reducedNameController,
     required this.dateOfBirthController,
+    required this.selectedSex,
     Key? key,
   }) : super(key: key);
 
@@ -55,11 +57,10 @@ class CustomerRegisterPersonalDataInformeds extends StatelessWidget {
                     title: "Data de nascimento",
                     subtitle: dateOfBirthController.text,
                   ),
-                if (customerRegisterProvider.selectedSexDropDown.value != null)
+                if (selectedSex != null)
                   TitleAndSubtitle.titleAndSubtitle(
                     title: "Sexo",
-                    subtitle:
-                        customerRegisterProvider.selectedSexDropDown.value,
+                    subtitle: selectedSex,
                   ),
               ],
             ),
