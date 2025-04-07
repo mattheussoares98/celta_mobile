@@ -28,6 +28,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
   int _selectedIndex = 0;
   ValueNotifier<String?> selectedSexDropDown = ValueNotifier<String?>(null);
+  final personFormKey = GlobalKey<FormState>();
 
   static const List appBarTitles = [
     "Dados pessoais",
@@ -96,6 +97,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       final cpfCnpj = cpfCnpjController.text;
       final name = nameController.text;
 
+      if (personFormKey.currentState?.validate() != true) {
+        return;
+      }
+
       customerRegisterProvider.changePersonalData(
         cpfCnpj: cpfCnpj.isNotEmpty ? cpfCnpj : null,
         name: name.isNotEmpty ? name : null,
@@ -120,6 +125,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
     List<Widget> _pages = <Widget>[
       CustomerRegisterPersonalDataPage(
+        personFormKey: personFormKey,
         changeSexDropDown: (value) {
           selectedSexDropDown.value = value;
         },

@@ -14,6 +14,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
   final FocusNode cpfCnpjFocusNode;
   final ValueNotifier<String?> selectedSexDropDown;
   final void Function(String?) changeSexDropDown;
+  final GlobalKey<FormState> personFormKey;
   const CustomerRegisterPersonalDataPage({
     required this.cpfCnpjController,
     required this.nameController,
@@ -26,6 +27,7 @@ class CustomerRegisterPersonalDataPage extends StatefulWidget {
     required this.cpfCnpjFocusNode,
     required this.selectedSexDropDown,
     required this.changeSexDropDown,
+    required this.personFormKey,
     Key? key,
   }) : super(key: key);
 
@@ -43,8 +45,6 @@ class _CustomerRegisterPersonalDataPageState
   final FocusNode passwordFocusNode = FocusNode();
   final FocusNode passwordConfirmationFocusNode = FocusNode();
 
-  final personFormKey = GlobalKey<FormState>();
-
   @override
   void dispose() {
     super.dispose();
@@ -61,7 +61,7 @@ class _CustomerRegisterPersonalDataPageState
     return SingleChildScrollView(
       primary: false,
       child: Form(
-        key: personFormKey,
+        key: widget.personFormKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -79,21 +79,24 @@ class _CustomerRegisterPersonalDataPageState
                     cpfCnpjIsValid: widget.cpfCnpjIsValid,
                     nameFocusNode: nameFocusNode,
                     reducedNameFocusNode: reducedNameFocusNode,
-                    validateFormKey: personFormKey.currentState?.validate,
+                    validateFormKey:
+                        widget.personFormKey.currentState?.validate,
                     nameController: widget.nameController,
                   ),
                   ReducedNameField(
                     reducedNameFocusNode: reducedNameFocusNode,
                     cpfCnpjIsValid: widget.cpfCnpjIsValid,
                     dateOfBirthFocusNode: dateOfBirthFocusNode,
-                    validateFormKey: personFormKey.currentState?.validate,
+                    validateFormKey:
+                        widget.personFormKey.currentState?.validate,
                     reducedNameController: widget.reducedNameController,
                   ),
                   BirthField(
                     cpfCnpjIsValid: widget.cpfCnpjIsValid,
                     dateOfBirthFocusNode: dateOfBirthFocusNode,
                     passwordFocusNode: passwordFocusNode,
-                    validateFormKey: personFormKey.currentState?.validate,
+                    validateFormKey:
+                        widget.personFormKey.currentState?.validate,
                     dateOfBirthController: widget.dateOfBirthController,
                   ),
                   Password(
@@ -101,7 +104,8 @@ class _CustomerRegisterPersonalDataPageState
                     passwordFocusNode: passwordFocusNode,
                     passwordConfirmationFocusNode:
                         passwordConfirmationFocusNode,
-                    validateFormKey: personFormKey.currentState?.validate,
+                    validateFormKey:
+                        widget.personFormKey.currentState?.validate,
                     passwordConfirmationController:
                         widget.passwordConfirmationController,
                     passwordController: widget.passwordController,
@@ -112,7 +116,8 @@ class _CustomerRegisterPersonalDataPageState
                       cpfCnpjIsValid: widget.cpfCnpjIsValid,
                       selectedSexDropDown: widget.selectedSexDropDown,
                       sexTypeFocusNode: sexTypeFocusNode,
-                      validateFormKey: personFormKey.currentState?.validate,
+                      validateFormKey:
+                          widget.personFormKey.currentState?.validate,
                       changeSexDropDown: widget.changeSexDropDown,
                     ),
                   ClearData(
