@@ -1,5 +1,6 @@
 export './change_address.dart';
 export './concurrents_items.dart';
+export './confirm_or_update_button.dart';
 export './floating_personalized_button.dart';
 export "filter_associateds_products.dart";
 export "get_all_products.dart";

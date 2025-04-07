@@ -17,7 +17,7 @@ class ResearchPricesInsertOrUpdateConcurrentPage extends StatefulWidget {
 class _ResearchPricesInsertOrUpdateConcurrentPageState
     extends State<ResearchPricesInsertOrUpdateConcurrentPage> {
   FocusNode _nameFocusNode = FocusNode();
-  TextEditingController _nameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   FocusNode observationFocusNode = FocusNode();
   TextEditingController observationController = TextEditingController();
@@ -25,7 +25,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   void _updateControllers(ResearchPricesConcurrentsModel? concurrent) {
     if (concurrent != null) {
       observationController.text = concurrent.Observation ?? "";
-      _nameController.text = concurrent.Name ?? "";
+      nameController.text = concurrent.Name ?? "";
     }
   }
 
@@ -45,52 +45,11 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future<void> _addOrUpdateConcurrent({
-    required ResearchPricesProvider researchPricesProvider,
-    required AddressProvider addressProvider,
-  }) async {
-    bool? isValid = _formKey.currentState?.validate();
-    if (isValid == false) return;
-
-    ShowAlertDialog.show(
-        context: context,
-        title: researchPricesProvider.selectedConcurrent == null
-            ? "Cadastrar concorrente"
-            : "Alterar concorrente",
-        content: SingleChildScrollView(
-          child: Text(
-            researchPricesProvider.selectedConcurrent == null
-                ? "Deseja realmente cadastrar o concorrente com os dados informados?"
-                : "Deseja realmente alterar o concorrente com os dados informados?",
-            textAlign: TextAlign.center,
-          ),
-        ),
-        function: () async {
-          await researchPricesProvider.addOrUpdateConcurrent(
-            context: context,
-            addressProvider: addressProvider,
-            concurrentName: _nameController.text,
-            observation: observationController.text,
-          );
-
-          if (researchPricesProvider.errorAddOrUpdateConcurrents == "") {
-            _nameController.clear();
-            observationController.clear();
-            Navigator.of(context).pop();
-          } else {
-            ShowSnackbarMessage.show(
-              message: researchPricesProvider.errorAddOrUpdateConcurrents,
-              context: context,
-            );
-          }
-        });
-  }
-
   @override
   void dispose() {
     super.dispose();
     _nameFocusNode.dispose();
-    _nameController.dispose();
+    nameController.dispose();
     observationFocusNode.dispose();
     observationController.dispose();
   }
@@ -98,7 +57,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
-    AddressProvider addressProvider = Provider.of(context, listen: true);
 
     return Stack(
       children: [
@@ -127,7 +85,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                       NameField(
                         nameFocusNode: _nameFocusNode,
                         observationFocusNode: observationFocusNode,
-                        nameController: _nameController,
+                        nameController: nameController,
                       ),
                       const SizedBox(height: 8),
                       ObservationField(
@@ -137,25 +95,10 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                       const SizedBox(height: 15),
                       ChangeAddress(),
                       const SizedBox(height: 8),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(200, 40),
-                        ),
-                        onPressed: researchPricesProvider
-                                .isLoadingAddOrUpdateConcurrents
-                            ? null
-                            : () async {
-                                await _addOrUpdateConcurrent(
-                                  researchPricesProvider:
-                                      researchPricesProvider,
-                                  addressProvider: addressProvider,
-                                );
-                              },
-                        child: Text(
-                          researchPricesProvider.selectedConcurrent == null
-                              ? "CADASTRAR"
-                              : "ALTERAR",
-                        ),
+                      ConfirmOrUpdateButton(
+                        formKey: _formKey,
+                        nameController: nameController,
+                        observationController: observationController,
                       ),
                     ],
                   ),
