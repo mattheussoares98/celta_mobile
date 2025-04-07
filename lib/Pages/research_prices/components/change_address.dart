@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
 class ChangeAddress extends StatelessWidget {
-  const ChangeAddress({super.key});
+  final AddressModel? newAddress;
+  const ChangeAddress({
+    super.key,
+    required this.newAddress,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +22,8 @@ class ChangeAddress extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              researchPricesProvider.selectedConcurrent?.Address!.Zip != "" &&
-                      researchPricesProvider.selectedConcurrent?.Address!.Zip !=
+              researchPricesProvider.selectedConcurrent?.Address?.Zip != "" &&
+                      researchPricesProvider.selectedConcurrent?.Address?.Zip !=
                           null
                   ? "Alterar endereço"
                   : "Inserir endereço",
@@ -44,9 +49,21 @@ class ChangeAddress extends StatelessWidget {
               children: [
                 AddressComponent(
                   addAddress: (address) {
-                    return false;
-                  }, //TODO create function to add new address
-                  addresses: [], //TODO test this a lot
+                    final selectedConcurrent =
+                        researchPricesProvider.selectedConcurrent;
+                    researchPricesProvider.changeSelectedConcurrent(
+                      ResearchPricesConcurrentsModel(
+                        ConcurrentCode: selectedConcurrent?.ConcurrentCode,
+                        Name: selectedConcurrent?.Name,
+                        Observation: selectedConcurrent?.Observation,
+                        Address: newAddress,
+                      ),
+                    );
+                    return true;
+                  },
+                  addresses: [
+                    if (newAddress != null) newAddress!,
+                  ],
                   canInsertMoreThanOneAddress: false,
                 ),
               ],

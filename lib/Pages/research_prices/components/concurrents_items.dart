@@ -32,7 +32,6 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider =
         Provider.of(context, listen: true);
-    AddressProvider addressProvider = Provider.of(context, listen: true);
 
     Map? arguments = ModalRoute.of(context)!.settings.arguments as Map?;
 
@@ -47,10 +46,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
             return Container(
               child: GestureDetector(
                 onTap: () async {
-                  researchPricesProvider.updateSelectedConcurrent(
-                    concurrent: concurrent,
-                    addressProvider: addressProvider,
-                  );
+                  researchPricesProvider.changeSelectedConcurrent(concurrent);
                   await researchPricesProvider
                       .associateConcurrentToResearchPrice(
                     context: context,
@@ -123,12 +119,11 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                         ),
                         TextButton.icon(
                           onPressed: () {
-                            researchPricesProvider.updateSelectedConcurrent(
-                              concurrent: concurrent,
-                              addressProvider: addressProvider,
-                            );
+                            researchPricesProvider
+                                .changeSelectedConcurrent(concurrent);
                             Navigator.of(context).pushNamed(
-                              APPROUTES.RESERACH_PRICES_INSERT_UPDATE_CONCORRENT,
+                              APPROUTES
+                                  .RESERACH_PRICES_INSERT_UPDATE_CONCORRENT,
                               arguments: {
                                 "enterpriseCode": arguments?["enterpriseCode"]
                               },

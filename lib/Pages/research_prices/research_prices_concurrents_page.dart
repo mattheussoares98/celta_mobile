@@ -52,7 +52,7 @@ class _ResearchPricesConcurrentsPageState
       canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents &&
           !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
       onPopInvokedWithResult: (_, __) async {
-        researchPricesProvider.updateSelectedConcurrent(concurrent: null);
+        researchPricesProvider.changeSelectedConcurrent(null);
         researchPricesProvider.clearConcurrents();
       },
       child: Stack(
@@ -77,8 +77,7 @@ class _ResearchPricesConcurrentsPageState
                           ConfigurationType.personalizedCode,
                         ],
                         autofocus: false,
-                        searchProductController:
-                            searchConcurrentControllerText,
+                        searchProductController: searchConcurrentControllerText,
                         onPressSearch: () async {
                           await _getConcurrents(
                             researchPricesProvider: researchPricesProvider,
@@ -136,15 +135,12 @@ class _ResearchPricesConcurrentsPageState
             floatingActionButton: floatingPersonalizedButton(
               context: context,
               researchPricesProvider: researchPricesProvider,
-              nextRoute:
-                  APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
+              nextRoute: APPROUTES.RESEARCH_PRICES_INSERT_UPDATE_RESEARCH_PRICE,
               isLoading: researchPricesProvider.isLoadingGetConcurrents ||
                   researchPricesProvider.isLoadingAddOrUpdateOfResearch,
               messageButton: "criar\nconcorrente".toUpperCase(),
               onTap: () {
-                researchPricesProvider.updateSelectedConcurrent(
-                  concurrent: null,
-                );
+                researchPricesProvider.changeSelectedConcurrent(null);
                 Navigator.of(context).pushNamed(
                     APPROUTES.RESERACH_PRICES_INSERT_UPDATE_CONCORRENT);
               },

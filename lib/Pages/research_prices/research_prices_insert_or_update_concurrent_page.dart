@@ -22,22 +22,30 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   FocusNode observationFocusNode = FocusNode();
   TextEditingController observationController = TextEditingController();
 
-  bool _isLoaded = false;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   AddressModel? newAddress;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
-    if (!_isLoaded) {
-      ResearchPricesProvider researchPricesProvider = Provider.of(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        ResearchPricesProvider researchPricesProvider =
+            Provider.of(context, listen: false);
 
-      _isLoaded = true;
+        final concurrent = researchPricesProvider.selectedConcurrent;
 
-      _updateControllers(researchPricesProvider.selectedConcurrent);
-    }
+        if (concurrent != null) {
+          setState(() {
+            observationController.text = concurrent.Observation ?? "";
+            nameController.text = concurrent.Name ?? "";
+            newAddress = concurrent.Address;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -49,13 +57,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     observationController.dispose();
   }
 
-  void _updateControllers(ResearchPricesConcurrentsModel? concurrent) {
-    if (concurrent != null) {
-      observationController.text = concurrent.Observation ?? "";
-      nameController.text = concurrent.Name ?? "";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
@@ -64,7 +65,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
       children: [
         PopScope(
           onPopInvokedWithResult: (_, __) {
-            researchPricesProvider.updateSelectedConcurrent(concurrent: null);
+            researchPricesProvider.changeSelectedConcurrent(null);
           },
           child: Scaffold(
             appBar: AppBar(
@@ -95,7 +96,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                         observationController: observationController,
                       ),
                       const SizedBox(height: 15),
-                      ChangeAddress(),
+                      ChangeAddress(newAddress: newAddress),
                       const SizedBox(height: 8),
                       ConfirmOrUpdateButton(
                         formKey: _formKey,

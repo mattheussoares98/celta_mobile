@@ -72,13 +72,8 @@ class ResearchPricesProvider with ChangeNotifier {
 
   ResearchPricesConcurrentsModel? _selectedConcurrent;
   ResearchPricesConcurrentsModel? get selectedConcurrent => _selectedConcurrent;
-  updateSelectedConcurrent({
-    required ResearchPricesConcurrentsModel? concurrent,
-    AddressProvider? addressProvider,
-  }) {
+  void changeSelectedConcurrent(ResearchPricesConcurrentsModel? concurrent) {
     _selectedConcurrent = concurrent;
-
-    _addConcurrentAddressInAddressProvider(addressProvider);
   }
 
   int selectedIndexAssociatedProducts = -1;
@@ -97,7 +92,7 @@ class ResearchPricesProvider with ChangeNotifier {
     _errorAddOrUpdateConcurrents = "";
     _errorGetConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = false;
-    updateSelectedConcurrent(concurrent: null);
+    changeSelectedConcurrent(null);
   }
 
   bool _concurrentAlreadyIsAssociated() {
@@ -277,32 +272,6 @@ class ResearchPricesProvider with ChangeNotifier {
 
     _isLoadingAddOrUpdateOfResearch = false;
     notifyListeners();
-  }
-
-  void _addConcurrentAddressInAddressProvider(
-    AddressProvider? addressProvider,
-  ) {
-    if (_selectedConcurrent?.Address == null) return;
-    if (_selectedConcurrent?.Address?.Zip?.isEmpty == true) return;
-    //todo endereço precisa de um CEP. Se estiver vazio, não tem endereço no
-    //concorrente
-
-    final oldConcurrent = _selectedConcurrent;
-    _selectedConcurrent = ResearchPricesConcurrentsModel(
-      ConcurrentCode: oldConcurrent?.ConcurrentCode,
-      Name: oldConcurrent?.Name,
-      Observation: oldConcurrent?.Observation,
-      Address: AddressModel(
-        Zip: oldConcurrent!.Address?.Zip,
-        Address: oldConcurrent.Address?.Address,
-        Number: oldConcurrent.Address?.Number,
-        District: oldConcurrent.Address?.District,
-        City: oldConcurrent.Address?.City,
-        State: oldConcurrent.Address?.State,
-        Complement: oldConcurrent.Address?.Complement,
-        Reference: oldConcurrent.Address?.Reference,
-      ),
-    );
   }
 
   void _updateLocalSelectedConcurrent({
