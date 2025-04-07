@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
@@ -8,16 +9,17 @@ class ConfirmOrUpdateButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
   final TextEditingController observationController;
+  final AddressModel? address;
   const ConfirmOrUpdateButton({
     super.key,
     required this.formKey,
     required this.nameController,
     required this.observationController,
+    required this.address,
   });
 
   Future<void> _addOrUpdateConcurrent({
     required ResearchPricesProvider researchPricesProvider,
-    required AddressProvider addressProvider,
     required BuildContext context,
   }) async {
     bool? isValid = formKey.currentState?.validate();
@@ -39,7 +41,7 @@ class ConfirmOrUpdateButton extends StatelessWidget {
         function: () async {
           await researchPricesProvider.addOrUpdateConcurrent(
             context: context,
-            addressProvider: addressProvider,
+            address: address,
             concurrentName: nameController.text,
             observation: observationController.text,
           );
@@ -60,7 +62,6 @@ class ConfirmOrUpdateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
-    AddressProvider addressProvider = Provider.of(context);
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -71,7 +72,6 @@ class ConfirmOrUpdateButton extends StatelessWidget {
           : () async {
               await _addOrUpdateConcurrent(
                 researchPricesProvider: researchPricesProvider,
-                addressProvider: addressProvider,
                 context: context,
               );
             },

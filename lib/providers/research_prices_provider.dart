@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../Models/models.dart';
 import '../api/api.dart';
 import '../../components/components.dart';
-import '../../Models/research_prices/research_prices.dart';
 import '../../providers/providers.dart';
 import '../utils/utils.dart';
 
@@ -287,44 +287,46 @@ class ResearchPricesProvider with ChangeNotifier {
     //todo endereço precisa de um CEP. Se estiver vazio, não tem endereço no
     //concorrente
 
-    // final addressModel = AddressModel(
-    //   Zip: _selectedConcurrent!.Address?.Zip,
-    //   Address: _selectedConcurrent!.Address?.Address,
-    //   Number: _selectedConcurrent!.Address?.Number,
-    //   District: _selectedConcurrent!.Address?.District,
-    //   City: _selectedConcurrent!.Address?.City,
-    //   State: _selectedConcurrent!.Address?.State,
-    //   Complement: _selectedConcurrent!.Address?.Complement,
-    //   Reference: _selectedConcurrent!.Address?.Reference,
-    // );
-
-    //TODO add address
+    final oldConcurrent = _selectedConcurrent;
+    _selectedConcurrent = ResearchPricesConcurrentsModel(
+      ConcurrentCode: oldConcurrent?.ConcurrentCode,
+      Name: oldConcurrent?.Name,
+      Observation: oldConcurrent?.Observation,
+      Address: AddressModel(
+        Zip: oldConcurrent!.Address?.Zip,
+        Address: oldConcurrent.Address?.Address,
+        Number: oldConcurrent.Address?.Number,
+        District: oldConcurrent.Address?.District,
+        City: oldConcurrent.Address?.City,
+        State: oldConcurrent.Address?.State,
+        Complement: oldConcurrent.Address?.Complement,
+        Reference: oldConcurrent.Address?.Reference,
+      ),
+    );
   }
 
   void _updateLocalSelectedConcurrent({
     String? name,
     String? observation,
-    required AddressProvider addressProvider,
+    AddressModel? address,
   }) {
     int index = _concurrents.indexOf(_selectedConcurrent!);
     if (index == -1) return;
 
-    _concurrents[index].Name = name;
-    _concurrents[index].Observation = observation;
-
-    //TODO test this if and else
-    // if (addressProvider.addresses.isEmpty) {
-    //   _concurrents[index].Address = null;
-    // } else {
-    //   _concurrents[index].Address = addressProvider.addresses[0];
-    // }
+    final oldConcurrent = _concurrents[index];
+    _concurrents[index] = ResearchPricesConcurrentsModel(
+      Name: name,
+      Observation: observation,
+      Address: address,
+      ConcurrentCode: oldConcurrent.ConcurrentCode,
+    );
   }
 
   Future<void> addOrUpdateConcurrent({
     required BuildContext context,
-    required AddressProvider addressProvider,
     required String concurrentName,
-    String? observation,
+    required String? observation,
+    required AddressModel? address,
   }) async {
     _errorAddOrUpdateConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = true;
@@ -338,10 +340,9 @@ class ResearchPricesProvider with ChangeNotifier {
       "Observation": observation,
     };
 
-    //TODO test this below
-    // if (addressProvider.addresses.isNotEmpty) {
-    //   jsonBody["Address"] = addressProvider.addresses[0].toJson();
-    // }
+    if (_selectedConcurrent?.Address != null) {
+      jsonBody["Address"] = _selectedConcurrent?.Address?.toJson();
+    }
 
     try {
       await SoapRequest.soapPost(
@@ -355,7 +356,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
       if (_errorAddOrUpdateConcurrents == "" && _selectedConcurrent != null) {
         _updateLocalSelectedConcurrent(
-          addressProvider: addressProvider,
+          address: address,
           name: concurrentName,
           observation: observation,
         );

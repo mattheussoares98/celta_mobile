@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/models.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
-import '../../Models/research_prices/research_prices.dart';
 import 'components/components.dart';
 
 class ResearchPricesInsertOrUpdateConcurrentPage extends StatefulWidget {
@@ -22,14 +22,11 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   FocusNode observationFocusNode = FocusNode();
   TextEditingController observationController = TextEditingController();
 
-  void _updateControllers(ResearchPricesConcurrentsModel? concurrent) {
-    if (concurrent != null) {
-      observationController.text = concurrent.Observation ?? "";
-      nameController.text = concurrent.Name ?? "";
-    }
-  }
-
   bool _isLoaded = false;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  AddressModel? newAddress;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -43,8 +40,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     }
   }
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   void dispose() {
     super.dispose();
@@ -52,6 +47,13 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     nameController.dispose();
     observationFocusNode.dispose();
     observationController.dispose();
+  }
+
+  void _updateControllers(ResearchPricesConcurrentsModel? concurrent) {
+    if (concurrent != null) {
+      observationController.text = concurrent.Observation ?? "";
+      nameController.text = concurrent.Name ?? "";
+    }
   }
 
   @override
@@ -99,6 +101,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                         formKey: _formKey,
                         nameController: nameController,
                         observationController: observationController,
+                        address: newAddress,
                       ),
                     ],
                   ),

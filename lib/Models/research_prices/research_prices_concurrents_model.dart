@@ -5,10 +5,10 @@ import '../address/address.dart';
 
 class ResearchPricesConcurrentsModel {
   // final int ResearchOfPriceCode;
-  final int ConcurrentCode;
-  String? Name;
-  String? Observation;
-  AddressModel? Address;
+  final int? ConcurrentCode;
+  final String? Name;
+  final String? Observation;
+  final AddressModel? Address;
 
   ResearchPricesConcurrentsModel({
     // required this.ResearchOfPriceCode,
@@ -40,8 +40,7 @@ class ResearchPricesConcurrentsModel {
 
   static List<ResearchPricesConcurrentsModel>
       convertResultToListOfConcurrents() {
-    List resultAsList =
-        json.decode(SoapRequestResponse.responseAsString);
+    List resultAsList = json.decode(SoapRequestResponse.responseAsString);
 
     return resultAsList
         .map((e) => ResearchPricesConcurrentsModel.fromJson(e))
