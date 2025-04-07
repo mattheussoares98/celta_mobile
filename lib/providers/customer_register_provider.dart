@@ -173,7 +173,7 @@ class CustomerRegisterProvider with ChangeNotifier {
     if (customer?.DateOfBirth != null) {
       _jsonInsertCustomer["DateOfBirth"] = DateFormat("yyyy-MM-dd'T'HH:mm:ss.")
           .parse(customer!.DateOfBirth!)
-          .toString(); //TODO test
+          .toString();
     }
 
     _jsonInsertCustomer.toString();
@@ -335,7 +335,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       _customer = await SoapHelper.getCustomer(
         searchTypeInt: 1, //cpf/cnpj
         controllerText: cpfCnpjText,
-        enterpriseCode: "1", //TODO test if always work
+        enterpriseCode: "1",
       );
     } catch (e) {
       debugPrint(SoapRequestResponse.errorMessage);
