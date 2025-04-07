@@ -24,22 +24,16 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
   void addEmail({
     required CustomerRegisterProvider customerRegisterProvider,
   }) {
-    if (widget.emailController.text.isNotEmpty) {
+    if (emailFormKey.currentState?.validate() == true) {
       customerRegisterProvider.addEmail(widget.emailController);
-
-      if (customerRegisterProvider.errorMessage == "") {
-        FocusScope.of(context).unfocus();
-      } else {
-        ShowSnackbarMessage.show(
-          message: customerRegisterProvider.errorMessage,
-          context: context,
-        );
-      }
     } else {
       ShowSnackbarMessage.show(
         message: "Digite um e-mail válido!",
         context: context,
       );
+      Future.delayed(Duration.zero, () {
+        emailFocusNode.requestFocus();
+      });
     }
   }
 
