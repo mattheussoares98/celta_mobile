@@ -34,6 +34,13 @@ class CustomerRegisterProvider with ChangeNotifier {
   void addEmail(TextEditingController emailController) {
     final oldCustomer = _customer;
 
+    if (oldCustomer?.Emails?.contains(emailController.text) == true) {
+      ShowSnackbarMessage.show(
+          message: "Esse email já foi adicionado",
+          context: NavigatorKey.key.currentState!.context);
+      return;
+    }
+
     _customer = CustomerModel(
       Emails: [...oldCustomer?.Emails ?? [], emailController.text],
       Name: customer?.Name,
@@ -51,6 +58,8 @@ class CustomerRegisterProvider with ChangeNotifier {
       password: customer?.password,
       CustomerCovenants: customer?.CustomerCovenants,
     );
+
+    emailController.text = "";
 
     notifyListeners();
   }
