@@ -48,7 +48,7 @@ class BindedCovenants extends StatelessWidget {
                   subtitle: binded?.covenant?.Name,
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
-                  title: "CNPJ",
+                  title: "Código",
                   subtitle: binded?.covenant?.Code?.toString(),
                 ),
                 TitleAndSubtitle.titleAndSubtitle(
