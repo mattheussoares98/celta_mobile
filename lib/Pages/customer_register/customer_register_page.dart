@@ -168,9 +168,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         if (customerRegisterProvider.customer != null) {
           ShowAlertDialog.show(
               context: context,
-              title: "Remover dados",
+              title: "Sair",
               content: Text(
-                "Deseja realmente retornar? Todos dados preenchidos serão perdidos",
+                "Deseja realmente sair? Todas alterações realizadas serão perdidas",
               ),
               function: () {
                 customerRegisterProvider.clearCustomer();
