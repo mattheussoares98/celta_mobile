@@ -151,20 +151,20 @@ class CustomerRegisterProvider with ChangeNotifier {
       "ReducedName": customer?.ReducedName,
       "CpfCnpjNumber": customer?.CpfCnpjNumber,
       "Password": password,
+      "SexType": customer?.SexType == "Masculino" ? "M" : "F",
       "PersonType": customer?.CpfCnpjNumber?.length == 11 ? "F" : "J",
       "RegistrationNumber": "",
-      "SexType": customer?.SexType == "Masculino" ? "M" : "F",
       "Emails": customer?.Emails,
       "Telephones": customer?.Telephones?.map((e) => e.toJson()).toList(),
       "Addresses": customer?.Addresses?.map((e) => e.toJson()).toList(),
-      "Covenants": null,
+      // "Covenants": null,
     };
     if ((customer?.CustomerCovenants?.length ?? 0) > 0) {
       _jsonInsertCustomer["CustomerCovenants"] = customer?.CustomerCovenants!
           .map(
             (e) => CustomerRegisterCustomerCovenantModel(
               Code: e.covenant!.Code!.toInt(),
-              Matriculate: "99",
+              Matriculate: "",
               LimitOfPurchase: e.LimitOfPurchase!,
             ).toJson(),
           )
@@ -176,6 +176,7 @@ class CustomerRegisterProvider with ChangeNotifier {
           .toString(); //TODO test
     }
 
+    _jsonInsertCustomer.toString();
     return _jsonInsertCustomer;
   }
 
