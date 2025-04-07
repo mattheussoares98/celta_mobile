@@ -153,9 +153,9 @@ class CustomerRegisterProvider with ChangeNotifier {
       "Password": password,
       "PersonType": customer?.CpfCnpjNumber?.length == 11 ? "F" : "J",
       "RegistrationNumber": "",
-      "SexType": customer?.SexType, //TODO if send correct value
+      "SexType": customer?.SexType == "Masculino" ? "M" : "F",
       "Emails": customer?.Emails,
-      "Telephones": customer?.Telephones,
+      "Telephones": customer?.Telephones?.map((e) => e.toJson()).toList(),
       "Addresses": customer?.Addresses?.map((e) => e.toJson()).toList(),
       "Covenants": null,
     };
