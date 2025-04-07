@@ -212,6 +212,8 @@ class CustomerRegisterProvider with ChangeNotifier {
       _errorMessage = SoapRequestResponse.errorMessage;
 
       FirebaseHelper.addSoapCallInFirebase(FirebaseCallEnum.customerRegister);
+
+      clearCustomer();
     } catch (e) {
       //print('Erro para cadastrar o cliente: $e');
       _errorMessage = DefaultErrorMessage.ERROR;

@@ -45,13 +45,16 @@ class AddressModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
+
     data['Zip'] = this.Zip;
     data['Address'] = this.Address;
     data['Complement'] = this.Complement;
     data['District'] = this.District;
     data['City'] = this.City;
-    data['State'] =
-        _states.entries.where((e) => e.value == this.State).first.key;
+    data['State'] = _states.entries
+        .where((e) => e.value == this.State || e.key == this.State)
+        .first
+        .key;
     data['Reference'] = this.Reference;
     data['Number'] = this.Number;
     return data;
