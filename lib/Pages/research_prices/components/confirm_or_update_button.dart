@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
@@ -9,13 +8,11 @@ class ConfirmOrUpdateButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
   final TextEditingController observationController;
-  final AddressModel? address;
   const ConfirmOrUpdateButton({
     super.key,
     required this.formKey,
     required this.nameController,
     required this.observationController,
-    required this.address,
   });
 
   Future<void> _addOrUpdateConcurrent({
@@ -41,7 +38,6 @@ class ConfirmOrUpdateButton extends StatelessWidget {
         function: () async {
           await researchPricesProvider.addOrUpdateConcurrent(
             context: context,
-            address: address,
             concurrentName: nameController.text,
             observation: observationController.text,
           );

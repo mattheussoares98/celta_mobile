@@ -60,6 +60,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
+    AddressProvider addressProvider = Provider.of(context);
 
     return Stack(
       children: [
@@ -96,13 +97,12 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                         observationController: observationController,
                       ),
                       const SizedBox(height: 15),
-                      ChangeAddress(newAddress: newAddress),
+                      ChangeAddress(),
                       const SizedBox(height: 8),
                       ConfirmOrUpdateButton(
                         formKey: _formKey,
                         nameController: nameController,
                         observationController: observationController,
-                        address: newAddress,
                       ),
                     ],
                   ),
@@ -112,6 +112,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
           ),
         ),
         loadingWidget(researchPricesProvider.isLoadingAddOrUpdateConcurrents),
+        loadingWidget(addressProvider.isLoading),
       ],
     );
   }

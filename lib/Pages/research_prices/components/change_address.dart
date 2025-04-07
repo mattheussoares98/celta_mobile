@@ -5,13 +5,14 @@ import '../../../Models/models.dart';
 import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
-class ChangeAddress extends StatelessWidget {
-  final AddressModel? newAddress;
-  const ChangeAddress({
-    super.key,
-    required this.newAddress,
-  });
+class ChangeAddress extends StatefulWidget {
+  const ChangeAddress({super.key});
 
+  @override
+  State<ChangeAddress> createState() => _ChangeAddressState();
+}
+
+class _ChangeAddressState extends State<ChangeAddress> {
   @override
   Widget build(BuildContext context) {
     ResearchPricesProvider researchPricesProvider = Provider.of(context);
@@ -51,31 +52,41 @@ class ChangeAddress extends StatelessWidget {
                   addAddress: (address) {
                     final selectedConcurrent =
                         researchPricesProvider.selectedConcurrent;
-                    researchPricesProvider.updateSelectedConcurrent(
-                      ResearchPricesConcurrentsModel(
-                        ConcurrentCode: selectedConcurrent?.ConcurrentCode,
-                        Name: selectedConcurrent?.Name,
-                        Observation: selectedConcurrent?.Observation,
-                        Address: newAddress,
-                      ),
-                    );
+
+                    setState(() {
+                      researchPricesProvider.updateSelectedConcurrent(
+                        ResearchPricesConcurrentsModel(
+                          ConcurrentCode: selectedConcurrent?.ConcurrentCode,
+                          Name: selectedConcurrent?.Name,
+                          Observation: selectedConcurrent?.Observation,
+                          Address: address,
+                        ),
+                      );
+                    });
                     return true;
                   },
                   addresses: [
-                    if (newAddress != null) newAddress!,
+                    if (researchPricesProvider.selectedConcurrent?.Address !=
+                            null &&
+                        researchPricesProvider
+                                .selectedConcurrent!.Address?.Zip !=
+                            "")
+                      researchPricesProvider.selectedConcurrent!.Address!
                   ],
                   canInsertMoreThanOneAddress: false,
                   removeAddress: (index) {
                     final selectedConcurrent =
                         researchPricesProvider.selectedConcurrent;
 
-                    researchPricesProvider.updateSelectedConcurrent(
-                        ResearchPricesConcurrentsModel(
-                      ConcurrentCode: selectedConcurrent?.ConcurrentCode,
-                      Name: selectedConcurrent?.Name,
-                      Observation: selectedConcurrent?.Observation,
-                      Address: null,
-                    ));
+                    setState(() {
+                      researchPricesProvider.updateSelectedConcurrent(
+                          ResearchPricesConcurrentsModel(
+                        ConcurrentCode: selectedConcurrent?.ConcurrentCode,
+                        Name: selectedConcurrent?.Name,
+                        Observation: selectedConcurrent?.Observation,
+                        Address: null,
+                      ));
+                    });
                   },
                 ),
               ],

@@ -236,7 +236,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                   )
                 : null,
           ),
-          loadingWidget(addressProvider.isLoadingCep),
+          loadingWidget(addressProvider.isLoading),
           loadingWidget(customerRegisterProvider.isLoading),
         ],
       ),

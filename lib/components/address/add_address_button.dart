@@ -21,7 +21,7 @@ class AddAddressButton extends StatelessWidget {
       style: TextButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      onPressed: addressProvider.isLoadingCep
+      onPressed: addressProvider.isLoading
           ? null
           : () {
               bool? isValid = formKey.currentState?.validate();

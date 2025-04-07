@@ -47,7 +47,7 @@ class AddressProvider with ChangeNotifier {
   bool get triedGetCep => _triedGetCep;
 
   bool _isLoadingCep = false;
-  bool get isLoadingCep => _isLoadingCep;
+  bool get isLoading => _isLoadingCep;
 
   String _errorMessageAddAddres = "";
   String get errorMessageAddAddres => _errorMessageAddAddres;

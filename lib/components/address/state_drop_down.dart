@@ -37,7 +37,7 @@ class StateDropDown extends StatelessWidget {
         }
         return null;
       },
-      onChanged: addressProvider.isLoadingCep
+      onChanged: addressProvider.isLoading
           ? null
           : (value) {
               selectedState.value = value;

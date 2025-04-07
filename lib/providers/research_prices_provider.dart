@@ -295,7 +295,6 @@ class ResearchPricesProvider with ChangeNotifier {
     required BuildContext context,
     required String concurrentName,
     required String? observation,
-    required AddressModel? address,
   }) async {
     _errorAddOrUpdateConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = true;
@@ -325,7 +324,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
       if (_errorAddOrUpdateConcurrents == "" && _selectedConcurrent != null) {
         _updateLocalSelectedConcurrent(
-          address: address,
+          address: _selectedConcurrent?.Address,
           name: concurrentName,
           observation: observation,
         );
