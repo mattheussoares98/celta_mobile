@@ -19,12 +19,12 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
   FocusNode _nameFocusNode = FocusNode();
   TextEditingController _nameController = TextEditingController();
 
-  FocusNode _observationFocusNode = FocusNode();
-  TextEditingController _observationController = TextEditingController();
+  FocusNode observationFocusNode = FocusNode();
+  TextEditingController observationController = TextEditingController();
 
   void _updateControllers(ResearchPricesConcurrentsModel? concurrent) {
     if (concurrent != null) {
-      _observationController.text = concurrent.Observation ?? "";
+      observationController.text = concurrent.Observation ?? "";
       _nameController.text = concurrent.Name ?? "";
     }
   }
@@ -70,12 +70,12 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
             context: context,
             addressProvider: addressProvider,
             concurrentName: _nameController.text,
-            observation: _observationController.text,
+            observation: observationController.text,
           );
 
           if (researchPricesProvider.errorAddOrUpdateConcurrents == "") {
             _nameController.clear();
-            _observationController.clear();
+            observationController.clear();
             Navigator.of(context).pop();
           } else {
             ShowSnackbarMessage.show(
@@ -91,8 +91,8 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     super.dispose();
     _nameFocusNode.dispose();
     _nameController.dispose();
-    _observationFocusNode.dispose();
-    _observationController.dispose();
+    observationFocusNode.dispose();
+    observationController.dispose();
   }
 
   @override
@@ -126,23 +126,13 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                     children: [
                       NameField(
                         nameFocusNode: _nameFocusNode,
-                        observationFocusNode: _observationFocusNode,
+                        observationFocusNode: observationFocusNode,
                         nameController: _nameController,
                       ),
                       const SizedBox(height: 8),
-                      TextFormField(
-                        focusNode: _observationFocusNode,
-                        enabled: !researchPricesProvider
-                            .isLoadingAddOrUpdateConcurrents,
-                        controller: _observationController,
-                        decoration: FormFieldDecoration.decoration(
-                          context: context,
-                          labelText: 'Observação',
-                        ),
-                        onFieldSubmitted: (_) async {
-                          FocusScope.of(context).requestFocus();
-                        },
-                        style: FormFieldStyle.style(),
+                      ObservationField(
+                        observationFocusNode: observationFocusNode,
+                        observationController: observationController,
                       ),
                       const SizedBox(height: 15),
                       Column(

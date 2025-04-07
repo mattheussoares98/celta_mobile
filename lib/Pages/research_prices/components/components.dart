@@ -4,5 +4,6 @@ export "filter_associateds_products.dart";
 export "get_all_products.dart";
 export './insert_prices.dart';
 export './name_field.dart';
+export './observation_field.dart';
 export './prices_items.dart';
 export "products_items.dart";
