@@ -170,55 +170,72 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
       ),
     ];
 
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: Text(
-              appBarTitles[_selectedIndex],
+    return PopScope(
+      canPop: customerRegisterProvider.customer == null,
+      onPopInvokedWithResult: (didPop, result) {
+        if (customerRegisterProvider.customer != null) {
+          ShowAlertDialog.show(
+              context: context,
+              title: "Remover dados",
+              content: Text(
+                "Deseja realmente retornar? Todos dados preenchidos serão perdidos",
+              ),
+              function: () {
+                customerRegisterProvider.clearCustomer();
+                Navigator.of(context).pop();
+              });
+        }
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text(
+                appBarTitles[_selectedIndex],
+              ),
             ),
+            bottomNavigationBar: CustomerRegisterBottomNavigationItems(
+              updateSelectedIndex: (index) {
+                updateSelectedIndex(
+                  index: index,
+                  customerRegisterProvider: customerRegisterProvider,
+                );
+              },
+              selectedIndex: _selectedIndex,
+            ),
+            body: _pages.elementAt(_selectedIndex),
+            floatingActionButton: _selectedIndex == 5
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomerRegisterClearAllData(
+                        nameController: nameController,
+                        emailController: emailController,
+                        telephoneController: telephoneController,
+                        dddController: dddController,
+                        reducedNameController: reducedNameController,
+                        cpfCnpjController: cpfCnpjController,
+                        dateOfBirthController: dateOfBirthController,
+                        passwordConfirmationController:
+                            passwordConfirmationController,
+                        passwordController: passwordController,
+                      ),
+                      CustomerRegisterFloatingActionButton(
+                        passwordController: passwordController,
+                        updateSelectedIndex: (index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                      )
+                    ],
+                  )
+                : null,
           ),
-          bottomNavigationBar: CustomerRegisterBottomNavigationItems(
-            updateSelectedIndex: (index) {
-              updateSelectedIndex(
-                index: index,
-                customerRegisterProvider: customerRegisterProvider,
-              );
-            },
-            selectedIndex: _selectedIndex,
-          ),
-          body: _pages.elementAt(_selectedIndex),
-          floatingActionButton: _selectedIndex == 5
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomerRegisterClearAllData(
-                      nameController: nameController,
-                      emailController: emailController,
-                      telephoneController: telephoneController,
-                      dddController: dddController,
-                      reducedNameController: reducedNameController,
-                      cpfCnpjController: cpfCnpjController,
-                      dateOfBirthController: dateOfBirthController,
-                      passwordConfirmationController:
-                          passwordConfirmationController,
-                      passwordController: passwordController,
-                    ),
-                    CustomerRegisterFloatingActionButton(
-                      passwordController: passwordController,
-                      updateSelectedIndex: (index) {
-                        setState(() {
-                          _selectedIndex = index;
-                        });
-                      },
-                    )
-                  ],
-                )
-              : null,
-        ),
-        loadingWidget(addressProvider.isLoadingCep),
-        loadingWidget(customerRegisterProvider.isLoading),
-      ],
+          loadingWidget(addressProvider.isLoadingCep),
+          loadingWidget(customerRegisterProvider.isLoading),
+        ],
+      ),
     );
   }
 }

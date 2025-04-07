@@ -400,4 +400,8 @@ class CustomerRegisterProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearCustomer() {
+    _customer = null;
+  }
 }
