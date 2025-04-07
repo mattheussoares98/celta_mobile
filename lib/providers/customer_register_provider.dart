@@ -104,7 +104,26 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void removeEmail(int index) {
-    //TODO implement this
+    final newEmails =
+        customer?.Emails?.where((e) => e != customer?.Emails?[index]).toList();
+
+    _customer = CustomerModel(
+      Emails: newEmails,
+      Name: customer?.Name,
+      Code: customer?.Code,
+      PersonalizedCode: customer?.PersonalizedCode,
+      ReducedName: customer?.ReducedName,
+      CpfCnpjNumber: customer?.CpfCnpjNumber,
+      RegistrationNumber: customer?.RegistrationNumber,
+      DateOfBirth: customer?.DateOfBirth,
+      SexType: customer?.SexType,
+      PersonType: customer?.PersonType,
+      Telephones: customer?.Telephones,
+      Addresses: customer?.Addresses,
+      selected: customer?.selected == true,
+      password: customer?.password,
+      CustomerCovenants: customer?.CustomerCovenants,
+    );
     notifyListeners();
   }
 
