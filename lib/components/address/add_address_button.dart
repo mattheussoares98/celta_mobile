@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 
 class AddAddressButton extends StatelessWidget {
+  final GlobalKey<FormState> formKey;
   final void Function() addAddress;
   const AddAddressButton({
     super.key,
     required this.addAddress,
+    required this.formKey,
   });
 
   @override
@@ -21,9 +23,10 @@ class AddAddressButton extends StatelessWidget {
       onPressed: addressProvider.isLoadingCep
           ? null
           : () {
-              bool isValid = true; //TODO test this
+              bool? isValid = formKey.currentState?.validate();
 
-              if (isValid /*  && addressProvider.cepController.text.isNotEmpty TODO test if works when doesnt has cep*/) {
+              if (isValid ==
+                  true /*  && addressProvider.cepController.text.isNotEmpty TODO test if works when doesnt has cep*/) {
                 addAddress();
                 FocusScope.of(context).unfocus();
               } /*  else {

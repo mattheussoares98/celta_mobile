@@ -210,6 +210,7 @@ class _AddressComponentState extends State<AddressComponent> {
                           clearControllers: clearControllers,
                         ),
                         AddAddressButton(
+                          formKey: formKey,
                           addAddress: () {
                             if (formKey.currentState?.validate() != true) {
                               return;
