@@ -4,11 +4,9 @@ import 'package:provider/provider.dart';
 import '../../providers/providers.dart';
 
 class AddAddressButton extends StatelessWidget {
-  final void Function() validateAdressFormKey;
   final void Function() addAddress;
   const AddAddressButton({
     super.key,
-    required this.validateAdressFormKey,
     required this.addAddress,
   });
 

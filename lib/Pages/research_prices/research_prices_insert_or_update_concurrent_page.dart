@@ -42,7 +42,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
     }
   }
 
-  GlobalKey<FormState> _adressFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> _addOrUpdateConcurrent({
@@ -212,11 +211,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                                       return false;
                                     }, //TODO create function to add new address
                                     addresses: [], //TODO test this a lot
-                                    adressFormKey: _adressFormKey,
                                     canInsertMoreThanOneAddress: false,
-                                    validateAdressFormKey: () {
-                                      //TODO test this
-                                    },
                                   ),
                                 ],
                               ),

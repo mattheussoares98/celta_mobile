@@ -7,14 +7,10 @@ import '../components.dart';
 import '../../providers/providers.dart';
 
 class AddressComponent extends StatefulWidget {
-  final GlobalKey<FormState> adressFormKey;
-  final void Function() validateAdressFormKey;
   final bool canInsertMoreThanOneAddress;
   final List<AddressModel> addresses;
   final bool Function(AddressModel address) addAddress;
   const AddressComponent({
-    required this.adressFormKey,
-    required this.validateAdressFormKey,
     required this.canInsertMoreThanOneAddress,
     required this.addresses,
     required this.addAddress,
@@ -44,6 +40,7 @@ class _AddressComponentState extends State<AddressComponent> {
   final referenceFocusNode = FocusNode();
 
   ValueNotifier<String?> selectedStateNotifier = ValueNotifier<String?>("");
+  final formKey = GlobalKey<FormState>();
 
   bool triedGetCep = false;
 
@@ -126,7 +123,7 @@ class _AddressComponentState extends State<AddressComponent> {
     return SingleChildScrollView(
       primary: false,
       child: Form(
-        key: widget.adressFormKey,
+        key: formKey,
         child: Column(
           children: [
             CepField(
@@ -210,8 +207,11 @@ class _AddressComponentState extends State<AddressComponent> {
                           clearControllers: clearControllers,
                         ),
                         AddAddressButton(
-                          validateAdressFormKey: widget.validateAdressFormKey,
                           addAddress: () {
+                            if (formKey.currentState?.validate() != true) {
+                              return;
+                            }
+
                             bool added = widget.addAddress(
                               AddressModel(
                                 Zip: zipController.text,

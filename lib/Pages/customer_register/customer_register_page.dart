@@ -27,7 +27,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
   final cpfCnpjFocusNode = FocusNode();
 
   final _personFormKey = GlobalKey<FormState>();
-  final _adressFormKey = GlobalKey<FormState>();
   final _emailFormKey = GlobalKey<FormState>();
 
   int _selectedIndex = 0;
@@ -44,7 +43,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
   void validateFormKeys() {
     _personFormKey.currentState?.validate() == true;
-    _adressFormKey.currentState?.validate() == true;
     _emailFormKey.currentState?.validate() == true;
   }
 
@@ -175,8 +173,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         dateOfBirthController: dateOfBirthController,
       ),
       AddressComponent(
-        validateAdressFormKey: validateFormKeys,
-        adressFormKey: _adressFormKey,
         canInsertMoreThanOneAddress: true,
         addresses: customerRegisterProvider.customer?.Addresses ?? [],
         addAddress:
