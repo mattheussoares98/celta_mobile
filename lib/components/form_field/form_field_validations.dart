@@ -81,8 +81,8 @@ class FormFieldValidations {
         return 'Informe o nome e o sobrenome';
       }
 
-      if (nameParts[0].length < 3 || nameParts[1].length < 3) {
-        return 'O nome e o sobrenome devem ter pelo menos 3 letras';
+      if (nameParts[0].length < 2 || nameParts[1].length < 2) {
+        return 'O nome e o sobrenome devem ter pelo menos 2 letras';
       }
 
       return null;
