@@ -49,7 +49,6 @@ class LoadedCovenants extends StatelessWidget {
         }
 
         final covenant = notInsertedCovenants[index - 1];
-        //TODO test what happens if dont load covenants
         return Card(
           child: InkWell(
             onTap: () {
