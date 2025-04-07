@@ -21,9 +21,7 @@ class CustomerRegisterAddPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CustomerRegisterProvider customerRegisterProvider =
-        Provider.of(context, listen: true);
-    AddressProvider addressProvider = Provider.of(context, listen: true);
+    CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
 
     return SingleChildScrollView(
       primary: false,
@@ -38,7 +36,7 @@ class CustomerRegisterAddPage extends StatelessWidget {
               dateOfBirthController: dateOfBirthController,
               selectedSex: selectedSex,
             ),
-          if (addressProvider.addressesCount > 0)
+          if ((customerRegisterProvider.customer?.Addresses?.length ?? 0) > 0)
             CustomerRegisterAddressesInformeds(
               addresses: customerRegisterProvider.customer?.Addresses ?? [],
             ),

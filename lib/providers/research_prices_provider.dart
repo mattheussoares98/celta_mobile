@@ -298,7 +298,6 @@ class ResearchPricesProvider with ChangeNotifier {
     //   Reference: _selectedConcurrent!.Address?.Reference,
     // );
 
-    addressProvider?.clearAddresses();
     //TODO add address
   }
 
@@ -312,11 +311,13 @@ class ResearchPricesProvider with ChangeNotifier {
 
     _concurrents[index].Name = name;
     _concurrents[index].Observation = observation;
-    if (addressProvider.addresses.isEmpty) {
-      _concurrents[index].Address = null;
-    } else {
-      _concurrents[index].Address = addressProvider.addresses[0];
-    }
+
+    //TODO test this if and else
+    // if (addressProvider.addresses.isEmpty) {
+    //   _concurrents[index].Address = null;
+    // } else {
+    //   _concurrents[index].Address = addressProvider.addresses[0];
+    // }
   }
 
   Future<void> addOrUpdateConcurrent({
@@ -336,9 +337,11 @@ class ResearchPricesProvider with ChangeNotifier {
       "Name": concurrentName,
       "Observation": observation,
     };
-    if (addressProvider.addresses.isNotEmpty) {
-      jsonBody["Address"] = addressProvider.addresses[0].toJson();
-    }
+
+    //TODO test this below
+    // if (addressProvider.addresses.isNotEmpty) {
+    //   jsonBody["Address"] = addressProvider.addresses[0].toJson();
+    // }
 
     try {
       await SoapRequest.soapPost(
@@ -364,8 +367,7 @@ class ResearchPricesProvider with ChangeNotifier {
         );
       }
     } catch (e) {
-      _errorAddOrUpdateConcurrents =
-          DefaultErrorMessage.ERROR;
+      _errorAddOrUpdateConcurrents = DefaultErrorMessage.ERROR;
     }
     if (_errorAddOrUpdateConcurrents == "") {
       ShowSnackbarMessage.show(
@@ -512,8 +514,7 @@ class ResearchPricesProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter os produtos: $e");
-      _errorGetAssociatedsProducts =
-          DefaultErrorMessage.ERROR;
+      _errorGetAssociatedsProducts = DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingGetProducts = false;
       notifyListeners();
@@ -565,8 +566,7 @@ class ResearchPricesProvider with ChangeNotifier {
       }
     } catch (e) {
       //print("Erro para obter os produtos: $e");
-      _errorGetNotAssociatedsProducts =
-          DefaultErrorMessage.ERROR;
+      _errorGetNotAssociatedsProducts = DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingGetProducts = false;
       notifyListeners();
@@ -714,8 +714,7 @@ class ResearchPricesProvider with ChangeNotifier {
       );
     } catch (e) {
       //print("Erro para obter os produtos: $e");
-      _errorInsertConcurrentPrices =
-          DefaultErrorMessage.ERROR;
+      _errorInsertConcurrentPrices = DefaultErrorMessage.ERROR;
     } finally {
       _isLoadingInsertConcurrentPrices = false;
       notifyListeners();

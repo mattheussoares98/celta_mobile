@@ -73,7 +73,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
           );
 
           if (researchPricesProvider.errorAddOrUpdateConcurrents == "") {
-            addressProvider.clearAddresses();
             _nameController.clear();
             _observationController.clear();
             Navigator.of(context).pop();
@@ -105,7 +104,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
         PopScope(
           onPopInvokedWithResult: (_, __) {
             researchPricesProvider.updateSelectedConcurrent(concurrent: null);
-            addressProvider.clearAddresses();
           },
           child: Scaffold(
             appBar: AppBar(

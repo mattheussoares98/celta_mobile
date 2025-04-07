@@ -30,7 +30,7 @@ class _CustomerRegisterFloatingActionButtonState
       onTap: customerRegisterProvider.isLoading
           ? null
           : () async {
-              if (addressProvider.addressesCount == 0) {
+              if (customerRegisterProvider.customer?.Addresses?.length == 0) {
                 setState(() {
                   widget.updateSelectedIndex(1);
                 });
@@ -110,7 +110,9 @@ class _CustomerRegisterFloatingActionButtonState
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        addressProvider.addressesCount > 0
+                        (customerRegisterProvider.customer?.Addresses?.length ??
+                                    0) >
+                                0
                             ? "SALVAR"
                             : "Adicione\num\nendereço",
                         textAlign: TextAlign.center,
@@ -119,7 +121,10 @@ class _CustomerRegisterFloatingActionButtonState
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      if (addressProvider.addressesCount > 0)
+                      if ((customerRegisterProvider
+                                  .customer?.Addresses?.length ??
+                              0) >
+                          0)
                         const Icon(
                           Icons.person_add,
                           color: Colors.white,

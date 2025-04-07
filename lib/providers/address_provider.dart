@@ -8,10 +8,6 @@ import '../components/components.dart';
 import '../Models/address/address.dart';
 
 class AddressProvider with ChangeNotifier {
-  List<AddressModel> _addresses = []; //TODO remove this
-  List<AddressModel> get addresses => [..._addresses];
-  int get addressesCount => _addresses.length;
-
   static const Map<String, String> _states = {
     "AC": "Acre",
     "AL": "Alagoas",
@@ -99,17 +95,8 @@ class AddressProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void removeAddress(int index) {
-    _addresses.removeAt(index);
-    notifyListeners();
-  }
-
   AddressModel? _addressCustomerModel;
   get addressCustomerModel => _addressCustomerModel;
-
-  void clearAddresses() {
-    _addresses.clear();
-  }
 
   Future<AddressModel?> getAddressByCep({
     required BuildContext context,

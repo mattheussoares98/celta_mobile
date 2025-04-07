@@ -109,7 +109,7 @@ class CustomerRegisterProvider with ChangeNotifier {
       "SexType": customer?.SexType, //TODO if send correct value
       "Emails": customer?.Emails,
       "Telephones": customer?.Telephones,
-      "Addresses": addressProvider.addresses.map((e) => e.toJson()).toList(),
+      "Addresses": customer?.Addresses?.map((e) => e.toJson()).toList(),
       "Covenants": null,
     };
     if ((customer?.CustomerCovenants?.length ?? 0) > 0) {
