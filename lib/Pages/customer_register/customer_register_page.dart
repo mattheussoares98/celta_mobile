@@ -26,10 +26,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
   final cpfCnpjFocusNode = FocusNode();
 
-  GlobalKey<FormState> _personFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> _adressFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> _telephoneFormKey = GlobalKey<FormState>();
+  final _personFormKey = GlobalKey<FormState>();
+  final _adressFormKey = GlobalKey<FormState>();
+  final _emailFormKey = GlobalKey<FormState>();
 
   int _selectedIndex = 0;
   ValueNotifier<String?> selectedSexDropDown = ValueNotifier<String?>(null);
@@ -47,7 +46,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     _personFormKey.currentState?.validate() == true;
     _adressFormKey.currentState?.validate() == true;
     _emailFormKey.currentState?.validate() == true;
-    _telephoneFormKey.currentState?.validate() == true;
   }
 
   bool _hasAdressInformed(
@@ -190,8 +188,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         emailController: emailController,
       ),
       CustomerRegisterTelephonePage(
-        telephoneFormKey: _telephoneFormKey,
-        validateTelephoneFormKey: validateFormKeys,
         areaCodeController: dddController,
         phoneNumberController: telephoneController,
       ),

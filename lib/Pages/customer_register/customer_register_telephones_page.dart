@@ -6,13 +6,9 @@ import '../../providers/providers.dart';
 import 'customer_register.dart';
 
 class CustomerRegisterTelephonePage extends StatefulWidget {
-  final GlobalKey<FormState> telephoneFormKey;
-  final Function validateTelephoneFormKey;
   final TextEditingController phoneNumberController;
   final TextEditingController areaCodeController;
   const CustomerRegisterTelephonePage({
-    required this.validateTelephoneFormKey,
-    required this.telephoneFormKey,
     required this.phoneNumberController,
     required this.areaCodeController,
     Key? key,
@@ -26,14 +22,16 @@ class CustomerRegisterTelephonePage extends StatefulWidget {
 class _CustomerRegisterTelephonePageState
     extends State<CustomerRegisterTelephonePage> {
   final FocusNode telephoneFocusNode = FocusNode();
-  final FocusNode dddFocusNode = FocusNode();
+  final FocusNode areaCodeFocusNode = FocusNode();
+  final telephoneKey = GlobalKey<FormState>();
+  bool telephoneIsValid = false;
 
   void _addTelephone({
     required CustomerRegisterProvider customerRegisterProvider,
   }) {
-    bool isValid = widget.validateTelephoneFormKey();
+    bool? isValid = telephoneKey.currentState?.validate();
 
-    if (isValid) {
+    if (isValid == true) {
       bool added = customerRegisterProvider.addTelephone(
         phoneNumber: widget.phoneNumberController.text,
         areaCode: widget.areaCodeController.text,
@@ -48,6 +46,15 @@ class _CustomerRegisterTelephonePageState
         message: "Digite um telefone válido! Informe o número com o DDD",
         context: context,
       );
+      if (widget.areaCodeController.text.length < 2) {
+        Future.delayed(Duration.zero, () {
+          areaCodeFocusNode.requestFocus();
+        });
+      } else {
+        Future.delayed(Duration.zero, () {
+          telephoneFocusNode.requestFocus();
+        });
+      }
     }
   }
 
@@ -55,7 +62,7 @@ class _CustomerRegisterTelephonePageState
   void dispose() {
     super.dispose();
     telephoneFocusNode.dispose();
-    dddFocusNode.dispose();
+    areaCodeFocusNode.dispose();
   }
 
   @override
@@ -66,7 +73,7 @@ class _CustomerRegisterTelephonePageState
     return SingleChildScrollView(
       primary: false,
       child: Form(
-        key: widget.telephoneFormKey,
+        key: telephoneKey,
         child: Column(
           children: [
             Row(
@@ -77,7 +84,7 @@ class _CustomerRegisterTelephonePageState
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: false),
                     enabled: true,
-                    focusNode: dddFocusNode,
+                    focusNode: areaCodeFocusNode,
                     onFieldSubmitted: (String? value) {
                       FocusScope.of(context).requestFocus(telephoneFocusNode);
                     },
@@ -138,7 +145,8 @@ class _CustomerRegisterTelephonePageState
                             telephoneController: widget.phoneNumberController,
                             dddController: widget.areaCodeController,
                           );
-                          FocusScope.of(context).requestFocus(dddFocusNode);
+                          FocusScope.of(context)
+                              .requestFocus(areaCodeFocusNode);
                         },
                         icon: const Icon(
                           Icons.delete,
