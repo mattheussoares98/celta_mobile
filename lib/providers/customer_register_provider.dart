@@ -52,7 +52,6 @@ class CustomerRegisterProvider with ChangeNotifier {
       CustomerCovenants: customer?.CustomerCovenants,
     );
 
-    //TODO implementar email
     notifyListeners();
   }
 
