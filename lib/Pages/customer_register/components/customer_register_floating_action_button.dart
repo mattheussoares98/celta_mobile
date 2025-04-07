@@ -5,13 +5,11 @@ import '../../../providers/providers.dart';
 import '../../../components/components.dart';
 
 class CustomerRegisterFloatingActionButton extends StatefulWidget {
-  final void Function() changeSelectedIndexToAddAddres; //TODO test if need this
-  final void Function() changeFormKeysToInvalid; //TODO test if need this
+  final void Function(int index) updateSelectedIndex;
   final TextEditingController passwordController;
 
   const CustomerRegisterFloatingActionButton({
-    required this.changeSelectedIndexToAddAddres,
-    required this.changeFormKeysToInvalid,
+    required this.updateSelectedIndex,
     required this.passwordController,
     Key? key,
   }) : super(key: key);
@@ -34,7 +32,7 @@ class _CustomerRegisterFloatingActionButtonState
           : () async {
               if (addressProvider.addressesCount == 0) {
                 setState(() {
-                  widget.changeSelectedIndexToAddAddres();
+                  widget.updateSelectedIndex(1);
                 });
               } else {
                 ShowAlertDialog.show(
@@ -54,7 +52,7 @@ class _CustomerRegisterFloatingActionButtonState
 
                     if (customerRegisterProvider.errorMessage == "") {
                       setState(() {
-                        widget.changeFormKeysToInvalid();
+                        widget.updateSelectedIndex(0);
                       });
 
                       ShowSnackbarMessage.show(

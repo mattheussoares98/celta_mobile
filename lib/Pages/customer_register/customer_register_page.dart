@@ -216,14 +216,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                       ),
                       CustomerRegisterFloatingActionButton(
                         passwordController: passwordController,
-                        changeSelectedIndexToAddAddres: () {
+                        updateSelectedIndex: (index) {
                           setState(() {
-                            _selectedIndex = 1;
-                          });
-                        },
-                        changeFormKeysToInvalid: () {
-                          setState(() {
-                            _selectedIndex = 0;
+                            _selectedIndex = index;
                           });
                         },
                       )
