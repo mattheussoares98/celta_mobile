@@ -55,6 +55,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
           children: [
             FormFieldWidget(
               enabled: true,
+              keyboardType: TextInputType.emailAddress,
               focusNode: emailFocusNode,
               onFieldSubmitted: (String? value) {
                 addEmail(customerRegisterProvider: customerRegisterProvider);
