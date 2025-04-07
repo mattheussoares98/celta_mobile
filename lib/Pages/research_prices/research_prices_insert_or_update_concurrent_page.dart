@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../components/components.dart';
 import '../../providers/providers.dart';
 import '../../Models/research_prices/research_prices.dart';
+import 'components/components.dart';
 
 class ResearchPricesInsertOrUpdateConcurrentPage extends StatefulWidget {
   const ResearchPricesInsertOrUpdateConcurrentPage({super.key});
@@ -123,32 +124,10 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
                   key: _formKey,
                   child: Column(
                     children: [
-                      TextFormField(
-                        autofocus: false,
-                        focusNode: _nameFocusNode,
-                        enabled: !researchPricesProvider
-                            .isLoadingAddOrUpdateConcurrents,
-                        controller: _nameController,
-                        decoration: FormFieldDecoration.decoration(
-                          context: context,
-                          labelText: 'Nome',
-                        ),
-                        validator: (value) {
-                          if (value == null) {
-                            return "Digite o nome!";
-                          } else if (value.isEmpty) {
-                            return "Digite o nome!";
-                          } else if (value.length < 3) {
-                            return "Mínimo de 3 caracteres";
-                          }
-                          return null;
-                        },
-                        onFieldSubmitted: (_) async {
-                          FocusScope.of(context).requestFocus(
-                            _observationFocusNode,
-                          );
-                        },
-                        style: FormFieldStyle.style(),
+                      NameField(
+                        nameFocusNode: _nameFocusNode,
+                        observationFocusNode: _observationFocusNode,
+                        nameController: _nameController,
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
