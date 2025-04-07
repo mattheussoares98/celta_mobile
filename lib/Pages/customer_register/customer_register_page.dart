@@ -214,6 +214,17 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                       ),
                       CustomerRegisterFloatingActionButton(
                         passwordController: passwordController,
+                        clearControllersInSuccess: () {
+                          cpfCnpjController.clear();
+                          nameController.clear();
+                          reducedNameController.clear();
+                          dateOfBirthController.clear();
+                          passwordController.clear();
+                          passwordConfirmationController.clear();
+                          setState(() {
+                            cpfCnpjIsValid = false;
+                          });
+                        },
                         updateSelectedIndex: (index) {
                           setState(() {
                             _selectedIndex = index;

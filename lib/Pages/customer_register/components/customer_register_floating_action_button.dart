@@ -7,10 +7,12 @@ import '../../../components/components.dart';
 class CustomerRegisterFloatingActionButton extends StatefulWidget {
   final void Function(int index) updateSelectedIndex;
   final TextEditingController passwordController;
+  final void Function() clearControllersInSuccess;
 
   const CustomerRegisterFloatingActionButton({
     required this.updateSelectedIndex,
     required this.passwordController,
+    required this.clearControllersInSuccess,
     Key? key,
   }) : super(key: key);
 
@@ -73,6 +75,8 @@ class _CustomerRegisterFloatingActionButtonState
                 setState(() {
                   widget.updateSelectedIndex(0);
                 });
+
+                widget.clearControllersInSuccess();
 
                 ShowSnackbarMessage.show(
                   message: "Cliente inserido/atualizado com sucesso",
