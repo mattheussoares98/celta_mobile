@@ -5,7 +5,7 @@ import '../../../components/components.dart';
 class ReducedNameField extends StatelessWidget {
   final FocusNode reducedNameFocusNode;
   final FocusNode dateOfBirthFocusNode;
-  final void Function() validateFormKey;
+  final void Function()? validateFormKey;
   final TextEditingController reducedNameController;
   final bool cpfCnpjIsValid;
   const ReducedNameField({
@@ -23,7 +23,9 @@ class ReducedNameField extends StatelessWidget {
       enabled: cpfCnpjIsValid,
       focusNode: reducedNameFocusNode,
       onChanged: (_) {
-        validateFormKey();
+        if (validateFormKey != null) {
+          validateFormKey!();
+        }
       },
       suffixWidget: IconButton(
         onPressed: () {

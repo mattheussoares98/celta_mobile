@@ -5,7 +5,7 @@ import '../../../components/components.dart';
 class NameField extends StatelessWidget {
   final FocusNode nameFocusNode;
   final FocusNode reducedNameFocusNode;
-  final void Function() validateFormKey;
+  final void Function()? validateFormKey;
   final TextEditingController nameController;
   final bool cpfCnpjIsValid;
   const NameField({

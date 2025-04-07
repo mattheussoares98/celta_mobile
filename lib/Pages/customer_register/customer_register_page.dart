@@ -26,9 +26,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
   final cpfCnpjFocusNode = FocusNode();
 
-  final _personFormKey = GlobalKey<FormState>();
-  final _emailFormKey = GlobalKey<FormState>();
-
   int _selectedIndex = 0;
   ValueNotifier<String?> selectedSexDropDown = ValueNotifier<String?>(null);
 
@@ -40,11 +37,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     "Convênios",
     "Confirmação de dados",
   ];
-
-  void validateFormKeys() {
-    _personFormKey.currentState?.validate() == true;
-    _emailFormKey.currentState?.validate() == true;
-  }
 
   @override
   dispose() {
@@ -73,25 +65,22 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
 
       await customerRegisterProvider.getCustomer(cpfCnpjController.text);
 
-      selectedSexDropDown.value =
-          customerRegisterProvider.customer?.SexType == null
-              ? null
-              : customerRegisterProvider.customer!.SexType == "M"
-                  ? "Masculino"
-                  : "Feminino";
-      nameController.text = customerRegisterProvider.customer?.Name ?? "";
-      reducedNameController.text =
-          customerRegisterProvider.customer?.ReducedName ?? "";
-      dateOfBirthController.text = customerRegisterProvider
-                  .customer?.DateOfBirth !=
-              null
-          ? DateFormat("dd/MM/yyyy").format(
-              DateTime.parse(customerRegisterProvider.customer!.DateOfBirth!))
-          : customerRegisterProvider.customer?.DateOfBirth ?? "";
+      final customer = customerRegisterProvider.customer;
+
+      selectedSexDropDown.value = customer?.SexType == null
+          ? null
+          : customer!.SexType == "M"
+              ? "Masculino"
+              : "Feminino";
+      nameController.text = customer?.Name ?? "";
+      reducedNameController.text = customer?.ReducedName ?? "";
+      dateOfBirthController.text = customer?.DateOfBirth != null
+          ? DateFormat("dd/MM/yyyy")
+              .format(DateTime.parse(customer!.DateOfBirth!))
+          : customer?.DateOfBirth ?? "";
       setState(() {
         cpfCnpjIsValid = true;
       });
-      validateFormKeys();
     } else {
       setState(() {
         cpfCnpjIsValid = false;
@@ -140,8 +129,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
           changeCpfCnpj(value, customerRegisterProvider);
         },
         cpfCnpjIsValid: cpfCnpjIsValid,
-        personFormKey: _personFormKey,
-        validateFormKey: validateFormKeys,
         cpfCnpjController: cpfCnpjController,
         nameController: nameController,
         passwordConfirmationController: passwordConfirmationController,
@@ -154,11 +141,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         addresses: customerRegisterProvider.customer?.Addresses ?? [],
         addAddress: customerRegisterProvider.addAddress,
       ),
-      CustomerRegisterEmailPage(
-        emailFormKey: _emailFormKey,
-        validateAdressFormKey: validateFormKeys,
-        emailController: emailController,
-      ),
+      CustomerRegisterEmailPage(emailController: emailController),
       CustomerRegisterTelephonePage(
         areaCodeController: dddController,
         phoneNumberController: telephoneController,

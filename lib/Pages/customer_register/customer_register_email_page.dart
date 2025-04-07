@@ -6,12 +6,8 @@ import '../../providers/providers.dart';
 import './components/components.dart';
 
 class CustomerRegisterEmailPage extends StatefulWidget {
-  final GlobalKey<FormState> emailFormKey;
-  final void Function() validateAdressFormKey;
   final TextEditingController emailController;
   const CustomerRegisterEmailPage({
-    required this.validateAdressFormKey,
-    required this.emailFormKey,
     required this.emailController,
     Key? key,
   }) : super(key: key);
@@ -23,6 +19,7 @@ class CustomerRegisterEmailPage extends StatefulWidget {
 
 class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
   final FocusNode emailFocusNode = FocusNode();
+  final emailFormKey = GlobalKey<FormState>();
 
   void addEmail({
     required CustomerRegisterProvider customerRegisterProvider,
@@ -59,7 +56,7 @@ class _CustomerRegisterEmailPageState extends State<CustomerRegisterEmailPage> {
     return SingleChildScrollView(
       primary: false,
       child: Form(
-        key: widget.emailFormKey,
+        key: emailFormKey,
         child: Column(
           children: [
             FormFieldWidget(

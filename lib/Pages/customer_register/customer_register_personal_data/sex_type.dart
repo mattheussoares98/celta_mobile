@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SexType extends StatelessWidget {
   final ValueNotifier<String?>? selectedSexDropDown;
   final FocusNode sexTypeFocusNode;
-  final void Function() validateFormKey;
+  final void Function()? validateFormKey;
   final bool cpfCnpjIsValid;
   final void Function(String?) changeSexDropDown;
   const SexType({
@@ -43,7 +43,9 @@ class SexType extends StatelessWidget {
             ? null
             : (value) {
                 changeSexDropDown(value);
-                validateFormKey();
+                if (validateFormKey != null) {
+                  validateFormKey!();
+                }
               },
         decoration: const InputDecoration(
           labelText: '',

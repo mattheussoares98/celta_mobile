@@ -6,7 +6,7 @@ class Password extends StatelessWidget {
   final FocusNode passwordFocusNode;
   final FocusNode passwordConfirmationFocusNode;
   final FocusNode sexTypeFocusNode;
-  final Function() validateFormKey;
+  final bool? Function()? validateFormKey;
   final TextEditingController passwordController;
   final TextEditingController passwordConfirmationController;
   final bool cpfCnpjIsValid;
@@ -55,7 +55,9 @@ class Password extends StatelessWidget {
             canBeNullOrEmpty: true,
           ),
           onChanged: (_) {
-            validateFormKey();
+            if (validateFormKey != null) {
+              validateFormKey!();
+            }
           },
         ),
         FormFieldWidget(
@@ -82,7 +84,9 @@ class Password extends StatelessWidget {
             ),
           ),
           onChanged: (_) {
-            validateFormKey();
+            if (validateFormKey != null) {
+              validateFormKey!();
+            }
           },
           validator: (value) {
             if (value != passwordController.text) {

@@ -6,7 +6,7 @@ import '../../../components/components.dart';
 class BirthField extends StatelessWidget {
   final FocusNode dateOfBirthFocusNode;
   final FocusNode passwordFocusNode;
-  final void Function() validateFormKey;
+  final void Function()? validateFormKey;
   final TextEditingController dateOfBirthController;
   final bool cpfCnpjIsValid;
 
@@ -26,7 +26,9 @@ class BirthField extends StatelessWidget {
       enabled: cpfCnpjIsValid,
       focusNode: dateOfBirthFocusNode,
       onChanged: (_) {
-        validateFormKey();
+        if (validateFormKey != null) {
+          validateFormKey!();
+        }
       },
       onFieldSubmitted: (String? value) {
         FocusScope.of(context).requestFocus(passwordFocusNode);
