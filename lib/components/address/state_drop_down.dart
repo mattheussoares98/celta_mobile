@@ -6,10 +6,12 @@ import '../../providers/providers.dart';
 class StateDropDown extends StatelessWidget {
   final FocusNode stateFocusNode;
   final ValueNotifier<String?> selectedState;
+  final TextEditingController areaCodeController;
   const StateDropDown({
     super.key,
     required this.stateFocusNode,
     required this.selectedState,
+    required this.areaCodeController,
   });
 
   @override
@@ -30,7 +32,7 @@ class StateDropDown extends StatelessWidget {
         ),
       ),
       validator: (value) {
-        if (value == null && addressProvider.cepController.text.length == 8) {
+        if (value == null && areaCodeController.text.length == 8) {
           return 'Selecione um estado!';
         }
         return null;

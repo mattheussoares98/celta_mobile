@@ -145,7 +145,6 @@ class CustomerRegisterProvider with ChangeNotifier {
     emailController.clear();
     telephoneController.clear();
     dddController.clear();
-    addressProvider.clearAddressControllers(clearCep: true);
     addressProvider.clearAddresses();
     _emails.clear();
     _telephones.clear();

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import '../Models/address/address.dart';
 import 'package:flutter/material.dart';
 
 import '../api/api.dart';
@@ -288,19 +287,19 @@ class ResearchPricesProvider with ChangeNotifier {
     //todo endereço precisa de um CEP. Se estiver vazio, não tem endereço no
     //concorrente
 
-    final addressModel = AddressModel(
-      Zip: _selectedConcurrent!.Address?.Zip,
-      Address: _selectedConcurrent!.Address?.Address,
-      Number: _selectedConcurrent!.Address?.Number,
-      District: _selectedConcurrent!.Address?.District,
-      City: _selectedConcurrent!.Address?.City,
-      State: _selectedConcurrent!.Address?.State,
-      Complement: _selectedConcurrent!.Address?.Complement,
-      Reference: _selectedConcurrent!.Address?.Reference,
-    );
+    // final addressModel = AddressModel(
+    //   Zip: _selectedConcurrent!.Address?.Zip,
+    //   Address: _selectedConcurrent!.Address?.Address,
+    //   Number: _selectedConcurrent!.Address?.Number,
+    //   District: _selectedConcurrent!.Address?.District,
+    //   City: _selectedConcurrent!.Address?.City,
+    //   State: _selectedConcurrent!.Address?.State,
+    //   Complement: _selectedConcurrent!.Address?.Complement,
+    //   Reference: _selectedConcurrent!.Address?.Reference,
+    // );
 
     addressProvider?.clearAddresses();
-    addressProvider?.addAddress(addressModel: addressModel);
+    //TODO add address
   }
 
   void _updateLocalSelectedConcurrent({

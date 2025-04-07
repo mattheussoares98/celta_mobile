@@ -29,6 +29,7 @@ class _AddressComponentState extends State<AddressComponent> {
   final addressController = TextEditingController();
   final complementController = TextEditingController();
   final referenceController = TextEditingController();
+  final areaCodeController = TextEditingController();
 
   final cepFocusNode = FocusNode();
   final addressFocusNode = FocusNode();
@@ -63,6 +64,7 @@ class _AddressComponentState extends State<AddressComponent> {
     addressController.dispose();
     complementController.dispose();
     referenceController.dispose();
+    areaCodeController.dispose();
   }
 
   Future<void> _getAdressByCep({
@@ -168,6 +170,7 @@ class _AddressComponentState extends State<AddressComponent> {
                         flex: 5,
                         child: StateDropDown(
                           stateFocusNode: stateFocusNode,
+                          areaCodeController: areaCodeController,
                           selectedState: selectedStateNotifier,
                         ),
                       ),

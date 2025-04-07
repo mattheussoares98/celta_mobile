@@ -106,7 +106,6 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
           onPopInvokedWithResult: (_, __) {
             researchPricesProvider.updateSelectedConcurrent(concurrent: null);
             addressProvider.clearAddresses();
-            addressProvider.clearAddressControllers(clearCep: true);
           },
           child: Scaffold(
             appBar: AppBar(

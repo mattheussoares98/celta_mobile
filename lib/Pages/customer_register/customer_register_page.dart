@@ -46,32 +46,6 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     _emailFormKey.currentState?.validate() == true;
   }
 
-  bool _hasAdressInformed(
-    AddressProvider addressProvider,
-  ) {
-    return addressProvider.addressController.text.isNotEmpty ||
-        addressProvider.cityController.text.isNotEmpty ||
-        addressProvider.complementController.text.isNotEmpty ||
-        addressProvider.districtController.text.isNotEmpty ||
-        addressProvider.selectedStateDropDown.value != null ||
-        addressProvider.numberController.text.isNotEmpty ||
-        addressProvider.referenceController.text.isNotEmpty ||
-        addressProvider.cepController.text.isNotEmpty;
-  }
-
-  bool canExitPage({
-    required CustomerRegisterProvider customerRegisterProvider,
-    required AddressProvider addressProvider,
-  }) {
-    if (_selectedIndex == 1 && _hasAdressInformed(addressProvider)) {
-      return false;
-    } else if (customerRegisterProvider.isLoading) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   @override
   dispose() {
     super.dispose();
@@ -211,14 +185,9 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         );
       },
       child: PopScope(
-        canPop: canExitPage(
-          customerRegisterProvider: customerRegisterProvider,
-          addressProvider: addressProvider,
-        ),
         onPopInvokedWithResult: (value, __) {
           if (value == true) {
             addressProvider.clearAddresses();
-            addressProvider.clearAddressControllers(clearCep: true);
           }
         },
         child: Stack(
@@ -230,7 +199,10 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                 ),
               ),
               bottomNavigationBar: CustomerRegisterBottomNavigationItems(
-                hasAddressInformed: _hasAdressInformed(addressProvider),
+                hasAddressInformed:
+                    (customerRegisterProvider.customer?.Addresses?.length ??
+                            0) >
+                        0,
                 updateSelectedIndex: (index) {
                   updateSelectedIndex(
                     index: index,

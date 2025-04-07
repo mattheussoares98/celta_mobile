@@ -8,22 +8,7 @@ import '../components/components.dart';
 import '../Models/address/address.dart';
 
 class AddressProvider with ChangeNotifier {
-  final TextEditingController cepController =
-      TextEditingController(); //TODO remove all
-  final TextEditingController addressController =
-      TextEditingController(); //TODO remove all
-  final TextEditingController districtController =
-      TextEditingController(); //TODO remove all
-  final TextEditingController complementController =
-      TextEditingController(); //TODO remove all
-  final TextEditingController referenceController =
-      TextEditingController(); //TODO remove all
-  final TextEditingController cityController =
-      TextEditingController(); //TODO remove all
-  final TextEditingController numberController =
-      TextEditingController(); //TODO remove all
-
-  List<AddressModel> _addresses = [];
+  List<AddressModel> _addresses = []; //TODO remove this
   List<AddressModel> get addresses => [..._addresses];
   int get addressesCount => _addresses.length;
 
@@ -57,11 +42,6 @@ class AddressProvider with ChangeNotifier {
     "TO": "Tocantins",
   };
 
-  ValueNotifier<String?> get selectedStateDropDown => _selectedStateDropDown;
-  set selectedStateDropDown(ValueNotifier<String?> newValue) {
-    _selectedStateDropDown.value = newValue.value;
-  }
-
   bool _addressFormKeyIsValid = false;
   bool get addressFormKeyIsValid => _addressFormKeyIsValid;
   set addressFormKeyIsValid(bool newValue) {
@@ -73,9 +53,6 @@ class AddressProvider with ChangeNotifier {
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
-  final ValueNotifier<String?> _selectedStateDropDown =
-      ValueNotifier<String?>(null);
-
   bool _triedGetCep = false;
   bool get triedGetCep => _triedGetCep;
 
@@ -85,68 +62,42 @@ class AddressProvider with ChangeNotifier {
   String _errorMessageAddAddres = "";
   String get errorMessageAddAddres => _errorMessageAddAddres;
 
-  void clearAddressControllers({required bool clearCep}) {
-    if (clearCep == true) {
-      cepController.text = "";
-    }
+  // String _getKeyByValue(String value) {
+  //   for (var entry in _states.entries) {
+  //     if (entry.value == value) {
+  //       return entry.key;
+  //     }
+  //   }
+  //   return "null"; // Valor não encontrado
+  // }
 
-    addressController.text = "";
-    cityController.text = "";
-    complementController.text = "";
-    districtController.text = "";
-    numberController.text = "";
-    referenceController.text = "";
-    _selectedStateDropDown.value = null;
-    _triedGetCep = false; //para deixar somente o campo de CEP aberto
-    notifyListeners();
-  }
+  // void addAddress({AddressModel? addressModel}) {
+  //   _errorMessageAddAddres = "";
+  //   _addresses.forEach((element) {
+  //     if (element.Zip == cepController.text &&
+  //         element.Number == numberController.text) {
+  //       _errorMessageAddAddres = "Já existe um endereço com esse CEP e número!";
+  //     }
+  //   });
 
-  String _getKeyByValue(String value) {
-    for (var entry in _states.entries) {
-      if (entry.value == value) {
-        return entry.key;
-      }
-    }
-    return "null"; // Valor não encontrado
-  }
-
-  void addAddress({AddressModel? addressModel}) {
-    _errorMessageAddAddres = "";
-    _addresses.forEach((element) {
-      if (element.Zip == cepController.text &&
-          element.Number == numberController.text) {
-        _errorMessageAddAddres = "Já existe um endereço com esse CEP e número!";
-      }
-    });
-
-    if (_errorMessageAddAddres == "") {
-      if (addressModel != null) {
-        _addresses.add(addressModel);
-      } else {
-        _addresses.add(AddressModel(
-          Address: addressController.text,
-          City: cityController.text,
-          Complement: complementController.text,
-          District: districtController.text,
-          Number: numberController.text,
-          Reference: referenceController.text,
-          Zip: cepController.text,
-          State: _getKeyByValue(selectedStateDropDown.value!),
-        ));
-      }
-
-      addressController.text = "";
-      cityController.text = "";
-      complementController.text = "";
-      districtController.text = "";
-      numberController.text = "";
-      referenceController.text = "";
-      cepController.text = "";
-      _selectedStateDropDown.value = null;
-      _triedGetCep = false; //para deixar somente o campo de CEP aberto
-    }
-    notifyListeners();
-  }
+  //   if (_errorMessageAddAddres == "") {
+  //     if (addressModel != null) {
+  //       _addresses.add(addressModel);
+  //     } else {
+  //       _addresses.add(AddressModel(
+  //         Address: addressController.text,
+  //         City: cityController.text,
+  //         Complement: complementController.text,
+  //         District: districtController.text,
+  //         Number: numberController.text,
+  //         Reference: referenceController.text,
+  //         Zip: cepController.text,
+  //         State: _getKeyByValue(selectedStateDropDown.value!),
+  //       ));
+  //     }
+  //   }
+  //   notifyListeners();
+  // }
 
   void removeAddress(int index) {
     _addresses.removeAt(index);
