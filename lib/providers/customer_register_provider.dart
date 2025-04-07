@@ -32,6 +32,26 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void addEmail(TextEditingController emailController) {
+    final oldCustomer = _customer;
+
+    _customer = CustomerModel(
+      Emails: [...oldCustomer?.Emails ?? [], emailController.text],
+      Name: customer?.Name,
+      Code: customer?.Code,
+      PersonalizedCode: customer?.PersonalizedCode,
+      ReducedName: customer?.ReducedName,
+      CpfCnpjNumber: customer?.CpfCnpjNumber,
+      RegistrationNumber: customer?.RegistrationNumber,
+      DateOfBirth: customer?.DateOfBirth,
+      SexType: customer?.SexType,
+      PersonType: customer?.PersonType,
+      Telephones: customer?.Telephones,
+      Addresses: customer?.Addresses,
+      selected: customer?.selected == true,
+      password: customer?.password,
+      CustomerCovenants: customer?.CustomerCovenants,
+    );
+
     //TODO implementar email
     notifyListeners();
   }
