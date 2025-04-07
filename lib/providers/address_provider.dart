@@ -38,12 +38,6 @@ class AddressProvider with ChangeNotifier {
     "TO": "Tocantins",
   };
 
-  bool _addressFormKeyIsValid = false;
-  bool get addressFormKeyIsValid => _addressFormKeyIsValid;
-  set addressFormKeyIsValid(bool newValue) {
-    _addressFormKeyIsValid = newValue;
-  }
-
   List<String> get states => [..._states.values];
 
   String _errorMessage = "";

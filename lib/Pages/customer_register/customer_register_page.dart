@@ -179,15 +179,12 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
             ),
           ),
           bottomNavigationBar: CustomerRegisterBottomNavigationItems(
-            hasAddressInformed:
-                (customerRegisterProvider.customer?.Addresses?.length ?? 0) > 0,
             updateSelectedIndex: (index) {
               updateSelectedIndex(
                 index: index,
                 customerRegisterProvider: customerRegisterProvider,
               );
             },
-            validateFormKeys: validateFormKeys,
             selectedIndex: _selectedIndex,
           ),
           body: _pages.elementAt(_selectedIndex),

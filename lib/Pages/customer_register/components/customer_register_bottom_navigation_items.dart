@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
 class CustomerRegisterBottomNavigationItems extends StatelessWidget {
-  final bool hasAddressInformed;
   final void Function(int) updateSelectedIndex;
-  final void Function() validateFormKeys;
   final int selectedIndex;
   const CustomerRegisterBottomNavigationItems({
-    required this.hasAddressInformed,
     required this.updateSelectedIndex,
-    required this.validateFormKeys,
     required this.selectedIndex,
     super.key,
   });
@@ -47,31 +42,6 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void _onItemTapped({
-    required int index,
-    required BuildContext context,
-  }) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    AddressProvider addressProvider = Provider.of(context, listen: false);
-
-    String errorMessage = "Informe os dados necessários!";
-    if (hasAddressInformed && addressProvider.addressFormKeyIsValid) {
-      errorMessage =
-          "Adicione o endereço ou apague os dados para mudar de tela!";
-    } else if (hasAddressInformed && !addressProvider.addressFormKeyIsValid) {
-      errorMessage = "Corrija os dados e salve o endereço para mudar de tela!";
-    }
-
-    if (!hasAddressInformed) {
-      updateSelectedIndex(index);
-    } else {
-      ShowSnackbarMessage.show(
-        message: errorMessage,
-        context: context,
-      );
-    }
   }
 
   @override
@@ -146,14 +116,7 @@ class CustomerRegisterBottomNavigationItems extends StatelessWidget {
       currentIndex: selectedIndex,
       selectedItemColor: Theme.of(context).colorScheme.primary,
       unselectedItemColor: Colors.grey,
-      onTap: customerRegisterProvider.isLoading
-          ? null
-          : (index) {
-              _onItemTapped(
-                index: index,
-                context: context,
-              );
-            },
+      onTap: updateSelectedIndex,
     );
   }
 }
