@@ -15,7 +15,7 @@ class CustomerRegisterProvider with ChangeNotifier {
 
   CustomerRegisterCovenantModel? _selectedCovenant;
   CustomerRegisterCovenantModel? get selectedCovenant => _selectedCovenant;
-  List<CustomerRegisterCovenantModel> _covenants = []; //TODO remove this
+  List<CustomerRegisterCovenantModel> _covenants = [];
   List<CustomerRegisterCovenantModel> get covenants => [..._covenants];
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
