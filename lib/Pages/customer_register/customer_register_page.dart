@@ -118,6 +118,18 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     });
   }
 
+  void clearAllData() {
+    cpfCnpjController.clear();
+    nameController.clear();
+    reducedNameController.clear();
+    dateOfBirthController.clear();
+    passwordController.clear();
+    passwordConfirmationController.clear();
+    setState(() {
+      cpfCnpjIsValid = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     CustomerRegisterProvider customerRegisterProvider = Provider.of(context);
@@ -202,30 +214,16 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomerRegisterClearAllData(
-                        nameController: nameController,
-                        emailController: emailController,
-                        telephoneController: telephoneController,
-                        dddController: dddController,
-                        reducedNameController: reducedNameController,
-                        cpfCnpjController: cpfCnpjController,
-                        dateOfBirthController: dateOfBirthController,
-                        passwordConfirmationController:
-                            passwordConfirmationController,
-                        passwordController: passwordController,
+                        clearAllData: () {
+                          clearAllData();
+                          setState(() {
+                            _selectedIndex = 0;
+                          });
+                        },
                       ),
                       CustomerRegisterFloatingActionButton(
                         passwordController: passwordController,
-                        clearControllersInSuccess: () {
-                          cpfCnpjController.clear();
-                          nameController.clear();
-                          reducedNameController.clear();
-                          dateOfBirthController.clear();
-                          passwordController.clear();
-                          passwordConfirmationController.clear();
-                          setState(() {
-                            cpfCnpjIsValid = false;
-                          });
-                        },
+                        clearControllersInSuccess: clearAllData,
                         updateSelectedIndex: (index) {
                           setState(() {
                             _selectedIndex = index;

@@ -5,25 +5,9 @@ import '../../../components/components.dart';
 import '../../../providers/providers.dart';
 
 class CustomerRegisterClearAllData extends StatelessWidget {
-  final TextEditingController nameController;
-  final TextEditingController emailController;
-  final TextEditingController telephoneController;
-  final TextEditingController dddController;
-  final TextEditingController reducedNameController;
-  final TextEditingController cpfCnpjController;
-  final TextEditingController dateOfBirthController;
-  final TextEditingController passwordController;
-  final TextEditingController passwordConfirmationController;
+  final void Function() clearAllData;
   const CustomerRegisterClearAllData({
-    required this.nameController,
-    required this.emailController,
-    required this.telephoneController,
-    required this.dddController,
-    required this.reducedNameController,
-    required this.cpfCnpjController,
-    required this.dateOfBirthController,
-    required this.passwordController,
-    required this.passwordConfirmationController,
+    required this.clearAllData,
     super.key,
   });
 
@@ -35,35 +19,24 @@ class CustomerRegisterClearAllData extends StatelessWidget {
       padding: const EdgeInsets.only(left: 30.0),
       child: FloatingActionButton(
         tooltip: "Limpar todos os dados do pedido",
-        onPressed:
-            customerRegisterProvider.isLoading || nameController.text.isEmpty
-                ? null
-                : () {
-                    ShowAlertDialog.show(
-                      context: context,
-                      title: "Apagar TODOS dados",
-                      content: const SingleChildScrollView(
-                        child: Text(
-                          "Deseja realmente limpar todos os dados do pedido?",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      function: () {
-                        nameController.clear();
-                        emailController.clear();
-                        telephoneController.clear();
-                        dddController.clear();
-                        reducedNameController.clear();
-                        cpfCnpjController.clear();
-                        dateOfBirthController.clear();
-                        passwordController.clear();
-                        passwordConfirmationController.clear();
-                      },
-                    );
-                  },
+        onPressed: customerRegisterProvider.customer == null
+            ? null
+            : () {
+                ShowAlertDialog.show(
+                  context: context,
+                  title: "Apagar TODOS dados",
+                  content: const SingleChildScrollView(
+                    child: Text(
+                      "Deseja realmente limpar todos os dados do pedido?",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  function: clearAllData,
+                );
+              },
         child: const Icon(Icons.delete, color: Colors.white),
         backgroundColor:
-            customerRegisterProvider.isLoading || nameController.text.isEmpty
+            customerRegisterProvider.customer == null
                 ? Colors.grey.withAlpha(190)
                 : Colors.red.withAlpha(190),
       ),
