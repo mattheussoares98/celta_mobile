@@ -391,9 +391,9 @@ class CustomerRegisterProvider with ChangeNotifier {
   }
 
   void changePersonalData({
-    required String cpfCnpj,
-    required String name,
-    required String sexType,
+    required String? cpfCnpj,
+    required String? name,
+    required String? sexType,
     String? reducedName,
     DateTime? birthDate,
     String? password,

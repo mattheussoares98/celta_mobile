@@ -104,10 +104,13 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
     required CustomerRegisterProvider customerRegisterProvider,
   }) {
     if (_selectedIndex == 0) {
+      final cpfCnpj = cpfCnpjController.text;
+      final name = nameController.text;
+
       customerRegisterProvider.changePersonalData(
-        cpfCnpj: cpfCnpjController.text,
-        name: nameController.text,
-        sexType: selectedSexDropDown.value ?? "",
+        cpfCnpj: cpfCnpj.isNotEmpty ? cpfCnpj : null,
+        name: name.isNotEmpty ? name : null,
+        sexType: selectedSexDropDown.value,
         birthDate: dateOfBirthController.text.isEmpty
             ? null
             : DateFormat("dd/MM/yyyy").parse(dateOfBirthController.text),
