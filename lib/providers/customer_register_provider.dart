@@ -390,7 +390,6 @@ class CustomerRegisterProvider with ChangeNotifier {
     final oldCustomer = _customer;
     oldCustomer?.Addresses?.removeAt(index);
     _customer = CustomerModel(
-      //TODO test this
       Addresses: oldCustomer?.Addresses,
       Name: customer?.Name,
       Code: customer?.Code,
