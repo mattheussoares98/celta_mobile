@@ -6,6 +6,7 @@ export './city_field.dart';
 export './clean_written_data_button.dart';
 export './complement_field.dart';
 export './district_field.dart';
+export './informed_addresses.dart';
 export './number_field.dart';
 export './reference_field.dart';
 export './state_drop_down.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/components.dart';
 import '../../providers/providers.dart';
 import 'customer_register.dart';
 
@@ -37,8 +38,9 @@ class CustomerRegisterAddPage extends StatelessWidget {
               selectedSex: selectedSex,
             ),
           if ((customerRegisterProvider.customer?.Addresses?.length ?? 0) > 0)
-            CustomerRegisterAddressesInformeds(
+            InformedsAddresses(
               addresses: customerRegisterProvider.customer?.Addresses ?? [],
+              removeAddress: customerRegisterProvider.removeAddress,
             ),
           if ((customerRegisterProvider.customer?.Emails?.length ?? 0) > 0)
             const CustomerRegisterEmailsInformeds(),

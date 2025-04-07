@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/models.dart';
-import '../../Pages/customer_register/customer_register.dart';
 import '../components.dart';
 import '../../providers/providers.dart';
 
@@ -10,10 +9,12 @@ class AddressComponent extends StatefulWidget {
   final bool canInsertMoreThanOneAddress;
   final List<AddressModel> addresses;
   final bool Function(AddressModel address) addAddress;
+  final void Function(int index) removeAddress;
   const AddressComponent({
     required this.canInsertMoreThanOneAddress,
     required this.addresses,
     required this.addAddress,
+    required this.removeAddress,
     Key? key,
   }) : super(key: key);
 
@@ -242,8 +243,9 @@ class _AddressComponentState extends State<AddressComponent> {
                 ],
               ),
             if (widget.addresses.length > 0)
-              CustomerRegisterAddressesInformeds(
+              InformedsAddresses(
                 addresses: widget.addresses,
+                removeAddress: widget.removeAddress,
               ),
           ],
         ),

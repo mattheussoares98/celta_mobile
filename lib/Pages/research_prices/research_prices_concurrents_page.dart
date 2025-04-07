@@ -52,7 +52,7 @@ class _ResearchPricesConcurrentsPageState
       canPop: !researchPricesProvider.isLoadingAddOrUpdateConcurrents &&
           !researchPricesProvider.isLoadingAddOrUpdateOfResearch,
       onPopInvokedWithResult: (_, __) async {
-        researchPricesProvider.changeSelectedConcurrent(null);
+        researchPricesProvider.updateSelectedConcurrent(null);
         researchPricesProvider.clearConcurrents();
       },
       child: Stack(
@@ -140,7 +140,7 @@ class _ResearchPricesConcurrentsPageState
                   researchPricesProvider.isLoadingAddOrUpdateOfResearch,
               messageButton: "criar\nconcorrente".toUpperCase(),
               onTap: () {
-                researchPricesProvider.changeSelectedConcurrent(null);
+                researchPricesProvider.updateSelectedConcurrent(null);
                 Navigator.of(context).pushNamed(
                     APPROUTES.RESERACH_PRICES_INSERT_UPDATE_CONCORRENT);
               },

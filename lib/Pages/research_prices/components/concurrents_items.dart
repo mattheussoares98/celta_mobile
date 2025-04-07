@@ -46,7 +46,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
             return Container(
               child: GestureDetector(
                 onTap: () async {
-                  researchPricesProvider.changeSelectedConcurrent(concurrent);
+                  researchPricesProvider.updateSelectedConcurrent(concurrent);
                   await researchPricesProvider
                       .associateConcurrentToResearchPrice(
                     context: context,
@@ -120,7 +120,7 @@ class _ConcurrentsItemsState extends State<ConcurrentsItems> {
                         TextButton.icon(
                           onPressed: () {
                             researchPricesProvider
-                                .changeSelectedConcurrent(concurrent);
+                                .updateSelectedConcurrent(concurrent);
                             Navigator.of(context).pushNamed(
                               APPROUTES
                                   .RESERACH_PRICES_INSERT_UPDATE_CONCORRENT,

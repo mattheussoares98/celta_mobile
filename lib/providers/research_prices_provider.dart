@@ -72,7 +72,7 @@ class ResearchPricesProvider with ChangeNotifier {
 
   ResearchPricesConcurrentsModel? _selectedConcurrent;
   ResearchPricesConcurrentsModel? get selectedConcurrent => _selectedConcurrent;
-  void changeSelectedConcurrent(ResearchPricesConcurrentsModel? concurrent) {
+  void updateSelectedConcurrent(ResearchPricesConcurrentsModel? concurrent) {
     _selectedConcurrent = concurrent;
   }
 
@@ -92,7 +92,7 @@ class ResearchPricesProvider with ChangeNotifier {
     _errorAddOrUpdateConcurrents = "";
     _errorGetConcurrents = "";
     _isLoadingAddOrUpdateConcurrents = false;
-    changeSelectedConcurrent(null);
+    updateSelectedConcurrent(null);
   }
 
   bool _concurrentAlreadyIsAssociated() {

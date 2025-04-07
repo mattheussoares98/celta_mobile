@@ -386,12 +386,28 @@ class CustomerRegisterProvider with ChangeNotifier {
     return true;
   }
 
-  void removeAddress(AddressModel address) {
-    if (_customer?.Addresses?.isEmpty == true) {
-      debugPrint("Não deveria estar vazio");
-      return;
-    }
-    _customer?.Addresses!.removeWhere((e) => e == address);
+  void removeAddress(int index) {
+    final oldCustomer = _customer;
+    oldCustomer?.Addresses?.removeAt(index);
+    _customer = CustomerModel(
+      //TODO test this
+      Addresses: oldCustomer?.Addresses,
+      Name: customer?.Name,
+      Code: customer?.Code,
+      PersonalizedCode: customer?.PersonalizedCode,
+      ReducedName: customer?.ReducedName,
+      CpfCnpjNumber: customer?.CpfCnpjNumber,
+      RegistrationNumber: customer?.RegistrationNumber,
+      DateOfBirth: customer?.DateOfBirth,
+      SexType: customer?.SexType,
+      PersonType: customer?.PersonType,
+      Emails: customer?.Emails,
+      Telephones: customer?.Telephones,
+      selected: customer?.selected == true,
+      password: customer?.password,
+      CustomerCovenants: customer?.CustomerCovenants,
+    );
+
     notifyListeners();
   }
 

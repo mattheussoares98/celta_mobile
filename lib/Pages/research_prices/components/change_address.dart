@@ -51,7 +51,7 @@ class ChangeAddress extends StatelessWidget {
                   addAddress: (address) {
                     final selectedConcurrent =
                         researchPricesProvider.selectedConcurrent;
-                    researchPricesProvider.changeSelectedConcurrent(
+                    researchPricesProvider.updateSelectedConcurrent(
                       ResearchPricesConcurrentsModel(
                         ConcurrentCode: selectedConcurrent?.ConcurrentCode,
                         Name: selectedConcurrent?.Name,
@@ -65,6 +65,18 @@ class ChangeAddress extends StatelessWidget {
                     if (newAddress != null) newAddress!,
                   ],
                   canInsertMoreThanOneAddress: false,
+                  removeAddress: (index) {
+                    final selectedConcurrent =
+                        researchPricesProvider.selectedConcurrent;
+
+                    researchPricesProvider.updateSelectedConcurrent(
+                        ResearchPricesConcurrentsModel(
+                      ConcurrentCode: selectedConcurrent?.ConcurrentCode,
+                      Name: selectedConcurrent?.Name,
+                      Observation: selectedConcurrent?.Observation,
+                      Address: null,
+                    ));
+                  },
                 ),
               ],
             ),

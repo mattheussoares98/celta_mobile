@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../components/components.dart';
-import '../../../Models/address/address.dart';
-import '../../../providers/providers.dart';
+import '../components.dart';
+import '../../Models/address/address.dart';
+import '../../providers/providers.dart';
 
-class CustomerRegisterAddressesInformeds extends StatelessWidget {
+class InformedsAddresses extends StatelessWidget {
   final List<AddressModel> addresses;
-  const CustomerRegisterAddressesInformeds({
+  final void Function(int index) removeAddress;
+  const InformedsAddresses({
     required this.addresses,
+    required this.removeAddress,
     Key? key,
   }) : super(key: key);
   String _getState({
@@ -110,8 +112,7 @@ class CustomerRegisterAddressesInformeds extends StatelessWidget {
                             ),
                           ),
                           function: () {
-                            customerRegisterProvider
-                                .removeAddress(addressModel);
+                            removeAddress(index);
                           },
                         );
                       },

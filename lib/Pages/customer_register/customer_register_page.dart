@@ -146,6 +146,7 @@ class _CustomerRegisterPageState extends State<CustomerRegisterPage> {
         canInsertMoreThanOneAddress: true,
         addresses: customerRegisterProvider.customer?.Addresses ?? [],
         addAddress: customerRegisterProvider.addAddress,
+        removeAddress: customerRegisterProvider.removeAddress,
       ),
       CustomerRegisterEmailPage(emailController: emailController),
       CustomerRegisterTelephonePage(

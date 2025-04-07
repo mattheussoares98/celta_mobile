@@ -65,7 +65,7 @@ class _ResearchPricesInsertOrUpdateConcurrentPageState
       children: [
         PopScope(
           onPopInvokedWithResult: (_, __) {
-            researchPricesProvider.changeSelectedConcurrent(null);
+            researchPricesProvider.updateSelectedConcurrent(null);
           },
           child: Scaffold(
             appBar: AppBar(
