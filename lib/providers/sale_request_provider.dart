@@ -1121,4 +1121,34 @@ class SaleRequestProvider with ChangeNotifier {
       );
     }
   }
+
+  Future<void> getSaleRequestByCode({
+    required int enterpriseCode,
+    required String saleRequestCode,
+  }) async {
+    _isLoadingRequests = true;
+
+    try {
+      SoapRequest.soapPost(
+        parameters: {
+          "crossIdentity": UserData.crossIdentity,
+          "enterpriseCode": enterpriseCode,
+          "saleRequestCode": saleRequestCode,
+        },
+        typeOfResponse: "GetSaleRequestResponse",
+        SOAPAction: "GetSaleRequest",
+        serviceASMX: "CeltaSaleRequestService.asmx",
+        typeOfResult: "GetSaleRequestResult",
+      );
+
+      SoapRequestResponse.errorMessage;
+      SoapRequestResponse.responseAsMap;
+      SoapRequestResponse.responseAsString;
+    } catch (e) {
+      _errorMessageRequests = DefaultErrorMessage.ERROR;
+    } finally {
+      _isLoadingRequests = false;
+      notifyListeners();
+    }
+  }
 }
