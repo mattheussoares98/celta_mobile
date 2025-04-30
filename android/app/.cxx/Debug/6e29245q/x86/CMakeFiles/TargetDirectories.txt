@@ -1,0 +1,2 @@
+C:/Development/Projects/celta_mobile/android/app/.cxx/Debug/6e29245q/x86/CMakeFiles/edit_cache.dir
+C:/Development/Projects/celta_mobile/android/app/.cxx/Debug/6e29245q/x86/CMakeFiles/rebuild_cache.dir
