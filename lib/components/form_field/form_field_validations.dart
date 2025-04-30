@@ -13,7 +13,9 @@ class FormFieldValidations {
     bool valueCanIsEmpty = false,
     bool isInteger = false,
   }) {
-    if (value!.isEmpty && !valueCanIsEmpty) {
+    if (value?.isEmpty == true && valueCanIsEmpty) {
+      return null;
+    } else if (value!.isEmpty && !valueCanIsEmpty) {
       return 'Digite um valor';
     } else if (value == '0' || value == '0.' || value == '0,') {
       return 'Digite um valor';

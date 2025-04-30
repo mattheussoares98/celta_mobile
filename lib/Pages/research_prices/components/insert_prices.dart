@@ -36,39 +36,40 @@ class _InsertPricesState extends State<InsertPrices> {
     required FocusNode? nextFocusOnSubmit,
   }) {
     return Flexible(
-      child: TextFormField(
-        focusNode: focusNode,
+      child: Form(
         key: key,
-        controller: textEditingController,
-        decoration: FormFieldDecoration.decoration(
-          context: context,
-          labelText: label,
-          hintText: label,
-          errorSize: 10,
-          suffixIcon: IconButton(
-            onPressed: () {
-              textEditingController.clear();
-              FocusScope.of(context).requestFocus(focusNode);
-            },
-            icon: const Icon(Icons.delete, color: Colors.red),
+        child: TextFormField(
+          focusNode: focusNode,
+          controller: textEditingController,
+          decoration: FormFieldDecoration.decoration(
+            context: context,
+            labelText: label,
+            hintText: label,
+            errorSize: 10,
+            suffixIcon: IconButton(
+              onPressed: () {
+                textEditingController.clear();
+                FocusScope.of(context).requestFocus(focusNode);
+              },
+              icon: const Icon(Icons.delete, color: Colors.red),
+            ),
           ),
+          onFieldSubmitted: (_) {
+            FocusScope.of(context).requestFocus(nextFocusOnSubmit);
+          },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (value) => FormFieldValidations.number(
+            value,
+            maxDecimalPlaces: 2,
+            valueCanIsEmpty: true,
+          ),
+          style: FormFieldStyle.style(),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
         ),
-        onFieldSubmitted: (_) {
-          FocusScope.of(context).requestFocus(nextFocusOnSubmit);
-        },
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (value) => FormFieldValidations.number(
-          value,
-          maxDecimalPlaces: 2,
-          valueCanIsEmpty: true,
-        ),
-        style: FormFieldStyle.style(),
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
       ),
     );
   }
 
-  final _formKey = GlobalKey<FormState>();
   final _priceRetailKey = GlobalKey<FormState>();
   final _offerRetailKey = GlobalKey<FormState>();
   final _priceWholeKey = GlobalKey<FormState>();
@@ -132,6 +133,15 @@ class _InsertPricesState extends State<InsertPrices> {
       );
   }
 
+  bool atLeastOnePriceInInformed() {
+    return _priceRetailKey.currentState?.validate() == true &&
+        _offerRetailKey.currentState?.validate() == true &&
+        _priceWholeKey.currentState?.validate() == true &&
+        _offerWholeKey.currentState?.validate() == true &&
+        _priceEcommerceKey.currentState?.validate() == true &&
+        _offerEcommerceKey.currentState?.validate() == true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -162,141 +172,134 @@ class _InsertPricesState extends State<InsertPrices> {
 
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                personalizedField(
-                  label: "Venda",
-                  textEditingController: _priceRetailController,
-                  focusNode: _priceRetailFocusNode,
-                  key: _priceRetailKey,
-                  nextFocusOnSubmit: _offerRetailFocusNode,
-                ),
-                const SizedBox(width: 10),
-                personalizedField(
-                  label: "Venda (oferta)",
-                  textEditingController: _offerRetailController,
-                  focusNode: _offerRetailFocusNode,
-                  key: _offerRetailKey,
-                  nextFocusOnSubmit: _priceWholeFocusNode,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                personalizedField(
-                  label: "Atacado",
-                  textEditingController: _priceWholeController,
-                  focusNode: _priceWholeFocusNode,
-                  key: _priceWholeKey,
-                  nextFocusOnSubmit: _offerWholeFocusNode,
-                ),
-                const SizedBox(width: 10),
-                personalizedField(
-                  label: "Atacado (oferta)",
-                  textEditingController: _offerWholeController,
-                  focusNode: _offerWholeFocusNode,
-                  key: _offerWholeKey,
-                  nextFocusOnSubmit: _priceEcommerceFocusNode,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                personalizedField(
-                  label: "Ecommerce",
-                  textEditingController: _priceEcommerceController,
-                  focusNode: _priceEcommerceFocusNode,
-                  key: _priceEcommerceKey,
-                  nextFocusOnSubmit: _offerEcommerceFocusNode,
-                ),
-                const SizedBox(width: 10),
-                personalizedField(
-                  label: "Ecommerce (oferta)",
-                  textEditingController: _offerEcommerceController,
-                  focusNode: _offerEcommerceFocusNode,
-                  key: _offerEcommerceKey,
-                  nextFocusOnSubmit: null,
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () async {
-                bool isValid = _formKey.currentState!.validate();
-
-                if (!isValid) {
-                  ShowSnackbarMessage.show(
-                    message: "Insira os preços corretamente!",
-                    context: context,
-                  );
-                } else {
-                  if (_allFieldsAreEmpty()) {}
-
-                  ShowAlertDialog.show(
-                    context: context,
-                    title: _allFieldsAreEmpty()
-                        ? "Zerar preços informados"
-                        : "Confirmar preços",
-                    content: SingleChildScrollView(
-                      child: Text(
-                        _allFieldsAreEmpty()
-                            ? "Deseja realmente zerar os preços informados"
-                            : "Deseja realmente confirmar os preços do concorrente?",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    function: () async {
-                      await researchPricesProvider.insertConcurrentPrices(
-                        isAssociatedProducts: widget.isAssociatedProducts,
-                        productCode: widget.product.ProductPackingCode,
-                        priceLookUp: widget.product.PriceLookUp,
-                        productName: widget.product.ProductName,
-                        priceRetail: double.tryParse(_priceRetailController.text
-                            .replaceAll(RegExp(','), '.')),
-                        offerRetail: double.tryParse(_offerRetailController.text
-                            .replaceAll(RegExp(','), '.')),
-                        priceWhole: double.tryParse(_priceWholeController.text
-                            .replaceAll(RegExp(','), '.')),
-                        offerWhole: double.tryParse(_offerWholeController.text
-                            .replaceAll(RegExp(','), '.')),
-                        priceECommerce: double.tryParse(
-                            _priceEcommerceController.text
-                                .replaceAll(RegExp(','), '.')),
-                        offerECommerce: double.tryParse(
-                            _offerEcommerceController.text
-                                .replaceAll(RegExp(','), '.')),
-                      );
-
-                      if (researchPricesProvider.errorInsertConcurrentPrices ==
-                          "") {
-                        widget.showSuccessMessage();
-                        //só funcionou dessa forma porque quando tentava chamar
-                        //o contexto após dar certo ou erro, ele já não existia
-                        //mais
-                      } else {
-                        widget.showErrorMessage();
-                        //só funcionou dessa forma porque quando tentava chamar
-                        //o contexto após dar certo ou erro, ele já não existia
-                        //mais
-                      }
-                    },
-                  );
-                }
-              },
-              icon: const Icon(Icons.check),
-              label: const Text(
-                "Confirmar preços do concorrente",
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              personalizedField(
+                label: "Venda",
+                textEditingController: _priceRetailController,
+                focusNode: _priceRetailFocusNode,
+                key: _priceRetailKey,
+                nextFocusOnSubmit: _offerRetailFocusNode,
               ),
+              const SizedBox(width: 10),
+              personalizedField(
+                label: "Venda (oferta)",
+                textEditingController: _offerRetailController,
+                focusNode: _offerRetailFocusNode,
+                key: _offerRetailKey,
+                nextFocusOnSubmit: _priceWholeFocusNode,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              personalizedField(
+                label: "Atacado",
+                textEditingController: _priceWholeController,
+                focusNode: _priceWholeFocusNode,
+                key: _priceWholeKey,
+                nextFocusOnSubmit: _offerWholeFocusNode,
+              ),
+              const SizedBox(width: 10),
+              personalizedField(
+                label: "Atacado (oferta)",
+                textEditingController: _offerWholeController,
+                focusNode: _offerWholeFocusNode,
+                key: _offerWholeKey,
+                nextFocusOnSubmit: _priceEcommerceFocusNode,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              personalizedField(
+                label: "Ecommerce",
+                textEditingController: _priceEcommerceController,
+                focusNode: _priceEcommerceFocusNode,
+                key: _priceEcommerceKey,
+                nextFocusOnSubmit: _offerEcommerceFocusNode,
+              ),
+              const SizedBox(width: 10),
+              personalizedField(
+                label: "Ecommerce (oferta)",
+                textEditingController: _offerEcommerceController,
+                focusNode: _offerEcommerceFocusNode,
+                key: _offerEcommerceKey,
+                nextFocusOnSubmit: null,
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            onPressed: () async {
+              if (!atLeastOnePriceInInformed()) {
+                ShowSnackbarMessage.show(
+                  message: "Insira os preços corretamente!",
+                  context: context,
+                );
+              } else {
+                ShowAlertDialog.show(
+                  context: context,
+                  title: _allFieldsAreEmpty()
+                      ? "Zerar preços informados"
+                      : "Confirmar preços",
+                  content: SingleChildScrollView(
+                    child: Text(
+                      _allFieldsAreEmpty()
+                          ? "Deseja realmente zerar os preços informados"
+                          : "Deseja realmente confirmar os preços do concorrente?",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  function: () async {
+                    await researchPricesProvider.insertConcurrentPrices(
+                      isAssociatedProducts: widget.isAssociatedProducts,
+                      productCode: widget.product.ProductPackingCode,
+                      priceLookUp: widget.product.PriceLookUp,
+                      productName: widget.product.ProductName,
+                      priceRetail: double.tryParse(_priceRetailController.text
+                          .replaceAll(RegExp(','), '.')),
+                      offerRetail: double.tryParse(_offerRetailController.text
+                          .replaceAll(RegExp(','), '.')),
+                      priceWhole: double.tryParse(_priceWholeController.text
+                          .replaceAll(RegExp(','), '.')),
+                      offerWhole: double.tryParse(_offerWholeController.text
+                          .replaceAll(RegExp(','), '.')),
+                      priceECommerce: double.tryParse(_priceEcommerceController
+                          .text
+                          .replaceAll(RegExp(','), '.')),
+                      offerECommerce: double.tryParse(_offerEcommerceController
+                          .text
+                          .replaceAll(RegExp(','), '.')),
+                    );
+
+                    if (researchPricesProvider.errorInsertConcurrentPrices ==
+                        "") {
+                      widget.showSuccessMessage();
+                      //só funcionou dessa forma porque quando tentava chamar
+                      //o contexto após dar certo ou erro, ele já não existia
+                      //mais
+                    } else {
+                      widget.showErrorMessage();
+                      //só funcionou dessa forma porque quando tentava chamar
+                      //o contexto após dar certo ou erro, ele já não existia
+                      //mais
+                    }
+                  },
+                );
+              }
+            },
+            icon: const Icon(Icons.check),
+            label: const Text(
+              "Confirmar preços do concorrente",
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
