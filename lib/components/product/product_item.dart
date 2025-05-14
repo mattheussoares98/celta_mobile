@@ -59,7 +59,11 @@ class ProductItem extends StatelessWidget {
                     OpenDialogProductInformations(
                       product: product,
                       pages: [
-                        if (showPrice == true) Prices(product: product),
+                        if (showPrice == true &&
+                                (product.wholePracticedPrice ?? 0) > 0 ||
+                            (product.retailPracticedPrice ?? 0) > 0 ||
+                            (product.eCommercePracticedPrice ?? 0) > 0)
+                          Prices(product: product),
                         if (showStocks == true) Stocks(product: product),
                         if (showAddress == true) StockAddress(product: product),
                         if (showLastBuyEntrance == true)

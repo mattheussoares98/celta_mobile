@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../components.dart';
 import '../../../Models/models.dart';
-import '../../../providers/providers.dart';
 import '../../../utils/utils.dart';
 
 class Prices extends StatelessWidget implements MoreInformationWidget {
@@ -21,8 +19,6 @@ class Prices extends StatelessWidget implements MoreInformationWidget {
 
   @override
   Widget build(BuildContext context) {
-    AdjustSalePriceProvider adjustSalePriceProvider = Provider.of(context);
-
     return Column(
       children: [
         const Padding(
@@ -35,9 +31,8 @@ class Prices extends StatelessWidget implements MoreInformationWidget {
             ),
           ),
         ),
-        if (adjustSalePriceProvider.saleTypes
-            .where((e) => e.saleTypeName == SaleTypeName.Varejo)
-            .isNotEmpty)
+        if (product.retailPracticedPrice != null &&
+            product.retailPracticedPrice! > 0)
           TitleAndSubtitle.titleAndSubtitle(
             title: "Varejo",
             subtitle: (product.retailPracticedPrice ?? 0)
@@ -46,9 +41,8 @@ class Prices extends StatelessWidget implements MoreInformationWidget {
                 .toBrazilianNumber()
                 .addBrazilianCoin(),
           ),
-        if (adjustSalePriceProvider.saleTypes
-            .where((e) => e.saleTypeName == SaleTypeName.Atacado)
-            .isNotEmpty)
+        if (product.wholePracticedPrice != null &&
+            product.wholePracticedPrice! > 0)
           TitleAndSubtitle.titleAndSubtitle(
             title: "Atacado",
             subtitle: (product.wholePracticedPrice ?? 0)
@@ -57,9 +51,8 @@ class Prices extends StatelessWidget implements MoreInformationWidget {
                 .toBrazilianNumber()
                 .addBrazilianCoin(),
           ),
-        if (adjustSalePriceProvider.saleTypes
-            .where((e) => e.saleTypeName == SaleTypeName.Ecommerce)
-            .isNotEmpty)
+        if (product.eCommercePracticedPrice != null &&
+            product.eCommercePracticedPrice! > 0)
           TitleAndSubtitle.titleAndSubtitle(
             title: "Ecommerce",
             subtitle: (product.eCommercePracticedPrice ?? 0)
