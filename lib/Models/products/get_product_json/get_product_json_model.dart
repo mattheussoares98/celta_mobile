@@ -38,7 +38,7 @@ class GetProductJsonModel {
   bool? isChildOfGrate;
   List<StockByEnterpriseAssociatedsModel>? stockByEnterpriseAssociateds;
   List<StocksModel>? stocks;
-  LastBuyEntranceModel? lastBuyEntrance;
+  List<LastBuyEntranceModel>? lastBuyEntrance;
   PriceCostModel? priceCost;
   double? valueTyped = 0;
   double quantity = 0;
@@ -163,17 +163,32 @@ class GetProductJsonModel {
         AutomaticDiscountValue: json["AutomaticDiscountValue"] ?? 0,
         TotalLiquid: json["TotalLiquid"],
         DiscountDescription: json["DiscountDescription"],
-        stockByEnterpriseAssociateds: json['StockByEnterpriseAssociateds']
-            ?.map<StockByEnterpriseAssociatedsModel>(
-                (e) => StockByEnterpriseAssociatedsModel.fromJson(e))
-            .toList(),
-        stocks: json['Stocks']
-            ?.map<StocksModel>((e) => StocksModel.fromJson(e))
-            .toList(),
-        lastBuyEntrance: json['LastBuyEntrance'] != null
-            ? LastBuyEntranceModel.fromJson(json['LastBuyEntrance'])
-            : null,
+        stockByEnterpriseAssociateds:
+            json['StockByEnterpriseAssociateds'] == null
+                ? null
+                : (json['StockByEnterpriseAssociateds'] as List)
+                    .map<StockByEnterpriseAssociatedsModel>(
+                        (e) => StockByEnterpriseAssociatedsModel.fromJson(e))
+                    .toList(),
+        stocks: json['Stocks'] == null
+            ? null
+            : (json['Stocks'] as List)
+                .map<StocksModel>((e) => StocksModel.fromJson(e))
+                .toList(),
+        lastBuyEntrance: _getLastBuys(json),
       );
+
+  static List<LastBuyEntranceModel>? _getLastBuys(Map json) {
+    if (json['LastBuyEntrances'] != null) {
+      return (json['LastBuyEntrances'] as List)
+          .map<LastBuyEntranceModel>((e) => LastBuyEntranceModel.fromJson(e))
+          .toList();
+    } else if (json['LastBuyEntrance'] != null) {
+      return [LastBuyEntranceModel.fromJson(json['LastBuyEntrance'])];
+    } else {
+      return null;
+    }
+  }
 
   factory GetProductJsonModel.fromProcessedCart({
     required GetProductJsonModel oldProduct,

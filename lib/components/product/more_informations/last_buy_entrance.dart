@@ -9,7 +9,7 @@ class LastBuyEntrance extends StatelessWidget implements MoreInformationWidget {
   @override
   MoreInformationType get type => MoreInformationType.lastBuyEntrance;
   @override
-  String get moreInformationName => "Compra";
+  String get moreInformationName => "Compras";
 
   final GetProductJsonModel product;
   const LastBuyEntrance({
@@ -25,7 +25,7 @@ class LastBuyEntrance extends StatelessWidget implements MoreInformationWidget {
         const Padding(
           padding: EdgeInsets.only(bottom: 10),
           child: Text(
-            "ÚLTIMA COMPRA",
+            "ÚLTIMAS COMPRAS",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 25,
@@ -36,30 +36,46 @@ class LastBuyEntrance extends StatelessWidget implements MoreInformationWidget {
         if (product.lastBuyEntrance == null)
           const Text("Não há compras para esse produto"),
         if (product.lastBuyEntrance != null)
-          Column(
-            children: [
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Número",
-                subtitle: product.lastBuyEntrance!.number,
+          Builder(builder: (context) {
+            product.lastBuyEntrance!
+                .sort((a, b) => b.entranceDate!.compareTo(a.entranceDate!));
+            return Expanded(
+              child: ListView.builder(
+                itemCount: product.lastBuyEntrance!.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final entrance = product.lastBuyEntrance![index];
+
+                  return Column(
+                    children: [
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Número",
+                        subtitle: entrance.number,
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Data",
+                        subtitle: DateFormat('dd/MM/yyyy HH:mm')
+                            .format(DateTime.parse(
+                          entrance.entranceDate!,
+                        )),
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Fornecedor",
+                        subtitle: entrance.supplier,
+                      ),
+                      TitleAndSubtitle.titleAndSubtitle(
+                        title: "Quantitade",
+                        subtitle:
+                            entrance.quantity.toString().toBrazilianNumber(),
+                      ),
+                      if (index < product.lastBuyEntrance!.length - 1)
+                        const Divider(),
+                    ],
+                  );
+                },
               ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Data",
-                subtitle: DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(
-                  product.lastBuyEntrance!.entranceDate!,
-                )),
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Fornecedor",
-                subtitle: product.lastBuyEntrance!.supplier,
-              ),
-              TitleAndSubtitle.titleAndSubtitle(
-                title: "Quantitade",
-                subtitle: product.lastBuyEntrance!.quantity
-                    .toString()
-                    .toBrazilianNumber(),
-              ),
-            ],
-          ),
+            );
+          }),
       ],
     );
   }
