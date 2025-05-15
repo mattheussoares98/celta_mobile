@@ -68,6 +68,12 @@ class LastBuyEntrance extends StatelessWidget implements MoreInformationWidget {
                         subtitle:
                             entrance.quantity.toString().toBrazilianNumber(),
                       ),
+                      if (entrance.fiscalCode != null &&
+                          entrance.fiscalCode!.isNotEmpty)
+                        TitleAndSubtitle.titleAndSubtitle(
+                          title: "CFOP",
+                          subtitle: entrance.fiscalCode,
+                        ),
                       if (index < product.lastBuyEntrance!.length - 1)
                         const Divider(),
                     ],
